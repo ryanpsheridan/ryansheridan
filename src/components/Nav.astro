@@ -1,30 +1,23 @@
 ---
+interface Props {
+  showBack?: boolean;
+}
 
+const { showBack = false } = Astro.props;
 ---
 
 <nav>
   <div class="nav-inner">
-    <a href="/" class="logo">RS</a>
+    <a href="/" class="logo">rsd</a>
     <div class="nav-links">
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
+      {showBack ? <a href="/">Home</a> : <a href="#work">Work</a>}
     </div>
   </div>
 </nav>
 
 <style>
   nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    padding: 1.5rem 2rem;
-    background: rgba(10, 10, 10, 0.8);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.3s;
+    padding: 24px var(--page-padding);
   }
 
   .nav-inner {
@@ -36,37 +29,18 @@
   }
 
   .logo {
-    font-family: var(--font-serif);
-    font-size: 1.5rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    color: var(--color-accent);
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 2.5rem;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
   }
 
   .nav-links a {
-    font-size: 0.875rem;
+    font-size: 14px;
     font-weight: 400;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-    transition: color 0.2s;
-  }
-
-  .nav-links a:hover {
     color: var(--color-text);
   }
 
-  @media (max-width: 640px) {
-    nav {
-      padding: 1rem 1.25rem;
-    }
-    .nav-links {
-      gap: 1.5rem;
-    }
+  .nav-links a:hover {
+    color: var(--color-text-muted);
   }
 </style>

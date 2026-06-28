@@ -1,0 +1,78 @@
+---
+
+---
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">rsd</span>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/#work">Work</a>
+    </div>
+    <a
+      href="https://www.linkedin.com/in/ryansheridan"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="footer-social"
+    >
+      LinkedIn <span class="arrow">&nearr;</span>
+    </a>
+  </div>
+</footer>
+
+<style>
+  footer {
+    border-top: 1px solid var(--color-border);
+    padding: 48px var(--page-padding);
+    margin-top: 80px;
+  }
+
+  .footer-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .footer-logo {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .footer-links a {
+    font-size: 13px;
+    color: var(--color-text-muted);
+  }
+
+  .footer-links a:hover {
+    color: var(--color-text);
+  }
+
+  .footer-social {
+    font-size: 13px;
+    color: var(--color-text);
+  }
+
+  .footer-social:hover {
+    color: var(--color-text-muted);
+  }
+
+  .arrow {
+    font-size: 12px;
+  }
+
+  @media (max-width: 540px) {
+    .footer-inner {
+      flex-direction: column;
+      gap: 24px;
+    }
+  }
+</style>

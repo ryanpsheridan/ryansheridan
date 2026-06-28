@@ -4,152 +4,41 @@
 
 <section class="hero">
   <div class="hero-inner">
-    <p class="hero-label">Designer & Creative</p>
-    <h1>
-      Ryan<br />
-      <span class="serif">Sheridan</span>
-    </h1>
-    <p class="hero-sub">
-      Crafting thoughtful digital experiences through design, strategy, and a
-      keen eye for detail.
-    </p>
-    <div class="hero-cta">
-      <a href="#work" class="btn-primary">View Work</a>
-      <a href="#contact" class="btn-secondary">Get in Touch</a>
-    </div>
+    <h1>Designing systems,<br />sites and brands.</h1>
+    <p class="location">based in Austin</p>
   </div>
-  <div class="scroll-indicator">
-    <span></span>
-  </div>
+  <hr />
 </section>
 
 <style>
   .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 6rem 2rem 4rem;
-    position: relative;
+    padding: 80px var(--page-padding) 0;
   }
 
   .hero-inner {
     max-width: var(--max-width);
     margin: 0 auto;
-    width: 100%;
-  }
-
-  .hero-label {
-    font-size: 0.8rem;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--color-accent);
-    margin-bottom: 1.5rem;
+    padding-bottom: 48px;
   }
 
   h1 {
-    font-family: var(--font-sans);
-    font-size: clamp(3.5rem, 10vw, 8rem);
-    font-weight: 700;
-    line-height: 0.95;
-    letter-spacing: -0.03em;
-    margin-bottom: 2rem;
-  }
-
-  .serif {
-    font-family: var(--font-serif);
+    font-size: 32px;
     font-weight: 400;
-    font-style: italic;
-    color: var(--color-accent);
-  }
-
-  .hero-sub {
-    font-size: 1.125rem;
-    color: var(--color-text-muted);
-    max-width: 480px;
-    line-height: 1.7;
-    margin-bottom: 3rem;
-  }
-
-  .hero-cta {
-    display: flex;
-    gap: 1rem;
-  }
-
-  .btn-primary {
-    display: inline-block;
-    padding: 0.875rem 2rem;
-    background: var(--color-accent);
-    color: var(--color-bg);
-    font-size: 0.875rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    border-radius: 2px;
-    transition: background 0.2s;
-  }
-
-  .btn-primary:hover {
-    background: var(--color-accent-hover);
-  }
-
-  .btn-secondary {
-    display: inline-block;
-    padding: 0.875rem 2rem;
-    border: 1px solid var(--color-border);
-    font-size: 0.875rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    color: var(--color-text-muted);
-    border-radius: 2px;
-    transition:
-      border-color 0.2s,
-      color 0.2s;
-  }
-
-  .btn-secondary:hover {
-    border-color: var(--color-text-muted);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
     color: var(--color-text);
   }
 
-  .scroll-indicator {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
+  .location {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--color-text-muted);
   }
 
-  .scroll-indicator span {
-    display: block;
-    width: 1px;
-    height: 48px;
-    background: var(--color-accent);
-    opacity: 0.4;
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%,
-    100% {
-      opacity: 0.2;
-      transform: scaleY(0.6);
-    }
-    50% {
-      opacity: 0.6;
-      transform: scaleY(1);
-    }
-  }
-
-  @media (max-width: 640px) {
-    .hero {
-      padding: 5rem 1.25rem 3rem;
-    }
-    .hero-cta {
-      flex-direction: column;
-    }
-    .btn-primary,
-    .btn-secondary {
-      text-align: center;
-    }
+  hr {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    border: none;
+    border-top: 1px solid var(--color-border);
   }
 </style>
