@@ -82,9 +82,9 @@ import Footer from "../components/Footer.astro";
         <div class="tool-group">
           <h3>Page Builders</h3>
           <ul>
-            <li><a href="https://www.makeswift.com" target="_blank" rel="noopener noreferrer">Makeswift</a></li>
             <li><a href="https://webflow.com" target="_blank" rel="noopener noreferrer">Webflow</a></li>
             <li><a href="https://www.framer.com" target="_blank" rel="noopener noreferrer">Framer</a></li>
+            <li><a href="https://www.makeswift.com" target="_blank" rel="noopener noreferrer">Makeswift</a></li>
             <li><a href="https://www.squarespace.com" target="_blank" rel="noopener noreferrer">Squarespace</a></li>
             <li><a href="https://www.wix.com" target="_blank" rel="noopener noreferrer">Wix</a></li>
             <li><a href="https://www.gohighlevel.com" target="_blank" rel="noopener noreferrer">GoHighLevel</a></li>
@@ -117,8 +117,9 @@ import Footer from "../components/Footer.astro";
     <section class="certification-section">
       <h2>Certification</h2>
       <div class="certification-item">
-        <span class="certification-name">User Experience (UX): The Ultimate Guide to Usability and UX</span>
-        <span class="certification-meta">Udemy · 2024</span>
+        <a href="https://www.udemy.com/certificate/UC-18d85801-2609-449f-b7ed-fefe40a5db46/" target="_blank" rel="noopener noreferrer" class="certification-name">User Experience (UX): The Ultimate Guide to Usability and UX</a>
+        <span class="certification-meta">Udemy · David Travis · 2024</span>
+        <p class="certification-desc">A 12-hour course covering usability testing, user research, information architecture, and interaction design principles.</p>
       </div>
     </section>
 
@@ -336,6 +337,20 @@ import Footer from "../components/Footer.astro";
     font-size: 17px;
     font-weight: 500;
     letter-spacing: -0.01em;
+    color: var(--color-text);
+    transition: color 0.2s;
+  }
+
+  .certification-name:hover {
+    color: var(--color-text-muted);
+  }
+
+  .certification-desc {
+    font-size: 15px;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    max-width: 540px;
+    margin-top: 8px;
   }
 
   .certification-meta {
