@@ -45,8 +45,9 @@ const { title, description = "Ryan Sheridan — Designing systems, sites and bra
     --color-tag-bg: #f3f3f3;
     --color-tag-text: #555;
     --font-sans: "Inter", -apple-system, system-ui, sans-serif;
-    --max-width: 580px;
-    --page-padding: 24px;
+    --max-width: 1140px;
+    --content-width: 680px;
+    --page-padding: 40px;
   }
 
   html {
@@ -60,7 +61,7 @@ const { title, description = "Ryan Sheridan — Designing systems, sites and bra
     background: var(--color-bg);
     color: var(--color-text);
     line-height: 1.6;
-    font-size: 14px;
+    font-size: 15px;
   }
 
   a {
@@ -76,5 +77,11 @@ const { title, description = "Ryan Sheridan — Designing systems, sites and bra
   ::selection {
     background: var(--color-text);
     color: var(--color-bg);
+  }
+
+  @media (max-width: 768px) {
+    :root {
+      --page-padding: 20px;
+    }
   }
 </style>

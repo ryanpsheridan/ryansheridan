@@ -7,10 +7,10 @@
     <span class="footer-logo">rsd</span>
     <div class="footer-links">
       <a href="/">Home</a>
-      <a href="/#work">Work</a>
+      <a href="/work">Work</a>
     </div>
     <a
-      href="https://www.linkedin.com/in/ryansheridan"
+      href="https://www.linkedin.com/in/ryansheridandesign/"
       target="_blank"
       rel="noopener noreferrer"
       class="footer-social"
@@ -22,8 +22,9 @@
 
 <style>
   footer {
-    border-top: 1px solid var(--color-border);
-    padding: 48px var(--page-padding);
+    background: #111;
+    color: #fff;
+    padding: 64px var(--page-padding);
     margin-top: 80px;
   }
 
@@ -36,43 +37,50 @@
   }
 
   .footer-logo {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 500;
     letter-spacing: -0.02em;
+    color: rgba(255, 255, 255, 0.7);
   }
 
   .footer-links {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
   }
 
   .footer-links a {
-    font-size: 13px;
-    color: var(--color-text-muted);
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    transition: color 0.2s;
   }
 
   .footer-links a:hover {
-    color: var(--color-text);
+    color: #fff;
   }
 
   .footer-social {
-    font-size: 13px;
-    color: var(--color-text);
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff;
+    transition: color 0.2s;
   }
 
   .footer-social:hover {
-    color: var(--color-text-muted);
+    color: rgba(255, 255, 255, 0.7);
   }
 
   .arrow {
-    font-size: 12px;
+    font-size: 14px;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 640px) {
+    footer {
+      padding: 48px var(--page-padding);
+    }
     .footer-inner {
       flex-direction: column;
-      gap: 24px;
+      gap: 32px;
     }
   }
 </style>

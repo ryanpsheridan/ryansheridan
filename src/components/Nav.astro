@@ -1,23 +1,38 @@
 ---
-interface Props {
-  showBack?: boolean;
-}
 
-const { showBack = false } = Astro.props;
 ---
 
 <nav>
   <div class="nav-inner">
     <a href="/" class="logo">rsd</a>
-    <div class="nav-links">
-      {showBack ? <a href="/">Home</a> : <a href="#work">Work</a>}
-    </div>
+    <button class="hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+    </button>
   </div>
 </nav>
 
+<div class="menu-overlay" aria-hidden="true">
+  <div class="menu-content">
+    <a href="/" class="menu-link">Home</a>
+    <a href="/work" class="menu-link">Work</a>
+    <a href="/contact" class="menu-link">Contact</a>
+    <a
+      href="https://www.linkedin.com/in/ryansheridandesign/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="menu-link menu-link-external"
+    >
+      LinkedIn <span class="arrow">&nearr;</span>
+    </a>
+  </div>
+</div>
+
 <style>
   nav {
-    padding: 24px var(--page-padding);
+    position: relative;
+    z-index: 200;
+    padding: 28px var(--page-padding);
   }
 
   .nav-inner {
@@ -29,18 +44,106 @@ const { showBack = false } = Astro.props;
   }
 
   .logo {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 500;
     letter-spacing: -0.02em;
+    position: relative;
+    z-index: 300;
   }
 
-  .nav-links a {
-    font-size: 14px;
+  .hamburger {
+    position: relative;
+    z-index: 300;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 20px;
+    height: 1.5px;
+    background: var(--color-text);
+    transition: transform 0.3s, opacity 0.3s;
+  }
+
+  .hamburger.active span:first-child {
+    transform: translateY(3.75px) rotate(45deg);
+  }
+
+  .hamburger.active span:last-child {
+    transform: translateY(-3.75px) rotate(-45deg);
+  }
+
+  .menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background: var(--color-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .menu-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .menu-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .menu-link {
+    font-size: 32px;
     font-weight: 400;
+    letter-spacing: -0.02em;
     color: var(--color-text);
+    transition: color 0.2s;
   }
 
-  .nav-links a:hover {
+  .menu-link:hover {
     color: var(--color-text-muted);
   }
+
+  .menu-link-external .arrow {
+    font-size: 24px;
+  }
 </style>
+
+<script>
+  const hamburger = document.querySelector(".hamburger")!;
+  const overlay = document.querySelector(".menu-overlay")!;
+
+  hamburger.addEventListener("click", () => {
+    const isOpen = hamburger.classList.toggle("active");
+    overlay.classList.toggle("open", isOpen);
+    hamburger.setAttribute("aria-expanded", String(isOpen));
+    overlay.setAttribute("aria-hidden", String(!isOpen));
+    document.body.style.overflow = isOpen ? "hidden" : "";
+  });
+
+  overlay.querySelectorAll(".menu-link").forEach((link) => {
+    link.addEventListener("click", () => {
+      hamburger.classList.remove("active");
+      overlay.classList.remove("open");
+      hamburger.setAttribute("aria-expanded", "false");
+      overlay.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    });
+  });
+</script>

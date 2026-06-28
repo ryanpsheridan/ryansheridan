@@ -16,31 +16,38 @@ const { project } = Astro.props;
 ---
 
 <Layout title={`${project.title} — Ryan Sheridan`}>
-  <Nav showBack={true} />
+  <Nav />
   <main class="project-page">
-    <div class="project-inner">
-      <header>
-        <h1>{project.title}</h1>
-        <div class="meta">
-          <div class="meta-group">
-            <span class="meta-label">Client</span>
-            <span class="meta-value">{project.client}</span>
-          </div>
-          <div class="meta-group">
-            <span class="meta-label">Type</span>
-            <span class="meta-value">{project.tags.join(", ")}</span>
-          </div>
-          <div class="meta-group">
-            <span class="meta-label">Tools</span>
-            <span class="meta-value">{project.tools.join(", ")}</span>
+    <div class="project-header">
+      <h1>{project.title}</h1>
+
+      <div class="meta">
+        <div class="meta-group">
+          <span class="meta-label">Client / Company</span>
+          <div class="meta-pills">
+            <span class="pill">{project.client}</span>
           </div>
         </div>
-      </header>
-
-      <div class="hero-image">
-        <img src={project.thumbnail} alt={project.title} />
+        <div class="meta-group">
+          <span class="meta-label">Project type</span>
+          <div class="meta-pills">
+            {project.tags.map((tag) => <span class="pill">{tag}</span>)}
+          </div>
+        </div>
+        <div class="meta-group">
+          <span class="meta-label">Tools</span>
+          <div class="meta-pills">
+            {project.tools.map((tool) => <span class="pill">{tool}</span>)}
+          </div>
+        </div>
       </div>
+    </div>
 
+    <div class="hero-image">
+      <img src={project.thumbnail} alt={project.title} />
+    </div>
+
+    <div class="project-content">
       {
         project.sections.map((section) => (
           <section class="content-section">
@@ -49,10 +56,10 @@ const { project } = Astro.props;
           </section>
         ))
       }
+    </div>
 
-      <div class="back-link">
-        <a href="/">&larr; Back to all work</a>
-      </div>
+    <div class="back-link-wrapper">
+      <a href="/work" class="back-link">&larr; All work</a>
     </div>
   </main>
   <Footer />
@@ -63,50 +70,55 @@ const { project } = Astro.props;
     padding: 80px var(--page-padding) 0;
   }
 
-  .project-inner {
+  .project-header {
     max-width: var(--max-width);
-    margin: 0 auto;
-  }
-
-  header {
-    margin-bottom: 40px;
+    margin: 0 auto 48px;
   }
 
   h1 {
-    font-size: 28px;
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    margin-bottom: 24px;
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    margin-bottom: 40px;
   }
 
   .meta {
     display: flex;
-    gap: 32px;
+    gap: 64px;
     flex-wrap: wrap;
   }
 
   .meta-group {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 10px;
   }
 
   .meta-label {
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    font-size: 13px;
     color: var(--color-text-muted);
   }
 
-  .meta-value {
-    font-size: 14px;
+  .meta-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pill {
+    font-size: 13px;
+    font-weight: 400;
+    padding: 6px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 99px;
+    color: var(--color-text);
   }
 
   .hero-image {
-    border-radius: 4px;
+    max-width: var(--max-width);
+    margin: 0 auto 64px;
+    border-radius: 16px;
     overflow: hidden;
-    margin-bottom: 56px;
   }
 
   .hero-image img {
@@ -114,25 +126,30 @@ const { project } = Astro.props;
     display: block;
   }
 
+  .project-content {
+    max-width: var(--content-width);
+    margin: 0 auto;
+  }
+
   .content-section {
     margin-bottom: 56px;
   }
 
   h2 {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 500;
     letter-spacing: -0.01em;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
   }
 
   .body {
-    font-size: 15px;
-    line-height: 1.75;
+    font-size: 16px;
+    line-height: 1.8;
     color: var(--color-text);
   }
 
   .body :global(p) {
-    margin-bottom: 16px;
+    margin-bottom: 18px;
   }
 
   .body :global(p:last-child) {
@@ -142,11 +159,12 @@ const { project } = Astro.props;
   .body :global(a) {
     color: var(--color-text);
     text-decoration: underline;
-    text-underline-offset: 2px;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--color-border);
   }
 
   .body :global(a:hover) {
-    color: var(--color-text-muted);
+    text-decoration-color: var(--color-text);
   }
 
   .body :global(strong) {
@@ -155,10 +173,11 @@ const { project } = Astro.props;
 
   .body :global(blockquote) {
     border-left: 2px solid var(--color-border);
-    padding-left: 20px;
-    margin: 32px 0;
+    padding-left: 24px;
+    margin: 36px 0;
     color: var(--color-text-muted);
     font-style: italic;
+    font-size: 17px;
   }
 
   .body :global(blockquote p) {
@@ -166,43 +185,42 @@ const { project } = Astro.props;
   }
 
   .body :global(h3) {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 600;
-    margin-top: 32px;
-    margin-bottom: 12px;
+    margin-top: 40px;
+    margin-bottom: 16px;
   }
 
   .body :global(img) {
     width: 100%;
-    border-radius: 4px;
-    margin: 24px 0;
+    border-radius: 8px;
+    margin: 28px 0;
   }
 
   .body :global(em) {
     color: var(--color-text-muted);
   }
 
-  .back-link {
+  .back-link-wrapper {
+    max-width: var(--content-width);
+    margin: 0 auto;
     padding: 40px 0;
     border-top: 1px solid var(--color-border);
   }
 
-  .back-link a {
+  .back-link {
     font-size: 14px;
     color: var(--color-text-muted);
     transition: color 0.2s;
   }
 
-  .back-link a:hover {
+  .back-link:hover {
     color: var(--color-text);
   }
 
-  @media (max-width: 540px) {
-    .project-page {
-      padding: 60px var(--page-padding) 0;
-    }
+  @media (max-width: 640px) {
     .meta {
-      gap: 20px;
+      gap: 28px;
     }
   }
 </style>
