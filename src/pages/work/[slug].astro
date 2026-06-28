@@ -66,7 +66,7 @@ const { project } = Astro.props;
               <div class="body" set:html={block.body} />
             </section>
           ) : (
-            <div class:list={["image-grid", block.images.length === 1 && "single"]}>
+            <div class="image-grid">
               {block.images.map((src) => (
                 <img src={src} alt="" />
               ))}
@@ -253,9 +253,6 @@ const { project } = Astro.props;
     gap: 16px;
   }
 
-  .image-grid.single {
-    grid-template-columns: 1fr;
-  }
 
   .image-grid img {
     width: 100%;
