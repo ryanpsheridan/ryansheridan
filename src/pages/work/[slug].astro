@@ -49,12 +49,20 @@ const { project } = Astro.props;
 
     <div class="project-content">
       {
-        project.sections.map((section) => (
-          <section class="content-section">
-            {section.heading && <h2>{section.heading}</h2>}
-            <div class="body" set:html={section.body} />
-          </section>
-        ))
+        project.content.map((block) =>
+          block.type === "text" ? (
+            <section class="content-section">
+              {block.heading && <h2>{block.heading}</h2>}
+              <div class="body" set:html={block.body} />
+            </section>
+          ) : (
+            <div class:list={["image-grid", block.images.length === 1 && "single"]}>
+              {block.images.map((src) => (
+                <img src={src} alt="" />
+              ))}
+            </div>
+          )
+        )
       }
     </div>
 
@@ -127,12 +135,13 @@ const { project } = Astro.props;
   }
 
   .project-content {
-    max-width: var(--content-width);
+    max-width: var(--max-width);
     margin: 0 auto;
   }
 
   .content-section {
-    margin-bottom: 56px;
+    max-width: var(--content-width);
+    margin: 0 auto 56px;
   }
 
   h2 {
@@ -199,6 +208,23 @@ const { project } = Astro.props;
 
   .body :global(em) {
     color: var(--color-text-muted);
+  }
+
+  .image-grid {
+    margin: 0 auto 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .image-grid.single {
+    grid-template-columns: 1fr;
+  }
+
+  .image-grid img {
+    width: 100%;
+    border-radius: 12px;
+    display: block;
   }
 
   .back-link-wrapper {
