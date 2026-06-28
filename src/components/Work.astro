@@ -1,0 +1,165 @@
+---
+const projects = [
+  {
+    title: "Brand Identity System",
+    category: "Branding",
+    description:
+      "Complete visual identity for a modern fintech startup, including logo, color system, and brand guidelines.",
+    year: "2024",
+    color: "#1a1a2e",
+  },
+  {
+    title: "E-Commerce Redesign",
+    category: "UI/UX Design",
+    description:
+      "End-to-end redesign of a luxury retail platform, improving conversion by focusing on product storytelling.",
+    year: "2024",
+    color: "#1a2e1a",
+  },
+  {
+    title: "Mobile App Experience",
+    category: "Product Design",
+    description:
+      "Designed a wellness app from concept to launch, creating an intuitive experience for daily habit tracking.",
+    year: "2023",
+    color: "#2e1a1a",
+  },
+  {
+    title: "Editorial Website",
+    category: "Web Design",
+    description:
+      "A content-first design for an independent publication, balancing readability with visual impact.",
+    year: "2023",
+    color: "#1a1a1a",
+  },
+];
+---
+
+<section id="work" class="work">
+  <div class="section-inner">
+    <div class="section-header">
+      <p class="section-label">Selected Work</p>
+      <h2>Projects</h2>
+    </div>
+    <div class="project-grid">
+      {
+        projects.map((project) => (
+          <article class="project-card">
+            <div
+              class="project-thumbnail"
+              style={`background: ${project.color};`}
+            >
+              <span class="project-year">{project.year}</span>
+            </div>
+            <div class="project-info">
+              <span class="project-category">{project.category}</span>
+              <h3>{project.title}</h3>
+              <p>{project.description}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .work {
+    padding: var(--section-gap) 2rem;
+  }
+
+  .section-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .section-header {
+    margin-bottom: 4rem;
+  }
+
+  .section-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-family: var(--font-serif);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 400;
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .project-card {
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition:
+      border-color 0.3s,
+      transform 0.3s;
+    cursor: pointer;
+  }
+
+  .project-card:hover {
+    border-color: var(--color-text-muted);
+    transform: translateY(-4px);
+  }
+
+  .project-thumbnail {
+    aspect-ratio: 16 / 10;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 1.25rem;
+  }
+
+  .project-year {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.1em;
+  }
+
+  .project-info {
+    padding: 1.5rem;
+  }
+
+  .project-category {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  .project-info p {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .work {
+      padding: 5rem 1.25rem;
+    }
+    .project-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

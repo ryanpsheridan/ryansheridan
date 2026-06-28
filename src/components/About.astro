@@ -1,0 +1,135 @@
+---
+
+---
+
+<section id="about" class="about">
+  <div class="section-inner">
+    <div class="section-header">
+      <p class="section-label">About</p>
+      <h2>A bit about me</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p class="lead">
+          I'm a designer who believes great design is invisible — it just
+          works, and it makes you feel something.
+        </p>
+        <p>
+          With a background spanning branding, UI/UX, and creative direction, I
+          help brands and products find their voice through considered,
+          purposeful design. Every project starts with understanding the
+          problem, then crafting a solution that feels effortless.
+        </p>
+        <p>
+          When I'm not designing, you can find me exploring new places,
+          experimenting with photography, or diving into whatever's caught my
+          curiosity lately.
+        </p>
+      </div>
+      <div class="about-details">
+        <div class="detail-group">
+          <h4>Services</h4>
+          <ul>
+            <li>Brand Identity</li>
+            <li>UI/UX Design</li>
+            <li>Web Design</li>
+            <li>Creative Direction</li>
+          </ul>
+        </div>
+        <div class="detail-group">
+          <h4>Tools</h4>
+          <ul>
+            <li>Figma</li>
+            <li>Adobe Creative Suite</li>
+            <li>Webflow</li>
+            <li>Framer</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    padding: var(--section-gap) 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .section-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .section-header {
+    margin-bottom: 4rem;
+  }
+
+  .section-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-family: var(--font-serif);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 400;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 4rem;
+  }
+
+  .about-text p {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .lead {
+    font-size: 1.25rem !important;
+    color: var(--color-text) !important;
+    line-height: 1.6 !important;
+  }
+
+  .detail-group {
+    margin-bottom: 2.5rem;
+  }
+
+  h4 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  li {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  @media (max-width: 768px) {
+    .about {
+      padding: 5rem 1.25rem;
+    }
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+  }
+</style>
