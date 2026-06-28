@@ -152,7 +152,7 @@ export const projects: Project[] = [
   {
     slug: "flow-stays",
     title: "Flow Stays",
-    thumbnail: "",
+    thumbnail: "/project-flow-stays1.jpg",
     showOnHomepage: true,
     tags: ["Branding"],
     tools: ["Adobe Illustrator", "Figma"],
@@ -162,6 +162,14 @@ export const projects: Project[] = [
         type: "text",
         heading: "A Brand Built Around Getting Into the Zone",
         body: `<p>Flow Stays is a retreat concept designed for teams and individuals who need space to do their best work. The idea is simple: get out of the office, into nature, and actually focus. The brand needed to feel calm and grounded without being too soft, so the identity leans on deep forest greens, natural textures, and a mark that nods to both shelter and the outdoors.</p><p>You can check out the live site at <a href="https://www.flowstays.com/" target="_blank" rel="noopener noreferrer">flowstays.com</a>.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-flow-stays2.svg", "/project-flow-stays3.svg"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-flow-stays4.svg", "/project-flow-stays5.svg"],
       },
     ],
   },
