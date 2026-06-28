@@ -67,6 +67,47 @@ import Footer from "../components/Footer.astro";
 
     <div class="divider"><hr /></div>
 
+    <section class="tools-section">
+      <h2>Tools</h2>
+      <div class="tools-grid">
+        <div class="tool-group">
+          <h3>Design</h3>
+          <ul>
+            <li>Figma</li>
+            <li>Photoshop</li>
+            <li>Illustrator</li>
+            <li>InDesign</li>
+            <li>Framer</li>
+            <li>Webflow</li>
+            <li>Squarespace</li>
+            <li>Wix</li>
+            <li>GoHighLevel</li>
+          </ul>
+        </div>
+        <div class="tool-group">
+          <h3>AI</h3>
+          <ul>
+            <li>Claude</li>
+            <li>Claude Code</li>
+            <li>Claude Design</li>
+            <li>ChatGPT</li>
+            <li>Gemini</li>
+            <li>Perplexity</li>
+          </ul>
+        </div>
+        <div class="tool-group">
+          <h3>Development</h3>
+          <ul>
+            <li>GitHub</li>
+            <li>Vercel</li>
+            <li>VS Code</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"><hr /></div>
+
     <section class="contact-section">
       <h2>Get in touch</h2>
       <div class="contact-links">
@@ -224,6 +265,38 @@ import Footer from "../components/Footer.astro";
     line-height: 1.5;
   }
 
+  .tools-section {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+  }
+
+  .tool-group h3 {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+  }
+
+  .tool-group ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tool-group li {
+    font-size: 15px;
+    color: var(--color-text-muted);
+  }
+
   .contact-section {
     max-width: var(--max-width);
     margin: 0 auto;
@@ -263,6 +336,11 @@ import Footer from "../components/Footer.astro";
     .timeline-item {
       grid-template-columns: 1fr;
       gap: 4px;
+    }
+
+    .tools-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
     }
 
     .contact-links {
