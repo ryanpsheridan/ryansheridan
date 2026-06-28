@@ -5,7 +5,11 @@
 <section class="hero">
   <div class="hero-inner">
     <h1>Designing systems,<br />sites and brands.</h1>
-    <p class="location">based in Austin</p>
+    <div class="hero-meta">
+      <p class="location">based in Austin</p>
+      <span class="meta-sep">·</span>
+      <p class="current-role">Principal Designer at Commerce</p>
+    </div>
   </div>
   <div class="hero-divider">
     <hr />
@@ -31,10 +35,22 @@
     color: var(--color-text-muted);
   }
 
-  .location {
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     margin-top: 24px;
+  }
+
+  .location,
+  .current-role {
     font-size: 15px;
     color: var(--color-text-muted);
+  }
+
+  .meta-sep {
+    color: var(--color-border);
+    font-size: 14px;
   }
 
   .hero-divider {
@@ -45,5 +61,17 @@
   hr {
     border: none;
     border-top: 1px solid var(--color-border);
+  }
+
+  @media (max-width: 480px) {
+    .hero-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .meta-sep {
+      display: none;
+    }
   }
 </style>

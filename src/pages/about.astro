@@ -1,0 +1,277 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout title="About — Ryan Sheridan">
+  <Nav />
+  <main class="about-page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <span class="current">About</span>
+    </nav>
+
+    <div class="about-hero">
+      <div class="about-intro">
+        <h1>Ryan Sheridan</h1>
+        <p class="role">Principal Designer, Design Systems</p>
+        <p class="bio">
+          I lead design systems and web experience at Commerce, the parent
+          company of BigCommerce. Over the past eight years I've built and
+          scaled brand systems, marketing sites, and design infrastructure
+          across multiple product lines. I care about the work that sits
+          between design and engineering — the tokens, the governance, the
+          rules that make a system hold up at scale.
+        </p>
+        <p class="bio">
+          Before that I was a visual and UI designer at BigCommerce and
+          TicketCity. I studied at Fort Lewis College in Durango, Colorado.
+          I'm based in the Austin area.
+        </p>
+      </div>
+      <div class="about-photo">
+        <img src="/profile-photo.png" alt="Ryan Sheridan" />
+      </div>
+    </div>
+
+    <div class="divider"><hr /></div>
+
+    <section class="experience">
+      <h2>Experience</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="timeline-period">2025 — Present</span>
+          <div class="timeline-detail">
+            <span class="timeline-company">Commerce</span>
+            <span class="timeline-roles">Principal Designer · Lead Web Designer, Design Systems</span>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-period">2018 — 2025</span>
+          <div class="timeline-detail">
+            <span class="timeline-company">BigCommerce</span>
+            <span class="timeline-roles">Lead Web Designer · Senior Visual Designer · Visual Designer</span>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <span class="timeline-period">2016 — 2018</span>
+          <div class="timeline-detail">
+            <span class="timeline-company">TicketCity</span>
+            <span class="timeline-roles">UI Designer · Graphic Designer</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"><hr /></div>
+
+    <section class="contact-section">
+      <h2>Get in touch</h2>
+      <div class="contact-links">
+        <a href="mailto:ryansheridandesign@gmail.com" class="contact-link">
+          ryansheridandesign@gmail.com
+        </a>
+        <a
+          href="https://www.linkedin.com/in/ryansheridandesign/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="contact-link"
+        >
+          LinkedIn <span class="arrow">&nearr;</span>
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .about-page {
+    padding: 80px var(--page-padding) 0;
+  }
+
+  .breadcrumbs {
+    max-width: var(--max-width);
+    margin: 0 auto 48px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .breadcrumbs a {
+    color: var(--color-text-muted);
+    transition: color 0.2s;
+  }
+
+  .breadcrumbs a:hover {
+    color: var(--color-text);
+  }
+
+  .breadcrumbs .sep {
+    color: var(--color-border);
+  }
+
+  .breadcrumbs .current {
+    color: var(--color-text);
+  }
+
+  .about-hero {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 80px;
+    align-items: start;
+  }
+
+  h1 {
+    font-size: clamp(32px, 4vw, 44px);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+
+  .role {
+    font-size: 15px;
+    color: var(--color-text-muted);
+    margin-bottom: 40px;
+  }
+
+  .bio {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--color-text);
+    max-width: 540px;
+    margin-bottom: 20px;
+  }
+
+  .bio:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .about-photo {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .about-photo img {
+    width: 100%;
+    display: block;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .divider {
+    max-width: var(--max-width);
+    margin: 80px auto;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .experience {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  h2 {
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    margin-bottom: 40px;
+  }
+
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 40px;
+  }
+
+  .timeline-period {
+    font-size: 14px;
+    color: var(--color-text-muted);
+    padding-top: 2px;
+  }
+
+  .timeline-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .timeline-company {
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .timeline-roles {
+    font-size: 14px;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+
+  .contact-section {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .contact-links {
+    display: flex;
+    gap: 40px;
+  }
+
+  .contact-link {
+    font-size: 16px;
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 2px;
+    transition: border-color 0.2s;
+  }
+
+  .contact-link:hover {
+    border-color: var(--color-text);
+  }
+
+  .arrow {
+    font-size: 13px;
+  }
+
+  @media (max-width: 768px) {
+    .about-hero {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+
+    .about-photo {
+      max-width: 320px;
+    }
+
+    .timeline-item {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+
+    .contact-links {
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .divider {
+      margin: 56px auto;
+    }
+  }
+</style>
