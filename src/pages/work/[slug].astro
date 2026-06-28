@@ -15,7 +15,7 @@ export const getStaticPaths: GetStaticPaths = () => {
 const { project } = Astro.props;
 ---
 
-<Layout title={`${project.title} — Ryan Sheridan`}>
+<Layout title={`${project.title} — Ryan Sheridan`} description={`${project.title} — a ${project.tags.join(", ").toLowerCase()} project by Ryan Sheridan.`} ogImage={project.thumbnail || "/project-new-office1.png"}>
   <Nav />
   <main class="project-page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
