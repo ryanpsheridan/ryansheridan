@@ -1,4 +1,2 @@
 User-agent: *
-Allow: /
-
-Sitemap: https://ryansheridan.studio/sitemap-index.xml
+Disallow: /
