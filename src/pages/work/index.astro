@@ -168,8 +168,10 @@ const allTags = [...new Set(projects.flatMap((p) => p.tags))];
     display: none;
   }
 
-  .project-card:hover img {
-    opacity: 0.85;
+  @media (hover: hover) {
+    .project-card:hover img {
+      opacity: 0.85;
+    }
   }
 
   .project-thumbnail {

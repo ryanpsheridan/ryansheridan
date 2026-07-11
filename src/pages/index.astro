@@ -78,8 +78,14 @@ const projects = getHomepageProjects();
     border-top: none;
   }
 
-  .project-row:hover {
-    background: var(--color-tag-bg);
+  @media (hover: hover) {
+    .project-row:hover {
+      background: var(--color-tag-bg);
+    }
+
+    .project-row:hover .project-image img {
+      transform: scale(1.02);
+    }
   }
 
   .project-number {
@@ -102,10 +108,6 @@ const projects = getHomepageProjects();
     height: 100%;
     object-fit: cover;
     transition: transform 0.4s ease;
-  }
-
-  .project-row:hover .project-image img {
-    transform: scale(1.02);
   }
 
   .project-title {
