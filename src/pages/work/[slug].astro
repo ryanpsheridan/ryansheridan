@@ -26,69 +26,67 @@ const { project } = Astro.props;
       <span class="current">{project.title}</span>
     </nav>
 
-    <div class="project-header">
-      <h1>{project.title}</h1>
+    <div class="project-layout">
+      <div class="project-main">
+        <h1>{project.title}</h1>
 
-      <table class="meta-table">
-        <tbody>
-          <tr>
-            <th>Client / Company</th>
-            <td>{project.client}</td>
-          </tr>
-          <tr>
-            <th>Project type</th>
-            <td>
-              <div class="badge-list">
-                {project.tags.map((tag) => <span class="badge">{tag}</span>)}
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th>Tools</th>
-            <td>
-              <div class="badge-list">
-                {project.tools.map((tool) => <span class="badge">{tool}</span>)}
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+        {project.thumbnail && (
+          <div class="hero-image">
+            <img src={project.thumbnail} alt={project.title} />
+          </div>
+        )}
 
-    {project.thumbnail && (
-      <div class="hero-image">
-        <img src={project.thumbnail} alt={project.title} />
+        <div class="project-content">
+          {
+            project.content.map((block) =>
+              block.type === "text" ? (
+                <section class="content-section">
+                  {block.heading && <h2>{block.heading}</h2>}
+                  <div class="body" set:html={block.body} />
+                </section>
+              ) : (
+                <div class="image-grid">
+                  {block.images.map((img) => {
+                    const src = typeof img === "string" ? img : img.src;
+                    const caption = typeof img === "string" ? undefined : img.caption;
+                    return (
+                      <figure class="image-item">
+                        {caption && <figcaption>{caption}</figcaption>}
+                        <img src={src} alt="" class="lightbox-trigger" />
+                      </figure>
+                    );
+                  })}
+                </div>
+              )
+            )
+          }
+        </div>
+
+        <div class="back-link-wrapper">
+          <a href="/work" class="back-link">&larr; All work</a>
+        </div>
       </div>
-    )}
 
-    <div class="project-content">
-      {
-        project.content.map((block) =>
-          block.type === "text" ? (
-            <section class="content-section">
-              {block.heading && <h2>{block.heading}</h2>}
-              <div class="body" set:html={block.body} />
-            </section>
-          ) : (
-            <div class="image-grid">
-              {block.images.map((img) => {
-                const src = typeof img === "string" ? img : img.src;
-                const caption = typeof img === "string" ? undefined : img.caption;
-                return (
-                  <figure class="image-item">
-                    {caption && <figcaption>{caption}</figcaption>}
-                    <img src={src} alt="" class="lightbox-trigger" />
-                  </figure>
-                );
-              })}
+      <aside class="project-sidebar">
+        <div class="sidebar-inner">
+          <div class="meta-group">
+            <span class="meta-label">Client / Company</span>
+            <p class="meta-value">{project.client}</p>
+          </div>
+          <div class="meta-group">
+            <span class="meta-label">Project type</span>
+            <div class="badge-list">
+              {project.tags.map((tag) => <span class="badge">{tag}</span>)}
             </div>
-          )
-        )
-      }
-    </div>
-
-    <div class="back-link-wrapper">
-      <a href="/work" class="back-link">&larr; All work</a>
+          </div>
+          <div class="meta-group">
+            <span class="meta-label">Tools</span>
+            <div class="badge-list">
+              {project.tools.map((tool) => <span class="badge">{tool}</span>)}
+            </div>
+          </div>
+        </div>
+      </aside>
     </div>
   </main>
 
@@ -180,54 +178,62 @@ const { project } = Astro.props;
     color: var(--color-text);
   }
 
-  .project-header {
+  .project-layout {
     max-width: var(--max-width);
-    margin: 0 auto var(--space-6);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: var(--space-8);
+    align-items: start;
   }
 
   h1 {
     font-size: clamp(var(--text-2xl), 5vw, var(--text-4xl));
     font-weight: 400;
     letter-spacing: -0.03em;
-    margin-bottom: var(--space-5);
+    margin-bottom: var(--space-6);
   }
 
-  .meta-table {
-    border-collapse: collapse;
-    width: 100%;
-    max-width: 640px;
+  .project-sidebar {
+    grid-row: 1 / -1;
+  }
+
+  .sidebar-inner {
+    position: sticky;
+    top: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding-top: var(--space-2);
+  }
+
+  .meta-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-top: var(--space-4);
     border-top: 1px solid var(--color-border);
   }
 
-  .meta-table tr {
-    border-bottom: 1px solid var(--color-border);
+  .meta-group:first-child {
+    padding-top: 0;
+    border-top: none;
   }
 
-  .meta-table th,
-  .meta-table td {
-    text-align: left;
-    font-weight: 400;
-    padding: var(--space-3) 0;
-    vertical-align: top;
-  }
-
-  .meta-table th {
-    width: 176px;
-    font-size: var(--text-sm);
+  .meta-label {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     color: var(--color-text-muted);
-    border-right: 1px solid var(--color-border);
-    padding-right: var(--space-4);
   }
 
-  .meta-table td {
-    font-size: var(--text-sm);
+  .meta-value {
+    font-size: var(--text-base);
     color: var(--color-text);
-    padding-left: var(--space-4);
   }
 
   .hero-image {
-    max-width: var(--max-width);
-    margin: 0 auto var(--space-7);
+    margin: 0 0 var(--space-7);
     overflow: hidden;
   }
 
@@ -236,14 +242,9 @@ const { project } = Astro.props;
     display: block;
   }
 
-  .project-content {
-    max-width: var(--max-width);
-    margin: 0 auto;
-  }
-
   .content-section {
     max-width: var(--content-width);
-    margin: 0 auto var(--space-6);
+    margin: 0 0 var(--space-6);
   }
 
   h2 {
@@ -312,7 +313,7 @@ const { project } = Astro.props;
   }
 
   .image-grid {
-    margin: 0 auto var(--space-6);
+    margin: 0 0 var(--space-6);
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-3);
@@ -336,8 +337,7 @@ const { project } = Astro.props;
   }
 
   .back-link-wrapper {
-    max-width: var(--max-width);
-    margin: 0 auto;
+    margin-top: var(--space-6);
     padding: var(--space-5) 0;
     border-top: 1px solid var(--color-border);
   }
@@ -352,14 +352,29 @@ const { project } = Astro.props;
     color: var(--color-text);
   }
 
-  @media (max-width: 640px) {
-    .meta-table th {
-      width: 40%;
-      padding-right: 16px;
+  @media (max-width: 900px) {
+    .project-layout {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
     }
 
-    .meta-table td {
-      padding-left: 16px;
+    .project-sidebar {
+      grid-row: auto;
+      order: -1;
+    }
+
+    .sidebar-inner {
+      position: static;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: var(--space-5);
+      padding-top: 0;
+    }
+
+    .meta-group {
+      flex: 1 1 160px;
+      padding-top: 0;
+      border-top: none;
     }
   }
 </style>
