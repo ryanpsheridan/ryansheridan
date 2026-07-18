@@ -38,27 +38,86 @@ const { project } = Astro.props;
 
         <div class="project-content">
           {
-            project.content.map((block) =>
-              block.type === "text" ? (
-                <section class="content-section">
-                  {block.heading && <h2>{block.heading}</h2>}
-                  <div class="body" set:html={block.body} />
-                </section>
-              ) : (
-                <div class="image-grid">
-                  {block.images.map((img) => {
-                    const src = typeof img === "string" ? img : img.src;
-                    const caption = typeof img === "string" ? undefined : img.caption;
-                    return (
-                      <figure class="image-item">
-                        {caption && <figcaption>{caption}</figcaption>}
-                        <img src={src} alt="" class="lightbox-trigger" />
-                      </figure>
-                    );
-                  })}
-                </div>
-              )
-            )
+            project.content.map((block) => {
+              if (block.type === "text") {
+                return (
+                  <section class="content-section">
+                    {block.heading && <h2>{block.heading}</h2>}
+                    <div class="body" set:html={block.body} />
+                  </section>
+                );
+              }
+
+              if (block.type === "imageGrid") {
+                return (
+                  <div class:list={["image-grid", { "is-framed": block.framed, "is-wide": block.wide }]}>
+                    {block.images.map((img) => {
+                      const src = typeof img === "string" ? img : img.src;
+                      const caption = typeof img === "string" ? undefined : img.caption;
+                      return (
+                        <figure class="image-item">
+                          {caption && <figcaption>{caption}</figcaption>}
+                          <img src={src} alt="" class="lightbox-trigger" />
+                        </figure>
+                      );
+                    })}
+                  </div>
+                );
+              }
+
+              if (block.type === "compare") {
+                return (
+                  <div class="compare-block">
+                    <div class="compare-controls">
+                      <div class="compare-tabs" role="tablist">
+                        <button type="button" class="compare-tab" data-tab="before">
+                          {block.before.label || "Before"}
+                        </button>
+                        <button type="button" class="compare-tab is-active" data-tab="after">
+                          {block.after.label || "After"}
+                        </button>
+                      </div>
+                      {block.liveUrl && (
+                        <a href={block.liveUrl} target="_blank" rel="noopener noreferrer" class="compare-live-link">
+                          View live page &#8599;
+                        </a>
+                      )}
+                    </div>
+                    <div class="compare-frame">
+                      <div class="compare-pane" data-pane="before">
+                        <img src={block.before.src} alt={block.before.label || "Before"} class="lightbox-trigger" />
+                      </div>
+                      <div class="compare-pane is-active" data-pane="after">
+                        <img src={block.after.src} alt={block.after.label || "After"} class="lightbox-trigger" />
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
+              if (block.type === "componentTable") {
+                return (
+                  <div class="component-table">
+                    {block.intro && <p class="component-table-intro">{block.intro}</p>}
+                    <div class="component-table-groups">
+                      {block.groups.map((group) => (
+                        <div class="component-table-group">
+                          <h3>{group.category}</h3>
+                          <div class="component-chip-list">
+                            {group.items.map((item) => (
+                              <span class="component-chip">{item}</span>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+
+
+              return null;
+            })
           }
         </div>
 
@@ -71,7 +130,15 @@ const { project } = Astro.props;
         <div class="sidebar-inner">
           <div class="meta-group">
             <span class="meta-label">Client / Company</span>
-            <p class="meta-value">{project.client}</p>
+            {project.clientUrl ? (
+              <p class="meta-value">
+                <a href={project.clientUrl} target="_blank" rel="noopener noreferrer" class="client-link">
+                  {project.client}<span class="client-link-arrow">&#8599;</span>
+                </a>
+              </p>
+            ) : (
+              <p class="meta-value">{project.client}</p>
+            )}
           </div>
           <div class="meta-group">
             <span class="meta-label">Project type</span>
@@ -90,7 +157,7 @@ const { project } = Astro.props;
     </div>
   </main>
 
-  <div class="lightbox" id="lightbox">
+  <div class="lightbox" id="lightbox" data-lenis-prevent>
     <button class="lightbox-close" aria-label="Close">&times;</button>
     <img class="lightbox-img" id="lightbox-img" src="" alt="" />
   </div>
@@ -105,12 +172,13 @@ const { project } = Astro.props;
     z-index: 1000;
     background: rgba(0, 0, 0, 0.9);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    overflow-y: auto;
+    padding: 64px 0;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.25s ease;
-    cursor: zoom-out;
   }
 
   .lightbox.open {
@@ -119,13 +187,13 @@ const { project } = Astro.props;
   }
 
   .lightbox-img {
-    max-width: 90vw;
-    max-height: 90vh;
-    object-fit: contain;
+    width: min(1100px, 92vw);
+    height: auto;
+    cursor: zoom-out;
   }
 
   .lightbox-close {
-    position: absolute;
+    position: fixed;
     top: var(--space-3);
     right: var(--space-4);
     background: none;
@@ -190,7 +258,7 @@ const { project } = Astro.props;
     max-width: var(--max-width);
     margin: 0 auto;
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     gap: var(--space-8);
   }
 
@@ -235,6 +303,23 @@ const { project } = Astro.props;
   .meta-value {
     font-size: var(--text-base);
     color: var(--color-text);
+  }
+
+  .client-link {
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 1px;
+    transition: border-color 0.2s;
+  }
+
+  .client-link:hover {
+    border-color: var(--color-text);
+  }
+
+  .client-link-arrow {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-left: 4px;
   }
 
   .hero-image {
@@ -340,6 +425,151 @@ const { project } = Astro.props;
     display: block;
   }
 
+  .image-grid.is-wide {
+    grid-template-columns: 1fr;
+  }
+
+  .image-grid.is-framed {
+    gap: var(--space-5);
+  }
+
+  .image-grid.is-framed img {
+    border: 1px solid var(--color-border);
+  }
+
+  .compare-block {
+    margin: 0 0 var(--space-6);
+  }
+
+  .compare-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .compare-tabs {
+    display: inline-flex;
+    gap: var(--space-2);
+    padding: 4px;
+    background: var(--color-surface, rgba(127, 127, 127, 0.08));
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+  }
+
+  .compare-live-link {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 1px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .compare-live-link:hover {
+    color: var(--color-text);
+    border-color: var(--color-text);
+  }
+
+  .compare-tab {
+    font-size: var(--text-xs);
+    letter-spacing: 0.02em;
+    color: var(--color-text-muted);
+    background: none;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .compare-tab:hover {
+    color: var(--color-text);
+  }
+
+  .compare-tab.is-active {
+    background: var(--color-text);
+    color: var(--color-bg, #fff);
+  }
+
+  .compare-frame {
+    position: relative;
+    max-height: 640px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+  }
+
+  .compare-pane {
+    display: none;
+  }
+
+  .compare-pane.is-active {
+    display: block;
+  }
+
+  .compare-pane img {
+    width: 100%;
+    display: block;
+    cursor: zoom-in;
+  }
+
+  .component-table {
+    margin: 0 0 var(--space-6);
+  }
+
+  .component-table-intro {
+    font-size: var(--text-base);
+    line-height: 1.8;
+    color: var(--color-text);
+    margin-bottom: var(--space-4);
+  }
+
+  .component-table-groups {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .component-table-group {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: var(--space-5);
+    padding: var(--space-5) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .component-table-group h3 {
+    font-size: var(--text-md);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .component-chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-content: flex-start;
+  }
+
+  .component-chip {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: 1;
+    padding: 7px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+  }
+
+  @media (max-width: 640px) {
+    .component-table-group {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+  }
+
   .back-link-wrapper {
     margin-top: var(--space-6);
     padding: var(--space-5) 0;
@@ -403,5 +633,18 @@ const { project } = Astro.props;
   lightbox.addEventListener("click", closeLightbox);
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeLightbox();
+  });
+
+  document.querySelectorAll<HTMLElement>(".compare-block").forEach((block) => {
+    const tabs = block.querySelectorAll<HTMLButtonElement>(".compare-tab");
+    const panes = block.querySelectorAll<HTMLElement>(".compare-pane");
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.tab;
+        tabs.forEach((t) => t.classList.toggle("is-active", t === tab));
+        panes.forEach((p) => p.classList.toggle("is-active", p.dataset.pane === target));
+      });
+    });
   });
 </script>

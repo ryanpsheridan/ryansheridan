@@ -12,9 +12,35 @@ export interface ImageGridImage {
 export interface ImageGridBlock {
   type: "imageGrid";
   images: (string | ImageGridImage)[];
+  /** Adds a light border around each image and extra breathing room (UI screenshots). */
+  framed?: boolean;
+  /** Lays the images out full-width instead of the two-column grid. */
+  wide?: boolean;
 }
 
-export type ContentBlock = TextBlock | ImageGridBlock;
+export interface CompareBlock {
+  type: "compare";
+  before: { src: string; label?: string };
+  after: { src: string; label?: string };
+  liveUrl?: string;
+}
+
+export interface ComponentTableGroup {
+  category: string;
+  items: string[];
+}
+
+export interface ComponentTableBlock {
+  type: "componentTable";
+  intro?: string;
+  groups: ComponentTableGroup[];
+}
+
+export type ContentBlock =
+  | TextBlock
+  | ImageGridBlock
+  | CompareBlock
+  | ComponentTableBlock;
 
 export interface Project {
   slug: string;
@@ -24,6 +50,8 @@ export interface Project {
   tags: string[];
   tools: string[];
   client: string;
+  /** Client's website; when set, the sidebar client name links out to it. */
+  clientUrl?: string;
   content: ContentBlock[];
 }
 
@@ -36,61 +64,112 @@ export const projects: Project[] = [
     tags: ["Design System", "Web Design"],
     tools: ["Figma", "Makeswift", "Contentful"],
     client: "Feedonomics",
+    clientUrl: "https://feedonomics.com/",
     content: [
       {
         type: "text",
-        heading: "Six Months, One Rebuild",
-        body: `<p>Feedonomics is a sub-brand under Commerce, alongside BigCommerce and Makeswift. The project started as a brand refresh and, over six months, turned into something bigger: a full rebrand where everything but the logo was open for reconsideration. New typography, new color, new components, new page architecture, top to bottom.</p><p>The old site also lived outside our main web stack, so alongside the design work, we rebuilt the entire thing into <strong>Makeswift</strong> as the page builder with <strong>Contentful</strong> as the CMS, the same system that already powers BigCommerce and Makeswift, now stretched to hold a third brand.</p>`,
+        heading: "Building the Foundation",
+        body: `<p><a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a> is a sub-brand under <a href="https://www.commerce.com/" target="_blank" rel="noopener noreferrer">Commerce</a>, alongside <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> and <a href="https://www.makeswift.com/" target="_blank" rel="noopener noreferrer">Makeswift</a>. This one started small: refresh the brand. Six months later, it had turned into a full rebrand where everything but the logo was back on the table, plus a move off the old site's standalone stack and into <strong>Makeswift</strong> as the page builder with <strong>Contentful</strong> as the CMS, the same combination already running BigCommerce and Makeswift, now stretched to hold a third brand.</p><p>My seat at the table was design systems: turning "new brand" into typography scales, spacing rules, and components that would hold up across a hundred future pages nobody had designed yet.</p>`,
       },
       {
-        type: "imageGrid",
-        images: [
-          { src: "/project-feedonomics2.jpg", caption: "Before" },
-          { src: "/project-feedonomics3.jpg", caption: "After" },
-        ],
-      },
-      {
-        type: "text",
-        heading: "Systems Underneath",
-        body: `<p>Color was developed by our brand designer <a href="https://www.linkedin.com/in/robrodriguezwork/" target="_blank" rel="noopener noreferrer"><strong>Rob Rodriguez</strong></a>, and page designs and graphics were led by our senior web designer <a href="https://www.linkedin.com/in/jc-roque/" target="_blank" rel="noopener noreferrer"><strong>Juan Roque</strong></a>. My part was mostly the structure underneath all of it, somewhere around 90% of my time: typography and sizing scales, spacing and layout guidelines from desktop down to mobile, and the rules that let designers and publishers build pages consistently without guessing. The rest was pitching in on page layouts wherever an extra set of hands helped, because a project like this only gets across the line as a team.</p><p>I also oversaw and built most of the new and updated components, and set up a "kitchen sink" environment in Makeswift, a working reference where every component, spacing token, and layout pattern lives side by side so the team could build pages efficiently without reinventing padding and gaps every time. Training designers and publishers on the new system was part of the job too, and by the back half of the project, most of my time was spent working directly with developers, getting components from spec to shipped.</p>`,
-      },
-      {
-        type: "imageGrid",
-        images: [
-          { src: "/project-feedonomics4.jpg", caption: "Before" },
-          { src: "/project-feedonomics5.jpg", caption: "After" },
-        ],
+        type: "compare",
+        before: { src: "/project-feedonomics2.jpg", label: "Before" },
+        after: { src: "/feedonomics-homepage.jpg", label: "After" },
+        liveUrl: "https://feedonomics.com/",
       },
       {
         type: "text",
-        heading: "Built for Handoff",
-        body: `<p>A design system is only as good as the handoff behind it. Every component got a full annotation pass: structure and content rules, interactive states, and responsive behavior spelled out at each breakpoint, desktop, small desktop, tablet, and mobile, so there was no ambiguity for the dev team building it.</p><p>Alongside that, I created and maintained the <strong>FDX Component Review</strong>, a running doc that tracked every component through its lifecycle: design approved, in dev, QA'd for SEO, signed off. It's where design, publishing, and engineering left notes on the same component in one place instead of scattered across Slack threads, so nothing shipped half-checked.</p>`,
+        heading: "Not a Solo Job",
+        body: `<p>None of this was one person's work, and the parts I'm proudest of aren't mine. Color came from our brand designer <a href="https://www.linkedin.com/in/robrodriguezwork/" target="_blank" rel="noopener noreferrer"><strong>Rob Rodriguez</strong></a>. Page design and graphics were led by our senior web designer <a href="https://www.linkedin.com/in/jc-roque/" target="_blank" rel="noopener noreferrer"><strong>Juan Roque</strong></a>. And by the back half of the project, most of my own time was spent shoulder to shoulder with our developers, turning specs into shipped, working components. A rebuild this size only crosses the line as a team, and this one had a good one.</p><p>I owned the core design system architecture, first building out the foundational components in Figma and then mapping matching tokens and sections into Makeswift. This unified structure defined the typography, spacing, and responsive layout rules required for cross-platform consistency. By creating this comprehensive "kitchen sink" reference, I optimized the page-building process for both designers and publishers while providing targeted training to ensure seamless adoption.</p>`,
       },
       {
         type: "imageGrid",
+        framed: true,
         images: [
-          { src: "/project-feedonomics6.jpg", caption: "Documentation" },
-          { src: "/project-feedonomics7.jpg", caption: "Documentation" },
+          { src: "/feedonomics-makeswift-tokens.jpg", caption: "Makeswift — Color Tokens" },
+          { src: "/feedonomics-makeswift-tokens-1.jpg", caption: "Makeswift — Type Scale" },
+        ],
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        wide: true,
+        images: [
+          { src: "/Feedonomics-color-tokens.jpg", caption: "Full Color Token System" },
+        ],
+      },
+      {
+        type: "compare",
+        before: { src: "/project-feedonomics4.jpg", label: "Before" },
+        after: { src: "/project-feedonomics5.jpg", label: "After" },
+        liveUrl: "https://feedonomics.com/product/advertising-feed-management/",
+      },
+      {
+        type: "text",
+        heading: "The Component System, in Full",
+        body: `<p>I put together annotation specs for every component: structure and content rules, interactive states, and responsive behavior at each breakpoint, desktop down to mobile, working closely with the dev team throughout to make sure nothing fell through the cracks. I tracked all of it in a running document called the <strong>FDX Component Review</strong>: every component's status, open questions, and sign-offs from design, publishing, and SEO in one place instead of scattered across Slack threads.</p><p>That document is internal, but the list underneath it isn't a secret. Here's what actually got designed and shipped, grouped by what it does rather than what we happened to call it in the file.</p>`,
+      },
+      {
+        type: "componentTable",
+        groups: [
+          {
+            category: "Navigation & Structure",
+            items: ["Primary Navigation (Mega Menu)", "Secondary Navigation", "Breadcrumbs", "Footer"],
+          },
+          {
+            category: "Content & Typography",
+            items: ["Eyebrow", "Bulleted & Numbered Lists", "Gradient Text", "Quote Block", "Icon System"],
+          },
+          {
+            category: "Interactive & Motion",
+            items: [
+              "Accordion",
+              "Pill Tabs",
+              "Carousel",
+              "Scroll-Triggered Reveal",
+              "Expanding CTA Banner",
+              "Text Animation (Typewriter Effects)",
+              "Scroll Progress Bar",
+              "Animated Illustrations (Lottie)",
+            ],
+          },
+          {
+            category: "Media",
+            items: ["Custom Video Embed", "Video Thumbnail Card", "Logo Grid"],
+          },
+          {
+            category: "Data, Cards & Forms",
+            items: ["Data Table", "Embedded Table", "Lead Capture Form", "Buttons & Button Group", "Standard Card", "Banner"],
+          },
+          {
+            category: "Layout Templates",
+            items: [
+              "River Layout (Alternating Media + Text)",
+              "Resources Hub",
+              "Blog Home & Article Template",
+              "Success Stories Hub & Template",
+              "Guides & Whitepapers Hub",
+              "Webinars Hub",
+              "Integrations Directory",
+            ],
+          },
         ],
       },
       {
         type: "text",
         heading: "A Resources System That Scales",
-        body: `<p>The largest single piece of this project was the resources section. Feedonomics runs a blog, success stories, webinars, and gated guides and whitepapers, and the old site treated each as its own one-off build. The goal was a layout system for the parent resources hub that could repeat cleanly across every content type, with child (L3) page templates that reused as much of that system as possible while still flexing for what makes a webinar page different from a blog post.</p><p>Same component logic, same spacing rules, same card patterns, applied consistently instead of rebuilt per content type. It's the same principle behind every design system I've worked on: reuse what you can, and only break the pattern where the content genuinely demands it.</p>`,
+        body: `<p>The largest single piece of this project was the resources section. <a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a> runs a blog, success stories, webinars, and gated guides and whitepapers, and the old site treated each as its own one-off build. The goal was a layout system for the parent resources hub that could repeat cleanly across every content type, with child page templates that reused as much of that system as possible while still flexing for what makes a webinar page different from a blog post.</p><p>Same component logic, same spacing rules, same card patterns, applied consistently instead of rebuilt per content type. It's the same principle behind every design system I've worked on: reuse what you can, and only break the pattern where the content genuinely demands it.</p>`,
       },
       {
-        type: "imageGrid",
-        images: [
-          { src: "/project-feedonomics9.jpg", caption: "Before" },
-          { src: "/project-feedonomics10.jpg", caption: "After" },
-        ],
+        type: "compare",
+        before: { src: "/project-feedonomics9.jpg", label: "Before" },
+        after: { src: "/project-feedonomics10.jpg", label: "After" },
+        liveUrl: "https://feedonomics.com/blog/",
       },
       {
-        type: "imageGrid",
-        images: [
-          { src: "/project-feedonomics8.jpg", caption: "Figma — Resources Hub" },
-          { src: "/project-feedonomics11.jpg", caption: "Figma — Blog Template" },
-        ],
+        type: "text",
+        heading: "Where It Landed",
+        body: `<p>Six months, three names on the credits I actually want up there, and a system built to outlast the project it launched with. The best measure of a design system isn't the pretty parts, it's whether someone who wasn't in the room can build a page next quarter without breaking anything. That was the goal from day one, and it's what shipped.</p>`,
       },
     ],
   },
@@ -102,11 +181,12 @@ export const projects: Project[] = [
     tags: ["Exploration", "Design System"],
     tools: ["Claude Design", "Figma"],
     client: "Commerce",
+    clientUrl: "https://www.commerce.com/",
     content: [
       {
         type: "text",
         heading: "The Premise",
-        body: `<p>Six months ago I built a <a href="/work/commerce-multi-brand-system">multi-brand Figma design system</a> to cover Commerce, BigCommerce, Feedonomics and Makeswift. One source of truth across four brands, with shared foundations and brand-specific surfaces. That alone solved most of what we needed it to solve.</p><p>Three months ago I connected that system to <strong>Claude</strong>. The same tokens, components and rules, now accessible to our design and development team through the chat interface. It opened up a different kind of speed. We could prototype website interfaces in Claude using our actual tokens, see real brand output in seconds, and pressure-test the system in ways Figma alone couldn't surface.</p><p>A few weeks ago I started exploring <strong>Claude Design</strong>, and it opened up a different question entirely. This wasn't an integration anymore, it was a different way to think about what a design system even is. Not a library you reference, but an environment that builds with you. And it opens the door to something we couldn't do before, giving marketing the ability to self-serve decks, one-pagers and thumbnails directly from the system.</p><blockquote><p>This wasn't an integration anymore, it was a different way to think about what a design system even is. Not a library you reference, but an environment that builds with you.</p></blockquote><p>The bottleneck I've been trying to solve is real. Four brands, one design team, and a steady drip of low-stakes asset requests that eat the time we need for higher-leverage work. Marketing wants independence. Design wants brand integrity. Both sides are right, and the gap between them is where this exploration lives.</p><p>The question I started with was simple. Could a design system live natively inside an AI environment without losing the consistency that makes it a system in the first place?</p><p>The answer turned out to be yes, mostly. But the more interesting answer is what the experiment taught me about design systems in general.</p><h3>The Architecture Decision</h3><p>The first real decision, going back to the original Figma system, was whether to build one system that covered all four brands or four separate systems with shared foundations. I tried the unified approach first because it felt like the cleaner answer. It wasn't.</p><p>When you mix brands into one system, everything starts to blend. Feedonomics surfaces end up with BigCommerce styling. Sister-brand logos show up where they shouldn't. The system treats every brand asset as fair game, which is exactly what a design system is supposed to prevent.</p><img alt="" src="/project-claude-design2.jpg"><p>Splitting them solved it. Each brand gets its own scoped system with its own tokens, components and rules. The foundations are shared but the surfaces are separate. That decision held up in Figma, and it held up again when I connected the system to Claude. If anything, AI made the principle sharper. AI doesn't forgive ambiguity. If two things can be confused, they will be.</p><blockquote><p>That decision held up in Figma, and it held up again when I connected the system to Claude.</p></blockquote><p>That's a useful reminder. Most design systems carry more shared structure than they should, because human designers can hold the brand context in their heads. AI can't. Building for AI made me more disciplined about scope than building for humans ever did.</p>`,
+        body: `<p>Six months ago I built a <a href="/work/commerce-multi-brand-system">multi-brand Figma design system</a> to cover Commerce, <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a>, <a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a> and <a href="https://www.makeswift.com/" target="_blank" rel="noopener noreferrer">Makeswift</a>. One source of truth across four brands, with shared foundations and brand-specific surfaces. That alone solved most of what we needed it to solve.</p><p>Three months ago I connected that system to <strong>Claude</strong>. The same tokens, components and rules, now accessible to our design and development team through the chat interface. It opened up a different kind of speed. We could prototype website interfaces in Claude using our actual tokens, see real brand output in seconds, and pressure-test the system in ways Figma alone couldn't surface.</p><p>A few weeks ago I started exploring <strong>Claude Design</strong>, and it opened up a different question entirely. This wasn't an integration anymore, it was a different way to think about what a design system even is. Not a library you reference, but an environment that builds with you. And it opens the door to something we couldn't do before, giving marketing the ability to self-serve decks, one-pagers and thumbnails directly from the system.</p><blockquote><p>This wasn't an integration anymore, it was a different way to think about what a design system even is. Not a library you reference, but an environment that builds with you.</p></blockquote><p>The bottleneck I've been trying to solve is real. Four brands, one design team, and a steady drip of low-stakes asset requests that eat the time we need for higher-leverage work. Marketing wants independence. Design wants brand integrity. Both sides are right, and the gap between them is where this exploration lives.</p><p>The question I started with was simple. Could a design system live natively inside an AI environment without losing the consistency that makes it a system in the first place?</p><p>The answer turned out to be yes, mostly. But the more interesting answer is what the experiment taught me about design systems in general.</p><h3>The Architecture Decision</h3><p>The first real decision, going back to the original Figma system, was whether to build one system that covered all four brands or four separate systems with shared foundations. I tried the unified approach first because it felt like the cleaner answer. It wasn't.</p><p>When you mix brands into one system, everything starts to blend. Feedonomics surfaces end up with BigCommerce styling. Sister-brand logos show up where they shouldn't. The system treats every brand asset as fair game, which is exactly what a design system is supposed to prevent.</p><img alt="" src="/project-claude-design2.jpg"><p>Splitting them solved it. Each brand gets its own scoped system with its own tokens, components and rules. The foundations are shared but the surfaces are separate. That decision held up in Figma, and it held up again when I connected the system to Claude. If anything, AI made the principle sharper. AI doesn't forgive ambiguity. If two things can be confused, they will be.</p><blockquote><p>That decision held up in Figma, and it held up again when I connected the system to Claude.</p></blockquote><p>That's a useful reminder. Most design systems carry more shared structure than they should, because human designers can hold the brand context in their heads. AI can't. Building for AI made me more disciplined about scope than building for humans ever did.</p>`,
       },
       {
         type: "text",
@@ -128,6 +208,7 @@ export const projects: Project[] = [
     tags: ["Branding", "Illustration"],
     tools: ["Adobe Illustrator", "Figma"],
     client: "RHOW Coffee",
+    clientUrl: "https://www.instagram.com/rhowcoffee",
     content: [
       {
         type: "text",
@@ -193,11 +274,12 @@ export const projects: Project[] = [
     tags: ["Design System"],
     tools: ["Figma"],
     client: "Commerce",
+    clientUrl: "https://www.commerce.com/",
     content: [
       {
         type: "text",
         heading: "One System for Three Brands",
-        body: `<p>Commerce is the parent company behind BigCommerce, Feedonomics, and Makeswift, and each brand had its own Figma file, token library, and way of doing things. Over time, maintaining four separate systems became unsustainable. Designers were constantly using tokens from each file, mixing up color and type tokens per brand. They were inconsistently named, and there was no shared source of truth.</p><p>The goal was to consolidate all four into a single scalable design system that worked not just for designers, but for publishers, marketers, developers, and CRO specialists too. That mixed audience is what made this genuinely hard to get right.</p>`,
+        body: `<p>Commerce is the parent company behind <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a>, <a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a>, and <a href="https://www.makeswift.com/" target="_blank" rel="noopener noreferrer">Makeswift</a>, and each brand had its own Figma file, token library, and way of doing things. Over time, maintaining four separate systems became unsustainable. Designers were constantly using tokens from each file, mixing up color and type tokens per brand. They were inconsistently named, and there was no shared source of truth.</p><p>The goal was to consolidate all four into a single scalable design system that worked not just for designers, but for publishers, marketers, developers, and CRO specialists too. That mixed audience is what made this genuinely hard to get right.</p>`,
       },
       {
         type: "imageGrid",
@@ -228,6 +310,7 @@ export const projects: Project[] = [
     tags: ["Branding"],
     tools: ["Adobe Illustrator", "Figma"],
     client: "Flow Stays",
+    clientUrl: "https://www.flowstays.com/",
     content: [
       {
         type: "text",
@@ -252,6 +335,7 @@ export const projects: Project[] = [
     tags: ["Web Design"],
     tools: ["Webflow"],
     client: "Bynum Golf",
+    clientUrl: "https://www.bynumgolf.com/",
     content: [
       {
         type: "text",
@@ -275,11 +359,12 @@ export const projects: Project[] = [
     tags: ["Branding", "Apparel"],
     tools: ["Adobe Illustrator"],
     client: "BigCommerce",
+    clientUrl: "https://www.bigcommerce.com/",
     content: [
       {
         type: "text",
         heading: "Swag Worth Keeping",
-        body: `<p>When BigCommerce hit 10 years, the goal was to make something people would actually want to wear. The design leans into a bold retro type treatment, layered with the company's blue and built to feel more like a streetwear graphic than a corporate giveaway. It started as a lockup and ended up on a shirt that people were genuinely excited to get.</p>`,
+        body: `<p>When <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> hit 10 years, the goal was to make something people would actually want to wear. The design leans into a bold retro type treatment, layered with the company's blue and built to feel more like a streetwear graphic than a corporate giveaway. It started as a lockup and ended up on a shirt that people were genuinely excited to get.</p>`,
       },
       {
         type: "imageGrid",
@@ -298,6 +383,7 @@ export const projects: Project[] = [
     tags: ["Web Design"],
     tools: ["Webflow"],
     client: "Five Star Vacation Home Rental",
+    clientUrl: "https://www.fivestarvhr.com/",
     content: [
       {
         type: "text",
@@ -356,11 +442,12 @@ export const projects: Project[] = [
     tags: ["Illustration", "Branding"],
     tools: ["InDesign", "Adobe Illustrator"],
     client: "BigCommerce",
+    clientUrl: "https://www.bigcommerce.com/",
     content: [
       {
         type: "text",
         heading: "Reaching the People Who Actually Make the Call",
-        body: `<p>This was a campaign built to get in front of B2B buyers and decision makers and show them what BigCommerce could do for their business. At the core of the work was a set of custom isometric illustrations that ran throughout the campaign, giving each piece a consistent visual language across ebook layouts, social assets, and ad creative.</p>`,
+        body: `<p>This was a campaign built to get in front of B2B buyers and decision makers and show them what <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> could do for their business. At the core of the work was a set of custom isometric illustrations that ran throughout the campaign, giving each piece a consistent visual language across ebook layouts, social assets, and ad creative.</p>`,
       },
       {
         type: "imageGrid",
@@ -403,6 +490,7 @@ export const projects: Project[] = [
     tags: ["Visual Design"],
     tools: ["InDesign"],
     client: "BigCommerce",
+    clientUrl: "https://www.bigcommerce.com/",
     content: [
       {
         type: "text",
@@ -433,6 +521,7 @@ export const projects: Project[] = [
     tags: ["Illustration"],
     tools: ["Adobe Illustrator"],
     client: "BigCommerce",
+    clientUrl: "https://www.bigcommerce.com/",
     content: [
       {
         type: "imageGrid",

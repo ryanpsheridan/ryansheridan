@@ -70,6 +70,17 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
     box-sizing: border-box;
   }
 
+  /* Matches Inter's box metrics so the fallback system font doesn't reflow
+     layout once the webfont swaps in (prevents CLS on first load). */
+  @font-face {
+    font-family: "Inter Fallback";
+    src: local("Arial");
+    ascent-override: 90.44%;
+    descent-override: 22.52%;
+    line-gap-override: 0%;
+    size-adjust: 107.12%;
+  }
+
   :root {
     --color-bg: #ffffff;
     --color-text: #111111;
@@ -77,7 +88,7 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
     --color-border: #e5e5e5;
     --color-tag-bg: #f9f9f9;
     --color-tag-text: #7a7a7a;
-    --font-sans: "Inter", -apple-system, system-ui, sans-serif;
+    --font-sans: "Inter", "Inter Fallback", -apple-system, system-ui, sans-serif;
     --max-width: 1140px;
     --content-width: 656px;
     --page-padding: 40px;
@@ -107,6 +118,7 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
 
   html {
     scroll-behavior: smooth;
+    scrollbar-gutter: stable;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
