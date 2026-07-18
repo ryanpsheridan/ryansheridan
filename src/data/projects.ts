@@ -18,6 +18,7 @@ export interface CompareBlock {
   type: "compare";
   before: { src: string; label?: string };
   after: { src: string; label?: string };
+  liveUrl?: string;
 }
 
 export interface ComponentTableGroup {
@@ -66,7 +67,8 @@ export const projects: Project[] = [
       {
         type: "compare",
         before: { src: "/project-feedonomics2.jpg", label: "Before" },
-        after: { src: "/project-feedonomics3.jpg", label: "After" },
+        after: { src: "/feedonomics-homepage.jpg", label: "After" },
+        liveUrl: "https://feedonomics.com/",
       },
       {
         type: "text",
@@ -77,6 +79,7 @@ export const projects: Project[] = [
         type: "compare",
         before: { src: "/project-feedonomics4.jpg", label: "Before" },
         after: { src: "/project-feedonomics5.jpg", label: "After" },
+        liveUrl: "https://feedonomics.com/product/advertising-feed-management/",
       },
       {
         type: "text",
@@ -138,6 +141,7 @@ export const projects: Project[] = [
         type: "compare",
         before: { src: "/project-feedonomics9.jpg", label: "Before" },
         after: { src: "/project-feedonomics10.jpg", label: "After" },
+        liveUrl: "https://feedonomics.com/blog/",
       },
       {
         type: "text",
