@@ -26,10 +26,10 @@ const { project } = Astro.props;
       <span class="current">{project.title}</span>
     </nav>
 
+    <h1>{project.title}</h1>
+
     <div class="project-layout">
       <div class="project-main">
-        <h1>{project.title}</h1>
-
         {project.thumbnail && (
           <div class="hero-image">
             <img src={project.thumbnail} alt={project.title} />
@@ -178,6 +178,14 @@ const { project } = Astro.props;
     color: var(--color-text);
   }
 
+  h1 {
+    max-width: var(--max-width);
+    margin: 0 auto var(--space-6);
+    font-size: clamp(var(--text-2xl), 5vw, var(--text-4xl));
+    font-weight: 400;
+    letter-spacing: -0.03em;
+  }
+
   .project-layout {
     max-width: var(--max-width);
     margin: 0 auto;
@@ -189,13 +197,6 @@ const { project } = Astro.props;
   .project-main {
     flex: 3 1 0%;
     min-width: 0;
-  }
-
-  h1 {
-    font-size: clamp(var(--text-2xl), 5vw, var(--text-4xl));
-    font-weight: 400;
-    letter-spacing: -0.03em;
-    margin-bottom: var(--space-6);
   }
 
   .project-sidebar {
@@ -227,8 +228,7 @@ const { project } = Astro.props;
 
   .meta-label {
     font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.02em;
     color: var(--color-text-muted);
   }
 
@@ -330,8 +330,7 @@ const { project } = Astro.props;
 
   .image-item figcaption {
     font-size: var(--text-xs);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    letter-spacing: 0.02em;
     color: var(--color-text-muted);
     margin-bottom: var(--space-2);
   }
