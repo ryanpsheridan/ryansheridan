@@ -14,10 +14,9 @@ const projects = getHomepageProjects();
       <h1 class="sticky-title">Designing systems,<br />sites and brands.</h1>
     </div>
     <div class="right-panel">
-      {projects.map((project, i) => (
+      {projects.map((project) => (
         <a href={`/work/${project.slug}`} class="project-row">
           <div class="row-grid">
-            <div class="cell cell-number">{String(i + 1).padStart(2, "0")}</div>
             <div class="cell cell-image">
               {project.thumbnail && <img src={project.thumbnail} alt={project.title} loading="lazy" />}
             </div>
@@ -87,7 +86,7 @@ const projects = getHomepageProjects();
 
   .row-grid {
     display: grid;
-    grid-template-columns: 56px 200px 1fr;
+    grid-template-columns: 200px 1fr;
     align-items: center;
     gap: 32px;
     padding: 32px 0;
@@ -97,20 +96,10 @@ const projects = getHomepageProjects();
     min-width: 0;
   }
 
-  .cell-number {
-    font-size: 12px;
-    color: var(--color-text-muted);
-    font-variant-numeric: tabular-nums;
-    padding-left: 20px;
-    border-left: 1px solid transparent;
-  }
-
   .cell-image {
     aspect-ratio: 4 / 3;
     overflow: hidden;
     background: var(--color-tag-bg);
-    border-left: 1px solid var(--color-border);
-    padding-left: 20px;
   }
 
   .cell-image img {
@@ -165,26 +154,16 @@ const projects = getHomepageProjects();
     }
 
     .row-grid {
-      grid-template-columns: 32px 1fr;
-      grid-template-areas:
-        "number image"
-        "info info";
+      grid-template-columns: 1fr;
       row-gap: 20px;
       padding: 28px 0;
     }
 
-    .cell-number {
-      grid-area: number;
-      padding-left: 0;
-    }
-
     .cell-image {
-      grid-area: image;
       aspect-ratio: 16 / 10;
     }
 
     .cell-info {
-      grid-area: info;
       border-left: none;
       padding-left: 0;
     }
