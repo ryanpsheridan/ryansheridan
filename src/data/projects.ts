@@ -24,6 +24,57 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: "feedonomics-rebrand-design-system",
+    title: "Feedonomics Rebrand & Design System",
+    thumbnail: "/project-feedonomics1.jpg",
+    showOnHomepage: true,
+    tags: ["Design System", "Web Design"],
+    tools: ["Figma", "Makeswift", "Contentful"],
+    client: "Feedonomics",
+    content: [
+      {
+        type: "text",
+        heading: "A Refresh That Became a Rebuild",
+        body: `<p>Feedonomics is a sub-brand under Commerce, alongside BigCommerce and Makeswift. What started as a brand refresh turned into a full rebrand, everything but the logo was on the table. New typography, new color, new components, new page architecture, top to bottom.</p><p>The old site also lived outside our main web stack, so alongside the design work, we rebuilt the entire thing into <strong>Makeswift</strong> as our page builder with <strong>Contentful</strong> as the CMS. Same team, same system now powering three brands instead of two.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-feedonomics2.jpg", "/project-feedonomics3.jpg"],
+      },
+      {
+        type: "text",
+        heading: "Systems First",
+        body: `<p>My focus on this project was design systems, not the visual identity itself. All color treatments were developed by our brand designer <a href="https://www.linkedin.com/in/robrodriguezwork/" target="_blank" rel="noopener noreferrer"><strong>Rob Rodriguez</strong></a>, and page designs and graphics were led by our lead web designer <a href="https://www.linkedin.com/in/jc-roque/" target="_blank" rel="noopener noreferrer"><strong>Juan Roque</strong></a>. What I owned was the structure underneath all of it: typography and sizing scales, spacing and layout guidelines from desktop down to mobile, and the rules that let designers and publishers build pages consistently without guessing.</p><p>I also oversaw and built most of the new and updated components, and set up the "kitchen sink" environment in Makeswift, a working reference where every component, spacing token, and layout pattern lives together so the team can build pages efficiently without reinventing padding and gaps every time. Training designers and publishers on the new system was part of the job too. By the second half of the project I was spending roughly 80% of my time working directly with developers, getting components from spec to shipped.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-feedonomics4.jpg", "/project-feedonomics5.jpg"],
+      },
+      {
+        type: "text",
+        heading: "Built for Handoff",
+        body: `<p>A design system is only as good as the handoff behind it. Every component I shipped got a full annotation pass: structure and content rules, interactive states, and responsive behavior spelled out at each breakpoint, desktop, small desktop, tablet, and mobile, so there was no ambiguity for the dev team building it.</p><p>Alongside that, I created and maintained the <strong>FDX Component Review</strong>, a running doc that tracked every component through its lifecycle: design approved, in dev, QA'd for SEO, signed off. It's where design, publishing, and engineering left notes on the same component in one place instead of scattered across Slack threads, so nothing shipped half-checked.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-feedonomics6.jpg", "/project-feedonomics7.jpg"],
+      },
+      {
+        type: "text",
+        heading: "A Resources System That Scales",
+        body: `<p>The largest single piece of this project was the resources section. Feedonomics runs a blog, success stories, webinars, and gated guides and whitepapers, and the old site treated each as its own one-off build. The goal was a layout system for the parent resources hub that could repeat cleanly across every content type, and child (L3) page templates that could reuse as much of that system as possible while still flexing for what makes a webinar page different from a blog post.</p><p>Same component logic, same spacing rules, same card patterns, applied consistently instead of rebuilt per content type. It's the same principle behind every design system I've worked on: reuse what you can, and only break the pattern where the content genuinely demands it.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-feedonomics9.jpg", "/project-feedonomics10.jpg"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-feedonomics8.jpg", "/project-feedonomics11.jpg"],
+      },
+    ],
+  },
+  {
     slug: "claude-design-consistency-first-design-second",
     title: "Claude Design: Consistency First",
     thumbnail: "/project-claude-design1.jpg",
