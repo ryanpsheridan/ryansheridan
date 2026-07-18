@@ -31,7 +31,7 @@ export const projects: Project[] = [
   {
     slug: "feedonomics-rebrand-design-system",
     title: "Feedonomics Rebrand & Design System",
-    thumbnail: "/project-feedonomics1.jpg",
+    thumbnail: "/feedonomics-featured.gif",
     showOnHomepage: true,
     tags: ["Design System", "Web Design"],
     tools: ["Figma", "Makeswift", "Contentful"],
