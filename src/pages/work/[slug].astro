@@ -38,27 +38,79 @@ const { project } = Astro.props;
 
         <div class="project-content">
           {
-            project.content.map((block) =>
-              block.type === "text" ? (
-                <section class="content-section">
-                  {block.heading && <h2>{block.heading}</h2>}
-                  <div class="body" set:html={block.body} />
-                </section>
-              ) : (
-                <div class="image-grid">
-                  {block.images.map((img) => {
-                    const src = typeof img === "string" ? img : img.src;
-                    const caption = typeof img === "string" ? undefined : img.caption;
-                    return (
-                      <figure class="image-item">
-                        {caption && <figcaption>{caption}</figcaption>}
-                        <img src={src} alt="" class="lightbox-trigger" />
-                      </figure>
-                    );
-                  })}
-                </div>
-              )
-            )
+            project.content.map((block) => {
+              if (block.type === "text") {
+                return (
+                  <section class="content-section">
+                    {block.heading && <h2>{block.heading}</h2>}
+                    <div class="body" set:html={block.body} />
+                  </section>
+                );
+              }
+
+              if (block.type === "imageGrid") {
+                return (
+                  <div class="image-grid">
+                    {block.images.map((img) => {
+                      const src = typeof img === "string" ? img : img.src;
+                      const caption = typeof img === "string" ? undefined : img.caption;
+                      return (
+                        <figure class="image-item">
+                          {caption && <figcaption>{caption}</figcaption>}
+                          <img src={src} alt="" class="lightbox-trigger" />
+                        </figure>
+                      );
+                    })}
+                  </div>
+                );
+              }
+
+              if (block.type === "compare") {
+                return (
+                  <div class="compare-block">
+                    <div class="compare-tabs" role="tablist">
+                      <button type="button" class="compare-tab is-active" data-tab="before">
+                        {block.before.label || "Before"}
+                      </button>
+                      <button type="button" class="compare-tab" data-tab="after">
+                        {block.after.label || "After"}
+                      </button>
+                    </div>
+                    <div class="compare-frame">
+                      <div class="compare-pane is-active" data-pane="before">
+                        <img src={block.before.src} alt={block.before.label || "Before"} class="lightbox-trigger" />
+                      </div>
+                      <div class="compare-pane" data-pane="after">
+                        <img src={block.after.src} alt={block.after.label || "After"} class="lightbox-trigger" />
+                      </div>
+                    </div>
+                    <p class="compare-hint">Scroll to see the full page. Click the image to expand it.</p>
+                  </div>
+                );
+              }
+
+              if (block.type === "componentTable") {
+                return (
+                  <div class="component-table">
+                    {block.intro && <p class="component-table-intro">{block.intro}</p>}
+                    <div class="component-table-groups">
+                      {block.groups.map((group) => (
+                        <div class="component-table-group">
+                          <h3>{group.category}</h3>
+                          <ul>
+                            {group.items.map((item) => (
+                              <li>{item}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+
+              return null;
+            })
           }
         </div>
 
@@ -340,6 +392,131 @@ const { project } = Astro.props;
     display: block;
   }
 
+  .compare-block {
+    margin: 0 0 var(--space-6);
+  }
+
+  .compare-tabs {
+    display: inline-flex;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+    padding: 4px;
+    background: var(--color-surface, rgba(127, 127, 127, 0.08));
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+  }
+
+  .compare-tab {
+    font-size: var(--text-xs);
+    letter-spacing: 0.02em;
+    color: var(--color-text-muted);
+    background: none;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .compare-tab:hover {
+    color: var(--color-text);
+  }
+
+  .compare-tab.is-active {
+    background: var(--color-text);
+    color: var(--color-bg, #fff);
+  }
+
+  .compare-frame {
+    position: relative;
+    max-height: 640px;
+    overflow-y: auto;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+  }
+
+  .compare-pane {
+    display: none;
+  }
+
+  .compare-pane.is-active {
+    display: block;
+  }
+
+  .compare-pane img {
+    width: 100%;
+    display: block;
+    cursor: zoom-in;
+  }
+
+  .compare-hint {
+    margin-top: var(--space-2);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .component-table {
+    margin: 0 0 var(--space-6);
+  }
+
+  .component-table-intro {
+    font-size: var(--text-base);
+    line-height: 1.8;
+    color: var(--color-text);
+    margin-bottom: var(--space-4);
+  }
+
+  .component-table-groups {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--space-5);
+  }
+
+  .component-table-group h3 {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    margin-bottom: var(--space-3);
+    color: var(--color-text-muted);
+  }
+
+  .component-table-group ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .component-table-group li {
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    line-height: 1.5;
+    padding-left: var(--space-3);
+    position: relative;
+  }
+
+  .component-table-group li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-border);
+  }
+
+  @media (max-width: 640px) {
+    .component-table-groups {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .back-link-wrapper {
     margin-top: var(--space-6);
     padding: var(--space-5) 0;
@@ -403,5 +580,19 @@ const { project } = Astro.props;
   lightbox.addEventListener("click", closeLightbox);
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeLightbox();
+  });
+
+  document.querySelectorAll<HTMLElement>(".compare-block").forEach((block) => {
+    const tabs = block.querySelectorAll<HTMLButtonElement>(".compare-tab");
+    const panes = block.querySelectorAll<HTMLElement>(".compare-pane");
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.tab;
+        tabs.forEach((t) => t.classList.toggle("is-active", t === tab));
+        panes.forEach((p) => p.classList.toggle("is-active", p.dataset.pane === target));
+        block.querySelector(".compare-frame")?.scrollTo({ top: 0 });
+      });
+    });
   });
 </script>

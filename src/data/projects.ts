@@ -14,7 +14,28 @@ export interface ImageGridBlock {
   images: (string | ImageGridImage)[];
 }
 
-export type ContentBlock = TextBlock | ImageGridBlock;
+export interface CompareBlock {
+  type: "compare";
+  before: { src: string; label?: string };
+  after: { src: string; label?: string };
+}
+
+export interface ComponentTableGroup {
+  category: string;
+  items: string[];
+}
+
+export interface ComponentTableBlock {
+  type: "componentTable";
+  intro?: string;
+  groups: ComponentTableGroup[];
+}
+
+export type ContentBlock =
+  | TextBlock
+  | ImageGridBlock
+  | CompareBlock
+  | ComponentTableBlock;
 
 export interface Project {
   slug: string;
@@ -39,58 +60,89 @@ export const projects: Project[] = [
     content: [
       {
         type: "text",
-        heading: "Six Months, One Rebuild",
-        body: `<p>Feedonomics is a sub-brand under Commerce, alongside BigCommerce and Makeswift. The project started as a brand refresh and, over six months, turned into something bigger: a full rebrand where everything but the logo was open for reconsideration. New typography, new color, new components, new page architecture, top to bottom.</p><p>The old site also lived outside our main web stack, so alongside the design work, we rebuilt the entire thing into <strong>Makeswift</strong> as the page builder with <strong>Contentful</strong> as the CMS, the same system that already powers BigCommerce and Makeswift, now stretched to hold a third brand.</p>`,
+        heading: "A Brand Refresh That Didn't Stay a Refresh",
+        body: `<p>Feedonomics is a sub-brand under Commerce, alongside BigCommerce and Makeswift. This one started small: refresh the brand. Six months later, it had turned into a full rebrand where everything but the logo was back on the table, plus a move off the old site's standalone stack and into <strong>Makeswift</strong> as the page builder with <strong>Contentful</strong> as the CMS, the same combination already running BigCommerce and Makeswift, now stretched to hold a third brand.</p><p>My seat at the table was design systems: turning "new brand" into typography scales, spacing rules, and components that would hold up across a hundred future pages nobody had designed yet.</p>`,
       },
       {
-        type: "imageGrid",
-        images: [
-          { src: "/project-feedonomics2.jpg", caption: "Before" },
-          { src: "/project-feedonomics3.jpg", caption: "After" },
-        ],
-      },
-      {
-        type: "text",
-        heading: "Systems Underneath",
-        body: `<p>Color was developed by our brand designer <a href="https://www.linkedin.com/in/robrodriguezwork/" target="_blank" rel="noopener noreferrer"><strong>Rob Rodriguez</strong></a>, and page designs and graphics were led by our senior web designer <a href="https://www.linkedin.com/in/jc-roque/" target="_blank" rel="noopener noreferrer"><strong>Juan Roque</strong></a>. My part was mostly the structure underneath all of it, somewhere around 90% of my time: typography and sizing scales, spacing and layout guidelines from desktop down to mobile, and the rules that let designers and publishers build pages consistently without guessing. The rest was pitching in on page layouts wherever an extra set of hands helped, because a project like this only gets across the line as a team.</p><p>I also oversaw and built most of the new and updated components, and set up a "kitchen sink" environment in Makeswift, a working reference where every component, spacing token, and layout pattern lives side by side so the team could build pages efficiently without reinventing padding and gaps every time. Training designers and publishers on the new system was part of the job too, and by the back half of the project, most of my time was spent working directly with developers, getting components from spec to shipped.</p>`,
-      },
-      {
-        type: "imageGrid",
-        images: [
-          { src: "/project-feedonomics4.jpg", caption: "Before" },
-          { src: "/project-feedonomics5.jpg", caption: "After" },
-        ],
+        type: "compare",
+        before: { src: "/project-feedonomics2.jpg", label: "Before" },
+        after: { src: "/project-feedonomics3.jpg", label: "After" },
       },
       {
         type: "text",
-        heading: "Built for Handoff",
-        body: `<p>A design system is only as good as the handoff behind it. Every component got a full annotation pass: structure and content rules, interactive states, and responsive behavior spelled out at each breakpoint, desktop, small desktop, tablet, and mobile, so there was no ambiguity for the dev team building it.</p><p>Alongside that, I created and maintained the <strong>FDX Component Review</strong>, a running doc that tracked every component through its lifecycle: design approved, in dev, QA'd for SEO, signed off. It's where design, publishing, and engineering left notes on the same component in one place instead of scattered across Slack threads, so nothing shipped half-checked.</p>`,
+        heading: "Not a Solo Job",
+        body: `<p>None of this was one person's work, and the parts I'm proudest of aren't mine. Color came from our brand designer <a href="https://www.linkedin.com/in/robrodriguezwork/" target="_blank" rel="noopener noreferrer"><strong>Rob Rodriguez</strong></a>. Page design and graphics were led by our senior web designer <a href="https://www.linkedin.com/in/jc-roque/" target="_blank" rel="noopener noreferrer"><strong>Juan Roque</strong></a>. And by the back half of the project, most of my own time was spent shoulder to shoulder with our developers, turning specs into shipped, working components. A rebuild this size only crosses the line as a team, and this one had a good one.</p><p>What I owned was the structure underneath all of it: typography and sizing scales, spacing and layout guidelines from desktop down to mobile, and the rules that let designers and publishers build pages consistently without guessing. I also set up a "kitchen sink" environment in Makeswift, a working reference where every component, token, and layout pattern lives side by side so nobody had to reinvent padding and gaps for the tenth time. Training designers and publishers on the new system was part of the job too.</p>`,
       },
       {
-        type: "imageGrid",
-        images: [
-          { src: "/project-feedonomics6.jpg", caption: "Documentation" },
-          { src: "/project-feedonomics7.jpg", caption: "Documentation" },
+        type: "compare",
+        before: { src: "/project-feedonomics4.jpg", label: "Before" },
+        after: { src: "/project-feedonomics5.jpg", label: "After" },
+      },
+      {
+        type: "text",
+        heading: "The Component System, in Full",
+        body: `<p>Design and I put together annotation specs for every component: structure and content rules, interactive states, and responsive behavior at each breakpoint, desktop down to mobile, so there was no ambiguity for the dev team building it. I tracked all of it in a running document called the <strong>FDX Component Review</strong>: every component's status, open questions, and sign-offs from design, publishing, and SEO in one place instead of scattered across Slack threads.</p><p>That document is internal, but the list underneath it isn't a secret. Here's what actually got designed and shipped, grouped by what it does rather than what we happened to call it in the file.</p>`,
+      },
+      {
+        type: "componentTable",
+        groups: [
+          {
+            category: "Navigation & Structure",
+            items: ["Primary Navigation (Mega Menu)", "Secondary Navigation", "Breadcrumbs", "Footer"],
+          },
+          {
+            category: "Content & Typography",
+            items: ["Eyebrow", "Bulleted & Numbered Lists", "Gradient Text", "Quote Block", "Icon System"],
+          },
+          {
+            category: "Interactive & Motion",
+            items: [
+              "Accordion",
+              "Pill Tabs",
+              "Carousel",
+              "Scroll-Triggered Reveal",
+              "Expanding CTA Banner",
+              "Text Animation (Typewriter Effects)",
+              "Scroll Progress Bar",
+              "Animated Illustrations (Lottie)",
+            ],
+          },
+          {
+            category: "Media",
+            items: ["Custom Video Embed", "Video Thumbnail Card", "Logo Grid"],
+          },
+          {
+            category: "Data, Cards & Forms",
+            items: ["Data Table", "Embedded Table", "Lead Capture Form", "Buttons & Button Group", "Standard Card", "Banner"],
+          },
+          {
+            category: "Layout Templates",
+            items: [
+              "River Layout (Alternating Media + Text)",
+              "Resources Hub",
+              "Blog Home & Article Template",
+              "Success Stories Hub & Template",
+              "Guides & Whitepapers Hub",
+              "Webinars Hub",
+              "Integrations Directory",
+            ],
+          },
         ],
       },
       {
         type: "text",
         heading: "A Resources System That Scales",
-        body: `<p>The largest single piece of this project was the resources section. Feedonomics runs a blog, success stories, webinars, and gated guides and whitepapers, and the old site treated each as its own one-off build. The goal was a layout system for the parent resources hub that could repeat cleanly across every content type, with child (L3) page templates that reused as much of that system as possible while still flexing for what makes a webinar page different from a blog post.</p><p>Same component logic, same spacing rules, same card patterns, applied consistently instead of rebuilt per content type. It's the same principle behind every design system I've worked on: reuse what you can, and only break the pattern where the content genuinely demands it.</p>`,
+        body: `<p>The largest single piece of this project was the resources section. Feedonomics runs a blog, success stories, webinars, and gated guides and whitepapers, and the old site treated each as its own one-off build. The goal was a layout system for the parent resources hub that could repeat cleanly across every content type, with child page templates that reused as much of that system as possible while still flexing for what makes a webinar page different from a blog post.</p><p>Same component logic, same spacing rules, same card patterns, applied consistently instead of rebuilt per content type. It's the same principle behind every design system I've worked on: reuse what you can, and only break the pattern where the content genuinely demands it.</p>`,
       },
       {
-        type: "imageGrid",
-        images: [
-          { src: "/project-feedonomics9.jpg", caption: "Before" },
-          { src: "/project-feedonomics10.jpg", caption: "After" },
-        ],
+        type: "compare",
+        before: { src: "/project-feedonomics9.jpg", label: "Before" },
+        after: { src: "/project-feedonomics10.jpg", label: "After" },
       },
       {
-        type: "imageGrid",
-        images: [
-          { src: "/project-feedonomics8.jpg", caption: "Figma — Resources Hub" },
-          { src: "/project-feedonomics11.jpg", caption: "Figma — Blog Template" },
-        ],
+        type: "text",
+        heading: "Where It Landed",
+        body: `<p>Six months, three names on the credits I actually want up there, and a system built to outlast the project it launched with. The best measure of a design system isn't the pretty parts, it's whether someone who wasn't in the room can build a page next quarter without breaking anything. That was the goal from day one, and it's what shipped.</p>`,
       },
     ],
   },
