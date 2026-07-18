@@ -50,7 +50,7 @@ const { project } = Astro.props;
 
               if (block.type === "imageGrid") {
                 return (
-                  <div class="image-grid">
+                  <div class:list={["image-grid", { "is-framed": block.framed, "is-wide": block.wide }]}>
                     {block.images.map((img) => {
                       const src = typeof img === "string" ? img : img.src;
                       const caption = typeof img === "string" ? undefined : img.caption;
@@ -83,7 +83,7 @@ const { project } = Astro.props;
                         </a>
                       )}
                     </div>
-                    <div class="compare-frame" data-lenis-prevent>
+                    <div class="compare-frame">
                       <div class="compare-pane" data-pane="before">
                         <img src={block.before.src} alt={block.before.label || "Before"} class="lightbox-trigger" />
                       </div>
@@ -91,7 +91,6 @@ const { project } = Astro.props;
                         <img src={block.after.src} alt={block.after.label || "After"} class="lightbox-trigger" />
                       </div>
                     </div>
-                    <p class="compare-hint">Click the image to see the full page.</p>
                   </div>
                 );
               }
@@ -401,6 +400,18 @@ const { project } = Astro.props;
     display: block;
   }
 
+  .image-grid.is-wide {
+    grid-template-columns: 1fr;
+  }
+
+  .image-grid.is-framed {
+    gap: var(--space-5);
+  }
+
+  .image-grid.is-framed img {
+    border: 1px solid var(--color-border);
+  }
+
   .compare-block {
     margin: 0 0 var(--space-6);
   }
@@ -460,7 +471,7 @@ const { project } = Astro.props;
   .compare-frame {
     position: relative;
     max-height: 640px;
-    overflow-y: auto;
+    overflow: hidden;
     border: 1px solid var(--color-border);
   }
 
@@ -476,12 +487,6 @@ const { project } = Astro.props;
     width: 100%;
     display: block;
     cursor: zoom-in;
-  }
-
-  .compare-hint {
-    margin-top: var(--space-2);
-    font-size: var(--text-xs);
-    color: var(--color-text-muted);
   }
 
   .component-table {
@@ -614,7 +619,6 @@ const { project } = Astro.props;
         const target = tab.dataset.tab;
         tabs.forEach((t) => t.classList.toggle("is-active", t === tab));
         panes.forEach((p) => p.classList.toggle("is-active", p.dataset.pane === target));
-        block.querySelector(".compare-frame")?.scrollTo({ top: 0 });
       });
     });
   });

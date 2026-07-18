@@ -12,6 +12,10 @@ export interface ImageGridImage {
 export interface ImageGridBlock {
   type: "imageGrid";
   images: (string | ImageGridImage)[];
+  /** Adds a light border around each image and extra breathing room (UI screenshots). */
+  framed?: boolean;
+  /** Lays the images out full-width instead of the two-column grid. */
+  wide?: boolean;
 }
 
 export interface CompareBlock {
@@ -61,8 +65,8 @@ export const projects: Project[] = [
     content: [
       {
         type: "text",
-        heading: "A Brand Refresh That Didn't Stay a Refresh",
-        body: `<p><a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a> is a sub-brand under Commerce, alongside <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> and <a href="https://www.makeswift.com/" target="_blank" rel="noopener noreferrer">Makeswift</a>. This one started small: refresh the brand. Six months later, it had turned into a full rebrand where everything but the logo was back on the table, plus a move off the old site's standalone stack and into <strong>Makeswift</strong> as the page builder with <strong>Contentful</strong> as the CMS, the same combination already running BigCommerce and Makeswift, now stretched to hold a third brand.</p><p>My seat at the table was design systems: turning "new brand" into typography scales, spacing rules, and components that would hold up across a hundred future pages nobody had designed yet.</p>`,
+        heading: "Building the Foundation",
+        body: `<p><a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a> is a sub-brand under <a href="https://www.commerce.com/" target="_blank" rel="noopener noreferrer">Commerce</a>, alongside <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> and <a href="https://www.makeswift.com/" target="_blank" rel="noopener noreferrer">Makeswift</a>. This one started small: refresh the brand. Six months later, it had turned into a full rebrand where everything but the logo was back on the table, plus a move off the old site's standalone stack and into <strong>Makeswift</strong> as the page builder with <strong>Contentful</strong> as the CMS, the same combination already running BigCommerce and Makeswift, now stretched to hold a third brand.</p><p>My seat at the table was design systems: turning "new brand" into typography scales, spacing rules, and components that would hold up across a hundred future pages nobody had designed yet.</p>`,
       },
       {
         type: "compare",
@@ -77,6 +81,7 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
+        framed: true,
         images: [
           { src: "/feedonomics-makeswift-tokens.jpg", caption: "Makeswift — Color Tokens" },
           { src: "/feedonomics-makeswift-tokens-1.jpg", caption: "Makeswift — Type Scale" },
@@ -84,6 +89,8 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
+        framed: true,
+        wide: true,
         images: [
           { src: "/Feedonomics-color-tokens.jpg", caption: "Full Color Token System" },
         ],
