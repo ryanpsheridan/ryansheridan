@@ -128,8 +128,8 @@ const { project } = Astro.props;
 
   .lightbox-close {
     position: absolute;
-    top: 20px;
-    right: 24px;
+    top: var(--space-3);
+    right: var(--space-4);
     background: none;
     border: none;
     color: #fff;
@@ -156,11 +156,11 @@ const { project } = Astro.props;
 
   .breadcrumbs {
     max-width: var(--max-width);
-    margin: 0 auto 32px;
-    font-size: 13px;
+    margin: 0 auto var(--space-5);
+    font-size: var(--text-sm);
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--space-2);
   }
 
   .breadcrumbs a {
@@ -182,14 +182,14 @@ const { project } = Astro.props;
 
   .project-header {
     max-width: var(--max-width);
-    margin: 0 auto 48px;
+    margin: 0 auto var(--space-6);
   }
 
   h1 {
-    font-size: clamp(32px, 5vw, 48px);
+    font-size: clamp(var(--text-2xl), 5vw, var(--text-4xl));
     font-weight: 400;
     letter-spacing: -0.03em;
-    margin-bottom: 40px;
+    margin-bottom: var(--space-5);
   }
 
   .meta-table {
@@ -207,27 +207,27 @@ const { project } = Astro.props;
   .meta-table td {
     text-align: left;
     font-weight: 400;
-    padding: 14px 0;
+    padding: var(--space-3) 0;
     vertical-align: top;
   }
 
   .meta-table th {
-    width: 180px;
-    font-size: 13px;
+    width: 176px;
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
     border-right: 1px solid var(--color-border);
-    padding-right: 24px;
+    padding-right: var(--space-4);
   }
 
   .meta-table td {
-    font-size: 14px;
+    font-size: var(--text-sm);
     color: var(--color-text);
-    padding-left: 24px;
+    padding-left: var(--space-4);
   }
 
   .hero-image {
     max-width: var(--max-width);
-    margin: 0 auto 64px;
+    margin: 0 auto var(--space-7);
     overflow: hidden;
   }
 
@@ -243,24 +243,24 @@ const { project } = Astro.props;
 
   .content-section {
     max-width: var(--content-width);
-    margin: 0 auto 56px;
+    margin: 0 auto var(--space-6);
   }
 
   h2 {
-    font-size: 22px;
+    font-size: var(--text-xl);
     font-weight: 500;
     letter-spacing: -0.01em;
-    margin-bottom: 20px;
+    margin-bottom: var(--space-3);
   }
 
   .body {
-    font-size: 16px;
+    font-size: var(--text-base);
     line-height: 1.8;
     color: var(--color-text);
   }
 
   .body :global(p) {
-    margin-bottom: 18px;
+    margin-bottom: var(--space-3);
   }
 
   .body :global(p:last-child) {
@@ -284,11 +284,11 @@ const { project } = Astro.props;
 
   .body :global(blockquote) {
     border-left: 2px solid var(--color-border);
-    padding-left: 24px;
-    margin: 36px 0;
+    padding-left: var(--space-4);
+    margin: var(--space-5) 0;
     color: var(--color-text-muted);
     font-style: italic;
-    font-size: 17px;
+    font-size: var(--text-md);
   }
 
   .body :global(blockquote p) {
@@ -296,15 +296,15 @@ const { project } = Astro.props;
   }
 
   .body :global(h3) {
-    font-size: 18px;
+    font-size: var(--text-md);
     font-weight: 500;
-    margin-top: 40px;
-    margin-bottom: 16px;
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-3);
   }
 
   .body :global(img) {
     width: 100%;
-    margin: 28px 0;
+    margin: var(--space-4) 0;
   }
 
   .body :global(em) {
@@ -312,23 +312,22 @@ const { project } = Astro.props;
   }
 
   .image-grid {
-    margin: 0 auto 48px;
+    margin: 0 auto var(--space-6);
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: var(--space-3);
   }
-
 
   .image-item {
     margin: 0;
   }
 
   .image-item figcaption {
-    font-size: 12px;
+    font-size: var(--text-xs);
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--color-text-muted);
-    margin-bottom: 10px;
+    margin-bottom: var(--space-2);
   }
 
   .image-grid img {
@@ -339,12 +338,12 @@ const { project } = Astro.props;
   .back-link-wrapper {
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: 40px 0;
+    padding: var(--space-5) 0;
     border-top: 1px solid var(--color-border);
   }
 
   .back-link {
-    font-size: 14px;
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
     transition: color 0.2s;
   }
