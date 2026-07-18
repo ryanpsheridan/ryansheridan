@@ -16,18 +16,16 @@ const projects = getHomepageProjects();
     <div class="right-panel">
       {projects.map((project, i) => (
         <a href={`/work/${project.slug}`} class="project-row">
-          <div class="project-number">{String(i + 1).padStart(2, "0")}</div>
-          <div class="project-image">
-            {project.thumbnail && <img src={project.thumbnail} alt={project.title} loading="lazy" />}
-          </div>
-          <div class="project-info">
-            <h2 class="project-title">{project.title}</h2>
-            <div class="project-tags">
-              {project.tags.map((tag) => (
-                <span class="tag">{tag}</span>
-              ))}
+          <div class="row-grid">
+            <div class="cell cell-number">{String(i + 1).padStart(2, "0")}</div>
+            <div class="cell cell-image">
+              {project.thumbnail && <img src={project.thumbnail} alt={project.title} loading="lazy" />}
             </div>
-            <span class="discover-link">View project</span>
+            <div class="cell cell-info">
+              <h2 class="project-title">{project.title}</h2>
+              <div class="project-tags">{project.tags.join(" · ")}</div>
+              <span class="discover-link">View project</span>
+            </div>
           </div>
         </a>
       ))}
@@ -68,14 +66,13 @@ const projects = getHomepageProjects();
 
   .project-row {
     display: block;
-    padding: 48px var(--page-padding) 48px 40px;
+    padding: 0 var(--page-padding);
     border-bottom: 1px solid var(--color-border);
-    transition: background 0.2s;
-    position: relative;
+    transition: background 0.15s;
   }
 
   .project-row:first-child {
-    border-top: none;
+    border-top: 1px solid var(--color-border);
   }
 
   @media (hover: hover) {
@@ -83,54 +80,62 @@ const projects = getHomepageProjects();
       background: var(--color-tag-bg);
     }
 
-    .project-row:hover .project-image img {
-      transform: scale(1.02);
+    .project-row:hover .cell-image img {
+      opacity: 0.85;
     }
   }
 
-  .project-number {
+  .row-grid {
+    display: grid;
+    grid-template-columns: 56px 200px 1fr;
+    align-items: center;
+    gap: 32px;
+    padding: 32px 0;
+  }
+
+  .cell {
+    min-width: 0;
+  }
+
+  .cell-number {
     font-size: 12px;
     color: var(--color-text-muted);
-    margin-bottom: 20px;
     font-variant-numeric: tabular-nums;
+    padding-left: 20px;
+    border-left: 1px solid transparent;
   }
 
-  .project-image {
-    aspect-ratio: 16 / 10;
-    border-radius: 6px;
+  .cell-image {
+    aspect-ratio: 4 / 3;
     overflow: hidden;
-    margin-bottom: 24px;
-    background: #f3f3f3;
+    background: var(--color-tag-bg);
+    border-left: 1px solid var(--color-border);
+    padding-left: 20px;
   }
 
-  .project-image img {
+  .cell-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.4s ease;
+    transition: opacity 0.2s;
+  }
+
+  .cell-info {
+    border-left: 1px solid var(--color-border);
+    padding-left: 20px;
   }
 
   .project-title {
     font-size: 16px;
     font-weight: 500;
     letter-spacing: -0.01em;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   .project-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 20px;
-  }
-
-  .tag {
-    font-size: 12px;
-    font-weight: 400;
-    padding: 4px 12px;
-    border: 1px solid var(--color-border);
-    color: var(--color-tag-text);
-    border-radius: 99px;
+    font-size: 13px;
+    color: var(--color-text-muted);
+    margin-bottom: 16px;
   }
 
   .discover-link {
@@ -159,8 +164,29 @@ const projects = getHomepageProjects();
       width: 100%;
     }
 
-    .project-row {
-      padding: 40px var(--page-padding);
+    .row-grid {
+      grid-template-columns: 32px 1fr;
+      grid-template-areas:
+        "number image"
+        "info info";
+      row-gap: 20px;
+      padding: 28px 0;
+    }
+
+    .cell-number {
+      grid-area: number;
+      padding-left: 0;
+    }
+
+    .cell-image {
+      grid-area: image;
+      aspect-ratio: 16 / 10;
+    }
+
+    .cell-info {
+      grid-area: info;
+      border-left: none;
+      padding-left: 0;
     }
   }
 </style>

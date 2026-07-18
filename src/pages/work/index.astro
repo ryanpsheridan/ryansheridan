@@ -34,26 +34,28 @@ const allTags = [...new Set(projects.flatMap((p) => p.tags))];
         </div>
       </div>
 
-      <div class="project-grid">
+      <div class="project-list">
         {
-          projects.map((project) => (
+          projects.map((project, i) => (
             <a
               href={`/work/${project.slug}`}
-              class="project-card"
+              class="project-row"
               data-tags={project.tags.join(",")}
             >
-              <div class="project-thumbnail">
-                {project.thumbnail && <img
-                  src={project.thumbnail}
-                  alt={project.title}
-                  loading="lazy"
-                />}
-              </div>
-              <h3>{project.title}</h3>
-              <div class="tags">
-                {project.tags.map((tag) => (
-                  <span class="tag">{tag}</span>
-                ))}
+              <div class="row-grid">
+                <div class="cell cell-number">{String(i + 1).padStart(2, "0")}</div>
+                <div class="cell cell-image">
+                  {project.thumbnail && <img
+                    src={project.thumbnail}
+                    alt={project.title}
+                    loading="lazy"
+                  />}
+                </div>
+                <div class="cell cell-info">
+                  <h3>{project.title}</h3>
+                  <div class="tags">{project.tags.join(" · ")}</div>
+                </div>
+                <div class="cell cell-client">{project.client}</div>
               </div>
             </a>
           ))
@@ -130,7 +132,6 @@ const allTags = [...new Set(projects.flatMap((p) => p.tags))];
     padding: 10px 14px;
     padding-right: 36px;
     border: 1px solid var(--color-border);
-    border-radius: 8px;
     background: var(--color-bg);
     color: var(--color-text);
     cursor: pointer;
@@ -153,75 +154,128 @@ const allTags = [...new Set(projects.flatMap((p) => p.tags))];
     pointer-events: none;
   }
 
-  .project-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 48px 32px;
+  .project-list {
     padding-bottom: 80px;
   }
 
-  .project-card {
+  .project-row {
     display: block;
+    border-bottom: 1px solid var(--color-border);
+    transition: background 0.15s;
   }
 
-  .project-card.hidden {
+  .project-row:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .project-row.hidden {
     display: none;
   }
 
   @media (hover: hover) {
-    .project-card:hover img {
+    .project-row:hover {
+      background: var(--color-tag-bg);
+    }
+
+    .project-row:hover .cell-image img {
       opacity: 0.85;
     }
   }
 
-  .project-thumbnail {
-    aspect-ratio: 4 / 3;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 16px;
-    background: #f3f3f3;
+  .row-grid {
+    display: grid;
+    grid-template-columns: 56px 160px 1fr 180px;
+    align-items: center;
+    gap: 32px;
+    padding: 28px 0;
   }
 
-  .project-thumbnail img {
+  .cell {
+    min-width: 0;
+  }
+
+  .cell-number {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cell-image {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--color-tag-bg);
+    border-left: 1px solid var(--color-border);
+    padding-left: 20px;
+  }
+
+  .cell-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: opacity 0.2s;
   }
 
-  h3 {
+  .cell-info {
+    border-left: 1px solid var(--color-border);
+    padding-left: 20px;
+  }
+
+  .cell-info h3 {
     font-size: 16px;
     font-weight: 500;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     letter-spacing: -0.01em;
   }
 
   .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
+    font-size: 13px;
+    color: var(--color-text-muted);
   }
 
-  .tag {
-    font-size: 12px;
-    font-weight: 400;
-    padding: 4px 12px;
-    border: 1px solid var(--color-border);
-    color: var(--color-tag-text);
-    border-radius: 99px;
+  .cell-client {
+    font-size: 13px;
+    color: var(--color-text-muted);
+    text-align: right;
+    border-left: 1px solid var(--color-border);
+    padding-left: 20px;
   }
 
-  @media (max-width: 640px) {
-    .project-grid {
-      grid-template-columns: 1fr;
-      gap: 40px;
+  @media (max-width: 768px) {
+    .row-grid {
+      grid-template-columns: 32px 1fr;
+      grid-template-areas:
+        "number image"
+        "info info";
+      row-gap: 16px;
+      padding: 24px 0;
+    }
+
+    .cell-number {
+      grid-area: number;
+    }
+
+    .cell-image {
+      grid-area: image;
+      aspect-ratio: 16 / 10;
+      border-left: none;
+      padding-left: 0;
+    }
+
+    .cell-info {
+      grid-area: info;
+      border-left: none;
+      padding-left: 0;
+    }
+
+    .cell-client {
+      display: none;
     }
   }
 </style>
 
 <script>
   const filter = document.getElementById("type-filter") as HTMLSelectElement;
-  const cards = document.querySelectorAll<HTMLAnchorElement>(".project-card");
+  const cards = document.querySelectorAll<HTMLAnchorElement>(".project-row");
 
   filter.addEventListener("change", () => {
     const value = filter.value;
