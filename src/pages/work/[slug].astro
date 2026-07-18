@@ -181,10 +181,14 @@ const { project } = Astro.props;
   .project-layout {
     max-width: var(--max-width);
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: 3fr 1fr;
+    display: flex;
+    align-items: flex-start;
     gap: var(--space-8);
-    align-items: start;
+  }
+
+  .project-main {
+    flex: 3 1 0%;
+    min-width: 0;
   }
 
   h1 {
@@ -195,7 +199,8 @@ const { project } = Astro.props;
   }
 
   .project-sidebar {
-    grid-row: 1 / -1;
+    flex: 1 1 0%;
+    min-width: 0;
   }
 
   .sidebar-inner {
@@ -354,13 +359,13 @@ const { project } = Astro.props;
 
   @media (max-width: 900px) {
     .project-layout {
-      grid-template-columns: 1fr;
+      flex-direction: column;
       gap: var(--space-6);
     }
 
     .project-sidebar {
-      grid-row: auto;
       order: -1;
+      width: 100%;
     }
 
     .sidebar-inner {
