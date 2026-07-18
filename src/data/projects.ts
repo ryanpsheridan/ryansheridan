@@ -73,7 +73,20 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Not a Solo Job",
-        body: `<p>None of this was one person's work, and the parts I'm proudest of aren't mine. Color came from our brand designer <a href="https://www.linkedin.com/in/robrodriguezwork/" target="_blank" rel="noopener noreferrer"><strong>Rob Rodriguez</strong></a>. Page design and graphics were led by our senior web designer <a href="https://www.linkedin.com/in/jc-roque/" target="_blank" rel="noopener noreferrer"><strong>Juan Roque</strong></a>. And by the back half of the project, most of my own time was spent shoulder to shoulder with our developers, turning specs into shipped, working components. A rebuild this size only crosses the line as a team, and this one had a good one.</p><p>What I owned was the structure underneath all of it: typography and sizing scales, spacing and layout guidelines from desktop down to mobile, and the rules that let designers and publishers build pages consistently without guessing. I also set up a "kitchen sink" environment in Makeswift, a working reference where every component, token, and layout pattern lives side by side so nobody had to reinvent padding and gaps for the tenth time. Training designers and publishers on the new system was part of the job too.</p>`,
+        body: `<p>None of this was one person's work, and the parts I'm proudest of aren't mine. Color came from our brand designer <a href="https://www.linkedin.com/in/robrodriguezwork/" target="_blank" rel="noopener noreferrer"><strong>Rob Rodriguez</strong></a>. Page design and graphics were led by our senior web designer <a href="https://www.linkedin.com/in/jc-roque/" target="_blank" rel="noopener noreferrer"><strong>Juan Roque</strong></a>. And by the back half of the project, most of my own time was spent shoulder to shoulder with our developers, turning specs into shipped, working components. A rebuild this size only crosses the line as a team, and this one had a good one.</p><p>I owned the core design system architecture, first building out the foundational components in Figma and then mapping matching tokens and sections into Makeswift. This unified structure defined the typography, spacing, and responsive layout rules required for cross-platform consistency. By creating this comprehensive "kitchen sink" reference, I optimized the page-building process for both designers and publishers while providing targeted training to ensure seamless adoption.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [
+          { src: "/feedonomics-makeswift-tokens.jpg", caption: "Makeswift — Color Tokens" },
+          { src: "/feedonomics-makeswift-tokens-1.jpg", caption: "Makeswift — Type Scale" },
+        ],
+      },
+      {
+        type: "imageGrid",
+        images: [
+          { src: "/Feedonomics-color-tokens.jpg", caption: "Full Color Token System" },
+        ],
       },
       {
         type: "compare",
