@@ -50,6 +50,8 @@ export interface Project {
   tags: string[];
   tools: string[];
   client: string;
+  /** Client's website; when set, the sidebar client name links out to it. */
+  clientUrl?: string;
   content: ContentBlock[];
 }
 
@@ -62,6 +64,7 @@ export const projects: Project[] = [
     tags: ["Design System", "Web Design"],
     tools: ["Figma", "Makeswift", "Contentful"],
     client: "Feedonomics",
+    clientUrl: "https://feedonomics.com/",
     content: [
       {
         type: "text",
@@ -178,6 +181,7 @@ export const projects: Project[] = [
     tags: ["Exploration", "Design System"],
     tools: ["Claude Design", "Figma"],
     client: "Commerce",
+    clientUrl: "https://www.commerce.com/",
     content: [
       {
         type: "text",
@@ -204,6 +208,7 @@ export const projects: Project[] = [
     tags: ["Branding", "Illustration"],
     tools: ["Adobe Illustrator", "Figma"],
     client: "RHOW Coffee",
+    clientUrl: "https://www.instagram.com/rhowcoffee",
     content: [
       {
         type: "text",
@@ -269,6 +274,7 @@ export const projects: Project[] = [
     tags: ["Design System"],
     tools: ["Figma"],
     client: "Commerce",
+    clientUrl: "https://www.commerce.com/",
     content: [
       {
         type: "text",
@@ -304,6 +310,7 @@ export const projects: Project[] = [
     tags: ["Branding"],
     tools: ["Adobe Illustrator", "Figma"],
     client: "Flow Stays",
+    clientUrl: "https://www.flowstays.com/",
     content: [
       {
         type: "text",
@@ -328,6 +335,7 @@ export const projects: Project[] = [
     tags: ["Web Design"],
     tools: ["Webflow"],
     client: "Bynum Golf",
+    clientUrl: "https://www.bynumgolf.com/",
     content: [
       {
         type: "text",
@@ -351,6 +359,7 @@ export const projects: Project[] = [
     tags: ["Branding", "Apparel"],
     tools: ["Adobe Illustrator"],
     client: "BigCommerce",
+    clientUrl: "https://www.bigcommerce.com/",
     content: [
       {
         type: "text",
@@ -374,6 +383,7 @@ export const projects: Project[] = [
     tags: ["Web Design"],
     tools: ["Webflow"],
     client: "Five Star Vacation Home Rental",
+    clientUrl: "https://www.fivestarvhr.com/",
     content: [
       {
         type: "text",
@@ -432,6 +442,7 @@ export const projects: Project[] = [
     tags: ["Illustration", "Branding"],
     tools: ["InDesign", "Adobe Illustrator"],
     client: "BigCommerce",
+    clientUrl: "https://www.bigcommerce.com/",
     content: [
       {
         type: "text",
@@ -479,6 +490,7 @@ export const projects: Project[] = [
     tags: ["Visual Design"],
     tools: ["InDesign"],
     client: "BigCommerce",
+    clientUrl: "https://www.bigcommerce.com/",
     content: [
       {
         type: "text",
@@ -509,6 +521,7 @@ export const projects: Project[] = [
     tags: ["Illustration"],
     tools: ["Adobe Illustrator"],
     client: "BigCommerce",
+    clientUrl: "https://www.bigcommerce.com/",
     content: [
       {
         type: "imageGrid",

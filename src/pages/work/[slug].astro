@@ -130,7 +130,15 @@ const { project } = Astro.props;
         <div class="sidebar-inner">
           <div class="meta-group">
             <span class="meta-label">Client / Company</span>
-            <p class="meta-value">{project.client}</p>
+            {project.clientUrl ? (
+              <p class="meta-value">
+                <a href={project.clientUrl} target="_blank" rel="noopener noreferrer" class="client-link">
+                  {project.client}<span class="client-link-arrow">&#8599;</span>
+                </a>
+              </p>
+            ) : (
+              <p class="meta-value">{project.client}</p>
+            )}
           </div>
           <div class="meta-group">
             <span class="meta-label">Project type</span>
@@ -295,6 +303,23 @@ const { project } = Astro.props;
   .meta-value {
     font-size: var(--text-base);
     color: var(--color-text);
+  }
+
+  .client-link {
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 1px;
+    transition: border-color 0.2s;
+  }
+
+  .client-link:hover {
+    border-color: var(--color-text);
+  }
+
+  .client-link-arrow {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-left: 4px;
   }
 
   .hero-image {
