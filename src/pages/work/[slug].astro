@@ -37,11 +37,19 @@ const { project } = Astro.props;
           </tr>
           <tr>
             <th>Project type</th>
-            <td>{project.tags.join(", ")}</td>
+            <td>
+              <div class="badge-list">
+                {project.tags.map((tag) => <span class="badge">{tag}</span>)}
+              </div>
+            </td>
           </tr>
           <tr>
             <th>Tools</th>
-            <td>{project.tools.join(", ")}</td>
+            <td>
+              <div class="badge-list">
+                {project.tools.map((tool) => <span class="badge">{tool}</span>)}
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>

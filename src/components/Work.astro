@@ -14,7 +14,9 @@ const projects = getHomepageProjects();
               {project.thumbnail && <img src={project.thumbnail} alt={project.title} loading="lazy" />}
             </div>
             <h3>{project.title}</h3>
-            <div class="tags">{project.tags.join(" · ")}</div>
+            <div class="badge-list tags">
+              {project.tags.map((tag) => <span class="badge">{tag}</span>)}
+            </div>
           </a>
         ))
       }
@@ -65,11 +67,6 @@ const projects = getHomepageProjects();
     font-weight: 500;
     margin-bottom: 10px;
     letter-spacing: -0.01em;
-  }
-
-  .tags {
-    font-size: 12px;
-    color: var(--color-tag-text);
   }
 
   @media (max-width: 640px) {

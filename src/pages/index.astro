@@ -22,7 +22,9 @@ const projects = getHomepageProjects();
             </div>
             <div class="cell cell-info">
               <h2 class="project-title">{project.title}</h2>
-              <div class="project-tags">{project.tags.join(" · ")}</div>
+              <div class="badge-list project-tags">
+                {project.tags.map((tag) => <span class="badge">{tag}</span>)}
+              </div>
               <span class="discover-link">View project</span>
             </div>
           </div>
@@ -122,8 +124,6 @@ const projects = getHomepageProjects();
   }
 
   .project-tags {
-    font-size: 13px;
-    color: var(--color-text-muted);
     margin-bottom: 16px;
   }
 

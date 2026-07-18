@@ -53,7 +53,9 @@ const allTags = [...new Set(projects.flatMap((p) => p.tags))];
                 </div>
                 <div class="cell cell-info">
                   <h3>{project.title}</h3>
-                  <div class="tags">{project.tags.join(" · ")}</div>
+                  <div class="badge-list tags">
+                    {project.tags.map((tag) => <span class="badge">{tag}</span>)}
+                  </div>
                 </div>
                 <div class="cell cell-client">{project.client}</div>
               </div>
@@ -225,11 +227,6 @@ const allTags = [...new Set(projects.flatMap((p) => p.tags))];
     font-weight: 500;
     margin-bottom: 8px;
     letter-spacing: -0.01em;
-  }
-
-  .tags {
-    font-size: 13px;
-    color: var(--color-text-muted);
   }
 
   .cell-client {
