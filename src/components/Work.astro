@@ -14,10 +14,8 @@ const projects = getHomepageProjects();
               {project.thumbnail && <img src={project.thumbnail} alt={project.title} loading="lazy" />}
             </div>
             <h3>{project.title}</h3>
-            <div class="tags">
-              {project.tags.map((tag) => (
-                <span class="tag">{tag}</span>
-              ))}
+            <div class="badge-list tags">
+              {project.tags.map((tag) => <span class="badge">{tag}</span>)}
             </div>
           </a>
         ))
@@ -52,10 +50,9 @@ const projects = getHomepageProjects();
 
   .project-thumbnail {
     aspect-ratio: 4 / 3;
-    border-radius: 8px;
     overflow: hidden;
     margin-bottom: 16px;
-    background: #f3f3f3;
+    background: var(--color-tag-bg);
   }
 
   .project-thumbnail img {
@@ -70,21 +67,6 @@ const projects = getHomepageProjects();
     font-weight: 500;
     margin-bottom: 10px;
     letter-spacing: -0.01em;
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .tag {
-    font-size: 12px;
-    font-weight: 400;
-    padding: 4px 12px;
-    border: 1px solid var(--color-border);
-    color: var(--color-tag-text);
-    border-radius: 99px;
   }
 
   @media (max-width: 640px) {

@@ -14,18 +14,15 @@ const projects = getHomepageProjects();
       <h1 class="sticky-title">Designing systems,<br />sites and brands.</h1>
     </div>
     <div class="right-panel">
-      {projects.map((project, i) => (
+      {projects.map((project) => (
         <a href={`/work/${project.slug}`} class="project-row">
-          <div class="project-number">{String(i + 1).padStart(2, "0")}</div>
-          <div class="project-image">
+          <div class="cell-image">
             {project.thumbnail && <img src={project.thumbnail} alt={project.title} loading="lazy" />}
           </div>
-          <div class="project-info">
+          <div class="cell-info">
             <h2 class="project-title">{project.title}</h2>
-            <div class="project-tags">
-              {project.tags.map((tag) => (
-                <span class="tag">{tag}</span>
-              ))}
+            <div class="badge-list project-tags">
+              {project.tags.map((tag) => <span class="badge">{tag}</span>)}
             </div>
             <span class="discover-link">View project</span>
           </div>
@@ -55,7 +52,7 @@ const projects = getHomepageProjects();
   }
 
   .sticky-title {
-    font-size: clamp(36px, 5vw, 52px);
+    font-size: clamp(var(--text-2xl), 5vw, var(--text-4xl));
     font-weight: 400;
     letter-spacing: -0.03em;
     line-height: 1.25;
@@ -68,78 +65,57 @@ const projects = getHomepageProjects();
 
   .project-row {
     display: block;
-    padding: 48px var(--page-padding) 48px 40px;
+    padding: var(--space-6) var(--page-padding);
     border-bottom: 1px solid var(--color-border);
-    transition: background 0.2s;
-    position: relative;
   }
 
   .project-row:first-child {
-    border-top: none;
+    padding-top: 0;
   }
 
-  @media (hover: hover) {
-    .project-row:hover {
-      background: var(--color-tag-bg);
-    }
-
-    .project-row:hover .project-image img {
-      transform: scale(1.02);
-    }
-  }
-
-  .project-number {
-    font-size: 12px;
-    color: var(--color-text-muted);
-    margin-bottom: 20px;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .project-image {
+  .cell-image {
     aspect-ratio: 16 / 10;
-    border-radius: 6px;
     overflow: hidden;
-    margin-bottom: 24px;
-    background: #f3f3f3;
+    background: var(--color-tag-bg);
+    margin-bottom: var(--space-4);
   }
 
-  .project-image img {
+  .cell-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.4s ease;
   }
 
   .project-title {
-    font-size: 16px;
+    font-size: var(--text-lg);
     font-weight: 500;
     letter-spacing: -0.01em;
-    margin-bottom: 10px;
+    margin-bottom: var(--space-2);
+    transition: opacity 0.15s;
+  }
+
+  @media (hover: hover) {
+    .project-row:hover .project-title {
+      opacity: 0.6;
+    }
+
+    .project-row:hover .discover-link {
+      border-bottom-color: var(--color-text-muted);
+    }
   }
 
   .project-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 20px;
-  }
-
-  .tag {
-    font-size: 12px;
-    font-weight: 400;
-    padding: 4px 12px;
-    border: 1px solid var(--color-border);
-    color: var(--color-tag-text);
-    border-radius: 99px;
+    margin-bottom: var(--space-3);
   }
 
   .discover-link {
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 500;
     color: var(--color-text);
     letter-spacing: -0.01em;
     border-bottom: 1px solid var(--color-text);
     padding-bottom: 1px;
+    transition: border-color 0.15s;
   }
 
   @media (max-width: 768px) {
@@ -160,7 +136,7 @@ const projects = getHomepageProjects();
     }
 
     .project-row {
-      padding: 40px var(--page-padding);
+      padding: var(--space-5) var(--page-padding);
     }
   }
 </style>
