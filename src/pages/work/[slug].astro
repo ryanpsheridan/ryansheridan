@@ -67,9 +67,16 @@ const { project } = Astro.props;
             </section>
           ) : (
             <div class="image-grid">
-              {block.images.map((src) => (
-                <img src={src} alt="" class="lightbox-trigger" />
-              ))}
+              {block.images.map((img) => {
+                const src = typeof img === "string" ? img : img.src;
+                const caption = typeof img === "string" ? undefined : img.caption;
+                return (
+                  <figure class="image-item">
+                    {caption && <figcaption>{caption}</figcaption>}
+                    <img src={src} alt="" class="lightbox-trigger" />
+                  </figure>
+                );
+              })}
             </div>
           )
         )
@@ -309,6 +316,18 @@ const { project } = Astro.props;
     gap: 16px;
   }
 
+
+  .image-item {
+    margin: 0;
+  }
+
+  .image-item figcaption {
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: 10px;
+  }
 
   .image-grid img {
     width: 100%;
