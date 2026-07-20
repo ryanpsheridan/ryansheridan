@@ -11,13 +11,14 @@ const projects = getHomepageProjects();
   <Nav />
   <main class="split-layout">
     <div class="left-panel">
-      <h1 class="sticky-title">
-        Designing systems<span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner">, sites</span></span><span class="reveal-wrap" data-reveal-index="2"><span class="reveal-inner">{" and brands"}</span></span>
+      <h1 class="sticky-title entrance-hidden">
+        Designing systems<span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner">,</span></span><br />
+        <span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner">sites</span></span><span class="reveal-wrap" data-reveal-index="2"><span class="reveal-inner">{" and brands."}</span></span>
       </h1>
     </div>
     <div class="right-panel">
       {projects.map((project, i) => (
-        <a href={`/work/${project.slug}`} class="project-row" data-index={i}>
+        <a href={`/work/${project.slug}`} class={`project-row${i === 0 ? " entrance-hidden" : ""}`} data-index={i}>
           <div class="cell-image">
             {project.thumbnail && <img src={project.thumbnail} alt={project.title} loading="lazy" />}
           </div>
@@ -59,6 +60,14 @@ const projects = getHomepageProjects();
   );
 
   rows.forEach((row) => observer.observe(row));
+
+  const firstProject = document.querySelector<HTMLElement>('.project-row[data-index="0"]');
+  const headline = document.querySelector<HTMLElement>(".sticky-title");
+
+  requestAnimationFrame(() => {
+    firstProject?.classList.add("visible");
+    setTimeout(() => headline?.classList.add("visible"), 350);
+  });
 </script>
 
 <style>
@@ -74,8 +83,8 @@ const projects = getHomepageProjects();
     width: 50%;
     height: calc(100vh - var(--nav-height));
     display: flex;
-    align-items: flex-end;
-    padding: 0 var(--page-padding) 20vh;
+    align-items: center;
+    padding: 0 var(--page-padding);
     flex-shrink: 0;
   }
 
@@ -86,6 +95,17 @@ const projects = getHomepageProjects();
     letter-spacing: -0.03em;
     line-height: 1.25;
     color: var(--color-text);
+  }
+
+  .entrance-hidden {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .entrance-hidden.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .reveal-wrap {
