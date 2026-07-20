@@ -11,11 +11,13 @@ const projects = getHomepageProjects();
   <Nav />
   <main class="split-layout">
     <div class="left-panel">
-      <h1 class="sticky-title">Designing systems,<br />sites and brands.</h1>
+      <h1 class="sticky-title">
+        Designing systems<span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner">, sites</span></span><span class="reveal-wrap" data-reveal-index="2"><span class="reveal-inner">{" and brands"}</span></span>
+      </h1>
     </div>
     <div class="right-panel">
-      {projects.map((project) => (
-        <a href={`/work/${project.slug}`} class="project-row">
+      {projects.map((project, i) => (
+        <a href={`/work/${project.slug}`} class="project-row" data-index={i}>
           <div class="cell-image">
             {project.thumbnail && <img src={project.thumbnail} alt={project.title} loading="lazy" />}
           </div>
@@ -33,6 +35,32 @@ const projects = getHomepageProjects();
   <Footer />
 </Layout>
 
+<script>
+  const revealWraps = document.querySelectorAll<HTMLElement>(".reveal-wrap");
+  const rows = document.querySelectorAll<HTMLElement>(".project-row");
+
+  function revealUpTo(index: number) {
+    revealWraps.forEach((wrap) => {
+      const revealIndex = Number(wrap.dataset.revealIndex);
+      if (revealIndex > index) return;
+      wrap.classList.add("visible");
+    });
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          revealUpTo(Number((entry.target as HTMLElement).dataset.index));
+        }
+      });
+    },
+    { rootMargin: "-45% 0px -45% 0px" }
+  );
+
+  rows.forEach((row) => observer.observe(row));
+</script>
+
 <style>
   .split-layout {
     display: flex;
@@ -42,9 +70,9 @@ const projects = getHomepageProjects();
 
   .left-panel {
     position: sticky;
-    top: 0;
+    top: var(--nav-height);
     width: 50%;
-    height: 100vh;
+    height: calc(100vh - var(--nav-height));
     display: flex;
     align-items: flex-end;
     padding: 0 var(--page-padding) 20vh;
@@ -52,11 +80,38 @@ const projects = getHomepageProjects();
   }
 
   .sticky-title {
+    max-width: 480px;
     font-size: clamp(var(--text-2xl), 5vw, var(--text-4xl));
     font-weight: 400;
     letter-spacing: -0.03em;
     line-height: 1.25;
     color: var(--color-text);
+  }
+
+  .reveal-wrap {
+    display: inline-grid;
+    grid-template-columns: 0fr;
+    vertical-align: bottom;
+    transition: grid-template-columns 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal-wrap.visible {
+    grid-template-columns: 1fr;
+  }
+
+  .reveal-inner {
+    display: inline-block;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+  }
+
+  .reveal-wrap.visible .reveal-inner {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .right-panel {
