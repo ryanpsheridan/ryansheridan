@@ -17,7 +17,7 @@ const projects = getHomepageProjects();
             <span class="reveal-wrap" data-load-reveal><span class="reveal-inner">Designing <span class="accent">systems</span></span></span><span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner">,</span></span><br />
             <span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner"><span class="accent">sites</span></span></span><span class="reveal-wrap" data-reveal-index="2"><span class="reveal-inner">{" and "}<span class="accent">brands</span>.</span></span>
           </h1>
-          <p class="tagline" data-reveal-index="3">Based out of Austin, Texas</p>
+          <p class="tagline"><span class="reveal-wrap" data-reveal-index="3"><span class="reveal-inner">Based out of Austin, Texas</span></span></p>
           <a href="/work" class="view-all-link" data-reveal-index={projects.length - 1}>View all work</a>
         </div>
       </div>
@@ -119,14 +119,6 @@ const projects = getHomepageProjects();
     margin-top: var(--space-3);
     font-size: var(--text-sm);
     color: var(--color-text-muted);
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 0.55s ease 0.15s, transform 0.55s ease 0.15s;
-  }
-
-  .tagline.visible {
-    opacity: 1;
-    transform: translateY(0);
   }
 
   .view-all-link {
@@ -136,17 +128,19 @@ const projects = getHomepageProjects();
     font-size: var(--text-sm);
     font-weight: 500;
     letter-spacing: -0.01em;
-    color: var(--color-text);
-    border: 1px solid var(--color-border);
+    color: var(--color-bg);
+    background: var(--color-text);
+    border: 1px solid var(--color-text);
     border-radius: 999px;
     padding: 12px 22px;
     opacity: 0;
     transform: translateY(8px);
-    transition: opacity 0.55s ease 0.15s, transform 0.55s ease 0.15s, border-color 0.2s;
+    transition: opacity 0.55s ease 0.15s, transform 0.55s ease 0.15s, background 0.2s;
   }
 
   .view-all-link:hover {
-    border-color: var(--color-text);
+    background: #333333;
+    border-color: #333333;
   }
 
   .view-all-link.visible {
@@ -169,7 +163,7 @@ const projects = getHomepageProjects();
     display: inline-grid;
     grid-template-columns: 0fr;
     vertical-align: bottom;
-    transition: grid-template-columns 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: grid-template-columns 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .reveal-wrap.visible {
@@ -183,7 +177,7 @@ const projects = getHomepageProjects();
     white-space: nowrap;
     opacity: 0;
     transform: translateY(6px);
-    transition: opacity 0.55s ease 0.15s, transform 0.55s ease 0.15s;
+    transition: opacity 0.65s ease 0.15s, transform 0.65s ease 0.15s;
   }
 
   .reveal-wrap.visible .reveal-inner {
@@ -255,7 +249,7 @@ const projects = getHomepageProjects();
       position: relative;
       width: 100%;
       height: auto;
-      padding: 120px 0 48px;
+      padding: 120px 0 var(--space-8);
       align-items: flex-start;
     }
 
@@ -283,7 +277,6 @@ const projects = getHomepageProjects();
       transition: none !important;
     }
 
-    .tagline,
     .view-all-link,
     .entrance-hidden {
       opacity: 1 !important;
