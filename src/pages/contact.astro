@@ -1,0 +1,111 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+
+const email = "ryansheridandesign@gmail.com";
+---
+
+<Layout title="Contact — Ryan Sheridan" description="Get in touch with Ryan Sheridan.">
+  <Nav />
+  <main class="contact-page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <span class="current">Contact</span>
+    </nav>
+
+    <div class="contact-hero">
+      <h1>Let's work together.</h1>
+      <p class="intro">
+        Have a project in mind? The fastest way to reach me is email —
+        send over a few details and I'll get back to you.
+      </p>
+      <a href={`mailto:${email}`} class="email-button">
+        Email me <span class="arrow">&nearr;</span>
+      </a>
+      <p class="email-plain">{email}</p>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .contact-page {
+    padding: 80px var(--page-padding) 160px;
+  }
+
+  .breadcrumbs {
+    max-width: var(--max-width);
+    margin: 0 auto 48px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .breadcrumbs a {
+    color: var(--color-text-muted);
+    transition: color 0.2s;
+  }
+
+  .breadcrumbs a:hover {
+    color: var(--color-text);
+  }
+
+  .breadcrumbs .sep {
+    color: var(--color-border);
+  }
+
+  .breadcrumbs .current {
+    color: var(--color-text);
+  }
+
+  .contact-hero {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: clamp(32px, 1.7rem + 1.2vw, 52px);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+
+  .intro {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--color-text-muted);
+    max-width: 480px;
+    margin-bottom: 40px;
+  }
+
+  .email-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-bg);
+    background: var(--color-text);
+    padding: 16px 28px;
+    border-radius: 999px;
+    transition: opacity 0.2s;
+  }
+
+  .email-button:hover {
+    opacity: 0.85;
+  }
+
+  .arrow {
+    font-size: 14px;
+  }
+
+  .email-plain {
+    font-size: 14px;
+    color: var(--color-text-muted);
+    margin-top: 20px;
+  }
+</style>
