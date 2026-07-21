@@ -38,6 +38,7 @@ const projects = getHomepageProjects();
           );
           return i === 0 ? <div class="first-project-frame">{row}</div> : row;
         })}
+        <div class="scroll-spacer"></div>
       </div>
     </div>
   </main>
@@ -76,6 +77,26 @@ const projects = getHomepageProjects();
     firstProject?.classList.add("visible");
     setTimeout(() => introWrap?.classList.add("visible"), 400);
   });
+
+  // Size the trailing spacer so the sticky headline releases right as the
+  // last project becomes vertically centered in the viewport, instead of
+  // releasing only once the project has scrolled away entirely.
+  const spacer = document.querySelector<HTMLElement>(".scroll-spacer");
+  const lastRow = rows[rows.length - 1];
+
+  function updateSpacer() {
+    if (!spacer || !lastRow) return;
+    if (window.innerWidth < 769) {
+      spacer.style.height = "0px";
+      return;
+    }
+    const rowHeight = lastRow.getBoundingClientRect().height;
+    const height = Math.max(0, (window.innerHeight - rowHeight) / 2);
+    spacer.style.height = `${height}px`;
+  }
+
+  updateSpacer();
+  window.addEventListener("resize", updateSpacer);
 </script>
 
 <style>
@@ -189,12 +210,8 @@ const projects = getHomepageProjects();
     width: 50%;
   }
 
-  @media (min-width: 769px) {
-    .right-panel::after {
-      content: "";
-      display: block;
-      height: calc(100vh - var(--nav-height));
-    }
+  .scroll-spacer {
+    height: 0;
   }
 
   .project-row {
