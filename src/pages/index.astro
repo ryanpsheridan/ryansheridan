@@ -189,6 +189,14 @@ const projects = getHomepageProjects();
     width: 50%;
   }
 
+  @media (min-width: 769px) {
+    .right-panel::after {
+      content: "";
+      display: block;
+      height: calc(100vh - var(--nav-height));
+    }
+  }
+
   .project-row {
     display: block;
     padding: var(--space-8) 0;

@@ -306,7 +306,7 @@ export const projects: Project[] = [
     slug: "flow-stays",
     title: "Flow Stays",
     thumbnail: "/project-flow-stays1.jpg",
-    showOnHomepage: true,
+    showOnHomepage: false,
     tags: ["Branding"],
     tools: ["Adobe Illustrator", "Figma"],
     client: "Flow Stays",
