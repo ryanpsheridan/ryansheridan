@@ -11,40 +11,45 @@ const projects = getHomepageProjects();
   <Nav />
   <main class="split-layout">
     <div class="left-panel">
-      <h1 class="sticky-title entrance-hidden">
-        Designing systems<span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner">,</span></span><br />
-        <span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner">sites</span></span><span class="reveal-wrap" data-reveal-index="2"><span class="reveal-inner">{" and brands."}</span></span>
-      </h1>
+      <div class="headline-block">
+        <h1 class="sticky-title">
+          <span class="reveal-wrap" data-load-reveal><span class="reveal-inner">Designing systems</span></span><span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner">,</span></span><br />
+          <span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner">sites</span></span><span class="reveal-wrap" data-reveal-index="2"><span class="reveal-inner">{" and brands."}</span></span>
+        </h1>
+        <p class="tagline" data-reveal-index="2">Based out of Boston, Texas</p>
+      </div>
     </div>
     <div class="right-panel">
-      {projects.map((project, i) => (
-        <a href={`/work/${project.slug}`} class={`project-row${i === 0 ? " entrance-hidden" : ""}`} data-index={i}>
-          <div class="cell-image">
-            {project.thumbnail && <img src={project.thumbnail} alt={project.title} loading="lazy" />}
-          </div>
-          <div class="cell-info">
-            <h2 class="project-title">{project.title}</h2>
-            <div class="badge-list project-tags">
-              {project.tags.map((tag) => <span class="badge">{tag}</span>)}
+      {projects.map((project, i) => {
+        const row = (
+          <a href={`/work/${project.slug}`} class={`project-row${i === 0 ? " entrance-hidden" : ""}`} data-index={i}>
+            <div class="cell-image">
+              {project.thumbnail && <img src={project.thumbnail} alt={project.title} loading="lazy" />}
             </div>
-            <span class="discover-link">View project</span>
-          </div>
-        </a>
-      ))}
+            <div class="cell-info">
+              <h2 class="project-title">{project.title}</h2>
+              <div class="badge-list project-tags">
+                {project.tags.map((tag) => <span class="badge">{tag}</span>)}
+              </div>
+            </div>
+          </a>
+        );
+        return i === 0 ? <div class="first-project-frame">{row}</div> : row;
+      })}
     </div>
   </main>
   <Footer />
 </Layout>
 
 <script>
-  const revealWraps = document.querySelectorAll<HTMLElement>(".reveal-wrap");
+  const revealTargets = document.querySelectorAll<HTMLElement>("[data-reveal-index]");
   const rows = document.querySelectorAll<HTMLElement>(".project-row");
 
   function revealUpTo(index: number) {
-    revealWraps.forEach((wrap) => {
-      const revealIndex = Number(wrap.dataset.revealIndex);
+    revealTargets.forEach((el) => {
+      const revealIndex = Number(el.dataset.revealIndex);
       if (revealIndex > index) return;
-      wrap.classList.add("visible");
+      el.classList.add("visible");
     });
   }
 
@@ -62,11 +67,11 @@ const projects = getHomepageProjects();
   rows.forEach((row) => observer.observe(row));
 
   const firstProject = document.querySelector<HTMLElement>('.project-row[data-index="0"]');
-  const headline = document.querySelector<HTMLElement>(".sticky-title");
+  const introWrap = document.querySelector<HTMLElement>(".reveal-wrap[data-load-reveal]");
 
   requestAnimationFrame(() => {
     firstProject?.classList.add("visible");
-    setTimeout(() => headline?.classList.add("visible"), 350);
+    setTimeout(() => introWrap?.classList.add("visible"), 400);
   });
 </script>
 
@@ -88,19 +93,39 @@ const projects = getHomepageProjects();
     flex-shrink: 0;
   }
 
+  .headline-block {
+    /* Nudge up to counter the nav bar eating into the visible viewport,
+       so the block reads as centered on the whole page, not just this panel. */
+    transform: translateY(calc(var(--nav-height) / -2));
+  }
+
   .sticky-title {
-    max-width: 480px;
-    font-size: clamp(var(--text-2xl), 5vw, var(--text-4xl));
+    max-width: 100%;
+    font-size: clamp(2rem, 1.5rem + 2vw, 4rem);
     font-weight: 400;
     letter-spacing: -0.03em;
     line-height: 1.25;
     color: var(--color-text);
   }
 
+  .tagline {
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.7s ease 0.9s, transform 0.7s ease 0.9s;
+  }
+
+  .tagline.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   .entrance-hidden {
     opacity: 0;
     transform: translateY(10px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition: opacity 0.8s ease, transform 0.8s ease;
   }
 
   .entrance-hidden.visible {
@@ -112,7 +137,7 @@ const projects = getHomepageProjects();
     display: inline-grid;
     grid-template-columns: 0fr;
     vertical-align: bottom;
-    transition: grid-template-columns 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: grid-template-columns 0.65s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .reveal-wrap.visible {
@@ -126,7 +151,7 @@ const projects = getHomepageProjects();
     white-space: nowrap;
     opacity: 0;
     transform: translateY(6px);
-    transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+    transition: opacity 0.55s ease 0.15s, transform 0.55s ease 0.15s;
   }
 
   .reveal-wrap.visible .reveal-inner {
@@ -141,10 +166,6 @@ const projects = getHomepageProjects();
   .project-row {
     display: block;
     padding: var(--space-8) var(--page-padding);
-  }
-
-  .project-row:first-child {
-    padding-top: 0;
   }
 
   .cell-image {
@@ -165,31 +186,30 @@ const projects = getHomepageProjects();
     font-size: var(--text-lg);
     font-weight: 500;
     letter-spacing: -0.01em;
-    margin-bottom: var(--space-2);
   }
 
   @media (hover: hover) {
     .project-row:hover .cell-image img {
       transform: scale(1.03);
     }
-
-    .project-row:hover .discover-link {
-      border-bottom-color: var(--color-text-muted);
-    }
   }
 
   .project-tags {
-    margin-bottom: var(--space-3);
+    margin-bottom: 0;
   }
 
-  .discover-link {
-    font-size: var(--text-sm);
-    font-weight: 500;
-    color: var(--color-text);
-    letter-spacing: -0.01em;
-    border-bottom: 1px solid var(--color-text);
-    padding-bottom: 1px;
-    transition: border-color 0.15s;
+  @media (min-width: 769px) {
+    .first-project-frame {
+      min-height: calc(100vh - var(--nav-height));
+      display: flex;
+      align-items: center;
+    }
+
+    .first-project-frame .project-row {
+      padding-top: 0;
+      padding-bottom: 0;
+      width: 100%;
+    }
   }
 
   @media (max-width: 768px) {
