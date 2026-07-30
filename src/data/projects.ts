@@ -14,8 +14,8 @@ export interface ImageGridBlock {
   images: (string | ImageGridImage)[];
   /** Adds a light border around each image and extra breathing room (UI screenshots). */
   framed?: boolean;
-  /** Lays the images out full-width instead of the two-column grid. */
-  wide?: boolean;
+  /** Opts into a two-column layout for this block instead of the single full-width column. */
+  sideBySide?: boolean;
 }
 
 export interface CompareBlock {
@@ -112,6 +112,7 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         framed: true,
+        sideBySide: true,
         images: [
           { src: "/feedonomics-makeswift-tokens.jpg", caption: "Makeswift — Color Tokens" },
           { src: "/feedonomics-makeswift-tokens-1.jpg", caption: "Makeswift — Type Scale" },
@@ -120,7 +121,6 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         framed: true,
-        wide: true,
         images: [
           { src: "/Feedonomics-color-tokens.jpg", caption: "Full Color Token System" },
         ],

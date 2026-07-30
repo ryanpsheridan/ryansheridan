@@ -50,7 +50,7 @@ const { project } = Astro.props;
 
               if (block.type === "imageGrid") {
                 return (
-                  <div class:list={["image-grid", { "is-framed": block.framed, "is-wide": block.wide }]}>
+                  <div class:list={["image-grid", { "is-framed": block.framed, "is-side-by-side": block.sideBySide }]}>
                     {block.images.map((img) => {
                       const src = typeof img === "string" ? img : img.src;
                       const caption = typeof img === "string" ? undefined : img.caption;
@@ -427,6 +427,16 @@ const { project } = Astro.props;
 
   .image-grid.is-framed {
     gap: var(--space-5);
+  }
+
+  .image-grid.is-side-by-side {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 640px) {
+    .image-grid.is-side-by-side {
+      grid-template-columns: 1fr;
+    }
   }
 
   .image-grid.is-framed img {
