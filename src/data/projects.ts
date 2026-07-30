@@ -36,11 +36,16 @@ export interface ComponentTableBlock {
   groups: ComponentTableGroup[];
 }
 
+export interface DividerBlock {
+  type: "divider";
+}
+
 export type ContentBlock =
   | TextBlock
   | ImageGridBlock
   | CompareBlock
-  | ComponentTableBlock;
+  | ComponentTableBlock
+  | DividerBlock;
 
 export interface Project {
   slug: string;
@@ -227,6 +232,14 @@ export const projects: Project[] = [
       {
         type: "text",
         body: `<p>Curious about David's path to owning RHOW? He shared the full story, from working the counter to buying the shop, in <a href="https://texascoffeeschool.com/buying-a-coffee-shop-meet-the-owner-of-rhow-coffee/" target="_blank" rel="noopener noreferrer">this interview with Texas Coffee School</a>.</p>`,
+      },
+      {
+        type: "divider",
+      },
+      {
+        type: "text",
+        heading: "Gallery",
+        body: "",
       },
       {
         type: "imageGrid",

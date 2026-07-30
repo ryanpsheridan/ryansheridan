@@ -43,9 +43,13 @@ const { project } = Astro.props;
                 return (
                   <section class="content-section">
                     {block.heading && <h2>{block.heading}</h2>}
-                    <div class="body" set:html={block.body} />
+                    {block.body && <div class="body" set:html={block.body} />}
                   </section>
                 );
+              }
+
+              if (block.type === "divider") {
+                return <hr class="content-divider" />;
               }
 
               if (block.type === "imageGrid") {
@@ -335,6 +339,13 @@ const { project } = Astro.props;
   .content-section {
     max-width: var(--content-width);
     margin: 0 0 var(--space-6);
+  }
+
+  .content-divider {
+    max-width: var(--content-width);
+    margin: 0 0 var(--space-6);
+    border: none;
+    border-top: 1px solid var(--color-border);
   }
 
   h2 {
