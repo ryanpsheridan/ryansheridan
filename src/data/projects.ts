@@ -212,8 +212,8 @@ export const projects: Project[] = [
     content: [
       {
         type: "text",
-        heading: "Calm by Design",
-        body: `<p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">Rhow Coffee</a> is a specialty coffee shop in Massillon, Ohio with a clear point of view. The focus is on hospitality, craft, and creating a space where people genuinely want to linger. Walking into Rhow feels intentional, from the paneled walls and warm lighting to the swan mark etched into the front door glass.</p><p>The identity needed to match that. The brand is built around a custom-traced logotype and a swan mark, anchored by a palette of shadow grey, parchment, steel blue, and dark walnut. Geometric and architectural, but warm enough to feel like a place worth staying in.</p>`,
+        heading: "Rise Humbly Over Worry",
+        body: `<p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">Rhow Coffee</a> is a specialty coffee shop in Massillon, Ohio, owned by David Hurley. The name is shorthand for his own philosophy, Rise Humbly Over Worry, control what you can control and let the rest go. That mindset shaped what he wanted the shop to be: less a place to grab a cup and go, more a room built for staying awhile, whether that's a business meeting, a first date, or old friends catching up.</p><p>The identity needed to hold that same restraint. The brand is built around a custom-traced logotype and a swan mark, anchored by a palette of shadow grey, parchment, steel blue, and dark walnut. Geometric and architectural, but warm enough to feel like a place worth lingering in.</p>`,
       },
       {
         type: "imageGrid",
@@ -263,6 +263,10 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: ["/project-rhow-coffee12.jpg"],
+      },
+      {
+        type: "text",
+        body: `<p>Curious about David's path to owning RHOW? He shared the full story, from working the counter to buying the shop, in <a href="https://texascoffeeschool.com/buying-a-coffee-shop-meet-the-owner-of-rhow-coffee/" target="_blank" rel="noopener noreferrer">this interview with Texas Coffee School</a>.</p>`,
       },
     ],
   },
