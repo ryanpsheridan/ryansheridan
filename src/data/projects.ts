@@ -217,17 +217,19 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: [
-          "/project-rhow-coffee04.jpg",
-          "/project-rhow-coffee07.jpg",
-        ],
+        images: ["/project-rhow-coffee04.jpg"],
       },
       {
         type: "imageGrid",
-        images: [
-          "/project-rhow-coffee08.jpg",
-          "/project-rhow-coffee10.jpg",
-        ],
+        images: ["/project-rhow-coffee07.jpg"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee08.jpg"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee10.jpg"],
       },
       {
         type: "imageGrid",
@@ -244,10 +246,11 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: [
-          "/project-rhow-coffee05.jpg",
-          "/project-rhow-coffee09.jpg",
-        ],
+        images: ["/project-rhow-coffee05.jpg"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee09.jpg"],
       },
       {
         type: "imageGrid",
@@ -255,10 +258,11 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: [
-          "/project-rhow-coffee11.jpg",
-          "/project-rhow-coffee13.jpg",
-        ],
+        images: ["/project-rhow-coffee11.jpg"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee13.jpg"],
       },
       {
         type: "imageGrid",

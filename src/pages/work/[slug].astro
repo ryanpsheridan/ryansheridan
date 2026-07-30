@@ -405,7 +405,7 @@ const { project } = Astro.props;
   .image-grid {
     margin: 0 0 var(--space-6);
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: var(--space-3);
   }
 
@@ -423,10 +423,6 @@ const { project } = Astro.props;
   .image-grid img {
     width: 100%;
     display: block;
-  }
-
-  .image-grid.is-wide {
-    grid-template-columns: 1fr;
   }
 
   .image-grid.is-framed {
@@ -610,11 +606,6 @@ const { project } = Astro.props;
     }
   }
 
-  @media (max-width: 640px) {
-    .image-grid {
-      grid-template-columns: 1fr;
-    }
-  }
 </style>
 
 <script>
