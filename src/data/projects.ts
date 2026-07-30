@@ -277,6 +277,18 @@ export const projects: Project[] = [
         type: "imageGrid",
         images: ["/project-rhow-coffee05.jpg"],
       },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee14.png"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee15.png"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee16.png"],
+      },
     ],
   },
   {
