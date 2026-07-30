@@ -238,7 +238,7 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        heading: "Gallery",
+        heading: "More Shots from the Shop",
         body: "",
       },
       {
