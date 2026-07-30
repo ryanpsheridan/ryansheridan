@@ -43,14 +43,18 @@ const { project } = Astro.props;
                 return (
                   <section class="content-section">
                     {block.heading && <h2>{block.heading}</h2>}
-                    <div class="body" set:html={block.body} />
+                    {block.body && <div class="body" set:html={block.body} />}
                   </section>
                 );
               }
 
+              if (block.type === "divider") {
+                return <hr class="content-divider" />;
+              }
+
               if (block.type === "imageGrid") {
                 return (
-                  <div class:list={["image-grid", { "is-framed": block.framed, "is-wide": block.wide }]}>
+                  <div class:list={["image-grid", { "is-framed": block.framed, "is-side-by-side": block.sideBySide }]}>
                     {block.images.map((img) => {
                       const src = typeof img === "string" ? img : img.src;
                       const caption = typeof img === "string" ? undefined : img.caption;
@@ -337,6 +341,13 @@ const { project } = Astro.props;
     margin: 0 0 var(--space-6);
   }
 
+  .content-divider {
+    max-width: var(--content-width);
+    margin: 0 0 var(--space-6);
+    border: none;
+    border-top: 1px solid var(--color-border);
+  }
+
   h2 {
     font-size: var(--text-xl);
     font-weight: 500;
@@ -405,7 +416,7 @@ const { project } = Astro.props;
   .image-grid {
     margin: 0 0 var(--space-6);
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: var(--space-3);
   }
 
@@ -425,12 +436,18 @@ const { project } = Astro.props;
     display: block;
   }
 
-  .image-grid.is-wide {
-    grid-template-columns: 1fr;
-  }
-
   .image-grid.is-framed {
     gap: var(--space-5);
+  }
+
+  .image-grid.is-side-by-side {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 640px) {
+    .image-grid.is-side-by-side {
+      grid-template-columns: 1fr;
+    }
   }
 
   .image-grid.is-framed img {
@@ -599,18 +616,17 @@ const { project } = Astro.props;
 
     .sidebar-inner {
       position: static;
-      flex-direction: row;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: var(--space-5);
       padding-top: 0;
     }
 
     .meta-group {
-      flex: 1 1 160px;
       padding-top: 0;
       border-top: none;
     }
   }
+
 </style>
 
 <script>

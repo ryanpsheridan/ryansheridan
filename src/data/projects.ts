@@ -14,8 +14,8 @@ export interface ImageGridBlock {
   images: (string | ImageGridImage)[];
   /** Adds a light border around each image and extra breathing room (UI screenshots). */
   framed?: boolean;
-  /** Lays the images out full-width instead of the two-column grid. */
-  wide?: boolean;
+  /** Opts into a two-column layout for this block instead of the single full-width column. */
+  sideBySide?: boolean;
 }
 
 export interface CompareBlock {
@@ -36,11 +36,16 @@ export interface ComponentTableBlock {
   groups: ComponentTableGroup[];
 }
 
+export interface DividerBlock {
+  type: "divider";
+}
+
 export type ContentBlock =
   | TextBlock
   | ImageGridBlock
   | CompareBlock
-  | ComponentTableBlock;
+  | ComponentTableBlock
+  | DividerBlock;
 
 export interface Project {
   slug: string;
@@ -112,6 +117,7 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         framed: true,
+        sideBySide: true,
         images: [
           { src: "/feedonomics-makeswift-tokens.jpg", caption: "Makeswift — Color Tokens" },
           { src: "/feedonomics-makeswift-tokens-1.jpg", caption: "Makeswift — Type Scale" },
@@ -120,7 +126,6 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         framed: true,
-        wide: true,
         images: [
           { src: "/Feedonomics-color-tokens.jpg", caption: "Full Color Token System" },
         ],
@@ -212,57 +217,77 @@ export const projects: Project[] = [
     content: [
       {
         type: "text",
-        heading: "Calm by Design",
-        body: `<p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">Rhow Coffee</a> is a specialty coffee shop in Massillon, Ohio with a clear point of view. The focus is on hospitality, craft, and creating a space where people genuinely want to linger. Walking into Rhow feels intentional, from the paneled walls and warm lighting to the swan mark etched into the front door glass.</p><p>The identity needed to match that. The brand is built around a custom-traced logotype and a swan mark, anchored by a palette of shadow grey, parchment, steel blue, and dark walnut. Geometric and architectural, but warm enough to feel like a place worth staying in.</p>`,
+        heading: "Design Philosophy",
+        body: `<p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">Rhow Coffee</a> is a specialty coffee shop in Massillon, Ohio, owned by David Hurley. The name is shorthand for his own philosophy, Rise Humbly Over Worry, control what you can control and let the rest go. That mindset shaped what he wanted the shop to be: less a place to grab a cup and go, more a room built for staying awhile, whether that's a business meeting, a first date, or old friends catching up.</p><p>The identity needed to hold that same restraint. The brand is built around a custom-traced logotype and a swan mark, anchored by a palette of shadow grey, parchment, steel blue, and dark walnut. David specifically asked for a swan, a nod to black swan latte art, and a mark that carries some personal meaning for him. Geometric and architectural, but warm enough to feel like a place worth lingering in.</p>`,
       },
       {
         type: "imageGrid",
-        images: [
-          "/project-rhow-coffee02.jpg",
-          "/project-rhow-coffee07.jpg",
-        ],
-      },
-      {
-        type: "imageGrid",
-        images: [
-          "/project-rhow-coffee03.jpg",
-          "/project-rhow-coffee08.jpg",
-        ],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee04.jpg"],
-      },
-      {
-        type: "imageGrid",
-        images: [
-          "/project-rhow-coffee05.jpg",
-          "/project-rhow-coffee09.jpg",
-        ],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee06.jpg"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee10.jpg"],
+        images: ["/project-rhow-coffee07.jpg"],
       },
       {
         type: "text",
         heading: "From the Door to the Cup",
-        body: `<p>The brand shows up everywhere in the shop, on signage, the front door, the menu display, and the retail shelving. That consistency was the goal from the start. Every piece of the identity was designed to hold up across physical touchpoints without losing the quiet, refined feel of the primary mark.</p><p>The brand book covers the full system including logo hierarchy, color palette, typography, and a merch collection spanning a t-shirt, coffee bag, punch card, and stickers. It is built to be something the Rhow team can hand to any vendor or collaborator and have it speak for itself.</p><p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">You can follow RHOW Coffee Instagram here.</a></p>`,
+        body: `<p>The brand shows up everywhere in the shop, on signage, the front door, the menu display, and the retail shelving. That consistency was the goal from the start. Every piece of the identity was designed to hold up across physical touchpoints without losing the quiet, refined feel of the primary mark.</p><p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">You can follow RHOW Coffee Instagram here.</a></p>`,
+      },
+      {
+        type: "text",
+        body: `<p>Curious about David's path to owning RHOW? He shared the full story, from working the counter to buying the shop, in <a href="https://texascoffeeschool.com/buying-a-coffee-shop-meet-the-owner-of-rhow-coffee/" target="_blank" rel="noopener noreferrer">this interview with Texas Coffee School</a>.</p>`,
+      },
+      {
+        type: "divider",
+      },
+      {
+        type: "text",
+        heading: "Brand in Use",
+        body: `<p>See the full brand book in motion in <a href="https://www.instagram.com/p/DTDZLLxkU5z/" target="_blank" rel="noopener noreferrer">this Instagram video</a>.</p>`,
       },
       {
         type: "imageGrid",
-        images: [
-          "/project-rhow-coffee11.jpg",
-          "/project-rhow-coffee13.jpg",
-        ],
+        images: ["/project-rhow-coffee02.jpg"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee11.jpg"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee13.jpg"],
       },
       {
         type: "imageGrid",
         images: ["/project-rhow-coffee12.jpg"],
+      },
+      {
+        type: "divider",
+      },
+      {
+        type: "text",
+        heading: "More Shots from the Shop",
+        body: "",
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee15.png"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee08.jpg"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee03.jpg"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee05.jpg"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee14.png"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee16.png"],
       },
     ],
   },
