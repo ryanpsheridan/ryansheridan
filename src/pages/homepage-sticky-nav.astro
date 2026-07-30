@@ -26,18 +26,7 @@ const sections = [
   <Nav />
   <main class="page">
     <div class="page-inner">
-      <aside class="side-nav">
-        <div class="side-nav-sticky">
-          <p class="side-nav-label">Contents</p>
-          <ul>
-            {sections.map((s) => (
-              <li>
-                <a href={`#${s.id}`} data-target={s.id}>{s.label}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </aside>
+      <div class="side-spacer" aria-hidden="true"></div>
 
       <div class="content-col">
         <section id="intro" class="intro-block">
@@ -70,7 +59,18 @@ const sections = [
         })}
       </div>
 
-      <div class="side-spacer" aria-hidden="true"></div>
+      <aside class="side-nav">
+        <div class="side-nav-sticky">
+          <p class="side-nav-label">Contents</p>
+          <ul>
+            {sections.map((s) => (
+              <li>
+                <a href={`#${s.id}`} data-target={s.id}>{s.label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
     </div>
   </main>
   <Footer />
@@ -117,13 +117,17 @@ const sections = [
     margin: 0 auto;
     padding-top: var(--space-7);
     display: grid;
-    grid-template-columns: 200px minmax(0, var(--content-width)) 200px;
+    grid-template-columns: 220px minmax(0, var(--content-width)) 220px;
     justify-content: center;
-    gap: var(--space-6);
+    column-gap: 120px;
+  }
+
+  .side-spacer {
+    grid-column: 1;
   }
 
   .side-nav {
-    grid-column: 1;
+    grid-column: 3;
   }
 
   .side-nav-sticky {
@@ -183,10 +187,6 @@ const sections = [
   .content-col {
     grid-column: 2;
     min-width: 0;
-  }
-
-  .side-spacer {
-    grid-column: 3;
   }
 
   .intro-block {
@@ -279,7 +279,7 @@ const sections = [
 
   @media (max-width: 900px) {
     .page-inner {
-      grid-template-columns: minmax(0, var(--content-width));
+      display: block;
       padding-top: var(--space-6);
     }
 
