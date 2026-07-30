@@ -239,7 +239,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Brand in Use",
-        body: "",
+        body: `<p>See the full brand book in motion in <a href="https://www.instagram.com/p/DTDZLLxkU5z/" target="_blank" rel="noopener noreferrer">this Instagram video</a>.</p>`,
       },
       {
         type: "imageGrid",
@@ -267,15 +267,7 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: ["/project-rhow-coffee04.jpg"],
-      },
-      {
-        type: "imageGrid",
         images: ["/project-rhow-coffee08.jpg"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee10.jpg"],
       },
       {
         type: "imageGrid",
@@ -284,14 +276,6 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: ["/project-rhow-coffee05.jpg"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee09.jpg"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee06.jpg"],
       },
     ],
   },
