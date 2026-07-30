@@ -238,6 +238,30 @@ export const projects: Project[] = [
       },
       {
         type: "text",
+        heading: "Brand in Use",
+        body: "",
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee02.jpg"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee11.jpg"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee13.jpg"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee12.jpg"],
+      },
+      {
+        type: "divider",
+      },
+      {
+        type: "text",
         heading: "More Shots from the Shop",
         body: "",
       },
@@ -268,22 +292,6 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: ["/project-rhow-coffee06.jpg"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee02.jpg"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee11.jpg"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee13.jpg"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee12.jpg"],
       },
     ],
   },
