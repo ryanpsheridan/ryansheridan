@@ -217,11 +217,20 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: ["/project-rhow-coffee04.jpg"],
+        images: ["/project-rhow-coffee07.jpg"],
+      },
+      {
+        type: "text",
+        heading: "From the Door to the Cup",
+        body: `<p>The brand shows up everywhere in the shop, on signage, the front door, the menu display, and the retail shelving. That consistency was the goal from the start. Every piece of the identity was designed to hold up across physical touchpoints without losing the quiet, refined feel of the primary mark.</p><p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">You can follow RHOW Coffee Instagram here.</a></p>`,
+      },
+      {
+        type: "text",
+        body: `<p>Curious about David's path to owning RHOW? He shared the full story, from working the counter to buying the shop, in <a href="https://texascoffeeschool.com/buying-a-coffee-shop-meet-the-owner-of-rhow-coffee/" target="_blank" rel="noopener noreferrer">this interview with Texas Coffee School</a>.</p>`,
       },
       {
         type: "imageGrid",
-        images: ["/project-rhow-coffee07.jpg"],
+        images: ["/project-rhow-coffee04.jpg"],
       },
       {
         type: "imageGrid",
@@ -234,11 +243,6 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: ["/project-rhow-coffee02.jpg"],
-      },
-      {
-        type: "text",
-        heading: "From the Door to the Cup",
-        body: `<p>The brand shows up everywhere in the shop, on signage, the front door, the menu display, and the retail shelving. That consistency was the goal from the start. Every piece of the identity was designed to hold up across physical touchpoints without losing the quiet, refined feel of the primary mark.</p><p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">You can follow RHOW Coffee Instagram here.</a></p>`,
       },
       {
         type: "imageGrid",
@@ -267,10 +271,6 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: ["/project-rhow-coffee12.jpg"],
-      },
-      {
-        type: "text",
-        body: `<p>Curious about David's path to owning RHOW? He shared the full story, from working the counter to buying the shop, in <a href="https://texascoffeeschool.com/buying-a-coffee-shop-meet-the-owner-of-rhow-coffee/" target="_blank" rel="noopener noreferrer">this interview with Texas Coffee School</a>.</p>`,
       },
     ],
   },
