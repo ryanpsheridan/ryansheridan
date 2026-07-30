@@ -218,20 +218,29 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          "/project-rhow-coffee02.jpg",
+          "/project-rhow-coffee04.jpg",
           "/project-rhow-coffee07.jpg",
         ],
       },
       {
         type: "imageGrid",
         images: [
-          "/project-rhow-coffee03.jpg",
           "/project-rhow-coffee08.jpg",
+          "/project-rhow-coffee10.jpg",
         ],
       },
       {
         type: "imageGrid",
-        images: ["/project-rhow-coffee04.jpg"],
+        images: ["/project-rhow-coffee02.jpg"],
+      },
+      {
+        type: "text",
+        heading: "From the Door to the Cup",
+        body: `<p>The brand shows up everywhere in the shop, on signage, the front door, the menu display, and the retail shelving. That consistency was the goal from the start. Every piece of the identity was designed to hold up across physical touchpoints without losing the quiet, refined feel of the primary mark.</p><p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">You can follow RHOW Coffee Instagram here.</a></p>`,
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee03.jpg"],
       },
       {
         type: "imageGrid",
@@ -243,15 +252,6 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: ["/project-rhow-coffee06.jpg"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee10.jpg"],
-      },
-      {
-        type: "text",
-        heading: "From the Door to the Cup",
-        body: `<p>The brand shows up everywhere in the shop, on signage, the front door, the menu display, and the retail shelving. That consistency was the goal from the start. Every piece of the identity was designed to hold up across physical touchpoints without losing the quiet, refined feel of the primary mark.</p><p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">You can follow RHOW Coffee Instagram here.</a></p>`,
       },
       {
         type: "imageGrid",

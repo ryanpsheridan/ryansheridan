@@ -599,16 +599,20 @@ const { project } = Astro.props;
 
     .sidebar-inner {
       position: static;
-      flex-direction: row;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: var(--space-5);
       padding-top: 0;
     }
 
     .meta-group {
-      flex: 1 1 160px;
       padding-top: 0;
       border-top: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .image-grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>
