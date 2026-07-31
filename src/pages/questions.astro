@@ -267,37 +267,39 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
             </div>
           </fieldset>
 
-          <fieldset class="field">
-            <legend>If yes, one-time payments or recurring/subscriptions?</legend>
-            <div class="radio-group">
-              <label class="radio-label">
-                <input type="radio" name="Payment type" value="One-time" />
-                One-time
-              </label>
-              <label class="radio-label">
-                <input type="radio" name="Payment type" value="Recurring / subscriptions" />
-                Recurring / subscriptions
-              </label>
-            </div>
-          </fieldset>
+          <div id="payment-details-wrap" hidden>
+            <fieldset class="field">
+              <legend>One-time payments or recurring/subscriptions?</legend>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="Payment type" value="One-time" />
+                  One-time
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="Payment type" value="Recurring / subscriptions" />
+                  Recurring / subscriptions
+                </label>
+              </div>
+            </fieldset>
 
-          <fieldset class="field">
-            <legend>Existing preference</legend>
-            <div class="radio-group">
-              <label class="radio-label">
-                <input type="radio" name="Payment preference" value="Stripe" />
-                Stripe
-              </label>
-              <label class="radio-label">
-                <input type="radio" name="Payment preference" value="PayPal" />
-                PayPal
-              </label>
-              <label class="radio-label">
-                <input type="radio" name="Payment preference" value="No preference" />
-                No preference
-              </label>
-            </div>
-          </fieldset>
+            <fieldset class="field">
+              <legend>Existing preference</legend>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="Payment preference" value="Stripe" />
+                  Stripe
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="Payment preference" value="PayPal" />
+                  PayPal
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="Payment preference" value="No preference" />
+                  No preference
+                </label>
+              </div>
+            </fieldset>
+          </div>
         </div>
       </section>
 
@@ -416,6 +418,13 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
     radio.addEventListener("change", () => {
       brandingDetails?.toggleAttribute("hidden", radio.value !== "Yes");
       brandingHelp?.toggleAttribute("hidden", radio.value !== "No");
+    });
+  });
+
+  const paymentDetails = document.getElementById("payment-details-wrap");
+  document.querySelectorAll<HTMLInputElement>('input[name="Payments needed"]').forEach((radio) => {
+    radio.addEventListener("change", () => {
+      paymentDetails?.toggleAttribute("hidden", radio.value !== "Yes");
     });
   });
 
