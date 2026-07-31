@@ -18,26 +18,19 @@ const email = "ryansheridandesign@gmail.com";
     <div class="contact-hero">
       <h1>Let's work together.</h1>
       <p class="intro">
-        Have a project in mind? The fastest way to reach me is email —
-        send over a few details and I'll get back to you.
+        Have a project in mind? The fastest way to reach me is email — send
+        over a few details and I'll get back to you. Already know you want a
+        new site built? Skip ahead with the project questionnaire.
       </p>
-      <a href={`mailto:${email}`} class="email-button">
-        Email me <span class="arrow">&nearr;</span>
-      </a>
-      <p class="email-plain">{email}</p>
-    </div>
-
-    <div class="questions-callout">
-      <div class="questions-callout-text">
-        <h2>Starting a new project?</h2>
-        <p>
-          If you already know you want a new site built, skip the back-and-forth —
-          fill out a short questionnaire and I'll follow up with a plan.
-        </p>
+      <div class="cta-group">
+        <a href={`mailto:${email}`} class="email-button">
+          Email me <span class="arrow">&nearr;</span>
+        </a>
+        <a href="/project-questionnaire" class="questionnaire-link">
+          Project questionnaire <span class="arrow">&nearr;</span>
+        </a>
       </div>
-      <a href="/project-questionnaire" class="questions-button">
-        Project questionnaire <span class="arrow">&nearr;</span>
-      </a>
+      <p class="email-plain">{email}</p>
     </div>
   </main>
   <Footer />
@@ -94,6 +87,13 @@ const email = "ryansheridandesign@gmail.com";
     margin-bottom: 40px;
   }
 
+  .cta-group {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
   .email-button {
     display: inline-flex;
     align-items: center;
@@ -116,71 +116,28 @@ const email = "ryansheridandesign@gmail.com";
     font-size: 14px;
   }
 
+  .questionnaire-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-text-muted);
+    transition: color 0.2s;
+  }
+
+  .questionnaire-link:hover {
+    color: var(--color-text);
+  }
+
+  .questionnaire-link .arrow {
+    font-size: 12px;
+  }
+
   .email-plain {
     font-size: 14px;
     color: var(--color-text-muted);
     margin-top: 20px;
-  }
-
-  .questions-callout {
-    max-width: var(--max-width);
-    margin: 64px auto 0;
-    padding: 40px;
-    border: 1px solid var(--color-border);
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 32px;
-  }
-
-  .questions-callout-text h2 {
-    font-size: var(--text-lg);
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    margin-bottom: 8px;
-  }
-
-  .questions-callout-text p {
-    font-size: 14px;
-    line-height: 1.7;
-    color: var(--color-text-muted);
-    max-width: 420px;
-  }
-
-  .questions-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-    font-size: 15px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    color: var(--color-text);
-    background: transparent;
-    border: 1px solid var(--color-border);
-    padding: 14px 24px;
-    border-radius: 999px;
-    transition: border-color 0.2s, color 0.2s;
-  }
-
-  .questions-button:hover {
-    border-color: var(--color-text);
-  }
-
-  .questions-button .arrow {
-    font-size: 12px;
-  }
-
-  @media (max-width: 640px) {
-    .questions-callout {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 32px 24px;
-    }
-
-    .questions-callout-text p {
-      max-width: none;
-    }
   }
 </style>
