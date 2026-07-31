@@ -26,6 +26,19 @@ const email = "ryansheridandesign@gmail.com";
       </a>
       <p class="email-plain">{email}</p>
     </div>
+
+    <div class="questions-callout">
+      <div class="questions-callout-text">
+        <h2>Starting a new project?</h2>
+        <p>
+          If you already know you want a new site built, skip the back-and-forth —
+          fill out a short questionnaire and I'll follow up with a plan.
+        </p>
+      </div>
+      <a href="/questions" class="questions-button">
+        Project questionnaire <span class="arrow">&nearr;</span>
+      </a>
+    </div>
   </main>
   <Footer />
 </Layout>
@@ -107,5 +120,67 @@ const email = "ryansheridandesign@gmail.com";
     font-size: 14px;
     color: var(--color-text-muted);
     margin-top: 20px;
+  }
+
+  .questions-callout {
+    max-width: var(--max-width);
+    margin: 64px auto 0;
+    padding: 40px;
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+
+  .questions-callout-text h2 {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+
+  .questions-callout-text p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    max-width: 420px;
+  }
+
+  .questions-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    padding: 14px 24px;
+    border-radius: 999px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .questions-button:hover {
+    border-color: var(--color-text);
+  }
+
+  .questions-button .arrow {
+    font-size: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .questions-callout {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 32px 24px;
+    }
+
+    .questions-callout-text p {
+      max-width: none;
+    }
   }
 </style>

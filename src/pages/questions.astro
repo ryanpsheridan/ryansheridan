@@ -51,7 +51,7 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
         <fieldset class="field">
           <legend>Who's your target customer / audience?</legend>
           <p class="field-note">Not sure yet? Pick what feels closest — you can always refine it later.</p>
-          <div class="checkbox-group stacked">
+          <div class="checkbox-group">
             <label class="checkbox-label">
               <input type="checkbox" name="Target audience" value="General public" />
               General public
@@ -93,7 +93,7 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
 
         <fieldset class="field">
           <legend>Do you have existing branding? (logo, colors, fonts)</legend>
-          <div class="radio-group stacked">
+          <div class="radio-group">
             <label class="radio-label">
               <input type="radio" name="Existing branding" value="Yes" />
               Yes
@@ -107,6 +107,26 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
             <label for="branding-details">Tell me a bit about it — colors, fonts, links to your logo or brand files, anything that helps.</label>
             <textarea id="branding-details" name="Branding details" rows="3"></textarea>
             <p class="field-note">You don't need to upload files here — email the assets separately if it's easier.</p>
+          </div>
+
+          <div class="field field-nested" id="branding-help-wrap" hidden>
+            <fieldset class="field">
+              <legend>Would you like help creating branding?</legend>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="Branding help needed" value="Yes" />
+                  Yes
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="Branding help needed" value="No" />
+                  No
+                </label>
+              </div>
+            </fieldset>
+            <div class="field field-nested">
+              <label for="branding-vision">Optional — describe the look/feel you're going for (colors, style, vibe, examples)</label>
+              <textarea id="branding-vision" name="Branding vision" rows="3"></textarea>
+            </div>
           </div>
         </fieldset>
 
@@ -131,7 +151,7 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
 
         <fieldset class="field">
           <legend>Which pages do you need?</legend>
-          <div class="checkbox-group stacked">
+          <div class="checkbox-group">
             <label class="checkbox-label">
               <input type="checkbox" name="Pages needed" value="Home" />
               Home
@@ -391,9 +411,11 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
   const thankYou = document.querySelector(".thank-you");
 
   const brandingDetails = document.getElementById("branding-details-wrap");
+  const brandingHelp = document.getElementById("branding-help-wrap");
   document.querySelectorAll<HTMLInputElement>('input[name="Existing branding"]').forEach((radio) => {
     radio.addEventListener("change", () => {
       brandingDetails?.toggleAttribute("hidden", radio.value !== "Yes");
+      brandingHelp?.toggleAttribute("hidden", radio.value !== "No");
     });
   });
 
@@ -581,12 +603,6 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
   .radio-group,
   .checkbox-group {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-4);
-  }
-
-  .radio-group.stacked,
-  .checkbox-group.stacked {
     flex-direction: column;
     gap: var(--space-3);
   }
@@ -646,6 +662,10 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
   .submit-button:disabled {
     opacity: 0.5;
     cursor: default;
+  }
+
+  .submit-button .arrow {
+    font-size: 13px;
   }
 
   .submit-status {
