@@ -6,7 +6,7 @@ interface Props {
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || "https://ryansheridan.studio");
-const { title, description = "Ryan Sheridan — Principal Designer specializing in design systems, marketing sites, and brand infrastructure.", ogImage = "/project-new-office1.png" } = Astro.props;
+const { title, description = "Ryan Sheridan — Principal Designer specializing in design systems, marketing sites, and brand infrastructure.", ogImage = "/og-default.png" } = Astro.props;
 ---
 
 <!doctype html>
