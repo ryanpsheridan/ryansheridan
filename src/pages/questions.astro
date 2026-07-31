@@ -1,0 +1,568 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+
+// Swap in your real Formspree endpoint (formspree.io/forms -> New Form -> copy the
+// "https://formspree.io/f/xxxxxxxx" URL) once you have one.
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/FORMSPREE_ENDPOINT_HERE";
+---
+
+<Layout
+  title="Project Questionnaire — Ryan Sheridan"
+  description="A short intake form for prospective clients starting a new website project."
+>
+  <Nav />
+  <main class="questions-page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <span class="current">Project Questionnaire</span>
+    </nav>
+
+    <div class="questions-hero">
+      <h1>Let's scope your project.</h1>
+      <p class="intro">
+        Answer what you can below — it helps me understand your business and
+        get you an accurate plan and timeline faster than a back-and-forth
+        over email.
+      </p>
+    </div>
+
+    <form
+      id="questions-form"
+      class="questions-form"
+      action={FORMSPREE_ENDPOINT}
+      method="POST"
+    >
+      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+
+      <section class="form-section">
+        <h2>About your business</h2>
+
+        <div class="field">
+          <label for="business-name">Business / organization name</label>
+          <input type="text" id="business-name" name="Business name" />
+        </div>
+
+        <div class="field">
+          <label for="business-description">One-line description of what you do</label>
+          <input type="text" id="business-description" name="Business description" />
+        </div>
+
+        <div class="field">
+          <label for="target-audience">Who's your target customer / audience?</label>
+          <textarea id="target-audience" name="Target audience" rows="3"></textarea>
+        </div>
+
+        <fieldset class="field">
+          <legend>Do you have existing branding? (logo, colors, fonts)</legend>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="Existing branding" value="Yes" />
+              Yes
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="Existing branding" value="No" />
+              No
+            </label>
+          </div>
+          <p class="field-note">If yes, no need to upload anything here — just email the assets separately.</p>
+        </fieldset>
+
+        <div class="field">
+          <label for="reference-sites">Any reference sites you like the look of?</label>
+          <textarea id="reference-sites" name="Reference sites" rows="3" placeholder="Optional"></textarea>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <h2>Pages you'll need</h2>
+
+        <fieldset class="field">
+          <legend>Which pages do you need?</legend>
+          <div class="checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" name="Pages needed" value="Home" />
+              Home
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="Pages needed" value="About" />
+              About
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="Pages needed" value="Services" />
+              Services
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="Pages needed" value="Contact" />
+              Contact
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="Pages needed" value="Gallery" />
+              Gallery
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="Pages needed" value="Blog" />
+              Blog
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="Pages needed" value="Other" />
+              Other
+            </label>
+          </div>
+          <div class="field">
+            <label for="pages-other">Other page(s)</label>
+            <input type="text" id="pages-other" name="Other pages" />
+          </div>
+        </fieldset>
+      </section>
+
+      <section class="form-section">
+        <h2>Contact form</h2>
+
+        <fieldset class="field">
+          <legend>Do you need a contact form on your site?</legend>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="Contact form needed" value="Yes" />
+              Yes
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="Contact form needed" value="No" />
+              No
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field">
+          <legend>If yes, expected inquiry volume</legend>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="Inquiry volume" value="Low" />
+              Low
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="Inquiry volume" value="Medium" />
+              Medium
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="Inquiry volume" value="High" />
+              High
+            </label>
+          </div>
+        </fieldset>
+      </section>
+
+      <section class="form-section">
+        <h2>Scheduling</h2>
+
+        <fieldset class="field">
+          <legend>Do people need to book appointments/calls with you?</legend>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="Booking needed" value="Yes" />
+              Yes
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="Booking needed" value="No" />
+              No
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label for="booking-tool">If yes, do you already use Calendly, Cal.com, or something else?</label>
+          <input type="text" id="booking-tool" name="Booking tool" />
+        </div>
+      </section>
+
+      <section class="form-section">
+        <h2>Payments</h2>
+
+        <fieldset class="field">
+          <legend>Will the site need to take payments?</legend>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="Payments needed" value="Yes" />
+              Yes
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="Payments needed" value="No" />
+              No
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field">
+          <legend>If yes, one-time payments or recurring/subscriptions?</legend>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="Payment type" value="One-time" />
+              One-time
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="Payment type" value="Recurring / subscriptions" />
+              Recurring / subscriptions
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field">
+          <legend>Existing preference</legend>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="Payment preference" value="Stripe" />
+              Stripe
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="Payment preference" value="PayPal" />
+              PayPal
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="Payment preference" value="No preference" />
+              No preference
+            </label>
+          </div>
+        </fieldset>
+      </section>
+
+      <section class="form-section">
+        <h2>Photos / gallery</h2>
+
+        <fieldset class="field">
+          <legend>Will you need a photo gallery?</legend>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="Gallery needed" value="Yes" />
+              Yes
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="Gallery needed" value="No" />
+              No
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field">
+          <legend>If yes, how often do you expect to add new photos?</legend>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="Photo update frequency" value="Rarely" />
+              Rarely
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="Photo update frequency" value="Occasionally" />
+              Occasionally
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="Photo update frequency" value="Frequently" />
+              Frequently
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label for="photo-uploader">Will you be adding photos yourself, or always sending them to me to add?</label>
+          <textarea id="photo-uploader" name="Photo uploader" rows="2"></textarea>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <h2>Ongoing content</h2>
+
+        <div class="field">
+          <label for="ongoing-content">Once the site is live, do you expect to want to edit content yourself, or would you rather I handle updates going forward?</label>
+          <textarea id="ongoing-content" name="Ongoing content" rows="3"></textarea>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <h2>Domain</h2>
+
+        <fieldset class="field">
+          <legend>Do you already own a domain for this?</legend>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="Domain owned" value="Yes" />
+              Yes
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="Domain owned" value="No" />
+              No
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label for="domain-ideas">If not, any domain name ideas, or should I help find one?</label>
+          <textarea id="domain-ideas" name="Domain ideas" rows="2"></textarea>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <h2>Timeline &amp; budget</h2>
+
+        <div class="field">
+          <label for="timeline">When would you like this live by?</label>
+          <input type="text" id="timeline" name="Timeline" />
+        </div>
+
+        <div class="field">
+          <label for="anything-else">Anything else I should know?</label>
+          <textarea id="anything-else" name="Anything else" rows="4"></textarea>
+        </div>
+      </section>
+
+      <div class="field">
+        <label for="reply-email">Your email</label>
+        <input type="email" id="reply-email" name="_replyto" required />
+      </div>
+
+      <button type="submit" class="submit-button">
+        Submit <span class="arrow">&nearr;</span>
+      </button>
+      <p class="submit-status" role="status" aria-live="polite"></p>
+    </form>
+
+    <div class="thank-you" hidden>
+      <h1>Thanks!</h1>
+      <p class="intro">I'll review this and follow up within 2 business days.</p>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  const form = document.getElementById("questions-form") as HTMLFormElement | null;
+  const status = document.querySelector(".submit-status");
+  const thankYou = document.querySelector(".thank-you");
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const submitButton = form.querySelector<HTMLButtonElement>(".submit-button");
+    if (submitButton) submitButton.disabled = true;
+    if (status) status.textContent = "Sending…";
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      });
+
+      if (response.ok) {
+        form.hidden = true;
+        thankYou?.removeAttribute("hidden");
+      } else {
+        if (status) status.textContent = "Something went wrong — please try again or email me directly.";
+        if (submitButton) submitButton.disabled = false;
+      }
+    } catch {
+      if (status) status.textContent = "Something went wrong — please try again or email me directly.";
+      if (submitButton) submitButton.disabled = false;
+    }
+  });
+</script>
+
+<style>
+  .questions-page {
+    padding: 80px var(--page-padding) 160px;
+  }
+
+  .breadcrumbs {
+    max-width: var(--content-width);
+    margin: 0 auto 48px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .breadcrumbs a {
+    color: var(--color-text-muted);
+    transition: color 0.2s;
+  }
+
+  .breadcrumbs a:hover {
+    color: var(--color-text);
+  }
+
+  .breadcrumbs .sep {
+    color: var(--color-border);
+  }
+
+  .breadcrumbs .current {
+    color: var(--color-text);
+  }
+
+  .questions-hero,
+  .questions-form,
+  .thank-you {
+    max-width: var(--content-width);
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: clamp(32px, 1.7rem + 1.2vw, 52px);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+
+  .intro {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--color-text-muted);
+    margin-bottom: 0;
+  }
+
+  .questions-hero {
+    margin-bottom: var(--space-8);
+  }
+
+  .form-section {
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .form-section:first-of-type {
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .form-section h2 {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-5);
+  }
+
+  .field {
+    margin-bottom: var(--space-5);
+  }
+
+  .field:last-child {
+    margin-bottom: 0;
+  }
+
+  fieldset.field {
+    border: none;
+    padding: 0;
+  }
+
+  label,
+  legend {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+
+  .field-note {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-top: var(--space-2);
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea {
+    width: 100%;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    color: var(--color-text);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    transition: border-color 0.2s;
+  }
+
+  textarea {
+    resize: vertical;
+    line-height: 1.6;
+  }
+
+  input[type="text"]:focus-visible,
+  input[type="email"]:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
+    border-color: var(--color-text);
+  }
+
+  .radio-group,
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .radio-label,
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--text-base);
+    font-weight: 400;
+    color: var(--color-text);
+    margin-bottom: 0;
+    cursor: pointer;
+  }
+
+  input[type="radio"],
+  input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-text);
+  }
+
+  input[type="radio"]:focus-visible,
+  input[type="checkbox"]:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
+  }
+
+  .submit-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-bg);
+    background: var(--color-text);
+    border: none;
+    padding: 16px 28px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-top: var(--space-7);
+  }
+
+  .submit-button:hover {
+    opacity: 0.85;
+  }
+
+  .submit-button:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 3px;
+  }
+
+  .submit-button:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  .submit-status {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--space-3);
+  }
+
+  .thank-you {
+    padding-top: var(--space-4);
+  }
+</style>
