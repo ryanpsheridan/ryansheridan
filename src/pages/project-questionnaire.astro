@@ -36,6 +36,11 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
     >
       <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
 
+      <div class="field">
+        <label for="reply-email">Your email <span class="required-marker">*</span></label>
+        <input type="email" id="reply-email" name="_replyto" required />
+      </div>
+
       <section class="form-section">
         <h2>About your business</h2>
 
@@ -370,11 +375,6 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
         </div>
       </section>
 
-      <div class="field">
-        <label for="reply-email">Your email</label>
-        <input type="email" id="reply-email" name="_replyto" required />
-      </div>
-
       <button type="submit" class="submit-button">
         Submit <span class="arrow">&nearr;</span>
       </button>
@@ -414,6 +414,12 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
   const galleryCheckbox = document.querySelector<HTMLInputElement>('input[name="Pages needed"][value="Gallery"]');
   galleryCheckbox?.addEventListener("change", () => {
     galleryFrequency?.toggleAttribute("hidden", !galleryCheckbox.checked);
+  });
+
+  form?.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input[type="text"], input[type="email"], textarea').forEach((field) => {
+    const syncFilled = () => field.classList.toggle("is-filled", field.value.trim().length > 0);
+    syncFilled();
+    field.addEventListener("input", syncFilled);
   });
 
   const otherFieldIds = ["audience-other", "pages-other"];
@@ -614,6 +620,16 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
     outline: 2px solid var(--color-text);
     outline-offset: 2px;
     border-color: var(--color-text);
+  }
+
+  input[type="text"].is-filled,
+  input[type="email"].is-filled,
+  textarea.is-filled {
+    border-color: var(--color-text-muted);
+  }
+
+  .required-marker {
+    color: var(--color-text-muted);
   }
 
   .radio-group,
