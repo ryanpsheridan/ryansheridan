@@ -345,10 +345,31 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
 
         <div class="subsection">
           <h3>Ongoing content</h3>
-          <div class="field">
-            <label for="ongoing-content">Once the site is live, do you expect to want to add photos and edit content yourself, or would you rather I handle updates going forward?</label>
-            <textarea id="ongoing-content" name="Ongoing content" rows="3"></textarea>
-          </div>
+          <fieldset class="field">
+            <legend>Once the site is live, how do you want to handle adding photos and editing content?</legend>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="Ongoing content" value="I'll handle all updates for you" />
+                I'll handle all updates for you
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Ongoing content" value="I can make edits to the code myself" />
+                I can make edits to the code myself
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Ongoing content" value="I'd like a simple form/editor for updating specific things myself (like blog posts or photos)" />
+                I'd like a simple form/editor for updating specific things myself (like blog posts or photos)
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Ongoing content" value="Some mix of the above" />
+                Some mix of the above
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Ongoing content" value="Not sure yet — let's discuss" />
+                Not sure yet — let's discuss
+              </label>
+            </div>
+          </fieldset>
         </div>
       </section>
 
