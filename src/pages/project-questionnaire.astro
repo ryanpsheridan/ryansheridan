@@ -34,7 +34,10 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
       action={FORMSPREE_ENDPOINT}
       method="POST"
     >
-      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+      <div class="honeypot-field" aria-hidden="true">
+        <label for="hp-field">Leave this field blank</label>
+        <input type="text" id="hp-field" name="_gotcha" tabindex="-1" autocomplete="off" />
+      </div>
 
       <div class="stepper" aria-hidden="true">
         <div class="stepper-node is-active" data-stepper-node="1">
@@ -59,7 +62,7 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
       </div>
 
       <div class="accordion">
-      <div class="accordion-item" data-step="1">
+      <div class="accordion-item is-open" data-step="1">
         <button type="button" class="accordion-header" aria-expanded="true">
           <span class="accordion-index">1</span>
           <span class="accordion-title">About your business</span>
@@ -177,8 +180,8 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
           <textarea
             id="reference-sites"
             name="Reference sites"
-            rows="3"
-            placeholder="e.g. https://example.com — love the typography and how clean it feels"
+            rows="4"
+            placeholder="e.g. https://example.com — love the typography and how clean it feels&#10;https://another-example.com — love this color palette"
           ></textarea>
         </div>
       </section>
@@ -470,6 +473,8 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
   const form = document.getElementById("questions-form") as HTMLFormElement | null;
   const status = document.querySelector(".submit-status");
   const thankYou = document.querySelector(".thank-you");
+  const formLoadTime = Date.now();
+  const MIN_FILL_TIME_MS = 3000;
 
   const brandingDetails = document.getElementById("branding-details-wrap");
   const brandingHelp = document.getElementById("branding-help-wrap");
@@ -549,6 +554,7 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
       const isTarget = other === item;
       other.querySelector(".accordion-panel")?.toggleAttribute("hidden", !isTarget);
       other.querySelector(".accordion-header")?.setAttribute("aria-expanded", String(isTarget));
+      other.classList.toggle("is-open", isTarget);
     });
     if (!item.classList.contains("is-complete")) {
       item.querySelector<HTMLInputElement>('input, textarea')?.focus({ preventScroll: true });
@@ -578,6 +584,16 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
 
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
+
+    const honeypot = form.querySelector<HTMLInputElement>('input[name="_gotcha"]');
+    const filledTooFast = Date.now() - formLoadTime < MIN_FILL_TIME_MS;
+    if ((honeypot && honeypot.value.trim() !== "") || filledTooFast) {
+      // Likely a bot: pretend it worked without actually submitting.
+      form.hidden = true;
+      thankYou?.removeAttribute("hidden");
+      return;
+    }
+
     const submitButton = form.querySelector<HTMLButtonElement>(".submit-button");
     if (submitButton) submitButton.disabled = true;
     if (status) status.textContent = "Sending…";
@@ -689,6 +705,11 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
     display: flex;
     align-items: center;
     margin-bottom: var(--space-7);
+    position: sticky;
+    top: 68px;
+    z-index: 100;
+    background: var(--color-bg);
+    padding: var(--space-3) 0;
   }
 
   .stepper-node {
@@ -734,6 +755,12 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
     border-radius: 12px;
     margin-bottom: var(--space-4);
     overflow: hidden;
+    scroll-margin-top: 140px;
+    transition: border-color 0.2s;
+  }
+
+  .accordion-item.is-open {
+    border-color: var(--color-text);
   }
 
   .accordion-header {
@@ -920,6 +947,15 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
 
   .required-marker {
     color: var(--color-text-muted);
+  }
+
+  .honeypot-field {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
 
   .radio-group,
