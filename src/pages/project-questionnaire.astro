@@ -48,7 +48,8 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
 
       <div class="field">
         <label for="reply-email">Your email <span class="required-marker">*</span></label>
-        <input type="email" id="reply-email" name="_replyto" required />
+        <input type="email" id="reply-email" name="_replyto" required aria-describedby="email-error" />
+        <p class="field-error" id="email-error"></p>
       </div>
 
       <section class="form-section">
@@ -403,8 +404,24 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
   const form = document.getElementById("questions-form") as HTMLFormElement | null;
   const status = document.querySelector(".submit-status");
   const thankYou = document.querySelector(".thank-you");
+  const formProgress = document.querySelector(".form-progress");
   const formLoadTime = Date.now();
   const MIN_FILL_TIME_MS = 3000;
+
+  const emailField = document.getElementById("reply-email") as HTMLInputElement | null;
+  const emailError = document.getElementById("email-error");
+  function syncEmailError() {
+    if (!emailField || !emailError) return;
+    if (emailField.value !== "" && !emailField.validity.valid) {
+      emailError.textContent = "Please enter a valid email address.";
+    } else {
+      emailError.textContent = "";
+    }
+  }
+  emailField?.addEventListener("blur", syncEmailError);
+  emailField?.addEventListener("input", () => {
+    if (emailError?.textContent) syncEmailError();
+  });
 
   const brandingDetails = document.getElementById("branding-details-wrap");
   const brandingHelp = document.getElementById("branding-help-wrap");
@@ -513,6 +530,7 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
     if ((honeypot && honeypot.value.trim() !== "") || filledTooFast) {
       // Likely a bot: pretend it worked without actually submitting.
       form.hidden = true;
+      formProgress?.setAttribute("hidden", "");
       thankYou?.removeAttribute("hidden");
       return;
     }
@@ -530,9 +548,8 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
 
       if (response.ok) {
         form.hidden = true;
+        formProgress?.setAttribute("hidden", "");
         thankYou?.removeAttribute("hidden");
-        if (progressLabel) progressLabel.textContent = "All done!";
-        if (progressFill) progressFill.style.width = "100%";
       } else {
         const data = await response.json().catch(() => null);
         const serverMessage = data?.errors?.map((e: { message: string }) => e.message).join(", ") ?? data?.error;
@@ -753,6 +770,15 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
     color: var(--color-text-muted);
   }
 
+  .field-error {
+    font-size: var(--text-xs);
+    color: #c0392b;
+    margin-top: var(--space-2);
+    margin-bottom: 0;
+    min-height: 1.4em;
+    line-height: 1.4;
+  }
+
   .honeypot-field {
     position: absolute;
     left: -9999px;
@@ -837,6 +863,11 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
   }
 
   .thank-you {
-    padding-top: var(--space-4);
+    padding-top: var(--space-8);
+  }
+
+  .thank-you h1 {
+    font-size: clamp(28px, 1.3rem + 1vw, 40px);
+    margin-bottom: var(--space-3);
   }
 </style>
