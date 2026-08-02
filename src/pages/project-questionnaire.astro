@@ -429,6 +429,17 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
     });
   });
 
+  const otherFieldIds = ["audience-other", "pages-other"];
+  otherFieldIds.forEach((inputId) => {
+    const input = document.getElementById(inputId) as HTMLInputElement | null;
+    const checkbox = input
+      ?.closest("fieldset")
+      ?.querySelector<HTMLInputElement>('input[type="checkbox"][value="Other"]');
+    input?.addEventListener("input", () => {
+      if (input.value.trim() && checkbox) checkbox.checked = true;
+    });
+  });
+
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
     const submitButton = form.querySelector<HTMLButtonElement>(".submit-button");
