@@ -307,23 +307,9 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
       <section class="form-section">
         <h2>Photos &amp; content</h2>
 
-        <div class="subsection">
+        <div class="subsection" id="gallery-frequency-wrap" hidden>
           <fieldset class="field">
-            <legend>Will you need a photo gallery?</legend>
-            <div class="radio-group">
-              <label class="radio-label">
-                <input type="radio" name="Gallery needed" value="Yes" />
-                Yes
-              </label>
-              <label class="radio-label">
-                <input type="radio" name="Gallery needed" value="No" />
-                No
-              </label>
-            </div>
-          </fieldset>
-
-          <fieldset class="field">
-            <legend>If yes, how often do you expect to add new photos?</legend>
+            <legend>How often do you expect to add new photos?</legend>
             <div class="radio-group">
               <label class="radio-label">
                 <input type="radio" name="Photo update frequency" value="Rarely" />
@@ -339,17 +325,12 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
               </label>
             </div>
           </fieldset>
-
-          <div class="field">
-            <label for="photo-uploader">Will you be adding photos yourself, or always sending them to me to add?</label>
-            <textarea id="photo-uploader" name="Photo uploader" rows="2"></textarea>
-          </div>
         </div>
 
         <div class="subsection">
           <h3>Ongoing content</h3>
           <div class="field">
-            <label for="ongoing-content">Once the site is live, do you expect to want to edit content yourself, or would you rather I handle updates going forward?</label>
+            <label for="ongoing-content">Once the site is live, do you expect to want to add photos and edit content yourself, or would you rather I handle updates going forward?</label>
             <textarea id="ongoing-content" name="Ongoing content" rows="3"></textarea>
           </div>
         </div>
@@ -429,6 +410,12 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
     });
   });
 
+  const galleryFrequency = document.getElementById("gallery-frequency-wrap");
+  const galleryCheckbox = document.querySelector<HTMLInputElement>('input[name="Pages needed"][value="Gallery"]');
+  galleryCheckbox?.addEventListener("change", () => {
+    galleryFrequency?.toggleAttribute("hidden", !galleryCheckbox.checked);
+  });
+
   const otherFieldIds = ["audience-other", "pages-other"];
   otherFieldIds.forEach((inputId) => {
     const input = document.getElementById(inputId) as HTMLInputElement | null;
@@ -457,10 +444,18 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
         form.hidden = true;
         thankYou?.removeAttribute("hidden");
       } else {
-        if (status) status.textContent = "Something went wrong — please try again or email me directly.";
+        const data = await response.json().catch(() => null);
+        const serverMessage = data?.errors?.map((e: { message: string }) => e.message).join(", ") ?? data?.error;
+        console.error("Formspree submission failed", response.status, data);
+        if (status) {
+          status.textContent = serverMessage
+            ? `Something went wrong: ${serverMessage}`
+            : "Something went wrong — please try again or email me directly.";
+        }
         if (submitButton) submitButton.disabled = false;
       }
-    } catch {
+    } catch (err) {
+      console.error("Formspree submission error", err);
       if (status) status.textContent = "Something went wrong — please try again or email me directly.";
       if (submitButton) submitButton.disabled = false;
     }
