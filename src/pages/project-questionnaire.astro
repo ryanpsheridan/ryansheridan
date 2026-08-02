@@ -36,10 +36,25 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
     >
       <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
 
-      <div class="accordion-progress">
-        <p class="accordion-progress-label"><span class="accordion-progress-count">0</span> of <span class="accordion-progress-total">5</span> sections done</p>
-        <div class="accordion-progress-bar">
-          <div class="accordion-progress-fill"></div>
+      <div class="stepper" aria-hidden="true">
+        <div class="stepper-node is-active" data-stepper-node="1">
+          <span class="stepper-circle">1</span>
+        </div>
+        <div class="stepper-line" data-stepper-line="1"></div>
+        <div class="stepper-node" data-stepper-node="2">
+          <span class="stepper-circle">2</span>
+        </div>
+        <div class="stepper-line" data-stepper-line="2"></div>
+        <div class="stepper-node" data-stepper-node="3">
+          <span class="stepper-circle">3</span>
+        </div>
+        <div class="stepper-line" data-stepper-line="3"></div>
+        <div class="stepper-node" data-stepper-node="4">
+          <span class="stepper-circle">4</span>
+        </div>
+        <div class="stepper-line" data-stepper-line="4"></div>
+        <div class="stepper-node" data-stepper-node="5">
+          <span class="stepper-circle">5</span>
         </div>
       </div>
 
@@ -252,8 +267,8 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
             </div>
           </fieldset>
 
-          <fieldset class="field">
-            <legend>If yes, expected inquiry volume</legend>
+          <fieldset class="field field-nested" id="inquiry-volume-wrap" hidden>
+            <legend>Expected inquiry volume</legend>
             <div class="radio-group">
               <label class="radio-label">
                 <input type="radio" name="Inquiry volume" value="Low" />
@@ -288,8 +303,8 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
             </div>
           </fieldset>
 
-          <div class="field">
-            <label for="booking-tool">If yes, do you already use Calendly, Cal.com, or something else?</label>
+          <div class="field field-nested" id="booking-tool-wrap" hidden>
+            <label for="booking-tool">Do you already use Calendly, Cal.com, or something else?</label>
             <input type="text" id="booking-tool" name="Booking tool" />
           </div>
         </div>
@@ -418,8 +433,8 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
           </div>
         </fieldset>
 
-        <div class="field">
-          <label for="domain-ideas">If not, any domain name ideas, or should I help find one?</label>
+        <div class="field field-nested" id="domain-ideas-wrap" hidden>
+          <label for="domain-ideas">Any domain name ideas, or should I help find one?</label>
           <textarea id="domain-ideas" name="Domain ideas" rows="2"></textarea>
         </div>
 
@@ -478,6 +493,27 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
     galleryFrequency?.toggleAttribute("hidden", !galleryCheckbox.checked);
   });
 
+  const inquiryVolume = document.getElementById("inquiry-volume-wrap");
+  document.querySelectorAll<HTMLInputElement>('input[name="Contact form needed"]').forEach((radio) => {
+    radio.addEventListener("change", () => {
+      inquiryVolume?.toggleAttribute("hidden", radio.value !== "Yes");
+    });
+  });
+
+  const bookingTool = document.getElementById("booking-tool-wrap");
+  document.querySelectorAll<HTMLInputElement>('input[name="Booking needed"]').forEach((radio) => {
+    radio.addEventListener("change", () => {
+      bookingTool?.toggleAttribute("hidden", radio.value !== "Yes");
+    });
+  });
+
+  const domainIdeas = document.getElementById("domain-ideas-wrap");
+  document.querySelectorAll<HTMLInputElement>('input[name="Domain owned"]').forEach((radio) => {
+    radio.addEventListener("change", () => {
+      domainIdeas?.toggleAttribute("hidden", radio.value !== "No");
+    });
+  });
+
   form?.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input[type="text"], input[type="email"], textarea').forEach((field) => {
     const syncFilled = () => field.classList.toggle("is-filled", field.value.trim().length > 0);
     syncFilled();
@@ -496,13 +532,16 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
   });
 
   const accordionItems = Array.from(form?.querySelectorAll<HTMLElement>(".accordion-item") ?? []);
-  const progressCount = document.querySelector(".accordion-progress-count");
-  const progressFill = document.querySelector<HTMLElement>(".accordion-progress-fill");
 
-  function updateProgress() {
-    const completed = accordionItems.filter((item) => item.classList.contains("is-complete")).length;
-    if (progressCount) progressCount.textContent = String(completed);
-    if (progressFill) progressFill.style.width = `${(completed / accordionItems.length) * 100}%`;
+  function syncStepper() {
+    accordionItems.forEach((item, index) => {
+      const step = index + 1;
+      const complete = item.classList.contains("is-complete");
+      const open = !item.querySelector(".accordion-panel")?.hasAttribute("hidden");
+      document.querySelector(`[data-stepper-node="${step}"]`)?.classList.toggle("is-complete", complete);
+      document.querySelector(`[data-stepper-node="${step}"]`)?.classList.toggle("is-active", open);
+      document.querySelector(`[data-stepper-line="${step}"]`)?.classList.toggle("is-complete", complete);
+    });
   }
 
   function openItem(item: HTMLElement) {
@@ -515,6 +554,7 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
       item.querySelector<HTMLInputElement>('input, textarea')?.focus({ preventScroll: true });
     }
     item.scrollIntoView({ behavior: "smooth", block: "start" });
+    syncStepper();
   }
 
   accordionItems.forEach((item, index) => {
@@ -530,9 +570,9 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
         return;
       }
       item.classList.add("is-complete");
-      updateProgress();
       const nextItem = accordionItems[index + 1];
       if (nextItem) openItem(nextItem);
+      else syncStepper();
     });
   });
 
@@ -645,29 +685,48 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
     border: 0;
   }
 
-  .accordion-progress {
-    margin-bottom: var(--space-6);
+  .stepper {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-7);
   }
 
-  .accordion-progress-label {
-    font-size: var(--text-xs);
+  .stepper-node {
+    flex-shrink: 0;
+  }
+
+  .stepper-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
     color: var(--color-text-muted);
-    margin-bottom: var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    background: var(--color-bg);
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
   }
 
-  .accordion-progress-bar {
-    height: 4px;
-    border-radius: 999px;
-    background: var(--color-border);
-    overflow: hidden;
-  }
-
-  .accordion-progress-fill {
-    height: 100%;
-    width: 0%;
+  .stepper-node.is-active .stepper-circle,
+  .stepper-node.is-complete .stepper-circle {
     background: var(--color-text);
-    border-radius: 999px;
-    transition: width 0.3s ease;
+    border-color: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  .stepper-line {
+    flex: 1;
+    height: 1px;
+    background: var(--color-border);
+    margin: 0 8px;
+    transition: background 0.2s;
+  }
+
+  .stepper-line.is-complete {
+    background: var(--color-text);
   }
 
   .accordion-item {
