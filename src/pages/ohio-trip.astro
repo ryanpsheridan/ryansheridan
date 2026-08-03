@@ -22,15 +22,15 @@ const fly = {
 };
 
 const itineraryA = [
-  { day: "Fri", route: "Austin → Dallas → Texarkana → Little Rock, AR", miles: "~490 mi", time: "~7.5 hrs", note: "Overnight Little Rock" },
-  { day: "Sat", route: "Little Rock → Memphis → Nashville", miles: "~360 mi", time: "~5.5 hrs", note: "Overnight Nashville, evening free" },
-  { day: "Sun", route: "Nashville → Lexington → Cincinnati → Akron", miles: "~510 mi", time: "~8 hrs", note: "Arrive Akron evening" },
+  { day: "Fri", route: "Austin → Memphis, TN", miles: "~645 mi", time: "~9.5-10 hrs", note: "Overnight Memphis" },
+  { day: "Sat", route: "Memphis → Nashville → Lexington → Cincinnati, OH", miles: "~480 mi", time: "~7.5 hrs", note: "Overnight Cincinnati" },
+  { day: "Sun", route: "Cincinnati → Columbus → Akron", miles: "~250 mi", time: "~4 hrs", note: "Arrive early to mid-afternoon" },
 ];
 
 const itineraryB = [
-  { day: "Fri", route: "Austin → Dallas → Little Rock, AR", miles: "~490 mi", time: "~7.5 hrs", note: "Same first stop as Option A" },
-  { day: "Sat", route: "Little Rock → Nashville (bypass Memphis)", miles: "~350 mi", time: "~5.5 hrs", note: "More downtime in Nashville" },
-  { day: "Sun", route: "Nashville → Louisville (stop) → Cincinnati → Akron", miles: "~530 mi", time: "~8.5 hrs", note: "Louisville Slugger Museum or bourbon tasting" },
+  { day: "Fri", route: "Austin → Little Rock, AR", miles: "~500 mi", time: "~7.5 hrs", note: "Overnight Little Rock" },
+  { day: "Sat", route: "Little Rock → Nashville → Louisville (stop) → Cincinnati", miles: "~615 mi total", time: "~9.5 hrs with the stop", note: "Louisville Slugger Museum or bourbon tasting · overnight Cincinnati" },
+  { day: "Sun", route: "Cincinnati → Columbus → Akron", miles: "~250 mi", time: "~4 hrs", note: "Same short final day" },
 ];
 ---
 
@@ -135,12 +135,15 @@ const itineraryB = [
 
     <section class="itinerary">
       <h3>Driving itinerary options</h3>
-      <p class="itinerary-sub">Both ~1,360 mi and 3 days. Leave Austin Friday morning, arrive Akron Sunday.</p>
+      <p class="itinerary-sub">
+        Both push more miles into Friday and Saturday, leaving a short ~4 hr final day into Akron
+        instead of a 7-8 hr one.
+      </p>
 
       <div class="itinerary-options">
         <div class="itinerary-option">
-          <h4>Option A — Memphis route</h4>
-          <p class="option-note">Closer to what you've done before.</p>
+          <h4>Option A — via Memphis</h4>
+          <p class="option-note">Long first day (9.5-10 hrs with the dog), but short and simple overall.</p>
           <ol class="timeline">
             {itineraryA.map((stop) => (
               <li class="timeline-stop">
@@ -156,8 +159,8 @@ const itineraryB = [
         </div>
 
         <div class="itinerary-option">
-          <h4>Option B — Louisville swap</h4>
-          <p class="option-note">Skips Memphis, breaks up the last day with a stop.</p>
+          <h4>Option B — via Louisville</h4>
+          <p class="option-note">Skips Memphis, spreads the long day to Saturday with a stop.</p>
           <ol class="timeline">
             {itineraryB.map((stop) => (
               <li class="timeline-stop">
@@ -174,9 +177,11 @@ const itineraryB = [
       </div>
 
       <p class="itinerary-summary">
-        Option A is the familiar route and slightly shorter on the last day. Option B trades
-        Memphis for a Louisville stop — Louisville Slugger Museum or a bourbon tasting — to
-        break up the final driving day.
+        Both land in Akron early-to-mid afternoon Sunday instead of late evening. The tradeoff:
+        Option A's Friday is a genuinely long first day with the dog, while Option B spreads that
+        same total more evenly across Friday and Saturday — but makes Saturday the long one
+        instead. Rebalancing further to keep every day under 8 hrs is possible, though it pushes
+        Sunday back up.
       </p>
     </section>
   </main>
