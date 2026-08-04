@@ -24,421 +24,356 @@ const fly = {
 const mapsLink = (name: string, address: string) =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name}, ${address}`)}`;
 
-const hotelWestMemphis = {
-  name: "La Quinta Inn & Suites by Wyndham West Memphis",
-  address: "1550 N 6th St, West Memphis, AR",
-  rating: "4.2★ (1,146 reviews)",
-  note: "Right off I-55 — reviewers note a designated dog area and quiet interstate access.",
-  fitness: "On-site fitness center, plus grassy areas around the property for an evening walk with the dog.",
-};
-
-const hotelWolfchase = {
-  name: "La Quinta Inn & Suites by Wyndham Memphis Wolfchase",
-  address: "2839 New Brunswick Rd, Memphis, TN",
-  rating: "4.3★ (894 reviews)",
-  note: "Wolfchase/Cordova suburb — reviewers repeatedly call the parking and neighborhood safe.",
-  fitness: "24-hour fitness center and an indoor saltwater pool.",
+// Hotel requirements: gym on-site, dog-friendly, 4.2★ minimum
+const hotelLittleRock = {
+  name: "La Quinta Inn & Suites by Wyndham Little Rock - Bryant",
+  address: "408 West Commerce Dr, Bryant, AR",
+  rating: "4.7★ (844 reviews) — #1 of 10 hotels in Bryant on Tripadvisor",
+  note: "Right off I-30 just south of Little Rock — quiet, safe suburb with shopping and restaurants nearby. Dog-friendly.",
+  fitness: "On-site fitness center with free weights; about 15 min from the Arkansas River Trail for a longer walk.",
 };
 
 const hotelNashville = {
   name: "La Quinta Inn & Suites by Wyndham Nashville",
   address: "315 Interstate Dr, Nashville, TN",
   rating: "4.3★ (1,337 reviews)",
-  note: "Just across the river from downtown via the pedestrian bridge — the usual spot.",
+  note: "Just across the river from downtown via the pedestrian bridge — the usual spot. Dog-friendly.",
   fitness: "Fitness center and indoor pool on-site; the pedestrian bridge into downtown doubles as a solid walk or morning jog route.",
 };
 
-const hotelLittleRock = {
-  name: "La Quinta Inn & Suites by Wyndham Little Rock - Bryant",
-  address: "408 West Commerce Dr, Bryant, AR",
-  rating: "4.7★ (844 reviews) — #1 of 10 hotels in Bryant on Tripadvisor",
-  note: "Right off I-30 just south of Little Rock — quiet, safe suburb with shopping and restaurants nearby.",
-  fitness: "On-site fitness center with free weights; about 15 min from the Arkansas River Trail for a longer walk.",
-};
-
-const routes = [
+const coffeeAustin = [
   {
-    id: "rec",
-    tab: "Recommended",
-    tagline: "Nashville locked as night 2 — long Friday, short Saturday, long Sunday.",
-    stops: [
-      {
-        day: "Fri",
-        date: "Aug 14",
-        route: "Austin → Memphis, TN",
-        miles: "~652 mi",
-        time: "~9.5–10 hrs",
-        note: "The longest day of the trip — overnight Memphis",
-        hotels: [hotelWestMemphis, hotelWolfchase],
-      },
-      {
-        day: "Sat",
-        date: "Aug 15",
-        route: "Memphis → Nashville, TN",
-        miles: "~210 mi",
-        time: "~3.5 hrs",
-        note: "The short breather day in the middle",
-        hotels: [hotelNashville],
-      },
-      {
-        day: "Sun",
-        date: "Aug 16",
-        route: "Nashville → Akron, OH",
-        miles: "~497 mi",
-        time: "~8 hrs",
-        note: "Via Lexington, Cincinnati & Columbus — straight through, no overnight",
-        hotels: [],
-      },
-    ],
-    pros: [
-      "Sunday (497 mi / 8 hrs) is no longer the single longest day — Friday edges it out, so the drive doesn't peak right before arrival.",
-      "Nashville as night 2 is a known quantity: a well-reviewed default spot just across the river from downtown.",
-      "Two solid, dog-friendly, well-reviewed hotel picks are locked in for night 1, both around or under $140/night.",
-    ],
-    cons: [
-      "Friday is the longest day of the whole trip — 9.5–10 hrs with the dog, right out of the gate.",
-      "Sunday is still a full 8-hour day to close things out, no matter how far Friday gets pushed.",
-      "The Nashville → Akron leg is fixed at ~497 mi — shrinking it further means dropping Nashville as the night 2 stop.",
-    ],
-    note: "Want it shorter still? Dropping Nashville as the overnight in favor of something closer to Cincinnati would shrink Sunday further — worth planning as a backup if the 8-hour final day is a dealbreaker.",
+    name: "Summer Moon Coffee",
+    address: "11005 Burnet Rd Ste 112, Austin, TX",
+    rating: "4.6★ (1,880 reviews)",
+    note: "Oak-fired coffee, North Austin — easy stop before you hit the highway.",
   },
   {
-    id: "a",
-    tab: "Short Sunday · Memphis",
-    tagline: "Long first day into Memphis, but Sunday eases off to just 4 hours.",
-    stops: [
-      {
-        day: "Fri",
-        date: "Aug 14",
-        route: "Austin → Memphis, TN",
-        miles: "~645 mi",
-        time: "~9.5–10 hrs",
-        note: "Overnight Memphis",
-        hotels: [],
-      },
-      {
-        day: "Sat",
-        date: "Aug 15",
-        route: "Memphis → Nashville → Lexington → Cincinnati, OH",
-        miles: "~480 mi",
-        time: "~7.5 hrs",
-        note: "Overnight Cincinnati",
-        hotels: [],
-      },
-      {
-        day: "Sun",
-        date: "Aug 16",
-        route: "Cincinnati → Columbus → Akron",
-        miles: "~250 mi",
-        time: "~4 hrs",
-        note: "Arrive early to mid-afternoon",
-        hotels: [],
-      },
-    ],
-    note: "The familiar route — Friday is long, but Saturday and Sunday taper off, landing in Akron with the afternoon still open.",
+    name: "Epoch Coffee",
+    address: "221 W North Loop Blvd, Austin, TX",
+    rating: "4.5★ (2,450 reviews)",
+    note: "Open 24/7 — good for an early start, big industrial space, lots of seating.",
   },
   {
-    id: "b",
-    tab: "Short Sunday · Louisville",
-    tagline: "Skips Memphis — the long day shifts to Saturday with a stop in Louisville.",
-    stops: [
-      {
-        day: "Fri",
-        date: "Aug 14",
-        route: "Austin → Little Rock, AR",
-        miles: "~500 mi",
-        time: "~7.5 hrs",
-        note: "Overnight Little Rock",
-        hotels: [],
-      },
-      {
-        day: "Sat",
-        date: "Aug 15",
-        route: "Little Rock → Nashville → Louisville (stop) → Cincinnati",
-        miles: "~615 mi total",
-        time: "~9.5 hrs with the stop",
-        note: "Louisville Slugger Museum or a bourbon tasting — overnight Cincinnati",
-        hotels: [],
-      },
-      {
-        day: "Sun",
-        date: "Aug 16",
-        route: "Cincinnati → Columbus → Akron",
-        miles: "~250 mi",
-        time: "~4 hrs",
-        note: "Same short final day",
-        hotels: [],
-      },
-    ],
-    note: "Trades Memphis for a Louisville stop to break up the long day — Saturday runs long instead of Friday, then the same easy Sunday into Akron.",
-  },
-  {
-    id: "opt-a",
-    tab: "Option A",
-    tagline: "Closer to what you've done before.",
-    stops: [
-      {
-        day: "Fri",
-        date: "Aug 14",
-        route: "Austin → Dallas → Texarkana → Little Rock, AR",
-        miles: "~490 mi",
-        time: "~7.5 hrs",
-        note: "Overnight Little Rock",
-        hotels: [hotelLittleRock],
-      },
-      {
-        day: "Sat",
-        date: "Aug 15",
-        route: "Little Rock → Memphis → Nashville",
-        miles: "~360 mi",
-        time: "~5.5 hrs",
-        note: "Overnight Nashville, evening free",
-        hotels: [hotelNashville],
-      },
-      {
-        day: "Sun",
-        date: "Aug 16",
-        route: "Nashville → Lexington → Cincinnati → Akron",
-        miles: "~510 mi",
-        time: "~8 hrs",
-        note: "Arrive Akron evening",
-        hotels: [],
-      },
-    ],
-  },
-  {
-    id: "opt-b",
-    tab: "Option B",
-    tagline: "Skips Memphis, breaks up the last day with a stop.",
-    stops: [
-      {
-        day: "Fri",
-        date: "Aug 14",
-        route: "Austin → Dallas → Little Rock, AR",
-        miles: "~490 mi",
-        time: "~7.5 hrs",
-        note: "Same first stop as Option A",
-        hotels: [hotelLittleRock],
-      },
-      {
-        day: "Sat",
-        date: "Aug 15",
-        route: "Little Rock → Nashville (bypass Memphis)",
-        miles: "~350 mi",
-        time: "~5.5 hrs",
-        note: "More downtime in Nashville",
-        hotels: [hotelNashville],
-      },
-      {
-        day: "Sun",
-        date: "Aug 16",
-        route: "Nashville → Louisville (stop) → Cincinnati → Akron",
-        miles: "~530 mi",
-        time: "~8.5 hrs",
-        note: "Louisville Slugger Museum or bourbon tasting",
-        hotels: [],
-      },
-    ],
+    name: "Houndstooth Coffee",
+    address: "4200 N Lamar Blvd, Austin, TX",
+    rating: "4.2★ (729 reviews)",
+    note: "Austin staple, strong cappuccinos.",
   },
 ];
+
+const coffeeLittleRock = [
+  {
+    name: "Koffee With A Kause",
+    address: "23233 I-30 Frontage Rd, Bryant, AR",
+    rating: "4.7★ (218 reviews)",
+    note: "Right on the I-30 frontage road — beloved independent roaster.",
+  },
+  {
+    name: "Speakeasy Cafe",
+    address: "3411 Main St #6, Bryant, AR",
+    rating: "4.7★ (649 reviews)",
+    note: "A few minutes from the hotel.",
+  },
+  {
+    name: "La Monarca Café Y Mas",
+    address: "612 Office Park Dr Suite 2, Bryant, AR",
+    rating: "4.7★ (39 reviews)",
+    note: "Small, well-reviewed local spot.",
+  },
+];
+
+const coffeeNashville = [
+  {
+    name: "Crema Coffee Roasters",
+    address: "15 Hermitage Ave, Nashville, TN",
+    rating: "4.5★ (3,203 reviews)",
+    note: "Zero-waste, carbon-neutral roaster in SoBro.",
+  },
+  {
+    name: "Frothy Monkey Downtown",
+    address: "235 Rep. John Lewis Way N, Nashville, TN",
+    rating: "4.1★ (Tripadvisor)",
+    note: "Voted Nashville's best coffee shop for 5+ years running — full breakfast menu too.",
+  },
+  {
+    name: "Honest Coffee Roasters",
+    address: "803 Lea Ave, Nashville, TN",
+    rating: "4.3★ (151 reviews)",
+    note: "Newest location — avocado toast and breakfast burritos if you want food too.",
+  },
+];
+
+const wholeFoodsAustin = {
+  name: "Whole Foods Market (Original Flagship)",
+  address: "525 N Lamar Blvd, Austin, TX",
+  note: "The original flagship store — stock up before you hit the road.",
+};
+
+const wholeFoodsLittleRock = {
+  name: "Whole Foods Market",
+  address: "501 S Bowman Rd, Little Rock, AR",
+  note: "About 15 min from the Bryant hotel.",
+};
+
+const wholeFoodsNashville = {
+  name: "Whole Foods Market (Green Hills)",
+  address: "4021 Hillsboro Pike, Nashville, TN",
+  note: "A short drive from the hotel before you head out.",
+};
+
+const wholeFoodsAkron = {
+  name: "Whole Foods Market",
+  address: "1745 W Market St, Akron, OH",
+  note: "Closest location to Akron — good for stocking the kitchen once you arrive.",
+};
+
+const route = {
+  tagline: "Skips Memphis — the long day shifts to Saturday with a stop in Louisville.",
+  stops: [
+    {
+      day: "Fri",
+      date: "Aug 14",
+      route: "Austin → Dallas → Little Rock, AR",
+      miles: "~490 mi",
+      time: "~7.5 hrs",
+      note: "Overnight Little Rock",
+      hotels: [hotelLittleRock],
+      coffee: coffeeAustin,
+      wholeFoods: wholeFoodsAustin,
+    },
+    {
+      day: "Sat",
+      date: "Aug 15",
+      route: "Little Rock → Nashville (bypass Memphis)",
+      miles: "~350 mi",
+      time: "~5.5 hrs",
+      note: "More downtime in Nashville",
+      hotels: [hotelNashville],
+      coffee: coffeeLittleRock,
+      wholeFoods: wholeFoodsLittleRock,
+    },
+    {
+      day: "Sun",
+      date: "Aug 16",
+      route: "Nashville → Louisville (stop) → Cincinnati → Akron",
+      miles: "~530 mi",
+      time: "~8.5 hrs",
+      note: "Louisville Slugger Museum or bourbon tasting",
+      hotels: [],
+      coffee: coffeeNashville,
+      wholeFoods: wholeFoodsNashville,
+    },
+  ],
+};
 ---
 
 <Layout title="Ohio Trip" description="Private trip planning page.">
   <main class="page">
     <section class="hero reveal">
       <h1>Ohio Trip 🐾</h1>
-      <p class="subhead">Driving vs. flying to Akron, comparing cost, time, and the dog situation.</p>
+      <p class="subhead">The Austin → Akron road trip plan, with hotels, coffee, and Whole Foods stops along the way.</p>
       <div class="date-pill">Departing Fri, Aug 14</div>
-    </section>
-
-    <section class="scenarios reveal">
-      <div class="scenario-card drive-card">
-        <div class="scenario-head">
-          <span class="scenario-icon">🚗</span>
-          <div>
-            <h2>Road Trip</h2>
-            <p class="scenario-meta">21 days · 2,722 mi round trip · dog rides along</p>
-          </div>
-        </div>
-
-        <div class="cost-range">
-          <span class="cost-figure">${drive.low.toLocaleString()}–${drive.high.toLocaleString()}</span>
-          <div class="range-bar">
-            <div
-              class="range-fill drive-fill"
-              data-left={(drive.low / maxCost) * 100}
-              data-width={((drive.high - drive.low) / maxCost) * 100}
-              style="width:0; left:0;"
-            ></div>
-          </div>
-        </div>
-
-        <ul class="cost-items">
-          {drive.items.map((item) => (
-            <li>
-              <div class="cost-item-row">
-                <span class="cost-item-label">{item.label}</span>
-                <span class="cost-item-value">
-                  {item.low === item.high ? `$${item.low}` : `$${item.low}–${item.high}`}
-                </span>
-              </div>
-              <p class="cost-item-detail">{item.detail}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div class="vs-divider">
-        <span>vs</span>
-      </div>
-
-      <div class="scenario-card fly-card">
-        <div class="scenario-head">
-          <span class="scenario-icon">✈️</span>
-          <div>
-            <h2>Fly + Board</h2>
-            <p class="scenario-meta">8 days · AUS ↔ CLE · dog stays home</p>
-          </div>
-        </div>
-
-        <div class="cost-range">
-          <span class="cost-figure">${fly.low.toLocaleString()}–${fly.high.toLocaleString()}</span>
-          <div class="range-bar">
-            <div
-              class="range-fill fly-fill"
-              data-left={(fly.low / maxCost) * 100}
-              data-width={((fly.high - fly.low) / maxCost) * 100}
-              style="width:0; left:0;"
-            ></div>
-          </div>
-        </div>
-
-        <ul class="cost-items">
-          {fly.items.map((item) => (
-            <li>
-              <div class="cost-item-row">
-                <span class="cost-item-label">{item.label}</span>
-                <span class="cost-item-value">
-                  {item.low === item.high ? `$${item.low}` : `$${item.low}–${item.high}`}
-                </span>
-              </div>
-              <p class="cost-item-detail">{item.detail}</p>
-            </li>
-          ))}
-        </ul>
-
-        <p class="flight-note">
-          Preferred carriers were showing $280–380/person round trip for nearby dates when
-          checked, padded up for mid-August peak pricing. Worth pulling actual AUS–CLE fares
-          for the exact dates.
-        </p>
-      </div>
-    </section>
-
-    <section class="bottom-line reveal">
-      <h3>Bottom line</h3>
-      <p>
-        Driving comes out roughly <strong>$250–400 cheaper</strong> — but it's not apples to
-        apples. The road trip is a <strong>21-day</strong> trip; flying is <strong>8 days</strong>.
-        Shorten the road trip to match and driving looks even better on cost, but a bigger share
-        of a short trip goes to the car.
-      </p>
     </section>
 
     <section class="itinerary reveal">
       <h3>The route</h3>
-      <p class="itinerary-sub">
-        Five ways to split the drive. Pick a tab to compare, then tap a day for hotel picks — each
-        one notes a spot to work out, do yoga, or walk it off.
-      </p>
+      <p class="route-tagline">{route.tagline}</p>
 
-      <div class="route-tabs">
-        {routes.map((r, i) => (
-          <>
-            <input
-              type="radio"
-              name="route"
-              id={`tab-${r.id}`}
-              class="route-radio"
-              checked={i === 0}
-            />
-            <label for={`tab-${r.id}`} class="route-tab-btn">{r.tab}</label>
-          </>
-        ))}
-
-        {routes.map((r) => (
-          <div class="route-panel" data-panel={r.id}>
-            <p class="route-tagline">{r.tagline}</p>
-
-            <ol class="timeline">
-              {r.stops.map((stop) => (
-                <li class="timeline-stop">
-                  <span class="timeline-day">{stop.day}</span>
-                  <div class="timeline-content">
-                    {stop.hotels.length > 0 ? (
-                      <details class="timeline-details">
-                        <summary>
-                          <div class="timeline-summary-text">
-                            <p class="timeline-route">{stop.route} <span class="timeline-date">· {stop.date}</span></p>
-                            <p class="timeline-stats">{stop.miles} · {stop.time}</p>
-                            <p class="timeline-note">{stop.note}</p>
-                          </div>
-                          <span class="timeline-chevron" aria-hidden="true">⌄</span>
-                        </summary>
-                        <div class="hotel-list">
-                          {stop.hotels.map((hotel) => (
-                            <div class="hotel-card">
-                              <p class="hotel-name">
-                                <a href={mapsLink(hotel.name, hotel.address)} target="_blank" rel="noopener noreferrer">
-                                  {hotel.name} <span class="hotel-link-arrow">↗</span>
-                                </a>
-                              </p>
-                              <p class="hotel-address">{hotel.address}</p>
-                              <p class="hotel-rating">{hotel.rating}</p>
-                              <p class="hotel-note">{hotel.note}</p>
-                              <p class="hotel-fitness"><span aria-hidden="true">🧘</span> {hotel.fitness}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </details>
-                    ) : (
-                      <div class="timeline-static">
-                        <p class="timeline-route">{stop.route} <span class="timeline-date">· {stop.date}</span></p>
-                        <p class="timeline-stats">{stop.miles} · {stop.time}</p>
-                        <p class="timeline-note">{stop.note}</p>
-                      </div>
-                    )}
+      <ol class="timeline">
+        {route.stops.map((stop) => (
+          <li class="timeline-stop">
+            <span class="timeline-day">{stop.day}</span>
+            <div class="timeline-content">
+              <details class="timeline-details" open>
+                <summary>
+                  <div class="timeline-summary-text">
+                    <p class="timeline-route">{stop.route} <span class="timeline-date">· {stop.date}</span></p>
+                    <p class="timeline-stats">{stop.miles} · {stop.time}</p>
+                    <p class="timeline-note">{stop.note}</p>
                   </div>
-                </li>
-              ))}
-            </ol>
+                  <span class="timeline-chevron" aria-hidden="true">⌄</span>
+                </summary>
 
-            {r.pros && r.cons && (
-              <div class="pros-cons">
-                <div class="pros-card">
-                  <h4><span aria-hidden="true">✅</span> What works</h4>
-                  <ul>
-                    {r.pros.map((item) => (
-                      <li>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div class="cons-card">
-                  <h4><span aria-hidden="true">⚠️</span> Worth knowing</h4>
-                  <ul>
-                    {r.cons.map((item) => (
-                      <li>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            )}
+                <div class="stop-details">
+                  {stop.hotels.length > 0 && (
+                    <div class="stop-block">
+                      <p class="stop-block-label"><span aria-hidden="true">🛏️</span> Hotel</p>
+                      <div class="hotel-list">
+                        {stop.hotels.map((hotel) => (
+                          <div class="hotel-card">
+                            <p class="hotel-name">
+                              <a href={mapsLink(hotel.name, hotel.address)} target="_blank" rel="noopener noreferrer">
+                                {hotel.name} <span class="hotel-link-arrow">↗</span>
+                              </a>
+                            </p>
+                            <p class="hotel-address">{hotel.address}</p>
+                            <p class="hotel-rating">{hotel.rating}</p>
+                            <p class="hotel-note">{hotel.note}</p>
+                            <p class="hotel-fitness"><span aria-hidden="true">🧘</span> {hotel.fitness}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
-            {r.note && <p class="itinerary-note">{r.note}</p>}
-          </div>
+                  <div class="stop-block">
+                    <p class="stop-block-label"><span aria-hidden="true">☕</span> Coffee options</p>
+                    <div class="mini-card-list">
+                      {stop.coffee.map((cafe) => (
+                        <div class="mini-card">
+                          <p class="mini-card-name">
+                            <a href={mapsLink(cafe.name, cafe.address)} target="_blank" rel="noopener noreferrer">
+                              {cafe.name} <span class="hotel-link-arrow">↗</span>
+                            </a>
+                          </p>
+                          <p class="mini-card-address">{cafe.address}</p>
+                          <p class="mini-card-rating">{cafe.rating}</p>
+                          <p class="mini-card-note">{cafe.note}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div class="stop-block">
+                    <p class="stop-block-label"><span aria-hidden="true">🛒</span> Whole Foods stop</p>
+                    <div class="mini-card-list">
+                      <div class="mini-card">
+                        <p class="mini-card-name">
+                          <a href={mapsLink(stop.wholeFoods.name, stop.wholeFoods.address)} target="_blank" rel="noopener noreferrer">
+                            {stop.wholeFoods.name} <span class="hotel-link-arrow">↗</span>
+                          </a>
+                        </p>
+                        <p class="mini-card-address">{stop.wholeFoods.address}</p>
+                        <p class="mini-card-note">{stop.wholeFoods.note}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </li>
         ))}
+      </ol>
+
+      <div class="stop-block arrival-block">
+        <p class="stop-block-label"><span aria-hidden="true">🛒</span> After you arrive</p>
+        <div class="mini-card-list">
+          <div class="mini-card">
+            <p class="mini-card-name">
+              <a href={mapsLink(wholeFoodsAkron.name, wholeFoodsAkron.address)} target="_blank" rel="noopener noreferrer">
+                {wholeFoodsAkron.name} <span class="hotel-link-arrow">↗</span>
+              </a>
+            </p>
+            <p class="mini-card-address">{wholeFoodsAkron.address}</p>
+            <p class="mini-card-note">{wholeFoodsAkron.note}</p>
+          </div>
+        </div>
       </div>
     </section>
+
+    <details class="cost-accordion reveal">
+      <summary class="cost-accordion-summary">
+        <span>Driving vs. flying — cost comparison</span>
+        <span class="timeline-chevron" aria-hidden="true">⌄</span>
+      </summary>
+
+      <div class="cost-accordion-body">
+        <section class="scenarios">
+          <div class="scenario-card drive-card">
+            <div class="scenario-head">
+              <span class="scenario-icon">🚗</span>
+              <div>
+                <h2>Road Trip</h2>
+                <p class="scenario-meta">21 days · 2,722 mi round trip · dog rides along</p>
+              </div>
+            </div>
+
+            <div class="cost-range">
+              <span class="cost-figure">${drive.low.toLocaleString()}–${drive.high.toLocaleString()}</span>
+              <div class="range-bar">
+                <div
+                  class="range-fill drive-fill"
+                  data-left={(drive.low / maxCost) * 100}
+                  data-width={((drive.high - drive.low) / maxCost) * 100}
+                  style="width:0; left:0;"
+                ></div>
+              </div>
+            </div>
+
+            <ul class="cost-items">
+              {drive.items.map((item) => (
+                <li>
+                  <div class="cost-item-row">
+                    <span class="cost-item-label">{item.label}</span>
+                    <span class="cost-item-value">
+                      {item.low === item.high ? `$${item.low}` : `$${item.low}–${item.high}`}
+                    </span>
+                  </div>
+                  <p class="cost-item-detail">{item.detail}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="vs-divider">
+            <span>vs</span>
+          </div>
+
+          <div class="scenario-card fly-card">
+            <div class="scenario-head">
+              <span class="scenario-icon">✈️</span>
+              <div>
+                <h2>Fly + Board</h2>
+                <p class="scenario-meta">8 days · AUS ↔ CLE · dog stays home</p>
+              </div>
+            </div>
+
+            <div class="cost-range">
+              <span class="cost-figure">${fly.low.toLocaleString()}–${fly.high.toLocaleString()}</span>
+              <div class="range-bar">
+                <div
+                  class="range-fill fly-fill"
+                  data-left={(fly.low / maxCost) * 100}
+                  data-width={((fly.high - fly.low) / maxCost) * 100}
+                  style="width:0; left:0;"
+                ></div>
+              </div>
+            </div>
+
+            <ul class="cost-items">
+              {fly.items.map((item) => (
+                <li>
+                  <div class="cost-item-row">
+                    <span class="cost-item-label">{item.label}</span>
+                    <span class="cost-item-value">
+                      {item.low === item.high ? `$${item.low}` : `$${item.low}–${item.high}`}
+                    </span>
+                  </div>
+                  <p class="cost-item-detail">{item.detail}</p>
+                </li>
+              ))}
+            </ul>
+
+            <p class="flight-note">
+              Preferred carriers were showing $280–380/person round trip for nearby dates when
+              checked, padded up for mid-August peak pricing. Worth pulling actual AUS–CLE fares
+              for the exact dates.
+            </p>
+          </div>
+        </section>
+
+        <section class="bottom-line">
+          <h3>Bottom line</h3>
+          <p>
+            Driving comes out roughly <strong>$250–400 cheaper</strong> — but it's not apples to
+            apples. The road trip is a <strong>21-day</strong> trip; flying is <strong>8 days</strong>.
+            Shorten the road trip to match and driving looks even better on cost, but a bigger share
+            of a short trip goes to the car.
+          </p>
+        </section>
+      </div>
+    </details>
   </main>
 
   <script>
@@ -446,32 +381,39 @@ const routes = [
     const fills = document.querySelectorAll(".range-fill");
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (prefersReducedMotion) {
-      revealTargets.forEach((el) => el.classList.add("in-view"));
+    const animateFills = () => {
       fills.forEach((el) => {
         const fill = el as HTMLElement;
         fill.style.left = `${fill.dataset.left}%`;
         fill.style.width = `${fill.dataset.width}%`;
       });
+    };
+
+    if (prefersReducedMotion) {
+      revealTargets.forEach((el) => el.classList.add("in-view"));
     } else {
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (!entry.isIntersecting) return;
             entry.target.classList.add("in-view");
-            if (entry.target.classList.contains("scenarios")) {
-              fills.forEach((el) => {
-                const fill = el as HTMLElement;
-                fill.style.left = `${fill.dataset.left}%`;
-                fill.style.width = `${fill.dataset.width}%`;
-              });
-            }
             observer.unobserve(entry.target);
           });
         },
         { threshold: 0.2 }
       );
       revealTargets.forEach((el) => observer.observe(el));
+    }
+
+    const accordion = document.querySelector(".cost-accordion");
+    if (accordion) {
+      accordion.addEventListener(
+        "toggle",
+        () => {
+          animateFills();
+        },
+        { once: true }
+      );
     }
   </script>
 </Layout>
@@ -521,6 +463,259 @@ const routes = [
     border: 1px solid var(--color-border);
     border-radius: 999px;
     color: var(--color-text-muted);
+  }
+
+  .itinerary {
+    margin-bottom: 72px;
+  }
+
+  .itinerary h3 {
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .route-tagline {
+    text-align: center;
+    font-size: 14px;
+    color: var(--color-text-muted);
+    font-style: italic;
+    max-width: var(--content-width);
+    margin: 0 auto 36px;
+  }
+
+  .timeline {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    max-width: var(--content-width);
+    margin: 0 auto 32px;
+  }
+
+  .timeline-stop {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 16px;
+    position: relative;
+    padding-bottom: 32px;
+  }
+
+  .timeline-stop:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-stop::before {
+    content: "";
+    position: absolute;
+    left: 15px;
+    top: 24px;
+    bottom: 0;
+    width: 1px;
+    background: var(--color-border);
+  }
+
+  .timeline-stop:last-child::before {
+    display: none;
+  }
+
+  .timeline-day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-text);
+    color: var(--color-bg);
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .timeline-content {
+    min-width: 0;
+  }
+
+  .timeline-details {
+    border: 1px solid transparent;
+    border-radius: 14px;
+    padding: 0;
+  }
+
+  .timeline-details summary {
+    list-style: none;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+    padding: 12px 14px;
+    margin: -12px -14px;
+    border-radius: 14px;
+    transition: background 0.2s ease;
+  }
+
+  .timeline-details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .timeline-details summary:hover {
+    background: var(--color-tag-bg);
+  }
+
+  .timeline-chevron {
+    flex-shrink: 0;
+    font-size: 16px;
+    color: var(--color-text-muted);
+    transition: transform 0.25s ease;
+    margin-top: 2px;
+  }
+
+  .timeline-details[open] .timeline-chevron {
+    transform: rotate(180deg);
+  }
+
+  .timeline-route {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+
+  .timeline-date {
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+
+  .timeline-stats {
+    font-size: 12.5px;
+    color: var(--color-text-muted);
+    margin-bottom: 3px;
+  }
+
+  .timeline-note {
+    font-size: 12.5px;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .stop-details {
+    padding: 8px 0 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .stop-block-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+    margin-bottom: 10px;
+  }
+
+  .hotel-list,
+  .mini-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .hotel-card,
+  .mini-card {
+    background: var(--color-tag-bg);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+
+  .hotel-name a,
+  .mini-card-name a {
+    font-size: 13.5px;
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: var(--color-border);
+    text-underline-offset: 2px;
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .hotel-name a:hover,
+  .mini-card-name a:hover {
+    text-decoration-color: var(--color-text);
+  }
+
+  .hotel-link-arrow {
+    font-size: 11px;
+  }
+
+  .hotel-address,
+  .mini-card-address {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin-top: 2px;
+    margin-bottom: 4px;
+  }
+
+  .hotel-rating,
+  .mini-card-rating {
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .hotel-note,
+  .mini-card-note {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .hotel-fitness {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--color-border);
+  }
+
+  .arrival-block {
+    max-width: var(--content-width);
+    margin: 0 auto;
+  }
+
+  .cost-accordion {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    padding: 8px;
+  }
+
+  .cost-accordion-summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 20px 24px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .cost-accordion-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .cost-accordion[open] .timeline-chevron {
+    transform: rotate(180deg);
+  }
+
+  .cost-accordion-body {
+    padding: 8px 24px 32px;
   }
 
   .scenarios {
@@ -672,7 +867,7 @@ const routes = [
 
   .bottom-line {
     max-width: var(--content-width);
-    margin: 0 auto 80px;
+    margin: 0 auto;
     text-align: center;
   }
 
@@ -690,361 +885,6 @@ const routes = [
     line-height: 1.7;
   }
 
-  .itinerary h3 {
-    font-size: 24px;
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    text-align: center;
-    margin-bottom: 8px;
-  }
-
-  .itinerary-sub {
-    text-align: center;
-    font-size: 14px;
-    color: var(--color-text-muted);
-    margin-bottom: 32px;
-    max-width: 480px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .route-tabs {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .route-radio {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    opacity: 0;
-  }
-
-  .route-tab-btn {
-    order: 1;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 10px 20px;
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    color: var(--color-text-muted);
-    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-    white-space: nowrap;
-  }
-
-  .route-tab-btn:hover {
-    color: var(--color-text);
-  }
-
-  .route-radio:checked + .route-tab-btn {
-    background: var(--color-text);
-    color: var(--color-bg);
-    border-color: var(--color-text);
-  }
-
-  .route-radio:focus-visible + .route-tab-btn {
-    outline: 2px solid var(--color-text);
-    outline-offset: 2px;
-  }
-
-  .route-panel {
-    order: 2;
-    display: none;
-    flex: 1 1 100%;
-    width: 100%;
-    margin-top: 40px;
-    animation: fade-in 0.35s ease;
-  }
-
-  #tab-rec:checked ~ .route-panel[data-panel="rec"],
-  #tab-a:checked ~ .route-panel[data-panel="a"],
-  #tab-b:checked ~ .route-panel[data-panel="b"],
-  #tab-opt-a:checked ~ .route-panel[data-panel="opt-a"],
-  #tab-opt-b:checked ~ .route-panel[data-panel="opt-b"] {
-    display: block;
-  }
-
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(6px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .route-tagline {
-    text-align: center;
-    font-size: 13.5px;
-    color: var(--color-text-muted);
-    font-style: italic;
-    max-width: var(--content-width);
-    margin: 0 auto 28px;
-  }
-
-  .timeline {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    position: relative;
-    max-width: var(--content-width);
-    margin: 0 auto 40px;
-  }
-
-  .timeline-stop {
-    display: grid;
-    grid-template-columns: 40px 1fr;
-    gap: 16px;
-    position: relative;
-    padding-bottom: 20px;
-  }
-
-  .timeline-stop:last-child {
-    padding-bottom: 0;
-  }
-
-  .timeline-stop::before {
-    content: "";
-    position: absolute;
-    left: 15px;
-    top: 24px;
-    bottom: 0;
-    width: 1px;
-    background: var(--color-border);
-  }
-
-  .timeline-stop:last-child::before {
-    display: none;
-  }
-
-  .timeline-day {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--color-text);
-    color: var(--color-bg);
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-  }
-
-  .timeline-content {
-    min-width: 0;
-  }
-
-  .timeline-static,
-  .timeline-details {
-    border: 1px solid transparent;
-    border-radius: 14px;
-    padding: 12px 0;
-  }
-
-  .timeline-details {
-    padding: 0;
-  }
-
-  .timeline-details summary {
-    list-style: none;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    cursor: pointer;
-    padding: 12px 14px;
-    margin: -12px -14px;
-    border-radius: 14px;
-    transition: background 0.2s ease;
-  }
-
-  .timeline-details summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .timeline-details summary:hover {
-    background: var(--color-tag-bg);
-  }
-
-  .timeline-chevron {
-    flex-shrink: 0;
-    font-size: 16px;
-    color: var(--color-text-muted);
-    transition: transform 0.25s ease;
-    margin-top: 2px;
-  }
-
-  .timeline-details[open] .timeline-chevron {
-    transform: rotate(180deg);
-  }
-
-  .timeline-route {
-    font-size: 14.5px;
-    font-weight: 500;
-    margin-bottom: 3px;
-  }
-
-  .timeline-date {
-    font-weight: 400;
-    color: var(--color-text-muted);
-  }
-
-  .timeline-stats {
-    font-size: 12.5px;
-    color: var(--color-text-muted);
-    margin-bottom: 3px;
-  }
-
-  .timeline-note {
-    font-size: 12.5px;
-    color: var(--color-text-muted);
-    font-style: italic;
-  }
-
-  .hotel-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 4px 14px 8px;
-  }
-
-  .hotel-card {
-    background: var(--color-tag-bg);
-    border-radius: 12px;
-    padding: 14px 16px;
-  }
-
-  .hotel-name a {
-    font-size: 13.5px;
-    font-weight: 500;
-    text-decoration: underline;
-    text-decoration-color: var(--color-border);
-    text-underline-offset: 2px;
-    transition: text-decoration-color 0.2s ease;
-  }
-
-  .hotel-name a:hover {
-    text-decoration-color: var(--color-text);
-  }
-
-  .hotel-link-arrow {
-    font-size: 11px;
-  }
-
-  .hotel-address {
-    font-size: 12px;
-    color: var(--color-text-muted);
-    margin-top: 2px;
-    margin-bottom: 4px;
-  }
-
-  .hotel-rating {
-    font-size: 12px;
-    font-weight: 500;
-    margin-bottom: 4px;
-  }
-
-  .hotel-note {
-    font-size: 12px;
-    color: var(--color-text-muted);
-    line-height: 1.6;
-  }
-
-  .hotel-fitness {
-    font-size: 12px;
-    color: var(--color-text-muted);
-    line-height: 1.6;
-    margin-top: 6px;
-    padding-top: 6px;
-    border-top: 1px dashed var(--color-border);
-  }
-
-  .pros-cons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    max-width: var(--max-width);
-    margin: 0 auto 32px;
-  }
-
-  .pros-card,
-  .cons-card {
-    border: 1px solid var(--color-border);
-    border-radius: 18px;
-    padding: 24px 28px;
-  }
-
-  .pros-card {
-    background: #f6f9f7;
-  }
-
-  .cons-card {
-    background: #fbf7f2;
-  }
-
-  .pros-card h4,
-  .cons-card h4 {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 15px;
-    font-weight: 500;
-    margin-bottom: 14px;
-  }
-
-  .pros-card ul,
-  .cons-card ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .pros-card li,
-  .cons-card li {
-    font-size: 13.5px;
-    line-height: 1.6;
-    color: var(--color-text-muted);
-    padding-left: 18px;
-    position: relative;
-  }
-
-  .pros-card li::before,
-  .cons-card li::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 8px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-  }
-
-  .pros-card li::before {
-    background: #2f6b4f;
-  }
-
-  .cons-card li::before {
-    background: #b5793a;
-  }
-
-  .itinerary-note {
-    max-width: var(--content-width);
-    margin: 0 auto;
-    text-align: center;
-    font-size: 13.5px;
-    color: var(--color-text-muted);
-    line-height: 1.7;
-  }
-
   @media (max-width: 860px) {
     .scenarios {
       grid-template-columns: 1fr;
@@ -1052,17 +892,6 @@ const routes = [
 
     .vs-divider {
       padding-top: 0;
-    }
-
-    .pros-cons {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  @media (max-width: 520px) {
-    .route-tab-btn {
-      padding: 9px 16px;
-      font-size: 12.5px;
     }
   }
 </style>
