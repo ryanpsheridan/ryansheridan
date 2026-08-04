@@ -24,6 +24,38 @@ const fly = {
 const mapsLink = (name: string, address: string) =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name}, ${address}`)}`;
 
+const hotelWestMemphis = {
+  name: "La Quinta Inn & Suites by Wyndham West Memphis",
+  address: "1550 N 6th St, West Memphis, AR",
+  rating: "4.2★ (1,146 reviews)",
+  note: "Right off I-55 — reviewers note a designated dog area and quiet interstate access.",
+  fitness: "On-site fitness center, plus grassy areas around the property for an evening walk with the dog.",
+};
+
+const hotelWolfchase = {
+  name: "La Quinta Inn & Suites by Wyndham Memphis Wolfchase",
+  address: "2839 New Brunswick Rd, Memphis, TN",
+  rating: "4.3★ (894 reviews)",
+  note: "Wolfchase/Cordova suburb — reviewers repeatedly call the parking and neighborhood safe.",
+  fitness: "24-hour fitness center and an indoor saltwater pool.",
+};
+
+const hotelNashville = {
+  name: "La Quinta Inn & Suites by Wyndham Nashville",
+  address: "315 Interstate Dr, Nashville, TN",
+  rating: "4.3★ (1,337 reviews)",
+  note: "Just across the river from downtown via the pedestrian bridge — the usual spot.",
+  fitness: "Fitness center and indoor pool on-site; the pedestrian bridge into downtown doubles as a solid walk or morning jog route.",
+};
+
+const hotelLittleRock = {
+  name: "La Quinta Inn & Suites by Wyndham Little Rock - Bryant",
+  address: "408 West Commerce Dr, Bryant, AR",
+  rating: "4.7★ (844 reviews) — #1 of 10 hotels in Bryant on Tripadvisor",
+  note: "Right off I-30 just south of Little Rock — quiet, safe suburb with shopping and restaurants nearby.",
+  fitness: "On-site fitness center with free weights; about 15 min from the Arkansas River Trail for a longer walk.",
+};
+
 const routes = [
   {
     id: "rec",
@@ -37,20 +69,7 @@ const routes = [
         miles: "~652 mi",
         time: "~9.5–10 hrs",
         note: "The longest day of the trip — overnight Memphis",
-        hotels: [
-          {
-            name: "La Quinta Inn & Suites by Wyndham West Memphis",
-            address: "1550 N 6th St, West Memphis, AR",
-            rating: "4.2★ (1,146 reviews)",
-            note: "Right off I-55 — reviewers note a designated dog area and quiet interstate access.",
-          },
-          {
-            name: "La Quinta Inn & Suites by Wyndham Memphis Wolfchase",
-            address: "2839 New Brunswick Rd, Memphis, TN",
-            rating: "4.3★ (894 reviews)",
-            note: "Wolfchase/Cordova suburb — reviewers repeatedly call the parking and neighborhood safe.",
-          },
-        ],
+        hotels: [hotelWestMemphis, hotelWolfchase],
       },
       {
         day: "Sat",
@@ -59,14 +78,7 @@ const routes = [
         miles: "~210 mi",
         time: "~3.5 hrs",
         note: "The short breather day in the middle",
-        hotels: [
-          {
-            name: "La Quinta Inn & Suites by Wyndham Nashville",
-            address: "315 Interstate Dr, Nashville, TN",
-            rating: "4.3★ (1,337 reviews)",
-            note: "Just across the river from downtown via the pedestrian bridge — the usual spot.",
-          },
-        ],
+        hotels: [hotelNashville],
       },
       {
         day: "Sun",
@@ -92,7 +104,7 @@ const routes = [
   },
   {
     id: "a",
-    tab: "Via Memphis",
+    tab: "Short Sunday · Memphis",
     tagline: "Long first day into Memphis, but Sunday eases off to just 4 hours.",
     stops: [
       {
@@ -127,7 +139,7 @@ const routes = [
   },
   {
     id: "b",
-    tab: "Via Louisville",
+    tab: "Short Sunday · Louisville",
     tagline: "Skips Memphis — the long day shifts to Saturday with a stop in Louisville.",
     stops: [
       {
@@ -159,6 +171,74 @@ const routes = [
       },
     ],
     note: "Trades Memphis for a Louisville stop to break up the long day — Saturday runs long instead of Friday, then the same easy Sunday into Akron.",
+  },
+  {
+    id: "opt-a",
+    tab: "Option A",
+    tagline: "Closer to what you've done before.",
+    stops: [
+      {
+        day: "Fri",
+        date: "Aug 14",
+        route: "Austin → Dallas → Texarkana → Little Rock, AR",
+        miles: "~490 mi",
+        time: "~7.5 hrs",
+        note: "Overnight Little Rock",
+        hotels: [hotelLittleRock],
+      },
+      {
+        day: "Sat",
+        date: "Aug 15",
+        route: "Little Rock → Memphis → Nashville",
+        miles: "~360 mi",
+        time: "~5.5 hrs",
+        note: "Overnight Nashville, evening free",
+        hotels: [hotelNashville],
+      },
+      {
+        day: "Sun",
+        date: "Aug 16",
+        route: "Nashville → Lexington → Cincinnati → Akron",
+        miles: "~510 mi",
+        time: "~8 hrs",
+        note: "Arrive Akron evening",
+        hotels: [],
+      },
+    ],
+  },
+  {
+    id: "opt-b",
+    tab: "Option B",
+    tagline: "Skips Memphis, breaks up the last day with a stop.",
+    stops: [
+      {
+        day: "Fri",
+        date: "Aug 14",
+        route: "Austin → Dallas → Little Rock, AR",
+        miles: "~490 mi",
+        time: "~7.5 hrs",
+        note: "Same first stop as Option A",
+        hotels: [hotelLittleRock],
+      },
+      {
+        day: "Sat",
+        date: "Aug 15",
+        route: "Little Rock → Nashville (bypass Memphis)",
+        miles: "~350 mi",
+        time: "~5.5 hrs",
+        note: "More downtime in Nashville",
+        hotels: [hotelNashville],
+      },
+      {
+        day: "Sun",
+        date: "Aug 16",
+        route: "Nashville → Louisville (stop) → Cincinnati → Akron",
+        miles: "~530 mi",
+        time: "~8.5 hrs",
+        note: "Louisville Slugger Museum or bourbon tasting",
+        hotels: [],
+      },
+    ],
   },
 ];
 ---
@@ -268,7 +348,8 @@ const routes = [
     <section class="itinerary reveal">
       <h3>The route</h3>
       <p class="itinerary-sub">
-        Three ways to split the drive. Pick a tab to compare, then tap a day for hotel picks.
+        Five ways to split the drive. Pick a tab to compare, then tap a day for hotel picks — each
+        one notes a spot to work out, do yoga, or walk it off.
       </p>
 
       <div class="route-tabs">
@@ -315,6 +396,7 @@ const routes = [
                               <p class="hotel-address">{hotel.address}</p>
                               <p class="hotel-rating">{hotel.rating}</p>
                               <p class="hotel-note">{hotel.note}</p>
+                              <p class="hotel-fitness"><span aria-hidden="true">🧘</span> {hotel.fitness}</p>
                             </div>
                           ))}
                         </div>
@@ -680,7 +762,9 @@ const routes = [
 
   #tab-rec:checked ~ .route-panel[data-panel="rec"],
   #tab-a:checked ~ .route-panel[data-panel="a"],
-  #tab-b:checked ~ .route-panel[data-panel="b"] {
+  #tab-b:checked ~ .route-panel[data-panel="b"],
+  #tab-opt-a:checked ~ .route-panel[data-panel="opt-a"],
+  #tab-opt-b:checked ~ .route-panel[data-panel="opt-b"] {
     display: block;
   }
 
@@ -872,6 +956,15 @@ const routes = [
     font-size: 12px;
     color: var(--color-text-muted);
     line-height: 1.6;
+  }
+
+  .hotel-fitness {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--color-border);
   }
 
   .pros-cons {
