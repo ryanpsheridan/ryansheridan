@@ -24,6 +24,25 @@ const fly = {
 const mapsLink = (name: string, address: string) =>
   `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name}, ${address}`)}`;
 
+// Material Symbols Outlined path data (inline SVG — no external icon font dependency)
+const iconPaths: Record<string, string> = {
+  pets: "M180-475q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm109-189q-29-29-29-71t29-71q29-29 71-29t71 29q29 29 29 71t-29 71q-29 29-71 29t-71-29Zm240 0q-29-29-29-71t29-71q29-29 71-29t71 29q29 29 29 71t-29 71q-29 29-71 29t-71-29Zm251 189q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM266-75q-45 0-75.5-34.5T160-191q0-52 35.5-91t70.5-77q29-31 50-67.5t50-68.5q22-26 51-43t63-17q34 0 63 16t51 42q28 32 49.5 69t50.5 69q35 38 70.5 77t35.5 91q0 47-30.5 81.5T694-75q-54 0-107-9t-107-9q-54 0-107 9t-107 9Z",
+  event: "M509-269q-29-29-29-71t29-71q29-29 71-29t71 29q29 29 29 71t-29 71q-29 29-71 29t-71-29ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z",
+  hotel: "M40-200v-600h80v400h320v-320h320q66 0 113 47t47 113v360h-80v-120H120v120H40Zm155-275q-35-35-35-85t35-85q35-35 85-35t85 35q35 35 35 85t-35 85q-35 35-85 35t-85-35Zm325 75h320v-160q0-33-23.5-56.5T760-640H520v240ZM308.5-531.5Q320-543 320-560t-11.5-28.5Q297-600 280-600t-28.5 11.5Q240-577 240-560t11.5 28.5Q263-520 280-520t28.5-11.5ZM280-560Zm240-80v240-240Z",
+  local_cafe: "M160-120v-80h640v80H160Zm160-160q-66 0-113-47t-47-113v-400h640q33 0 56.5 23.5T880-760v120q0 33-23.5 56.5T800-560h-80v120q0 66-47 113t-113 47H320Zm0-80h240q33 0 56.5-23.5T640-440v-320H240v320q0 33 23.5 56.5T320-360Zm400-280h80v-120h-80v120ZM320-360h-80 400-320Z",
+  storefront: "M841-518v318q0 33-23.5 56.5T761-120H201q-33 0-56.5-23.5T121-200v-318q-23-21-35.5-54t-.5-72l42-136q8-26 28.5-43t47.5-17h556q27 0 47 16.5t29 43.5l42 136q12 39-.5 71T841-518Zm-272-42q27 0 41-18.5t11-41.5l-22-140h-78v148q0 21 14 36.5t34 15.5Zm-180 0q23 0 37.5-15.5T441-612v-148h-78l-22 140q-4 24 10.5 42t37.5 18Zm-178 0q18 0 31.5-13t16.5-33l22-154h-78l-40 134q-6 20 6.5 43t41.5 23Zm540 0q29 0 42-23t6-43l-42-134h-76l22 154q3 20 16.5 33t31.5 13ZM201-200h560v-282q-5 2-6.5 2H751q-27 0-47.5-9T663-518q-18 18-41 28t-49 10q-27 0-50.5-10T481-518q-17 18-39.5 28T393-480q-29 0-52.5-10T299-518q-21 21-41.5 29.5T211-480h-4.5q-2.5 0-5.5-2v282Zm560 0H201h560Z",
+  fitness_center: "m536-84-56-56 142-142-340-340-142 142-56-56 56-58-56-56 84-84-56-58 56-56 58 56 84-84 56 56 58-56 56 56-142 142 340 340 142-142 56 56-56 58 56 56-84 84 56 58-56 56-58-56-84 84-56-56-58 56Z",
+  directions_car: "M240-200v40q0 17-11.5 28.5T200-120h-40q-17 0-28.5-11.5T120-160v-320l84-240q6-18 21.5-29t34.5-11h440q19 0 34.5 11t21.5 29l84 240v320q0 17-11.5 28.5T800-120h-40q-17 0-28.5-11.5T720-160v-40H240Zm-8-360h496l-42-120H274l-42 120Zm-32 80v200-200Zm100 160q25 0 42.5-17.5T360-380q0-25-17.5-42.5T300-440q-25 0-42.5 17.5T240-380q0 25 17.5 42.5T300-320Zm360 0q25 0 42.5-17.5T720-380q0-25-17.5-42.5T660-440q-25 0-42.5 17.5T600-380q0 25 17.5 42.5T660-320Zm-460 40h560v-200H200v200Z",
+  flight: "M280-80v-100l120-84v-144L80-280v-120l320-224v-176q0-33 23.5-56.5T480-880q33 0 56.5 23.5T560-800v176l320 224v120L560-408v144l120 84v100l-200-60-200 60Z",
+  expand_more: "M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z",
+  open_in_new: "M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z",
+  insights: "M120-160q-33 0-56.5-23.5T40-240q0-33 23.5-56.5T120-320h10.5q4.5 0 9.5 2l182-182q-2-5-2-9.5V-520q0-33 23.5-56.5T400-600q33 0 56.5 23.5T480-520q0 2-2 20l102 102q5-2 9.5-2h21q4.5 0 9.5 2l142-142q-2-5-2-9.5V-560q0-33 23.5-56.5T840-640q33 0 56.5 23.5T920-560q0 33-23.5 56.5T840-480h-10.5q-4.5 0-9.5-2L678-340q2 5 2 9.5v10.5q0 33-23.5 56.5T600-240q-33 0-56.5-23.5T520-320v-10.5q0-4.5 2-9.5L420-442q-5 2-9.5 2H400q-2 0-20-2L198-260q2 5 2 9.5v10.5q0 33-23.5 56.5T120-160Zm40-401-25-54-54-25 54-25 25-54 25 54 54 25-54 25-25 54Zm440-39-38-82-82-38 82-38 38-82 38 82 82 38-82 38-38 82Z",
+  payments: "M560-440q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35ZM280-320q-33 0-56.5-23.5T200-400v-320q0-33 23.5-56.5T280-800h560q33 0 56.5 23.5T920-720v320q0 33-23.5 56.5T840-320H280Zm80-80h400q0-33 23.5-56.5T840-480v-160q-33 0-56.5-23.5T760-720H360q0 33-23.5 56.5T280-640v160q33 0 56.5 23.5T360-400Zm440 240H120q-33 0-56.5-23.5T40-240v-440h80v440h680v80ZM280-400v-320 320Z",
+};
+
+const icon = (name: string) =>
+  `<svg viewBox="0 -960 960 960" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="${iconPaths[name]}"/></svg>`;
+
 // Hotel requirements: gym on-site, dog-friendly, 4.2★ minimum
 const hotelLittleRock = {
   name: "La Quinta Inn & Suites by Wyndham Little Rock - Bryant",
@@ -171,9 +190,12 @@ const route = {
 <Layout title="Ohio Trip" description="Private trip planning page.">
   <main class="page">
     <section class="hero reveal">
-      <h1>Ohio Trip 🐾</h1>
+      <h1><span class="icon icon-hero" set:html={icon("pets")} />Ohio Trip</h1>
       <p class="subhead">The Austin → Akron road trip plan, with hotels, coffee, and Whole Foods stops along the way.</p>
-      <div class="date-pill">Departing Fri, Aug 14</div>
+      <div class="chip">
+        <span class="icon icon-sm" set:html={icon("event")} />
+        Departing Fri, Aug 14
+      </div>
     </section>
 
     <section class="itinerary reveal">
@@ -192,25 +214,31 @@ const route = {
                     <p class="timeline-stats">{stop.miles} · {stop.time}</p>
                     <p class="timeline-note">{stop.note}</p>
                   </div>
-                  <span class="timeline-chevron" aria-hidden="true">⌄</span>
+                  <span class="icon expand-icon" set:html={icon("expand_more")} />
                 </summary>
 
                 <div class="stop-details">
                   {stop.hotels.length > 0 && (
                     <div class="stop-block">
-                      <p class="stop-block-label"><span aria-hidden="true">🛏️</span> Hotel</p>
+                      <p class="stop-block-label">
+                        <span class="icon icon-sm" set:html={icon("hotel")} /> Hotel
+                      </p>
                       <div class="hotel-list">
                         {stop.hotels.map((hotel) => (
                           <div class="hotel-card">
                             <p class="hotel-name">
                               <a href={mapsLink(hotel.name, hotel.address)} target="_blank" rel="noopener noreferrer">
-                                {hotel.name} <span class="hotel-link-arrow">↗</span>
+                                {hotel.name}
+                                <span class="icon icon-xs" set:html={icon("open_in_new")} />
                               </a>
                             </p>
                             <p class="hotel-address">{hotel.address}</p>
                             <p class="hotel-rating">{hotel.rating}</p>
                             <p class="hotel-note">{hotel.note}</p>
-                            <p class="hotel-fitness"><span aria-hidden="true">🧘</span> {hotel.fitness}</p>
+                            <p class="hotel-fitness">
+                              <span class="icon icon-xs" set:html={icon("fitness_center")} />
+                              {hotel.fitness}
+                            </p>
                           </div>
                         ))}
                       </div>
@@ -218,13 +246,16 @@ const route = {
                   )}
 
                   <div class="stop-block">
-                    <p class="stop-block-label"><span aria-hidden="true">☕</span> Coffee options</p>
+                    <p class="stop-block-label">
+                      <span class="icon icon-sm" set:html={icon("local_cafe")} /> Coffee options
+                    </p>
                     <div class="mini-card-list">
                       {stop.coffee.map((cafe) => (
                         <div class="mini-card">
                           <p class="mini-card-name">
                             <a href={mapsLink(cafe.name, cafe.address)} target="_blank" rel="noopener noreferrer">
-                              {cafe.name} <span class="hotel-link-arrow">↗</span>
+                              {cafe.name}
+                              <span class="icon icon-xs" set:html={icon("open_in_new")} />
                             </a>
                           </p>
                           <p class="mini-card-address">{cafe.address}</p>
@@ -236,12 +267,15 @@ const route = {
                   </div>
 
                   <div class="stop-block">
-                    <p class="stop-block-label"><span aria-hidden="true">🛒</span> Whole Foods stop</p>
+                    <p class="stop-block-label">
+                      <span class="icon icon-sm" set:html={icon("storefront")} /> Whole Foods stop
+                    </p>
                     <div class="mini-card-list">
                       <div class="mini-card">
                         <p class="mini-card-name">
                           <a href={mapsLink(stop.wholeFoods.name, stop.wholeFoods.address)} target="_blank" rel="noopener noreferrer">
-                            {stop.wholeFoods.name} <span class="hotel-link-arrow">↗</span>
+                            {stop.wholeFoods.name}
+                            <span class="icon icon-xs" set:html={icon("open_in_new")} />
                           </a>
                         </p>
                         <p class="mini-card-address">{stop.wholeFoods.address}</p>
@@ -257,12 +291,15 @@ const route = {
       </ol>
 
       <div class="stop-block arrival-block">
-        <p class="stop-block-label"><span aria-hidden="true">🛒</span> After you arrive</p>
+        <p class="stop-block-label">
+          <span class="icon icon-sm" set:html={icon("storefront")} /> After you arrive
+        </p>
         <div class="mini-card-list">
           <div class="mini-card">
             <p class="mini-card-name">
               <a href={mapsLink(wholeFoodsAkron.name, wholeFoodsAkron.address)} target="_blank" rel="noopener noreferrer">
-                {wholeFoodsAkron.name} <span class="hotel-link-arrow">↗</span>
+                {wholeFoodsAkron.name}
+                <span class="icon icon-xs" set:html={icon("open_in_new")} />
               </a>
             </p>
             <p class="mini-card-address">{wholeFoodsAkron.address}</p>
@@ -274,15 +311,20 @@ const route = {
 
     <details class="cost-accordion reveal">
       <summary class="cost-accordion-summary">
-        <span>Driving vs. flying — cost comparison</span>
-        <span class="timeline-chevron" aria-hidden="true">⌄</span>
+        <span class="cost-accordion-title">
+          <span class="icon icon-sm" set:html={icon("payments")} />
+          Driving vs. flying — cost comparison
+        </span>
+        <span class="icon expand-icon" set:html={icon("expand_more")} />
       </summary>
 
       <div class="cost-accordion-body">
         <section class="scenarios">
-          <div class="scenario-card drive-card">
+          <div class="scenario-card">
             <div class="scenario-head">
-              <span class="scenario-icon">🚗</span>
+              <span class="scenario-icon icon-green">
+                <span class="icon" set:html={icon("directions_car")} />
+              </span>
               <div>
                 <h2>Road Trip</h2>
                 <p class="scenario-meta">21 days · 2,722 mi round trip · dog rides along</p>
@@ -317,12 +359,14 @@ const route = {
           </div>
 
           <div class="vs-divider">
-            <span>vs</span>
+            <span>VS</span>
           </div>
 
-          <div class="scenario-card fly-card">
+          <div class="scenario-card">
             <div class="scenario-head">
-              <span class="scenario-icon">✈️</span>
+              <span class="scenario-icon icon-blue">
+                <span class="icon" set:html={icon("flight")} />
+              </span>
               <div>
                 <h2>Fly + Board</h2>
                 <p class="scenario-meta">8 days · AUS ↔ CLE · dog stays home</p>
@@ -364,13 +408,16 @@ const route = {
         </section>
 
         <section class="bottom-line">
-          <h3>Bottom line</h3>
-          <p>
-            Driving comes out roughly <strong>$250–400 cheaper</strong> — but it's not apples to
-            apples. The road trip is a <strong>21-day</strong> trip; flying is <strong>8 days</strong>.
-            Shorten the road trip to match and driving looks even better on cost, but a bigger share
-            of a short trip goes to the car.
-          </p>
+          <span class="icon icon-md bottom-line-icon" set:html={icon("insights")} />
+          <div>
+            <h3>Bottom line</h3>
+            <p>
+              Driving comes out roughly <strong>$250–400 cheaper</strong> — but it's not apples to
+              apples. The road trip is a <strong>21-day</strong> trip; flying is <strong>8 days</strong>.
+              Shorten the road trip to match and driving looks even better on cost, but a bigger share
+              of a short trip goes to the car.
+            </p>
+          </div>
         </section>
       </div>
     </details>
@@ -419,16 +466,83 @@ const route = {
 </Layout>
 
 <style>
+  @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
+
   .page {
+    --md-primary: #1a73e8;
+    --md-primary-container: #e8f0fe;
+    --md-on-primary-container: #0842a0;
+    --md-green: #188038;
+    --md-green-container: #e6f4ea;
+    --md-on-green-container: #0d652d;
+    --md-indigo: #3949ab;
+    --md-indigo-container: #e8eaf6;
+    --md-on-indigo-container: #283593;
+    --md-surface: #ffffff;
+    --md-surface-container: #f8f9fa;
+    --md-surface-container-high: #f1f3f4;
+    --md-outline: #dadce0;
+    --md-outline-variant: #e8eaed;
+    --md-on-surface: #202124;
+    --md-on-surface-variant: #5f6368;
+
+    --md-elevation-1: 0px 1px 2px 0px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+    --md-elevation-2: 0px 1px 2px 0px rgba(60, 64, 67, 0.3), 0px 2px 6px 2px rgba(60, 64, 67, 0.15);
+    --md-elevation-3: 0px 1px 3px 0px rgba(60, 64, 67, 0.3), 0px 4px 8px 3px rgba(60, 64, 67, 0.15);
+
+    --shape-xs: 4px;
+    --shape-sm: 8px;
+    --shape-md: 12px;
+    --shape-lg: 16px;
+    --shape-xl: 28px;
+
+    font-family: "Roboto", "Inter", -apple-system, system-ui, sans-serif;
+    color: var(--md-on-surface);
+    background: var(--md-surface);
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 80px var(--page-padding) 160px;
   }
 
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+
+  .icon svg {
+    display: block;
+    width: 1em;
+    height: 1em;
+  }
+
+  .icon-xs {
+    font-size: 14px;
+  }
+
+  .icon-sm {
+    font-size: 18px;
+  }
+
+  .icon-md {
+    font-size: 28px;
+  }
+
+  .icon-hero {
+    font-size: 0.62em;
+    color: var(--md-primary);
+    margin-right: 0.18em;
+    vertical-align: baseline;
+    position: relative;
+    top: -0.02em;
+  }
+
   .reveal {
     opacity: 0;
     transform: translateY(16px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition: opacity 0.5s cubic-bezier(0.2, 0, 0, 1), transform 0.5s cubic-bezier(0.2, 0, 0, 1);
   }
 
   .reveal.in-view {
@@ -442,46 +556,51 @@ const route = {
   }
 
   h1 {
-    font-size: clamp(40px, 2rem + 3vw, 72px);
+    font-size: clamp(36px, 2rem + 2.4vw, 56px);
     font-weight: 400;
-    letter-spacing: -0.03em;
+    letter-spacing: 0;
     margin-bottom: 16px;
+    color: var(--md-on-surface);
   }
 
   .subhead {
-    font-size: 17px;
-    color: var(--color-text-muted);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--md-on-surface-variant);
     max-width: 480px;
     margin: 0 auto 24px;
   }
 
-  .date-pill {
+  .chip {
     display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-size: 13px;
     font-weight: 500;
-    padding: 8px 18px;
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    color: var(--color-text-muted);
+    padding: 7px 16px 7px 12px;
+    border: 1px solid var(--md-outline);
+    border-radius: var(--shape-sm);
+    color: var(--md-on-surface-variant);
+    background: var(--md-surface);
   }
 
   .itinerary {
-    margin-bottom: 72px;
+    margin-bottom: 56px;
   }
 
   .itinerary h3 {
-    font-size: 28px;
-    font-weight: 500;
-    letter-spacing: -0.02em;
+    font-size: 26px;
+    font-weight: 400;
+    letter-spacing: 0;
     text-align: center;
     margin-bottom: 8px;
+    color: var(--md-on-surface);
   }
 
   .route-tagline {
     text-align: center;
     font-size: 14px;
-    color: var(--color-text-muted);
-    font-style: italic;
+    color: var(--md-on-surface-variant);
     max-width: var(--content-width);
     margin: 0 auto 36px;
   }
@@ -490,7 +609,7 @@ const route = {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 20px;
     position: relative;
     max-width: var(--content-width);
     margin: 0 auto 32px;
@@ -498,24 +617,19 @@ const route = {
 
   .timeline-stop {
     display: grid;
-    grid-template-columns: 40px 1fr;
+    grid-template-columns: 36px 1fr;
     gap: 16px;
     position: relative;
-    padding-bottom: 32px;
-  }
-
-  .timeline-stop:last-child {
-    padding-bottom: 0;
   }
 
   .timeline-stop::before {
     content: "";
     position: absolute;
-    left: 15px;
-    top: 24px;
-    bottom: 0;
-    width: 1px;
-    background: var(--color-border);
+    left: 17px;
+    top: 36px;
+    bottom: -20px;
+    width: 2px;
+    background: var(--md-outline-variant);
   }
 
   .timeline-stop:last-child::before {
@@ -526,14 +640,16 @@ const route = {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    background: var(--color-text);
-    color: var(--color-bg);
+    background: var(--md-primary);
+    color: #ffffff;
     font-size: 11px;
     font-weight: 500;
     text-transform: uppercase;
+    letter-spacing: 0.02em;
+    z-index: 1;
   }
 
   .timeline-content {
@@ -541,9 +657,11 @@ const route = {
   }
 
   .timeline-details {
-    border: 1px solid transparent;
-    border-radius: 14px;
-    padding: 0;
+    border: 1px solid var(--md-outline-variant);
+    border-radius: var(--shape-lg);
+    background: var(--md-surface);
+    box-shadow: var(--md-elevation-1);
+    overflow: hidden;
   }
 
   .timeline-details summary {
@@ -553,10 +671,8 @@ const route = {
     justify-content: space-between;
     gap: 12px;
     cursor: pointer;
-    padding: 12px 14px;
-    margin: -12px -14px;
-    border-radius: 14px;
-    transition: background 0.2s ease;
+    padding: 18px 20px;
+    transition: background-color 0.15s ease;
   }
 
   .timeline-details summary::-webkit-details-marker {
@@ -564,18 +680,18 @@ const route = {
   }
 
   .timeline-details summary:hover {
-    background: var(--color-tag-bg);
+    background-color: rgba(26, 115, 232, 0.04);
   }
 
-  .timeline-chevron {
+  .expand-icon {
     flex-shrink: 0;
-    font-size: 16px;
-    color: var(--color-text-muted);
-    transition: transform 0.25s ease;
-    margin-top: 2px;
+    font-size: 22px;
+    color: var(--md-on-surface-variant);
+    transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1);
+    margin-top: 1px;
   }
 
-  .timeline-details[open] .timeline-chevron {
+  .timeline-details[open] .expand-icon {
     transform: rotate(180deg);
   }
 
@@ -583,116 +699,156 @@ const route = {
     font-size: 15px;
     font-weight: 500;
     margin-bottom: 3px;
+    color: var(--md-on-surface);
   }
 
   .timeline-date {
     font-weight: 400;
-    color: var(--color-text-muted);
+    color: var(--md-on-surface-variant);
   }
 
   .timeline-stats {
-    font-size: 12.5px;
-    color: var(--color-text-muted);
+    font-size: 13px;
+    color: var(--md-on-surface-variant);
     margin-bottom: 3px;
   }
 
   .timeline-note {
-    font-size: 12.5px;
-    color: var(--color-text-muted);
-    font-style: italic;
+    font-size: 13px;
+    color: var(--md-on-surface-variant);
   }
 
   .stop-details {
-    padding: 8px 0 4px;
+    padding: 0 20px 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 22px;
+    border-top: 1px solid var(--md-outline-variant);
+    padding-top: 18px;
+    margin-top: -2px;
   }
 
   .stop-block-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--color-text-muted);
+    letter-spacing: 0.06em;
+    color: var(--md-on-surface-variant);
     margin-bottom: 10px;
+  }
+
+  .stop-block-label .icon {
+    color: var(--md-primary);
   }
 
   .hotel-list,
   .mini-card-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
 
   .hotel-card,
   .mini-card {
-    background: var(--color-tag-bg);
-    border-radius: 12px;
+    background: var(--md-surface-container-high);
+    border-radius: var(--shape-md);
     padding: 14px 16px;
+    transition: box-shadow 0.15s ease;
+  }
+
+  .hotel-card:hover,
+  .mini-card:hover {
+    box-shadow: var(--md-elevation-1);
   }
 
   .hotel-name a,
   .mini-card-name a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     font-size: 13.5px;
     font-weight: 500;
-    text-decoration: underline;
-    text-decoration-color: var(--color-border);
-    text-underline-offset: 2px;
-    transition: text-decoration-color 0.2s ease;
+    color: var(--md-primary);
+    text-decoration: none;
   }
 
   .hotel-name a:hover,
   .mini-card-name a:hover {
-    text-decoration-color: var(--color-text);
+    text-decoration: underline;
   }
 
-  .hotel-link-arrow {
-    font-size: 11px;
+  .hotel-name .icon,
+  .mini-card-name .icon {
+    color: var(--md-primary);
   }
 
   .hotel-address,
   .mini-card-address {
     font-size: 12px;
-    color: var(--color-text-muted);
-    margin-top: 2px;
+    color: var(--md-on-surface-variant);
+    margin-top: 3px;
     margin-bottom: 4px;
   }
 
   .hotel-rating,
   .mini-card-rating {
-    font-size: 12px;
+    display: inline-block;
+    font-size: 11.5px;
     font-weight: 500;
-    margin-bottom: 4px;
+    color: var(--md-on-green-container);
+    background: var(--md-green-container);
+    padding: 2px 8px;
+    border-radius: var(--shape-xs);
+    margin-bottom: 6px;
   }
 
   .hotel-note,
   .mini-card-note {
-    font-size: 12px;
-    color: var(--color-text-muted);
+    font-size: 12.5px;
+    color: var(--md-on-surface-variant);
     line-height: 1.6;
   }
 
   .hotel-fitness {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
     font-size: 12px;
-    color: var(--color-text-muted);
-    line-height: 1.6;
-    margin-top: 6px;
-    padding-top: 6px;
-    border-top: 1px dashed var(--color-border);
+    color: var(--md-on-surface-variant);
+    line-height: 1.5;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--md-outline-variant);
+  }
+
+  .hotel-fitness .icon {
+    color: var(--md-green);
+    margin-top: 1px;
   }
 
   .arrival-block {
     max-width: var(--content-width);
     margin: 0 auto;
+    padding: 20px;
+    border: 1px dashed var(--md-outline);
+    border-radius: var(--shape-lg);
+  }
+
+  .arrival-block .stop-block-label {
+    margin-bottom: 12px;
   }
 
   .cost-accordion {
     max-width: var(--max-width);
     margin: 0 auto;
-    border: 1px solid var(--color-border);
-    border-radius: 20px;
-    padding: 8px;
+    border: 1px solid var(--md-outline-variant);
+    border-radius: var(--shape-lg);
+    background: var(--md-surface);
+    box-shadow: var(--md-elevation-1);
+    overflow: hidden;
   }
 
   .cost-accordion-summary {
@@ -701,17 +857,28 @@ const route = {
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
-    padding: 20px 24px;
+    padding: 22px 24px;
     font-size: 16px;
     font-weight: 500;
+    transition: background-color 0.15s ease;
+  }
+
+  .cost-accordion-summary:hover {
+    background-color: rgba(26, 115, 232, 0.04);
+  }
+
+  .cost-accordion-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cost-accordion-title .icon {
+    color: var(--md-primary);
   }
 
   .cost-accordion-summary::-webkit-details-marker {
     display: none;
-  }
-
-  .cost-accordion[open] .timeline-chevron {
-    transform: rotate(180deg);
   }
 
   .cost-accordion-body {
@@ -721,32 +888,25 @@ const route = {
   .scenarios {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    gap: 32px;
+    gap: 24px;
     align-items: start;
-    margin-bottom: 56px;
+    margin-bottom: 40px;
   }
 
   .scenario-card {
-    border: 1px solid var(--color-border);
-    border-radius: 20px;
-    padding: 32px;
+    border: 1px solid var(--md-outline-variant);
+    border-radius: var(--shape-lg);
+    padding: 28px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    gap: 22px;
+    background: var(--md-surface);
+    box-shadow: var(--md-elevation-1);
+    transition: box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1);
   }
 
   .scenario-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 16px 32px -20px rgba(0, 0, 0, 0.25);
-  }
-
-  .drive-card {
-    background: #f6f9f7;
-  }
-
-  .fly-card {
-    background: #f6f7fb;
+    box-shadow: var(--md-elevation-2);
   }
 
   .scenario-head {
@@ -756,19 +916,35 @@ const route = {
   }
 
   .scenario-icon {
-    font-size: 32px;
-    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--shape-md);
+    flex-shrink: 0;
+  }
+
+  .scenario-icon.icon-green {
+    background: var(--md-green-container);
+    color: var(--md-on-green-container);
+  }
+
+  .scenario-icon.icon-blue {
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
   }
 
   .scenario-head h2 {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 500;
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
+    color: var(--md-on-surface);
   }
 
   .scenario-meta {
-    font-size: 13px;
-    color: var(--color-text-muted);
+    font-size: 12.5px;
+    color: var(--md-on-surface-variant);
     margin-top: 2px;
   }
 
@@ -779,15 +955,16 @@ const route = {
   }
 
   .cost-figure {
-    font-size: clamp(28px, 1.4rem + 1.6vw, 40px);
-    font-weight: 500;
-    letter-spacing: -0.02em;
+    font-size: clamp(26px, 1.3rem + 1.4vw, 36px);
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--md-on-surface);
   }
 
   .range-bar {
     position: relative;
-    height: 8px;
-    background: var(--color-border);
+    height: 4px;
+    background: var(--md-outline-variant);
     border-radius: 999px;
     overflow: hidden;
   }
@@ -797,30 +974,44 @@ const route = {
     top: 0;
     bottom: 0;
     border-radius: 999px;
-    transition: left 1s cubic-bezier(0.22, 1, 0.36, 1), width 1s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: left 1s cubic-bezier(0.2, 0, 0, 1), width 1s cubic-bezier(0.2, 0, 0, 1);
   }
 
   .drive-fill {
-    background: #2f6b4f;
+    background: var(--md-green);
   }
 
   .fly-fill {
-    background: #3f4d8c;
+    background: var(--md-primary);
   }
 
   .cost-items {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+  }
+
+  .cost-items li {
+    padding: 12px 0;
+    border-top: 1px solid var(--md-outline-variant);
+  }
+
+  .cost-items li:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .cost-items li:last-child {
+    padding-bottom: 0;
   }
 
   .cost-item-row {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    font-size: 15px;
+    font-size: 14.5px;
     font-weight: 500;
+    color: var(--md-on-surface);
   }
 
   .cost-item-value {
@@ -829,14 +1020,15 @@ const route = {
 
   .cost-item-detail {
     font-size: 12.5px;
-    color: var(--color-text-muted);
+    color: var(--md-on-surface-variant);
     margin-top: 3px;
   }
 
   .flight-note {
     font-size: 12.5px;
-    color: var(--color-text-muted);
-    border-top: 1px solid var(--color-border);
+    color: var(--md-on-surface-variant);
+    line-height: 1.6;
+    border-top: 1px solid var(--md-outline-variant);
     padding-top: 16px;
   }
 
@@ -844,45 +1036,54 @@ const route = {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 100px;
+    padding-top: 90px;
   }
 
   .vs-divider span {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 500;
-    color: var(--color-text-muted);
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    width: 40px;
-    height: 40px;
+    letter-spacing: 0.04em;
+    color: var(--md-on-surface-variant);
+    border: 1px solid var(--md-outline);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s ease;
-  }
-
-  .vs-divider span:hover {
-    transform: scale(1.12) rotate(-6deg);
+    background: var(--md-surface);
   }
 
   .bottom-line {
     max-width: var(--content-width);
     margin: 0 auto;
-    text-align: center;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    text-align: left;
+    background: var(--md-primary-container);
+    border-radius: var(--shape-lg);
+    padding: 24px;
+  }
+
+  .bottom-line-icon {
+    color: var(--md-on-primary-container);
+    flex-shrink: 0;
   }
 
   .bottom-line h3 {
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: var(--color-text-muted);
-    margin-bottom: 16px;
+    color: var(--md-on-primary-container);
+    margin-bottom: 8px;
   }
 
   .bottom-line p {
-    font-size: 18px;
-    line-height: 1.7;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--md-on-primary-container);
   }
 
   @media (max-width: 860px) {
