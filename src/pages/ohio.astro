@@ -1,0 +1,777 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const maxCost = 1355;
+
+const drive = {
+  low: 850,
+  high: 1050,
+  items: [
+    { label: "Gas", detail: "34 mpg · 2,722 mi round trip · ~$3.60–3.70/gal", low: 290, high: 300 },
+    { label: "Hotels", detail: "4 nights · 2 each way · pet-friendly + pet fees", low: 550, high: 750 },
+  ],
+};
+
+const fly = {
+  low: 1105,
+  high: 1355,
+  items: [
+    { label: "Flights", detail: "2 people RT · AUS–CLE · United/Delta/Southwest/American only", low: 650, high: 900 },
+    { label: "Dog boarding", detail: "7 nights · $65/night", low: 455, high: 455 },
+  ],
+};
+
+const itinerary = [
+  {
+    day: "Fri",
+    date: "Aug 14",
+    route: "Austin → Memphis, TN",
+    miles: "~652 mi",
+    time: "~9.5–10 hrs",
+    note: "The longest day of the trip — overnight Memphis",
+    hotels: [
+      {
+        name: "La Quinta Inn & Suites by Wyndham West Memphis",
+        address: "1550 N 6th St, West Memphis, AR",
+        rating: "4.2★ (1,146 reviews)",
+        note: "Right off I-55 — reviewers note a designated dog area and quiet interstate access.",
+      },
+      {
+        name: "La Quinta Inn & Suites by Wyndham Memphis Wolfchase",
+        address: "2839 New Brunswick Rd, Memphis, TN",
+        rating: "4.3★ (894 reviews)",
+        note: "Wolfchase/Cordova suburb — reviewers repeatedly call the parking and neighborhood safe.",
+      },
+    ],
+  },
+  {
+    day: "Sat",
+    date: "Aug 15",
+    route: "Memphis → Nashville, TN",
+    miles: "~210 mi",
+    time: "~3.5 hrs",
+    note: "The short breather day in the middle",
+    hotels: [
+      {
+        name: "La Quinta Inn & Suites by Wyndham Nashville",
+        address: "315 Interstate Dr, Nashville, TN",
+        rating: "4.3★ (1,337 reviews)",
+        note: "Just across the river from downtown via the pedestrian bridge — the usual spot.",
+      },
+    ],
+  },
+  {
+    day: "Sun",
+    date: "Aug 16",
+    route: "Nashville → Akron, OH",
+    miles: "~497 mi",
+    time: "~8 hrs",
+    note: "Via Lexington, Cincinnati & Columbus — straight through, no overnight",
+    hotels: [],
+  },
+];
+
+const pros = [
+  "Sunday (497 mi / 8 hrs) is no longer the single longest day — Friday edges it out, so the drive doesn't peak right before arrival.",
+  "Nashville as night 2 is a known quantity: a well-reviewed default spot just across the river from downtown.",
+  "Two solid, dog-friendly, well-reviewed hotel picks are locked in for night 1, both around or under $140/night.",
+];
+
+const cons = [
+  "Friday is the longest day of the whole trip — 9.5–10 hrs with the dog, right out of the gate.",
+  "Sunday is still a full 8-hour day to close things out, no matter how far Friday gets pushed.",
+  "The Nashville → Akron leg is fixed at ~497 mi — shrinking it further means dropping Nashville as the night 2 stop.",
+];
+---
+
+<Layout title="Ohio Trip" description="Private trip planning page.">
+  <main class="page">
+    <section class="hero reveal">
+      <h1>Ohio Trip 🐾</h1>
+      <p class="subhead">Driving vs. flying to Akron, comparing cost, time, and the dog situation.</p>
+      <div class="date-pill">Departing Fri, Aug 14</div>
+    </section>
+
+    <section class="scenarios reveal">
+      <div class="scenario-card drive-card">
+        <div class="scenario-head">
+          <span class="scenario-icon">🚗</span>
+          <div>
+            <h2>Road Trip</h2>
+            <p class="scenario-meta">21 days · 2,722 mi round trip · dog rides along</p>
+          </div>
+        </div>
+
+        <div class="cost-range">
+          <span class="cost-figure">${drive.low.toLocaleString()}–${drive.high.toLocaleString()}</span>
+          <div class="range-bar">
+            <div
+              class="range-fill drive-fill"
+              data-left={(drive.low / maxCost) * 100}
+              data-width={((drive.high - drive.low) / maxCost) * 100}
+              style="width:0; left:0;"
+            ></div>
+          </div>
+        </div>
+
+        <ul class="cost-items">
+          {drive.items.map((item) => (
+            <li>
+              <div class="cost-item-row">
+                <span class="cost-item-label">{item.label}</span>
+                <span class="cost-item-value">
+                  {item.low === item.high ? `$${item.low}` : `$${item.low}–${item.high}`}
+                </span>
+              </div>
+              <p class="cost-item-detail">{item.detail}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="vs-divider">
+        <span>vs</span>
+      </div>
+
+      <div class="scenario-card fly-card">
+        <div class="scenario-head">
+          <span class="scenario-icon">✈️</span>
+          <div>
+            <h2>Fly + Board</h2>
+            <p class="scenario-meta">8 days · AUS ↔ CLE · dog stays home</p>
+          </div>
+        </div>
+
+        <div class="cost-range">
+          <span class="cost-figure">${fly.low.toLocaleString()}–${fly.high.toLocaleString()}</span>
+          <div class="range-bar">
+            <div
+              class="range-fill fly-fill"
+              data-left={(fly.low / maxCost) * 100}
+              data-width={((fly.high - fly.low) / maxCost) * 100}
+              style="width:0; left:0;"
+            ></div>
+          </div>
+        </div>
+
+        <ul class="cost-items">
+          {fly.items.map((item) => (
+            <li>
+              <div class="cost-item-row">
+                <span class="cost-item-label">{item.label}</span>
+                <span class="cost-item-value">
+                  {item.low === item.high ? `$${item.low}` : `$${item.low}–${item.high}`}
+                </span>
+              </div>
+              <p class="cost-item-detail">{item.detail}</p>
+            </li>
+          ))}
+        </ul>
+
+        <p class="flight-note">
+          Preferred carriers were showing $280–380/person round trip for nearby dates when
+          checked, padded up for mid-August peak pricing. Worth pulling actual AUS–CLE fares
+          for the exact dates.
+        </p>
+      </div>
+    </section>
+
+    <section class="bottom-line reveal">
+      <h3>Bottom line</h3>
+      <p>
+        Driving comes out roughly <strong>$250–400 cheaper</strong> — but it's not apples to
+        apples. The road trip is a <strong>21-day</strong> trip; flying is <strong>8 days</strong>.
+        Shorten the road trip to match and driving looks even better on cost, but a bigger share
+        of a short trip goes to the car.
+      </p>
+    </section>
+
+    <section class="itinerary reveal">
+      <h3>The route</h3>
+      <p class="itinerary-sub">
+        Three days, two overnights. Tap a day to see the hotel picks. Roughly 10 hrs / 3.5 hrs / 8
+        hrs across Friday, Saturday, and Sunday.
+      </p>
+
+      <ol class="timeline">
+        {itinerary.map((stop) => (
+          <li class="timeline-stop">
+            <span class="timeline-day">{stop.day}</span>
+            <div class="timeline-content">
+              {stop.hotels.length > 0 ? (
+                <details class="timeline-details">
+                  <summary>
+                    <div class="timeline-summary-text">
+                      <p class="timeline-route">{stop.route} <span class="timeline-date">· {stop.date}</span></p>
+                      <p class="timeline-stats">{stop.miles} · {stop.time}</p>
+                      <p class="timeline-note">{stop.note}</p>
+                    </div>
+                    <span class="timeline-chevron" aria-hidden="true">⌄</span>
+                  </summary>
+                  <div class="hotel-list">
+                    {stop.hotels.map((hotel) => (
+                      <div class="hotel-card">
+                        <p class="hotel-name">{hotel.name}</p>
+                        <p class="hotel-address">{hotel.address}</p>
+                        <p class="hotel-rating">{hotel.rating}</p>
+                        <p class="hotel-note">{hotel.note}</p>
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              ) : (
+                <div class="timeline-static">
+                  <p class="timeline-route">{stop.route} <span class="timeline-date">· {stop.date}</span></p>
+                  <p class="timeline-stats">{stop.miles} · {stop.time}</p>
+                  <p class="timeline-note">{stop.note}</p>
+                </div>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <div class="pros-cons">
+        <div class="pros-card">
+          <h4><span aria-hidden="true">✅</span> What works</h4>
+          <ul>
+            {pros.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="cons-card">
+          <h4><span aria-hidden="true">⚠️</span> Worth knowing</h4>
+          <ul>
+            {cons.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <p class="itinerary-note">
+        Want it shorter still? Dropping Nashville as the overnight in favor of something closer
+        to Cincinnati would shrink Sunday further — worth planning as a backup if the 8-hour
+        final day is a dealbreaker.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    const revealTargets = document.querySelectorAll(".reveal");
+    const fills = document.querySelectorAll(".range-fill");
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+      revealTargets.forEach((el) => el.classList.add("in-view"));
+      fills.forEach((el) => {
+        const fill = el as HTMLElement;
+        fill.style.left = `${fill.dataset.left}%`;
+        fill.style.width = `${fill.dataset.width}%`;
+      });
+    } else {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("in-view");
+            if (entry.target.classList.contains("scenarios")) {
+              fills.forEach((el) => {
+                const fill = el as HTMLElement;
+                fill.style.left = `${fill.dataset.left}%`;
+                fill.style.width = `${fill.dataset.width}%`;
+              });
+            }
+            observer.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.2 }
+      );
+      revealTargets.forEach((el) => observer.observe(el));
+    }
+  </script>
+</Layout>
+
+<style>
+  .page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 80px var(--page-padding) 160px;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .hero {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  h1 {
+    font-size: clamp(40px, 2rem + 3vw, 72px);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+  }
+
+  .subhead {
+    font-size: 17px;
+    color: var(--color-text-muted);
+    max-width: 480px;
+    margin: 0 auto 24px;
+  }
+
+  .date-pill {
+    display: inline-flex;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-text-muted);
+  }
+
+  .scenarios {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 32px;
+    align-items: start;
+    margin-bottom: 56px;
+  }
+
+  .scenario-card {
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .scenario-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px -20px rgba(0, 0, 0, 0.25);
+  }
+
+  .drive-card {
+    background: #f6f9f7;
+  }
+
+  .fly-card {
+    background: #f6f7fb;
+  }
+
+  .scenario-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .scenario-icon {
+    font-size: 32px;
+    line-height: 1;
+  }
+
+  .scenario-head h2 {
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .scenario-meta {
+    font-size: 13px;
+    color: var(--color-text-muted);
+    margin-top: 2px;
+  }
+
+  .cost-range {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cost-figure {
+    font-size: clamp(28px, 1.4rem + 1.6vw, 40px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .range-bar {
+    position: relative;
+    height: 8px;
+    background: var(--color-border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .range-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-radius: 999px;
+    transition: left 1s cubic-bezier(0.22, 1, 0.36, 1), width 1s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .drive-fill {
+    background: #2f6b4f;
+  }
+
+  .fly-fill {
+    background: #3f4d8c;
+  }
+
+  .cost-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .cost-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .cost-item-value {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cost-item-detail {
+    font-size: 12.5px;
+    color: var(--color-text-muted);
+    margin-top: 3px;
+  }
+
+  .flight-note {
+    font-size: 12.5px;
+    color: var(--color-text-muted);
+    border-top: 1px solid var(--color-border);
+    padding-top: 16px;
+  }
+
+  .vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 100px;
+  }
+
+  .vs-divider span {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+  }
+
+  .vs-divider span:hover {
+    transform: scale(1.12) rotate(-6deg);
+  }
+
+  .bottom-line {
+    max-width: var(--content-width);
+    margin: 0 auto 80px;
+    text-align: center;
+  }
+
+  .bottom-line h3 {
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    margin-bottom: 16px;
+  }
+
+  .bottom-line p {
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  .itinerary h3 {
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .itinerary-sub {
+    text-align: center;
+    font-size: 14px;
+    color: var(--color-text-muted);
+    margin-bottom: 40px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .timeline {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    max-width: var(--content-width);
+    margin: 0 auto 40px;
+  }
+
+  .timeline-stop {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 16px;
+    position: relative;
+    padding-bottom: 20px;
+  }
+
+  .timeline-stop:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-stop::before {
+    content: "";
+    position: absolute;
+    left: 15px;
+    top: 24px;
+    bottom: 0;
+    width: 1px;
+    background: var(--color-border);
+  }
+
+  .timeline-stop:last-child::before {
+    display: none;
+  }
+
+  .timeline-day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-text);
+    color: var(--color-bg);
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .timeline-content {
+    min-width: 0;
+  }
+
+  .timeline-static,
+  .timeline-details {
+    border: 1px solid transparent;
+    border-radius: 14px;
+    padding: 12px 0;
+  }
+
+  .timeline-details {
+    padding: 0;
+  }
+
+  .timeline-details summary {
+    list-style: none;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+    padding: 12px 14px;
+    margin: -12px -14px;
+    border-radius: 14px;
+    transition: background 0.2s ease;
+  }
+
+  .timeline-details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .timeline-details summary:hover {
+    background: var(--color-tag-bg);
+  }
+
+  .timeline-chevron {
+    flex-shrink: 0;
+    font-size: 16px;
+    color: var(--color-text-muted);
+    transition: transform 0.25s ease;
+    margin-top: 2px;
+  }
+
+  .timeline-details[open] .timeline-chevron {
+    transform: rotate(180deg);
+  }
+
+  .timeline-route {
+    font-size: 14.5px;
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+
+  .timeline-date {
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+
+  .timeline-stats {
+    font-size: 12.5px;
+    color: var(--color-text-muted);
+    margin-bottom: 3px;
+  }
+
+  .timeline-note {
+    font-size: 12.5px;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .hotel-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 4px 14px 8px;
+  }
+
+  .hotel-card {
+    background: var(--color-tag-bg);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+
+  .hotel-name {
+    font-size: 13.5px;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+
+  .hotel-address {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin-bottom: 4px;
+  }
+
+  .hotel-rating {
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .hotel-note {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: var(--max-width);
+    margin: 0 auto 32px;
+  }
+
+  .pros-card,
+  .cons-card {
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+    padding: 24px 28px;
+  }
+
+  .pros-card {
+    background: #f6f9f7;
+  }
+
+  .cons-card {
+    background: #fbf7f2;
+  }
+
+  .pros-card h4,
+  .cons-card h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+
+  .pros-card ul,
+  .cons-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pros-card li,
+  .cons-card li {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    padding-left: 18px;
+    position: relative;
+  }
+
+  .pros-card li::before,
+  .cons-card li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .pros-card li::before {
+    background: #2f6b4f;
+  }
+
+  .cons-card li::before {
+    background: #b5793a;
+  }
+
+  .itinerary-note {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    text-align: center;
+    font-size: 13.5px;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 860px) {
+    .scenarios {
+      grid-template-columns: 1fr;
+    }
+
+    .vs-divider {
+      padding-top: 0;
+    }
+
+    .pros-cons {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

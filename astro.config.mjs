@@ -8,7 +8,7 @@ export default defineConfig({
   site: 'https://ryansheridan.studio',
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/ohio-trip'),
+      filter: (page) => !page.includes('/ohio'),
     }),
   ]
 });
