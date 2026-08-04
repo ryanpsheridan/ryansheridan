@@ -21,66 +21,145 @@ const fly = {
   ],
 };
 
-const itinerary = [
+const mapsLink = (name: string, address: string) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name}, ${address}`)}`;
+
+const routes = [
   {
-    day: "Fri",
-    date: "Aug 14",
-    route: "Austin → Memphis, TN",
-    miles: "~652 mi",
-    time: "~9.5–10 hrs",
-    note: "The longest day of the trip — overnight Memphis",
-    hotels: [
+    id: "rec",
+    tab: "Recommended",
+    tagline: "Nashville locked as night 2 — long Friday, short Saturday, long Sunday.",
+    stops: [
       {
-        name: "La Quinta Inn & Suites by Wyndham West Memphis",
-        address: "1550 N 6th St, West Memphis, AR",
-        rating: "4.2★ (1,146 reviews)",
-        note: "Right off I-55 — reviewers note a designated dog area and quiet interstate access.",
+        day: "Fri",
+        date: "Aug 14",
+        route: "Austin → Memphis, TN",
+        miles: "~652 mi",
+        time: "~9.5–10 hrs",
+        note: "The longest day of the trip — overnight Memphis",
+        hotels: [
+          {
+            name: "La Quinta Inn & Suites by Wyndham West Memphis",
+            address: "1550 N 6th St, West Memphis, AR",
+            rating: "4.2★ (1,146 reviews)",
+            note: "Right off I-55 — reviewers note a designated dog area and quiet interstate access.",
+          },
+          {
+            name: "La Quinta Inn & Suites by Wyndham Memphis Wolfchase",
+            address: "2839 New Brunswick Rd, Memphis, TN",
+            rating: "4.3★ (894 reviews)",
+            note: "Wolfchase/Cordova suburb — reviewers repeatedly call the parking and neighborhood safe.",
+          },
+        ],
       },
       {
-        name: "La Quinta Inn & Suites by Wyndham Memphis Wolfchase",
-        address: "2839 New Brunswick Rd, Memphis, TN",
-        rating: "4.3★ (894 reviews)",
-        note: "Wolfchase/Cordova suburb — reviewers repeatedly call the parking and neighborhood safe.",
+        day: "Sat",
+        date: "Aug 15",
+        route: "Memphis → Nashville, TN",
+        miles: "~210 mi",
+        time: "~3.5 hrs",
+        note: "The short breather day in the middle",
+        hotels: [
+          {
+            name: "La Quinta Inn & Suites by Wyndham Nashville",
+            address: "315 Interstate Dr, Nashville, TN",
+            rating: "4.3★ (1,337 reviews)",
+            note: "Just across the river from downtown via the pedestrian bridge — the usual spot.",
+          },
+        ],
+      },
+      {
+        day: "Sun",
+        date: "Aug 16",
+        route: "Nashville → Akron, OH",
+        miles: "~497 mi",
+        time: "~8 hrs",
+        note: "Via Lexington, Cincinnati & Columbus — straight through, no overnight",
+        hotels: [],
       },
     ],
+    pros: [
+      "Sunday (497 mi / 8 hrs) is no longer the single longest day — Friday edges it out, so the drive doesn't peak right before arrival.",
+      "Nashville as night 2 is a known quantity: a well-reviewed default spot just across the river from downtown.",
+      "Two solid, dog-friendly, well-reviewed hotel picks are locked in for night 1, both around or under $140/night.",
+    ],
+    cons: [
+      "Friday is the longest day of the whole trip — 9.5–10 hrs with the dog, right out of the gate.",
+      "Sunday is still a full 8-hour day to close things out, no matter how far Friday gets pushed.",
+      "The Nashville → Akron leg is fixed at ~497 mi — shrinking it further means dropping Nashville as the night 2 stop.",
+    ],
+    note: "Want it shorter still? Dropping Nashville as the overnight in favor of something closer to Cincinnati would shrink Sunday further — worth planning as a backup if the 8-hour final day is a dealbreaker.",
   },
   {
-    day: "Sat",
-    date: "Aug 15",
-    route: "Memphis → Nashville, TN",
-    miles: "~210 mi",
-    time: "~3.5 hrs",
-    note: "The short breather day in the middle",
-    hotels: [
+    id: "a",
+    tab: "Via Memphis",
+    tagline: "Long first day into Memphis, but Sunday eases off to just 4 hours.",
+    stops: [
       {
-        name: "La Quinta Inn & Suites by Wyndham Nashville",
-        address: "315 Interstate Dr, Nashville, TN",
-        rating: "4.3★ (1,337 reviews)",
-        note: "Just across the river from downtown via the pedestrian bridge — the usual spot.",
+        day: "Fri",
+        date: "Aug 14",
+        route: "Austin → Memphis, TN",
+        miles: "~645 mi",
+        time: "~9.5–10 hrs",
+        note: "Overnight Memphis",
+        hotels: [],
+      },
+      {
+        day: "Sat",
+        date: "Aug 15",
+        route: "Memphis → Nashville → Lexington → Cincinnati, OH",
+        miles: "~480 mi",
+        time: "~7.5 hrs",
+        note: "Overnight Cincinnati",
+        hotels: [],
+      },
+      {
+        day: "Sun",
+        date: "Aug 16",
+        route: "Cincinnati → Columbus → Akron",
+        miles: "~250 mi",
+        time: "~4 hrs",
+        note: "Arrive early to mid-afternoon",
+        hotels: [],
       },
     ],
+    note: "The familiar route — Friday is long, but Saturday and Sunday taper off, landing in Akron with the afternoon still open.",
   },
   {
-    day: "Sun",
-    date: "Aug 16",
-    route: "Nashville → Akron, OH",
-    miles: "~497 mi",
-    time: "~8 hrs",
-    note: "Via Lexington, Cincinnati & Columbus — straight through, no overnight",
-    hotels: [],
+    id: "b",
+    tab: "Via Louisville",
+    tagline: "Skips Memphis — the long day shifts to Saturday with a stop in Louisville.",
+    stops: [
+      {
+        day: "Fri",
+        date: "Aug 14",
+        route: "Austin → Little Rock, AR",
+        miles: "~500 mi",
+        time: "~7.5 hrs",
+        note: "Overnight Little Rock",
+        hotels: [],
+      },
+      {
+        day: "Sat",
+        date: "Aug 15",
+        route: "Little Rock → Nashville → Louisville (stop) → Cincinnati",
+        miles: "~615 mi total",
+        time: "~9.5 hrs with the stop",
+        note: "Louisville Slugger Museum or a bourbon tasting — overnight Cincinnati",
+        hotels: [],
+      },
+      {
+        day: "Sun",
+        date: "Aug 16",
+        route: "Cincinnati → Columbus → Akron",
+        miles: "~250 mi",
+        time: "~4 hrs",
+        note: "Same short final day",
+        hotels: [],
+      },
+    ],
+    note: "Trades Memphis for a Louisville stop to break up the long day — Saturday runs long instead of Friday, then the same easy Sunday into Akron.",
   },
-];
-
-const pros = [
-  "Sunday (497 mi / 8 hrs) is no longer the single longest day — Friday edges it out, so the drive doesn't peak right before arrival.",
-  "Nashville as night 2 is a known quantity: a well-reviewed default spot just across the river from downtown.",
-  "Two solid, dog-friendly, well-reviewed hotel picks are locked in for night 1, both around or under $140/night.",
-];
-
-const cons = [
-  "Friday is the longest day of the whole trip — 9.5–10 hrs with the dog, right out of the gate.",
-  "Sunday is still a full 8-hour day to close things out, no matter how far Friday gets pushed.",
-  "The Nashville → Akron leg is fixed at ~497 mi — shrinking it further means dropping Nashville as the night 2 stop.",
 ];
 ---
 
@@ -189,72 +268,94 @@ const cons = [
     <section class="itinerary reveal">
       <h3>The route</h3>
       <p class="itinerary-sub">
-        Three days, two overnights. Tap a day to see the hotel picks. Roughly 10 hrs / 3.5 hrs / 8
-        hrs across Friday, Saturday, and Sunday.
+        Three ways to split the drive. Pick a tab to compare, then tap a day for hotel picks.
       </p>
 
-      <ol class="timeline">
-        {itinerary.map((stop) => (
-          <li class="timeline-stop">
-            <span class="timeline-day">{stop.day}</span>
-            <div class="timeline-content">
-              {stop.hotels.length > 0 ? (
-                <details class="timeline-details">
-                  <summary>
-                    <div class="timeline-summary-text">
-                      <p class="timeline-route">{stop.route} <span class="timeline-date">· {stop.date}</span></p>
-                      <p class="timeline-stats">{stop.miles} · {stop.time}</p>
-                      <p class="timeline-note">{stop.note}</p>
-                    </div>
-                    <span class="timeline-chevron" aria-hidden="true">⌄</span>
-                  </summary>
-                  <div class="hotel-list">
-                    {stop.hotels.map((hotel) => (
-                      <div class="hotel-card">
-                        <p class="hotel-name">{hotel.name}</p>
-                        <p class="hotel-address">{hotel.address}</p>
-                        <p class="hotel-rating">{hotel.rating}</p>
-                        <p class="hotel-note">{hotel.note}</p>
-                      </div>
-                    ))}
-                  </div>
-                </details>
-              ) : (
-                <div class="timeline-static">
-                  <p class="timeline-route">{stop.route} <span class="timeline-date">· {stop.date}</span></p>
-                  <p class="timeline-stats">{stop.miles} · {stop.time}</p>
-                  <p class="timeline-note">{stop.note}</p>
-                </div>
-              )}
-            </div>
-          </li>
+      <div class="route-tabs">
+        {routes.map((r, i) => (
+          <>
+            <input
+              type="radio"
+              name="route"
+              id={`tab-${r.id}`}
+              class="route-radio"
+              checked={i === 0}
+            />
+            <label for={`tab-${r.id}`} class="route-tab-btn">{r.tab}</label>
+          </>
         ))}
-      </ol>
 
-      <div class="pros-cons">
-        <div class="pros-card">
-          <h4><span aria-hidden="true">✅</span> What works</h4>
-          <ul>
-            {pros.map((item) => (
-              <li>{item}</li>
-            ))}
-          </ul>
-        </div>
-        <div class="cons-card">
-          <h4><span aria-hidden="true">⚠️</span> Worth knowing</h4>
-          <ul>
-            {cons.map((item) => (
-              <li>{item}</li>
-            ))}
-          </ul>
-        </div>
+        {routes.map((r) => (
+          <div class="route-panel" data-panel={r.id}>
+            <p class="route-tagline">{r.tagline}</p>
+
+            <ol class="timeline">
+              {r.stops.map((stop) => (
+                <li class="timeline-stop">
+                  <span class="timeline-day">{stop.day}</span>
+                  <div class="timeline-content">
+                    {stop.hotels.length > 0 ? (
+                      <details class="timeline-details">
+                        <summary>
+                          <div class="timeline-summary-text">
+                            <p class="timeline-route">{stop.route} <span class="timeline-date">· {stop.date}</span></p>
+                            <p class="timeline-stats">{stop.miles} · {stop.time}</p>
+                            <p class="timeline-note">{stop.note}</p>
+                          </div>
+                          <span class="timeline-chevron" aria-hidden="true">⌄</span>
+                        </summary>
+                        <div class="hotel-list">
+                          {stop.hotels.map((hotel) => (
+                            <div class="hotel-card">
+                              <p class="hotel-name">
+                                <a href={mapsLink(hotel.name, hotel.address)} target="_blank" rel="noopener noreferrer">
+                                  {hotel.name} <span class="hotel-link-arrow">↗</span>
+                                </a>
+                              </p>
+                              <p class="hotel-address">{hotel.address}</p>
+                              <p class="hotel-rating">{hotel.rating}</p>
+                              <p class="hotel-note">{hotel.note}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </details>
+                    ) : (
+                      <div class="timeline-static">
+                        <p class="timeline-route">{stop.route} <span class="timeline-date">· {stop.date}</span></p>
+                        <p class="timeline-stats">{stop.miles} · {stop.time}</p>
+                        <p class="timeline-note">{stop.note}</p>
+                      </div>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
+
+            {r.pros && r.cons && (
+              <div class="pros-cons">
+                <div class="pros-card">
+                  <h4><span aria-hidden="true">✅</span> What works</h4>
+                  <ul>
+                    {r.pros.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div class="cons-card">
+                  <h4><span aria-hidden="true">⚠️</span> Worth knowing</h4>
+                  <ul>
+                    {r.cons.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            {r.note && <p class="itinerary-note">{r.note}</p>}
+          </div>
+        ))}
       </div>
-
-      <p class="itinerary-note">
-        Want it shorter still? Dropping Nashville as the overnight in favor of something closer
-        to Cincinnati would shrink Sunday further — worth planning as a backup if the 8-hour
-        final day is a dealbreaker.
-      </p>
     </section>
   </main>
 
@@ -519,10 +620,88 @@ const cons = [
     text-align: center;
     font-size: 14px;
     color: var(--color-text-muted);
-    margin-bottom: 40px;
+    margin-bottom: 32px;
     max-width: 480px;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .route-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .route-radio {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+  }
+
+  .route-tab-btn {
+    order: 1;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-text-muted);
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .route-tab-btn:hover {
+    color: var(--color-text);
+  }
+
+  .route-radio:checked + .route-tab-btn {
+    background: var(--color-text);
+    color: var(--color-bg);
+    border-color: var(--color-text);
+  }
+
+  .route-radio:focus-visible + .route-tab-btn {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
+  }
+
+  .route-panel {
+    order: 2;
+    display: none;
+    flex: 1 1 100%;
+    width: 100%;
+    margin-top: 40px;
+    animation: fade-in 0.35s ease;
+  }
+
+  #tab-rec:checked ~ .route-panel[data-panel="rec"],
+  #tab-a:checked ~ .route-panel[data-panel="a"],
+  #tab-b:checked ~ .route-panel[data-panel="b"] {
+    display: block;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .route-tagline {
+    text-align: center;
+    font-size: 13.5px;
+    color: var(--color-text-muted);
+    font-style: italic;
+    max-width: var(--content-width);
+    margin: 0 auto 28px;
   }
 
   .timeline {
@@ -659,15 +838,27 @@ const cons = [
     padding: 14px 16px;
   }
 
-  .hotel-name {
+  .hotel-name a {
     font-size: 13.5px;
     font-weight: 500;
-    margin-bottom: 2px;
+    text-decoration: underline;
+    text-decoration-color: var(--color-border);
+    text-underline-offset: 2px;
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .hotel-name a:hover {
+    text-decoration-color: var(--color-text);
+  }
+
+  .hotel-link-arrow {
+    font-size: 11px;
   }
 
   .hotel-address {
     font-size: 12px;
     color: var(--color-text-muted);
+    margin-top: 2px;
     margin-bottom: 4px;
   }
 
@@ -772,6 +963,13 @@ const cons = [
 
     .pros-cons {
       grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .route-tab-btn {
+      padding: 9px 16px;
+      font-size: 12.5px;
     }
   }
 </style>
