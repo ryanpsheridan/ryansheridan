@@ -44,6 +44,7 @@ const iconPaths: Record<string, string> = {
   open_in_new: "M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z",
   insights: "M120-160q-33 0-56.5-23.5T40-240q0-33 23.5-56.5T120-320h10.5q4.5 0 9.5 2l182-182q-2-5-2-9.5V-520q0-33 23.5-56.5T400-600q33 0 56.5 23.5T480-520q0 2-2 20l102 102q5-2 9.5-2h21q4.5 0 9.5 2l142-142q-2-5-2-9.5V-560q0-33 23.5-56.5T840-640q33 0 56.5 23.5T920-560q0 33-23.5 56.5T840-480h-10.5q-4.5 0-9.5-2L678-340q2 5 2 9.5v10.5q0 33-23.5 56.5T600-240q-33 0-56.5-23.5T520-320v-10.5q0-4.5 2-9.5L420-442q-5 2-9.5 2H400q-2 0-20-2L198-260q2 5 2 9.5v10.5q0 33-23.5 56.5T120-160Zm40-401-25-54-54-25 54-25 25-54 25 54 54 25-54 25-25 54Zm440-39-38-82-82-38 82-38 38-82 38 82 82 38-82 38-38 82Z",
   payments: "M560-440q-50 0-85-35t-35-85q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35ZM280-320q-33 0-56.5-23.5T200-400v-320q0-33 23.5-56.5T280-800h560q33 0 56.5 23.5T920-720v320q0 33-23.5 56.5T840-320H280Zm80-80h400q0-33 23.5-56.5T840-480v-160q-33 0-56.5-23.5T760-720H360q0 33-23.5 56.5T280-640v160q33 0 56.5 23.5T360-400Zm440 240H120q-33 0-56.5-23.5T40-240v-440h80v440h680v80ZM280-400v-320 320Z",
+  info: "M440-280h80v-240h-80v240Zm68.5-331.5Q520-623 520-640t-11.5-28.5Q497-680 480-680t-28.5 11.5Q440-657 440-640t11.5 28.5Q463-600 480-600t28.5-11.5ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z",
 };
 
 const icon = (name: string) =>
@@ -75,6 +76,28 @@ const hotelNashville = {
   rating: "4.3★",
   reviews: "1,337 reviews",
   perks: ["Fitness center + indoor pool", "Dogs welcome", "Walk to downtown via bridge"],
+};
+
+// Green Hills alternates — both allow dogs and have a gym, but neither
+// clears the 4.2★ bar on Tripadvisor, so the shortfall is shown inline.
+const hotelCourtyard = {
+  name: "Courtyard by Marriott Nashville Green Hills",
+  short: "Courtyard — Green Hills",
+  address: "3800 Bedford Ave, Nashville, TN",
+  rating: "4.0★",
+  reviews: "346 reviews (Tripadvisor) · 8.3/10 on Booking.com",
+  perks: ["24/7 fitness center", "Rooftop pool", "Dogs to 75 lb · $75 fee"],
+  flag: "Just under your 4.2★ bar, but the highest-rated of the two and the roomier dog limit.",
+};
+
+const hotelResidenceInn = {
+  name: "Residence Inn by Marriott Nashville Green Hills",
+  short: "Residence Inn — Green Hills",
+  address: "3807 Cleghorn Ave, Nashville, TN",
+  rating: "3.0★",
+  reviews: "47 reviews (Tripadvisor)",
+  perks: ["Fitness center + seasonal pool", "In-room kitchens", "Dogs to 50 lb · $150 fee"],
+  flag: "Well under the 4.2★ bar (on a small sample), and the 50 lb dog cap plus $150 fee are the tightest of the three.",
 };
 
 const days = [
@@ -154,6 +177,9 @@ const days = [
         title: "Arrive Nashville",
         hotel: hotelNashville,
         detail: "Afternoon and evening completely free — the payoff for the short drive.",
+        altHotels: [hotelCourtyard, hotelResidenceInn],
+        altNote:
+          "Both sit in Green Hills, about 15 min south of the La Quinta — and a 5 min drive from Whole Foods Green Hills.",
       },
     ],
     coffee: {
@@ -297,6 +323,43 @@ const totals = { miles: "1,365 mi", drive: "21h 15m", nights: "2 nights" };
                       ))}
                     </ul>
                   </div>
+                )}
+
+                {s.altHotels && (
+                  <details class="alts">
+                    <summary>
+                      <span class="icon alts-icon" set:html={icon("hotel")} />
+                      <span class="alts-label">{s.altHotels.length} more Nashville options</span>
+                      <span class="icon expand-icon" set:html={icon("expand_more")} />
+                    </summary>
+                    {s.altNote && <p class="alts-note">{s.altNote}</p>}
+                    <div class="alt-list">
+                      {s.altHotels.map((h) => (
+                        <div class="alt">
+                          <div class="alt-top">
+                            <a class="alt-name" href={mapsLink(h.name, h.address)} target="_blank" rel="noopener noreferrer">
+                              {h.short}
+                              <span class="icon icon-xs" set:html={icon("open_in_new")} />
+                            </a>
+                            <span class="rating rating-warn">{h.rating}</span>
+                          </div>
+                          <p class="alt-addr">{h.address}</p>
+                          <p class="alt-reviews">{h.reviews}</p>
+                          <ul class="perks perks-alt">
+                            {h.perks.map((p) => (
+                              <li>{p}</li>
+                            ))}
+                          </ul>
+                          {h.flag && (
+                            <p class="alt-flag">
+                              <span class="icon icon-xs" set:html={icon("info")} />
+                              {h.flag}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </details>
                 )}
               </div>
             </li>
@@ -851,6 +914,125 @@ const totals = { miles: "1,365 mi", drive: "21h 15m", nights: "2 nights" };
     background: rgba(255, 255, 255, 0.7);
     border-radius: 6px;
     padding: 3px 8px;
+  }
+
+  /* ---- Alternate hotels ---- */
+  .alts {
+    margin-top: 10px;
+  }
+
+  .alts summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 9px 11px;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+  }
+
+  .alts summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .alts summary:hover {
+    background: var(--sunken);
+  }
+
+  .alts-icon {
+    font-size: 17px;
+    color: var(--ink-2);
+  }
+
+  .alts-label {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--ink-2);
+  }
+
+  .alts-note {
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    padding: 10px 2px 0;
+  }
+
+  .alt-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 10px;
+  }
+
+  .alt {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px;
+  }
+
+  .alt-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .alt-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--blue);
+    line-height: 1.35;
+  }
+
+  .alt-name .icon {
+    margin-left: 3px;
+  }
+
+  .alt-name:hover {
+    text-decoration: underline;
+  }
+
+  .rating-warn {
+    flex-shrink: 0;
+    margin-right: 0;
+    color: var(--amber);
+    background: var(--amber-c);
+  }
+
+  .alt-addr {
+    font-size: 11.5px;
+    color: var(--ink-2);
+    margin-top: 4px;
+  }
+
+  .alt-reviews {
+    font-size: 11.5px;
+    color: var(--ink-2);
+    opacity: 0.85;
+    margin-top: 3px;
+  }
+
+  .perks-alt li {
+    color: var(--ink-2);
+    background: var(--raised);
+  }
+
+  .alt-flag {
+    display: flex;
+    gap: 6px;
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: var(--amber);
+    background: var(--amber-c);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-top: 9px;
+  }
+
+  .alt-flag .icon {
+    flex-shrink: 0;
+    margin-top: 2px;
   }
 
   /* ---- Coffee disclosure ---- */
