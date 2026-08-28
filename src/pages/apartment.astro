@@ -1,0 +1,8 @@
+---
+// Serves src/raw/apartment.html verbatim at /apartment. Paste a complete,
+// standalone HTML document into that file — it is emitted byte for byte, with
+// none of the site's layout, fonts, or global styles applied.
+import html from "../raw/apartment.html?raw";
+---
+
+<Fragment set:html={html} />
