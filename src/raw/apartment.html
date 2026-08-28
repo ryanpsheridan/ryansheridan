@@ -280,6 +280,7 @@
   let i = 0;
   const trackEl = document.getElementById('track');
   const stageEl = document.querySelector('.photo-stage');
+  const cardEl = document.querySelector('.card');
   const roomNameEl = document.getElementById('roomName');
   const captionEl = document.getElementById('caption');
   const counterEl = document.getElementById('counter');
@@ -358,7 +359,8 @@
 
   window.addEventListener('resize', () => { setTrackTransition(false); updateTrackPosition(0); });
 
-  // Touch drag — 1:1 tracking with the finger, real carousel feel
+  // Touch drag — 1:1 tracking with the finger, real carousel feel.
+  // Bound to the whole card so a swipe anywhere on it works, caption included.
   let touchStartX = 0;
   let touchStartY = 0;
   let dragging = false;
@@ -367,9 +369,9 @@
   let lastTime = 0;
   let velocity = 0;
 
-  stageEl.style.touchAction = 'pan-y';
+  cardEl.style.touchAction = 'pan-y';
 
-  stageEl.addEventListener('touchstart', (e) => {
+  cardEl.addEventListener('touchstart', (e) => {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
     dragging = true;
@@ -380,7 +382,7 @@
     setTrackTransition(false);
   }, { passive: true });
 
-  stageEl.addEventListener('touchmove', (e) => {
+  cardEl.addEventListener('touchmove', (e) => {
     if (!dragging) return;
     const dx = e.touches[0].clientX - touchStartX;
     const dy = e.touches[0].clientY - touchStartY;
@@ -402,7 +404,7 @@
     updateTrackPosition(dx * resist);
   }, { passive: false });
 
-  stageEl.addEventListener('touchend', (e) => {
+  cardEl.addEventListener('touchend', (e) => {
     if (!dragging) return;
     dragging = false;
     if (!horizontalLock) return;
