@@ -388,6 +388,45 @@
   }
   .weather-link .icon { margin-left: auto; }
 
+  .weather-now {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.18);
+  }
+  .weather-temp { font-size: 40px; font-weight: 700; line-height: 1; flex-shrink: 0; }
+  .weather-now-meta { min-width: 0; }
+  .weather-desc { font-size: 13.5px; font-weight: 600; text-transform: capitalize; }
+  .weather-facts {
+    display: flex; flex-wrap: wrap; gap: 3px 10px;
+    font-size: 11.5px; color: rgba(255,255,255,0.8);
+    margin-top: 4px;
+  }
+  .weather-updated { font-size: 10.5px; color: rgba(255,255,255,0.65); margin-top: 10px; }
+
+  .forecast-row {
+    display: flex; gap: 8px; overflow-x: auto;
+    -ms-overflow-style: none; scrollbar-width: none;
+    padding: 2px 2px 4px;
+  }
+  .forecast-row::-webkit-scrollbar { display: none; }
+  .forecast-day {
+    flex: 0 0 auto;
+    width: 78px;
+    background: var(--surface);
+    border: 1px solid var(--outline-variant);
+    border-radius: 14px;
+    padding: 12px 8px;
+    text-align: center;
+    box-shadow: var(--e1);
+  }
+  .forecast-day-label { font-size: 11.5px; font-weight: 700; color: var(--on-surface-variant); }
+  .forecast-day-icon { color: var(--tertiary); margin: 8px 0; }
+  .forecast-day-hi { font-size: 13px; font-weight: 700; }
+  .forecast-day-lo { font-size: 11.5px; color: var(--on-surface-variant); }
+
   /* ---------- Install banner ---------- */
   .install-banner {
     position: fixed;
@@ -562,19 +601,40 @@
     <div class="section">
       <div class="weather-card">
         <div class="card-row">
-          <div class="card-icon" style="background:rgba(255,255,255,0.18); color:#fff;">
+          <div class="card-icon" id="weather-icon-wrap" style="background:rgba(255,255,255,0.18); color:#fff;">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </div>
           <div>
             <div class="card-title">Weather</div>
-            <div class="card-sub">Miromar Lakes, FL 33913 — check the live forecast before you pack.</div>
+            <div class="card-sub" id="weather-sub">Miromar Lakes, FL 33913 — check the live forecast before you pack.</div>
           </div>
         </div>
+
+        <div id="weather-live" style="display:none;">
+          <div class="weather-now">
+            <div class="weather-temp" id="weather-temp">—°</div>
+            <div class="weather-now-meta">
+              <div class="weather-desc" id="weather-desc">—</div>
+              <div class="weather-facts">
+                <span id="weather-feels">Feels —</span>
+                <span id="weather-wind">Wind —</span>
+                <span id="weather-humidity">Humidity —</span>
+              </div>
+            </div>
+          </div>
+          <div class="weather-updated" id="weather-updated"></div>
+        </div>
+
         <a class="weather-link" href="https://www.google.com/search?q=weather+miromar+lakes+fl" target="_blank" rel="noopener noreferrer">
-          See current forecast
+          See full forecast
           <span class="icon"><svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </a>
       </div>
+    </div>
+
+    <div class="section" id="forecast-section" style="display:none;">
+      <div class="section-title">Next few days</div>
+      <div class="forecast-row" id="forecast-row"></div>
     </div>
 
     <div class="section">
@@ -969,6 +1029,115 @@
     L.marker([CONDO.lat, CONDO.lng], { icon: markerIcon("stay", true) }).addTo(miniMap);
     setTimeout(function () { miniMap.invalidateSize(); }, 50);
   }
+
+  /* ---------------- Live weather (OpenWeatherMap) ---------------- */
+
+  var OWM_KEY = "b72af3f83bb49e28d8ef2e78c74bd9c8";
+  var WEATHER_CACHE_KEY = "golftrip-weather-cache-v1";
+
+  function weatherIconSvg(iconCode, size) {
+    size = size || 20;
+    var main = (iconCode || "").slice(0, 2);
+    var paths = {
+      "01": '<circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+      "02": '<circle cx="9" cy="10" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M8 18h9a3.5 3.5 0 000-7 5 5 0 00-9.5-1.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>',
+      "03": '<path d="M7 17h10a3.8 3.8 0 000-7.6 5.5 5.5 0 00-10.6 1.8A3.6 3.6 0 007 17z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>',
+      "04": '<path d="M6 15h11a3.5 3.5 0 000-7 5 5 0 00-9.6-1.3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/><path d="M5 19h11a3 3 0 000-6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>',
+      "09": '<path d="M7 13h10a3.8 3.8 0 000-7.6 5.5 5.5 0 00-10.6 1.8A3.6 3.6 0 007 13z" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M8 17v3M12 17v3M16 17v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+      "10": '<path d="M7 13h10a3.8 3.8 0 000-7.6 5.5 5.5 0 00-10.6 1.8A3.6 3.6 0 007 13z" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M9 17v2M15 17v2M12 18v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+      "11": '<path d="M7 12h10a3.8 3.8 0 000-7.6 5.5 5.5 0 00-10.6 1.8A3.6 3.6 0 007 12z" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M13 13l-3 5h3l-2 4" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>',
+      "13": '<path d="M7 13h10a3.8 3.8 0 000-7.6 5.5 5.5 0 00-10.6 1.8A3.6 3.6 0 007 13z" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M8 17v.01M12 17v.01M16 17v.01M8 20v.01M12 20v.01M16 20v.01" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>',
+      "50": '<path d="M4 9h16M4 13h16M4 17h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'
+    };
+    var body = paths[main] || paths["03"];
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none">' + body + '</svg>';
+  }
+
+  function renderWeather(cur, fc, cachedTs) {
+    if (!cur || !cur.weather || !cur.weather[0] || !cur.main) return;
+
+    document.getElementById("weather-icon-wrap").innerHTML = weatherIconSvg(cur.weather[0].icon, 18);
+    document.getElementById("weather-sub").textContent = "Miromar Lakes, FL 33913";
+    document.getElementById("weather-temp").textContent = Math.round(cur.main.temp) + "°";
+    document.getElementById("weather-desc").textContent = cur.weather[0].description;
+    document.getElementById("weather-feels").textContent = "Feels " + Math.round(cur.main.feels_like) + "°";
+    document.getElementById("weather-wind").textContent = "Wind " + Math.round((cur.wind && cur.wind.speed) || 0) + " mph";
+    document.getElementById("weather-humidity").textContent = "Humidity " + cur.main.humidity + "%";
+
+    var updatedEl = document.getElementById("weather-updated");
+    if (cachedTs) {
+      var mins = Math.max(1, Math.round((Date.now() - cachedTs) / 60000));
+      updatedEl.textContent = "Saved forecast · updated " + mins + " min ago";
+    } else {
+      updatedEl.textContent = "Live · updated just now";
+    }
+
+    document.getElementById("weather-live").style.display = "";
+
+    var forecastSection = document.getElementById("forecast-section");
+    var forecastRow = document.getElementById("forecast-row");
+    if (!fc || !fc.list || !fc.list.length) { forecastSection.style.display = "none"; return; }
+
+    var days = {};
+    var order = [];
+    fc.list.forEach(function (item) {
+      var date = item.dt_txt.slice(0, 10);
+      if (!days[date]) { days[date] = { temps: [], icon: null, iconDist: null }; order.push(date); }
+      days[date].temps.push(item.main.temp);
+      var hour = Number(item.dt_txt.slice(11, 13));
+      var dist = Math.abs(hour - 13);
+      if (days[date].iconDist === null || dist < days[date].iconDist) {
+        days[date].iconDist = dist;
+        days[date].icon = item.weather[0].icon;
+      }
+    });
+
+    var todayStr = new Date().toISOString().slice(0, 10);
+    forecastRow.innerHTML = "";
+    order.slice(0, 5).forEach(function (date) {
+      var d = days[date];
+      var hi = Math.round(Math.max.apply(null, d.temps));
+      var lo = Math.round(Math.min.apply(null, d.temps));
+      var label = date === todayStr ? "Today" : new Date(date + "T12:00:00").toLocaleDateString("en-US", { weekday: "short" });
+      var card = document.createElement("div");
+      card.className = "forecast-day";
+      card.innerHTML =
+        '<div class="forecast-day-label">' + label + '</div>' +
+        '<div class="forecast-day-icon">' + weatherIconSvg(d.icon, 26) + '</div>' +
+        '<div class="forecast-day-hi">' + hi + '°</div>' +
+        '<div class="forecast-day-lo">' + lo + '°</div>';
+      forecastRow.appendChild(card);
+    });
+    forecastSection.style.display = "";
+  }
+
+  function loadWeather() {
+    var base = "https://api.openweathermap.org/data/2.5/";
+    var qs = "lat=" + CONDO.lat + "&lon=" + CONDO.lng + "&units=imperial&appid=" + OWM_KEY;
+
+    Promise.all([fetch(base + "weather?" + qs), fetch(base + "forecast?" + qs)])
+      .then(function (res) {
+        if (!res[0].ok || !res[1].ok) throw new Error("weather http error");
+        return Promise.all([res[0].json(), res[1].json()]);
+      })
+      .then(function (data) {
+        var cur = data[0], fc = data[1];
+        if (cur.cod && Number(cur.cod) !== 200) throw new Error("weather api error");
+        renderWeather(cur, fc);
+        try { localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify({ cur: cur, fc: fc, ts: Date.now() })); } catch (e) {}
+      })
+      .catch(function () {
+        // Live fetch failed (bad key, offline, rate-limited) — fall back to
+        // a cached response if we have one, otherwise leave the original
+        // static weather card (Google search link + mini map) untouched.
+        try {
+          var cached = JSON.parse(localStorage.getItem(WEATHER_CACHE_KEY) || "null");
+          if (cached && cached.cur && cached.fc) renderWeather(cached.cur, cached.fc, cached.ts);
+        } catch (e) {}
+      });
+  }
+
+  loadWeather();
 
   /* ---------------- Offline indicator ---------------- */
 
