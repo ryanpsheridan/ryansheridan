@@ -1,0 +1,1063 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Florida Golf Trip 2</title>
+<meta name="description" content="Trip itinerary for Fort Myers / Bonita Springs / Miromar Lakes, FL — Sept 17-20, 2026." />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#1E6B3A" />
+<meta name="color-scheme" content="light" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Golf Trip" />
+<link rel="manifest" href="/golftrip/manifest.json" />
+<link rel="apple-touch-icon" href="/golftrip/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/golftrip/favicon-32x32.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+
+<style>
+  :root {
+    --primary: #1E6B3A;
+    --on-primary: #FFFFFF;
+    --primary-container: #D9F0DD;
+    --on-primary-container: #063C1B;
+
+    --secondary: #8A5A2B;
+    --on-secondary: #FFFFFF;
+    --secondary-container: #F3E1C8;
+    --on-secondary-container: #4A2E0C;
+
+    --tertiary: #35507A;
+    --on-tertiary: #FFFFFF;
+    --tertiary-container: #DCE6F7;
+    --on-tertiary-container: #0F2A4A;
+
+    --surface: #FFFFFF;
+    --surface-dim: #F6F5EF;
+    --surface-container: #F1F0E8;
+    --surface-container-high: #EAE9E0;
+    --outline: #DEDCD2;
+    --outline-variant: #E9E7DE;
+    --on-surface: #1B1C18;
+    --on-surface-variant: #49493F;
+
+    --e1: 0 1px 2px rgba(27,28,24,0.06), 0 1px 3px 1px rgba(27,28,24,0.08);
+    --e2: 0 1px 2px rgba(27,28,24,0.08), 0 2px 8px 2px rgba(27,28,24,0.1);
+    --e3: 0 4px 8px 3px rgba(27,28,24,0.1), 0 1px 3px rgba(27,28,24,0.12);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--surface-dim);
+    color: var(--on-surface);
+    font-family: "Roboto", system-ui, -apple-system, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; border: none; background: none; cursor: pointer; }
+  ul, ol { list-style: none; margin: 0; padding: 0; }
+  h1, h2, h3, p { margin: 0; }
+
+  .icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .icon svg { display: block; width: 1em; height: 1em; }
+
+  /* ---------- App bar ---------- */
+  .appbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: calc(14px + env(safe-area-inset-top)) 16px 14px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--outline-variant);
+  }
+
+  .appbar-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: var(--primary);
+    color: var(--on-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    flex-shrink: 0;
+  }
+
+  .appbar-text { flex: 1; min-width: 0; }
+  .appbar-title { font-size: 16px; font-weight: 700; line-height: 1.2; }
+  .appbar-sub { font-size: 11.5px; color: var(--on-surface-variant); margin-top: 1px; }
+
+  .appbar-action {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    color: var(--on-surface-variant);
+  }
+  .appbar-action:active { background: var(--surface-container-high); }
+
+  .offline-pill {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--on-secondary-container);
+    background: var(--secondary-container);
+    border-radius: 99px;
+    padding: 5px 10px 5px 8px;
+    margin: 10px 16px 0;
+  }
+  .offline-pill.show { display: inline-flex; }
+  .offline-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--secondary); }
+
+  /* ---------- Layout ---------- */
+  main { max-width: 720px; margin: 0 auto; }
+
+  .view { display: none; padding: 18px 16px 8px; }
+  .view.active { display: block; }
+
+  .section { margin-bottom: 22px; }
+  .section-title {
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: var(--on-surface-variant);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding: 0 2px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    background: linear-gradient(155deg, var(--primary) 0%, #164f2a 100%);
+    color: var(--on-primary);
+    border-radius: 20px;
+    padding: 20px 18px;
+    margin-bottom: 20px;
+    box-shadow: var(--e2);
+  }
+  .hero-eyebrow { font-size: 11.5px; font-weight: 500; letter-spacing: 0.4px; opacity: 0.82; text-transform: uppercase; }
+  .hero h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.2px; margin-top: 5px; line-height: 1.25; }
+  .hero-dates { font-size: 13px; opacity: 0.88; margin-top: 5px; }
+  .hero-countdown {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    background: rgba(255,255,255,0.16);
+    border-radius: 99px;
+    padding: 7px 13px;
+    font-size: 12.5px;
+    font-weight: 500;
+  }
+  .hero-stats { display: flex; gap: 10px; margin-top: 16px; }
+  .hero-stat { flex: 1; background: rgba(255,255,255,0.12); border-radius: 12px; padding: 10px 12px; }
+  .hero-stat b { display: block; font-size: 17px; font-weight: 700; }
+  .hero-stat span { font-size: 10.5px; opacity: 0.82; }
+
+  /* ---------- Cards ---------- */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--outline-variant);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: var(--e1);
+  }
+  .card + .card { margin-top: 10px; }
+
+  .card-row { display: flex; align-items: flex-start; gap: 12px; }
+  .card-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+    background: var(--primary-container); color: var(--on-primary-container);
+  }
+  .card-icon.tertiary { background: var(--tertiary-container); color: var(--on-tertiary-container); }
+  .card-icon.secondary { background: var(--secondary-container); color: var(--on-secondary-container); }
+
+  .card-title { font-size: 14.5px; font-weight: 700; line-height: 1.3; }
+  .card-sub { font-size: 12.5px; color: var(--on-surface-variant); margin-top: 2px; line-height: 1.45; }
+
+  .btn-line {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--primary);
+    margin-top: 8px;
+  }
+
+  /* ---------- Group / flights ---------- */
+  .people-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .person-row {
+    display: flex; align-items: center; gap: 11px;
+    background: var(--surface-container);
+    border-radius: 12px; padding: 10px 12px;
+  }
+  .avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--primary); color: var(--on-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+  }
+  .person-name { font-size: 13.5px; font-weight: 500; }
+  .person-meta { font-size: 11.5px; color: var(--on-surface-variant); margin-top: 1px; }
+
+  .flight-leg {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 0;
+    border-top: 1px dashed var(--outline);
+  }
+  .flight-leg:first-of-type { border-top: none; padding-top: 4px; }
+  .flight-code {
+    display: flex; flex-direction: column; align-items: center;
+    font-size: 15px; font-weight: 700; color: var(--on-surface);
+    min-width: 46px;
+  }
+  .flight-code span { font-size: 10px; font-weight: 500; color: var(--on-surface-variant); margin-top: 1px; }
+  .flight-route { flex: 1; }
+  .flight-airports { display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 700; }
+  .flight-arrow { color: var(--on-surface-variant); font-size: 13px; }
+  .flight-time { font-size: 12px; color: var(--on-surface-variant); margin-top: 2px; }
+  .flight-meta { font-size: 11px; color: var(--on-surface-variant); margin-top: 1px; }
+
+  /* ---------- Filter chips ---------- */
+  .chip-row {
+    display: flex; gap: 8px; overflow-x: auto;
+    padding: 2px 2px 4px;
+    -ms-overflow-style: none; scrollbar-width: none;
+  }
+  .chip-row::-webkit-scrollbar { display: none; }
+
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12.5px; font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 99px;
+    border: 1px solid var(--outline);
+    color: var(--on-surface-variant);
+    background: var(--surface);
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .chip.active {
+    background: var(--primary-container);
+    color: var(--on-primary-container);
+    border-color: transparent;
+    font-weight: 700;
+  }
+  .chip .dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  /* ---------- Segmented toggle ---------- */
+  .toggle-row { display: flex; justify-content: flex-end; margin: 2px 0 12px; }
+  .segmented {
+    display: inline-flex;
+    background: var(--surface-container);
+    border-radius: 99px;
+    padding: 3px;
+    gap: 2px;
+  }
+  .segmented button {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 12.5px; font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 99px;
+    color: var(--on-surface-variant);
+  }
+  .segmented button.active {
+    background: var(--surface);
+    color: var(--primary);
+    font-weight: 700;
+    box-shadow: var(--e1);
+  }
+
+  /* ---------- Place cards ---------- */
+  .place-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .place-card {
+    background: var(--surface);
+    border: 1px solid var(--outline-variant);
+    border-radius: 16px;
+    padding: 15px;
+    box-shadow: var(--e1);
+  }
+
+  .place-top { display: flex; align-items: flex-start; gap: 11px; }
+  .place-icon {
+    width: 38px; height: 38px; border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 19px; flex-shrink: 0;
+    background: var(--primary-container); color: var(--on-primary-container);
+  }
+  .place-icon.food { background: var(--secondary-container); color: var(--on-secondary-container); }
+  .place-icon.stay { background: var(--tertiary-container); color: var(--on-tertiary-container); }
+
+  .place-name { font-size: 14.5px; font-weight: 700; line-height: 1.3; }
+  .place-address { font-size: 12px; color: var(--on-surface-variant); margin-top: 2px; }
+
+  .place-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+  .tag {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.2px;
+    padding: 3px 9px; border-radius: 7px;
+    background: var(--surface-container-high); color: var(--on-surface-variant);
+  }
+  .tag.confirmed { background: var(--primary-container); color: var(--on-primary-container); }
+  .tag.pending { background: var(--secondary-container); color: var(--on-secondary-container); }
+
+  .place-notes { font-size: 12.5px; line-height: 1.55; color: var(--on-surface-variant); margin-top: 9px; }
+  .place-facts { font-size: 12px; color: var(--on-surface); margin-top: 7px; display: flex; flex-wrap: wrap; gap: 4px 14px; }
+  .place-facts b { font-weight: 700; }
+
+  .quick-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .qa-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: var(--surface-container);
+    color: var(--on-surface);
+  }
+  .qa-btn:active { background: var(--surface-container-high); }
+  .qa-btn.primary { background: var(--primary); color: var(--on-primary); }
+
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--on-surface-variant); font-size: 13px; }
+
+  /* ---------- Map ---------- */
+  .map-wrap {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--outline-variant);
+    box-shadow: var(--e1);
+  }
+  #map { width: 100%; height: 58vh; min-height: 380px; background: var(--surface-container); }
+  .map-note { font-size: 11.5px; color: var(--on-surface-variant); margin-top: 8px; padding: 0 2px; }
+
+  .map-mini-wrap { border-radius: 14px; overflow: hidden; border: 1px solid var(--outline-variant); }
+  #map-mini { width: 100%; height: 200px; background: var(--surface-container); }
+
+  .leaflet-popup-content-wrapper { border-radius: 12px; }
+  .leaflet-popup-content { font-family: "Roboto", sans-serif; font-size: 12.5px; margin: 10px 12px; }
+  .popup-title { font-weight: 700; font-size: 13px; margin-bottom: 2px; }
+  .popup-addr { color: #49493F; font-size: 11.5px; }
+
+  .pin-marker { display: flex; align-items: center; justify-content: center; }
+  .pin-marker svg { display: block; }
+
+  /* ---------- Weather ---------- */
+  .weather-card {
+    background: linear-gradient(155deg, var(--tertiary) 0%, #223a5e 100%);
+    color: var(--on-tertiary);
+    border-radius: 18px;
+    padding: 18px;
+    box-shadow: var(--e2);
+  }
+  .weather-card .card-sub { color: rgba(255,255,255,0.82); }
+  .weather-card .place-name, .weather-card .card-title { color: #fff; }
+  .weather-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.16);
+    border-radius: 12px;
+    padding: 11px 14px;
+    font-size: 13px; font-weight: 600;
+    margin-top: 14px;
+    width: 100%;
+  }
+  .weather-link .icon { margin-left: auto; }
+
+  /* ---------- Install banner ---------- */
+  .install-banner {
+    position: fixed;
+    left: 12px; right: 12px;
+    bottom: calc(84px + env(safe-area-inset-bottom));
+    z-index: 40;
+    background: var(--on-surface);
+    color: var(--surface);
+    border-radius: 16px;
+    padding: 13px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--e3);
+    transform: translateY(140%);
+    transition: transform 0.3s cubic-bezier(0.2,0,0,1);
+  }
+  .install-banner.show { transform: translateY(0); }
+  .install-banner .icon-wrap {
+    width: 34px; height: 34px; border-radius: 10px;
+    background: var(--primary);
+    color: var(--on-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; flex-shrink: 0;
+  }
+  .install-copy { flex: 1; min-width: 0; }
+  .install-copy b { display: block; font-size: 13px; font-weight: 700; }
+  .install-copy p { font-size: 11.5px; opacity: 0.78; margin-top: 1px; line-height: 1.4; }
+  .install-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .install-go {
+    background: var(--primary); color: var(--on-primary);
+    font-size: 12px; font-weight: 700;
+    padding: 8px 12px; border-radius: 9px;
+  }
+  .install-close { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; opacity: 0.7; }
+
+  /* ---------- Bottom nav ---------- */
+  .bottom-nav {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 30;
+    display: flex;
+    background: var(--surface);
+    border-top: 1px solid var(--outline-variant);
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+  }
+  .nav-item {
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 4px 0;
+    color: var(--on-surface-variant);
+  }
+  .nav-item .nav-icon-wrap {
+    width: 46px; height: 26px;
+    border-radius: 13px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    transition: background 0.15s ease;
+  }
+  .nav-item.active { color: var(--on-surface); }
+  .nav-item.active .nav-icon-wrap { background: var(--primary-container); color: var(--on-primary-container); }
+  .nav-item span { font-size: 10.5px; font-weight: 600; }
+
+  @media (min-width: 600px) {
+    .hero-stats { gap: 12px; }
+    .view { padding: 24px 24px 8px; }
+    #map { height: 480px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar-icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M12 3v13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 4.5l6 3-6 3" fill="currentColor"/><ellipse cx="12" cy="20" rx="6.5" ry="1.4" fill="currentColor" opacity="0.55"/></svg>
+  </div>
+  <div class="appbar-text">
+    <div class="appbar-title">Florida Golf Trip 2</div>
+    <div class="appbar-sub" id="appbar-sub">Sept 17–20, 2026</div>
+  </div>
+  <button class="appbar-action" id="install-icon-btn" title="Install app" aria-label="Install app">
+    <svg viewBox="0 0 24 24" width="19" height="19" fill="none"><path d="M12 4v11m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 18v1.5A1.5 1.5 0 006.5 21h11a1.5 1.5 0 001.5-1.5V18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+</header>
+
+<div class="offline-pill" id="offline-pill"><span class="offline-dot"></span>Offline — showing saved trip data</div>
+
+<main>
+
+  <!-- ================= TRIP TAB ================= -->
+  <section class="view active" data-view="trip">
+
+    <div class="hero">
+      <div class="hero-eyebrow">Golf trip</div>
+      <h1>Fort Myers · Bonita Springs · Miromar Lakes, FL</h1>
+      <div class="hero-dates">Thursday, Sept 17 – Sunday, Sept 20, 2026</div>
+      <div class="hero-countdown" id="countdown">
+        <span class="icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        <span id="countdown-text">Loading…</span>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><b>4</b><span>days</span></div>
+        <div class="hero-stat"><b>3</b><span>rounds of golf</span></div>
+        <div class="hero-stat"><b>4</b><span>guys</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Home base</div>
+      <div class="card">
+        <div class="card-row">
+          <div class="card-icon tertiary">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M4 11.5L12 4l8 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9.5a1 1 0 001 1h3.5v-5.5h3V20.5H17a1 1 0 001-1V10" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="card-title">The condo</div>
+            <div class="card-sub">10733 Mirasol Drive #211, Miromar Lakes, FL 33913</div>
+            <a class="btn-line" id="condo-directions" href="#" target="_blank" rel="noopener noreferrer">
+              Get directions
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Who's going</div>
+      <div class="card">
+        <div class="people-list" id="people-list"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Return flight · Ryan · Sun, Sept 20</div>
+      <div class="card" id="flights-card"></div>
+    </div>
+
+  </section>
+
+  <!-- ================= PLACES TAB ================= -->
+  <section class="view" data-view="places">
+
+    <div class="chip-row" id="chip-row"></div>
+
+    <div class="toggle-row">
+      <div class="segmented">
+        <button id="seg-list" class="active" data-mode="list">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          List
+        </button>
+        <button id="seg-map" data-mode="map">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M9 4L4 6v14l5-2 6 2 5-2V4l-5 2-6-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" stroke="currentColor" stroke-width="2"/></svg>
+          Map
+        </button>
+      </div>
+    </div>
+
+    <div id="list-view">
+      <ul class="place-list" id="place-list"></ul>
+    </div>
+
+    <div id="map-view" style="display:none;">
+      <div class="map-wrap"><div id="map"></div></div>
+      <p class="map-note">Pin locations are approximate. Use "Directions" on a place for exact navigation.</p>
+    </div>
+
+  </section>
+
+  <!-- ================= WEATHER TAB ================= -->
+  <section class="view" data-view="weather">
+    <div class="section">
+      <div class="weather-card">
+        <div class="card-row">
+          <div class="card-icon" style="background:rgba(255,255,255,0.18); color:#fff;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="card-title">Weather</div>
+            <div class="card-sub">Miromar Lakes, FL 33913 — check the live forecast before you pack.</div>
+          </div>
+        </div>
+        <a class="weather-link" href="https://www.google.com/search?q=weather+miromar+lakes+fl" target="_blank" rel="noopener noreferrer">
+          See current forecast
+          <span class="icon"><svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Trip area</div>
+      <div class="map-mini-wrap"><div id="map-mini"></div></div>
+      <p class="map-note">Home base pinned — Fort Myers, Bonita Springs, and Naples sit just north and south along the coast.</p>
+    </div>
+  </section>
+
+</main>
+
+<div class="install-banner" id="install-banner">
+  <div class="icon-wrap">
+    <svg viewBox="0 0 24 24" width="17" height="17" fill="none"><path d="M12 4v11m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 18v1.5A1.5 1.5 0 006.5 21h11a1.5 1.5 0 001.5-1.5V18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </div>
+  <div class="install-copy">
+    <b id="install-title">Add to Home Screen</b>
+    <p id="install-copy-text">Get one-tap access to the itinerary, even offline.</p>
+  </div>
+  <div class="install-actions">
+    <button class="install-go" id="install-go">Add</button>
+    <button class="install-close" id="install-close" aria-label="Dismiss">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <button class="nav-item active" data-target="trip">
+    <span class="nav-icon-wrap"><svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M4 11.5L12 4l8 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9.5a1 1 0 001 1h3.5v-5.5h3V20.5H17a1 1 0 001-1V10" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>
+    <span>Trip</span>
+  </button>
+  <button class="nav-item" data-target="places">
+    <span class="nav-icon-wrap"><svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M12 21s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="9" r="2.3" stroke="currentColor" stroke-width="2"/></svg></span>
+    <span>Places</span>
+  </button>
+  <button class="nav-item" data-target="weather">
+    <span class="nav-icon-wrap"><svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M17.5 18a4 4 0 000-8 5.5 5.5 0 00-10.6 1.8A3.5 3.5 0 007.5 18h10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>
+    <span>Weather</span>
+  </button>
+</nav>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  /* ---------------- Data ---------------- */
+
+  var mapsDir = function (address) {
+    return "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(address);
+  };
+
+  var CONDO = {
+    name: "The condo",
+    address: "10733 Mirasol Drive #211, Miromar Lakes, FL 33913",
+    lat: 26.4685, lng: -81.7440
+  };
+
+  var PEOPLE = [
+    { name: "Ryan S.", meta: "Arrives Thu, Sept 17 — early (lands ~12:30 PM)", initials: "RS" },
+    { name: "Gustavo C.", meta: "Arrives Thu, Sept 17 — early (lands ~12:30 PM)", initials: "GC" },
+    { name: "Matt T.", meta: "Arrives Thu, Sept 17 — later", initials: "MT" },
+    { name: "Oscar A.", meta: "Arrives Thu, Sept 17 — later", initials: "OA" }
+  ];
+
+  var FLIGHTS = [
+    {
+      flightNo: "DL1395", carrier: "Delta Air Lines", plane: "Airbus A321",
+      from: "RSW", fromName: "Fort Myers", to: "ATL", toName: "Atlanta",
+      depart: "8:10 AM", arrive: "9:55 AM", terminal: "Domestic Term-South"
+    },
+    {
+      flightNo: "DL2011", carrier: "Delta Air Lines", plane: "Airbus A321",
+      from: "ATL", fromName: "Atlanta", to: "AUS", toName: "Austin",
+      depart: "11:10 AM", arrive: "12:29 PM", terminal: "Domestic Term-South"
+    }
+  ];
+
+  var PLACES = [
+    {
+      id: "stoneybrook", category: "golf",
+      name: "Stoneybrook Golf Club",
+      address: "21251 Stoneybrook Golf Blvd, Estero, FL 33928",
+      lat: 26.4200, lng: -81.7900,
+      day: "Day 1 · Thu, Sept 17", status: "pending", statusLabel: "Option A · not booked",
+      price: "$99–199 / person",
+      notes: "18-hole only, cart required — no walking. Casual round near the condo on arrival day.",
+      phone: null, website: null
+    },
+    {
+      id: "bonita-fairways", category: "golf",
+      name: "Bonita Fairways Golf Club",
+      address: "26740 Sammoset Way, Bonita Springs, FL 34135",
+      lat: 26.3550, lng: -81.7700,
+      day: "Day 1 · Thu, Sept 17", status: "pending", statusLabel: "Option B · not booked",
+      notes: "Par-61 executive course — shorter, faster round. Good pick for 9 holes.",
+      phone: "(239) 947-9100", website: null
+    },
+    {
+      id: "saltleaf", category: "golf",
+      name: "Saltleaf Golf Preserve — The Preserve",
+      address: "23001 Coconut Point Resort Drive, Bonita Springs, FL 34134",
+      lat: 26.3400, lng: -81.8080,
+      day: "Day 2 · Fri, Sept 18", status: "confirmed", statusLabel: "Confirmed",
+      teeTime: "8:40 AM", confirmation: "429535097",
+      price: "$220–225 / person (18 holes)",
+      notes: "18-Hole Championship Course. Booked via GolfNow.",
+      phone: null, website: null
+    },
+    {
+      id: "tiburon", category: "golf",
+      name: "Tiburón Golf Club — Black Course",
+      address: "2620 Tiburon Dr, Naples, FL 34109",
+      lat: 26.2470, lng: -81.7900,
+      day: "Day 3 · Sat, Sept 19", status: "confirmed", statusLabel: "Confirmed",
+      teeTime: "9:40 AM", confirmation: "429539576",
+      price: "$250–290 / person (18 holes)",
+      notes: "Resort / dynamic pricing — actual charge at checkout may vary. Booked via GolfNow.",
+      phone: null, website: null
+    },
+    {
+      id: "backyard-social", category: "food",
+      name: "Backyard Social",
+      address: "16371 Corporate Commerce Way, Fort Myers, FL 33913",
+      lat: 26.5200, lng: -81.7520,
+      notes: "Backyard games, patio bar.",
+      phone: "(239) 703-7077", website: "https://backyardsocial.com"
+    },
+    {
+      id: "best-breakfast", category: "food",
+      name: "Best Breakfast USA",
+      address: "11131 Canal Grande Dr, Fort Myers, FL 33913",
+      lat: 26.5550, lng: -81.7600,
+      notes: "Breakfast spot — good option before an early tee time.",
+      phone: "(952) 277-9784", website: "https://bestbreakfastusa.com"
+    },
+    {
+      id: "twin-peaks", category: "food",
+      name: "Twin Peaks",
+      address: "16411 Corporate Commerce Way, Fort Myers, FL 33913",
+      lat: 26.5205, lng: -81.7515,
+      notes: "Sports-bar style — good for watching a game.",
+      phone: "(239) 245-9559", website: "https://twinpeaksrestaurant.com"
+    },
+    {
+      id: "blue-water", category: "food",
+      name: "Blue Water Beach Grill",
+      address: "18151 Miromar Lakes Pkwy, Miromar Lakes, FL 33913",
+      lat: 26.4650, lng: -81.7480,
+      notes: "Inside Miromar Lakes Beach & Golf Club — same community as the condo. Our closest, home-base restaurant.",
+      home: true,
+      phone: "(239) 999-1199", website: "https://miromarlakes.com"
+    }
+  ];
+
+  /* ---------------- Icons ---------------- */
+
+  function golfIconSvg(size) {
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#1E6B3A" stroke="#fff" stroke-width="2"/><rect x="15" y="9" width="2" height="12" rx="1" fill="#fff"/><path d="M17 10l7 3-7 3z" fill="#fff"/><ellipse cx="16" cy="23" rx="6" ry="1.4" fill="#fff" opacity="0.6"/></svg>';
+  }
+  function foodIconSvg(size) {
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#8A5A2B" stroke="#fff" stroke-width="2"/><path d="M11 8v7a2 2 0 002 2v7" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M11 8v5M13 8v5M9 8v5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><path d="M20 8c-1.4 0-2.4 1.6-2.4 4s1 4 2.4 4v8" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+  function homeIconSvg(size) {
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#35507A" stroke="#fff" stroke-width="2"/><path d="M10 16l6-5 6 5" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.5 15v7a0.8 0.8 0 00.8.8H19.7a0.8 0.8 0 00.8-.8v-7" stroke="#fff" stroke-width="1.8" fill="none" stroke-linejoin="round"/></svg>';
+  }
+
+  function markerIcon(category, isHome) {
+    var svg = isHome ? homeIconSvg(30) : (category === "food" ? foodIconSvg(30) : golfIconSvg(30));
+    return L.divIcon({
+      className: "pin-marker",
+      html: svg,
+      iconSize: [30, 30],
+      iconAnchor: [15, 15],
+      popupAnchor: [0, -14]
+    });
+  }
+
+  var UI_ICONS = {
+    directions: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    call: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M6.5 4h3l1.5 4-2 1.5a11 11 0 005 5l1.5-2 4 1.5v3a2 2 0 01-2.2 2A16 16 0 014.5 6.2 2 2 0 016.5 4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+    website: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M3.7 12h16.6M12 3.5c2.2 2.3 3.4 5.3 3.4 8.5s-1.2 6.2-3.4 8.5c-2.2-2.3-3.4-5.3-3.4-8.5S9.8 5.8 12 3.5z" stroke="currentColor" stroke-width="1.8"/></svg>'
+  };
+
+  /* ---------------- Render: people & flights ---------------- */
+
+  var peopleList = document.getElementById("people-list");
+  PEOPLE.forEach(function (p) {
+    var row = document.createElement("div");
+    row.className = "person-row";
+    row.innerHTML =
+      '<div class="avatar">' + p.initials + '</div>' +
+      '<div><div class="person-name">' + p.name + '</div><div class="person-meta">' + p.meta + '</div></div>';
+    peopleList.appendChild(row);
+  });
+
+  var flightsCard = document.getElementById("flights-card");
+  FLIGHTS.forEach(function (f) {
+    var leg = document.createElement("div");
+    leg.className = "flight-leg";
+    leg.innerHTML =
+      '<div class="flight-code">' + f.from + '<span>' + f.depart + '</span></div>' +
+      '<div class="flight-route">' +
+        '<div class="flight-airports">' + f.fromName + ' <span class="flight-arrow">→</span> ' + f.toName + '</div>' +
+        '<div class="flight-time">' + f.flightNo + ' · ' + f.carrier + ' · ' + f.plane + '</div>' +
+        '<div class="flight-meta">' + f.terminal + '</div>' +
+      '</div>' +
+      '<div class="flight-code">' + f.to + '<span>' + f.arrive + '</span></div>';
+    flightsCard.appendChild(leg);
+  });
+
+  document.getElementById("condo-directions").href = mapsDir(CONDO.address);
+
+  /* ---------------- Countdown ---------------- */
+
+  (function () {
+    var start = new Date("2026-09-17T00:00:00-04:00");
+    var end = new Date("2026-09-20T23:59:00-04:00");
+    var now = new Date();
+    var text;
+    if (now < start) {
+      var days = Math.ceil((start - now) / 86400000);
+      text = days <= 0 ? "Trip starts today" : days + " day" + (days === 1 ? "" : "s") + " until tee-off";
+    } else if (now >= start && now <= end) {
+      var day = Math.min(4, Math.floor((now - start) / 86400000) + 1);
+      text = "Day " + day + " of 4 — enjoy the trip";
+    } else {
+      text = "Trip complete — until next time";
+    }
+    document.getElementById("countdown-text").textContent = text;
+  })();
+
+  /* ---------------- Bottom nav / tabs ---------------- */
+
+  var navItems = document.querySelectorAll(".nav-item");
+  var views = document.querySelectorAll(".view");
+  var appbarSub = document.getElementById("appbar-sub");
+  var subs = { trip: "Sept 17–20, 2026", places: "Golf & restaurants", weather: "Miromar Lakes, FL" };
+
+  navItems.forEach(function (item) {
+    item.addEventListener("click", function () {
+      var target = item.getAttribute("data-target");
+      navItems.forEach(function (n) { n.classList.toggle("active", n === item); });
+      views.forEach(function (v) { v.classList.toggle("active", v.getAttribute("data-view") === target); });
+      appbarSub.textContent = subs[target];
+      if (target === "places" && currentMode === "map") { initMap(); map && map.invalidateSize(); }
+      if (target === "weather") { initMiniMap(); }
+    });
+  });
+
+  /* ---------------- Filter chips ---------------- */
+
+  var FILTERS = [
+    { id: "all", label: "All" },
+    { id: "golf", label: "Golf" },
+    { id: "food", label: "Restaurants" }
+  ];
+  var activeFilter = "all";
+
+  var chipRow = document.getElementById("chip-row");
+  FILTERS.forEach(function (f) {
+    var chip = document.createElement("button");
+    chip.className = "chip" + (f.id === "all" ? " active" : "");
+    chip.dataset.filter = f.id;
+    chip.textContent = f.label;
+    chip.addEventListener("click", function () {
+      activeFilter = f.id;
+      document.querySelectorAll(".chip").forEach(function (c) { c.classList.toggle("active", c.dataset.filter === f.id); });
+      renderList();
+      applyMapFilter();
+    });
+    chipRow.appendChild(chip);
+  });
+
+  /* ---------------- List rendering ---------------- */
+
+  function statusTag(place) {
+    if (!place.status) return "";
+    var cls = place.status === "confirmed" ? "confirmed" : "pending";
+    return '<span class="tag ' + cls + '">' + place.statusLabel + '</span>';
+  }
+
+  function placeCardHtml(p) {
+    var iconCls = p.category === "food" ? "food" : (p.home ? "stay" : "");
+    var iconSvg = p.category === "food"
+      ? '<svg viewBox="0 0 24 24" width="17" height="17" fill="none"><path d="M8 3v7a2 2 0 002 2v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 3v5M10 3v5M6 3v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 3c-1.7 0-3 2-3 5s1.3 5 3 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : '<svg viewBox="0 0 24 24" width="17" height="17" fill="none"><path d="M12 3v13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 4.5l6 3-6 3" fill="currentColor"/><ellipse cx="12" cy="20" rx="6.5" ry="1.4" fill="currentColor" opacity="0.5"/></svg>';
+
+    var tags = "";
+    if (p.day) tags += '<span class="tag">' + p.day + '</span>';
+    tags += statusTag(p);
+    if (p.home) tags += '<span class="tag confirmed">Home base pick</span>';
+
+    var facts = "";
+    if (p.teeTime) facts += '<span><b>Tee time</b> ' + p.teeTime + '</span>';
+    if (p.confirmation) facts += '<span><b>Conf. #</b> ' + p.confirmation + '</span>';
+    if (p.price) facts += '<span><b>Est.</b> ' + p.price + '</span>';
+
+    var actions = '<a class="qa-btn primary" href="' + mapsDir(p.address) + '" target="_blank" rel="noopener noreferrer">' + UI_ICONS.directions + ' Directions</a>';
+    if (p.phone) actions += '<a class="qa-btn" href="tel:' + p.phone.replace(/[^0-9+]/g, "") + '">' + UI_ICONS.call + ' Call</a>';
+    if (p.website) actions += '<a class="qa-btn" href="' + p.website + '" target="_blank" rel="noopener noreferrer">' + UI_ICONS.website + ' Website</a>';
+
+    return (
+      '<li class="place-card" data-category="' + p.category + '">' +
+        '<div class="place-top">' +
+          '<div class="place-icon ' + iconCls + '">' + iconSvg + '</div>' +
+          '<div>' +
+            '<div class="place-name">' + p.name + '</div>' +
+            '<div class="place-address">' + p.address + '</div>' +
+          '</div>' +
+        '</div>' +
+        (tags ? '<div class="place-tags">' + tags + '</div>' : "") +
+        (p.notes ? '<div class="place-notes">' + p.notes + '</div>' : "") +
+        (facts ? '<div class="place-facts">' + facts + '</div>' : "") +
+        '<div class="quick-actions">' + actions + '</div>' +
+      '</li>'
+    );
+  }
+
+  var placeListEl = document.getElementById("place-list");
+  function renderList() {
+    var filtered = PLACES.filter(function (p) { return activeFilter === "all" || p.category === activeFilter; });
+    placeListEl.innerHTML = filtered.length
+      ? filtered.map(placeCardHtml).join("")
+      : '<li class="empty-state">No places in this category yet.</li>';
+  }
+  renderList();
+
+  /* ---------------- List / Map toggle ---------------- */
+
+  var currentMode = "list";
+  var segList = document.getElementById("seg-list");
+  var segMap = document.getElementById("seg-map");
+  var listViewEl = document.getElementById("list-view");
+  var mapViewEl = document.getElementById("map-view");
+
+  function setMode(mode) {
+    currentMode = mode;
+    segList.classList.toggle("active", mode === "list");
+    segMap.classList.toggle("active", mode === "map");
+    listViewEl.style.display = mode === "list" ? "" : "none";
+    mapViewEl.style.display = mode === "map" ? "" : "none";
+    if (mode === "map") { initMap(); setTimeout(function () { map && map.invalidateSize(); }, 50); }
+  }
+  segList.addEventListener("click", function () { setMode("list"); });
+  segMap.addEventListener("click", function () { setMode("map"); });
+
+  /* ---------------- Leaflet map ---------------- */
+
+  var map = null;
+  var markers = [];
+
+  function initMap() {
+    if (map || typeof L === "undefined") return;
+    map = L.map("map", { scrollWheelZoom: false }).setView([CONDO.lat, CONDO.lng], 11);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    var homeMarker = L.marker([CONDO.lat, CONDO.lng], { icon: markerIcon("stay", true) }).addTo(map);
+    homeMarker.bindPopup('<div class="popup-title">' + CONDO.name + '</div><div class="popup-addr">' + CONDO.address + '</div>');
+
+    PLACES.forEach(function (p) {
+      var m = L.marker([p.lat, p.lng], { icon: markerIcon(p.category, false) }).addTo(map);
+      m.bindPopup('<div class="popup-title">' + p.name + '</div><div class="popup-addr">' + p.address + '</div>');
+      m.placeCategory = p.category;
+      markers.push(m);
+    });
+  }
+
+  function applyMapFilter() {
+    if (!map) return;
+    markers.forEach(function (m) {
+      var show = activeFilter === "all" || m.placeCategory === activeFilter;
+      if (show && !map.hasLayer(m)) m.addTo(map);
+      if (!show && map.hasLayer(m)) map.removeLayer(m);
+    });
+  }
+
+  var miniMap = null;
+  function initMiniMap() {
+    if (miniMap || typeof L === "undefined") return;
+    miniMap = L.map("map-mini", {
+      zoomControl: false, dragging: false, scrollWheelZoom: false,
+      doubleClickZoom: false, touchZoom: false, boxZoom: false
+    }).setView([CONDO.lat, CONDO.lng], 10);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(miniMap);
+    L.marker([CONDO.lat, CONDO.lng], { icon: markerIcon("stay", true) }).addTo(miniMap);
+    setTimeout(function () { miniMap.invalidateSize(); }, 50);
+  }
+
+  /* ---------------- Offline indicator ---------------- */
+
+  function updateOnlineState() {
+    document.getElementById("offline-pill").classList.toggle("show", !navigator.onLine);
+  }
+  window.addEventListener("online", updateOnlineState);
+  window.addEventListener("offline", updateOnlineState);
+  updateOnlineState();
+
+  /* ---------------- Service worker ---------------- */
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("/golftrip/sw.js", { scope: "/golftrip/" }).catch(function () {});
+    });
+  }
+
+  /* ---------------- Add to Home Screen ---------------- */
+
+  var installBanner = document.getElementById("install-banner");
+  var installTitle = document.getElementById("install-title");
+  var installCopyText = document.getElementById("install-copy-text");
+  var installGo = document.getElementById("install-go");
+  var installClose = document.getElementById("install-close");
+  var installIconBtn = document.getElementById("install-icon-btn");
+  var deferredPrompt = null;
+  var DISMISS_KEY = "golftrip-install-dismissed";
+
+  var isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+  function dismissed() {
+    try { return localStorage.getItem(DISMISS_KEY) === "1"; } catch (e) { return false; }
+  }
+  function setDismissed() {
+    try { localStorage.setItem(DISMISS_KEY, "1"); } catch (e) {}
+  }
+
+  function showBanner() {
+    if (isStandalone || dismissed()) return;
+    installBanner.classList.add("show");
+  }
+  function hideBanner() {
+    installBanner.classList.remove("show");
+  }
+
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    installTitle.textContent = "Add to Home Screen";
+    installCopyText.textContent = "Get one-tap access to the itinerary, even offline.";
+    installGo.style.display = "";
+    setTimeout(showBanner, 1200);
+  });
+
+  if (isIOS && !isStandalone) {
+    installTitle.textContent = "Add to Home Screen";
+    installCopyText.textContent = 'Tap the Share icon, then "Add to Home Screen".';
+    installGo.style.display = "none";
+    setTimeout(showBanner, 1500);
+  }
+
+  installGo.addEventListener("click", function () {
+    if (!deferredPrompt) { hideBanner(); return; }
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.finally(function () {
+      deferredPrompt = null;
+      hideBanner();
+      setDismissed();
+    });
+  });
+
+  installClose.addEventListener("click", function () {
+    hideBanner();
+    setDismissed();
+  });
+
+  installIconBtn.addEventListener("click", function () {
+    if (dismissed()) { try { localStorage.removeItem(DISMISS_KEY); } catch (e) {} }
+    showBanner();
+  });
+
+  window.addEventListener("appinstalled", function () {
+    hideBanner();
+    setDismissed();
+  });
+
+})();
+</script>
+</body>
+</html>
