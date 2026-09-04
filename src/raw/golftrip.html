@@ -120,15 +120,6 @@
   .appbar-title { font-size: 16px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.15; }
   .appbar-sub { font-size: 12px; color: var(--ink-2); margin-top: 2px; letter-spacing: -0.005em; }
 
-  .appbar-action {
-    width: 44px; height: 44px;
-    margin-right: -8px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--ink);
-  }
-  .appbar-action:active { background: var(--sand-2); }
-
   .offline-pill {
     display: none;
     align-items: center;
@@ -495,7 +486,13 @@
   }
 
   /* ---------- Map ---------- */
+  /* Leaflet's panes (400) and controls (up to 1000) would otherwise compete
+     in the root stacking context and paint over the fixed nav/app bar.
+     position+z-index:0 traps all of it inside a context below them. */
   .map-wrap {
+    position: relative;
+    z-index: 0;
+    isolation: isolate;
     border-radius: var(--r-md);
     overflow: hidden;
     border: 1px solid var(--line);
@@ -503,7 +500,14 @@
   #map { width: 100%; height: 58vh; min-height: 380px; background: var(--sand-2); }
   .map-note { font-size: 12.5px; color: var(--ink-2); margin-top: 10px; padding: 0 2px; line-height: 1.45; }
 
-  .map-mini-wrap { border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+  .map-mini-wrap {
+    position: relative;
+    z-index: 0;
+    isolation: isolate;
+    border-radius: var(--r-md);
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
   #map-mini { width: 100%; height: 210px; background: var(--sand-2); }
 
   .leaflet-popup-content-wrapper { border-radius: 10px; }
@@ -609,61 +613,6 @@
   }
   .forecast-day-lo { font-size: 12.5px; color: var(--ink-2); margin-top: 2px; }
 
-  /* ---------- Install banner ---------- */
-  .install-banner {
-    position: fixed;
-    left: 12px; right: 12px;
-    bottom: calc(86px + env(safe-area-inset-bottom));
-    z-index: 40;
-    max-width: 640px;
-    margin: 0 auto;
-    background: var(--ink);
-    color: var(--paper);
-    border-radius: var(--r-md);
-    padding: 14px;
-    display: flex;
-    align-items: center;
-    gap: 13px;
-    box-shadow: var(--lift);
-    /* Must clear its own height *and* the 86px bottom offset, or the top edge
-       stays visible over the nav. visibility guarantees it regardless of height,
-       and pointer-events stops the hidden layer swallowing taps on the nav. */
-    transform: translateY(calc(100% + 110px));
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: transform 0.28s cubic-bezier(0.2, 0, 0, 1), opacity 0.28s ease, visibility 0s linear 0.28s;
-  }
-  .install-banner.show {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transition: transform 0.28s cubic-bezier(0.2, 0, 0, 1), opacity 0.28s ease, visibility 0s linear 0s;
-  }
-  .install-banner .icon-wrap {
-    width: 36px; height: 36px; border-radius: 10px;
-    background: rgba(255, 252, 246, 0.14);
-    color: var(--paper);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .install-copy { flex: 1; min-width: 0; }
-  .install-copy b { display: block; font-size: 14px; font-weight: 600; letter-spacing: -0.015em; }
-  .install-copy p { font-size: 12.5px; color: rgba(255, 252, 246, 0.72); margin-top: 2px; line-height: 1.4; }
-  .install-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-  .install-go {
-    background: var(--paper); color: var(--ink);
-    font-size: 13.5px; font-weight: 600; letter-spacing: -0.012em;
-    min-height: 40px; padding: 0 14px;
-    border-radius: var(--r-sm);
-  }
-  .install-close {
-    width: 40px; height: 40px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: rgba(255, 252, 246, 0.7);
-  }
-
   /* ---------- Bottom nav ---------- */
   .bottom-nav {
     position: fixed;
@@ -716,9 +665,6 @@
     <div class="appbar-title">Florida Golf Trip 2</div>
     <div class="appbar-sub" id="appbar-sub">Sept 17–20, 2026</div>
   </div>
-  <button class="appbar-action" id="install-icon-btn" title="Install app" aria-label="Install app">
-    <svg viewBox="0 0 24 24" width="20" height="20" fill="none"><path d="M12 4v11m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 18v1.5A1.5 1.5 0 006.5 21h11a1.5 1.5 0 001.5-1.5V18" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
-  </button>
 </header>
 
 <div class="offline-pill" id="offline-pill"><span class="offline-dot"></span>Offline — showing saved trip data</div>
@@ -895,22 +841,6 @@
 
 </main>
 
-<div class="install-banner" id="install-banner">
-  <div class="icon-wrap">
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M12 4v11m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 18v1.5A1.5 1.5 0 006.5 21h11a1.5 1.5 0 001.5-1.5V18" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
-  </div>
-  <div class="install-copy">
-    <b id="install-title">Add to Home Screen</b>
-    <p id="install-copy-text">Get one-tap access to the itinerary, even offline.</p>
-  </div>
-  <div class="install-actions">
-    <button class="install-go" id="install-go">Add</button>
-    <button class="install-close" id="install-close" aria-label="Dismiss">
-      <svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
-    </button>
-  </div>
-</div>
-
 <nav class="bottom-nav">
   <button class="nav-item active" data-target="trip">
     <span class="icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none"><path d="M4 11.5L12 4l8 7.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9.5a1 1 0 001 1h3.5v-5.5h3V20.5H17a1 1 0 001-1V10" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></span>
@@ -972,6 +902,7 @@
       day: "Day 1 · Thu, Sept 17", status: "pending", statusLabel: "Option A · not booked",
       price: "$99–199 / person",
       notes: "18-hole only, cart required — no walking. Casual round near the condo on arrival day.",
+      // Add the clubhouse number here and a Call button appears automatically
       phone: null, website: null
     },
     {
@@ -992,6 +923,7 @@
       teeTime: "8:40 AM", confirmation: "429535097",
       price: "$220–225 / person (18 holes)",
       notes: "18-Hole Championship Course. Booked via GolfNow.",
+      // Add the pro shop number here and a Call button appears automatically
       phone: null, website: null
     },
     {
@@ -1003,6 +935,7 @@
       teeTime: "9:40 AM", confirmation: "429539576",
       price: "$250–290 / person (18 holes)",
       notes: "Resort / dynamic pricing — actual charge at checkout may vary. Booked via GolfNow.",
+      // Add the pro shop number here and a Call button appears automatically
       phone: null, website: null
     },
     {
@@ -1329,7 +1262,9 @@
     var main = (iconCode || "").slice(0, 2);
     var paths = {
       "01": '<circle cx="12" cy="12" r="4.6" stroke="currentColor" stroke-width="1.9"/><path d="M12 2.4v2.2M12 19.4v2.2M5 5l1.5 1.5M17.5 17.5L19 19M2.4 12h2.2M19.4 12h2.2M5 19l1.5-1.5M17.5 6.5L19 5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>',
-      "02": '<circle cx="9" cy="9.6" r="3.6" stroke="currentColor" stroke-width="1.8"/><path d="M8 18h9a3.5 3.5 0 000-7 5 5 0 00-9.5-1.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>',
+      /* Sun sits clear of the cloud rather than overlapping it — these are
+         stroke-only glyphs, so an overlap shows through and reads as a blob. */
+      "02": '<circle cx="7.4" cy="6.6" r="2.8" stroke="currentColor" stroke-width="1.8"/><path d="M9 18.4h8.2a3.6 3.6 0 000-7.2 5.1 5.1 0 00-9.7-1A3.6 3.6 0 009 18.4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>',
       "03": '<path d="M7 17h10a3.8 3.8 0 000-7.6 5.5 5.5 0 00-10.6 1.8A3.6 3.6 0 007 17z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>',
       "04": '<path d="M6 15h11a3.5 3.5 0 000-7 5 5 0 00-9.6-1.3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/><path d="M5 19h11a3 3 0 000-6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>',
       "09": '<path d="M7 13h10a3.8 3.8 0 000-7.6 5.5 5.5 0 00-10.6 1.8A3.6 3.6 0 007 13z" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M8 17v3M12 17v3M16 17v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
@@ -1388,13 +1323,17 @@
       var hi = Math.round(Math.max.apply(null, d.temps));
       var lo = Math.round(Math.min.apply(null, d.temps));
       var label = date === todayStr ? "Today" : new Date(date + "T12:00:00").toLocaleDateString("en-US", { weekday: "short" });
+      // Late in the day only a couple of 3-hour blocks remain, so hi and lo
+      // collapse to the same number. Show it once, but keep the element in
+      // place so every card in the row stays the same height.
+      var loStyle = hi === lo ? ' style="visibility:hidden"' : "";
       var card = document.createElement("div");
       card.className = "forecast-day";
       card.innerHTML =
         '<div class="forecast-day-label">' + label + '</div>' +
         '<div class="forecast-day-icon">' + weatherIconSvg(d.icon, 26) + '</div>' +
         '<div class="forecast-day-hi">' + hi + '°</div>' +
-        '<div class="forecast-day-lo">' + lo + '°</div>';
+        '<div class="forecast-day-lo"' + loStyle + '>' + lo + '°</div>';
       forecastRow.appendChild(card);
     });
     forecastSection.style.display = "";
@@ -1445,75 +1384,8 @@
     });
   }
 
-  /* ---------------- Add to Home Screen ---------------- */
-
-  var installBanner = document.getElementById("install-banner");
-  var installTitle = document.getElementById("install-title");
-  var installCopyText = document.getElementById("install-copy-text");
-  var installGo = document.getElementById("install-go");
-  var installClose = document.getElementById("install-close");
-  var installIconBtn = document.getElementById("install-icon-btn");
-  var deferredPrompt = null;
-  var DISMISS_KEY = "golftrip-install-dismissed";
-
-  var isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
-  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-  function dismissed() {
-    try { return localStorage.getItem(DISMISS_KEY) === "1"; } catch (e) { return false; }
-  }
-  function setDismissed() {
-    try { localStorage.setItem(DISMISS_KEY, "1"); } catch (e) {}
-  }
-
-  function showBanner() {
-    if (isStandalone || dismissed()) return;
-    installBanner.classList.add("show");
-  }
-  function hideBanner() {
-    installBanner.classList.remove("show");
-  }
-
-  window.addEventListener("beforeinstallprompt", function (e) {
-    e.preventDefault();
-    deferredPrompt = e;
-    installTitle.textContent = "Add to Home Screen";
-    installCopyText.textContent = "Get one-tap access to the itinerary, even offline.";
-    installGo.style.display = "";
-    setTimeout(showBanner, 1200);
-  });
-
-  if (isIOS && !isStandalone) {
-    installTitle.textContent = "Add to Home Screen";
-    installCopyText.textContent = 'Tap the Share icon, then "Add to Home Screen".';
-    installGo.style.display = "none";
-    setTimeout(showBanner, 1500);
-  }
-
-  installGo.addEventListener("click", function () {
-    if (!deferredPrompt) { hideBanner(); return; }
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.finally(function () {
-      deferredPrompt = null;
-      hideBanner();
-      setDismissed();
-    });
-  });
-
-  installClose.addEventListener("click", function () {
-    hideBanner();
-    setDismissed();
-  });
-
-  installIconBtn.addEventListener("click", function () {
-    if (dismissed()) { try { localStorage.removeItem(DISMISS_KEY); } catch (e) {} }
-    showBanner();
-  });
-
-  window.addEventListener("appinstalled", function () {
-    hideBanner();
-    setDismissed();
-  });
+  /* No install prompt by design — the manifest and apple-touch-icon still make
+     the page installable through the browser's own Share > Add to Home Screen. */
 
 })();
 </script>
