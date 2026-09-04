@@ -6,7 +6,7 @@
 <title>Florida Golf Trip 2</title>
 <meta name="description" content="Trip itinerary for Fort Myers / Bonita Springs / Miromar Lakes, FL — Sept 17-20, 2026." />
 <meta name="robots" content="noindex, nofollow" />
-<meta name="theme-color" content="#1E6B3A" />
+<meta name="theme-color" content="#FFFCF6" />
 <meta name="color-scheme" content="light" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -16,38 +16,40 @@
 <link rel="apple-touch-icon" href="/golftrip/apple-touch-icon.png" />
 <link rel="icon" type="image/png" sizes="32x32" href="/golftrip/favicon-32x32.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
 
 <style>
   :root {
-    --primary: #1E6B3A;
-    --on-primary: #FFFFFF;
-    --primary-container: #D9F0DD;
-    --on-primary-container: #063C1B;
+    /* Ground + surfaces — warm, printed-paper neutrals */
+    --sand: #F4EDE1;
+    --sand-2: #EAE0CE;
+    --paper: #FFFCF6;
+    --ink: #171310;
+    --ink-2: #5C5347;
+    --line: #E2D7C4;
+    --line-2: #CFC1A9;
 
-    --secondary: #8A5A2B;
-    --on-secondary: #FFFFFF;
-    --secondary-container: #F3E1C8;
-    --on-secondary-container: #4A2E0C;
+    /* Accents — sun-faded Florida */
+    --palm: #1F5B43;
+    --palm-deep: #143B2C;
+    --palm-soft: #DCE8DE;
+    --sunset: #B94E27;
+    /* Darker burnt tone for text/glyphs on --sunset-soft: #B94E27 lands at
+       3.9:1 there, under the 4.5:1 AA floor. This one clears 6:1. */
+    --sunset-ink: #8F3A1B;
+    --sunset-soft: #F6E1D3;
+    --ocean: #2C6E7F;
+    --ocean-deep: #1D4A57;
+    --ocean-soft: #DAE7EA;
+    --butter: #E8A33D;
 
-    --tertiary: #35507A;
-    --on-tertiary: #FFFFFF;
-    --tertiary-container: #DCE6F7;
-    --on-tertiary-container: #0F2A4A;
+    --r-sm: 8px;
+    --r-md: 12px;
+    --r-lg: 16px;
 
-    --surface: #FFFFFF;
-    --surface-dim: #F6F5EF;
-    --surface-container: #F1F0E8;
-    --surface-container-high: #EAE9E0;
-    --outline: #DEDCD2;
-    --outline-variant: #E9E7DE;
-    --on-surface: #1B1C18;
-    --on-surface-variant: #49493F;
-
-    --e1: 0 1px 2px rgba(27,28,24,0.06), 0 1px 3px 1px rgba(27,28,24,0.08);
-    --e2: 0 1px 2px rgba(27,28,24,0.08), 0 2px 8px 2px rgba(27,28,24,0.1);
-    --e3: 0 4px 8px 3px rgba(27,28,24,0.1), 0 1px 3px rgba(27,28,24,0.12);
+    --lift: 0 6px 24px rgba(23, 19, 16, 0.13);
   }
 
   * { box-sizing: border-box; }
@@ -55,356 +57,533 @@
   html, body {
     margin: 0;
     padding: 0;
-    background: var(--surface-dim);
-    color: var(--on-surface);
-    font-family: "Roboto", system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
     -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
   }
 
   body {
-    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+    /* Paper grain sits behind content, never over it */
+    background-color: var(--sand);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
     min-height: 100vh;
     min-height: 100dvh;
   }
 
   a { color: inherit; text-decoration: none; }
-  button { font-family: inherit; border: none; background: none; cursor: pointer; }
+  button { font-family: inherit; border: none; background: none; cursor: pointer; color: inherit; }
   ul, ol { list-style: none; margin: 0; padding: 0; }
   h1, h2, h3, p { margin: 0; }
 
-  .icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .icon svg { display: block; width: 1em; height: 1em; }
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
 
-  /* ---------- App bar ---------- */
+  .display {
+    font-family: "Fraunces", Georgia, serif;
+    font-variation-settings: "SOFT" 40, "WONK" 1;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .icon svg { display: block; }
+
+  /* ---------- Top bar ---------- */
   .appbar {
     position: sticky;
     top: 0;
     z-index: 20;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: calc(14px + env(safe-area-inset-top)) 16px 14px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--outline-variant);
+    gap: 12px;
+    padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
   }
 
-  .appbar-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    background: var(--primary);
-    color: var(--on-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 19px;
+  .appbar-mark {
+    width: 34px; height: 34px;
+    border-radius: var(--r-sm);
+    background: var(--palm);
+    color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
   }
 
   .appbar-text { flex: 1; min-width: 0; }
-  .appbar-title { font-size: 16px; font-weight: 700; line-height: 1.2; }
-  .appbar-sub { font-size: 11.5px; color: var(--on-surface-variant); margin-top: 1px; }
+  .appbar-title { font-size: 16px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.15; }
+  .appbar-sub { font-size: 12px; color: var(--ink-2); margin-top: 2px; letter-spacing: -0.005em; }
 
   .appbar-action {
-    width: 38px;
-    height: 38px;
+    width: 44px; height: 44px;
+    margin-right: -8px;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 19px;
-    color: var(--on-surface-variant);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink);
   }
-  .appbar-action:active { background: var(--surface-container-high); }
+  .appbar-action:active { background: var(--sand-2); }
 
   .offline-pill {
     display: none;
     align-items: center;
-    gap: 6px;
-    font-size: 11px;
+    gap: 8px;
+    font-size: 12px;
     font-weight: 500;
-    color: var(--on-secondary-container);
-    background: var(--secondary-container);
-    border-radius: 99px;
-    padding: 5px 10px 5px 8px;
-    margin: 10px 16px 0;
+    color: var(--sunset-ink);
+    background: var(--sunset-soft);
+    border: 1px solid rgba(185, 78, 39, 0.22);
+    border-radius: var(--r-sm);
+    padding: 9px 12px;
+    margin: 12px 16px 0;
   }
-  .offline-pill.show { display: inline-flex; }
-  .offline-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--secondary); }
+  .offline-pill.show { display: flex; }
+  .offline-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--sunset); flex-shrink: 0; }
 
   /* ---------- Layout ---------- */
-  main { max-width: 720px; margin: 0 auto; }
+  main { max-width: 680px; margin: 0 auto; }
 
-  .view { display: none; padding: 18px 16px 8px; }
+  .view { display: none; padding: 16px 16px 8px; }
   .view.active { display: block; }
 
-  .section { margin-bottom: 22px; }
+  .section { margin-bottom: 26px; }
+  .section:last-child { margin-bottom: 8px; }
+
   .section-title {
-    font-size: 12.5px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    color: var(--on-surface-variant);
-    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink-2);
     margin-bottom: 10px;
-    padding: 0 2px;
   }
 
-  /* ---------- Hero ---------- */
+  /* ---------- Hero — the one poster moment ---------- */
   .hero {
-    background: linear-gradient(155deg, var(--primary) 0%, #164f2a 100%);
-    color: var(--on-primary);
-    border-radius: 20px;
-    padding: 20px 18px;
-    margin-bottom: 20px;
-    box-shadow: var(--e2);
+    position: relative;
+    overflow: hidden;
+    background: var(--palm-deep);
+    color: var(--paper);
+    border-radius: var(--r-lg);
+    padding: 22px 20px 20px;
+    margin-bottom: 26px;
   }
-  .hero-eyebrow { font-size: 11.5px; font-weight: 500; letter-spacing: 0.4px; opacity: 0.82; text-transform: uppercase; }
-  .hero h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.2px; margin-top: 5px; line-height: 1.25; }
-  .hero-dates { font-size: 13px; opacity: 0.88; margin-top: 5px; }
+
+  /* Cropped by the right edge, not the top — a sun cut by the horizon is the
+     retro idiom; cut across the top just reads like a mistake. */
+  .hero-sun {
+    position: absolute;
+    top: 6px;
+    right: -52px;
+    width: 172px;
+    height: 172px;
+    pointer-events: none;
+  }
+
+  .hero-inner { position: relative; z-index: 1; }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    color: var(--butter);
+  }
+  .hero-rays { display: flex; flex-direction: column; gap: 2px; }
+  .hero-rays i { display: block; width: 13px; height: 2px; border-radius: 1px; background: currentColor; }
+  .hero-rays i:nth-child(2) { width: 9px; opacity: 0.75; }
+  .hero-rays i:nth-child(3) { width: 5px; opacity: 0.5; }
+
+  .hero h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-variation-settings: "SOFT" 40, "WONK" 1;
+    font-weight: 600;
+    font-size: clamp(30px, 8.4vw, 40px);
+    line-height: 1.04;
+    letter-spacing: -0.028em;
+    margin-top: 12px;
+    max-width: 11ch;
+  }
+
+  .hero-dates {
+    font-size: 14px;
+    color: rgba(255, 252, 246, 0.78);
+    margin-top: 12px;
+    letter-spacing: -0.01em;
+  }
+
   .hero-countdown {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     margin-top: 14px;
-    background: rgba(255,255,255,0.16);
-    border-radius: 99px;
-    padding: 7px 13px;
-    font-size: 12.5px;
+    background: rgba(255, 252, 246, 0.13);
+    border: 1px solid rgba(255, 252, 246, 0.18);
+    border-radius: 999px;
+    padding: 7px 13px 7px 11px;
+    font-size: 13px;
     font-weight: 500;
+    letter-spacing: -0.01em;
   }
-  .hero-stats { display: flex; gap: 10px; margin-top: 16px; }
-  .hero-stat { flex: 1; background: rgba(255,255,255,0.12); border-radius: 12px; padding: 10px 12px; }
-  .hero-stat b { display: block; font-size: 17px; font-weight: 700; }
-  .hero-stat span { font-size: 10.5px; opacity: 0.82; }
 
-  /* ---------- Cards ---------- */
+  .hero-stats {
+    display: flex;
+    margin-top: 22px;
+    border-top: 1px solid rgba(255, 252, 246, 0.16);
+    padding-top: 16px;
+  }
+  .hero-stat { flex: 1; padding-right: 12px; }
+  .hero-stat + .hero-stat {
+    border-left: 1px solid rgba(255, 252, 246, 0.16);
+    padding-left: 14px;
+  }
+  .hero-stat b {
+    display: block;
+    font-family: "Fraunces", Georgia, serif;
+    font-variation-settings: "SOFT" 40, "WONK" 1;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .hero-stat span {
+    display: block;
+    font-size: 11.5px;
+    color: rgba(255, 252, 246, 0.72);
+    margin-top: 5px;
+    letter-spacing: -0.005em;
+  }
+
+  /* ---------- Cards + rows ---------- */
   .card {
-    background: var(--surface);
-    border: 1px solid var(--outline-variant);
-    border-radius: 16px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
     padding: 16px;
-    box-shadow: var(--e1);
   }
-  .card + .card { margin-top: 10px; }
 
-  .card-row { display: flex; align-items: flex-start; gap: 12px; }
-  .card-icon {
-    width: 36px; height: 36px; border-radius: 10px;
+  .card-row { display: flex; align-items: flex-start; gap: 13px; }
+
+  .tile {
+    width: 40px; height: 40px;
+    border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px; flex-shrink: 0;
-    background: var(--primary-container); color: var(--on-primary-container);
+    flex-shrink: 0;
+    background: var(--palm-soft); color: var(--palm);
   }
-  .card-icon.tertiary { background: var(--tertiary-container); color: var(--on-tertiary-container); }
-  .card-icon.secondary { background: var(--secondary-container); color: var(--on-secondary-container); }
+  .tile.ocean { background: var(--ocean-soft); color: var(--ocean); }
+  .tile.sunset { background: var(--sunset-soft); color: var(--sunset-ink); }
 
-  .card-title { font-size: 14.5px; font-weight: 700; line-height: 1.3; }
-  .card-sub { font-size: 12.5px; color: var(--on-surface-variant); margin-top: 2px; line-height: 1.45; }
+  .card-title { font-size: 15.5px; font-weight: 600; letter-spacing: -0.018em; line-height: 1.25; }
+  .card-sub { font-size: 13.5px; color: var(--ink-2); margin-top: 3px; line-height: 1.45; letter-spacing: -0.006em; }
+
+  /* Uber-style dense list rows, hairline separated */
+  .rows { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
+  .person-row {
+    display: flex; align-items: center; gap: 13px;
+    padding: 13px 16px;
+  }
+  .person-row + .person-row { border-top: 1px solid var(--line); }
+  .avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--palm-soft); color: var(--palm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12.5px; font-weight: 600; letter-spacing: -0.01em;
+    flex-shrink: 0;
+  }
+  .person-name { font-size: 14.5px; font-weight: 600; letter-spacing: -0.015em; }
+  .person-meta { font-size: 12.5px; color: var(--ink-2); margin-top: 2px; letter-spacing: -0.005em; }
 
   .btn-line {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    font-size: 12.5px;
-    font-weight: 500;
-    color: var(--primary);
-    margin-top: 8px;
+    gap: 6px;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    color: var(--palm);
+    margin-top: 10px;
+    min-height: 24px;
   }
+  .btn-line:active { opacity: 0.7; }
 
-  /* ---------- Group / flights ---------- */
-  .people-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
-  .person-row {
-    display: flex; align-items: center; gap: 11px;
-    background: var(--surface-container);
-    border-radius: 12px; padding: 10px 12px;
+  /* ---------- Boarding pass ---------- */
+  .boarding-pass {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    overflow: hidden;
   }
-  .avatar {
-    width: 30px; height: 30px; border-radius: 50%;
-    background: var(--primary); color: var(--on-primary);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700; flex-shrink: 0;
+  .flight-leg { position: relative; padding: 18px 16px; }
+  .flight-leg + .flight-leg { border-top: 1px dashed var(--line-2); }
+  /* Perforation notches at the tear line */
+  .flight-leg + .flight-leg::before,
+  .flight-leg + .flight-leg::after {
+    content: "";
+    position: absolute;
+    top: -7px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--sand);
+    border: 1px solid var(--line);
   }
-  .person-name { font-size: 13.5px; font-weight: 500; }
-  .person-meta { font-size: 11.5px; color: var(--on-surface-variant); margin-top: 1px; }
+  .flight-leg + .flight-leg::before { left: -8px; }
+  .flight-leg + .flight-leg::after { right: -8px; }
 
-  .flight-leg {
-    display: flex; align-items: center; gap: 12px;
-    padding: 11px 0;
-    border-top: 1px dashed var(--outline);
+  .leg-main { display: flex; align-items: flex-start; gap: 10px; }
+  .leg-end { min-width: 0; }
+  .leg-end-right { text-align: right; }
+  .leg-code {
+    font-family: "Fraunces", Georgia, serif;
+    font-variation-settings: "SOFT" 40, "WONK" 1;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 1;
+    letter-spacing: -0.02em;
   }
-  .flight-leg:first-of-type { border-top: none; padding-top: 4px; }
-  .flight-code {
-    display: flex; flex-direction: column; align-items: center;
-    font-size: 15px; font-weight: 700; color: var(--on-surface);
-    min-width: 46px;
+  .leg-time { font-size: 13.5px; font-weight: 600; margin-top: 6px; letter-spacing: -0.012em; }
+  .leg-city { font-size: 12px; color: var(--ink-2); margin-top: 2px; letter-spacing: -0.005em; }
+
+  .leg-path { flex: 1; display: flex; align-items: center; gap: 6px; padding-top: 9px; color: var(--line-2); }
+  .leg-path .rule { flex: 1; height: 1px; background: repeating-linear-gradient(to right, var(--line-2) 0 4px, transparent 4px 8px); }
+  .leg-path .icon { color: var(--palm); }
+
+  .leg-meta {
+    display: flex; flex-wrap: wrap; gap: 4px 8px;
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--ink-2);
+    letter-spacing: -0.005em;
   }
-  .flight-code span { font-size: 10px; font-weight: 500; color: var(--on-surface-variant); margin-top: 1px; }
-  .flight-route { flex: 1; }
-  .flight-airports { display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 700; }
-  .flight-arrow { color: var(--on-surface-variant); font-size: 13px; }
-  .flight-time { font-size: 12px; color: var(--on-surface-variant); margin-top: 2px; }
-  .flight-meta { font-size: 11px; color: var(--on-surface-variant); margin-top: 1px; }
+  /* Separator trails its own item so it never wraps onto the next line alone */
+  .leg-meta span { display: inline-flex; align-items: center; white-space: nowrap; }
+  .leg-meta span:not(:last-child)::after { content: "·"; margin-left: 8px; color: var(--line-2); }
+
+  /* Terminal is a different class of fact than flight identity — own line */
+  .leg-terminal { font-size: 12px; color: var(--ink-2); margin-top: 5px; letter-spacing: -0.005em; }
 
   /* ---------- Filter chips ---------- */
   .chip-row {
     display: flex; gap: 8px; overflow-x: auto;
-    padding: 2px 2px 4px;
+    padding: 2px 2px 6px;
     -ms-overflow-style: none; scrollbar-width: none;
   }
   .chip-row::-webkit-scrollbar { display: none; }
 
   .chip {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 12.5px; font-weight: 500;
-    padding: 8px 14px;
-    border-radius: 99px;
-    border: 1px solid var(--outline);
-    color: var(--on-surface-variant);
-    background: var(--surface);
+    display: inline-flex; align-items: center;
+    min-height: 40px;
+    font-size: 13.5px; font-weight: 600; letter-spacing: -0.012em;
+    padding: 0 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line-2);
+    color: var(--ink);
+    background: var(--paper);
     white-space: nowrap;
     flex-shrink: 0;
     transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
   }
+  /* Uber selects with solid fill, not a tint — unmistakable at a glance */
   .chip.active {
-    background: var(--primary-container);
-    color: var(--on-primary-container);
-    border-color: transparent;
-    font-weight: 700;
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
   }
-  .chip .dot { width: 6px; height: 6px; border-radius: 50%; }
 
-  /* ---------- Segmented toggle ---------- */
-  .toggle-row { display: flex; justify-content: flex-end; margin: 2px 0 12px; }
+  /* ---------- Segmented control ---------- */
+  .toggle-row { display: flex; justify-content: flex-end; margin: 4px 0 14px; }
   .segmented {
     display: inline-flex;
-    background: var(--surface-container);
-    border-radius: 99px;
+    background: var(--sand-2);
+    border-radius: 10px;
     padding: 3px;
-    gap: 2px;
+    gap: 3px;
   }
   .segmented button {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 12.5px; font-weight: 500;
-    padding: 7px 14px;
-    border-radius: 99px;
-    color: var(--on-surface-variant);
+    display: flex; align-items: center; gap: 6px;
+    min-height: 36px;
+    font-size: 13px; font-weight: 600; letter-spacing: -0.012em;
+    padding: 0 14px;
+    border-radius: var(--r-sm);
+    color: var(--ink-2);
   }
   .segmented button.active {
-    background: var(--surface);
-    color: var(--primary);
-    font-weight: 700;
-    box-shadow: var(--e1);
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: 0 1px 2px rgba(23, 19, 16, 0.1);
   }
 
   /* ---------- Place cards ---------- */
-  .place-list { display: flex; flex-direction: column; gap: 10px; }
+  .place-list { display: flex; flex-direction: column; gap: 12px; }
 
   .place-card {
-    background: var(--surface);
-    border: 1px solid var(--outline-variant);
-    border-radius: 16px;
-    padding: 15px;
-    box-shadow: var(--e1);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 16px;
   }
 
-  .place-top { display: flex; align-items: flex-start; gap: 11px; }
+  .place-top { display: flex; align-items: flex-start; gap: 13px; }
   .place-icon {
-    width: 38px; height: 38px; border-radius: 11px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 19px; flex-shrink: 0;
-    background: var(--primary-container); color: var(--on-primary-container);
-  }
-  .place-icon.food { background: var(--secondary-container); color: var(--on-secondary-container); }
-  .place-icon.stay { background: var(--tertiary-container); color: var(--on-tertiary-container); }
-
-  .place-name { font-size: 14.5px; font-weight: 700; line-height: 1.3; }
-  .place-address { font-size: 12px; color: var(--on-surface-variant); margin-top: 2px; }
-
-  .place-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
-  .tag {
-    font-size: 10.5px; font-weight: 600; letter-spacing: 0.2px;
-    padding: 3px 9px; border-radius: 7px;
-    background: var(--surface-container-high); color: var(--on-surface-variant);
-  }
-  .tag.confirmed { background: var(--primary-container); color: var(--on-primary-container); }
-  .tag.pending { background: var(--secondary-container); color: var(--on-secondary-container); }
-
-  .place-notes { font-size: 12.5px; line-height: 1.55; color: var(--on-surface-variant); margin-top: 9px; }
-  .place-facts { font-size: 12px; color: var(--on-surface); margin-top: 7px; display: flex; flex-wrap: wrap; gap: 4px 14px; }
-  .place-facts b { font-weight: 700; }
-
-  .quick-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
-  .qa-btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 12px; font-weight: 600;
-    padding: 8px 12px;
+    width: 40px; height: 40px;
     border-radius: 10px;
-    background: var(--surface-container);
-    color: var(--on-surface);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    background: var(--palm-soft); color: var(--palm);
   }
-  .qa-btn:active { background: var(--surface-container-high); }
-  .qa-btn.primary { background: var(--primary); color: var(--on-primary); }
+  .place-icon.food { background: var(--sunset-soft); color: var(--sunset-ink); }
+  .place-icon.stay { background: var(--ocean-soft); color: var(--ocean); }
 
-  .empty-state { text-align: center; padding: 40px 20px; color: var(--on-surface-variant); font-size: 13px; }
+  .place-name { font-size: 15.5px; font-weight: 600; letter-spacing: -0.018em; line-height: 1.25; }
+  .place-address { font-size: 13px; color: var(--ink-2); margin-top: 3px; letter-spacing: -0.005em; line-height: 1.4; }
+
+  .place-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .tag {
+    font-size: 12px; font-weight: 600; letter-spacing: -0.008em;
+    padding: 5px 10px; border-radius: 7px;
+    background: var(--sand-2); color: var(--ink-2);
+  }
+  /* Status carries a word and a mark, never colour alone (WCAG 1.4.1) */
+  .tag.confirmed { background: var(--palm-soft); color: var(--palm); }
+  .tag.pending { background: var(--sunset-soft); color: var(--sunset-ink); }
+
+  .place-notes { font-size: 13.5px; line-height: 1.5; color: var(--ink-2); margin-top: 11px; letter-spacing: -0.006em; }
+
+  .place-facts {
+    margin-top: 12px;
+    border-top: 1px solid var(--line);
+    padding-top: 11px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .place-facts span { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; letter-spacing: -0.006em; }
+  .place-facts b { font-weight: 500; color: var(--ink-2); }
+  .place-facts i { font-style: normal; font-weight: 600; text-align: right; }
+
+  .quick-actions { display: flex; gap: 8px; margin-top: 14px; }
+  .qa-btn {
+    flex: 1;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    min-height: 44px;
+    font-size: 13.5px; font-weight: 600; letter-spacing: -0.012em;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--line-2);
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .qa-btn:active { background: var(--sand-2); }
+  .qa-btn.primary {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+  .qa-btn.primary:active { background: #2A2320; }
+
+  .empty-state {
+    text-align: center;
+    padding: 44px 20px;
+    color: var(--ink-2);
+    font-size: 14px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+  }
 
   /* ---------- Map ---------- */
   .map-wrap {
-    border-radius: 16px;
+    border-radius: var(--r-md);
     overflow: hidden;
-    border: 1px solid var(--outline-variant);
-    box-shadow: var(--e1);
+    border: 1px solid var(--line);
   }
-  #map { width: 100%; height: 58vh; min-height: 380px; background: var(--surface-container); }
-  .map-note { font-size: 11.5px; color: var(--on-surface-variant); margin-top: 8px; padding: 0 2px; }
+  #map { width: 100%; height: 58vh; min-height: 380px; background: var(--sand-2); }
+  .map-note { font-size: 12.5px; color: var(--ink-2); margin-top: 10px; padding: 0 2px; line-height: 1.45; }
 
-  .map-mini-wrap { border-radius: 14px; overflow: hidden; border: 1px solid var(--outline-variant); }
-  #map-mini { width: 100%; height: 200px; background: var(--surface-container); }
+  .map-mini-wrap { border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+  #map-mini { width: 100%; height: 210px; background: var(--sand-2); }
 
-  .leaflet-popup-content-wrapper { border-radius: 12px; }
-  .leaflet-popup-content { font-family: "Roboto", sans-serif; font-size: 12.5px; margin: 10px 12px; }
-  .popup-title { font-weight: 700; font-size: 13px; margin-bottom: 2px; }
-  .popup-addr { color: #49493F; font-size: 11.5px; }
+  .leaflet-popup-content-wrapper { border-radius: 10px; }
+  .leaflet-popup-content { font-family: "Inter", sans-serif; font-size: 13px; margin: 11px 13px; }
+  .popup-title { font-weight: 600; font-size: 13.5px; letter-spacing: -0.015em; margin-bottom: 3px; }
+  .popup-addr { color: #5C5347; font-size: 12px; }
 
   .pin-marker { display: flex; align-items: center; justify-content: center; }
   .pin-marker svg { display: block; }
 
   /* ---------- Weather ---------- */
   .weather-card {
-    background: linear-gradient(155deg, var(--tertiary) 0%, #223a5e 100%);
-    color: var(--on-tertiary);
-    border-radius: 18px;
-    padding: 18px;
-    box-shadow: var(--e2);
+    position: relative;
+    overflow: hidden;
+    background: var(--ocean-deep);
+    color: var(--paper);
+    border-radius: var(--r-lg);
+    padding: 20px;
   }
-  .weather-card .card-sub { color: rgba(255,255,255,0.82); }
-  .weather-card .place-name, .weather-card .card-title { color: #fff; }
-  .weather-link {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(255,255,255,0.16);
-    border-radius: 12px;
-    padding: 11px 14px;
-    font-size: 13px; font-weight: 600;
-    margin-top: 14px;
-    width: 100%;
+  /* Sits clear of the rule above .weather-now so the line never cuts it */
+  .weather-sun {
+    position: absolute;
+    top: -46px; right: -40px;
+    width: 134px; height: 134px;
+    pointer-events: none;
   }
-  .weather-link .icon { margin-left: auto; }
+  .weather-head { position: relative; z-index: 1; display: flex; align-items: flex-start; gap: 13px; }
+  .weather-tile {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: rgba(255, 252, 246, 0.16);
+    color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .weather-card .card-title { color: var(--paper); }
+  .weather-card .card-sub { color: rgba(255, 252, 246, 0.78); }
 
   .weather-now {
+    position: relative; z-index: 1;
     display: flex;
     align-items: center;
-    gap: 14px;
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid rgba(255,255,255,0.18);
+    gap: 16px;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 252, 246, 0.18);
   }
-  .weather-temp { font-size: 40px; font-weight: 700; line-height: 1; flex-shrink: 0; }
+  .weather-temp {
+    font-family: "Fraunces", Georgia, serif;
+    font-variation-settings: "SOFT" 40, "WONK" 1;
+    font-weight: 600;
+    font-size: 52px;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    flex-shrink: 0;
+  }
   .weather-now-meta { min-width: 0; }
-  .weather-desc { font-size: 13.5px; font-weight: 600; text-transform: capitalize; }
+  .weather-desc { font-size: 14.5px; font-weight: 600; letter-spacing: -0.015em; text-transform: capitalize; }
   .weather-facts {
-    display: flex; flex-wrap: wrap; gap: 3px 10px;
-    font-size: 11.5px; color: rgba(255,255,255,0.8);
-    margin-top: 4px;
+    display: flex; flex-wrap: wrap; gap: 3px 12px;
+    font-size: 12.5px; color: rgba(255, 252, 246, 0.78);
+    margin-top: 5px; letter-spacing: -0.005em;
   }
-  .weather-updated { font-size: 10.5px; color: rgba(255,255,255,0.65); margin-top: 10px; }
+  .weather-updated {
+    position: relative; z-index: 1;
+    font-size: 11.5px; color: rgba(255, 252, 246, 0.72);
+    margin-top: 12px;
+  }
+
+  .weather-link {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; gap: 8px;
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: var(--r-sm);
+    min-height: 46px;
+    padding: 0 16px;
+    font-size: 14px; font-weight: 600; letter-spacing: -0.015em;
+    margin-top: 16px;
+  }
+  .weather-link .icon { margin-left: auto; }
 
   .forecast-row {
     display: flex; gap: 8px; overflow-x: auto;
@@ -414,54 +593,76 @@
   .forecast-row::-webkit-scrollbar { display: none; }
   .forecast-day {
     flex: 0 0 auto;
-    width: 78px;
-    background: var(--surface);
-    border: 1px solid var(--outline-variant);
-    border-radius: 14px;
-    padding: 12px 8px;
+    width: 82px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 13px 8px;
     text-align: center;
-    box-shadow: var(--e1);
   }
-  .forecast-day-label { font-size: 11.5px; font-weight: 700; color: var(--on-surface-variant); }
-  .forecast-day-icon { color: var(--tertiary); margin: 8px 0; }
-  .forecast-day-hi { font-size: 13px; font-weight: 700; }
-  .forecast-day-lo { font-size: 11.5px; color: var(--on-surface-variant); }
+  .forecast-day-label { font-size: 12.5px; font-weight: 600; color: var(--ink-2); letter-spacing: -0.008em; }
+  .forecast-day-icon { color: var(--ocean); margin: 9px 0; display: flex; justify-content: center; }
+  .forecast-day-hi {
+    font-family: "Fraunces", Georgia, serif;
+    font-variation-settings: "SOFT" 40, "WONK" 1;
+    font-weight: 600; font-size: 17px; letter-spacing: -0.02em;
+  }
+  .forecast-day-lo { font-size: 12.5px; color: var(--ink-2); margin-top: 2px; }
 
   /* ---------- Install banner ---------- */
   .install-banner {
     position: fixed;
     left: 12px; right: 12px;
-    bottom: calc(84px + env(safe-area-inset-bottom));
+    bottom: calc(86px + env(safe-area-inset-bottom));
     z-index: 40;
-    background: var(--on-surface);
-    color: var(--surface);
-    border-radius: 16px;
-    padding: 13px 14px;
+    max-width: 640px;
+    margin: 0 auto;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: var(--r-md);
+    padding: 14px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    box-shadow: var(--e3);
-    transform: translateY(140%);
-    transition: transform 0.3s cubic-bezier(0.2,0,0,1);
+    gap: 13px;
+    box-shadow: var(--lift);
+    /* Must clear its own height *and* the 86px bottom offset, or the top edge
+       stays visible over the nav. visibility guarantees it regardless of height,
+       and pointer-events stops the hidden layer swallowing taps on the nav. */
+    transform: translateY(calc(100% + 110px));
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.28s cubic-bezier(0.2, 0, 0, 1), opacity 0.28s ease, visibility 0s linear 0.28s;
   }
-  .install-banner.show { transform: translateY(0); }
+  .install-banner.show {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: transform 0.28s cubic-bezier(0.2, 0, 0, 1), opacity 0.28s ease, visibility 0s linear 0s;
+  }
   .install-banner .icon-wrap {
-    width: 34px; height: 34px; border-radius: 10px;
-    background: var(--primary);
-    color: var(--on-primary);
+    width: 36px; height: 36px; border-radius: 10px;
+    background: rgba(255, 252, 246, 0.14);
+    color: var(--paper);
     display: flex; align-items: center; justify-content: center;
-    font-size: 17px; flex-shrink: 0;
+    flex-shrink: 0;
   }
   .install-copy { flex: 1; min-width: 0; }
-  .install-copy b { display: block; font-size: 13px; font-weight: 700; }
-  .install-copy p { font-size: 11.5px; opacity: 0.78; margin-top: 1px; line-height: 1.4; }
-  .install-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+  .install-copy b { display: block; font-size: 14px; font-weight: 600; letter-spacing: -0.015em; }
+  .install-copy p { font-size: 12.5px; color: rgba(255, 252, 246, 0.72); margin-top: 2px; line-height: 1.4; }
+  .install-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
   .install-go {
-    background: var(--primary); color: var(--on-primary);
-    font-size: 12px; font-weight: 700;
-    padding: 8px 12px; border-radius: 9px;
+    background: var(--paper); color: var(--ink);
+    font-size: 13.5px; font-weight: 600; letter-spacing: -0.012em;
+    min-height: 40px; padding: 0 14px;
+    border-radius: var(--r-sm);
   }
-  .install-close { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; opacity: 0.7; }
+  .install-close {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255, 252, 246, 0.7);
+  }
 
   /* ---------- Bottom nav ---------- */
   .bottom-nav {
@@ -469,46 +670,54 @@
     left: 0; right: 0; bottom: 0;
     z-index: 30;
     display: flex;
-    background: var(--surface);
-    border-top: 1px solid var(--outline-variant);
-    padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom);
   }
   .nav-item {
+    position: relative;
     flex: 1;
-    display: flex; flex-direction: column; align-items: center; gap: 3px;
-    padding: 4px 0;
-    color: var(--on-surface-variant);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    min-height: 58px;
+    padding: 8px 0 10px;
+    color: var(--ink-2);
   }
-  .nav-item .nav-icon-wrap {
-    width: 46px; height: 26px;
-    border-radius: 13px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
+  .nav-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 26px; height: 3px;
+    border-radius: 0 0 3px 3px;
+    background: transparent;
     transition: background 0.15s ease;
   }
-  .nav-item.active { color: var(--on-surface); }
-  .nav-item.active .nav-icon-wrap { background: var(--primary-container); color: var(--on-primary-container); }
-  .nav-item span { font-size: 10.5px; font-weight: 600; }
+  .nav-item.active { color: var(--ink); }
+  .nav-item.active::before { background: var(--palm); }
+  .nav-item span { font-size: 11.5px; font-weight: 600; letter-spacing: -0.008em; }
 
   @media (min-width: 600px) {
-    .hero-stats { gap: 12px; }
     .view { padding: 24px 24px 8px; }
-    #map { height: 480px; }
+    .hero { padding: 28px 26px 24px; }
+    #map { height: 460px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
   }
 </style>
 </head>
 <body>
 
 <header class="appbar">
-  <div class="appbar-icon" aria-hidden="true">
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M12 3v13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 4.5l6 3-6 3" fill="currentColor"/><ellipse cx="12" cy="20" rx="6.5" ry="1.4" fill="currentColor" opacity="0.55"/></svg>
+  <div class="appbar-mark" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="19" height="19" fill="none"><path d="M12 3.5v14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M12.6 4.6l6.2 2.7-6.2 2.7z" fill="currentColor"/><ellipse cx="12" cy="19.4" rx="5.6" ry="1.3" fill="currentColor" opacity="0.5"/></svg>
   </div>
   <div class="appbar-text">
     <div class="appbar-title">Florida Golf Trip 2</div>
     <div class="appbar-sub" id="appbar-sub">Sept 17–20, 2026</div>
   </div>
   <button class="appbar-action" id="install-icon-btn" title="Install app" aria-label="Install app">
-    <svg viewBox="0 0 24 24" width="19" height="19" fill="none"><path d="M12 4v11m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 18v1.5A1.5 1.5 0 006.5 21h11a1.5 1.5 0 001.5-1.5V18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none"><path d="M12 4v11m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 18v1.5A1.5 1.5 0 006.5 21h11a1.5 1.5 0 001.5-1.5V18" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
   </button>
 </header>
 
@@ -520,17 +729,41 @@
   <section class="view active" data-view="trip">
 
     <div class="hero">
-      <div class="hero-eyebrow">Golf trip</div>
-      <h1>Fort Myers · Bonita Springs · Miromar Lakes, FL</h1>
-      <div class="hero-dates">Thursday, Sept 17 – Sunday, Sept 20, 2026</div>
-      <div class="hero-countdown" id="countdown">
-        <span class="icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-        <span id="countdown-text">Loading…</span>
-      </div>
-      <div class="hero-stats">
-        <div class="hero-stat"><b>4</b><span>days</span></div>
-        <div class="hero-stat"><b>3</b><span>rounds of golf</span></div>
-        <div class="hero-stat"><b>4</b><span>guys</span></div>
+      <svg class="hero-sun" viewBox="0 0 160 160" aria-hidden="true">
+        <defs>
+          <clipPath id="sunClip"><circle cx="80" cy="80" r="62" /></clipPath>
+          <linearGradient id="sunFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#E8A33D" />
+            <stop offset="100%" stop-color="#B94E27" />
+          </linearGradient>
+        </defs>
+        <g clip-path="url(#sunClip)">
+          <rect x="0" y="0" width="160" height="160" fill="url(#sunFill)" />
+          <g fill="#143B2C">
+            <rect x="0" y="92" width="160" height="4" />
+            <rect x="0" y="103" width="160" height="6" />
+            <rect x="0" y="117" width="160" height="8" />
+            <rect x="0" y="134" width="160" height="11" />
+          </g>
+        </g>
+      </svg>
+
+      <div class="hero-inner">
+        <div class="hero-eyebrow">
+          <span class="hero-rays" aria-hidden="true"><i></i><i></i><i></i></span>
+          Golf trip
+        </div>
+        <h1>Fort Myers &amp; Bonita Springs</h1>
+        <div class="hero-dates">Thursday, Sept 17 – Sunday, Sept 20, 2026</div>
+        <div class="hero-countdown" id="countdown">
+          <span class="icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none"><circle cx="12" cy="12" r="8.6" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.4v5l3.3 1.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          <span id="countdown-text">Loading…</span>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><b>4</b><span>days</span></div>
+          <div class="hero-stat"><b>3</b><span>rounds of golf</span></div>
+          <div class="hero-stat"><b>4</b><span>guys</span></div>
+        </div>
       </div>
     </div>
 
@@ -538,15 +771,15 @@
       <div class="section-title">Home base</div>
       <div class="card">
         <div class="card-row">
-          <div class="card-icon tertiary">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M4 11.5L12 4l8 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9.5a1 1 0 001 1h3.5v-5.5h3V20.5H17a1 1 0 001-1V10" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          <div class="tile ocean">
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none"><path d="M4 11.5L12 4l8 7.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9.5a1 1 0 001 1h3.5v-5.5h3V20.5H17a1 1 0 001-1V10" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg>
           </div>
           <div>
             <div class="card-title">The condo</div>
             <div class="card-sub">10733 Mirasol Drive #211, Miromar Lakes, FL 33913</div>
             <a class="btn-line" id="condo-directions" href="#" target="_blank" rel="noopener noreferrer">
               Get directions
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </div>
         </div>
@@ -555,14 +788,12 @@
 
     <div class="section">
       <div class="section-title">Who's going</div>
-      <div class="card">
-        <div class="people-list" id="people-list"></div>
-      </div>
+      <div class="rows" id="people-list"></div>
     </div>
 
     <div class="section">
       <div class="section-title">Return flight · Ryan · Sun, Sept 20</div>
-      <div class="card" id="flights-card"></div>
+      <div class="boarding-pass" id="flights-card"></div>
     </div>
 
   </section>
@@ -575,11 +806,11 @@
     <div class="toggle-row">
       <div class="segmented">
         <button id="seg-list" class="active" data-mode="list">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
           List
         </button>
         <button id="seg-map" data-mode="map">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M9 4L4 6v14l5-2 6 2 5-2V4l-5 2-6-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" stroke="currentColor" stroke-width="2"/></svg>
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M9 4L4 6v14l5-2 6 2 5-2V4l-5 2-6-2z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" stroke="currentColor" stroke-width="1.9"/></svg>
           Map
         </button>
       </div>
@@ -600,9 +831,27 @@
   <section class="view" data-view="weather">
     <div class="section">
       <div class="weather-card">
-        <div class="card-row">
-          <div class="card-icon" id="weather-icon-wrap" style="background:rgba(255,255,255,0.18); color:#fff;">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="weather-sun" viewBox="0 0 160 160" aria-hidden="true">
+          <defs>
+            <clipPath id="wSunClip"><circle cx="80" cy="80" r="58" /></clipPath>
+            <linearGradient id="wSunFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#E8A33D" />
+              <stop offset="100%" stop-color="#B94E27" />
+            </linearGradient>
+          </defs>
+          <g clip-path="url(#wSunClip)">
+            <rect x="0" y="0" width="160" height="160" fill="url(#wSunFill)" />
+            <g fill="#1D4A57">
+              <rect x="0" y="94" width="160" height="5" />
+              <rect x="0" y="106" width="160" height="7" />
+              <rect x="0" y="121" width="160" height="10" />
+            </g>
+          </g>
+        </svg>
+
+        <div class="weather-head">
+          <div class="weather-tile" id="weather-icon-wrap">
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none"><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.9"/><path d="M12 2.6v2M12 19.4v2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M2.6 12h2M19.4 12h2M5.2 18.8l1.4-1.4M17.4 6.6l1.4-1.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
           </div>
           <div>
             <div class="card-title">Weather</div>
@@ -627,7 +876,7 @@
 
         <a class="weather-link" href="https://www.google.com/search?q=weather+miromar+lakes+fl" target="_blank" rel="noopener noreferrer">
           See full forecast
-          <span class="icon"><svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="icon"><svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </a>
       </div>
     </div>
@@ -648,7 +897,7 @@
 
 <div class="install-banner" id="install-banner">
   <div class="icon-wrap">
-    <svg viewBox="0 0 24 24" width="17" height="17" fill="none"><path d="M12 4v11m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 18v1.5A1.5 1.5 0 006.5 21h11a1.5 1.5 0 001.5-1.5V18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M12 4v11m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 18v1.5A1.5 1.5 0 006.5 21h11a1.5 1.5 0 001.5-1.5V18" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
   </div>
   <div class="install-copy">
     <b id="install-title">Add to Home Screen</b>
@@ -657,22 +906,22 @@
   <div class="install-actions">
     <button class="install-go" id="install-go">Add</button>
     <button class="install-close" id="install-close" aria-label="Dismiss">
-      <svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
     </button>
   </div>
 </div>
 
 <nav class="bottom-nav">
   <button class="nav-item active" data-target="trip">
-    <span class="nav-icon-wrap"><svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M4 11.5L12 4l8 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9.5a1 1 0 001 1h3.5v-5.5h3V20.5H17a1 1 0 001-1V10" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>
+    <span class="icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none"><path d="M4 11.5L12 4l8 7.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9.5a1 1 0 001 1h3.5v-5.5h3V20.5H17a1 1 0 001-1V10" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></span>
     <span>Trip</span>
   </button>
   <button class="nav-item" data-target="places">
-    <span class="nav-icon-wrap"><svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M12 21s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="9" r="2.3" stroke="currentColor" stroke-width="2"/></svg></span>
+    <span class="icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none"><path d="M12 21s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><circle cx="12" cy="9" r="2.3" stroke="currentColor" stroke-width="1.9"/></svg></span>
     <span>Places</span>
   </button>
   <button class="nav-item" data-target="weather">
-    <span class="nav-icon-wrap"><svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M17.5 18a4 4 0 000-8 5.5 5.5 0 00-10.6 1.8A3.5 3.5 0 007.5 18h10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>
+    <span class="icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none"><path d="M17.5 18a4 4 0 000-8 5.5 5.5 0 00-10.6 1.8A3.5 3.5 0 007.5 18h10z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></span>
     <span>Weather</span>
   </button>
 </nav>
@@ -695,10 +944,10 @@
   };
 
   var PEOPLE = [
-    { name: "Ryan S.", meta: "Arrives Thu, Sept 17 — early (lands ~12:30 PM)", initials: "RS" },
-    { name: "Gustavo C.", meta: "Arrives Thu, Sept 17 — early (lands ~12:30 PM)", initials: "GC" },
-    { name: "Matt T.", meta: "Arrives Thu, Sept 17 — later", initials: "MT" },
-    { name: "Oscar A.", meta: "Arrives Thu, Sept 17 — later", initials: "OA" }
+    { name: "Ryan S.", meta: "Thu, Sept 17 · lands ~12:30 PM", initials: "RS" },
+    { name: "Gustavo C.", meta: "Thu, Sept 17 · lands ~12:30 PM", initials: "GC" },
+    { name: "Matt T.", meta: "Thu, Sept 17 · arrives later", initials: "MT" },
+    { name: "Oscar A.", meta: "Thu, Sept 17 · arrives later", initials: "OA" }
   ];
 
   var FLIGHTS = [
@@ -791,33 +1040,51 @@
     }
   ];
 
-  /* ---------------- Icons ---------------- */
+  /* ---------------- Map markers ---------------- */
+  /* Rounded-square pins in the trip palette — differentiated by both
+     colour and glyph so category never rests on colour alone. */
 
-  function golfIconSvg(size) {
-    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#1E6B3A" stroke="#fff" stroke-width="2"/><rect x="15" y="9" width="2" height="12" rx="1" fill="#fff"/><path d="M17 10l7 3-7 3z" fill="#fff"/><ellipse cx="16" cy="23" rx="6" ry="1.4" fill="#fff" opacity="0.6"/></svg>';
+  function pinSvg(fill, glyph) {
+    return '<svg width="32" height="32" viewBox="0 0 32 32">' +
+      '<rect x="1" y="1" width="30" height="30" rx="9" fill="' + fill + '" stroke="#FFFCF6" stroke-width="2"/>' +
+      glyph +
+    '</svg>';
   }
-  function foodIconSvg(size) {
-    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#8A5A2B" stroke="#fff" stroke-width="2"/><path d="M11 8v7a2 2 0 002 2v7" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M11 8v5M13 8v5M9 8v5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><path d="M20 8c-1.4 0-2.4 1.6-2.4 4s1 4 2.4 4v8" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function golfIconSvg() {
+    return pinSvg("#1F5B43",
+      '<rect x="15.1" y="9" width="1.8" height="13" rx="0.9" fill="#FFFCF6"/>' +
+      '<path d="M17 10l6.4 2.8L17 15.6z" fill="#FFFCF6"/>' +
+      '<ellipse cx="16" cy="23" rx="5" ry="1.2" fill="#FFFCF6" opacity="0.55"/>');
   }
-  function homeIconSvg(size) {
-    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 32 32"><circle cx="16" cy="16" r="15" fill="#35507A" stroke="#fff" stroke-width="2"/><path d="M10 16l6-5 6 5" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.5 15v7a0.8 0.8 0 00.8.8H19.7a0.8 0.8 0 00.8-.8v-7" stroke="#fff" stroke-width="1.8" fill="none" stroke-linejoin="round"/></svg>';
+  function foodIconSvg() {
+    return pinSvg("#B94E27",
+      '<path d="M11.5 8.5v6a1.8 1.8 0 001.8 1.8v7.2" stroke="#FFFCF6" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="M9.6 8.5v4.4M13.4 8.5v4.4" stroke="#FFFCF6" stroke-width="1.7" stroke-linecap="round"/>' +
+      '<path d="M20.6 8.5c-1.4 0-2.5 1.8-2.5 4s1.1 4 2.5 4v7" stroke="#FFFCF6" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>');
+  }
+  function homeIconSvg() {
+    return pinSvg("#2C6E7F",
+      '<path d="M10 16.2l6-5.2 6 5.2" stroke="#FFFCF6" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="M11.6 15.2v7a0.8 0.8 0 00.8.8h7.2a0.8 0.8 0 00.8-.8v-7" stroke="#FFFCF6" stroke-width="1.8" fill="none" stroke-linejoin="round"/>');
   }
 
   function markerIcon(category, isHome) {
-    var svg = isHome ? homeIconSvg(30) : (category === "food" ? foodIconSvg(30) : golfIconSvg(30));
+    var svg = isHome ? homeIconSvg() : (category === "food" ? foodIconSvg() : golfIconSvg());
     return L.divIcon({
       className: "pin-marker",
       html: svg,
-      iconSize: [30, 30],
-      iconAnchor: [15, 15],
-      popupAnchor: [0, -14]
+      iconSize: [32, 32],
+      iconAnchor: [16, 16],
+      popupAnchor: [0, -15]
     });
   }
 
   var UI_ICONS = {
-    directions: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    call: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M6.5 4h3l1.5 4-2 1.5a11 11 0 005 5l1.5-2 4 1.5v3a2 2 0 01-2.2 2A16 16 0 014.5 6.2 2 2 0 016.5 4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
-    website: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M3.7 12h16.6M12 3.5c2.2 2.3 3.4 5.3 3.4 8.5s-1.2 6.2-3.4 8.5c-2.2-2.3-3.4-5.3-3.4-8.5S9.8 5.8 12 3.5z" stroke="currentColor" stroke-width="1.8"/></svg>'
+    directions: '<svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    call: '<svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M6.5 4h3l1.5 4-2 1.5a11 11 0 005 5l1.5-2 4 1.5v3a2 2 0 01-2.2 2A16 16 0 014.5 6.2 2 2 0 016.5 4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+    website: '<svg viewBox="0 0 24 24" width="15" height="15" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M3.7 12h16.6M12 3.5c2.2 2.3 3.4 5.3 3.4 8.5s-1.2 6.2-3.4 8.5c-2.2-2.3-3.4-5.3-3.4-8.5S9.8 5.8 12 3.5z" stroke="currentColor" stroke-width="1.8"/></svg>',
+    plane: '<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M21 15.5l-8.2-2.3-2.6 4.6-1.7-.4 1-4.9L4.9 11 3.6 12.9l-1.3-.3.9-3.2-.9-3.2 1.3-.3L4.9 7.8l4.6-1.5-1-4.9 1.7-.4 2.6 4.6L21 3.3l.5 1.8-6.4 4.2 1.4 1.9 5.5.5z"/></svg>'
   };
 
   /* ---------------- Render: people & flights ---------------- */
@@ -837,13 +1104,29 @@
     var leg = document.createElement("div");
     leg.className = "flight-leg";
     leg.innerHTML =
-      '<div class="flight-code">' + f.from + '<span>' + f.depart + '</span></div>' +
-      '<div class="flight-route">' +
-        '<div class="flight-airports">' + f.fromName + ' <span class="flight-arrow">→</span> ' + f.toName + '</div>' +
-        '<div class="flight-time">' + f.flightNo + ' · ' + f.carrier + ' · ' + f.plane + '</div>' +
-        '<div class="flight-meta">' + f.terminal + '</div>' +
+      '<div class="leg-main">' +
+        '<div class="leg-end">' +
+          '<div class="leg-code">' + f.from + '</div>' +
+          '<div class="leg-time">' + f.depart + '</div>' +
+          '<div class="leg-city">' + f.fromName + '</div>' +
+        '</div>' +
+        '<div class="leg-path">' +
+          '<span class="rule"></span>' +
+          '<span class="icon">' + UI_ICONS.plane + '</span>' +
+          '<span class="rule"></span>' +
+        '</div>' +
+        '<div class="leg-end leg-end-right">' +
+          '<div class="leg-code">' + f.to + '</div>' +
+          '<div class="leg-time">' + f.arrive + '</div>' +
+          '<div class="leg-city">' + f.toName + '</div>' +
+        '</div>' +
       '</div>' +
-      '<div class="flight-code">' + f.to + '<span>' + f.arrive + '</span></div>';
+      '<div class="leg-meta">' +
+        '<span>' + f.flightNo + '</span>' +
+        '<span>' + f.carrier + '</span>' +
+        '<span>' + f.plane + '</span>' +
+      '</div>' +
+      '<div class="leg-terminal">' + f.terminal + '</div>';
     flightsCard.appendChild(leg);
   });
 
@@ -881,6 +1164,7 @@
       navItems.forEach(function (n) { n.classList.toggle("active", n === item); });
       views.forEach(function (v) { v.classList.toggle("active", v.getAttribute("data-view") === target); });
       appbarSub.textContent = subs[target];
+      window.scrollTo({ top: 0, behavior: "auto" });
       if (target === "places" && currentMode === "map") { initMap(); map && map.invalidateSize(); }
       if (target === "weather") { initMiniMap(); }
     });
@@ -901,9 +1185,14 @@
     chip.className = "chip" + (f.id === "all" ? " active" : "");
     chip.dataset.filter = f.id;
     chip.textContent = f.label;
+    chip.setAttribute("aria-pressed", f.id === "all" ? "true" : "false");
     chip.addEventListener("click", function () {
       activeFilter = f.id;
-      document.querySelectorAll(".chip").forEach(function (c) { c.classList.toggle("active", c.dataset.filter === f.id); });
+      document.querySelectorAll(".chip").forEach(function (c) {
+        var on = c.dataset.filter === f.id;
+        c.classList.toggle("active", on);
+        c.setAttribute("aria-pressed", on ? "true" : "false");
+      });
       renderList();
       applyMapFilter();
     });
@@ -921,8 +1210,8 @@
   function placeCardHtml(p) {
     var iconCls = p.category === "food" ? "food" : (p.home ? "stay" : "");
     var iconSvg = p.category === "food"
-      ? '<svg viewBox="0 0 24 24" width="17" height="17" fill="none"><path d="M8 3v7a2 2 0 002 2v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 3v5M10 3v5M6 3v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 3c-1.7 0-3 2-3 5s1.3 5 3 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-      : '<svg viewBox="0 0 24 24" width="17" height="17" fill="none"><path d="M12 3v13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 4.5l6 3-6 3" fill="currentColor"/><ellipse cx="12" cy="20" rx="6.5" ry="1.4" fill="currentColor" opacity="0.5"/></svg>';
+      ? '<svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M8 3v7a2 2 0 002 2v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 3v5M10 3v5M6 3v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 3c-1.7 0-3 2-3 5s1.3 5 3 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : '<svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M12 3.5v14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M12.6 4.6l6.2 2.7-6.2 2.7z" fill="currentColor"/><ellipse cx="12" cy="19.4" rx="5.6" ry="1.3" fill="currentColor" opacity="0.5"/></svg>';
 
     var tags = "";
     if (p.day) tags += '<span class="tag">' + p.day + '</span>';
@@ -930,9 +1219,9 @@
     if (p.home) tags += '<span class="tag confirmed">Home base pick</span>';
 
     var facts = "";
-    if (p.teeTime) facts += '<span><b>Tee time</b> ' + p.teeTime + '</span>';
-    if (p.confirmation) facts += '<span><b>Conf. #</b> ' + p.confirmation + '</span>';
-    if (p.price) facts += '<span><b>Est.</b> ' + p.price + '</span>';
+    if (p.teeTime) facts += '<span><b>Tee time</b><i>' + p.teeTime + '</i></span>';
+    if (p.confirmation) facts += '<span><b>Confirmation</b><i>' + p.confirmation + '</i></span>';
+    if (p.price) facts += '<span><b>Estimated</b><i>' + p.price + '</i></span>';
 
     var actions = '<a class="qa-btn primary" href="' + mapsDir(p.address) + '" target="_blank" rel="noopener noreferrer">' + UI_ICONS.directions + ' Directions</a>';
     if (p.phone) actions += '<a class="qa-btn" href="tel:' + p.phone.replace(/[^0-9+]/g, "") + '">' + UI_ICONS.call + ' Call</a>';
@@ -1039,8 +1328,8 @@
     size = size || 20;
     var main = (iconCode || "").slice(0, 2);
     var paths = {
-      "01": '<circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
-      "02": '<circle cx="9" cy="10" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M8 18h9a3.5 3.5 0 000-7 5 5 0 00-9.5-1.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>',
+      "01": '<circle cx="12" cy="12" r="4.6" stroke="currentColor" stroke-width="1.9"/><path d="M12 2.4v2.2M12 19.4v2.2M5 5l1.5 1.5M17.5 17.5L19 19M2.4 12h2.2M19.4 12h2.2M5 19l1.5-1.5M17.5 6.5L19 5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>',
+      "02": '<circle cx="9" cy="9.6" r="3.6" stroke="currentColor" stroke-width="1.8"/><path d="M8 18h9a3.5 3.5 0 000-7 5 5 0 00-9.5-1.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>',
       "03": '<path d="M7 17h10a3.8 3.8 0 000-7.6 5.5 5.5 0 00-10.6 1.8A3.6 3.6 0 007 17z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>',
       "04": '<path d="M6 15h11a3.5 3.5 0 000-7 5 5 0 00-9.6-1.3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/><path d="M5 19h11a3 3 0 000-6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>',
       "09": '<path d="M7 13h10a3.8 3.8 0 000-7.6 5.5 5.5 0 00-10.6 1.8A3.6 3.6 0 007 13z" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M8 17v3M12 17v3M16 17v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
@@ -1056,7 +1345,7 @@
   function renderWeather(cur, fc, cachedTs) {
     if (!cur || !cur.weather || !cur.weather[0] || !cur.main) return;
 
-    document.getElementById("weather-icon-wrap").innerHTML = weatherIconSvg(cur.weather[0].icon, 18);
+    document.getElementById("weather-icon-wrap").innerHTML = weatherIconSvg(cur.weather[0].icon, 19);
     document.getElementById("weather-sub").textContent = "Miromar Lakes, FL 33913";
     document.getElementById("weather-temp").textContent = Math.round(cur.main.temp) + "°";
     document.getElementById("weather-desc").textContent = cur.weather[0].description;

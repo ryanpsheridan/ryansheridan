@@ -6,8 +6,8 @@
   "scope": "/golftrip",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#F5F5F0",
-  "theme_color": "#1E5631",
+  "background_color": "#F4EDE1",
+  "theme_color": "#FFFCF6",
   "icons": [
     { "src": "/golftrip/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "/golftrip/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },

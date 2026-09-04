@@ -1,4 +1,4 @@
-const CACHE = "golftrip-v1";
+const CACHE = "golftrip-v2";
 const ASSETS = [
   "/golftrip",
   "/golftrip/",
