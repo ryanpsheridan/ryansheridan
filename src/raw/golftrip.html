@@ -1326,7 +1326,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div style="display: flex; align-items: center; gap: 10px;">
           <div style="flex: none; width: 30px; height: 30px; border-radius: 9px; background: #2A9D95;"></div>
           <div>
-            <div style="font-size: 15px; font-weight: 600; color: #14352A;">Splitwise — Fort Myers R3</div>
+            <div style="font-size: 15px; font-weight: 600; color: #14352A;">Splitwise — Fort Myers R2</div>
             <div style="margin-top: 2px; font-size: 12.5px; color: #54634F;">Green fees, groceries, the bar tab — all of it goes here.</div>
           </div>
         </div>
@@ -1564,6 +1564,14 @@ const COURSES = [
 
 const EATS = [
   {
+    id: 'bluewater', name: 'Blue Water Beach Grill', category: 'eats', tag: 'Home base',
+    address: '18151 Miromar Lakes Pkwy, Miromar Lakes, FL 33913',
+    lat: 26.4650, lng: -81.7480, phone: '(239) 999-1199',
+    website: 'https://miromarlakes.com',
+    maps: 'https://maps.app.goo.gl/ozWNp3TCi4J3BP2w7',
+    notes: 'Inside Miromar Lakes Beach & Golf Club — same community as the condo. Closest table to the couch.'
+  },
+  {
     id: 'backyard', name: 'Backyard Social', category: 'eats', tag: 'Bar + games',
     address: '16371 Corporate Commerce Way, Fort Myers, FL 33913',
     lat: 26.5200, lng: -81.7520, phone: '(239) 703-7077',
@@ -1586,14 +1594,6 @@ const EATS = [
     website: 'https://twinpeaksrestaurant.com',
     maps: 'https://maps.app.goo.gl/Bs63b4L6Sw6NrjXF7',
     notes: 'Saturday college football, cold beer, next door to Backyard Social.'
-  },
-  {
-    id: 'bluewater', name: 'Blue Water Beach Grill', category: 'eats', tag: 'Home base',
-    address: '18151 Miromar Lakes Pkwy, Miromar Lakes, FL 33913',
-    lat: 26.4650, lng: -81.7480, phone: '(239) 999-1199',
-    website: 'https://miromarlakes.com',
-    maps: 'https://maps.app.goo.gl/ozWNp3TCi4J3BP2w7',
-    notes: 'Inside Miromar Lakes Beach & Golf Club — same community as the condo. Closest table to the couch.'
   }
 ];
 
@@ -1817,9 +1817,12 @@ class Component extends DCLogic {
     const flight = (t) => {
       const tc = clamp(t, 0, 1);
       return {
-        x: tc * (vw * 0.58 + 50),
-        y: -Math.sin(Math.PI * Math.pow(tc, 0.88)) * vh * 0.36 - tc * vh * 0.05,
-        s: lerp(1, 0.3, tc)
+        // The ball sits at left:42% and the sun is centred at 50%, so a small
+        // drift right puts the flight straight up the middle of the sunset
+        // rather than squirting out to the right.
+        x: tc * vw * 0.09,
+        y: -Math.pow(tc, 0.62) * vh * 0.36,
+        s: lerp(1, 0.18, tc)
       };
     };
     const t0 = seg(p, 0.705, 0.95);
@@ -2123,7 +2126,7 @@ class Component extends DCLogic {
           { dot: '#D8467A', title: 'Dinner at Blue Water Beach Grill', meta: 'Walkable from the condo — no one has to drive' }
         ] },
         { dow: 'Sun', num: '20', items: [
-          { dot: '#C86A34', title: 'Ryan out on DL1395', meta: '8:10 am from RSW · leave the condo by 6:30' }
+          { dot: '#C86A34', title: 'Out on DL1395', meta: '8:10 am from RSW · leave the condo by 6:30' }
         ] }
       ],
 
