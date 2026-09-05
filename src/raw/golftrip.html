@@ -1575,7 +1575,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   <div data-el="nav" style="position: sticky; bottom: 0; z-index: 60; padding: 0 16px calc(14px + env(safe-area-inset-bottom)); pointer-events: none;">
     <div style="display: flex; gap: 1px; padding: 5px; background: rgba(20,53,42,.96); backdrop-filter: blur(14px); border-radius: 999px; box-shadow: 0 12px 30px rgba(20,53,42,.28); pointer-events: auto;">
       <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
-        <button type="button" sc-camel-on-click="{{ t.onClick }}" style="flex: 1; min-height: 46px; padding: 0 2px; border: none; border-radius: 999px; background: {{ t.bg }}; color: {{ t.ink }}; font-family: inherit; font-size: 11.5px; font-weight: 600; letter-spacing: -.01em; cursor: pointer;">{{ t.label }}</button>
+        <button type="button" sc-camel-on-click="{{ t.onClick }}" style="flex: 1 1 auto; white-space: nowrap; min-height: 46px; padding: 0 7px; border: none; border-radius: 999px; background: {{ t.bg }}; color: {{ t.ink }}; font-family: inherit; font-size: 11.5px; font-weight: 600; letter-spacing: -.01em; cursor: pointer;">{{ t.label }}</button>
       </sc-for>
     </div>
   </div>
@@ -2095,7 +2095,7 @@ class Component extends DCLogic {
   /* ---------- render values ---------- */
   renderVals() {
     const s = this.state;
-    const tabs = [['trip', 'Trip'], ['golf', 'Golf'], ['eats', 'Eats'], ['map', 'Map'], ['base', 'Base']]
+    const tabs = [['trip', 'Trip'], ['golf', 'Golf'], ['eats', 'Eats & Drank'], ['map', 'Map'], ['base', 'Base']]
       .map(([id, label]) => ({
         id, label,
         bg: s.tab === id ? (id === 'base' ? '#E8A33F' : '#FFF8EA') : 'transparent',
