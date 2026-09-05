@@ -1175,32 +1175,61 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
         <div data-el="clouds" style="position: absolute; left: -20%; right: -20%; top: 12vh; height: 14vh; opacity: .3; background: radial-gradient(54px 9px at 20% 40%, rgba(255,246,226,.85) 0 55%, transparent 58%), radial-gradient(78px 11px at 54% 72%, rgba(255,246,226,.7) 0 55%, transparent 58%), radial-gradient(62px 8px at 84% 26%, rgba(255,246,226,.6) 0 55%, transparent 58%); background-repeat: no-repeat; animation: drift 34s linear infinite alternate;"></div>
 
-        <div data-el="haze" style="position: absolute; left: 50%; top: 22vh; width: 96%; aspect-ratio: 1 / 1; margin-left: -48%; border-radius: 999px; background: radial-gradient(circle, rgba(255,127,168,.34) 0 38%, rgba(255,146,120,.14) 58%, transparent 72%); will-change: transform;"></div>
+        <div data-el="haze" style="position: absolute; left: 50%; top: 30vh; width: 96%; aspect-ratio: 1 / 1; margin-left: -48%; border-radius: 999px; background: radial-gradient(circle, rgba(255,127,168,.34) 0 38%, rgba(255,146,120,.14) 58%, transparent 72%); will-change: transform;"></div>
 
-        <div data-el="sun" style="position: absolute; left: 50%; top: 26vh; width: 66%; aspect-ratio: 1 / 1; margin-left: -33%; border-radius: 999px; overflow: hidden; background: radial-gradient(circle at 50% 38%, #FFD2A8 0 18%, #FFAF8C 42%, #FF87A6 68%, #E4607F 100%); filter: blur(.4px); will-change: transform;">
+        <!-- The sun settles below the headline rather than behind it: cream
+             type on the bright centre of the disc was the one place on this
+             page where contrast fell apart. -->
+        <div data-el="sun" style="position: absolute; left: 50%; top: 34vh; width: 56%; aspect-ratio: 1 / 1; margin-left: -28%; border-radius: 999px; overflow: hidden; background: radial-gradient(circle at 50% 38%, #FFD2A8 0 18%, #FFAF8C 42%, #FF87A6 68%, #E4607F 100%); filter: blur(.4px); will-change: transform;">
           <div style="position: absolute; left: -6%; right: -6%; top: 61%; height: 5%; background: #40204F; opacity: .32; filter: blur(4px);"></div>
           <div style="position: absolute; left: -6%; right: -6%; top: 75%; height: 6%; background: #3A1B4A; opacity: .3; filter: blur(5px);"></div>
           <div style="position: absolute; left: -6%; right: -6%; top: 88%; height: 7%; background: #35184A; opacity: .28; filter: blur(6px);"></div>
         </div>
 
-        <div data-el="trees" style="position: absolute; left: -14px; bottom: 24vh; width: 96px; height: 150px; will-change: transform;">
-          <svg viewBox="0 0 60 100" width="96" height="150" style="display: block; overflow: visible; filter: blur(1.6px); opacity: .92; animation: sway 6.5s ease-in-out infinite; transform-origin: 26px 150px;">
+        <!-- Palms flank both edges at four heights. Each sits on a zero-height
+             baseline so `bottom` reads as depth up the slope, and the blur and
+             opacity fall off with distance. -->
+        <div data-el="trees" style="position: absolute; left: 0; right: 0; bottom: 41vh; height: 0; will-change: transform;">
+
+          <svg viewBox="0 0 60 100" width="95" height="158" style="position: absolute; left: -18px; bottom: -18px; display: block; overflow: visible; filter: blur(1.4px); opacity: .95; animation: sway 6.5s ease-in-out infinite; transform-origin: 51px 158px;">
             <path d="M30 100 C 25 78 32 54 33 34 L 37 34 C 36 55 31 79 35 100 Z" fill="#07160F"/>
             <g transform="translate(34,33)" fill="#07160F">
-              <path d="M0 0 C 12 -10 34 -10 46 -2 C 32 2 12 4 0 0 Z" transform="rotate(-52)"/>
-              <path d="M0 0 C 12 -8 32 -6 44 4 C 30 6 12 6 0 0 Z" transform="rotate(-16)"/>
+              <path d="M0 0 C 12 -10 34 -10 46 -2 C 32 2 12 4 0 0 Z" transform="rotate(-56)"/>
+              <path d="M0 0 C 12 -8 32 -6 44 4 C 30 6 12 6 0 0 Z" transform="rotate(-18)"/>
               <path d="M0 0 C 12 -4 30 2 40 12 C 26 10 10 6 0 0 Z" transform="rotate(20)"/>
-              <path d="M0 0 C 10 2 24 10 32 22 C 20 16 8 8 0 0 Z" transform="rotate(54)"/>
-              <path d="M0 0 C 8 4 16 14 20 26 C 10 18 4 8 0 0 Z" transform="rotate(84)"/>
+              <path d="M0 0 C 10 2 24 10 32 22 C 20 16 8 8 0 0 Z" transform="rotate(56)"/>
+              <path d="M0 0 C 8 4 16 14 20 26 C 10 18 4 8 0 0 Z" transform="rotate(86)"/>
             </g>
           </svg>
-          <svg viewBox="0 0 60 100" width="74" height="118" style="display: block; overflow: visible; position: absolute; right: -66px; bottom: -14px; filter: blur(2.2px); opacity: .66; animation: swayb 7.8s ease-in-out infinite; transform-origin: 34px 118px;">
-            <path d="M30 100 C 25 78 32 54 33 34 L 37 34 C 36 55 31 79 35 100 Z" fill="#08190F"/>
-            <g transform="translate(34,33) scale(-1,1)" fill="#08190F">
-              <path d="M0 0 C 12 -10 34 -10 46 -2 C 32 2 12 4 0 0 Z" transform="rotate(-52)"/>
+
+          <svg viewBox="0 0 60 100" width="62" height="104" style="position: absolute; left: 70px; bottom: 22px; display: block; overflow: visible; filter: blur(2.6px); opacity: .66; animation: swayb 8.6s ease-in-out infinite -1.4s; transform-origin: 33px 104px;">
+            <path d="M30 100 C 25 78 32 54 33 34 L 37 34 C 36 55 31 79 35 100 Z" fill="#0A1D12"/>
+            <g transform="translate(34,33) scale(-1,1)" fill="#0A1D12">
+              <path d="M0 0 C 12 -10 34 -10 46 -2 C 32 2 12 4 0 0 Z" transform="rotate(-48)"/>
+              <path d="M0 0 C 12 -8 32 -6 44 4 C 30 6 12 6 0 0 Z" transform="rotate(-12)"/>
+              <path d="M0 0 C 12 -4 30 2 40 12 C 26 10 10 6 0 0 Z" transform="rotate(26)"/>
+              <path d="M0 0 C 10 2 24 10 32 22 C 20 16 8 8 0 0 Z" transform="rotate(62)"/>
+            </g>
+          </svg>
+
+          <svg viewBox="0 0 60 100" width="83" height="138" style="position: absolute; right: -22px; bottom: -12px; display: block; overflow: visible; filter: blur(1.8px); opacity: .9; animation: swayb 7.4s ease-in-out infinite -.6s; transform-origin: 44px 138px;">
+            <path d="M30 100 C 25 78 32 54 33 34 L 37 34 C 36 55 31 79 35 100 Z" fill="#07160F"/>
+            <g transform="translate(34,33) scale(-1,1)" fill="#07160F">
+              <path d="M0 0 C 12 -10 34 -10 46 -2 C 32 2 12 4 0 0 Z" transform="rotate(-54)"/>
               <path d="M0 0 C 12 -8 32 -6 44 4 C 30 6 12 6 0 0 Z" transform="rotate(-16)"/>
-              <path d="M0 0 C 12 -4 30 2 40 12 C 26 10 10 6 0 0 Z" transform="rotate(20)"/>
-              <path d="M0 0 C 10 2 24 10 32 22 C 20 16 8 8 0 0 Z" transform="rotate(54)"/>
+              <path d="M0 0 C 12 -4 30 2 40 12 C 26 10 10 6 0 0 Z" transform="rotate(22)"/>
+              <path d="M0 0 C 10 2 24 10 32 22 C 20 16 8 8 0 0 Z" transform="rotate(58)"/>
+              <path d="M0 0 C 8 4 16 14 20 26 C 10 18 4 8 0 0 Z" transform="rotate(88)"/>
+            </g>
+          </svg>
+
+          <svg viewBox="0 0 60 100" width="55" height="92" style="position: absolute; right: 74px; bottom: 26px; display: block; overflow: visible; filter: blur(2.9px); opacity: .6; animation: sway 9.2s ease-in-out infinite -2.2s; transform-origin: 29px 92px;">
+            <path d="M30 100 C 25 78 32 54 33 34 L 37 34 C 36 55 31 79 35 100 Z" fill="#0A1D12"/>
+            <g transform="translate(34,33)" fill="#0A1D12">
+              <path d="M0 0 C 12 -10 34 -10 46 -2 C 32 2 12 4 0 0 Z" transform="rotate(-44)"/>
+              <path d="M0 0 C 12 -8 32 -6 44 4 C 30 6 12 6 0 0 Z" transform="rotate(-8)"/>
+              <path d="M0 0 C 12 -4 30 2 40 12 C 26 10 10 6 0 0 Z" transform="rotate(30)"/>
+              <path d="M0 0 C 10 2 24 10 32 22 C 20 16 8 8 0 0 Z" transform="rotate(66)"/>
             </g>
           </svg>
         </div>
@@ -1391,10 +1420,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <div style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(125% 92% at 50% 44%, rgba(0,0,0,0) 38%, rgba(10,18,34,.42) 100%);"></div>
         </div>
 
-        <div data-el="title" style="position: absolute; left: 0; right: 0; top: 8vh; padding: 0 26px; text-align: center; will-change: transform, opacity;">
+        <!-- The drop shadow is belt-and-braces: the sun now rests clear of the
+             type, but on a short viewport the gap closes and the shadow keeps
+             the headline legible either way. -->
+        <div data-el="title" style="position: absolute; left: 0; right: 0; top: 8vh; padding: 0 26px; text-align: center; text-shadow: 0 2px 20px rgba(12,20,40,.55); will-change: transform, opacity;">
           <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; color: #FFC7A0;">Sept 17 – 20, 2026</div>
           <div style="margin-top: 10px; font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 50px; line-height: .94; letter-spacing: -.03em; color: #FFF8EA;">Florida<br>Golf Trip <span style="color: #FF7FA8; text-shadow: 0 0 18px rgba(255,127,168,.55);">2026</span></div>
-          <div style="margin-top: 12px; font-size: 13.5px; color: rgba(255,248,234,.72);">Fort Myers · Estero · Miromar Lakes</div>
         </div>
 
         
@@ -1880,7 +1911,7 @@ class Component extends DCLogic {
      value, so going from scroll-driven to timed only changes where that
      value comes from. Order: the ball rolls the hole, the title rises in
      over the resting scene, then the whole thing fades to the app. */
-  reel = { swing: 4200, titleIn: 750, hold: 2850, out: 550 };
+  reel = { roll: 4200, titleAt: 1650, titleIn: 700, hold: 1500, out: 550 };
 
   playIntro() {
     const r = this.rootRef.current;
@@ -1902,10 +1933,13 @@ class Component extends DCLogic {
 
   renderIntro(ms) {
     const R = this.reel;
-    const swing = clamp(ms / R.swing, 0, 1);
-    const title = clamp((ms - R.swing) / R.titleIn, 0, 1);
-    const out = clamp((ms - R.swing - R.titleIn - R.hold) / R.out, 0, 1);
-    this.frame(swing, title, out);
+    // The title no longer queues behind the ball: it lands about a third of
+    // the way through the roll and the hole finishes underneath it, which
+    // gets the copy readable ~2.5s earlier and shortens the whole reel.
+    const roll = clamp(ms / R.roll, 0, 1);
+    const title = clamp((ms - R.titleAt) / R.titleIn, 0, 1);
+    const out = clamp((ms - R.roll - R.hold) / R.out, 0, 1);
+    this.frame(roll, title, out);
     return out >= 1;
   }
 
@@ -1938,9 +1972,9 @@ class Component extends DCLogic {
     if (e.cam) e.cam.style.transform = 'translateY(' + (-cam * vh * 0.045) + 'px) scale(' + (1 + cam * 0.06) + ')';
 
     const rise = ease(seg(p, 0, 1));
-    if (e.sun) e.sun.style.transform = 'translateY(' + lerp(130, -22, rise) + 'px) scale(' + lerp(0.84, 1.08, rise) + ')';
+    if (e.sun) e.sun.style.transform = 'translateY(' + lerp(140, 8, rise) + 'px) scale(' + lerp(0.86, 1.04, rise) + ')';
     if (e.haze) {
-      e.haze.style.transform = 'translateY(' + lerp(130, -22, rise) + 'px) scale(' + lerp(0.9, 1.14, rise) + ')';
+      e.haze.style.transform = 'translateY(' + lerp(140, 8, rise) + 'px) scale(' + lerp(0.92, 1.1, rise) + ')';
       e.haze.style.opacity = 0.5 + 0.5 * rise;
     }
     if (e.clouds) e.clouds.style.opacity = 0.1 + 0.14 * rise;
