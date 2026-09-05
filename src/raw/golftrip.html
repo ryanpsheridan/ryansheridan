@@ -1,1393 +1,2136 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<script>window.__resources = {"photoStoneybrook":"/golftrip/assets/731ca771-afc1-4989-a381-20de594ad8f6.jpg","photoSaltleaf":"/golftrip/assets/368889f2-af08-45de-a255-ba458ae36e7a.jpg","photoTiburon":"/golftrip/assets/38cf5d1d-187f-4007-ba71-a098de64b86f.jpg","https://unpkg.com/react@18.3.1/umd/react.production.min.js":"/golftrip/assets/68f363a0-a5a1-443c-aa2c-dc812f1b2842.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"/golftrip/assets/a012dc2b-d35c-4046-8b93-8030db9bddf3.js"};</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Florida Golf Trip 2</title>
-<meta name="description" content="Trip itinerary for Fort Myers / Bonita Springs / Miromar Lakes, FL — Sept 17-20, 2026." />
-<meta name="robots" content="noindex, nofollow" />
-<meta name="theme-color" content="#FFFCF6" />
-<meta name="color-scheme" content="light" />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="default" />
-<meta name="apple-mobile-web-app-title" content="Golf Trip" />
-<link rel="manifest" href="/golftrip/manifest.json" />
-<link rel="apple-touch-icon" href="/golftrip/apple-touch-icon.png" />
-<link rel="icon" type="image/png" sizes="32x32" href="/golftrip/favicon-32x32.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<meta name="robots" content="noindex, nofollow">
 
-<style>
-  :root {
-    /* Ground + surfaces — warm, printed-paper neutrals */
-    --sand: #F4EDE1;
-    --sand-2: #EAE0CE;
-    --paper: #FFFCF6;
-    --ink: #171310;
-    --ink-2: #5C5347;
-    --line: #E2D7C4;
-    --line-2: #CFC1A9;
 
-    /* Accents — sun-faded Florida */
-    --palm: #1F5B43;
-    --palm-deep: #143B2C;
-    --palm-soft: #DCE8DE;
-    --sunset: #B94E27;
-    /* Darker burnt tone for text/glyphs on --sunset-soft: #B94E27 lands at
-       3.9:1 there, under the 4.5:1 AA floor. This one clears 6:1. */
-    --sunset-ink: #8F3A1B;
-    --sunset-soft: #F6E1D3;
-    --ocean: #2C6E7F;
-    --ocean-deep: #1D4A57;
-    --ocean-soft: #DAE7EA;
-    --butter: #E8A33D;
 
-    --r-sm: 8px;
-    --r-md: 12px;
-    --r-lg: 16px;
 
-    --lift: 0 6px 24px rgba(23, 19, 16, 0.13);
-  }
-
-  * { box-sizing: border-box; }
-
-  html, body {
-    margin: 0;
-    padding: 0;
-    color: var(--ink);
-    font-family: "Inter", system-ui, -apple-system, sans-serif;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  body {
-    /* Paper grain sits behind content, never over it */
-    background-color: var(--sand);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
-    padding-bottom: calc(80px + env(safe-area-inset-bottom));
-    min-height: 100vh;
-    min-height: 100dvh;
-  }
-
-  a { color: inherit; text-decoration: none; }
-  button { font-family: inherit; border: none; background: none; cursor: pointer; color: inherit; }
-  ul, ol { list-style: none; margin: 0; padding: 0; }
-  h1, h2, h3, p { margin: 0; }
-
-  a:focus-visible,
-  button:focus-visible {
-    outline: 2px solid var(--ink);
-    outline-offset: 2px;
-    border-radius: 6px;
-  }
-
-  .display {
-    font-family: "Fraunces", Georgia, serif;
-    font-variation-settings: "SOFT" 40, "WONK" 1;
-    font-weight: 600;
-    letter-spacing: -0.015em;
-  }
-
-  .icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .icon svg { display: block; }
-
-  /* ---------- Top bar ---------- */
-  .appbar {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
-    background: var(--paper);
-    border-bottom: 1px solid var(--line);
-  }
-
-  .appbar-mark {
-    width: 34px; height: 34px;
-    border-radius: var(--r-sm);
-    background: var(--palm);
-    color: var(--paper);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .appbar-text { flex: 1; min-width: 0; }
-  .appbar-title { font-size: 16px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.15; }
-  .appbar-sub { font-size: 12px; color: var(--ink-2); margin-top: 2px; letter-spacing: -0.005em; }
-
-  .offline-pill {
-    display: none;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--sunset-ink);
-    background: var(--sunset-soft);
-    border: 1px solid rgba(185, 78, 39, 0.22);
-    border-radius: var(--r-sm);
-    padding: 9px 12px;
-    margin: 12px 16px 0;
-  }
-  .offline-pill.show { display: flex; }
-  .offline-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--sunset); flex-shrink: 0; }
-
-  /* ---------- Layout ---------- */
-  main { max-width: 680px; margin: 0 auto; }
-
-  .view { display: none; padding: 16px 16px 8px; }
-  .view.active { display: block; }
-
-  .section { margin-bottom: 26px; }
-  .section:last-child { margin-bottom: 8px; }
-
-  .section-title {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--ink-2);
-    margin-bottom: 10px;
-  }
-
-  /* ---------- Hero — the one poster moment ---------- */
-  .hero {
-    position: relative;
-    overflow: hidden;
-    background: var(--palm-deep);
-    color: var(--paper);
-    border-radius: var(--r-lg);
-    padding: 22px 20px 20px;
-    margin-bottom: 26px;
-  }
-
-  /* Cropped by the right edge, not the top — a sun cut by the horizon is the
-     retro idiom; cut across the top just reads like a mistake. */
-  .hero-sun {
-    position: absolute;
-    top: 6px;
-    right: -52px;
-    width: 172px;
-    height: 172px;
-    pointer-events: none;
-  }
-
-  .hero-inner { position: relative; z-index: 1; }
-
-  .hero-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: -0.005em;
-    color: var(--butter);
-  }
-  .hero-rays { display: flex; flex-direction: column; gap: 2px; }
-  .hero-rays i { display: block; width: 13px; height: 2px; border-radius: 1px; background: currentColor; }
-  .hero-rays i:nth-child(2) { width: 9px; opacity: 0.75; }
-  .hero-rays i:nth-child(3) { width: 5px; opacity: 0.5; }
-
-  .hero h1 {
-    font-family: "Fraunces", Georgia, serif;
-    font-variation-settings: "SOFT" 40, "WONK" 1;
-    font-weight: 600;
-    font-size: clamp(30px, 8.4vw, 40px);
-    line-height: 1.04;
-    letter-spacing: -0.028em;
-    margin-top: 12px;
-    max-width: 11ch;
-  }
-
-  .hero-dates {
-    font-size: 14px;
-    color: rgba(255, 252, 246, 0.78);
-    margin-top: 12px;
-    letter-spacing: -0.01em;
-  }
-
-  .hero-countdown {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    margin-top: 14px;
-    background: rgba(255, 252, 246, 0.13);
-    border: 1px solid rgba(255, 252, 246, 0.18);
-    border-radius: 999px;
-    padding: 7px 13px 7px 11px;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-  }
-
-  .hero-stats {
-    display: flex;
-    margin-top: 22px;
-    border-top: 1px solid rgba(255, 252, 246, 0.16);
-    padding-top: 16px;
-  }
-  .hero-stat { flex: 1; padding-right: 12px; }
-  .hero-stat + .hero-stat {
-    border-left: 1px solid rgba(255, 252, 246, 0.16);
-    padding-left: 14px;
-  }
-  .hero-stat b {
-    display: block;
-    font-family: "Fraunces", Georgia, serif;
-    font-variation-settings: "SOFT" 40, "WONK" 1;
-    font-weight: 600;
-    font-size: 26px;
-    line-height: 1;
-    letter-spacing: -0.02em;
-  }
-  .hero-stat span {
-    display: block;
-    font-size: 11.5px;
-    color: rgba(255, 252, 246, 0.72);
-    margin-top: 5px;
-    letter-spacing: -0.005em;
-  }
-
-  /* ---------- Cards + rows ---------- */
-  .card {
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: var(--r-md);
-    padding: 16px;
-  }
-
-  .card-row { display: flex; align-items: flex-start; gap: 13px; }
-
-  .tile {
-    width: 40px; height: 40px;
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    background: var(--palm-soft); color: var(--palm);
-  }
-  .tile.ocean { background: var(--ocean-soft); color: var(--ocean); }
-  .tile.sunset { background: var(--sunset-soft); color: var(--sunset-ink); }
-
-  .card-title { font-size: 15.5px; font-weight: 600; letter-spacing: -0.018em; line-height: 1.25; }
-  .card-sub { font-size: 13.5px; color: var(--ink-2); margin-top: 3px; line-height: 1.45; letter-spacing: -0.006em; }
-
-  /* Uber-style dense list rows, hairline separated */
-  .rows { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
-  .person-row {
-    display: flex; align-items: center; gap: 13px;
-    padding: 13px 16px;
-  }
-  .person-row + .person-row { border-top: 1px solid var(--line); }
-  .avatar {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: var(--palm-soft); color: var(--palm);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12.5px; font-weight: 600; letter-spacing: -0.01em;
-    flex-shrink: 0;
-  }
-  .person-name { font-size: 14.5px; font-weight: 600; letter-spacing: -0.015em; }
-  .person-meta { font-size: 12.5px; color: var(--ink-2); margin-top: 2px; letter-spacing: -0.005em; }
-
-  .btn-line {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13.5px;
-    font-weight: 600;
-    letter-spacing: -0.012em;
-    color: var(--palm);
-    margin-top: 10px;
-    min-height: 24px;
-  }
-  .btn-line:active { opacity: 0.7; }
-
-  /* ---------- Boarding pass ---------- */
-  .boarding-pass {
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: var(--r-md);
-    overflow: hidden;
-  }
-  .flight-leg { position: relative; padding: 18px 16px; }
-  .flight-leg + .flight-leg { border-top: 1px dashed var(--line-2); }
-  /* Perforation notches at the tear line */
-  .flight-leg + .flight-leg::before,
-  .flight-leg + .flight-leg::after {
-    content: "";
-    position: absolute;
-    top: -7px;
-    width: 14px; height: 14px;
-    border-radius: 50%;
-    background: var(--sand);
-    border: 1px solid var(--line);
-  }
-  .flight-leg + .flight-leg::before { left: -8px; }
-  .flight-leg + .flight-leg::after { right: -8px; }
-
-  .leg-main { display: flex; align-items: flex-start; gap: 10px; }
-  .leg-end { min-width: 0; }
-  .leg-end-right { text-align: right; }
-  .leg-code {
-    font-family: "Fraunces", Georgia, serif;
-    font-variation-settings: "SOFT" 40, "WONK" 1;
-    font-weight: 600;
-    font-size: 26px;
-    line-height: 1;
-    letter-spacing: -0.02em;
-  }
-  .leg-time { font-size: 13.5px; font-weight: 600; margin-top: 6px; letter-spacing: -0.012em; }
-  .leg-city { font-size: 12px; color: var(--ink-2); margin-top: 2px; letter-spacing: -0.005em; }
-
-  .leg-path { flex: 1; display: flex; align-items: center; gap: 6px; padding-top: 9px; color: var(--line-2); }
-  .leg-path .rule { flex: 1; height: 1px; background: repeating-linear-gradient(to right, var(--line-2) 0 4px, transparent 4px 8px); }
-  .leg-path .icon { color: var(--palm); }
-
-  .leg-meta {
-    display: flex; flex-wrap: wrap; gap: 4px 8px;
-    margin-top: 14px;
-    font-size: 12px;
-    color: var(--ink-2);
-    letter-spacing: -0.005em;
-  }
-  /* Separator trails its own item so it never wraps onto the next line alone */
-  .leg-meta span { display: inline-flex; align-items: center; white-space: nowrap; }
-  .leg-meta span:not(:last-child)::after { content: "·"; margin-left: 8px; color: var(--line-2); }
-
-  /* Terminal is a different class of fact than flight identity — own line */
-  .leg-terminal { font-size: 12px; color: var(--ink-2); margin-top: 5px; letter-spacing: -0.005em; }
-
-  /* ---------- Filter chips ---------- */
-  .chip-row {
-    display: flex; gap: 8px; overflow-x: auto;
-    padding: 2px 2px 6px;
-    -ms-overflow-style: none; scrollbar-width: none;
-  }
-  .chip-row::-webkit-scrollbar { display: none; }
-
-  .chip {
-    display: inline-flex; align-items: center;
-    min-height: 40px;
-    font-size: 13.5px; font-weight: 600; letter-spacing: -0.012em;
-    padding: 0 16px;
-    border-radius: 999px;
-    border: 1px solid var(--line-2);
-    color: var(--ink);
-    background: var(--paper);
-    white-space: nowrap;
-    flex-shrink: 0;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-  }
-  /* Uber selects with solid fill, not a tint — unmistakable at a glance */
-  .chip.active {
-    background: var(--ink);
-    color: var(--paper);
-    border-color: var(--ink);
-  }
-
-  /* ---------- Segmented control ---------- */
-  .toggle-row { display: flex; justify-content: flex-end; margin: 4px 0 14px; }
-  .segmented {
-    display: inline-flex;
-    background: var(--sand-2);
-    border-radius: 10px;
-    padding: 3px;
-    gap: 3px;
-  }
-  .segmented button {
-    display: flex; align-items: center; gap: 6px;
-    min-height: 36px;
-    font-size: 13px; font-weight: 600; letter-spacing: -0.012em;
-    padding: 0 14px;
-    border-radius: var(--r-sm);
-    color: var(--ink-2);
-  }
-  .segmented button.active {
-    background: var(--paper);
-    color: var(--ink);
-    box-shadow: 0 1px 2px rgba(23, 19, 16, 0.1);
-  }
-
-  /* ---------- Place cards ---------- */
-  .place-list { display: flex; flex-direction: column; gap: 12px; }
-
-  .place-card {
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: var(--r-md);
-    padding: 16px;
-  }
-
-  .place-top { display: flex; align-items: flex-start; gap: 13px; }
-  .place-icon {
-    width: 40px; height: 40px;
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    background: var(--palm-soft); color: var(--palm);
-  }
-  .place-icon.food { background: var(--sunset-soft); color: var(--sunset-ink); }
-  .place-icon.stay { background: var(--ocean-soft); color: var(--ocean); }
-
-  .place-name { font-size: 15.5px; font-weight: 600; letter-spacing: -0.018em; line-height: 1.25; }
-  .place-address { font-size: 13px; color: var(--ink-2); margin-top: 3px; letter-spacing: -0.005em; line-height: 1.4; }
-
-  .place-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-  .tag {
-    font-size: 12px; font-weight: 600; letter-spacing: -0.008em;
-    padding: 5px 10px; border-radius: 7px;
-    background: var(--sand-2); color: var(--ink-2);
-  }
-  /* Status carries a word and a mark, never colour alone (WCAG 1.4.1) */
-  .tag.confirmed { background: var(--palm-soft); color: var(--palm); }
-  .tag.pending { background: var(--sunset-soft); color: var(--sunset-ink); }
-
-  .place-notes { font-size: 13.5px; line-height: 1.5; color: var(--ink-2); margin-top: 11px; letter-spacing: -0.006em; }
-
-  .place-facts {
-    margin-top: 12px;
-    border-top: 1px solid var(--line);
-    padding-top: 11px;
-    display: flex; flex-direction: column; gap: 6px;
-  }
-  .place-facts span { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; letter-spacing: -0.006em; }
-  .place-facts b { font-weight: 500; color: var(--ink-2); }
-  .place-facts i { font-style: normal; font-weight: 600; text-align: right; }
-
-  .quick-actions { display: flex; gap: 8px; margin-top: 14px; }
-  .qa-btn {
-    flex: 1;
-    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-    min-height: 44px;
-    font-size: 13.5px; font-weight: 600; letter-spacing: -0.012em;
-    border-radius: var(--r-sm);
-    border: 1px solid var(--line-2);
-    background: var(--paper);
-    color: var(--ink);
-  }
-  .qa-btn:active { background: var(--sand-2); }
-  .qa-btn.primary {
-    background: var(--ink);
-    border-color: var(--ink);
-    color: var(--paper);
-  }
-  .qa-btn.primary:active { background: #2A2320; }
-
-  .empty-state {
-    text-align: center;
-    padding: 44px 20px;
-    color: var(--ink-2);
-    font-size: 14px;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: var(--r-md);
-  }
-
-  /* ---------- Map ---------- */
-  /* Leaflet's panes (400) and controls (up to 1000) would otherwise compete
-     in the root stacking context and paint over the fixed nav/app bar.
-     position+z-index:0 traps all of it inside a context below them. */
-  .map-wrap {
-    position: relative;
-    z-index: 0;
-    isolation: isolate;
-    border-radius: var(--r-md);
-    overflow: hidden;
-    border: 1px solid var(--line);
-  }
-  #map { width: 100%; height: 58vh; min-height: 380px; background: var(--sand-2); }
-  .map-note { font-size: 12.5px; color: var(--ink-2); margin-top: 10px; padding: 0 2px; line-height: 1.45; }
-
-  .map-mini-wrap {
-    position: relative;
-    z-index: 0;
-    isolation: isolate;
-    border-radius: var(--r-md);
-    overflow: hidden;
-    border: 1px solid var(--line);
-  }
-  #map-mini { width: 100%; height: 210px; background: var(--sand-2); }
-
-  .leaflet-popup-content-wrapper { border-radius: 10px; }
-  .leaflet-popup-content { font-family: "Inter", sans-serif; font-size: 13px; margin: 11px 13px; }
-  .popup-title { font-weight: 600; font-size: 13.5px; letter-spacing: -0.015em; margin-bottom: 3px; }
-  .popup-addr { color: #5C5347; font-size: 12px; }
-
-  .pin-marker { display: flex; align-items: center; justify-content: center; }
-  .pin-marker svg { display: block; }
-
-  /* ---------- Weather ---------- */
-  .weather-card {
-    position: relative;
-    overflow: hidden;
-    background: var(--ocean-deep);
-    color: var(--paper);
-    border-radius: var(--r-lg);
-    padding: 20px;
-  }
-  /* Sits clear of the rule above .weather-now so the line never cuts it */
-  .weather-sun {
-    position: absolute;
-    top: -46px; right: -40px;
-    width: 134px; height: 134px;
-    pointer-events: none;
-  }
-  .weather-head { position: relative; z-index: 1; display: flex; align-items: flex-start; gap: 13px; }
-  .weather-tile {
-    width: 40px; height: 40px; border-radius: 10px;
-    background: rgba(255, 252, 246, 0.16);
-    color: var(--paper);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .weather-card .card-title { color: var(--paper); }
-  .weather-card .card-sub { color: rgba(255, 252, 246, 0.78); }
-
-  .weather-now {
-    position: relative; z-index: 1;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-top: 18px;
-    padding-top: 18px;
-    border-top: 1px solid rgba(255, 252, 246, 0.18);
-  }
-  .weather-temp {
-    font-family: "Fraunces", Georgia, serif;
-    font-variation-settings: "SOFT" 40, "WONK" 1;
-    font-weight: 600;
-    font-size: 52px;
-    line-height: 0.9;
-    letter-spacing: -0.03em;
-    flex-shrink: 0;
-  }
-  .weather-now-meta { min-width: 0; }
-  .weather-desc { font-size: 14.5px; font-weight: 600; letter-spacing: -0.015em; text-transform: capitalize; }
-  .weather-facts {
-    display: flex; flex-wrap: wrap; gap: 3px 12px;
-    font-size: 12.5px; color: rgba(255, 252, 246, 0.78);
-    margin-top: 5px; letter-spacing: -0.005em;
-  }
-  .weather-updated {
-    position: relative; z-index: 1;
-    font-size: 11.5px; color: rgba(255, 252, 246, 0.72);
-    margin-top: 12px;
-  }
-
-  .weather-link {
-    position: relative; z-index: 1;
-    display: flex; align-items: center; gap: 8px;
-    background: var(--paper);
-    color: var(--ink);
-    border-radius: var(--r-sm);
-    min-height: 46px;
-    padding: 0 16px;
-    font-size: 14px; font-weight: 600; letter-spacing: -0.015em;
-    margin-top: 16px;
-  }
-  .weather-link .icon { margin-left: auto; }
-
-  .forecast-row {
-    display: flex; gap: 8px; overflow-x: auto;
-    -ms-overflow-style: none; scrollbar-width: none;
-    padding: 2px 2px 4px;
-  }
-  .forecast-row::-webkit-scrollbar { display: none; }
-  .forecast-day {
-    flex: 0 0 auto;
-    width: 82px;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: var(--r-md);
-    padding: 13px 8px;
-    text-align: center;
-  }
-  .forecast-day-label { font-size: 12.5px; font-weight: 600; color: var(--ink-2); letter-spacing: -0.008em; }
-  .forecast-day-icon { color: var(--ocean); margin: 9px 0; display: flex; justify-content: center; }
-  .forecast-day-hi {
-    font-family: "Fraunces", Georgia, serif;
-    font-variation-settings: "SOFT" 40, "WONK" 1;
-    font-weight: 600; font-size: 17px; letter-spacing: -0.02em;
-  }
-  .forecast-day-lo { font-size: 12.5px; color: var(--ink-2); margin-top: 2px; }
-
-  /* ---------- Bottom nav ---------- */
-  .bottom-nav {
-    position: fixed;
-    left: 0; right: 0; bottom: 0;
-    z-index: 30;
-    display: flex;
-    background: var(--paper);
-    border-top: 1px solid var(--line);
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-  .nav-item {
-    position: relative;
-    flex: 1;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-    min-height: 58px;
-    padding: 8px 0 10px;
-    color: var(--ink-2);
-  }
-  .nav-item::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    width: 26px; height: 3px;
-    border-radius: 0 0 3px 3px;
-    background: transparent;
-    transition: background 0.15s ease;
-  }
-  .nav-item.active { color: var(--ink); }
-  .nav-item.active::before { background: var(--palm); }
-  .nav-item span { font-size: 11.5px; font-weight: 600; letter-spacing: -0.008em; }
-
-  @media (min-width: 600px) {
-    .view { padding: 24px 24px 8px; }
-    .hero { padding: 28px 26px 24px; }
-    #map { height: 460px; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    * { transition: none !important; animation: none !important; }
-  }
-</style>
+<script src="/golftrip/assets/9d40224f-4e5d-49d9-9c01-ba627b010c79.js"></script>
 </head>
 <body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14352A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Golf Trip 2">
+<link rel="manifest" href="/golftrip/manifest.json">
+<link rel="apple-touch-icon" href="/golftrip/assets/cc9bc872-fe3b-4f3d-b5d6-52b9d98a4056.png">
+<link rel="icon" href="/golftrip/assets/615c6723-83bb-4565-a94b-bebef393b223.png" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<style>/* vietnamese */
+@font-face {
+  font-family: 'Familjen Grotesk';
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/golftrip/assets/ded8e158-fb89-460a-a853-f71a478858f0.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Familjen Grotesk';
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/golftrip/assets/87121de2-d969-4cee-be26-4332df028ee3.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Familjen Grotesk';
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/golftrip/assets/1fa0a412-1b80-472d-8191-e2d41dada281.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Familjen Grotesk';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/golftrip/assets/93d2894c-a1c5-4857-a34d-482eeb403ae9.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Familjen Grotesk';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/golftrip/assets/652f5b0e-1f37-411e-bf61-bb9f311ce1cb.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Familjen Grotesk';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/golftrip/assets/41f50196-a48c-40fe-aa59-ec3a5dca5597.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/golftrip/assets/58bdb5ee-87a9-4822-b265-88b1c28a2997.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/golftrip/assets/6c4bd310-4dbb-46ca-a739-394111b92a31.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/golftrip/assets/6fa97095-035f-4253-8b07-8409f03e347d.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/golftrip/assets/f729e61b-3e54-420b-9fda-6c55aac3b9a2.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/golftrip/assets/26f27325-4b4a-4ef1-aac8-818db3c6e8b0.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/golftrip/assets/3e8fa1ff-3014-4ed1-9513-c8ba5affe1d9.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/golftrip/assets/4d18a40c-98be-422a-869f-327e1c5cdf76.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/golftrip/assets/22a3bb87-434e-4885-bcd6-2bb567d4941b.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/golftrip/assets/032d5767-fafa-4122-b94c-4c30fa135a58.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/golftrip/assets/97873b0b-3118-4852-9785-b679fe1cbff9.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/golftrip/assets/09429051-9fa6-47b3-b660-2b35e9047ae2.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/golftrip/assets/feff1447-96fd-4e17-9fd7-212ea9f4d7af.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/golftrip/assets/18e41d0a-17e9-492f-85c9-bd05536dafe4.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/golftrip/assets/cf1948a0-ba15-4cdd-95d2-ac6fd4afca8d.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/golftrip/assets/bc55da1b-4ca2-4131-a30c-65d28c254136.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/ec05aa4b-ac67-4c62-9caa-723f2bd5ac59.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/df6146bf-a944-4024-b27b-c2b04d93fb17.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/5eddd9a2-a346-4045-9b58-646594fa3689.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/53fbbca4-9d41-40e8-9926-a407ce00e83f.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/700973cd-a64d-4c32-a0de-78b50cb27e74.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/ea728f9e-1619-41f0-87c8-a1c202c16799.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/ec05aa4b-ac67-4c62-9caa-723f2bd5ac59.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/df6146bf-a944-4024-b27b-c2b04d93fb17.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/5eddd9a2-a346-4045-9b58-646594fa3689.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/53fbbca4-9d41-40e8-9926-a407ce00e83f.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/700973cd-a64d-4c32-a0de-78b50cb27e74.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/ea728f9e-1619-41f0-87c8-a1c202c16799.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/ec05aa4b-ac67-4c62-9caa-723f2bd5ac59.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/df6146bf-a944-4024-b27b-c2b04d93fb17.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/5eddd9a2-a346-4045-9b58-646594fa3689.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/53fbbca4-9d41-40e8-9926-a407ce00e83f.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/700973cd-a64d-4c32-a0de-78b50cb27e74.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/ea728f9e-1619-41f0-87c8-a1c202c16799.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/ec05aa4b-ac67-4c62-9caa-723f2bd5ac59.woff2") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/df6146bf-a944-4024-b27b-c2b04d93fb17.woff2") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/5eddd9a2-a346-4045-9b58-646594fa3689.woff2") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/53fbbca4-9d41-40e8-9926-a407ce00e83f.woff2") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/700973cd-a64d-4c32-a0de-78b50cb27e74.woff2") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url("/golftrip/assets/ea728f9e-1619-41f0-87c8-a1c202c16799.woff2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style>
+<style>/* required styles */
 
-<header class="appbar">
-  <div class="appbar-mark" aria-hidden="true">
-    <svg viewBox="0 0 24 24" width="19" height="19" fill="none"><path d="M12 3.5v14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M12.6 4.6l6.2 2.7-6.2 2.7z" fill="currentColor"/><ellipse cx="12" cy="19.4" rx="5.6" ry="1.3" fill="currentColor" opacity="0.5"/></svg>
-  </div>
-  <div class="appbar-text">
-    <div class="appbar-title">Florida Golf Trip 2</div>
-    <div class="appbar-sub" id="appbar-sub">Sept 17–20, 2026</div>
-  </div>
-</header>
+.leaflet-pane,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-tile-container,
+.leaflet-pane > svg,
+.leaflet-pane > canvas,
+.leaflet-zoom-box,
+.leaflet-image-layer,
+.leaflet-layer {
+	position: absolute;
+	left: 0;
+	top: 0;
+	}
+.leaflet-container {
+	overflow: hidden;
+	}
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+	        user-select: none;
+	  -webkit-user-drag: none;
+	}
+/* Prevents IE11 from highlighting tiles in blue */
+.leaflet-tile::selection {
+	background: transparent;
+}
+/* Safari renders non-retina tile on retina better with this, but Chrome is worse */
+.leaflet-safari .leaflet-tile {
+	image-rendering: -webkit-optimize-contrast;
+	}
+/* hack that prevents hw layers "stretching" when loading new tiles */
+.leaflet-safari .leaflet-tile-container {
+	width: 1600px;
+	height: 1600px;
+	-webkit-transform-origin: 0 0;
+	}
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+	display: block;
+	}
+/* .leaflet-container svg: reset svg max-width decleration shipped in Joomla! (joomla.org) 3.x */
+/* .leaflet-container img: map is broken in FF if you have max-width: 100% on tiles */
+.leaflet-container .leaflet-overlay-pane svg {
+	max-width: none !important;
+	max-height: none !important;
+	}
+.leaflet-container .leaflet-marker-pane img,
+.leaflet-container .leaflet-shadow-pane img,
+.leaflet-container .leaflet-tile-pane img,
+.leaflet-container img.leaflet-image-layer,
+.leaflet-container .leaflet-tile {
+	max-width: none !important;
+	max-height: none !important;
+	width: auto;
+	padding: 0;
+	}
 
-<div class="offline-pill" id="offline-pill"><span class="offline-dot"></span>Offline — showing saved trip data</div>
+.leaflet-container img.leaflet-tile {
+	/* See: https://bugs.chromium.org/p/chromium/issues/detail?id=600120 */
+	mix-blend-mode: plus-lighter;
+}
 
-<main>
+.leaflet-container.leaflet-touch-zoom {
+	-ms-touch-action: pan-x pan-y;
+	touch-action: pan-x pan-y;
+	}
+.leaflet-container.leaflet-touch-drag {
+	-ms-touch-action: pinch-zoom;
+	/* Fallback for FF which doesn't support pinch-zoom */
+	touch-action: none;
+	touch-action: pinch-zoom;
+}
+.leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {
+	-ms-touch-action: none;
+	touch-action: none;
+}
+.leaflet-container {
+	-webkit-tap-highlight-color: transparent;
+}
+.leaflet-container a {
+	-webkit-tap-highlight-color: rgba(51, 181, 229, 0.4);
+}
+.leaflet-tile {
+	filter: inherit;
+	visibility: hidden;
+	}
+.leaflet-tile-loaded {
+	visibility: inherit;
+	}
+.leaflet-zoom-box {
+	width: 0;
+	height: 0;
+	-moz-box-sizing: border-box;
+	     box-sizing: border-box;
+	z-index: 800;
+	}
+/* workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=888319 */
+.leaflet-overlay-pane svg {
+	-moz-user-select: none;
+	}
 
-  <!-- ================= TRIP TAB ================= -->
-  <section class="view active" data-view="trip">
+.leaflet-pane         { z-index: 400; }
 
-    <div class="hero">
-      <svg class="hero-sun" viewBox="0 0 160 160" aria-hidden="true">
-        <defs>
-          <clipPath id="sunClip"><circle cx="80" cy="80" r="62" /></clipPath>
-          <linearGradient id="sunFill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#E8A33D" />
-            <stop offset="100%" stop-color="#B94E27" />
-          </linearGradient>
-        </defs>
-        <g clip-path="url(#sunClip)">
-          <rect x="0" y="0" width="160" height="160" fill="url(#sunFill)" />
-          <g fill="#143B2C">
-            <rect x="0" y="92" width="160" height="4" />
-            <rect x="0" y="103" width="160" height="6" />
-            <rect x="0" y="117" width="160" height="8" />
-            <rect x="0" y="134" width="160" height="11" />
-          </g>
-        </g>
-      </svg>
+.leaflet-tile-pane    { z-index: 200; }
+.leaflet-overlay-pane { z-index: 400; }
+.leaflet-shadow-pane  { z-index: 500; }
+.leaflet-marker-pane  { z-index: 600; }
+.leaflet-tooltip-pane   { z-index: 650; }
+.leaflet-popup-pane   { z-index: 700; }
 
-      <div class="hero-inner">
-        <div class="hero-eyebrow">
-          <span class="hero-rays" aria-hidden="true"><i></i><i></i><i></i></span>
-          Golf trip
+.leaflet-map-pane canvas { z-index: 100; }
+.leaflet-map-pane svg    { z-index: 200; }
+
+.leaflet-vml-shape {
+	width: 1px;
+	height: 1px;
+	}
+.lvml {
+	behavior: url(#default#VML);
+	display: inline-block;
+	position: absolute;
+	}
+
+
+/* control positioning */
+
+.leaflet-control {
+	position: relative;
+	z-index: 800;
+	pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
+	pointer-events: auto;
+	}
+.leaflet-top,
+.leaflet-bottom {
+	position: absolute;
+	z-index: 1000;
+	pointer-events: none;
+	}
+.leaflet-top {
+	top: 0;
+	}
+.leaflet-right {
+	right: 0;
+	}
+.leaflet-bottom {
+	bottom: 0;
+	}
+.leaflet-left {
+	left: 0;
+	}
+.leaflet-control {
+	float: left;
+	clear: both;
+	}
+.leaflet-right .leaflet-control {
+	float: right;
+	}
+.leaflet-top .leaflet-control {
+	margin-top: 10px;
+	}
+.leaflet-bottom .leaflet-control {
+	margin-bottom: 10px;
+	}
+.leaflet-left .leaflet-control {
+	margin-left: 10px;
+	}
+.leaflet-right .leaflet-control {
+	margin-right: 10px;
+	}
+
+
+/* zoom and fade animations */
+
+.leaflet-fade-anim .leaflet-popup {
+	opacity: 0;
+	-webkit-transition: opacity 0.2s linear;
+	   -moz-transition: opacity 0.2s linear;
+	        transition: opacity 0.2s linear;
+	}
+.leaflet-fade-anim .leaflet-map-pane .leaflet-popup {
+	opacity: 1;
+	}
+.leaflet-zoom-animated {
+	-webkit-transform-origin: 0 0;
+	    -ms-transform-origin: 0 0;
+	        transform-origin: 0 0;
+	}
+svg.leaflet-zoom-animated {
+	will-change: transform;
+}
+
+.leaflet-zoom-anim .leaflet-zoom-animated {
+	-webkit-transition: -webkit-transform 0.25s cubic-bezier(0,0,0.25,1);
+	   -moz-transition:    -moz-transform 0.25s cubic-bezier(0,0,0.25,1);
+	        transition:         transform 0.25s cubic-bezier(0,0,0.25,1);
+	}
+.leaflet-zoom-anim .leaflet-tile,
+.leaflet-pan-anim .leaflet-tile {
+	-webkit-transition: none;
+	   -moz-transition: none;
+	        transition: none;
+	}
+
+.leaflet-zoom-anim .leaflet-zoom-hide {
+	visibility: hidden;
+	}
+
+
+/* cursors */
+
+.leaflet-interactive {
+	cursor: pointer;
+	}
+.leaflet-grab {
+	cursor: -webkit-grab;
+	cursor:    -moz-grab;
+	cursor:         grab;
+	}
+.leaflet-crosshair,
+.leaflet-crosshair .leaflet-interactive {
+	cursor: crosshair;
+	}
+.leaflet-popup-pane,
+.leaflet-control {
+	cursor: auto;
+	}
+.leaflet-dragging .leaflet-grab,
+.leaflet-dragging .leaflet-grab .leaflet-interactive,
+.leaflet-dragging .leaflet-marker-draggable {
+	cursor: move;
+	cursor: -webkit-grabbing;
+	cursor:    -moz-grabbing;
+	cursor:         grabbing;
+	}
+
+/* marker & overlays interactivity */
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-image-layer,
+.leaflet-pane > svg path,
+.leaflet-tile-container {
+	pointer-events: none;
+	}
+
+.leaflet-marker-icon.leaflet-interactive,
+.leaflet-image-layer.leaflet-interactive,
+.leaflet-pane > svg path.leaflet-interactive,
+svg.leaflet-image-layer.leaflet-interactive path {
+	pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
+	pointer-events: auto;
+	}
+
+/* visual tweaks */
+
+.leaflet-container {
+	background: #ddd;
+	outline-offset: 1px;
+	}
+.leaflet-container a {
+	color: #0078A8;
+	}
+.leaflet-zoom-box {
+	border: 2px dotted #38f;
+	background: rgba(255,255,255,0.5);
+	}
+
+
+/* general typography */
+.leaflet-container {
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-size: 0.75rem;
+	line-height: 1.5;
+	}
+
+
+/* general toolbar styles */
+
+.leaflet-bar {
+	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+	border-radius: 4px;
+	}
+.leaflet-bar a {
+	background-color: #fff;
+	border-bottom: 1px solid #ccc;
+	width: 26px;
+	height: 26px;
+	line-height: 26px;
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	color: black;
+	}
+.leaflet-bar a,
+.leaflet-control-layers-toggle {
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	display: block;
+	}
+.leaflet-bar a:hover,
+.leaflet-bar a:focus {
+	background-color: #f4f4f4;
+	}
+.leaflet-bar a:first-child {
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	}
+.leaflet-bar a:last-child {
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom: none;
+	}
+.leaflet-bar a.leaflet-disabled {
+	cursor: default;
+	background-color: #f4f4f4;
+	color: #bbb;
+	}
+
+.leaflet-touch .leaflet-bar a {
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	}
+.leaflet-touch .leaflet-bar a:first-child {
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+	}
+.leaflet-touch .leaflet-bar a:last-child {
+	border-bottom-left-radius: 2px;
+	border-bottom-right-radius: 2px;
+	}
+
+/* zoom control */
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+	font: bold 18px 'Lucida Console', Monaco, monospace;
+	text-indent: 1px;
+	}
+
+.leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out  {
+	font-size: 22px;
+	}
+
+
+/* layers control */
+
+.leaflet-control-layers {
+	box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+	background: #fff;
+	border-radius: 5px;
+	}
+.leaflet-control-layers-toggle {
+	background-image: url("/golftrip/assets/6be00f72-a1a2-4a63-b7b2-0c00c67c6cca.png");
+	width: 36px;
+	height: 36px;
+	}
+.leaflet-retina .leaflet-control-layers-toggle {
+	background-image: url("/golftrip/assets/5c370eae-9580-43c7-a14b-4674a39345d9.png");
+	background-size: 26px 26px;
+	}
+.leaflet-touch .leaflet-control-layers-toggle {
+	width: 44px;
+	height: 44px;
+	}
+.leaflet-control-layers .leaflet-control-layers-list,
+.leaflet-control-layers-expanded .leaflet-control-layers-toggle {
+	display: none;
+	}
+.leaflet-control-layers-expanded .leaflet-control-layers-list {
+	display: block;
+	position: relative;
+	}
+.leaflet-control-layers-expanded {
+	padding: 6px 10px 6px 6px;
+	color: #333;
+	background: #fff;
+	}
+.leaflet-control-layers-scrollbar {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	padding-right: 5px;
+	}
+.leaflet-control-layers-selector {
+	margin-top: 2px;
+	position: relative;
+	top: 1px;
+	}
+.leaflet-control-layers label {
+	display: block;
+	font-size: 13px;
+	font-size: 1.08333em;
+	}
+.leaflet-control-layers-separator {
+	height: 0;
+	border-top: 1px solid #ddd;
+	margin: 5px -10px 5px -6px;
+	}
+
+/* Default icon URLs */
+.leaflet-default-icon-path { /* used only in path-guessing heuristic, see L.Icon.Default */
+	background-image: url("/golftrip/assets/dd5757c9-7dd9-4712-85e1-48debbfb398e.png");
+	}
+
+
+/* attribution and scale controls */
+
+.leaflet-container .leaflet-control-attribution {
+	background: #fff;
+	background: rgba(255, 255, 255, 0.8);
+	margin: 0;
+	}
+.leaflet-control-attribution,
+.leaflet-control-scale-line {
+	padding: 0 5px;
+	color: #333;
+	line-height: 1.4;
+	}
+.leaflet-control-attribution a {
+	text-decoration: none;
+	}
+.leaflet-control-attribution a:hover,
+.leaflet-control-attribution a:focus {
+	text-decoration: underline;
+	}
+.leaflet-attribution-flag {
+	display: inline !important;
+	vertical-align: baseline !important;
+	width: 1em;
+	height: 0.6669em;
+	}
+.leaflet-left .leaflet-control-scale {
+	margin-left: 5px;
+	}
+.leaflet-bottom .leaflet-control-scale {
+	margin-bottom: 5px;
+	}
+.leaflet-control-scale-line {
+	border: 2px solid #777;
+	border-top: none;
+	line-height: 1.1;
+	padding: 2px 5px 1px;
+	white-space: nowrap;
+	-moz-box-sizing: border-box;
+	     box-sizing: border-box;
+	background: rgba(255, 255, 255, 0.8);
+	text-shadow: 1px 1px #fff;
+	}
+.leaflet-control-scale-line:not(:first-child) {
+	border-top: 2px solid #777;
+	border-bottom: none;
+	margin-top: -2px;
+	}
+.leaflet-control-scale-line:not(:first-child):not(:last-child) {
+	border-bottom: 2px solid #777;
+	}
+
+.leaflet-touch .leaflet-control-attribution,
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+	box-shadow: none;
+	}
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+	border: 2px solid rgba(0,0,0,0.2);
+	background-clip: padding-box;
+	}
+
+
+/* popup */
+
+.leaflet-popup {
+	position: absolute;
+	text-align: center;
+	margin-bottom: 20px;
+	}
+.leaflet-popup-content-wrapper {
+	padding: 1px;
+	text-align: left;
+	border-radius: 12px;
+	}
+.leaflet-popup-content {
+	margin: 13px 24px 13px 20px;
+	line-height: 1.3;
+	font-size: 13px;
+	font-size: 1.08333em;
+	min-height: 1px;
+	}
+.leaflet-popup-content p {
+	margin: 17px 0;
+	margin: 1.3em 0;
+	}
+.leaflet-popup-tip-container {
+	width: 40px;
+	height: 20px;
+	position: absolute;
+	left: 50%;
+	margin-top: -1px;
+	margin-left: -20px;
+	overflow: hidden;
+	pointer-events: none;
+	}
+.leaflet-popup-tip {
+	width: 17px;
+	height: 17px;
+	padding: 1px;
+
+	margin: -10px auto 0;
+	pointer-events: auto;
+
+	-webkit-transform: rotate(45deg);
+	   -moz-transform: rotate(45deg);
+	    -ms-transform: rotate(45deg);
+	        transform: rotate(45deg);
+	}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+	background: white;
+	color: #333;
+	box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+	}
+.leaflet-container a.leaflet-popup-close-button {
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: none;
+	text-align: center;
+	width: 24px;
+	height: 24px;
+	font: 16px/24px Tahoma, Verdana, sans-serif;
+	color: #757575;
+	text-decoration: none;
+	background: transparent;
+	}
+.leaflet-container a.leaflet-popup-close-button:hover,
+.leaflet-container a.leaflet-popup-close-button:focus {
+	color: #585858;
+	}
+.leaflet-popup-scrolled {
+	overflow: auto;
+	}
+
+.leaflet-oldie .leaflet-popup-content-wrapper {
+	-ms-zoom: 1;
+	}
+.leaflet-oldie .leaflet-popup-tip {
+	width: 24px;
+	margin: 0 auto;
+
+	-ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)";
+	filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678);
+	}
+
+.leaflet-oldie .leaflet-control-zoom,
+.leaflet-oldie .leaflet-control-layers,
+.leaflet-oldie .leaflet-popup-content-wrapper,
+.leaflet-oldie .leaflet-popup-tip {
+	border: 1px solid #999;
+	}
+
+
+/* div icon */
+
+.leaflet-div-icon {
+	background: #fff;
+	border: 1px solid #666;
+	}
+
+
+/* Tooltip */
+/* Base styles for the element that has a tooltip */
+.leaflet-tooltip {
+	position: absolute;
+	padding: 6px;
+	background-color: #fff;
+	border: 1px solid #fff;
+	border-radius: 3px;
+	color: #222;
+	white-space: nowrap;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	pointer-events: none;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+	}
+.leaflet-tooltip.leaflet-interactive {
+	cursor: pointer;
+	pointer-events: auto;
+	}
+.leaflet-tooltip-top:before,
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {
+	position: absolute;
+	pointer-events: none;
+	border: 6px solid transparent;
+	background: transparent;
+	content: "";
+	}
+
+/* Directions */
+
+.leaflet-tooltip-bottom {
+	margin-top: 6px;
+}
+.leaflet-tooltip-top {
+	margin-top: -6px;
+}
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-top:before {
+	left: 50%;
+	margin-left: -6px;
+	}
+.leaflet-tooltip-top:before {
+	bottom: 0;
+	margin-bottom: -12px;
+	border-top-color: #fff;
+	}
+.leaflet-tooltip-bottom:before {
+	top: 0;
+	margin-top: -12px;
+	margin-left: -6px;
+	border-bottom-color: #fff;
+	}
+.leaflet-tooltip-left {
+	margin-left: -6px;
+}
+.leaflet-tooltip-right {
+	margin-left: 6px;
+}
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {
+	top: 50%;
+	margin-top: -6px;
+	}
+.leaflet-tooltip-left:before {
+	right: 0;
+	margin-right: -12px;
+	border-left-color: #fff;
+	}
+.leaflet-tooltip-right:before {
+	left: 0;
+	margin-left: -12px;
+	border-right-color: #fff;
+	}
+
+/* Printing */
+
+@media print {
+	/* Prevent printers from removing background-images of controls. */
+	.leaflet-control {
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+		}
+	}
+</style>
+<script src="/golftrip/assets/0d276d84-f013-4338-b172-9895cdb0db0e.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #14352A; }
+  body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  * { -webkit-tap-highlight-color: transparent; }
+  a { color: #1E4A38; text-decoration: none; }
+  a:hover { color: #C86A34; }
+  @keyframes nudge { 0%, 100% { transform: translateY(0); opacity: .55 } 50% { transform: translateY(7px); opacity: 1 } }
+  @keyframes softin { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
+  @keyframes flutter { 0%, 100% { transform: skewY(0deg) scaleX(1) } 35% { transform: skewY(-7deg) scaleX(.9) } 70% { transform: skewY(5deg) scaleX(.97) } }
+  @keyframes drift { from { transform: translateX(0) } to { transform: translateX(60px) } }
+  @keyframes sway { 0%, 100% { transform: rotate(-1.5deg) } 50% { transform: rotate(2deg) } }
+  @keyframes swayb { 0%, 100% { transform: rotate(1.5deg) } 50% { transform: rotate(-2deg) } }
+  .leaflet-container { font-family: "IBM Plex Sans", system-ui, sans-serif; background: #E8EFE6; }
+  .leaflet-popup-content-wrapper { border-radius: 14px; box-shadow: 0 10px 30px rgba(20,53,42,.18) }
+  .leaflet-popup-content { margin: 12px 14px; font-size: 13px; line-height: 1.45 }
+  .leaflet-bar a { border-radius: 0 }
+</style>
+</helmet>
+
+<div style="height: 100vh; background: #0B231B; display: flex; justify-content: center; overflow: hidden;">
+<div ref="{{ rootRef }}" style="position: relative; width: 100%; max-width: 440px; height: 100vh; overflow-x: hidden; overflow-y: auto; background: #EFE8D8; color: #16211C; font-family: 'IBM Plex Sans', system-ui, sans-serif; box-shadow: 0 0 0 1px rgba(253,246,232,.08), 0 24px 70px rgba(0,0,0,.5); -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+
+  <sc-if value="{{ introOn }}" hint-placeholder-val="{{ true }}">
+    <div data-el="track" style="height: 380vh; position: relative;">
+      <div style="position: sticky; top: 0; height: 100vh; overflow: hidden; background: linear-gradient(#141C4A 0%, #3B2260 26%, #8A3568 46%, #D0574F 64%, #E8913F 78%, #1D4634 100%);">
+
+        <div data-el="cam" style="position: absolute; inset: 0; will-change: transform;">
+
+        <div data-el="clouds" style="position: absolute; left: -20%; right: -20%; top: 12vh; height: 14vh; opacity: .3; background: radial-gradient(54px 9px at 20% 40%, rgba(255,246,226,.85) 0 55%, transparent 58%), radial-gradient(78px 11px at 54% 72%, rgba(255,246,226,.7) 0 55%, transparent 58%), radial-gradient(62px 8px at 84% 26%, rgba(255,246,226,.6) 0 55%, transparent 58%); background-repeat: no-repeat; animation: drift 34s linear infinite alternate;"></div>
+
+        <div data-el="haze" style="position: absolute; left: 50%; top: 22vh; width: 96%; aspect-ratio: 1 / 1; margin-left: -48%; border-radius: 999px; background: radial-gradient(circle, rgba(255,127,168,.34) 0 38%, rgba(255,146,120,.14) 58%, transparent 72%); will-change: transform;"></div>
+
+        <div data-el="sun" style="position: absolute; left: 50%; top: 26vh; width: 66%; aspect-ratio: 1 / 1; margin-left: -33%; border-radius: 999px; overflow: hidden; background: radial-gradient(circle at 50% 38%, #FFD2A8 0 18%, #FFAF8C 42%, #FF87A6 68%, #E4607F 100%); filter: blur(.4px); will-change: transform;">
+          <div style="position: absolute; left: -6%; right: -6%; top: 61%; height: 5%; background: #40204F; opacity: .32; filter: blur(4px);"></div>
+          <div style="position: absolute; left: -6%; right: -6%; top: 75%; height: 6%; background: #3A1B4A; opacity: .3; filter: blur(5px);"></div>
+          <div style="position: absolute; left: -6%; right: -6%; top: 88%; height: 7%; background: #35184A; opacity: .28; filter: blur(6px);"></div>
         </div>
-        <h1>Fort Myers &amp; Bonita Springs</h1>
-        <div class="hero-dates">Thursday, Sept 17 – Sunday, Sept 20, 2026</div>
-        <div class="hero-countdown" id="countdown">
-          <span class="icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none"><circle cx="12" cy="12" r="8.6" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.4v5l3.3 1.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-          <span id="countdown-text">Loading…</span>
-        </div>
-        <div class="hero-stats">
-          <div class="hero-stat"><b>4</b><span>days</span></div>
-          <div class="hero-stat"><b>3</b><span>rounds of golf</span></div>
-          <div class="hero-stat"><b>4</b><span>guys</span></div>
-        </div>
-      </div>
-    </div>
 
-    <div class="section">
-      <div class="section-title">Home base</div>
-      <div class="card">
-        <div class="card-row">
-          <div class="tile ocean">
-            <svg viewBox="0 0 24 24" width="19" height="19" fill="none"><path d="M4 11.5L12 4l8 7.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9.5a1 1 0 001 1h3.5v-5.5h3V20.5H17a1 1 0 001-1V10" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg>
+        <div data-el="trees" style="position: absolute; left: -8%; right: -8%; bottom: 30.6vh; height: 8vh; opacity: .92; filter: blur(2.4px); background: radial-gradient(circle at 5% 100%, #0B2419 0 26px, transparent 27px), radial-gradient(circle at 16% 100%, #0B2419 0 36px, transparent 45px), radial-gradient(circle at 27% 100%, #0B2419 0 24px, transparent 25px), radial-gradient(circle at 39% 100%, #0B2419 0 33px, transparent 34px), radial-gradient(circle at 51% 100%, #0B2419 0 26px, transparent 27px), radial-gradient(circle at 63% 100%, #0B2419 0 37px, transparent 38px), radial-gradient(circle at 76% 100%, #0B2419 0 27px, transparent 28px), radial-gradient(circle at 88% 100%, #0B2419 0 34px, transparent 35px), radial-gradient(circle at 99% 100%, #0B2419 0 26px, transparent 27px); background-repeat: no-repeat; will-change: transform;"></div>
+
+        <div style="position: absolute; left: -10%; right: -10%; bottom: -6vh; height: 34vh; border-radius: 50% 50% 0 0 / 5vh 5vh 0 0; background: linear-gradient(#3A7A55 0%, #2A5D44 40%, #17402F 100%);"></div>
+        <div style="position: absolute; left: -10%; right: -10%; bottom: -6vh; height: 34vh; border-radius: 50% 50% 0 0 / 5vh 5vh 0 0; background: repeating-linear-gradient(96deg, rgba(253,246,232,.045) 0 16px, rgba(0,0,0,0) 16px 34px);"></div>
+
+        <div style="position: absolute; left: -14px; bottom: 24vh; width: 96px; height: 190px; transform-origin: 26px 100%; filter: blur(2.6px); opacity: .9; animation: sway 6.5s ease-in-out infinite;">
+          <div style="position: absolute; left: 22px; bottom: 0; width: 8px; height: 152px; border-radius: 5px; background: #07160F; transform: rotate(-5deg); transform-origin: 50% 100%;"></div>
+          <div style="position: absolute; left: 14px; top: 6px; width: 58px; height: 9px; border-radius: 0 999px 999px 999px; background: #07160F; transform-origin: 0 50%; transform: rotate(-56deg);"></div>
+          <div style="position: absolute; left: 14px; top: 6px; width: 64px; height: 10px; border-radius: 0 999px 999px 999px; background: #07160F; transform-origin: 0 50%; transform: rotate(-24deg);"></div>
+          <div style="position: absolute; left: 14px; top: 6px; width: 60px; height: 10px; border-radius: 0 999px 999px 999px; background: #07160F; transform-origin: 0 50%; transform: rotate(6deg);"></div>
+          <div style="position: absolute; left: 14px; top: 6px; width: 54px; height: 9px; border-radius: 0 999px 999px 999px; background: #07160F; transform-origin: 0 50%; transform: rotate(38deg);"></div>
+          <div style="position: absolute; left: 14px; top: 6px; width: 44px; height: 8px; border-radius: 0 999px 999px 999px; background: #07160F; transform-origin: 0 50%; transform: rotate(74deg);"></div>
+        </div>
+
+        <div style="position: absolute; right: -20px; bottom: 25.5vh; width: 78px; height: 138px; transform-origin: 52px 100%; filter: blur(3.4px); opacity: .68; animation: swayb 7.8s ease-in-out infinite;">
+          <div style="position: absolute; right: 22px; bottom: 0; width: 6px; height: 108px; border-radius: 4px; background: #08190F; transform: rotate(6deg); transform-origin: 50% 100%;"></div>
+          <div style="position: absolute; right: 16px; top: 4px; width: 44px; height: 8px; border-radius: 999px 0 999px 999px; background: #08190F; transform-origin: 100% 50%; transform: rotate(50deg);"></div>
+          <div style="position: absolute; right: 16px; top: 4px; width: 48px; height: 9px; border-radius: 999px 0 999px 999px; background: #08190F; transform-origin: 100% 50%; transform: rotate(14deg);"></div>
+          <div style="position: absolute; right: 16px; top: 4px; width: 44px; height: 8px; border-radius: 999px 0 999px 999px; background: #08190F; transform-origin: 100% 50%; transform: rotate(-20deg);"></div>
+          <div style="position: absolute; right: 16px; top: 4px; width: 36px; height: 7px; border-radius: 999px 0 999px 999px; background: #08190F; transform-origin: 100% 50%; transform: rotate(-58deg);"></div>
+        </div>
+
+        <div data-el="distflag" style="position: absolute; left: 50%; bottom: 26vh; margin-left: 52px; width: 46px; height: 62px; will-change: opacity;">
+          <div style="position: absolute; left: 0; bottom: 0; width: 3px; height: 62px; border-radius: 2px; background: #F6EFDD;"></div>
+          <div style="position: absolute; left: 3px; top: 2px; width: 0; height: 0; border-left: 22px solid #FFF6E2; border-top: 8px solid transparent; border-bottom: 8px solid transparent; transform-origin: 0 50%; animation: flutter 3.4s ease-in-out infinite;"></div>
+          <div style="position: absolute; left: -14px; bottom: -6px; width: 34px; height: 9px; border-radius: 50%; background: rgba(11,36,25,.35);"></div>
+          <div data-el="restball" style="position: absolute; left: 14px; bottom: -4px; width: 7px; height: 7px; border-radius: 999px; background: #FFFDF7; opacity: 0;"></div>
+        </div>
+
+        <div data-el="golfer" style="position: absolute; left: 13%; bottom: 18.5vh; width: 84px; height: 152px; will-change: transform;">
+          <div data-el="gshadow" style="position: absolute; left: -10px; bottom: -9px; width: 104px; height: 17px; border-radius: 50%; background: rgba(6,20,15,.5); filter: blur(6px);"></div>
+
+          <div data-el="legRear" style="position: absolute; left: 20px; top: 72px; width: 14px; height: 70px; border-radius: 8px; background: linear-gradient(270deg, rgba(255,170,140,.55) 0 1.5px, #113526 2.5px, #081B14 100%); transform-origin: 7px 5px; will-change: transform;">
+            <div style="position: absolute; left: -5px; bottom: -4px; width: 27px; height: 9px; border-radius: 4px 5px 5px 4px; background: #123A2C;"></div>
           </div>
-          <div>
-            <div class="card-title">The condo</div>
-            <div class="card-sub">10733 Mirasol Drive #211, Miromar Lakes, FL 33913</div>
-            <a class="btn-line" id="condo-directions" href="#" target="_blank" rel="noopener noreferrer">
-              Get directions
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
+          <div data-el="legFront" style="position: absolute; left: 38px; top: 72px; width: 14px; height: 70px; border-radius: 8px; background: linear-gradient(270deg, rgba(255,170,140,.7) 0 1.5px, #0E2C21 2.5px, #071810 100%); transform-origin: 7px 5px; will-change: transform;">
+            <div style="position: absolute; left: -3px; bottom: -4px; width: 30px; height: 9px; border-radius: 4px 5px 5px 4px; background: #0B231B;"></div>
           </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="section">
-      <div class="section-title">Who's going</div>
-      <div class="rows" id="people-list"></div>
-    </div>
+          <div data-el="hips" style="position: absolute; left: 17px; top: 62px; width: 38px; height: 20px; border-radius: 10px; background: linear-gradient(270deg, rgba(255,170,140,.6) 0 1.5px, #0E2C21 2.5px, #071810 100%); transform-origin: 19px 10px; will-change: transform;"></div>
 
-    <div class="section">
-      <div class="section-title">Return flight · Ryan · Sun, Sept 20</div>
-      <div class="boarding-pass" id="flights-card"></div>
-    </div>
-
-  </section>
-
-  <!-- ================= PLACES TAB ================= -->
-  <section class="view" data-view="places">
-
-    <div class="chip-row" id="chip-row"></div>
-
-    <div class="toggle-row">
-      <div class="segmented">
-        <button id="seg-list" class="active" data-mode="list">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
-          List
-        </button>
-        <button id="seg-map" data-mode="map">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M9 4L4 6v14l5-2 6 2 5-2V4l-5 2-6-2z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" stroke="currentColor" stroke-width="1.9"/></svg>
-          Map
-        </button>
-      </div>
-    </div>
-
-    <div id="list-view">
-      <ul class="place-list" id="place-list"></ul>
-    </div>
-
-    <div id="map-view" style="display:none;">
-      <div class="map-wrap"><div id="map"></div></div>
-      <p class="map-note">Pin locations are approximate. Use "Directions" on a place for exact navigation.</p>
-    </div>
-
-  </section>
-
-  <!-- ================= WEATHER TAB ================= -->
-  <section class="view" data-view="weather">
-    <div class="section">
-      <div class="weather-card">
-        <svg class="weather-sun" viewBox="0 0 160 160" aria-hidden="true">
-          <defs>
-            <clipPath id="wSunClip"><circle cx="80" cy="80" r="58" /></clipPath>
-            <linearGradient id="wSunFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#E8A33D" />
-              <stop offset="100%" stop-color="#B94E27" />
-            </linearGradient>
-          </defs>
-          <g clip-path="url(#wSunClip)">
-            <rect x="0" y="0" width="160" height="160" fill="url(#wSunFill)" />
-            <g fill="#1D4A57">
-              <rect x="0" y="94" width="160" height="5" />
-              <rect x="0" y="106" width="160" height="7" />
-              <rect x="0" y="121" width="160" height="10" />
-            </g>
-          </g>
-        </svg>
-
-        <div class="weather-head">
-          <div class="weather-tile" id="weather-icon-wrap">
-            <svg viewBox="0 0 24 24" width="19" height="19" fill="none"><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.9"/><path d="M12 2.6v2M12 19.4v2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M2.6 12h2M19.4 12h2M5.2 18.8l1.4-1.4M17.4 6.6l1.4-1.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
-          </div>
-          <div>
-            <div class="card-title">Weather</div>
-            <div class="card-sub" id="weather-sub">Miromar Lakes, FL 33913 — check the live forecast before you pack.</div>
-          </div>
-        </div>
-
-        <div id="weather-live" style="display:none;">
-          <div class="weather-now">
-            <div class="weather-temp" id="weather-temp">—°</div>
-            <div class="weather-now-meta">
-              <div class="weather-desc" id="weather-desc">—</div>
-              <div class="weather-facts">
-                <span id="weather-feels">Feels —</span>
-                <span id="weather-wind">Wind —</span>
-                <span id="weather-humidity">Humidity —</span>
+          <div data-el="torso" style="position: absolute; left: 19px; top: 20px; width: 34px; height: 50px; transform-origin: 17px 48px; will-change: transform;">
+            <div style="position: absolute; inset: 0; border-radius: 15px 15px 9px 9px; background: linear-gradient(270deg, rgba(255,178,148,.85) 0 1.5px, #123A28 2.5px, #091E17 100%);"></div>
+            <div data-el="head" style="position: absolute; left: 5px; top: -25px; width: 25px; height: 25px; border-radius: 999px; background: #091E17; box-shadow: inset -2px 0 0 rgba(255,178,148,.6); transform-origin: 12px 22px; will-change: transform;">
+              <div style="position: absolute; left: 1px; top: 5px; width: 33px; height: 7px; border-radius: 4px; background: #C86A34;"></div>
+              <div style="position: absolute; left: 3px; top: 1px; width: 19px; height: 10px; border-radius: 999px 999px 0 0; background: #C86A34;"></div>
+            </div>
+            <div data-el="arms" style="position: absolute; left: 23px; top: 5px; width: 13px; height: 46px; transform-origin: 6px 6px; will-change: transform;">
+              <div style="position: absolute; left: 0; top: 0; width: 13px; height: 46px; border-radius: 7px; background: linear-gradient(270deg, rgba(255,178,148,.8) 0 1.5px, #16452C 2.5px, #0A2118 100%);"></div>
+              <div style="position: absolute; left: 1px; top: 38px; width: 11px; height: 11px; border-radius: 999px; background: #E8DDC6;"></div>
+              <div data-el="blur" style="position: absolute; left: 4px; top: 42px; width: 5px; height: 96px; border-radius: 3px; transform-origin: 2.5px 3px; background: linear-gradient(rgba(253,246,232,.5), rgba(253,246,232,0)); filter: blur(2.5px); opacity: 0;"></div>
+              <div data-el="club" style="position: absolute; left: 2px; top: 40px; width: 10px; height: 98px; transform-origin: 5px 4px; will-change: transform;">
+                <div style="position: absolute; left: 0; top: 0; width: 10px; height: 26px; border-radius: 5px; background: #101F19;"></div>
+                <div style="position: absolute; left: 3.5px; top: 3px; width: 3.5px; height: 92px; border-radius: 2px; background: linear-gradient(90deg, #F1E7D2, #A79B84);"></div>
+                <div style="position: absolute; left: 1px; top: 88px; width: 18px; height: 11px; border-radius: 3px 6px 6px 2px; background: linear-gradient(160deg, #E7E1D4, #9C9484);"></div>
               </div>
             </div>
           </div>
-          <div class="weather-updated" id="weather-updated"></div>
         </div>
 
-        <a class="weather-link" href="https://www.google.com/search?q=weather+miromar+lakes+fl" target="_blank" rel="noopener noreferrer">
-          See full forecast
-          <span class="icon"><svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </a>
+        <div data-el="bshadow" style="position: absolute; left: 42%; bottom: 18.6vh; width: 17px; height: 6px; border-radius: 50%; background: rgba(8,26,20,.4); filter: blur(1px); will-change: transform;"></div>
+
+        <div data-el="divot" style="position: absolute; left: 42%; bottom: 19vh; width: 30px; height: 22px; opacity: 0; will-change: transform;">
+          <div style="position: absolute; left: 2px; top: 12px; width: 6px; height: 4px; border-radius: 2px; background: #14352A;"></div>
+          <div style="position: absolute; left: 12px; top: 4px; width: 5px; height: 4px; border-radius: 2px; background: #1B4331;"></div>
+          <div style="position: absolute; left: 20px; top: 10px; width: 7px; height: 4px; border-radius: 2px; background: #14352A;"></div>
+          <div style="position: absolute; left: 8px; top: 0; width: 4px; height: 3px; border-radius: 2px; background: #2A5D44;"></div>
+        </div>
+
+        <div data-el="trail2" style="position: absolute; left: 42%; bottom: 19.5vh; width: 15px; height: 15px; border-radius: 999px; background: rgba(255,253,247,.16); will-change: transform;"></div>
+        <div data-el="trail1" style="position: absolute; left: 42%; bottom: 19.5vh; width: 15px; height: 15px; border-radius: 999px; background: rgba(255,253,247,.26); will-change: transform;"></div>
+        <div data-el="trail0" style="position: absolute; left: 42%; bottom: 19.5vh; width: 15px; height: 15px; border-radius: 999px; background: rgba(255,253,247,.4); will-change: transform;"></div>
+
+        <div data-el="ball" style="position: absolute; left: 42%; bottom: 19.5vh; width: 15px; height: 15px; will-change: transform;">
+          <div data-el="ballspin" style="position: absolute; inset: 0; border-radius: 999px; background: radial-gradient(circle at 34% 28%, #FFFFFF 0 34%, #F6EEDF 62%, #CFC3AC 100%); box-shadow: 0 1px 3px rgba(8,26,20,.4); will-change: transform;">
+            <div style="position: absolute; left: 3px; top: 8px; width: 3px; height: 3px; border-radius: 999px; background: rgba(20,53,42,.13);"></div>
+            <div style="position: absolute; left: 8px; top: 4px; width: 2px; height: 2px; border-radius: 999px; background: rgba(20,53,42,.12);"></div>
+            <div style="position: absolute; left: 6px; top: 11px; width: 2px; height: 2px; border-radius: 999px; background: rgba(20,53,42,.1);"></div>
+          </div>
+        </div>
+
+        <div style="position: absolute; left: 42%; bottom: 19vh; margin-left: 5px; width: 5px; height: 9px; border-radius: 2px; background: #FFF0D2; opacity: .75;"></div>
+
+        <div data-el="flash" style="position: absolute; left: 42%; bottom: 18.8vh; margin-left: -13px; width: 42px; height: 42px; border-radius: 999px; background: radial-gradient(circle, rgba(255,253,247,.85) 0 22%, rgba(255,240,210,.25) 45%, transparent 70%); opacity: 0;"></div>
+
+        <div style="position: absolute; left: -10%; right: -10%; bottom: 28vh; height: 7vh; background: linear-gradient(rgba(255,176,138,.3), rgba(255,176,138,0)); filter: blur(7px); pointer-events: none;"></div>
+
+        <div data-el="fg" style="position: absolute; left: -10%; right: -10%; bottom: -2vh; height: 9vh; background: repeating-linear-gradient(84deg, rgba(10,33,24,.85) 0 3px, transparent 3px 14px), linear-gradient(transparent, #0A2118 78%); filter: blur(3.5px); will-change: transform;"></div>
+
+          <div style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(125% 92% at 50% 44%, rgba(0,0,0,0) 38%, rgba(10,18,34,.42) 100%);"></div>
+        </div>
+
+        <div data-el="title" style="position: absolute; left: 0; right: 0; top: 8vh; padding: 0 26px; text-align: center; will-change: transform, opacity;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; color: #FFC7A0;">Sept 17 – 20, 2026</div>
+          <div style="margin-top: 10px; font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 50px; line-height: .94; letter-spacing: -.03em; color: #FFF8EA;">Florida<br>Golf Trip <span style="color: #FF7FA8; text-shadow: 0 0 18px rgba(255,127,168,.55);">2026</span></div>
+          <div style="margin-top: 12px; font-size: 13.5px; color: rgba(255,248,234,.72);">Fort Myers · Estero · Miromar Lakes</div>
+        </div>
+
+        <div data-el="hint" style="position: absolute; left: 0; right: 0; bottom: 5vh; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: .14em; color: rgba(255,248,234,.75);">
+          <div>scroll to swing</div>
+          <div style="margin: 8px auto 0; width: 10px; height: 10px; border-right: 2px solid #E9B98A; border-bottom: 2px solid #E9B98A; transform: rotate(45deg); animation: nudge 1.7s ease-in-out infinite;"></div>
+        </div>
+
+        <div data-el="fin" style="position: absolute; left: 0; right: 0; bottom: 15vh; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: .14em; color: rgba(255,248,234,.8); opacity: 0;">striped it — keep going</div>
+
+        <div data-el="veil" style="position: absolute; inset: 0; background: #EFE8D8; opacity: 0; pointer-events: none;"></div>
+
+        <button type="button" sc-camel-on-click="{{ skipIntro }}" style="position: absolute; right: 10px; top: 10px; min-height: 44px; min-width: 72px; padding: 8px 13px; border: 1px solid rgba(253,246,232,.28); border-radius: 999px; background: rgba(253,246,232,.08); color: #FFF8EA; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; cursor: pointer;">skip</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <div data-el="app" style="position: relative; padding: 0 16px 128px;">
+
+    <div style="position: sticky; top: 0; z-index: 40; margin: 0 -16px; padding: 14px 16px 12px; background: rgba(239,232,216,.95); backdrop-filter: blur(12px); border-bottom: 1px solid #D3C6A9; box-shadow: 0 6px 18px -12px rgba(20,53,42,.35);">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+        <div>
+          <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: -.02em; color: #14352A;">Florida Golf Trip 2026</div>
+          <div style="margin-top: 4px; display: flex; align-items: center; gap: 6px;">
+            <div style="display: flex; gap: 3px;">
+              <div style="width: 14px; height: 3px; border-radius: 2px; background: #E85A7A;"></div>
+              <div style="width: 14px; height: 3px; border-radius: 2px; background: #E8A33F;"></div>
+              <div style="width: 14px; height: 3px; border-radius: 2px; background: #2A9D95;"></div>
+            </div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #54634F;">Sept 17–20 · 4 players · 3 rounds</div>
+          </div>
+        </div>
+        <div style="flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 58px; height: 52px; border-radius: 16px; background: #14352A; color: #FFF8EA;">
+          <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 21px; line-height: 1;">{{ daysOut }}</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .1em; color: #E9B98A;">{{ daysWord }}</div>
+        </div>
       </div>
     </div>
 
-    <div class="section" id="forecast-section" style="display:none;">
-      <div class="section-title">Next few days</div>
-      <div class="forecast-row" id="forecast-row"></div>
+    <div style="display: {{ showTrip }}; padding-top: 18px; animation: softin .3s ease both;">
+      <div style="margin-top: 4px; display: flex; align-items: baseline; justify-content: space-between;">
+        <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 17px; color: #14352A;">The plan</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #54634F;">4 days</div>
+      </div>
+      <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+        <sc-for list="{{ days }}" as="d" hint-placeholder-count="4">
+          <div style="display: grid; grid-template-columns: 62px 1fr; gap: 14px; padding: 15px 16px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
+            <div>
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .1em; color: #54634F;">{{ d.dow }}</div>
+              <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 26px; line-height: 1.05; color: #14352A;">{{ d.num }}</div>
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #7B8A7F;">Sept</div>
+            </div>
+            <div style="border-left: 1px solid #EFE6D3; padding-left: 14px; display: flex; flex-direction: column; gap: 7px;">
+              <sc-for list="{{ d.items }}" as="it" hint-placeholder-count="2">
+                <div style="display: flex; gap: 9px; align-items: flex-start;">
+                  <div style="flex: none; margin-top: 6px; width: 6px; height: 6px; border-radius: 999px; background: {{ it.dot }};"></div>
+                  <div>
+                    <div style="font-size: 14.5px; font-weight: 600; color: #16211C;">{{ it.title }}</div>
+                    <div style="font-size: 12.5px; color: #54634F; margin-top: 1px;">{{ it.meta }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="margin-top: 22px; padding: 16px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="flex: none; width: 30px; height: 30px; border-radius: 9px; background: #2A9D95;"></div>
+          <div>
+            <div style="font-size: 15px; font-weight: 600; color: #14352A;">Splitwise — Fort Myers R3</div>
+            <div style="margin-top: 2px; font-size: 12.5px; color: #54634F;">Green fees, groceries, the bar tab — all of it goes here.</div>
+          </div>
+        </div>
+        <a href="https://www.splitwise.com/join/mewNfMDa1W6+x028z?v=e" target="_blank" rel="noopener" style="margin-top: 13px; display: block; min-height: 44px; box-sizing: border-box; padding: 13px; border-radius: 13px; background: #14352A; color: #FFF8EA; font-size: 13.5px; font-weight: 600; text-align: center;">Join the group</a>
+      </div>
     </div>
 
-    <div class="section">
-      <div class="section-title">Trip area</div>
-      <div class="map-mini-wrap"><div id="map-mini"></div></div>
-      <p class="map-note">Home base pinned — Fort Myers, Bonita Springs, and Naples sit just north and south along the coast.</p>
+    <div style="display: {{ showGolf }}; padding-top: 18px; animation: softin .3s ease both;">
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <sc-for list="{{ courses }}" as="c" hint-placeholder-count="4">
+          <div style="background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 20px; box-shadow: 0 1px 3px rgba(20,53,42,.07); overflow: hidden;">
+            <div style="position: relative; aspect-ratio: 16 / 9; background: #DCD3BF; overflow: hidden;">
+              <img src="{{ c.photo }}" alt="{{ c.name }}" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;">
+              <div style="position: absolute; inset: 0; background: linear-gradient(rgba(8,26,20,.5) 0%, rgba(8,26,20,0) 34%, rgba(8,26,20,.62) 100%);"></div>
+              <div style="position: absolute; left: 14px; right: 14px; top: 12px; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .09em; color: #FFF6E2; text-shadow: 0 1px 6px rgba(8,26,20,.7);">{{ c.day }}</div>
+                <div style="flex: none; padding: 6px 11px; border-radius: 999px; background: {{ c.pillBg }}; color: {{ c.pillInk }}; font-size: 11px; font-weight: 600; box-shadow: 0 2px 8px rgba(8,26,20,.3);">{{ c.statusLabel }}</div>
+              </div>
+              <div style="position: absolute; left: 16px; right: 16px; bottom: 13px; font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 22px; line-height: 1.12; letter-spacing: -.02em; color: #FFF8EA; text-shadow: 0 2px 10px rgba(8,26,20,.6);">{{ c.name }}</div>
+            </div>
+            <div style="padding: 16px;">
+              <div style="font-size: 13px; color: #54634F; line-height: 1.5;">{{ c.address }}</div>
+              <div style="margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div style="padding: 11px 12px; background: #F3ECDB; border-radius: 13px;">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .09em; color: #54634F;">Tee time</div>
+                  <div style="margin-top: 3px; font-size: 15px; font-weight: 600; color: #16211C;">{{ c.teeTime }}</div>
+                  <div style="margin-top: 2px; font-size: 11.5px; color: #6C7A6E;">{{ c.teeNote }}</div>
+                </div>
+                <div style="padding: 11px 12px; background: #F3ECDB; border-radius: 13px; display: {{ priceDisplay }};">
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .09em; color: #54634F;">Per player</div>
+                  <div style="margin-top: 3px; font-size: 15px; font-weight: 600; color: #16211C;">{{ c.price }}</div>
+                  <div style="margin-top: 2px; font-size: 11.5px; color: #6C7A6E;">{{ c.priceNote }}</div>
+                </div>
+              </div>
+              <div style="margin-top: 12px; font-size: 13.5px; color: #435349; line-height: 1.55;">{{ c.notes }}</div>
+              <sc-if value="{{ c.confirmation }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #54634F;">Confirmation {{ c.confirmation }} · booked via GolfNow</div>
+              </sc-if>
+              <div style="margin-top: 16px; display: flex; gap: 8px;">
+                <a href="{{ c.mapsUrl }}" target="_blank" rel="noopener" style="flex: 1; min-height: 44px; box-sizing: border-box; padding: 12px; border-radius: 13px; background: #14352A; color: #FFF8EA; font-size: 13.5px; font-weight: 600; text-align: center;">Directions</a>
+                <sc-if value="{{ c.phone }}" hint-placeholder-val="{{ false }}">
+                  <a href="{{ c.telUrl }}" style="flex: 1; min-height: 44px; box-sizing: border-box; padding: 12px; border-radius: 13px; border: 1px solid #CFC2A6; color: #14352A; font-size: 13.5px; font-weight: 600; text-align: center;">Call</a>
+                </sc-if>
+                <sc-if value="{{ c.website }}" hint-placeholder-val="{{ false }}">
+                  <a href="{{ c.website }}" target="_blank" rel="noopener" style="flex: 1; min-height: 44px; box-sizing: border-box; padding: 12px; border-radius: 13px; border: 1px solid #CFC2A6; color: #14352A; font-size: 13.5px; font-weight: 600; text-align: center;">Website</a>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin-top: 16px; font-size: 12.5px; color: #54634F; line-height: 1.55; text-wrap: pretty;">Thursday is the only round still open — Ryan and Gustavo tee it up at Stoneybrook while Matt and Oscar are in the air. Friday and Saturday are paid in full; Tiburón runs dynamic pricing, so a re-book would land somewhere else.</div>
     </div>
-  </section>
 
-</main>
+    <div style="display: {{ showEats }}; padding-top: 18px; animation: softin .3s ease both;">
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <sc-for list="{{ eats }}" as="r" hint-placeholder-count="4">
+          <div style="padding: 16px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 20px; box-shadow: 0 1px 3px rgba(20,53,42,.07);">
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;">
+              <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 19px; letter-spacing: -.015em; color: #14352A;">{{ r.name }}</div>
+              <div style="flex: none; padding: 5px 10px; border-radius: 999px; background: {{ r.tagBg }}; color: {{ r.tagInk }}; font-size: 11px; font-weight: 600;">{{ r.tag }}</div>
+            </div>
+            <div style="margin-top: 5px; font-size: 13px; color: #54634F; line-height: 1.5;">{{ r.address }}</div>
+            <div style="margin-top: 10px; font-size: 13.5px; color: #435349; line-height: 1.55;">{{ r.notes }}</div>
+            <div style="margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px;">
+              <a href="{{ r.mapsUrl }}" target="_blank" rel="noopener" style="flex: 1 1 calc(50% - 4px); min-height: 44px; box-sizing: border-box; padding: 12px; border-radius: 13px; background: #14352A; color: #FFF8EA; font-size: 13.5px; font-weight: 600; text-align: center;">Directions</a>
+              <sc-if value="{{ r.telUrl }}" hint-placeholder-val="{{ false }}">
+                <a href="{{ r.telUrl }}" style="flex: 1 1 calc(50% - 4px); min-height: 44px; box-sizing: border-box; padding: 12px; border-radius: 13px; border: 1px solid #CFC2A6; color: #14352A; font-size: 13.5px; font-weight: 600; text-align: center;">Call</a>
+              </sc-if>
+              <sc-if value="{{ r.tapList }}" hint-placeholder-val="{{ false }}">
+                <a href="{{ r.tapList }}" target="_blank" rel="noopener" style="flex: 1 1 calc(50% - 4px); min-height: 44px; box-sizing: border-box; padding: 12px; border-radius: 13px; border: 1px solid #D8467A; color: #B03260; font-size: 13.5px; font-weight: 600; text-align: center;">Tap list</a>
+              </sc-if>
+              <sc-if value="{{ r.menu }}" hint-placeholder-val="{{ false }}">
+                <a href="{{ r.menu }}" target="_blank" rel="noopener" style="flex: 1 1 calc(50% - 4px); min-height: 44px; box-sizing: border-box; padding: 12px; border-radius: 13px; border: 1px solid #CFC2A6; color: #14352A; font-size: 13.5px; font-weight: 600; text-align: center;">Food menu</a>
+              </sc-if>
+              <a href="{{ r.website }}" target="_blank" rel="noopener" style="flex: 1 1 calc(50% - 4px); min-height: 44px; box-sizing: border-box; padding: 12px; border-radius: 13px; border: 1px solid #CFC2A6; color: #14352A; font-size: 13.5px; font-weight: 600; text-align: center;">Website</a>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
 
-<nav class="bottom-nav">
-  <button class="nav-item active" data-target="trip">
-    <span class="icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none"><path d="M4 11.5L12 4l8 7.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9.5a1 1 0 001 1h3.5v-5.5h3V20.5H17a1 1 0 001-1V10" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></span>
-    <span>Trip</span>
-  </button>
-  <button class="nav-item" data-target="places">
-    <span class="icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none"><path d="M12 21s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><circle cx="12" cy="9" r="2.3" stroke="currentColor" stroke-width="1.9"/></svg></span>
-    <span>Places</span>
-  </button>
-  <button class="nav-item" data-target="weather">
-    <span class="icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none"><path d="M17.5 18a4 4 0 000-8 5.5 5.5 0 00-10.6 1.8A3.5 3.5 0 007.5 18h10z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></span>
-    <span>Weather</span>
-  </button>
-</nav>
+    <div style="display: {{ showMap }}; padding-top: 18px; animation: softin .3s ease both;">
+      <div style="display: {{ ctlFlex }}; padding: 4px; background: #E4DBC6; border-radius: 999px;">
+        <button type="button" sc-camel-on-click="{{ setList }}" style="flex: 1; min-height: 40px; border: none; border-radius: 999px; background: {{ listBtnBg }}; color: {{ listBtnInk }}; font-family: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;">List</button>
+        <button type="button" sc-camel-on-click="{{ setMapView }}" style="flex: 1; min-height: 40px; border: none; border-radius: 999px; background: {{ mapBtnBg }}; color: {{ mapBtnInk }}; font-family: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;">Map</button>
+      </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script>
-(function () {
-  "use strict";
+      <div style="display: {{ ctlBlock }}; margin: 14px -16px 0; padding: 0 16px; overflow-x: auto; scrollbar-width: none;">
+        <div style="display: flex; gap: 8px; width: max-content; padding-bottom: 2px;">
+          <sc-for list="{{ chips }}" as="ch" hint-placeholder-count="4">
+            <button type="button" sc-camel-on-click="{{ ch.onClick }}" style="min-height: 38px; padding: 9px 15px; border: 1px solid {{ ch.border }}; border-radius: 999px; background: {{ ch.bg }}; color: {{ ch.ink }}; font-family: inherit; font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer;">{{ ch.label }}</button>
+          </sc-for>
+        </div>
+      </div>
 
-  /* ---------------- Data ---------------- */
+      <div style="display: {{ mapWrapDisplay }}; margin-top: 14px; position: relative; z-index: 0; isolation: isolate; border: 1px solid #DBCFB5; border-radius: 20px; box-shadow: 0 1px 3px rgba(20,53,42,.07); overflow: hidden;">
+        <div data-el="map" style="height: 60vh; min-height: 330px;"></div>
+        <div style="display: {{ baseDisplay }}; position: absolute; left: 12px; right: 12px; top: 12px; z-index: 500; padding: 11px 14px; background: rgba(255,253,247,.96); border-radius: 999px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .04em; color: #14352A; text-align: center; box-shadow: 0 4px 14px rgba(8,26,20,.22);">10733 Mirasol Drive #211, Miromar Lakes</div>
+        <div style="display: {{ baseDisplay }}; position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 500; padding: 15px 16px; background: #FFFDF7; border-radius: 18px; box-shadow: 0 12px 30px rgba(8,26,20,.3);">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .12em; color: #54634F;">Home base</div>
+          <div style="margin-top: 5px; font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 19px; letter-spacing: -.02em; color: #14352A;">The condo at Miromar Lakes</div>
+          <div style="margin-top: 8px; display: flex; gap: 8px;">
+            <a href="https://www.google.com/maps/dir/?api=1&amp;destination=10733+Mirasol+Drive+211+Miromar+Lakes+FL+33913" target="_blank" rel="noopener" style="flex: 1; min-height: 44px; box-sizing: border-box; padding: 12px; border-radius: 13px; background: #14352A; color: #FFF8EA; font-size: 13.5px; font-weight: 600; text-align: center;">Directions to here</a>
+            <button type="button" sc-camel-on-click="{{ recenterBase }}" style="flex: none; min-height: 44px; padding: 12px 15px; border: 1px solid #CFC2A6; border-radius: 13px; background: transparent; color: #14352A; font-family: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;">Recenter</button>
+          </div>
+        </div>
+      </div>
 
-  var mapsDir = function (address) {
-    return "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(address);
+      <div style="display: {{ mapListDisplay }}; margin-top: 14px; flex-direction: column; gap: 10px;">
+        <sc-for list="{{ visiblePlaces }}" as="p" hint-placeholder-count="5">
+          <div style="padding: 15px 16px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="flex: none; width: 26px; height: 26px; border-radius: 999px; background: {{ p.pinBg }};"></div>
+              <div style="flex: 1;">
+                <div style="font-size: 15px; font-weight: 600; color: #16211C;">{{ p.name }}</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .08em; color: #54634F; margin-top: 2px;">{{ p.tag }} · {{ p.distance }}</div>
+              </div>
+            </div>
+            <div style="margin-top: 10px; font-size: 12.5px; color: #54634F; line-height: 1.5;">{{ p.address }}</div>
+            <div style="margin-top: 12px; display: flex; gap: 8px;">
+              <a href="{{ p.mapsUrl }}" target="_blank" rel="noopener" style="flex: 1; min-height: 42px; box-sizing: border-box; padding: 11px; border-radius: 12px; background: #F2ECDD; color: #14352A; font-size: 13px; font-weight: 600; text-align: center;">Directions</a>
+              <sc-if value="{{ p.telUrl }}" hint-placeholder-val="{{ false }}">
+                <a href="{{ p.telUrl }}" style="flex: 1; min-height: 42px; box-sizing: border-box; padding: 11px; border-radius: 12px; border: 1px solid #CFC2A6; color: #14352A; font-size: 13px; font-weight: 600; text-align: center;">Call</a>
+              </sc-if>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display: {{ showWx }}; padding-top: 18px; animation: softin .3s ease both;">
+      <div style="padding: 20px; border-radius: 22px; background: linear-gradient(#1B2650 0%, #6B2F63 52%, #C1594F 100%); color: #FFF8EA; position: relative; overflow: hidden;">
+        <div style="position: absolute; right: -24px; bottom: -34px; width: 130px; height: 130px; border-radius: 999px; background: linear-gradient(#FFB07A, #FF7FA8); opacity: .42;"></div>
+        <div style="position: relative;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .16em; color: #E9B98A;">Miromar Lakes, FL</div>
+          <div style="margin-top: 14px; display: flex; align-items: flex-end; gap: 14px;">
+            <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 62px; line-height: .9; letter-spacing: -.04em;">{{ wxTemp }}</div>
+            <div style="padding-bottom: 8px;">
+              <div style="font-size: 15px; font-weight: 600;">{{ wxDesc }}</div>
+              <div style="margin-top: 3px; font-size: 13px; color: rgba(255,248,234,.72);">{{ wxFeels }}</div>
+            </div>
+          </div>
+          <div style="margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+            <sc-for list="{{ wxStats }}" as="s" hint-placeholder-count="3">
+              <div style="padding: 11px 12px; border-radius: 13px; background: rgba(253,246,232,.1);">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .1em; color: #E9B98A;">{{ s.label }}</div>
+                <div style="margin-top: 3px; font-size: 14.5px; font-weight: 600;">{{ s.value }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: rgba(255,248,234,.6);">{{ wxUpdated }}</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 14px; display: {{ wxDaysDisplay }}; gap: 10px; overflow-x: auto; scrollbar-width: none;">
+        <sc-for list="{{ wxDays }}" as="d" hint-placeholder-count="4">
+          <div style="flex: none; width: 92px; padding: 14px 12px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .08em; color: #54634F;">{{ d.label }}</div>
+            <div style="margin-top: 10px; height: 4px; border-radius: 2px; background: {{ d.bar }};"></div>
+            <div style="margin-top: 10px; font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 20px; color: #14352A;">{{ d.hi }}°</div>
+            <div style="font-size: 12px; color: #54634F;">{{ d.lo }}° low</div>
+            <div style="margin-top: 6px; font-size: 11.5px; color: #435349; line-height: 1.35;">{{ d.desc }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <a href="https://www.google.com/search?q=weather+miromar+lakes+fl" target="_blank" rel="noopener" style="margin-top: 14px; display: flex; align-items: center; justify-content: space-between; padding: 15px 16px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
+        <span style="font-size: 14px; font-weight: 600; color: #14352A;">Full forecast on Google</span>
+        <span style="width: 8px; height: 8px; border-right: 2px solid #C86A34; border-top: 2px solid #C86A34; transform: rotate(45deg);"></span>
+      </a>
+
+      <div style="margin-top: 14px; padding: 16px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
+        <div style="font-size: 14px; font-weight: 600; color: #14352A;">September in southwest Florida</div>
+        <div style="margin-top: 6px; font-size: 13px; color: #54634F; line-height: 1.55; text-wrap: pretty;">Hot and humid with afternoon storms most days. Morning tee times are the play — both confirmed rounds go off before 10, which should keep us ahead of the pop-ups.</div>
+      </div>
+    </div>
+  </div>
+
+  <div data-el="nav" style="position: sticky; bottom: 0; z-index: 60; padding: 0 16px calc(14px + env(safe-area-inset-bottom)); pointer-events: none;">
+    <div style="display: flex; gap: 1px; padding: 5px; background: rgba(20,53,42,.96); backdrop-filter: blur(14px); border-radius: 999px; box-shadow: 0 12px 30px rgba(20,53,42,.28); pointer-events: auto;">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+        <button type="button" sc-camel-on-click="{{ t.onClick }}" style="flex: 1; min-height: 46px; padding: 0 2px; border: none; border-radius: 999px; background: {{ t.bg }}; color: {{ t.ink }}; font-family: inherit; font-size: 11.5px; font-weight: 600; letter-spacing: -.01em; cursor: pointer;">{{ t.label }}</button>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: 430, &quot;height&quot;: 932 },
+  &quot;introEnabled&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot; },
+  &quot;showPrices&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot; }
+}">
+const OWM_KEY = 'b72af3f83bb49e28d8ef2e78c74bd9c8';
+const CONDO = { lat: 26.4685, lng: -81.7440 };
+
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const seg = (p, a, b) => clamp((p - a) / (b - a), 0, 1);
+const lerp = (a, b, t) => a + (b - a) * t;
+const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+const dir = (q) => 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(q);
+const tel = (p) => 'tel:' + p.replace(/[^0-9]/g, '');
+
+const COURSES = [
+  {
+    id: 'stoneybrook', name: 'Stoneybrook Golf Club', category: 'golf',
+    address: '21251 Stoneybrook Golf Blvd, Estero, FL 33928',
+    lat: 26.4200, lng: -81.7900,
+    day: 'Day 1 — Thu, Sept 17', status: 'open', statusLabel: 'Not booked yet',
+    teeTime: 'Book on arrival', price: '$60–80', priceNote: 'estimate · Ryan + Gustavo',
+    photo: (window.__resources && window.__resources.photoStoneybrook) || 'photos/stoneybrook.jpg',
+    notes: '18 holes only, cart required, no walking. Ryan and Gustavo play this one after landing — call from the car for an afternoon slot.'
+  },
+  {
+    id: 'saltleaf', name: 'Saltleaf Golf Preserve — The Preserve', category: 'golf',
+    address: '23001 Coconut Point Resort Drive, Bonita Springs, FL 34134',
+    lat: 26.3400, lng: -81.8080,
+    day: 'Day 2 — Fri, Sept 18', status: 'confirmed', statusLabel: 'Confirmed',
+    teeTime: '8:40 am', price: '$140.64', priceNote: '$562.54 total · 4 players',
+    photo: (window.__resources && window.__resources.photoSaltleaf) || 'photos/saltleaf.jpg', confirmation: '429535097',
+    notes: '18-hole championship course. Leave the condo by 7:50 to make the tee sheet comfortably.'
+  },
+  {
+    id: 'tiburon', name: 'Tiburón Golf Club — Black Course', category: 'golf',
+    address: '2620 Tiburon Dr, Naples, FL 34109',
+    lat: 26.2470, lng: -81.7900,
+    day: 'Day 3 — Sat, Sept 19', status: 'confirmed', statusLabel: 'Confirmed',
+    teeTime: '9:40 am', price: '$181.70', priceNote: '$726.80 total · 4 players',
+    photo: (window.__resources && window.__resources.photoTiburon) || 'photos/tiburon.jpg', confirmation: '429539576',
+    notes: 'The big one. Resort dynamic pricing, so the actual charge may land above the estimate.'
+  }
+];
+
+const EATS = [
+  {
+    id: 'backyard', name: 'Backyard Social', category: 'eats', tag: 'Bar + games',
+    address: '16371 Corporate Commerce Way, Fort Myers, FL 33913',
+    lat: 26.5200, lng: -81.7520, phone: '(239) 703-7077',
+    website: 'https://backyardsocial.com',
+    maps: 'https://maps.app.goo.gl/1WA7DfDWgJpfSKY56',
+    notes: 'Patio bar with yard games. Easy first night once everyone has landed.'
+  },
+  {
+    id: 'breakfast', name: 'Best Breakfast USA', category: 'eats', tag: 'Breakfast',
+    address: '11131 Canal Grande Dr, Fort Myers, FL 33913',
+    lat: 26.5550, lng: -81.7600, phone: '(952) 277-9784',
+    website: 'https://bestbreakfastusa.com',
+    maps: 'https://maps.app.goo.gl/4Y56TrN6QAjARaC1A',
+    notes: 'Pre-round fuel. Close enough to the condo for a 7 am stop before Saltleaf.'
+  },
+  {
+    id: 'twinpeaks', name: 'Twin Peaks', category: 'eats', tag: 'Sports bar',
+    address: '16411 Corporate Commerce Way, Fort Myers, FL 33913',
+    lat: 26.5205, lng: -81.7515, phone: '(239) 245-9559',
+    website: 'https://twinpeaksrestaurant.com',
+    maps: 'https://maps.app.goo.gl/Bs63b4L6Sw6NrjXF7',
+    notes: 'Saturday college football, cold beer, next door to Backyard Social.'
+  },
+  {
+    id: 'bluewater', name: 'Blue Water Beach Grill', category: 'eats', tag: 'Home base',
+    address: '18151 Miromar Lakes Pkwy, Miromar Lakes, FL 33913',
+    lat: 26.4650, lng: -81.7480, phone: '(239) 999-1199',
+    website: 'https://miromarlakes.com',
+    maps: 'https://maps.app.goo.gl/ozWNp3TCi4J3BP2w7',
+    notes: 'Inside Miromar Lakes Beach & Golf Club — same community as the condo. Closest table to the couch.'
+  }
+];
+
+const BREWS = [
+  {
+    id: 'fmbrew', name: 'Fort Myers Brewing Company', category: 'eats', tag: 'Brewery',
+    address: '12811 Commerce Lakes Dr #28, Fort Myers, FL 33913',
+    lat: 26.5410, lng: -81.7660,
+    website: 'https://www.fmbrew.com', tapList: 'https://www.fmbrew.com/our-brews/core-beers/',
+    maps: 'https://www.google.com/maps/search/?api=1&query=Fort+Myers+Brewing+Company',
+    notes: 'Friday night plan. Big taproom with a food truck park out front, so dinner and beer are the same stop.'
+  },
+  {
+    id: 'palmcity', name: 'Palm City Brewing', category: 'eats', tag: 'Brewery',
+    address: '7887 Drew Cir, Fort Myers, FL 33967',
+    lat: 26.4830, lng: -81.8090,
+    website: 'https://www.palmcitybrewing.com', tapList: 'https://www.palmcitybrewing.com/beers/whats-pouring/',
+    maps: 'https://www.google.com/maps/search/?api=1&query=Palm+City+Brewing+Fort+Myers',
+    notes: 'No kitchen and no food trucks — eat first, then come here for a pint.'
+  },
+  {
+    id: 'chubby', name: 'Chubby Mermaid Brewing', category: 'eats', tag: 'Brewery + food',
+    address: 'Bonita Springs, FL',
+    lat: 26.3398, lng: -81.7787,
+    website: 'https://chubbymermaidbrewing.com',
+    tapList: 'https://chubbymermaidbrewing.com/beer-menu/',
+    menu: 'https://chubbymermaidbrewing.com/evening-menu/',
+    maps: 'https://www.google.com/maps/search/?api=1&query=Chubby+Mermaid+Brewing',
+    notes: 'Full evening menu plus their own taps — the one brewery here that can handle dinner on its own.'
+  }
+];
+
+const STAY = {
+  id: 'condo', name: 'The condo', category: 'stay', tag: 'Home base',
+  address: '10733 Mirasol Drive #211, Miromar Lakes, FL 33913',
+  lat: CONDO.lat, lng: CONDO.lng
+};
+
+function miles(a, b) {
+  const R = 3958.8, dLat = (b.lat - a.lat) * Math.PI / 180, dLng = (b.lng - a.lng) * Math.PI / 180;
+  const la1 = a.lat * Math.PI / 180, la2 = b.lat * Math.PI / 180;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(la1) * Math.cos(la2) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+class Component extends DCLogic {
+  state = {
+    tab: 'golf', mapMode: 'map', filter: 'all',
+    wx: null, wxDays: [], wxErr: false, wxAt: null,
+    a2hs: false, canInstall: false, iosHint: false
+  };
+  rootRef = React.createRef();
+
+  componentDidMount() {
+    const r = this.rootRef.current;
+    if (!r) return;
+    this.el = {};
+    ['track', 'cam', 'clouds', 'haze', 'sun', 'trees', 'fg', 'veil', 'app', 'title', 'hint', 'fin', 'ball', 'ballspin',
+      'bshadow', 'trail0', 'trail1', 'trail2', 'divot', 'flash', 'golfer', 'gshadow', 'torso', 'hips',
+      'head', 'arms', 'club', 'blur', 'legRear', 'legFront', 'distflag', 'restball', 'nav', 'map']
+      .forEach((k) => { this.el[k] = r.querySelector('[data-el="' + k + '"]'); });
+
+    this.onScroll = () => {
+      if (this.raf) return;
+      this.raf = requestAnimationFrame(() => { this.raf = null; this.frame(); });
+    };
+    r.addEventListener('scroll', this.onScroll, { passive: true });
+    window.addEventListener('resize', this.onScroll);
+    this.frame();
+
+    this.loadWeather();
+    this.registerSW();
+    if (this.state.tab === 'map' || this.state.tab === 'base') this.initMap();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const t = this.state.tab;
+    const prev = prevState || {};
+    if (t === 'map' || t === 'base') { this.initMap(); this.syncMarkers(); }
+    if (prev.mapMode !== this.state.mapMode && this.map) setTimeout(() => this.map.invalidateSize(), 60);
+    if (prev.tab !== t && this.map) {
+      setTimeout(() => {
+        if (!this.map) return;
+        this.map.invalidateSize();
+        if (t === 'base') this.focusBase();
+        else if (t === 'map' && this.markers) {
+          this.map.closePopup();
+          const b = L.featureGroup(this.markers).getBounds().pad(0.2);
+          if (prev.tab === 'base') this.map.flyToBounds(b, { duration: 0.9 });
+          else this.map.fitBounds(b);
+        }
+      }, 70);
+    }
+  }
+
+  focusBase = () => {
+    if (!this.map) return;
+    this.map.closePopup();
+    this.map.flyTo([CONDO.lat, CONDO.lng], 16.5, { duration: 1.2 });
   };
 
-  var CONDO = {
-    name: "The condo",
-    address: "10733 Mirasol Drive #211, Miromar Lakes, FL 33913",
-    lat: 26.4685, lng: -81.7440
+  recenterBase = () => {
+    this.setState({ tab: 'base' });
+    this.focusBase();
   };
 
-  var PEOPLE = [
-    { name: "Ryan S.", meta: "Thu, Sept 17 · lands ~12:30 PM", initials: "RS" },
-    { name: "Gustavo C.", meta: "Thu, Sept 17 · lands ~12:30 PM", initials: "GC" },
-    { name: "Matt T.", meta: "Thu, Sept 17 · arrives later", initials: "MT" },
-    { name: "Oscar A.", meta: "Thu, Sept 17 · arrives later", initials: "OA" }
-  ];
+  componentWillUnmount() {
+    const r = this.rootRef.current;
+    if (r && this.onScroll) r.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onScroll);
+  }
 
-  var FLIGHTS = [
-    {
-      flightNo: "DL1395", carrier: "Delta Air Lines", plane: "Airbus A321",
-      from: "RSW", fromName: "Fort Myers", to: "ATL", toName: "Atlanta",
-      depart: "8:10 AM", arrive: "9:55 AM", terminal: "Domestic Term-South"
-    },
-    {
-      flightNo: "DL2011", carrier: "Delta Air Lines", plane: "Airbus A321",
-      from: "ATL", fromName: "Atlanta", to: "AUS", toName: "Austin",
-      depart: "11:10 AM", arrive: "12:29 PM", terminal: "Domestic Term-South"
+  /* ---------- scroll-driven swing ---------- */
+  frame() {
+    const r = this.rootRef.current;
+    if (!r) return;
+    const vh = r.clientHeight, vw = r.clientWidth;
+    const track = this.el && this.el.track;
+    const span = track ? track.offsetHeight - vh : 0;
+    const p = span > 0 ? clamp(r.scrollTop / span, 0, 1) : 1;
+    const e = this.el || {};
+
+    if (e.nav) {
+      const on = span > 0 ? seg(p, 0.93, 1) : 1;
+      e.nav.style.opacity = on;
+      e.nav.style.transform = 'translateY(' + (1 - on) * 20 + 'px)';
+      e.nav.style.visibility = on < 0.02 ? 'hidden' : 'visible';
     }
-  ];
+    if (!track) return;
 
-  var PLACES = [
-    {
-      id: "stoneybrook", category: "golf",
-      name: "Stoneybrook Golf Club",
-      address: "21251 Stoneybrook Golf Blvd, Estero, FL 33928",
-      lat: 26.4200, lng: -81.7900,
-      day: "Day 1 · Thu, Sept 17", status: "pending", statusLabel: "Option A · not booked",
-      price: "$99–199 / person",
-      notes: "18-hole only, cart required — no walking. Casual round near the condo on arrival day.",
-      // Add the clubhouse number here and a Call button appears automatically
-      phone: null, website: null
-    },
-    {
-      id: "bonita-fairways", category: "golf",
-      name: "Bonita Fairways Golf Club",
-      address: "26740 Sammoset Way, Bonita Springs, FL 34135",
-      lat: 26.3550, lng: -81.7700,
-      day: "Day 1 · Thu, Sept 17", status: "pending", statusLabel: "Option B · not booked",
-      notes: "Par-61 executive course — shorter, faster round. Good pick for 9 holes.",
-      phone: "(239) 947-9100", website: null
-    },
-    {
-      id: "saltleaf", category: "golf",
-      name: "Saltleaf Golf Preserve — The Preserve",
-      address: "23001 Coconut Point Resort Drive, Bonita Springs, FL 34134",
-      lat: 26.3400, lng: -81.8080,
-      day: "Day 2 · Fri, Sept 18", status: "confirmed", statusLabel: "Confirmed",
-      teeTime: "8:40 AM", confirmation: "429535097",
-      price: "$220–225 / person (18 holes)",
-      notes: "18-Hole Championship Course. Booked via GolfNow.",
-      // Add the pro shop number here and a Call button appears automatically
-      phone: null, website: null
-    },
-    {
-      id: "tiburon", category: "golf",
-      name: "Tiburón Golf Club — Black Course",
-      address: "2620 Tiburon Dr, Naples, FL 34109",
-      lat: 26.2470, lng: -81.7900,
-      day: "Day 3 · Sat, Sept 19", status: "confirmed", statusLabel: "Confirmed",
-      teeTime: "9:40 AM", confirmation: "429539576",
-      price: "$250–290 / person (18 holes)",
-      notes: "Resort / dynamic pricing — actual charge at checkout may vary. Booked via GolfNow.",
-      // Add the pro shop number here and a Call button appears automatically
-      phone: null, website: null
-    },
-    {
-      id: "backyard-social", category: "food",
-      name: "Backyard Social",
-      address: "16371 Corporate Commerce Way, Fort Myers, FL 33913",
-      lat: 26.5200, lng: -81.7520,
-      notes: "Backyard games, patio bar.",
-      phone: "(239) 703-7077", website: "https://backyardsocial.com"
-    },
-    {
-      id: "best-breakfast", category: "food",
-      name: "Best Breakfast USA",
-      address: "11131 Canal Grande Dr, Fort Myers, FL 33913",
-      lat: 26.5550, lng: -81.7600,
-      notes: "Breakfast spot — good option before an early tee time.",
-      phone: "(952) 277-9784", website: "https://bestbreakfastusa.com"
-    },
-    {
-      id: "twin-peaks", category: "food",
-      name: "Twin Peaks",
-      address: "16411 Corporate Commerce Way, Fort Myers, FL 33913",
-      lat: 26.5205, lng: -81.7515,
-      notes: "Sports-bar style — good for watching a game.",
-      phone: "(239) 245-9559", website: "https://twinpeaksrestaurant.com"
-    },
-    {
-      id: "blue-water", category: "food",
-      name: "Blue Water Beach Grill",
-      address: "18151 Miromar Lakes Pkwy, Miromar Lakes, FL 33913",
-      lat: 26.4650, lng: -81.7480,
-      notes: "Inside Miromar Lakes Beach & Golf Club — same community as the condo. Our closest, home-base restaurant.",
-      home: true,
-      phone: "(239) 999-1199", website: "https://miromarlakes.com"
+    // the swing plays once — at the end the runway collapses and the app locks in
+    if (!this.locked && span > 0 && p >= 0.995) {
+      this.locked = true;
+      track.style.display = 'none';
+      r.scrollTop = 0;
+      if (e.app) e.app.style.animation = 'softin .55s cubic-bezier(.2,.7,.2,1) both';
+      if (e.nav) {
+        e.nav.style.transition = 'opacity .45s ease';
+        e.nav.style.opacity = 1; e.nav.style.transform = 'none'; e.nav.style.visibility = 'visible';
+      }
+      return;
     }
-  ];
+    if (this.locked) return;
 
-  /* ---------------- Map markers ---------------- */
-  /* Rounded-square pins in the trip palette — differentiated by both
-     colour and glyph so category never rests on colour alone. */
+    if (e.title) {
+      const t = seg(p, 0.02, 0.28);
+      e.title.style.opacity = 1 - t;
+      e.title.style.transform = 'translateY(' + -t * 46 + 'px) scale(' + (1 - t * 0.04) + ')';
+    }
+    if (e.hint) e.hint.style.opacity = 1 - seg(p, 0, 0.08);
 
-  function pinSvg(fill, glyph) {
-    return '<svg width="32" height="32" viewBox="0 0 32 32">' +
-      '<rect x="1" y="1" width="30" height="30" rx="9" fill="' + fill + '" stroke="#FFFCF6" stroke-width="2"/>' +
-      glyph +
-    '</svg>';
+    // camera: eases in on impact, then pulls out with the ball
+    const cam = seg(p, 0.62, 0.96);
+    if (e.cam) e.cam.style.transform = 'translateY(' + (-cam * vh * 0.045) + 'px) scale(' + (1 + cam * 0.06) + ')';
+
+    const rise = ease(seg(p, 0, 1));
+    if (e.sun) e.sun.style.transform = 'translateY(' + lerp(130, -22, rise) + 'px) scale(' + lerp(0.84, 1.08, rise) + ')';
+    if (e.haze) {
+      e.haze.style.transform = 'translateY(' + lerp(130, -22, rise) + 'px) scale(' + lerp(0.9, 1.14, rise) + ')';
+      e.haze.style.opacity = 0.5 + 0.5 * rise;
+    }
+    if (e.clouds) e.clouds.style.opacity = 0.1 + 0.14 * rise;
+    if (e.trees) e.trees.style.transform = 'translateX(' + (-p * 14) + 'px) translateY(' + (rise * 4) + 'px)';
+    if (e.fg) e.fg.style.transform = 'translateX(' + (p * 46) + 'px) translateY(' + (cam * 10) + 'px)';
+    if (e.distflag) e.distflag.style.opacity = 0.2 + 0.8 * seg(p, 0.28, 0.68);
+
+    /* --- swing: one shaft angle drives arms, wrists and body --- */
+    let S;
+    if (p < 0.44) S = lerp(-8, -26, seg(p, 0.26, 0.44));
+    else if (p < 0.64) S = lerp(-26, 152, ease(seg(p, 0.44, 0.64)));
+    else if (p < 0.72) S = lerp(152, -34, ease(seg(p, 0.64, 0.72)));
+    else S = lerp(-34, -112, ease(seg(p, 0.72, 0.9)));
+
+    const coil = p < 0.64 ? -14 * ease(seg(p, 0.42, 0.64)) : lerp(-14, 20, ease(seg(p, 0.64, 0.82)));
+    const whip = p < 0.64 ? 18 * ease(seg(p, 0.5, 0.64)) : lerp(18, -12, ease(seg(p, 0.64, 0.715))) * (p < 0.715 ? 1 : 0) + (p >= 0.715 ? lerp(-12, 0, seg(p, 0.715, 0.86)) : 0);
+    const armAngle = S * 0.46 - coil * 0.35;
+    const clubAngle = S * 0.54 + whip;
+
+    if (e.golfer) {
+      const t = ease(seg(p, 0.12, 0.42));
+      const shift = p < 0.64 ? -3 * ease(seg(p, 0.44, 0.64)) : lerp(-3, 7, ease(seg(p, 0.64, 0.9)));
+      const bob = Math.sin(seg(p, 0.12, 0.42) * Math.PI * 3) * (1 - t) * 4;
+      e.golfer.style.transform = 'translate(' + (lerp(-vw * 0.6 - 100, 0, t) + shift) + 'px,' + bob + 'px)';
+    }
+    if (e.gshadow) {
+      const sq = 1 + Math.abs(coil) * 0.004;
+      e.gshadow.style.transform = 'scaleX(' + sq + ')';
+    }
+    if (e.torso) e.torso.style.transform = 'rotate(' + coil * 0.55 + 'deg)';
+    if (e.hips) e.hips.style.transform = 'rotate(' + coil * 0.3 + 'deg)';
+    if (e.head) e.head.style.transform = 'rotate(' + (-coil * 0.4 + (p > 0.82 ? -seg(p, 0.82, 0.96) * 16 : 0)) + 'deg)';
+    if (e.arms) e.arms.style.transform = 'rotate(' + armAngle + 'deg)';
+    if (e.club) e.club.style.transform = 'rotate(' + clubAngle + 'deg)';
+    if (e.blur) {
+      e.blur.style.transform = 'rotate(' + (clubAngle + 26) + 'deg)';
+      e.blur.style.opacity = Math.max(seg(p, 0.6, 0.7) * 0.8, (1 - seg(p, 0.72, 0.82)) * seg(p, 0.66, 0.72) * 0.9);
+    }
+    if (e.legRear) e.legRear.style.transform = 'rotate(' + (p < 0.64 ? -3 * ease(seg(p, 0.44, 0.64)) : lerp(-3, 14, ease(seg(p, 0.64, 0.88)))) + 'deg)';
+    if (e.legFront) e.legFront.style.transform = 'rotate(' + (p < 0.64 ? 4 * ease(seg(p, 0.44, 0.64)) : lerp(4, -7, ease(seg(p, 0.64, 0.88)))) + 'deg)';
+
+    /* --- ball flight --- */
+    const flight = (t) => {
+      const tc = clamp(t, 0, 1);
+      return {
+        x: tc * (vw * 0.58 + 50),
+        y: -Math.sin(Math.PI * Math.pow(tc, 0.88)) * vh * 0.36 - tc * vh * 0.05,
+        s: lerp(1, 0.3, tc)
+      };
+    };
+    const t0 = seg(p, 0.705, 0.95);
+    const f = flight(t0);
+    if (e.ball) {
+      e.ball.style.transform = 'translate(' + f.x + 'px,' + f.y + 'px) scale(' + f.s + ')';
+      e.ball.style.opacity = t0 > 0.97 ? 0 : 1;
+    }
+    if (e.ballspin) e.ballspin.style.transform = 'rotate(' + t0 * 1080 + 'deg)';
+    [0, 1, 2].forEach((i) => {
+      const el = e['trail' + i];
+      if (!el) return;
+      const tt = t0 - 0.035 * (i + 1);
+      if (tt <= 0 || t0 >= 0.99) { el.style.opacity = 0; return; }
+      const q = flight(tt);
+      el.style.opacity = (1 - t0) * (1 - i * 0.22);
+      el.style.transform = 'translate(' + q.x + 'px,' + q.y + 'px) scale(' + q.s * (0.9 - i * 0.15) + ')';
+    });
+    if (e.bshadow) {
+      e.bshadow.style.transform = 'translateX(' + f.x * 0.94 + 'px) scale(' + lerp(1, 0.5, t0) + ',' + lerp(1, 0.6, t0) + ')';
+      e.bshadow.style.opacity = t0 > 0.97 ? 0 : 0.4 - t0 * 0.28;
+    }
+    if (e.flash) {
+      const ft = seg(p, 0.7, 0.745);
+      e.flash.style.opacity = Math.sin(Math.PI * ft) * 0.9;
+    }
+    if (e.divot) {
+      const dt = seg(p, 0.71, 0.85);
+      e.divot.style.opacity = Math.sin(Math.PI * Math.pow(dt, 0.7)) * 0.9;
+      e.divot.style.transform = 'translate(' + dt * 30 + 'px,' + -dt * 20 + 'px) scale(' + (1 + dt * 0.7) + ')';
+    }
+    if (e.restball) e.restball.style.opacity = seg(p, 0.95, 0.995);
+    const out = seg(p, 0.93, 0.995);
+    if (e.fin) e.fin.style.opacity = seg(p, 0.88, 0.95) * 0.95 * (1 - out);
+    if (e.veil) e.veil.style.opacity = out;
+    if (e.cam) e.cam.style.filter = out > 0 ? 'blur(' + (out * 5).toFixed(2) + 'px)' : 'none';
   }
 
-  function golfIconSvg() {
-    return pinSvg("#1F5B43",
-      '<rect x="15.1" y="9" width="1.8" height="13" rx="0.9" fill="#FFFCF6"/>' +
-      '<path d="M17 10l6.4 2.8L17 15.6z" fill="#FFFCF6"/>' +
-      '<ellipse cx="16" cy="23" rx="5" ry="1.2" fill="#FFFCF6" opacity="0.55"/>');
-  }
-  function foodIconSvg() {
-    return pinSvg("#B94E27",
-      '<path d="M11.5 8.5v6a1.8 1.8 0 001.8 1.8v7.2" stroke="#FFFCF6" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' +
-      '<path d="M9.6 8.5v4.4M13.4 8.5v4.4" stroke="#FFFCF6" stroke-width="1.7" stroke-linecap="round"/>' +
-      '<path d="M20.6 8.5c-1.4 0-2.5 1.8-2.5 4s1.1 4 2.5 4v7" stroke="#FFFCF6" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>');
-  }
-  function homeIconSvg() {
-    return pinSvg("#2C6E7F",
-      '<path d="M10 16.2l6-5.2 6 5.2" stroke="#FFFCF6" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' +
-      '<path d="M11.6 15.2v7a0.8 0.8 0 00.8.8h7.2a0.8 0.8 0 00.8-.8v-7" stroke="#FFFCF6" stroke-width="1.8" fill="none" stroke-linejoin="round"/>');
+  appTop() {
+    const t = this.el && this.el.track;
+    return t ? t.offsetHeight : 0;
   }
 
-  function markerIcon(category, isHome) {
-    var svg = isHome ? homeIconSvg() : (category === "food" ? foodIconSvg() : golfIconSvg());
+  skipIntro = () => {
+    const r = this.rootRef.current;
+    if (r) r.scrollTo({ top: this.appTop(), behavior: 'smooth' });
+  };
+
+  go = (tab) => () => {
+    this.setState({ tab });
+    const r = this.rootRef.current;
+    if (r && r.scrollTop > this.appTop()) r.scrollTo({ top: this.appTop() });
+  };
+
+  goMap = () => {
+    this.setState({ tab: 'map', mapMode: 'map' });
+    const r = this.rootRef.current;
+    if (r) r.scrollTo({ top: this.appTop(), behavior: 'smooth' });
+  };
+
+  /* ---------- map ---------- */
+  pinColor(cat) { return cat === 'eats' ? '#D8467A' : cat === 'stay' ? '#E8A33F' : '#2A6B4C'; }
+
+  icon(place) {
+    const c = this.pinColor(place.category);
+    const flag = place.category === 'golf'
+      ? '<span style="position:absolute;left:12px;top:2px;width:0;height:0;border-left:9px solid #FFF6E2;border-top:4px solid transparent;border-bottom:4px solid transparent"></span><span style="position:absolute;left:11px;top:1px;width:2px;height:11px;background:#FFF6E2;border-radius:1px"></span>'
+      : place.category === 'eats'
+        ? '<span style="position:absolute;left:12px;top:8px;width:8px;height:8px;border-radius:999px;background:#FFF6E2"></span>'
+        : '<span style="position:absolute;left:11px;top:9px;width:10px;height:6px;border-radius:2px;background:#FFF6E2"></span>';
     return L.divIcon({
-      className: "pin-marker",
-      html: svg,
+      className: '',
       iconSize: [32, 32],
       iconAnchor: [16, 16],
-      popupAnchor: [0, -15]
+      html: '<div style="position:relative;width:32px;height:32px;border-radius:999px;background:' + c +
+        ';border:2.5px solid #FFFDF7;box-shadow:0 3px 10px rgba(20,53,42,.35)">' + flag + '</div>'
     });
   }
 
-  var UI_ICONS = {
-    directions: '<svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M7 17L17 7M17 7H9M17 7v8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    call: '<svg viewBox="0 0 24 24" width="15" height="15" fill="none"><path d="M6.5 4h3l1.5 4-2 1.5a11 11 0 005 5l1.5-2 4 1.5v3a2 2 0 01-2.2 2A16 16 0 014.5 6.2 2 2 0 016.5 4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>',
-    website: '<svg viewBox="0 0 24 24" width="15" height="15" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M3.7 12h16.6M12 3.5c2.2 2.3 3.4 5.3 3.4 8.5s-1.2 6.2-3.4 8.5c-2.2-2.3-3.4-5.3-3.4-8.5S9.8 5.8 12 3.5z" stroke="currentColor" stroke-width="1.8"/></svg>',
-    plane: '<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M21 15.5l-8.2-2.3-2.6 4.6-1.7-.4 1-4.9L4.9 11 3.6 12.9l-1.3-.3.9-3.2-.9-3.2 1.3-.3L4.9 7.8l4.6-1.5-1-4.9 1.7-.4 2.6 4.6L21 3.3l.5 1.8-6.4 4.2 1.4 1.9 5.5.5z"/></svg>'
-  };
-
-  /* ---------------- Render: people & flights ---------------- */
-
-  var peopleList = document.getElementById("people-list");
-  PEOPLE.forEach(function (p) {
-    var row = document.createElement("div");
-    row.className = "person-row";
-    row.innerHTML =
-      '<div class="avatar">' + p.initials + '</div>' +
-      '<div><div class="person-name">' + p.name + '</div><div class="person-meta">' + p.meta + '</div></div>';
-    peopleList.appendChild(row);
-  });
-
-  var flightsCard = document.getElementById("flights-card");
-  FLIGHTS.forEach(function (f) {
-    var leg = document.createElement("div");
-    leg.className = "flight-leg";
-    leg.innerHTML =
-      '<div class="leg-main">' +
-        '<div class="leg-end">' +
-          '<div class="leg-code">' + f.from + '</div>' +
-          '<div class="leg-time">' + f.depart + '</div>' +
-          '<div class="leg-city">' + f.fromName + '</div>' +
-        '</div>' +
-        '<div class="leg-path">' +
-          '<span class="rule"></span>' +
-          '<span class="icon">' + UI_ICONS.plane + '</span>' +
-          '<span class="rule"></span>' +
-        '</div>' +
-        '<div class="leg-end leg-end-right">' +
-          '<div class="leg-code">' + f.to + '</div>' +
-          '<div class="leg-time">' + f.arrive + '</div>' +
-          '<div class="leg-city">' + f.toName + '</div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="leg-meta">' +
-        '<span>' + f.flightNo + '</span>' +
-        '<span>' + f.carrier + '</span>' +
-        '<span>' + f.plane + '</span>' +
-      '</div>' +
-      '<div class="leg-terminal">' + f.terminal + '</div>';
-    flightsCard.appendChild(leg);
-  });
-
-  document.getElementById("condo-directions").href = mapsDir(CONDO.address);
-
-  /* ---------------- Countdown ---------------- */
-
-  (function () {
-    var start = new Date("2026-09-17T00:00:00-04:00");
-    var end = new Date("2026-09-20T23:59:00-04:00");
-    var now = new Date();
-    var text;
-    if (now < start) {
-      var days = Math.ceil((start - now) / 86400000);
-      text = days <= 0 ? "Trip starts today" : days + " day" + (days === 1 ? "" : "s") + " until tee-off";
-    } else if (now >= start && now <= end) {
-      var day = Math.min(4, Math.floor((now - start) / 86400000) + 1);
-      text = "Day " + day + " of 4 — enjoy the trip";
-    } else {
-      text = "Trip complete — until next time";
-    }
-    document.getElementById("countdown-text").textContent = text;
-  })();
-
-  /* ---------------- Bottom nav / tabs ---------------- */
-
-  var navItems = document.querySelectorAll(".nav-item");
-  var views = document.querySelectorAll(".view");
-  var appbarSub = document.getElementById("appbar-sub");
-  var subs = { trip: "Sept 17–20, 2026", places: "Golf & restaurants", weather: "Miromar Lakes, FL" };
-
-  navItems.forEach(function (item) {
-    item.addEventListener("click", function () {
-      var target = item.getAttribute("data-target");
-      navItems.forEach(function (n) { n.classList.toggle("active", n === item); });
-      views.forEach(function (v) { v.classList.toggle("active", v.getAttribute("data-view") === target); });
-      appbarSub.textContent = subs[target];
-      window.scrollTo({ top: 0, behavior: "auto" });
-      if (target === "places" && currentMode === "map") { initMap(); map && map.invalidateSize(); }
-      if (target === "weather") { initMiniMap(); }
-    });
-  });
-
-  /* ---------------- Filter chips ---------------- */
-
-  var FILTERS = [
-    { id: "all", label: "All" },
-    { id: "golf", label: "Golf" },
-    { id: "food", label: "Restaurants" }
-  ];
-  var activeFilter = "all";
-
-  var chipRow = document.getElementById("chip-row");
-  FILTERS.forEach(function (f) {
-    var chip = document.createElement("button");
-    chip.className = "chip" + (f.id === "all" ? " active" : "");
-    chip.dataset.filter = f.id;
-    chip.textContent = f.label;
-    chip.setAttribute("aria-pressed", f.id === "all" ? "true" : "false");
-    chip.addEventListener("click", function () {
-      activeFilter = f.id;
-      document.querySelectorAll(".chip").forEach(function (c) {
-        var on = c.dataset.filter === f.id;
-        c.classList.toggle("active", on);
-        c.setAttribute("aria-pressed", on ? "true" : "false");
-      });
-      renderList();
-      applyMapFilter();
-    });
-    chipRow.appendChild(chip);
-  });
-
-  /* ---------------- List rendering ---------------- */
-
-  function statusTag(place) {
-    if (!place.status) return "";
-    var cls = place.status === "confirmed" ? "confirmed" : "pending";
-    return '<span class="tag ' + cls + '">' + place.statusLabel + '</span>';
-  }
-
-  function placeCardHtml(p) {
-    var iconCls = p.category === "food" ? "food" : (p.home ? "stay" : "");
-    var iconSvg = p.category === "food"
-      ? '<svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M8 3v7a2 2 0 002 2v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 3v5M10 3v5M6 3v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 3c-1.7 0-3 2-3 5s1.3 5 3 5v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
-      : '<svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M12 3.5v14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M12.6 4.6l6.2 2.7-6.2 2.7z" fill="currentColor"/><ellipse cx="12" cy="19.4" rx="5.6" ry="1.3" fill="currentColor" opacity="0.5"/></svg>';
-
-    var tags = "";
-    if (p.day) tags += '<span class="tag">' + p.day + '</span>';
-    tags += statusTag(p);
-    if (p.home) tags += '<span class="tag confirmed">Home base pick</span>';
-
-    var facts = "";
-    if (p.teeTime) facts += '<span><b>Tee time</b><i>' + p.teeTime + '</i></span>';
-    if (p.confirmation) facts += '<span><b>Confirmation</b><i>' + p.confirmation + '</i></span>';
-    if (p.price) facts += '<span><b>Estimated</b><i>' + p.price + '</i></span>';
-
-    var actions = '<a class="qa-btn primary" href="' + mapsDir(p.address) + '" target="_blank" rel="noopener noreferrer">' + UI_ICONS.directions + ' Directions</a>';
-    if (p.phone) actions += '<a class="qa-btn" href="tel:' + p.phone.replace(/[^0-9+]/g, "") + '">' + UI_ICONS.call + ' Call</a>';
-    if (p.website) actions += '<a class="qa-btn" href="' + p.website + '" target="_blank" rel="noopener noreferrer">' + UI_ICONS.website + ' Website</a>';
-
-    return (
-      '<li class="place-card" data-category="' + p.category + '">' +
-        '<div class="place-top">' +
-          '<div class="place-icon ' + iconCls + '">' + iconSvg + '</div>' +
-          '<div>' +
-            '<div class="place-name">' + p.name + '</div>' +
-            '<div class="place-address">' + p.address + '</div>' +
-          '</div>' +
-        '</div>' +
-        (tags ? '<div class="place-tags">' + tags + '</div>' : "") +
-        (p.notes ? '<div class="place-notes">' + p.notes + '</div>' : "") +
-        (facts ? '<div class="place-facts">' + facts + '</div>' : "") +
-        '<div class="quick-actions">' + actions + '</div>' +
-      '</li>'
-    );
-  }
-
-  var placeListEl = document.getElementById("place-list");
-  function renderList() {
-    var filtered = PLACES.filter(function (p) { return activeFilter === "all" || p.category === activeFilter; });
-    placeListEl.innerHTML = filtered.length
-      ? filtered.map(placeCardHtml).join("")
-      : '<li class="empty-state">No places in this category yet.</li>';
-  }
-  renderList();
-
-  /* ---------------- List / Map toggle ---------------- */
-
-  var currentMode = "list";
-  var segList = document.getElementById("seg-list");
-  var segMap = document.getElementById("seg-map");
-  var listViewEl = document.getElementById("list-view");
-  var mapViewEl = document.getElementById("map-view");
-
-  function setMode(mode) {
-    currentMode = mode;
-    segList.classList.toggle("active", mode === "list");
-    segMap.classList.toggle("active", mode === "map");
-    listViewEl.style.display = mode === "list" ? "" : "none";
-    mapViewEl.style.display = mode === "map" ? "" : "none";
-    if (mode === "map") { initMap(); setTimeout(function () { map && map.invalidateSize(); }, 50); }
-  }
-  segList.addEventListener("click", function () { setMode("list"); });
-  segMap.addEventListener("click", function () { setMode("map"); });
-
-  /* ---------------- Leaflet map ---------------- */
-
-  var map = null;
-  var markers = [];
-
-  function initMap() {
-    if (map || typeof L === "undefined") return;
-    map = L.map("map", { scrollWheelZoom: false }).setView([CONDO.lat, CONDO.lng], 11);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  initMap() {
+    if (this.map || typeof L === 'undefined') return;
+    const node = this.el && this.el.map;
+    if (!node || !node.offsetParent) return;
+    this.map = L.map(node, { scrollWheelZoom: false, zoomControl: true }).setView([26.42, -81.77], 10);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+    }).addTo(this.map);
 
-    var homeMarker = L.marker([CONDO.lat, CONDO.lng], { icon: markerIcon("stay", true) }).addTo(map);
-    homeMarker.bindPopup('<div class="popup-title">' + CONDO.name + '</div><div class="popup-addr">' + CONDO.address + '</div>');
+    this.markers = this.allPlaces().map((p) => {
+      const m = L.marker([p.lat, p.lng], { icon: this.icon(p) }).addTo(this.map);
+      m.bindPopup('<div style="font-weight:600;color:#14352A">' + p.name + '</div><div style="color:#54634F;margin-top:3px">' +
+        p.address + '</div><a href="' + (p.maps || dir(p.address)) + '" target="_blank" style="display:inline-block;margin-top:8px;color:#C86A34;font-weight:600">Directions</a>');
+      m._cat = p.category;
+      if (p.category === 'stay') this.homeMarker = m;
+      return m;
+    });
+    const group = L.featureGroup(this.markers);
+    this.map.fitBounds(group.getBounds().pad(0.18));
+    setTimeout(() => this.map && this.map.invalidateSize(), 80);
+  }
 
-    PLACES.forEach(function (p) {
-      var m = L.marker([p.lat, p.lng], { icon: markerIcon(p.category, false) }).addTo(map);
-      m.bindPopup('<div class="popup-title">' + p.name + '</div><div class="popup-addr">' + p.address + '</div>');
-      m.placeCategory = p.category;
-      markers.push(m);
+  syncMarkers() {
+    if (!this.map || !this.markers) return;
+    const f = this.state.filter;
+    this.markers.forEach((m) => {
+      const on = f === 'all' || m._cat === f;
+      if (on && !this.map.hasLayer(m)) m.addTo(this.map);
+      if (!on && this.map.hasLayer(m)) this.map.removeLayer(m);
     });
   }
 
-  function applyMapFilter() {
-    if (!map) return;
-    markers.forEach(function (m) {
-      var show = activeFilter === "all" || m.placeCategory === activeFilter;
-      if (show && !map.hasLayer(m)) m.addTo(map);
-      if (!show && map.hasLayer(m)) map.removeLayer(m);
-    });
-  }
+  allPlaces() { return [STAY].concat(COURSES, EATS, BREWS); }
 
-  var miniMap = null;
-  function initMiniMap() {
-    if (miniMap || typeof L === "undefined") return;
-    miniMap = L.map("map-mini", {
-      zoomControl: false, dragging: false, scrollWheelZoom: false,
-      doubleClickZoom: false, touchZoom: false, boxZoom: false
-    }).setView([CONDO.lat, CONDO.lng], 10);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(miniMap);
-    L.marker([CONDO.lat, CONDO.lng], { icon: markerIcon("stay", true) }).addTo(miniMap);
-    setTimeout(function () { miniMap.invalidateSize(); }, 50);
-  }
-
-  /* ---------------- Live weather (OpenWeatherMap) ---------------- */
-
-  var OWM_KEY = "b72af3f83bb49e28d8ef2e78c74bd9c8";
-  var WEATHER_CACHE_KEY = "golftrip-weather-cache-v1";
-
-  function weatherIconSvg(iconCode, size) {
-    size = size || 20;
-    var main = (iconCode || "").slice(0, 2);
-    var paths = {
-      "01": '<circle cx="12" cy="12" r="4.6" stroke="currentColor" stroke-width="1.9"/><path d="M12 2.4v2.2M12 19.4v2.2M5 5l1.5 1.5M17.5 17.5L19 19M2.4 12h2.2M19.4 12h2.2M5 19l1.5-1.5M17.5 6.5L19 5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>',
-      /* Sun sits clear of the cloud rather than overlapping it — these are
-         stroke-only glyphs, so an overlap shows through and reads as a blob. */
-      "02": '<circle cx="7.4" cy="6.6" r="2.8" stroke="currentColor" stroke-width="1.8"/><path d="M9 18.4h8.2a3.6 3.6 0 000-7.2 5.1 5.1 0 00-9.7-1A3.6 3.6 0 009 18.4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>',
-      "03": '<path d="M7 17h10a3.8 3.8 0 000-7.6 5.5 5.5 0 00-10.6 1.8A3.6 3.6 0 007 17z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>',
-      "04": '<path d="M6 15h11a3.5 3.5 0 000-7 5 5 0 00-9.6-1.3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/><path d="M5 19h11a3 3 0 000-6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>',
-      "09": '<path d="M7 13h10a3.8 3.8 0 000-7.6 5.5 5.5 0 00-10.6 1.8A3.6 3.6 0 007 13z" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M8 17v3M12 17v3M16 17v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
-      "10": '<path d="M7 13h10a3.8 3.8 0 000-7.6 5.5 5.5 0 00-10.6 1.8A3.6 3.6 0 007 13z" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M9 17v2M15 17v2M12 18v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
-      "11": '<path d="M7 12h10a3.8 3.8 0 000-7.6 5.5 5.5 0 00-10.6 1.8A3.6 3.6 0 007 12z" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M13 13l-3 5h3l-2 4" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/>',
-      "13": '<path d="M7 13h10a3.8 3.8 0 000-7.6 5.5 5.5 0 00-10.6 1.8A3.6 3.6 0 007 13z" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M8 17v.01M12 17v.01M16 17v.01M8 20v.01M12 20v.01M16 20v.01" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>',
-      "50": '<path d="M4 9h16M4 13h16M4 17h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'
-    };
-    var body = paths[main] || paths["03"];
-    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none">' + body + '</svg>';
-  }
-
-  function renderWeather(cur, fc, cachedTs) {
-    if (!cur || !cur.weather || !cur.weather[0] || !cur.main) return;
-
-    document.getElementById("weather-icon-wrap").innerHTML = weatherIconSvg(cur.weather[0].icon, 19);
-    document.getElementById("weather-sub").textContent = "Miromar Lakes, FL 33913";
-    document.getElementById("weather-temp").textContent = Math.round(cur.main.temp) + "°";
-    document.getElementById("weather-desc").textContent = cur.weather[0].description;
-    document.getElementById("weather-feels").textContent = "Feels " + Math.round(cur.main.feels_like) + "°";
-    document.getElementById("weather-wind").textContent = "Wind " + Math.round((cur.wind && cur.wind.speed) || 0) + " mph";
-    document.getElementById("weather-humidity").textContent = "Humidity " + cur.main.humidity + "%";
-
-    var updatedEl = document.getElementById("weather-updated");
-    if (cachedTs) {
-      var mins = Math.max(1, Math.round((Date.now() - cachedTs) / 60000));
-      updatedEl.textContent = "Saved forecast · updated " + mins + " min ago";
-    } else {
-      updatedEl.textContent = "Live · updated just now";
-    }
-
-    document.getElementById("weather-live").style.display = "";
-
-    var forecastSection = document.getElementById("forecast-section");
-    var forecastRow = document.getElementById("forecast-row");
-    if (!fc || !fc.list || !fc.list.length) { forecastSection.style.display = "none"; return; }
-
-    var days = {};
-    var order = [];
-    fc.list.forEach(function (item) {
-      var date = item.dt_txt.slice(0, 10);
-      if (!days[date]) { days[date] = { temps: [], icon: null, iconDist: null }; order.push(date); }
-      days[date].temps.push(item.main.temp);
-      var hour = Number(item.dt_txt.slice(11, 13));
-      var dist = Math.abs(hour - 13);
-      if (days[date].iconDist === null || dist < days[date].iconDist) {
-        days[date].iconDist = dist;
-        days[date].icon = item.weather[0].icon;
+  /* ---------- weather ---------- */
+  loadWeather() {
+    try {
+      const raw = localStorage.getItem('ftg2-wx');
+      if (raw) {
+        const c = JSON.parse(raw);
+        if (c && c.wx) this.setState({ wx: c.wx, wxDays: c.wxDays || [], wxAt: c.wxAt });
       }
-    });
+    } catch (err) { /* no cache */ }
 
-    var todayStr = new Date().toISOString().slice(0, 10);
-    forecastRow.innerHTML = "";
-    order.slice(0, 5).forEach(function (date) {
-      var d = days[date];
-      var hi = Math.round(Math.max.apply(null, d.temps));
-      var lo = Math.round(Math.min.apply(null, d.temps));
-      var label = date === todayStr ? "Today" : new Date(date + "T12:00:00").toLocaleDateString("en-US", { weekday: "short" });
-      // Late in the day only a couple of 3-hour blocks remain, so hi and lo
-      // collapse to the same number. Show it once, but keep the element in
-      // place so every card in the row stays the same height.
-      var loStyle = hi === lo ? ' style="visibility:hidden"' : "";
-      var card = document.createElement("div");
-      card.className = "forecast-day";
-      card.innerHTML =
-        '<div class="forecast-day-label">' + label + '</div>' +
-        '<div class="forecast-day-icon">' + weatherIconSvg(d.icon, 26) + '</div>' +
-        '<div class="forecast-day-hi">' + hi + '°</div>' +
-        '<div class="forecast-day-lo"' + loStyle + '>' + lo + '°</div>';
-      forecastRow.appendChild(card);
-    });
-    forecastSection.style.display = "";
-  }
-
-  function loadWeather() {
-    var base = "https://api.openweathermap.org/data/2.5/";
-    var qs = "lat=" + CONDO.lat + "&lon=" + CONDO.lng + "&units=imperial&appid=" + OWM_KEY;
-
-    Promise.all([fetch(base + "weather?" + qs), fetch(base + "forecast?" + qs)])
-      .then(function (res) {
-        if (!res[0].ok || !res[1].ok) throw new Error("weather http error");
-        return Promise.all([res[0].json(), res[1].json()]);
-      })
-      .then(function (data) {
-        var cur = data[0], fc = data[1];
-        if (cur.cod && Number(cur.cod) !== 200) throw new Error("weather api error");
-        renderWeather(cur, fc);
-        try { localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify({ cur: cur, fc: fc, ts: Date.now() })); } catch (e) {}
-      })
-      .catch(function () {
-        // Live fetch failed (bad key, offline, rate-limited) — fall back to
-        // a cached response if we have one, otherwise leave the original
-        // static weather card (Google search link + mini map) untouched.
-        try {
-          var cached = JSON.parse(localStorage.getItem(WEATHER_CACHE_KEY) || "null");
-          if (cached && cached.cur && cached.fc) renderWeather(cached.cur, cached.fc, cached.ts);
-        } catch (e) {}
+    const qs = 'lat=' + CONDO.lat + '&lon=' + CONDO.lng + '&units=imperial&appid=' + OWM_KEY;
+    const base = 'https://api.openweathermap.org/data/2.5/';
+    Promise.all([
+      fetch(base + 'weather?' + qs).then((r) => (r.ok ? r.json() : Promise.reject(r.status))),
+      fetch(base + 'forecast?' + qs).then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+    ]).then(([now, fc]) => {
+      const wx = {
+        temp: Math.round(now.main.temp),
+        feels: Math.round(now.main.feels_like),
+        desc: (now.weather && now.weather[0] ? now.weather[0].description : '') || '',
+        wind: Math.round(now.wind ? now.wind.speed : 0),
+        humidity: now.main.humidity,
+        pop: null
+      };
+      const byDay = {};
+      (fc.list || []).forEach((s) => {
+        const d = s.dt_txt.slice(0, 10);
+        byDay[d] = byDay[d] || { temps: [], mid: null, pops: [] };
+        byDay[d].temps.push(s.main.temp);
+        byDay[d].pops.push(s.pop || 0);
+        if (s.dt_txt.slice(11, 13) === '12') byDay[d].mid = s.weather[0].main;
+        if (!byDay[d].mid) byDay[d].mid = s.weather[0].main;
       });
+      const today = new Date().toISOString().slice(0, 10);
+      const days = Object.keys(byDay).sort().slice(0, 5).map((d) => ({
+        label: d === today ? 'Today' : new Date(d + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short' }),
+        hi: Math.round(Math.max.apply(null, byDay[d].temps)),
+        lo: Math.round(Math.min.apply(null, byDay[d].temps)),
+        desc: byDay[d].mid === 'Clear' ? 'Sun' : byDay[d].mid === 'Rain' ? 'Showers' : byDay[d].mid === 'Thunderstorm' ? 'Storms' : byDay[d].mid,
+        bar: byDay[d].mid === 'Clear' ? '#E0A056' : byDay[d].mid === 'Clouds' ? '#B7BFB4' : '#5D8FA8'
+      }));
+      const next24 = (fc.list || []).slice(0, 8).map((b) => b.pop || 0);
+      wx.pop = Math.round(Math.max.apply(null, next24.length ? next24 : [0]) * 100);
+      const wxAt = Date.now();
+      this.setState({ wx, wxDays: days, wxErr: false, wxAt });
+      try { localStorage.setItem('ftg2-wx', JSON.stringify({ wx, wxDays: days, wxAt })); } catch (err) { /* full */ }
+    }).catch(() => { if (!this.state.wx) this.setState({ wxErr: true }); });
   }
 
-  loadWeather();
-
-  /* ---------------- Offline indicator ---------------- */
-
-  function updateOnlineState() {
-    document.getElementById("offline-pill").classList.toggle("show", !navigator.onLine);
+  /* ---------- pwa ---------- */
+  registerSW() {
+    if (!('serviceWorker' in navigator) || location.protocol === 'file:') return;
+    navigator.serviceWorker.register('/golftrip/sw.js', { scope: '/golftrip/' }).catch(() => {});
   }
-  window.addEventListener("online", updateOnlineState);
-  window.addEventListener("offline", updateOnlineState);
-  updateOnlineState();
 
-  /* ---------------- Service worker ---------------- */
-
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", function () {
-      navigator.serviceWorker.register("/golftrip/sw.js", { scope: "/golftrip/" }).catch(function () {});
+  setupInstall() {
+    let dismissed = false;
+    try { dismissed = localStorage.getItem('ftg2-a2hs') === '1'; } catch (err) { /* ignore */ }
+    const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    if (!dismissed && !standalone) this.setState({ a2hs: true, iosHint: ios });
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      this.installEvent = e;
+      if (!dismissed && !standalone) this.setState({ a2hs: true, canInstall: true });
     });
   }
 
-  /* No install prompt by design — the manifest and apple-touch-icon still make
-     the page installable through the browser's own Share > Add to Home Screen. */
+  dismissA2HS = () => {
+    try { localStorage.setItem('ftg2-a2hs', '1'); } catch (err) { /* ignore */ }
+    this.setState({ a2hs: false });
+  };
 
-})();
+  doInstall = () => {
+    if (this.installEvent) { this.installEvent.prompt(); this.installEvent = null; }
+    this.setState({ canInstall: false });
+  };
+
+  /* ---------- render values ---------- */
+  renderVals() {
+    const s = this.state;
+    const tabs = [['golf', 'Golf'], ['eats', 'Eats'], ['wx', 'Weather'], ['map', 'Map'], ['trip', 'Trip'], ['base', 'Base']]
+      .map(([id, label]) => ({
+        id, label,
+        bg: s.tab === id ? (id === 'base' ? '#E8A33F' : '#FFF8EA') : 'transparent',
+        ink: s.tab === id ? (id === 'base' ? '#2E2208' : '#14352A') : 'rgba(255,248,234,.72)',
+        onClick: this.go(id)
+      }));
+
+    const chipDefs = [['all', 'All stops'], ['golf', 'Golf'], ['eats', 'Food + drink'], ['stay', 'Stay']];
+    const chips = chipDefs.map(([id, label]) => ({
+      label,
+      bg: s.filter === id ? '#14352A' : '#FFFDF7',
+      ink: s.filter === id ? '#FFF8EA' : '#3C4E42',
+      border: s.filter === id ? '#14352A' : '#DDD2BB',
+      onClick: () => this.setState({ filter: id })
+    }));
+
+    const places = this.allPlaces()
+      .filter((p) => s.filter === 'all' || p.category === s.filter)
+      .map((p) => ({
+        name: p.name,
+        address: p.address,
+        tag: p.category === 'golf' ? 'Golf' : p.category === 'eats' ? (p.tag || 'Food') : 'Stay',
+        distance: p.category === 'stay' ? 'home base' : miles(CONDO, p).toFixed(1) + ' mi out',
+        pinBg: this.pinColor(p.category),
+        mapsUrl: p.maps || dir(p.address),
+        telUrl: p.phone ? tel(p.phone) : null
+      }));
+
+    const trip = new Date('2026-09-17T00:00:00');
+    const d0 = new Date(); d0.setHours(0, 0, 0, 0);
+    const dd = Math.round((trip - d0) / 86400000);
+
+    const showPrices = this.props.showPrices !== false;
+    const wx = s.wx;
+
+    return {
+      introOn: this.props.introEnabled !== false,
+      skipIntro: this.skipIntro,
+      goMap: this.goMap,
+      rootRef: this.rootRef,
+      tabs, chips,
+      daysOut: dd > 0 ? dd : dd === 0 ? 'Go' : 'GG',
+      daysWord: dd > 1 ? 'days out' : dd === 1 ? 'day out' : dd === 0 ? 'today' : 'done',
+
+      showTrip: s.tab === 'trip' ? 'block' : 'none',
+      showGolf: s.tab === 'golf' ? 'block' : 'none',
+      showEats: s.tab === 'eats' ? 'block' : 'none',
+      showMap: (s.tab === 'map' || s.tab === 'base') ? 'block' : 'none',
+      ctlFlex: s.tab === 'map' ? 'flex' : 'none',
+      ctlBlock: s.tab === 'map' ? 'block' : 'none',
+      baseDisplay: s.tab === 'base' ? 'block' : 'none',
+      recenterBase: this.recenterBase,
+      showWx: s.tab === 'wx' ? 'block' : 'none',
+      priceDisplay: showPrices ? 'block' : 'none',
+
+      listBtnBg: s.mapMode === 'list' ? '#FFFDF7' : 'transparent',
+      listBtnInk: s.mapMode === 'list' ? '#14352A' : '#54634F',
+      mapBtnBg: s.mapMode === 'map' ? '#FFFDF7' : 'transparent',
+      mapBtnInk: s.mapMode === 'map' ? '#14352A' : '#54634F',
+      setList: () => this.setState({ mapMode: 'list' }),
+      setMapView: () => this.setState({ mapMode: 'map' }),
+      mapWrapDisplay: (s.tab === 'base' || s.mapMode === 'map') ? 'block' : 'none',
+      mapListDisplay: (s.tab === 'map' && s.mapMode === 'list') ? 'flex' : 'none',
+      visiblePlaces: places,
+
+      courses: COURSES.map((c) => ({
+        ...c,
+        mapsUrl: dir(c.address),
+        telUrl: c.phone ? tel(c.phone) : null,
+        teeNote: c.status === 'confirmed' ? 'confirmed' : 'call the shop',
+        pillBg: c.status === 'confirmed' ? '#1F5C3E' : '#E8A33F',
+        pillInk: c.status === 'confirmed' ? '#FFF8EA' : '#2E2208'
+      })),
+
+      eats: EATS.concat(BREWS).map((r) => ({
+        ...r,
+        mapsUrl: r.maps || dir(r.address),
+        telUrl: r.phone ? tel(r.phone) : null,
+        tagBg: r.id === 'bluewater' ? '#D8467A' : '#F1E4E9',
+        tagInk: r.id === 'bluewater' ? '#FFF4F7' : '#8A4159'
+      })),
+
+      crew: [
+        { initials: 'RS', name: 'Ryan S.', meta: 'Thu Sept 17 · lands ~12:30 pm' },
+        { initials: 'GC', name: 'Gustavo C.', meta: 'Thu Sept 17 · lands ~12:30 pm' },
+        { initials: 'MT', name: 'Matt T.', meta: 'Thu Sept 17 · arrives later' },
+        { initials: 'OA', name: 'Oscar A.', meta: 'Thu Sept 17 · arrives later' }
+      ],
+
+      days: [
+        { dow: 'Thu', num: '17', items: [
+          { dot: '#C86A34', title: 'Ryan + Gustavo land at RSW', meta: '~12:30 pm · pick up the car, then the condo' },
+          { dot: '#2A6B4C', title: 'Stoneybrook — Ryan + Gustavo', meta: '18 holes with a cart · book from the road' },
+          { dot: '#7B8A7F', title: 'Matt + Oscar arrive later', meta: 'Dinner at Backyard Social' }
+        ] },
+        { dow: 'Fri', num: '18', items: [
+          { dot: '#2A6B4C', title: 'Saltleaf Golf Preserve — The Preserve', meta: '8:40 am tee time · confirmed' },
+          { dot: '#D8467A', title: 'Fort Myers Brewing Company', meta: 'Food trucks out front · dinner and taps in one stop' }
+        ] },
+        { dow: 'Sat', num: '19', items: [
+          { dot: '#2A6B4C', title: 'Tiburón Golf Club — Black Course', meta: '9:40 am tee time · confirmed' },
+          { dot: '#D8467A', title: 'Dinner at Blue Water Beach Grill', meta: 'Walkable from the condo — no one has to drive' }
+        ] },
+        { dow: 'Sun', num: '20', items: [
+          { dot: '#C86A34', title: 'Ryan out on DL1395', meta: '8:10 am from RSW · leave the condo by 6:30' }
+        ] }
+      ],
+
+      flights: [
+        { from: 'RSW', to: 'ATL', dep: '8:10 am', arr: '9:55 am', meta: 'DL1395 · Airbus A321 · Fort Myers to Atlanta' },
+        { from: 'ATL', to: 'AUS', dep: '11:10 am', arr: '12:29 pm', meta: 'DL2011 · Airbus A321 · Atlanta to Austin' }
+      ],
+
+      showA2HS: s.a2hs,
+      canInstall: s.canInstall,
+      a2hsHint: s.iosHint
+        ? 'Tap the share button in Safari, then “Add to Home Screen” — it opens full screen and works without signal.'
+        : 'Add this to your home screen and it opens full screen, with the itinerary cached for no-signal moments.',
+      dismissA2HS: this.dismissA2HS,
+      doInstall: this.doInstall,
+
+      wxTemp: wx ? wx.temp + '°' : s.wxErr ? '—' : '··',
+      wxDesc: wx ? wx.desc.charAt(0).toUpperCase() + wx.desc.slice(1) : s.wxErr ? 'Live weather unavailable' : 'Loading conditions',
+      wxFeels: wx ? 'Feels like ' + wx.feels + '°' : 'Tap through to Google below',
+      wxStats: wx ? [
+        { label: 'Humidity', value: wx.humidity + '%' },
+        { label: 'Wind', value: wx.wind + ' mph' },
+        { label: 'Rain 24h', value: (wx.pop == null ? '—' : wx.pop + '%') }
+      ] : [],
+      wxUpdated: s.wxAt
+        ? 'Updated ' + new Date(s.wxAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) + ' · cached for offline'
+        : 'OpenWeather · Miromar Lakes',
+      wxDays: s.wxDays,
+      wxDaysDisplay: s.wxDays && s.wxDays.length ? 'flex' : 'none'
+    };
+  }
+}
+
 </script>
-</body>
-</html>
+
+
+</body></html>
