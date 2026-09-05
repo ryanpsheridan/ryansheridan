@@ -6,6 +6,11 @@ const NET_TIMEOUT = 3000;
 // caching. That is the difference between working on a course with no signal
 // and showing a blank screen.
 const ASSETS = [
+  "/golftrip/assets/photo-breakfast.jpg",
+  "/golftrip/assets/photo-chubby.jpg",
+  "/golftrip/assets/photo-fmbrew.jpg",
+  "/golftrip/assets/photo-palmcity.jpg",
+  "/golftrip/assets/photo-twinpeaks.jpg",
   "/golftrip/",
   "/golftrip",
   "/golftrip/manifest.json",
