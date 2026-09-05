@@ -1197,29 +1197,61 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <div data-el="golfer" style="position: absolute; left: 13%; bottom: 18.5vh; width: 84px; height: 152px; will-change: transform;">
           <div data-el="gshadow" style="position: absolute; left: -10px; bottom: -9px; width: 104px; height: 17px; border-radius: 50%; background: rgba(6,20,15,.5); filter: blur(6px);"></div>
 
-          <div data-el="legRear" style="position: absolute; left: 20px; top: 72px; width: 14px; height: 70px; border-radius: 8px; background: linear-gradient(270deg, rgba(255,170,140,.55) 0 1.5px, #113526 2.5px, #081B14 100%); transform-origin: 7px 5px; will-change: transform;">
-            <div style="position: absolute; left: -5px; bottom: -4px; width: 27px; height: 9px; border-radius: 4px 5px 5px 4px; background: #123A2C;"></div>
-          </div>
-          <div data-el="legFront" style="position: absolute; left: 38px; top: 72px; width: 14px; height: 70px; border-radius: 8px; background: linear-gradient(270deg, rgba(255,170,140,.7) 0 1.5px, #0E2C21 2.5px, #071810 100%); transform-origin: 7px 5px; will-change: transform;">
-            <div style="position: absolute; left: -3px; bottom: -4px; width: 30px; height: 9px; border-radius: 4px 5px 5px 4px; background: #0B231B;"></div>
+          <!-- Lit from behind by the sun, so every part carries a hot rim on its
+               right edge, a dark core, and a cool bounce off the sky on the left. -->
+          <div data-el="legRear" style="position: absolute; left: 20px; top: 72px; width: 14px; height: 70px; border-radius: 8px; transform-origin: 7px 5px; will-change: transform;">
+            <div style="position: absolute; inset: 0; border-radius: 8px 8px 6px 6px; background: linear-gradient(270deg, rgba(255,178,140,.42) 0 1.6px, #123425 2.6px, #0A2018 48%, #06150F 100%); box-shadow: inset 2px 0 4px rgba(120,158,196,.10);"></div>
+            <div style="position: absolute; left: 0; right: 0; top: 29px; height: 11px; border-radius: 5px; background: linear-gradient(270deg, rgba(255,178,140,.14) 0 1.6px, rgba(255,255,255,.05) 2.6px, rgba(0,0,0,.18) 100%);"></div>
+            <div style="position: absolute; left: -1px; right: -1px; bottom: 9px; height: 4px; border-radius: 2px; background: linear-gradient(270deg, rgba(255,178,140,.26) 0 1.6px, rgba(0,0,0,.30) 2.6px, rgba(0,0,0,.16) 100%);"></div>
+            <div style="position: absolute; left: -5px; bottom: -4px; width: 27px; height: 10px; border-radius: 4px 6px 4px 3px; background: linear-gradient(200deg, #16402F, #071A13);"></div>
+            <div style="position: absolute; left: -5px; bottom: -4px; width: 27px; height: 3px; border-radius: 0 0 3px 3px; background: #04100B;"></div>
           </div>
 
-          <div data-el="hips" style="position: absolute; left: 17px; top: 62px; width: 38px; height: 20px; border-radius: 10px; background: linear-gradient(270deg, rgba(255,170,140,.6) 0 1.5px, #0E2C21 2.5px, #071810 100%); transform-origin: 19px 10px; will-change: transform;"></div>
+          <div data-el="legFront" style="position: absolute; left: 38px; top: 72px; width: 14px; height: 70px; border-radius: 8px; transform-origin: 7px 5px; will-change: transform;">
+            <div style="position: absolute; inset: 0; border-radius: 8px 8px 6px 6px; background: linear-gradient(270deg, rgba(255,186,150,.62) 0 1.8px, #143B2A 2.8px, #0B241A 46%, #071A13 100%); box-shadow: inset 2px 0 4px rgba(130,168,205,.12);"></div>
+            <div style="position: absolute; left: 0; right: 0; top: 29px; height: 11px; border-radius: 5px; background: linear-gradient(270deg, rgba(255,186,150,.20) 0 1.8px, rgba(255,255,255,.06) 2.8px, rgba(0,0,0,.18) 100%);"></div>
+            <div style="position: absolute; left: -1px; right: -1px; bottom: 9px; height: 4px; border-radius: 2px; background: linear-gradient(270deg, rgba(255,186,150,.34) 0 1.8px, rgba(0,0,0,.30) 2.8px, rgba(0,0,0,.16) 100%);"></div>
+            <div style="position: absolute; left: -3px; bottom: -4px; width: 30px; height: 10px; border-radius: 4px 6px 4px 3px; background: linear-gradient(200deg, #143A2B, #082018);"></div>
+            <div style="position: absolute; left: -3px; bottom: -4px; width: 30px; height: 3px; border-radius: 0 0 3px 3px; background: #050F0B;"></div>
+          </div>
+
+          <div data-el="hips" style="position: absolute; left: 17px; top: 62px; width: 38px; height: 20px; border-radius: 10px; transform-origin: 19px 10px; will-change: transform;">
+            <div style="position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(270deg, rgba(255,178,140,.5) 0 1.8px, #123626 2.8px, #0C2419 34%, #071810 100%); box-shadow: inset 2px 0 5px rgba(120,158,196,.12);"></div>
+            <div style="position: absolute; left: 0; right: 0; top: 2px; height: 5px; border-radius: 3px; background: linear-gradient(270deg, rgba(255,178,140,.34) 0 1.8px, rgba(0,0,0,.34) 2.8px, rgba(0,0,0,.2) 100%);"></div>
+            <div style="position: absolute; left: 24px; top: 2.5px; width: 5px; height: 4px; border-radius: 1px; background: rgba(240,206,150,.5);"></div>
+          </div>
 
           <div data-el="torso" style="position: absolute; left: 19px; top: 20px; width: 34px; height: 50px; transform-origin: 17px 48px; will-change: transform;">
-            <div style="position: absolute; inset: 0; border-radius: 15px 15px 9px 9px; background: linear-gradient(270deg, rgba(255,178,148,.85) 0 1.5px, #123A28 2.5px, #091E17 100%);"></div>
-            <div data-el="head" style="position: absolute; left: 5px; top: -25px; width: 25px; height: 25px; border-radius: 999px; background: #091E17; box-shadow: inset -2px 0 0 rgba(255,178,148,.6); transform-origin: 12px 22px; will-change: transform;">
-              <div style="position: absolute; left: 1px; top: 5px; width: 33px; height: 7px; border-radius: 4px; background: #C86A34;"></div>
-              <div style="position: absolute; left: 3px; top: 1px; width: 19px; height: 10px; border-radius: 999px 999px 0 0; background: #C86A34;"></div>
+            <div style="position: absolute; inset: 0; border-radius: 15px 15px 9px 9px; background: linear-gradient(270deg, rgba(255,186,150,.85) 0 1.8px, #16452F 3px, #0C2419 42%, #071A13 100%); box-shadow: inset 3px 0 7px rgba(130,168,205,.14), inset 0 -6px 8px rgba(0,0,0,.3);"></div>
+            <div style="position: absolute; left: 2px; right: 2px; top: 0; height: 13px; border-radius: 13px 13px 8px 8px; background: linear-gradient(270deg, rgba(255,196,158,.5) 0 2px, rgba(255,255,255,.07) 3px, transparent 68%);"></div>
+            <div style="position: absolute; left: 8px; top: 2px; width: 17px; height: 7px; border-radius: 0 0 7px 7px; background: linear-gradient(180deg, rgba(0,0,0,.45), transparent); "></div>
+            <div style="position: absolute; left: 20px; top: 12px; width: 1.5px; height: 30px; border-radius: 1px; background: rgba(0,0,0,.3);"></div>
+            <div style="position: absolute; left: 12px; top: -7px; width: 11px; height: 13px; border-radius: 5px; background: linear-gradient(270deg, rgba(255,178,140,.45) 0 1.5px, #0C2419 2.5px, #061510 100%);"></div>
+
+            <div data-el="head" style="position: absolute; left: 5px; top: -25px; width: 25px; height: 25px; border-radius: 999px; background: radial-gradient(circle at 78% 42%, #1B4632 0 26%, #0C2419 62%, #061510 100%); box-shadow: inset -2px 0 0 rgba(255,190,152,.72), inset 3px 0 5px rgba(130,168,205,.14); transform-origin: 12px 22px; will-change: transform;">
+              <div style="position: absolute; left: 20px; top: 11px; width: 6px; height: 8px; border-radius: 999px; background: linear-gradient(270deg, rgba(255,190,152,.6) 0 1.4px, #0B2118 2.4px, #061510 100%);"></div>
+              <div style="position: absolute; left: 1px; top: 5px; width: 33px; height: 7px; border-radius: 4px; background: linear-gradient(180deg, #D2743B, #A5501F);"></div>
+              <div style="position: absolute; left: 1px; top: 10px; width: 33px; height: 2.5px; border-radius: 0 0 4px 4px; background: rgba(0,0,0,.45);"></div>
+              <div style="position: absolute; left: 3px; top: 1px; width: 19px; height: 10px; border-radius: 999px 999px 0 0; background: linear-gradient(255deg, #E08247 0 22%, #C86A34 48%, #8E4519 100%);"></div>
+              <div style="position: absolute; left: 11px; top: 0.5px; width: 4px; height: 4px; border-radius: 999px; background: #B75E2A;"></div>
             </div>
+
             <div data-el="arms" style="position: absolute; left: 23px; top: 5px; width: 13px; height: 46px; transform-origin: 6px 6px; will-change: transform;">
-              <div style="position: absolute; left: 0; top: 0; width: 13px; height: 46px; border-radius: 7px; background: linear-gradient(270deg, rgba(255,178,148,.8) 0 1.5px, #16452C 2.5px, #0A2118 100%);"></div>
-              <div style="position: absolute; left: 1px; top: 38px; width: 11px; height: 11px; border-radius: 999px; background: #E8DDC6;"></div>
+              <div style="position: absolute; left: 0; top: 0; width: 13px; height: 46px; border-radius: 7px; background: linear-gradient(270deg, rgba(255,190,152,.8) 0 1.8px, #17482E 3px, #0C2419 50%, #081D15 100%); box-shadow: inset 2px 0 4px rgba(130,168,205,.12);"></div>
+              <div style="position: absolute; left: 0; top: 0; width: 13px; height: 12px; border-radius: 7px; background: linear-gradient(270deg, rgba(255,196,158,.42) 0 1.8px, rgba(255,255,255,.07) 3px, transparent 72%);"></div>
+              <div style="position: absolute; left: 0.5px; top: 21px; width: 12px; height: 9px; border-radius: 6px; background: linear-gradient(270deg, rgba(255,190,152,.22) 0 1.8px, rgba(0,0,0,.2) 3px, rgba(0,0,0,.1) 100%);"></div>
+              <div style="position: absolute; left: 1px; top: 34px; width: 11px; height: 5px; border-radius: 3px; background: linear-gradient(270deg, rgba(255,200,164,.5) 0 1.6px, #0A1F17 2.6px, #061510 100%);"></div>
+              <div style="position: absolute; left: 1px; top: 38px; width: 11px; height: 11px; border-radius: 999px; background: radial-gradient(circle at 72% 34%, #FFFBF0 0 34%, #E8DDC6 68%, #B3A98F 100%);"></div>
               <div data-el="blur" style="position: absolute; left: 4px; top: 42px; width: 5px; height: 96px; border-radius: 3px; transform-origin: 2.5px 3px; background: linear-gradient(rgba(253,246,232,.5), rgba(253,246,232,0)); filter: blur(2.5px); opacity: 0;"></div>
               <div data-el="club" style="position: absolute; left: 2px; top: 40px; width: 10px; height: 98px; transform-origin: 5px 4px; will-change: transform;">
-                <div style="position: absolute; left: 0; top: 0; width: 10px; height: 26px; border-radius: 5px; background: #101F19;"></div>
-                <div style="position: absolute; left: 3.5px; top: 3px; width: 3.5px; height: 92px; border-radius: 2px; background: linear-gradient(90deg, #F1E7D2, #A79B84);"></div>
-                <div style="position: absolute; left: 1px; top: 88px; width: 18px; height: 11px; border-radius: 3px 6px 6px 2px; background: linear-gradient(160deg, #E7E1D4, #9C9484);"></div>
+                <div style="position: absolute; left: 0; top: 0; width: 10px; height: 26px; border-radius: 5px; background: linear-gradient(270deg, rgba(255,190,152,.35) 0 1.4px, #16241E 2.4px, #0B120F 100%);"></div>
+                <div style="position: absolute; left: 0; top: 8px; width: 10px; height: 1.5px; background: rgba(0,0,0,.4);"></div>
+                <div style="position: absolute; left: 0; top: 16px; width: 10px; height: 1.5px; background: rgba(0,0,0,.4);"></div>
+                <div style="position: absolute; left: 3.5px; top: 3px; width: 3.5px; height: 92px; border-radius: 2px; background: linear-gradient(90deg, #FFF7E8 0 22%, #D8CDB6 48%, #8E8672 100%);"></div>
+                <div style="position: absolute; left: 3px; top: 84px; width: 4.5px; height: 5px; border-radius: 1px; background: #2A2E27;"></div>
+                <div style="position: absolute; left: 1px; top: 88px; width: 18px; height: 11px; border-radius: 3px 6px 6px 2px; background: linear-gradient(155deg, #FFFAEC 0 18%, #DCD5C4 46%, #8C8474 100%); box-shadow: inset 0 -1.5px 2px rgba(0,0,0,.35);"></div>
+                <div style="position: absolute; left: 4px; top: 89.5px; width: 13px; height: 1px; background: rgba(0,0,0,.22);"></div>
+                <div style="position: absolute; left: 4px; top: 92px; width: 13px; height: 1px; background: rgba(0,0,0,.22);"></div>
               </div>
             </div>
           </div>
@@ -1486,7 +1518,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <sc-for list="{{ wxDays }}" as="d" hint-placeholder-count="4">
           <div style="flex: none; width: 92px; padding: 14px 12px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
             <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .08em; color: #54634F;">{{ d.label }}</div>
-            <div style="margin-top: 10px; height: 4px; border-radius: 2px; background: {{ d.bar }};"></div>
+            <div style="margin-top: 1px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .04em; color: #8A9686;">{{ d.date }}</div>
+            <div style="margin-top: 9px; height: 4px; border-radius: 2px; background: {{ d.bar }};"></div>
             <div style="margin-top: 10px; font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 20px; color: #14352A;">{{ d.hi }}°</div>
             <div style="font-size: 12px; color: #54634F;">{{ d.lo }}° low</div>
             <div style="margin-top: 6px; font-size: 11.5px; color: #435349; line-height: 1.35;">{{ d.desc }}</div>
@@ -1943,7 +1976,7 @@ class Component extends DCLogic {
   /* ---------- weather ---------- */
   loadWeather() {
     try {
-      const raw = localStorage.getItem('ftg2-wx');
+      const raw = localStorage.getItem('ftg2-wx2');
       if (raw) {
         const c = JSON.parse(raw);
         if (c && c.wx) this.setState({ wx: c.wx, wxDays: c.wxDays || [], wxAt: c.wxAt });
@@ -1976,6 +2009,7 @@ class Component extends DCLogic {
       const today = new Date().toISOString().slice(0, 10);
       const days = Object.keys(byDay).sort().slice(0, 5).map((d) => ({
         label: d === today ? 'Today' : new Date(d + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short' }),
+        date: new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' }),
         hi: Math.round(Math.max.apply(null, byDay[d].temps)),
         lo: Math.round(Math.min.apply(null, byDay[d].temps)),
         desc: byDay[d].mid === 'Clear' ? 'Sun' : byDay[d].mid === 'Rain' ? 'Showers' : byDay[d].mid === 'Thunderstorm' ? 'Storms' : byDay[d].mid,
@@ -1985,7 +2019,7 @@ class Component extends DCLogic {
       wx.pop = Math.round(Math.max.apply(null, next24.length ? next24 : [0]) * 100);
       const wxAt = Date.now();
       this.setState({ wx, wxDays: days, wxErr: false, wxAt });
-      try { localStorage.setItem('ftg2-wx', JSON.stringify({ wx, wxDays: days, wxAt })); } catch (err) { /* full */ }
+      try { localStorage.setItem('ftg2-wx2', JSON.stringify({ wx, wxDays: days, wxAt })); } catch (err) { /* full */ }
     }).catch(() => { if (!this.state.wx) this.setState({ wxErr: true }); });
   }
 
