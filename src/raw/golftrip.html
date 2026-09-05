@@ -1646,7 +1646,7 @@ function miles(a, b) {
 
 class Component extends DCLogic {
   state = {
-    tab: 'golf', mapMode: 'map', filter: 'all',
+    tab: 'trip', mapMode: 'map', filter: 'all',
     wx: null, wxDays: [], wxErr: false, wxAt: null,
     a2hs: false, canInstall: false, iosHint: false
   };
@@ -2001,7 +2001,7 @@ class Component extends DCLogic {
   /* ---------- render values ---------- */
   renderVals() {
     const s = this.state;
-    const tabs = [['golf', 'Golf'], ['eats', 'Eats'], ['wx', 'Weather'], ['map', 'Map'], ['trip', 'Trip'], ['base', 'Base']]
+    const tabs = [['trip', 'Trip'], ['golf', 'Golf'], ['eats', 'Eats'], ['wx', 'Weather'], ['map', 'Map'], ['base', 'Base']]
       .map(([id, label]) => ({
         id, label,
         bg: s.tab === id ? (id === 'base' ? '#E8A33F' : '#FFF8EA') : 'transparent',
