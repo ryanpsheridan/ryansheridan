@@ -1210,88 +1210,85 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <div data-el="restball" style="position: absolute; left: 14px; bottom: -4px; width: 7px; height: 7px; border-radius: 999px; background: #FFFDF7; opacity: 0;"></div>
         </div>
 
-        <div data-el="golfer" style="position: absolute; left: 13%; bottom: 18.5vh; width: 84px; height: 152px; will-change: transform;">
-          <div data-el="gshadow" style="position: absolute; left: -10px; bottom: -9px; width: 104px; height: 17px; border-radius: 50%; background: rgba(6,20,15,.5); filter: blur(6px);"></div>
+        <div data-el="golfer" style="position: absolute; left: 42%; margin-left: -180px; bottom: 18.5vh; width: 210px; height: 100px; will-change: transform;">
+          <div data-el="gshadow" style="position: absolute; left: 34px; bottom: -6px; width: 140px; height: 18px; border-radius: 50%; background: rgba(6,20,15,.5); filter: blur(6px);"></div>
 
-          <!-- Gator, backlit by the sun: hot rim on every right edge, dark core,
-               cool sky bounce on the left. A dorsal ridge runs from the snout
-               down the back and straight into the tail, so the tail reads as the
-               spine continuing rather than a limb bolted on. -->
+          <!-- Lit from above so the shading survives the turn: mirroring the
+               gator would flip a side rim light onto the wrong edge. -->
+          <div data-el="flip" style="position: absolute; inset: 0; transform-origin: 95px 52px; will-change: transform;">
 
-          <div data-el="legRear" style="position: absolute; left: 20px; top: 72px; width: 14px; height: 70px; border-radius: 8px; transform-origin: 7px 5px; will-change: transform;">
-            <div style="position: absolute; left: -1px; top: 0; width: 16px; height: 52px; border-radius: 9px 9px 7px 7px; background: linear-gradient(270deg, rgba(255,178,140,.32) 0 1.6px, #1B4225 2.6px, #102A18 52%, #0A1C11 100%);"></div>
-            <div style="position: absolute; left: -4px; bottom: 12px; width: 22px; height: 13px; border-radius: 8px 6px 5px 7px; background: linear-gradient(200deg, #1D4527, #0B1E13);"></div>
-            <div style="position: absolute; left: -5px; bottom: 10px; width: 24px; height: 5px; border-radius: 3px; background: #081810;"></div>
-            <div style="position: absolute; left: -5px; bottom: 9px; width: 6px; height: 4px; border-radius: 2px 0 0 2px; background: #E8DDC6; opacity: .5;"></div>
-          </div>
-
-          <div data-el="legFront" style="position: absolute; left: 38px; top: 72px; width: 14px; height: 70px; border-radius: 8px; transform-origin: 7px 5px; will-change: transform;">
-            <div style="position: absolute; left: -1px; top: 0; width: 17px; height: 54px; border-radius: 9px 9px 7px 7px; background: linear-gradient(270deg, rgba(255,190,152,.6) 0 1.8px, #23532E 3px, #14331D 52%, #0C2214 100%); box-shadow: inset 2px 0 4px rgba(130,168,205,.12);"></div>
-            <div style="position: absolute; left: -1px; top: 20px; width: 17px; height: 10px; border-radius: 5px; background: linear-gradient(270deg, rgba(255,190,152,.2) 0 1.8px, rgba(0,0,0,.2) 3px, rgba(0,0,0,.08) 100%);"></div>
-            <div style="position: absolute; left: -5px; bottom: 10px; width: 26px; height: 14px; border-radius: 9px 7px 5px 8px; background: linear-gradient(200deg, #265932, #0D2416), linear-gradient(270deg, rgba(255,190,152,.34) 0 2px, #1E4A29 3px, #0B2013 100%);"></div>
-            <div style="position: absolute; left: -6px; bottom: 8px; width: 28px; height: 5px; border-radius: 3px; background: #091A10;"></div>
-            <div style="position: absolute; left: -6px; bottom: 7px; width: 7px; height: 4px; border-radius: 2px 0 0 2px; background: #F0E7D2; opacity: .62;"></div>
-            <div style="position: absolute; left: 2px; bottom: 7px; width: 6px; height: 4px; border-radius: 2px 0 0 2px; background: #F0E7D2; opacity: .45;"></div>
-          </div>
-
-          <div data-el="hips" style="position: absolute; left: 17px; top: 62px; width: 38px; height: 20px; border-radius: 10px; transform-origin: 19px 10px; will-change: transform;">
-            <div style="position: absolute; left: -2px; top: -6px; width: 44px; height: 30px; border-radius: 16px 14px 12px 14px; background: linear-gradient(270deg, rgba(255,178,140,.5) 0 1.8px, #245430 3px, #13301C 46%, #0A1E12 100%); box-shadow: inset 2px 0 5px rgba(120,158,196,.12);"></div>
-            <div style="position: absolute; left: 16px; top: -3px; width: 24px; height: 15px; border-radius: 12px 10px 8px 10px; background: linear-gradient(270deg, rgba(255,186,150,.28) 0 1.8px, rgba(255,255,255,.05) 3px, transparent 72%);"></div>
-          </div>
-
-          <div data-el="torso" style="position: absolute; left: 19px; top: 20px; width: 34px; height: 50px; transform-origin: 17px 48px; will-change: transform;">
-            <div style="position: absolute; left: -3px; top: 0; width: 40px; height: 54px; border-radius: 17px 15px 11px 13px; background: linear-gradient(270deg, rgba(255,190,152,.85) 0 2px, #275B33 3.2px, #14331D 44%, #0A1E12 100%); box-shadow: inset 3px 0 7px rgba(130,168,205,.14), inset 0 -6px 8px rgba(0,0,0,.28);"></div>
-            <div style="position: absolute; left: 20px; top: 3px; width: 17px; height: 46px; border-radius: 10px 12px 8px 6px; background: linear-gradient(270deg, rgba(255,196,158,.5) 0 2px, rgba(255,255,255,.06) 3.2px, transparent 66%);"></div>
-            <div style="position: absolute; left: 1px; top: 10px; width: 15px; height: 34px; border-radius: 8px; background: linear-gradient(90deg, rgba(226,214,178,.30), rgba(226,214,178,.05));"></div>
-            <div style="position: absolute; left: 1px; top: 14px; width: 15px; height: 1.5px; background: rgba(0,0,0,.22);"></div>
-            <div style="position: absolute; left: 1px; top: 22px; width: 15px; height: 1.5px; background: rgba(0,0,0,.22);"></div>
-            <div style="position: absolute; left: 1px; top: 30px; width: 15px; height: 1.5px; background: rgba(0,0,0,.22);"></div>
-            <div style="position: absolute; left: 25px; top: -2px; width: 8px; height: 9px; border-radius: 3px 4px 1px 1px; background: #1D4728; transform: rotate(14deg);"></div>
-            <div style="position: absolute; left: 27px; top: 8px; width: 9px; height: 10px; border-radius: 3px 4px 1px 1px; background: #1F4B2A; transform: rotate(10deg);"></div>
-            <div style="position: absolute; left: 28px; top: 19px; width: 9px; height: 10px; border-radius: 3px 4px 1px 1px; background: #1D4728; transform: rotate(6deg);"></div>
-            <div style="position: absolute; left: 8px; top: 26px; width: 14px; height: 7px; border-radius: 4px; background: linear-gradient(270deg, rgba(255,190,152,.4) 0 1.4px, #16381F 2.4px, #0B2113 100%);"></div>
-            <div style="position: absolute; left: 18px; top: 29px; width: 7px; height: 4px; border-radius: 2px; background: #0D2517;"></div>
-
-            <div data-el="head" style="position: absolute; left: 5px; top: -25px; width: 25px; height: 25px; border-radius: 13px 11px 9px 10px; background: radial-gradient(circle at 76% 44%, #2A5F36 0 24%, #14331D 60%, #0A1E12 100%); box-shadow: inset -2px 0 0 rgba(255,190,152,.7), inset 3px 0 5px rgba(130,168,205,.14); transform-origin: 12px 22px; will-change: transform;">
-              <div style="position: absolute; left: 17px; top: 11px; width: 26px; height: 12px; border-radius: 5px 8px 8px 4px; background: linear-gradient(270deg, rgba(255,190,152,.6) 0 1.8px, #235431 3px, #102C19 100%);"></div>
-              <div style="position: absolute; left: 19px; top: 18px; width: 24px; height: 4px; border-radius: 0 4px 4px 0; background: #081A0F;"></div>
-              <div style="position: absolute; left: 22px; top: 19.5px; width: 3px; height: 3px; background: #EFE7D2; clip-path: polygon(50% 100%, 0 0, 100% 0);"></div>
-              <div style="position: absolute; left: 28px; top: 19.5px; width: 3px; height: 3px; background: #EFE7D2; clip-path: polygon(50% 100%, 0 0, 100% 0);"></div>
-              <div style="position: absolute; left: 34px; top: 19.5px; width: 3px; height: 3px; background: #EFE7D2; clip-path: polygon(50% 100%, 0 0, 100% 0);"></div>
-              <div style="position: absolute; left: 39px; top: 12px; width: 3px; height: 3px; border-radius: 999px; background: #08190F;"></div>
-              <div style="position: absolute; left: 13px; top: 3px; width: 9px; height: 8px; border-radius: 5px 5px 3px 3px; background: linear-gradient(270deg, #3A7A45 0 2px, #1B4526 3px, #0E2717 100%);"></div>
-              <div style="position: absolute; left: 15.5px; top: 5px; width: 3.5px; height: 5px; border-radius: 2px; background: #E8B23F;"></div>
-              <div style="position: absolute; left: 16.4px; top: 6px; width: 1.6px; height: 3.2px; border-radius: 1px; background: #0A1B10;"></div>
-              <div style="position: absolute; left: 1px; top: 2px; width: 30px; height: 7px; border-radius: 4px; background: linear-gradient(180deg, #D2743B, #A5501F);"></div>
-              <div style="position: absolute; left: 1px; top: 7px; width: 30px; height: 2.5px; border-radius: 0 0 4px 4px; background: rgba(0,0,0,.42);"></div>
-              <div style="position: absolute; left: 2px; top: -2px; width: 17px; height: 9px; border-radius: 999px 999px 0 0; background: linear-gradient(255deg, #E08247 0 22%, #C86A34 48%, #8E4519 100%);"></div>
+            <div data-el="legBL" style="position: absolute; left: 118px; top: 60px; width: 12px; height: 30px; transform-origin: 6px 4px; will-change: transform;">
+              <div style="position: absolute; left: 0; top: 0; width: 12px; height: 24px; border-radius: 6px 6px 5px 5px; background: linear-gradient(#14331D, #0A1E12);"></div>
+              <div style="position: absolute; left: -4px; top: 20px; width: 18px; height: 9px; border-radius: 5px 4px 4px 6px; background: #0B2114;"></div>
+            </div>
+            <div data-el="legFL" style="position: absolute; left: 60px; top: 60px; width: 12px; height: 30px; transform-origin: 6px 4px; will-change: transform;">
+              <div style="position: absolute; left: 0; top: 0; width: 12px; height: 24px; border-radius: 6px 6px 5px 5px; background: linear-gradient(#14331D, #0A1E12);"></div>
+              <div style="position: absolute; left: -4px; top: 20px; width: 18px; height: 9px; border-radius: 5px 4px 4px 6px; background: #0B2114;"></div>
             </div>
 
-            <div data-el="arms" style="position: absolute; left: 23px; top: 5px; width: 13px; height: 46px; transform-origin: 6px 6px; will-change: transform;">
-              <div style="position: absolute; left: -6px; top: -8px; width: 24px; height: 34px; border-radius: 13px 12px 9px 9px; background: linear-gradient(270deg, rgba(255,190,152,.62) 0 2px, #275933 3.2px, #163821 46%, #0B2114 100%);"></div>
-              <div style="position: absolute; left: -3px; top: 2px; width: 19px; height: 48px; border-radius: 10px 10px 8px 8px; background: linear-gradient(270deg, rgba(255,190,152,.8) 0 2px, #265832 3.2px, #14331D 46%, #0A1E12 100%); box-shadow: inset 2px 0 4px rgba(130,168,205,.12);"></div>
-              <div style="position: absolute; left: 11px; top: 4px; width: 9px; height: 10px; border-radius: 3px 5px 1px 1px; background: #1F4B2A; transform: rotate(8deg);"></div>
-              <div style="position: absolute; left: 11px; top: 15px; width: 9px; height: 10px; border-radius: 3px 5px 1px 1px; background: #1D4728; transform: rotate(5deg);"></div>
-              <div style="position: absolute; left: 10px; top: 26px; width: 8px; height: 9px; border-radius: 3px 4px 1px 1px; background: #1B4326; transform: rotate(3deg);"></div>
-              <div style="position: absolute; left: 9px; top: 36px; width: 8px; height: 9px; border-radius: 3px 4px 1px 1px; background: #194024;"></div>
+            <div data-el="torso" style="position: absolute; left: 48px; top: 30px; width: 92px; height: 40px; transform-origin: 46px 20px; will-change: transform;">
+              <div style="position: absolute; left: 0; top: 2px; width: 92px; height: 36px; border-radius: 20px 26px 22px 18px; background: linear-gradient(#3C7A4A 0 14%, #275933 46%, #16371F 78%, #0D2416 100%);"></div>
+              <div style="position: absolute; left: 6px; top: 22px; width: 78px; height: 15px; border-radius: 14px; background: linear-gradient(rgba(0,0,0,0), rgba(226,214,178,.18));"></div>
+              <div style="position: absolute; left: 10px; top: 27px; width: 68px; height: 1.5px; background: rgba(0,0,0,.18);"></div>
+              <div style="position: absolute; left: 8px; top: 1px; width: 10px; height: 9px; border-radius: 4px 5px 1px 1px; background: #478A56; transform: rotate(-8deg);"></div>
+              <div style="position: absolute; left: 22px; top: -1px; width: 11px; height: 10px; border-radius: 4px 5px 1px 1px; background: #4A9059; transform: rotate(-4deg);"></div>
+              <div style="position: absolute; left: 37px; top: -2px; width: 11px; height: 11px; border-radius: 4px 5px 1px 1px; background: #4A9059;"></div>
+              <div style="position: absolute; left: 52px; top: -1px; width: 11px; height: 10px; border-radius: 4px 5px 1px 1px; background: #478A56; transform: rotate(3deg);"></div>
+              <div style="position: absolute; left: 66px; top: 1px; width: 10px; height: 9px; border-radius: 4px 5px 1px 1px; background: #43824F; transform: rotate(6deg);"></div>
 
-              <div data-el="blur" style="position: absolute; left: 4px; top: 42px; width: 5px; height: 96px; border-radius: 3px; transform-origin: 2.5px 3px; background: linear-gradient(rgba(253,246,232,.5), rgba(253,246,232,0)); filter: blur(2.5px); opacity: 0;"></div>
-
-              <div data-el="club" style="position: absolute; left: 2px; top: 40px; width: 10px; height: 98px; transform-origin: 5px 4px; will-change: transform;">
-                <div style="position: absolute; left: -3px; top: 0; width: 16px; height: 30px; border-radius: 8px 8px 6px 6px; background: linear-gradient(270deg, rgba(255,190,152,.72) 0 1.8px, #23532E 3px, #12301B 100%);"></div>
-                <div style="position: absolute; left: -1px; top: 24px; width: 13px; height: 32px; border-radius: 7px 7px 5px 5px; background: linear-gradient(270deg, rgba(255,186,150,.66) 0 1.6px, #1F4B2A 2.8px, #102B18 100%);"></div>
-                <div style="position: absolute; left: 0.5px; top: 52px; width: 10px; height: 28px; border-radius: 5px 5px 4px 4px; background: linear-gradient(270deg, rgba(255,186,150,.6) 0 1.4px, #1B4326 2.6px, #0E2615 100%);"></div>
-                <div style="position: absolute; left: 2px; top: 76px; width: 7px; height: 18px; border-radius: 4px 4px 3px 3px; background: linear-gradient(270deg, rgba(255,182,146,.55) 0 1.2px, #17391F 2.2px, #0C2113 100%);"></div>
-                <div style="position: absolute; left: 3.2px; top: 90px; width: 4.4px; height: 11px; border-radius: 2px 2px 2.2px 2.2px; background: linear-gradient(270deg, rgba(255,182,146,.5) 0 1px, #143318 2px, #0A1C10 100%);"></div>
-                <div style="position: absolute; left: 9px; top: 2px; width: 8px; height: 9px; border-radius: 3px 4px 1px 1px; background: #21502C; transform: rotate(2deg);"></div>
-                <div style="position: absolute; left: 8px; top: 13px; width: 7px; height: 8px; border-radius: 3px 4px 1px 1px; background: #1F4B2A;"></div>
-                <div style="position: absolute; left: 8px; top: 24px; width: 7px; height: 8px; border-radius: 3px 4px 1px 1px; background: #1D4728;"></div>
-                <div style="position: absolute; left: 8px; top: 35px; width: 6px; height: 7px; border-radius: 2px 3px 1px 1px; background: #1B4326;"></div>
-                <div style="position: absolute; left: 7px; top: 46px; width: 6px; height: 7px; border-radius: 2px 3px 1px 1px; background: #194024;"></div>
-                <div style="position: absolute; left: 7px; top: 57px; width: 5px; height: 6px; border-radius: 2px 3px 1px 1px; background: #173C22;"></div>
-                <div style="position: absolute; left: 6.5px; top: 68px; width: 4px; height: 5px; border-radius: 2px 2px 1px 1px; background: #163920;"></div>
-                <div style="position: absolute; left: 6px; top: 79px; width: 3px; height: 4px; border-radius: 1px 2px 1px 1px; background: #14351E;"></div>
+              <div data-el="hips" style="position: absolute; left: 60px; top: 2px; width: 36px; height: 36px; transform-origin: 18px 18px; will-change: transform;">
+                <div style="position: absolute; left: 0; top: 0; width: 36px; height: 34px; border-radius: 18px 20px 16px 16px; background: linear-gradient(#377144 0 12%, #245430 48%, #12301B 100%);"></div>
               </div>
+
+              <div data-el="head" style="position: absolute; left: -46px; top: 0; width: 52px; height: 30px; transform-origin: 50px 15px; will-change: transform;">
+                <div style="position: absolute; left: 16px; top: 2px; width: 36px; height: 26px; border-radius: 14px 10px 10px 14px; background: linear-gradient(#3C7A4A 0 16%, #275933 52%, #14331D 100%);"></div>
+                <div style="position: absolute; left: -2px; top: 9px; width: 30px; height: 14px; border-radius: 8px 4px 5px 9px; background: linear-gradient(#367044 0 18%, #235430 56%, #102C19 100%);"></div>
+                <div style="position: absolute; left: -2px; top: 17px; width: 30px; height: 5px; border-radius: 7px 2px 3px 7px; background: #0A1F13;"></div>
+                <div style="position: absolute; left: 3px; top: 14px; width: 3px; height: 3.4px; background: #EFE7D2; clip-path: polygon(50% 100%, 0 0, 100% 0);"></div>
+                <div style="position: absolute; left: 9px; top: 14px; width: 3px; height: 3.4px; background: #EFE7D2; clip-path: polygon(50% 100%, 0 0, 100% 0);"></div>
+                <div style="position: absolute; left: 15px; top: 14px; width: 3px; height: 3.4px; background: #EFE7D2; clip-path: polygon(50% 100%, 0 0, 100% 0);"></div>
+                <div style="position: absolute; left: 21px; top: 14px; width: 3px; height: 3.4px; background: #EFE7D2; clip-path: polygon(50% 100%, 0 0, 100% 0);"></div>
+                <div style="position: absolute; left: 1px; top: 10px; width: 3.5px; height: 3px; border-radius: 999px; background: #0A1B10;"></div>
+                <div style="position: absolute; left: 26px; top: -1px; width: 12px; height: 10px; border-radius: 6px 6px 3px 3px; background: linear-gradient(#4A9059, #235430);"></div>
+                <div style="position: absolute; left: 29.5px; top: 1.5px; width: 4.5px; height: 6px; border-radius: 2.5px; background: #E8B23F;"></div>
+                <div style="position: absolute; left: 30.8px; top: 2.6px; width: 1.9px; height: 4px; border-radius: 1px; background: #0A1B10;"></div>
+                <div style="position: absolute; left: 22px; top: -4px; width: 30px; height: 8px; border-radius: 4px; background: linear-gradient(#D2743B, #A5501F);"></div>
+                <div style="position: absolute; left: 22px; top: 1px; width: 30px; height: 2.5px; border-radius: 0 0 4px 4px; background: rgba(0,0,0,.4);"></div>
+              </div>
+
+              <div data-el="arms" style="position: absolute; left: 70px; top: 13px; width: 20px; height: 40px; transform-origin: 10px 5px; will-change: transform;">
+                <div style="position: absolute; left: -1px; top: -6px; width: 22px; height: 30px; border-radius: 11px 11px 9px 9px; background: linear-gradient(90deg, #3A7548 0 16%, #275933 52%, #14331D 100%);"></div>
+                <div style="position: absolute; left: 1px; top: 12px; width: 18px; height: 32px; border-radius: 9px 9px 8px 8px; background: linear-gradient(90deg, #377144 0 14%, #245430 50%, #12301B 100%);"></div>
+                <div style="position: absolute; left: 3px; top: 4px; width: 9px; height: 9px; border-radius: 4px 5px 1px 1px; background: #4A9059;"></div>
+                <div style="position: absolute; left: 4px; top: 16px; width: 8px; height: 9px; border-radius: 4px 5px 1px 1px; background: #478A56;"></div>
+                <div style="position: absolute; left: 5px; top: 28px; width: 8px; height: 8px; border-radius: 3px 4px 1px 1px; background: #43824F;"></div>
+
+                <div data-el="blur" style="position: absolute; left: 7px; top: 34px; width: 6px; height: 84px; border-radius: 3px; transform-origin: 3px 3px; background: linear-gradient(rgba(253,246,232,.5), rgba(253,246,232,0)); filter: blur(2.5px); opacity: 0;"></div>
+
+                <div data-el="club" style="position: absolute; left: 5px; top: 35px; width: 14px; height: 42px; transform-origin: 5px 4px; will-change: transform;">
+                  <div style="position: absolute; left: -1px; top: 0; width: 15px; height: 18px; border-radius: 7px 7px 6px 6px; background: linear-gradient(90deg, #367044 0 14%, #235430 50%, #112E1A 100%);"></div>
+                  <div style="position: absolute; left: 0.5px; top: 14px; width: 12px; height: 16px; border-radius: 6px 6px 5px 5px; background: linear-gradient(90deg, #33693F 0 14%, #204C2C 50%, #0F2917 100%);"></div>
+                  <div style="position: absolute; left: 2px; top: 26px; width: 9px; height: 12px; border-radius: 4px 4px 4px 4px; background: linear-gradient(90deg, #2F6139 0 14%, #1D4629 50%, #0D2415 100%);"></div>
+                  <div style="position: absolute; left: 3.4px; top: 34px; width: 5.6px; height: 10px; border-radius: 3px 3px 2.8px 2.8px; background: linear-gradient(90deg, #2B5834 0 14%, #1A4025 50%, #0B2013 100%);"></div>
+                  <div style="position: absolute; left: 3px; top: 1px; width: 8px; height: 8px; border-radius: 3px 4px 1px 1px; background: #43824F;"></div>
+                  <div style="position: absolute; left: 3px; top: 11px; width: 7px; height: 7px; border-radius: 3px 4px 1px 1px; background: #3E7A49;"></div>
+                  <div style="position: absolute; left: 3.5px; top: 21px; width: 6px; height: 6px; border-radius: 2px 3px 1px 1px; background: #3A7345;"></div>
+                  <div style="position: absolute; left: 4px; top: 30px; width: 4px; height: 5px; border-radius: 2px 2px 1px 1px; background: #366D41;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div data-el="legBR" style="position: absolute; left: 110px; top: 62px; width: 13px; height: 30px; transform-origin: 6px 4px; will-change: transform;">
+              <div style="position: absolute; left: 0; top: 0; width: 13px; height: 26px; border-radius: 7px 7px 5px 5px; background: linear-gradient(#377144 0 16%, #245430 52%, #12301B 100%);"></div>
+              <div style="position: absolute; left: -5px; top: 22px; width: 21px; height: 10px; border-radius: 6px 5px 4px 7px; background: linear-gradient(#1E4A29, #0C2214);"></div>
+              <div style="position: absolute; left: -5px; top: 29px; width: 6px; height: 3.5px; border-radius: 2px 0 0 2px; background: #EFE7D2; opacity: .55;"></div>
+              <div style="position: absolute; left: 1px; top: 29px; width: 6px; height: 3.5px; border-radius: 2px 0 0 2px; background: #EFE7D2; opacity: .4;"></div>
+            </div>
+            <div data-el="legFR" style="position: absolute; left: 54px; top: 62px; width: 13px; height: 30px; transform-origin: 6px 4px; will-change: transform;">
+              <div style="position: absolute; left: 0; top: 0; width: 13px; height: 26px; border-radius: 7px 7px 5px 5px; background: linear-gradient(#377144 0 16%, #245430 52%, #12301B 100%);"></div>
+              <div style="position: absolute; left: -5px; top: 22px; width: 21px; height: 10px; border-radius: 6px 5px 4px 7px; background: linear-gradient(#1E4A29, #0C2214);"></div>
+              <div style="position: absolute; left: -5px; top: 29px; width: 6px; height: 3.5px; border-radius: 2px 0 0 2px; background: #EFE7D2; opacity: .55;"></div>
+              <div style="position: absolute; left: 1px; top: 29px; width: 6px; height: 3.5px; border-radius: 2px 0 0 2px; background: #EFE7D2; opacity: .4;"></div>
             </div>
           </div>
         </div>
@@ -1756,9 +1753,9 @@ class Component extends DCLogic {
     const r = this.rootRef.current;
     if (!r) return;
     this.el = {};
-    ['track', 'cam', 'clouds', 'haze', 'sun', 'trees', 'fg', 'veil', 'app', 'title', 'hint', 'fin', 'ball', 'ballspin',
-      'bshadow', 'trail0', 'trail1', 'trail2', 'divot', 'flash', 'golfer', 'gshadow', 'torso', 'hips',
-      'head', 'arms', 'club', 'blur', 'legRear', 'legFront', 'distflag', 'restball', 'nav', 'map']
+    ['track', 'cam', 'clouds', 'haze', 'sun', 'trees', 'fg', 'veil', 'app', 'title', 'ball', 'ballspin',
+      'bshadow', 'trail0', 'trail1', 'trail2', 'divot', 'flash', 'golfer', 'gshadow', 'flip', 'torso', 'hips',
+      'head', 'arms', 'club', 'blur', 'legFL', 'legFR', 'legBL', 'legBR', 'distflag', 'restball', 'nav', 'map']
       .forEach((k) => { this.el[k] = r.querySelector('[data-el="' + k + '"]'); });
 
     this.onResize = () => { if (!this.locked) this.renderIntro(performance.now() - this.t0); };
@@ -1884,39 +1881,73 @@ class Component extends DCLogic {
     if (e.fg) e.fg.style.transform = 'translateX(' + (p * 46) + 'px) translateY(' + (cam * 10) + 'px)';
     if (e.distflag) e.distflag.style.opacity = 0.2 + 0.8 * seg(p, 0.28, 0.68);
 
-    /* --- swing: one shaft angle drives arms, wrists and body --- */
-    let S;
-    if (p < 0.44) S = lerp(-8, -26, seg(p, 0.26, 0.44));
-    else if (p < 0.64) S = lerp(-26, 152, ease(seg(p, 0.44, 0.64)));
-    else if (p < 0.72) S = lerp(152, -34, ease(seg(p, 0.64, 0.72)));
-    else S = lerp(-34, -112, ease(seg(p, 0.72, 0.9)));
+    /* --- gator: crawls in, turns around, whips the ball with its tail ---
+       Phases: crawl 0-.34, settle to .44, turn to .56, wind up to .66,
+       whip into contact at .705, follow through, settle. Contact has to land
+       on .705 because that is when the ball flight starts. */
 
-    const coil = p < 0.64 ? -14 * ease(seg(p, 0.42, 0.64)) : lerp(-14, 20, ease(seg(p, 0.64, 0.82)));
-    const whip = p < 0.64 ? 18 * ease(seg(p, 0.5, 0.64)) : lerp(18, -12, ease(seg(p, 0.64, 0.715))) * (p < 0.715 ? 1 : 0) + (p >= 0.715 ? lerp(-12, 0, seg(p, 0.715, 0.86)) : 0);
-    const armAngle = S * 0.46 - coil * 0.35;
-    const clubAngle = S * 0.54 + whip;
+    const crawl = ease(seg(p, 0.02, 0.34));
+    const gait = 1 - seg(p, 0.30, 0.38);
+    const step = seg(p, 0.02, 0.34) * Math.PI * 2 * 3.4;
 
     if (e.golfer) {
-      const t = ease(seg(p, 0.12, 0.42));
-      const shift = p < 0.64 ? -3 * ease(seg(p, 0.44, 0.64)) : lerp(-3, 7, ease(seg(p, 0.64, 0.9)));
-      const bob = Math.sin(seg(p, 0.12, 0.42) * Math.PI * 3) * (1 - t) * 4;
-      e.golfer.style.transform = 'translate(' + (lerp(-vw * 0.6 - 100, 0, t) + shift) + 'px,' + bob + 'px)';
+      const bob = Math.sin(step * 2) * 1.6 * gait;
+      e.golfer.style.transform = 'translate(' + lerp(-vw * 0.75 - 240, 0, crawl) + 'px,' + bob + 'px)';
     }
-    if (e.gshadow) {
-      const sq = 1 + Math.abs(coil) * 0.004;
-      e.gshadow.style.transform = 'scaleX(' + sq + ')';
+
+    // The turn: scaleX through zero reads as the body swinging round, and
+    // keeps the tail on the correct side before and after.
+    if (e.flip) {
+      const turn = ease(seg(p, 0.44, 0.56));
+      const sx = lerp(-1, 1, turn);
+      const lift = 1 + Math.sin(Math.PI * seg(p, 0.44, 0.56)) * 0.07;
+      e.flip.style.transform = 'scaleX(' + sx.toFixed(3) + ') scaleY(' + lift.toFixed(3) + ')';
     }
-    if (e.torso) e.torso.style.transform = 'rotate(' + coil * 0.55 + 'deg)';
-    if (e.hips) e.hips.style.transform = 'rotate(' + coil * 0.3 + 'deg)';
-    if (e.head) e.head.style.transform = 'rotate(' + (-coil * 0.4 + (p > 0.82 ? -seg(p, 0.82, 0.96) * 16 : 0)) + 'deg)';
-    if (e.arms) e.arms.style.transform = 'rotate(' + armAngle + 'deg)';
-    if (e.club) e.club.style.transform = 'rotate(' + clubAngle + 'deg)';
+
+    // Tail. Natural direction is down, so -90 points it straight out behind.
+    let tailA;
+    if (p < 0.56) tailA = -84;
+    else if (p < 0.66) tailA = lerp(-84, -172, ease(seg(p, 0.56, 0.66)));
+    else if (p < 0.705) tailA = lerp(-172, -57, ease(seg(p, 0.66, 0.705)));
+    else if (p < 0.84) tailA = lerp(-57, -20, ease(seg(p, 0.705, 0.84)));
+    else tailA = lerp(-20, -74, ease(seg(p, 0.84, 1)));
+
+    // The outer segment lags on the way round and straightens at contact, so
+    // the tail cracks rather than swinging like a plank.
+    let tipA;
+    if (p < 0.56) tipA = 15;
+    else if (p < 0.66) tipA = lerp(15, 42, ease(seg(p, 0.56, 0.66)));
+    else if (p < 0.705) tipA = lerp(42, 0, ease(seg(p, 0.66, 0.705)));
+    else if (p < 0.80) tipA = lerp(0, -28, ease(seg(p, 0.705, 0.80)));
+    else tipA = lerp(-28, 13, ease(seg(p, 0.80, 1)));
+
+    const coil = p < 0.66 ? -7 * ease(seg(p, 0.56, 0.66)) : lerp(-7, 10, ease(seg(p, 0.66, 0.84)));
+
+    if (e.torso) e.torso.style.transform = 'rotate(' + (coil * 0.5 + Math.sin(step) * 1.4 * gait) + 'deg)';
+    if (e.hips) e.hips.style.transform = 'rotate(' + coil * 0.7 + 'deg)';
+    if (e.head) {
+      const look = seg(p, 0.58, 0.70) * 9 - seg(p, 0.72, 0.9) * 5;
+      e.head.style.transform = 'rotate(' + (-coil * 0.5 + look + Math.sin(step + 1) * 2.2 * gait) + 'deg)';
+    }
+    if (e.arms) e.arms.style.transform = 'rotate(' + tailA + 'deg)';
+    if (e.club) e.club.style.transform = 'rotate(' + tipA + 'deg)';
     if (e.blur) {
-      e.blur.style.transform = 'rotate(' + (clubAngle + 26) + 'deg)';
-      e.blur.style.opacity = Math.max(seg(p, 0.6, 0.7) * 0.8, (1 - seg(p, 0.72, 0.82)) * seg(p, 0.66, 0.72) * 0.9);
+      e.blur.style.transform = 'rotate(' + (tipA + 14) + 'deg)';
+      e.blur.style.opacity = Math.max(seg(p, 0.63, 0.70) * 0.85, (1 - seg(p, 0.72, 0.82)) * seg(p, 0.66, 0.72) * 0.9);
     }
-    if (e.legRear) e.legRear.style.transform = 'rotate(' + (p < 0.64 ? -3 * ease(seg(p, 0.44, 0.64)) : lerp(-3, 14, ease(seg(p, 0.64, 0.88)))) + 'deg)';
-    if (e.legFront) e.legFront.style.transform = 'rotate(' + (p < 0.64 ? 4 * ease(seg(p, 0.44, 0.64)) : lerp(4, -7, ease(seg(p, 0.64, 0.88)))) + 'deg)';
+    if (e.gshadow) e.gshadow.style.transform = 'scaleX(' + (1 + Math.abs(coil) * 0.004) + ')';
+
+    // Diagonal gait while walking, then a brace through the strike.
+    const legs = [['legFR', 0], ['legBL', 0.6], ['legFL', Math.PI], ['legBR', Math.PI + 0.6]];
+    legs.forEach(([k, ph]) => {
+      const el = e[k];
+      if (!el) return;
+      const walkA = Math.sin(step + ph) * 22 * gait;
+      const brace = (k === 'legBR' || k === 'legBL')
+        ? (p < 0.66 ? -4 * ease(seg(p, 0.56, 0.66)) : lerp(-4, 12, ease(seg(p, 0.66, 0.86))))
+        : (p < 0.66 ? 5 * ease(seg(p, 0.56, 0.66)) : lerp(5, -6, ease(seg(p, 0.66, 0.86))));
+      el.style.transform = 'rotate(' + (walkA + brace) + 'deg)';
+    });
 
     /* --- ball flight --- */
     const flight = (t) => {
