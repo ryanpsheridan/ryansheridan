@@ -1145,6 +1145,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
   @keyframes drift { from { transform: translateX(0) } to { transform: translateX(60px) } }
   @keyframes sway { 0%, 100% { transform: rotate(-1.5deg) } 50% { transform: rotate(2deg) } }
   @keyframes swayb { 0%, 100% { transform: rotate(1.5deg) } 50% { transform: rotate(-2deg) } }
+  @keyframes ripple { 0%, 100% { transform: scale(1); opacity: .55 } 50% { transform: scale(1.05); opacity: .72 } }
+  @keyframes dash { from { stroke-dashoffset: 0 } to { stroke-dashoffset: -9.2 } }
   .leaflet-container { font-family: "IBM Plex Sans", system-ui, sans-serif; background: #E8EFE6; }
   .leaflet-popup-content-wrapper { border-radius: 14px; box-shadow: 0 10px 30px rgba(20,53,42,.18) }
   .leaflet-popup-content { margin: 12px 14px; font-size: 13px; line-height: 1.45 }
@@ -1181,142 +1183,124 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <div style="position: absolute; left: -6%; right: -6%; top: 88%; height: 7%; background: #35184A; opacity: .28; filter: blur(6px);"></div>
         </div>
 
-        <div data-el="trees" style="position: absolute; left: -8%; right: -8%; bottom: 30.6vh; height: 8vh; opacity: .92; filter: blur(2.4px); background: radial-gradient(circle at 5% 100%, #0B2419 0 26px, transparent 27px), radial-gradient(circle at 16% 100%, #0B2419 0 36px, transparent 45px), radial-gradient(circle at 27% 100%, #0B2419 0 24px, transparent 25px), radial-gradient(circle at 39% 100%, #0B2419 0 33px, transparent 34px), radial-gradient(circle at 51% 100%, #0B2419 0 26px, transparent 27px), radial-gradient(circle at 63% 100%, #0B2419 0 37px, transparent 38px), radial-gradient(circle at 76% 100%, #0B2419 0 27px, transparent 28px), radial-gradient(circle at 88% 100%, #0B2419 0 34px, transparent 35px), radial-gradient(circle at 99% 100%, #0B2419 0 26px, transparent 27px); background-repeat: no-repeat; will-change: transform;"></div>
-
-        <div style="position: absolute; left: -10%; right: -10%; bottom: -6vh; height: 34vh; border-radius: 50% 50% 0 0 / 5vh 5vh 0 0; background: linear-gradient(#3A7A55 0%, #2A5D44 40%, #17402F 100%);"></div>
-        <div style="position: absolute; left: -10%; right: -10%; bottom: -6vh; height: 34vh; border-radius: 50% 50% 0 0 / 5vh 5vh 0 0; background: repeating-linear-gradient(96deg, rgba(253,246,232,.045) 0 16px, rgba(0,0,0,0) 16px 34px);"></div>
-
-        <div style="position: absolute; left: -14px; bottom: 24vh; width: 96px; height: 190px; transform-origin: 26px 100%; filter: blur(2.6px); opacity: .9; animation: sway 6.5s ease-in-out infinite;">
-          <div style="position: absolute; left: 22px; bottom: 0; width: 8px; height: 152px; border-radius: 5px; background: #07160F; transform: rotate(-5deg); transform-origin: 50% 100%;"></div>
-          <div style="position: absolute; left: 14px; top: 6px; width: 58px; height: 9px; border-radius: 0 999px 999px 999px; background: #07160F; transform-origin: 0 50%; transform: rotate(-56deg);"></div>
-          <div style="position: absolute; left: 14px; top: 6px; width: 64px; height: 10px; border-radius: 0 999px 999px 999px; background: #07160F; transform-origin: 0 50%; transform: rotate(-24deg);"></div>
-          <div style="position: absolute; left: 14px; top: 6px; width: 60px; height: 10px; border-radius: 0 999px 999px 999px; background: #07160F; transform-origin: 0 50%; transform: rotate(6deg);"></div>
-          <div style="position: absolute; left: 14px; top: 6px; width: 54px; height: 9px; border-radius: 0 999px 999px 999px; background: #07160F; transform-origin: 0 50%; transform: rotate(38deg);"></div>
-          <div style="position: absolute; left: 14px; top: 6px; width: 44px; height: 8px; border-radius: 0 999px 999px 999px; background: #07160F; transform-origin: 0 50%; transform: rotate(74deg);"></div>
+        <div data-el="trees" style="position: absolute; left: -14px; bottom: 24vh; width: 96px; height: 150px; will-change: transform;">
+          <svg viewBox="0 0 60 100" width="96" height="150" style="display: block; overflow: visible; filter: blur(1.6px); opacity: .92; animation: sway 6.5s ease-in-out infinite; transform-origin: 26px 150px;">
+            <path d="M30 100 C 25 78 32 54 33 34 L 37 34 C 36 55 31 79 35 100 Z" fill="#07160F"/>
+            <g transform="translate(34,33)" fill="#07160F">
+              <path d="M0 0 C 12 -10 34 -10 46 -2 C 32 2 12 4 0 0 Z" transform="rotate(-52)"/>
+              <path d="M0 0 C 12 -8 32 -6 44 4 C 30 6 12 6 0 0 Z" transform="rotate(-16)"/>
+              <path d="M0 0 C 12 -4 30 2 40 12 C 26 10 10 6 0 0 Z" transform="rotate(20)"/>
+              <path d="M0 0 C 10 2 24 10 32 22 C 20 16 8 8 0 0 Z" transform="rotate(54)"/>
+              <path d="M0 0 C 8 4 16 14 20 26 C 10 18 4 8 0 0 Z" transform="rotate(84)"/>
+            </g>
+          </svg>
+          <svg viewBox="0 0 60 100" width="74" height="118" style="display: block; overflow: visible; position: absolute; right: -66px; bottom: -14px; filter: blur(2.2px); opacity: .66; animation: swayb 7.8s ease-in-out infinite; transform-origin: 34px 118px;">
+            <path d="M30 100 C 25 78 32 54 33 34 L 37 34 C 36 55 31 79 35 100 Z" fill="#08190F"/>
+            <g transform="translate(34,33) scale(-1,1)" fill="#08190F">
+              <path d="M0 0 C 12 -10 34 -10 46 -2 C 32 2 12 4 0 0 Z" transform="rotate(-52)"/>
+              <path d="M0 0 C 12 -8 32 -6 44 4 C 30 6 12 6 0 0 Z" transform="rotate(-16)"/>
+              <path d="M0 0 C 12 -4 30 2 40 12 C 26 10 10 6 0 0 Z" transform="rotate(20)"/>
+              <path d="M0 0 C 10 2 24 10 32 22 C 20 16 8 8 0 0 Z" transform="rotate(54)"/>
+            </g>
+          </svg>
         </div>
 
-        <div style="position: absolute; right: -20px; bottom: 25.5vh; width: 78px; height: 138px; transform-origin: 52px 100%; filter: blur(3.4px); opacity: .68; animation: swayb 7.8s ease-in-out infinite;">
-          <div style="position: absolute; right: 22px; bottom: 0; width: 6px; height: 108px; border-radius: 4px; background: #08190F; transform: rotate(6deg); transform-origin: 50% 100%;"></div>
-          <div style="position: absolute; right: 16px; top: 4px; width: 44px; height: 8px; border-radius: 999px 0 999px 999px; background: #08190F; transform-origin: 100% 50%; transform: rotate(50deg);"></div>
-          <div style="position: absolute; right: 16px; top: 4px; width: 48px; height: 9px; border-radius: 999px 0 999px 999px; background: #08190F; transform-origin: 100% 50%; transform: rotate(14deg);"></div>
-          <div style="position: absolute; right: 16px; top: 4px; width: 44px; height: 8px; border-radius: 999px 0 999px 999px; background: #08190F; transform-origin: 100% 50%; transform: rotate(-20deg);"></div>
-          <div style="position: absolute; right: 16px; top: 4px; width: 36px; height: 7px; border-radius: 999px 0 999px 999px; background: #08190F; transform-origin: 100% 50%; transform: rotate(-58deg);"></div>
+        <!-- Putt-putt hole: a single SVG scene replaces the old stacked-div
+             golfer so the ball, gators and green read as one drawn illustration
+             instead of dozens of flat clip-art shapes. The ball's own position
+             each frame comes from sampling data-el="lanepath" with
+             getPointAtLength, so it always rides exactly on the drawn curve. -->
+        <div data-el="scene" style="position: absolute; left: -10%; right: -10%; bottom: -6vh; height: 58vh; overflow: hidden;">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block;">
+            <defs>
+              <linearGradient id="turf" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#3E8259"/>
+                <stop offset="45%" stop-color="#2C6144"/>
+                <stop offset="100%" stop-color="#15402D"/>
+              </linearGradient>
+              <radialGradient id="pond" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#1B3A3A"/>
+                <stop offset="100%" stop-color="#122A2A" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="ballg" cx="35%" cy="30%" r="70%">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="62%" stop-color="#F6EEDF"/>
+                <stop offset="100%" stop-color="#CFC3AC"/>
+              </radialGradient>
+            </defs>
+
+            <path d="M-10 24 Q 50 4 110 24 L 110 110 L -10 110 Z" fill="url(#turf)"/>
+            <path d="M-10 24 Q 50 4 110 24" fill="none" stroke="rgba(253,246,232,.06)" stroke-width="1.4"/>
+
+            <ellipse cx="15" cy="70" rx="15" ry="8" fill="url(#pond)" style="filter: blur(1px); animation: ripple 5.5s ease-in-out infinite;"/>
+            <ellipse cx="81" cy="22" rx="13" ry="6.5" fill="url(#pond)" style="filter: blur(1px); animation: ripple 6.5s ease-in-out infinite .8s;"/>
+
+            <path data-el="lanepath" d="M50 96 C 30 84 18 76 24 64 C 30 52 46 44 50 40 C 54 36 72 32 68 20 C 66 14 58 14 50 14" fill="none" stroke="none"/>
+            <path d="M50 96 C 30 84 18 76 24 64 C 30 52 46 44 50 40 C 54 36 72 32 68 20 C 66 14 58 14 50 14" fill="none" stroke="#EFE6CC" stroke-opacity=".5" stroke-width="9.6" stroke-linecap="round"/>
+            <path d="M50 96 C 30 84 18 76 24 64 C 30 52 46 44 50 40 C 54 36 72 32 68 20 C 66 14 58 14 50 14" fill="none" stroke="#4C9463" stroke-width="7.4" stroke-linecap="round"/>
+            <path d="M50 96 C 30 84 18 76 24 64 C 30 52 46 44 50 40 C 54 36 72 32 68 20 C 66 14 58 14 50 14" fill="none" stroke="rgba(253,246,232,.4)" stroke-width=".7" stroke-dasharray="1.4 3.2" stroke-linecap="round" style="animation: dash 1.4s linear infinite;"/>
+
+            <g transform="translate(14,66) rotate(-6)">
+              <ellipse cx="-4" cy="4" rx="10" ry="3.6" fill="rgba(8,26,20,.28)" style="filter: blur(1px);"/>
+              <ellipse cx="-2" cy="-2.8" rx="1.05" ry="1.05" fill="#22401F"/>
+              <ellipse cx="2" cy="-3.2" rx="1" ry="1" fill="#22401F"/>
+              <ellipse cx="6" cy="-2.9" rx="1" ry="1" fill="#22401F"/>
+              <ellipse cx="0" cy="0" rx="9" ry="3.6" fill="#3F6B3A"/>
+              <ellipse cx="8" cy="0.2" rx="3.6" ry="1.9" fill="#3F6B3A"/>
+              <path d="M8.6 1.1 C 10.4 1.6 11.6 1.2 12 0.2 C 11.4 0 10 0 8.6 1.1 Z" fill="#0E1F10"/>
+              <path d="M6.5 -1.2 L 7.6 -2.3 L 7.9 -0.9 Z" fill="#FDF6E8"/>
+              <path d="M9.2 -1.3 L 10.2 -2.2 L 10.3 -0.8 Z" fill="#FDF6E8"/>
+              <ellipse cx="7.2" cy="-1.7" rx=".85" ry=".85" fill="#FDF6E8"/>
+              <ellipse cx="9.6" cy="-1.5" rx=".85" ry=".85" fill="#FDF6E8"/>
+              <ellipse cx="7.2" cy="-1.5" rx=".38" ry=".38" fill="#12200F"/>
+              <ellipse cx="9.6" cy="-1.3" rx=".38" ry=".38" fill="#12200F"/>
+              <g data-el="gator1tail" style="transform-origin: -8px 0px; transform: rotate(6deg);">
+                <path d="M-8 -1.7 C -16 -5.4 -25 -4.2 -29 0 C -25 4.2 -16 5.4 -8 1.7 Z" fill="#2C5028"/>
+              </g>
+            </g>
+
+            <g transform="translate(83,20) rotate(6)">
+              <ellipse cx="4" cy="4" rx="9" ry="3.2" fill="rgba(8,26,20,.28)" style="filter: blur(1px);"/>
+              <ellipse cx="2" cy="-2.5" rx=".95" ry=".95" fill="#1F3B1C"/>
+              <ellipse cx="-1.8" cy="-2.9" rx=".9" ry=".9" fill="#1F3B1C"/>
+              <ellipse cx="-5.4" cy="-2.6" rx=".9" ry=".9" fill="#1F3B1C"/>
+              <ellipse cx="0" cy="0" rx="8" ry="3.2" fill="#38623A"/>
+              <ellipse cx="-7.2" cy="0.2" rx="3.2" ry="1.7" fill="#38623A"/>
+              <path d="M-7.7 1 C -9.3 1.4 -10.4 1 -10.7 .2 C -10.2 0 -8.9 0 -7.7 1 Z" fill="#0E1F10"/>
+              <path d="M-5.8 -1.1 L -6.8 -2.1 L -7.1 -0.8 Z" fill="#FDF6E8"/>
+              <path d="M-8.2 -1.2 L -9.1 -2 L -9.2 -0.7 Z" fill="#FDF6E8"/>
+              <ellipse cx="-6.4" cy="-1.5" rx=".76" ry=".76" fill="#FDF6E8"/>
+              <ellipse cx="-8.5" cy="-1.3" rx=".76" ry=".76" fill="#FDF6E8"/>
+              <ellipse cx="-6.4" cy="-1.3" rx=".34" ry=".34" fill="#12200F"/>
+              <ellipse cx="-8.5" cy="-1.1" rx=".34" ry=".34" fill="#12200F"/>
+              <g data-el="gator2tail" style="transform-origin: 7px 0px; transform: rotate(-6deg);">
+                <path d="M7 -1.5 C 14 -4.9 22.6 -3.8 26.2 0 C 22.6 3.8 14 4.9 7 1.5 Z" fill="#193317"/>
+              </g>
+            </g>
+
+            <ellipse cx="50" cy="14" rx="6.2" ry="2.6" fill="rgba(8,26,20,.3)" style="filter: blur(.6px);"/>
+            <ellipse cx="50" cy="14" rx="5" ry="2" fill="#0B2419"/>
+            <ellipse cx="50" cy="14" rx="5.6" ry="2.35" fill="none" stroke="rgba(253,246,232,.4)" stroke-width=".5"/>
+            <circle data-el="splash0" cx="50" cy="14" r="2" fill="none" stroke="rgba(253,246,232,.7)" stroke-width=".6" opacity="0"/>
+            <circle data-el="splash1" cx="50" cy="14" r="2" fill="none" stroke="rgba(253,246,232,.5)" stroke-width=".5" opacity="0"/>
+            <line x1="50" y1="14" x2="50" y2="3" stroke="#F6EFDD" stroke-width=".7" stroke-linecap="round"/>
+            <polygon points="50,3 61,5.6 50,8.6" fill="#FF7FA8" style="transform-box: fill-box; transform-origin: 0% 50%; animation: flutter 3.4s ease-in-out infinite;"/>
+
+            <circle data-el="trail2" cx="50" cy="96" r="1" fill="rgba(255,253,247,.16)"/>
+            <circle data-el="trail1" cx="50" cy="96" r="1.15" fill="rgba(255,253,247,.26)"/>
+            <circle data-el="trail0" cx="50" cy="96" r="1.3" fill="rgba(255,253,247,.4)"/>
+            <ellipse data-el="bshadow" cx="50" cy="96" rx="3" ry="1.1" fill="rgba(8,26,20,.4)"/>
+
+            <g data-el="ballWrap" transform="translate(50,96)">
+              <g data-el="ballspin">
+                <circle r="2.6" fill="url(#ballg)"/>
+                <circle cx=".9" cy="-.6" r=".38" fill="rgba(20,53,42,.14)"/>
+                <circle cx="-.5" cy=".9" r=".3" fill="rgba(20,53,42,.12)"/>
+                <circle cx=".3" cy="1.3" r=".26" fill="rgba(20,53,42,.1)"/>
+              </g>
+            </g>
+          </svg>
         </div>
-
-        <div data-el="distflag" style="position: absolute; left: 50%; bottom: 26vh; margin-left: 52px; width: 46px; height: 62px; will-change: opacity;">
-          <div style="position: absolute; left: 0; bottom: 0; width: 3px; height: 62px; border-radius: 2px; background: #F6EFDD;"></div>
-          <div style="position: absolute; left: 3px; top: 2px; width: 0; height: 0; border-left: 22px solid #FFF6E2; border-top: 8px solid transparent; border-bottom: 8px solid transparent; transform-origin: 0 50%; animation: flutter 3.4s ease-in-out infinite;"></div>
-          <div style="position: absolute; left: -14px; bottom: -6px; width: 34px; height: 9px; border-radius: 50%; background: rgba(11,36,25,.35);"></div>
-          <div data-el="restball" style="position: absolute; left: 14px; bottom: -4px; width: 7px; height: 7px; border-radius: 999px; background: #FFFDF7; opacity: 0;"></div>
-        </div>
-
-        <div data-el="golfer" style="position: absolute; left: 42%; margin-left: -180px; bottom: 18.5vh; width: 210px; height: 100px; will-change: transform;">
-          <div data-el="gshadow" style="position: absolute; left: 34px; bottom: -6px; width: 140px; height: 18px; border-radius: 50%; background: rgba(6,20,15,.5); filter: blur(6px);"></div>
-
-          <!-- Lit from above so the shading survives the turn: mirroring the
-               gator would flip a side rim light onto the wrong edge. -->
-          <div data-el="flip" style="position: absolute; inset: 0; transform-origin: 95px 52px; will-change: transform;">
-
-            <div data-el="legBL" style="position: absolute; left: 118px; top: 60px; width: 12px; height: 30px; transform-origin: 6px 4px; will-change: transform;">
-              <div style="position: absolute; left: 0; top: 0; width: 12px; height: 24px; border-radius: 6px 6px 5px 5px; background: linear-gradient(#14331D, #0A1E12);"></div>
-              <div style="position: absolute; left: -4px; top: 20px; width: 18px; height: 9px; border-radius: 5px 4px 4px 6px; background: #0B2114;"></div>
-            </div>
-            <div data-el="legFL" style="position: absolute; left: 60px; top: 60px; width: 12px; height: 30px; transform-origin: 6px 4px; will-change: transform;">
-              <div style="position: absolute; left: 0; top: 0; width: 12px; height: 24px; border-radius: 6px 6px 5px 5px; background: linear-gradient(#14331D, #0A1E12);"></div>
-              <div style="position: absolute; left: -4px; top: 20px; width: 18px; height: 9px; border-radius: 5px 4px 4px 6px; background: #0B2114;"></div>
-            </div>
-
-            <div data-el="torso" style="position: absolute; left: 48px; top: 30px; width: 92px; height: 40px; transform-origin: 46px 20px; will-change: transform;">
-              <div style="position: absolute; left: 0; top: 2px; width: 92px; height: 36px; border-radius: 20px 26px 22px 18px; background: linear-gradient(#3C7A4A 0 14%, #275933 46%, #16371F 78%, #0D2416 100%);"></div>
-              <div style="position: absolute; left: 6px; top: 22px; width: 78px; height: 15px; border-radius: 14px; background: linear-gradient(rgba(0,0,0,0), rgba(226,214,178,.18));"></div>
-              <div style="position: absolute; left: 10px; top: 27px; width: 68px; height: 1.5px; background: rgba(0,0,0,.18);"></div>
-              <div style="position: absolute; left: 8px; top: 1px; width: 10px; height: 9px; border-radius: 4px 5px 1px 1px; background: #478A56; transform: rotate(-8deg);"></div>
-              <div style="position: absolute; left: 22px; top: -1px; width: 11px; height: 10px; border-radius: 4px 5px 1px 1px; background: #4A9059; transform: rotate(-4deg);"></div>
-              <div style="position: absolute; left: 37px; top: -2px; width: 11px; height: 11px; border-radius: 4px 5px 1px 1px; background: #4A9059;"></div>
-              <div style="position: absolute; left: 52px; top: -1px; width: 11px; height: 10px; border-radius: 4px 5px 1px 1px; background: #478A56; transform: rotate(3deg);"></div>
-              <div style="position: absolute; left: 66px; top: 1px; width: 10px; height: 9px; border-radius: 4px 5px 1px 1px; background: #43824F; transform: rotate(6deg);"></div>
-
-              <div data-el="hips" style="position: absolute; left: 60px; top: 2px; width: 36px; height: 36px; transform-origin: 18px 18px; will-change: transform;">
-                <div style="position: absolute; left: 0; top: 0; width: 36px; height: 34px; border-radius: 18px 20px 16px 16px; background: linear-gradient(#377144 0 12%, #245430 48%, #12301B 100%);"></div>
-              </div>
-
-              <div data-el="head" style="position: absolute; left: -46px; top: 0; width: 52px; height: 30px; transform-origin: 50px 15px; will-change: transform;">
-                <div style="position: absolute; left: 16px; top: 2px; width: 36px; height: 26px; border-radius: 14px 10px 10px 14px; background: linear-gradient(#3C7A4A 0 16%, #275933 52%, #14331D 100%);"></div>
-                <div style="position: absolute; left: -2px; top: 9px; width: 30px; height: 14px; border-radius: 8px 4px 5px 9px; background: linear-gradient(#367044 0 18%, #235430 56%, #102C19 100%);"></div>
-                <div style="position: absolute; left: -2px; top: 17px; width: 30px; height: 5px; border-radius: 7px 2px 3px 7px; background: #0A1F13;"></div>
-                <div style="position: absolute; left: 3px; top: 14px; width: 3px; height: 3.4px; background: #EFE7D2; clip-path: polygon(50% 100%, 0 0, 100% 0);"></div>
-                <div style="position: absolute; left: 9px; top: 14px; width: 3px; height: 3.4px; background: #EFE7D2; clip-path: polygon(50% 100%, 0 0, 100% 0);"></div>
-                <div style="position: absolute; left: 15px; top: 14px; width: 3px; height: 3.4px; background: #EFE7D2; clip-path: polygon(50% 100%, 0 0, 100% 0);"></div>
-                <div style="position: absolute; left: 21px; top: 14px; width: 3px; height: 3.4px; background: #EFE7D2; clip-path: polygon(50% 100%, 0 0, 100% 0);"></div>
-                <div style="position: absolute; left: 1px; top: 10px; width: 3.5px; height: 3px; border-radius: 999px; background: #0A1B10;"></div>
-                <div style="position: absolute; left: 26px; top: -1px; width: 12px; height: 10px; border-radius: 6px 6px 3px 3px; background: linear-gradient(#4A9059, #235430);"></div>
-                <div style="position: absolute; left: 29.5px; top: 1.5px; width: 4.5px; height: 6px; border-radius: 2.5px; background: #E8B23F;"></div>
-                <div style="position: absolute; left: 30.8px; top: 2.6px; width: 1.9px; height: 4px; border-radius: 1px; background: #0A1B10;"></div>
-                <div style="position: absolute; left: 22px; top: -4px; width: 30px; height: 8px; border-radius: 4px; background: linear-gradient(#D2743B, #A5501F);"></div>
-                <div style="position: absolute; left: 22px; top: 1px; width: 30px; height: 2.5px; border-radius: 0 0 4px 4px; background: rgba(0,0,0,.4);"></div>
-              </div>
-
-              <div data-el="arms" style="position: absolute; left: 70px; top: 13px; width: 20px; height: 40px; transform-origin: 10px 5px; will-change: transform;">
-                <div style="position: absolute; left: -1px; top: -6px; width: 22px; height: 30px; border-radius: 11px 11px 9px 9px; background: linear-gradient(90deg, #3A7548 0 16%, #275933 52%, #14331D 100%);"></div>
-                <div style="position: absolute; left: 1px; top: 12px; width: 18px; height: 32px; border-radius: 9px 9px 8px 8px; background: linear-gradient(90deg, #377144 0 14%, #245430 50%, #12301B 100%);"></div>
-                <div style="position: absolute; left: 3px; top: 4px; width: 9px; height: 9px; border-radius: 4px 5px 1px 1px; background: #4A9059;"></div>
-                <div style="position: absolute; left: 4px; top: 16px; width: 8px; height: 9px; border-radius: 4px 5px 1px 1px; background: #478A56;"></div>
-                <div style="position: absolute; left: 5px; top: 28px; width: 8px; height: 8px; border-radius: 3px 4px 1px 1px; background: #43824F;"></div>
-
-                <div data-el="blur" style="position: absolute; left: 7px; top: 34px; width: 6px; height: 84px; border-radius: 3px; transform-origin: 3px 3px; background: linear-gradient(rgba(253,246,232,.5), rgba(253,246,232,0)); filter: blur(2.5px); opacity: 0;"></div>
-
-                <div data-el="club" style="position: absolute; left: 5px; top: 35px; width: 14px; height: 42px; transform-origin: 5px 4px; will-change: transform;">
-                  <div style="position: absolute; left: -1px; top: 0; width: 15px; height: 18px; border-radius: 7px 7px 6px 6px; background: linear-gradient(90deg, #367044 0 14%, #235430 50%, #112E1A 100%);"></div>
-                  <div style="position: absolute; left: 0.5px; top: 14px; width: 12px; height: 16px; border-radius: 6px 6px 5px 5px; background: linear-gradient(90deg, #33693F 0 14%, #204C2C 50%, #0F2917 100%);"></div>
-                  <div style="position: absolute; left: 2px; top: 26px; width: 9px; height: 12px; border-radius: 4px 4px 4px 4px; background: linear-gradient(90deg, #2F6139 0 14%, #1D4629 50%, #0D2415 100%);"></div>
-                  <div style="position: absolute; left: 3.4px; top: 34px; width: 5.6px; height: 10px; border-radius: 3px 3px 2.8px 2.8px; background: linear-gradient(90deg, #2B5834 0 14%, #1A4025 50%, #0B2013 100%);"></div>
-                  <div style="position: absolute; left: 3px; top: 1px; width: 8px; height: 8px; border-radius: 3px 4px 1px 1px; background: #43824F;"></div>
-                  <div style="position: absolute; left: 3px; top: 11px; width: 7px; height: 7px; border-radius: 3px 4px 1px 1px; background: #3E7A49;"></div>
-                  <div style="position: absolute; left: 3.5px; top: 21px; width: 6px; height: 6px; border-radius: 2px 3px 1px 1px; background: #3A7345;"></div>
-                  <div style="position: absolute; left: 4px; top: 30px; width: 4px; height: 5px; border-radius: 2px 2px 1px 1px; background: #366D41;"></div>
-                </div>
-              </div>
-            </div>
-
-            <div data-el="legBR" style="position: absolute; left: 110px; top: 62px; width: 13px; height: 30px; transform-origin: 6px 4px; will-change: transform;">
-              <div style="position: absolute; left: 0; top: 0; width: 13px; height: 26px; border-radius: 7px 7px 5px 5px; background: linear-gradient(#377144 0 16%, #245430 52%, #12301B 100%);"></div>
-              <div style="position: absolute; left: -5px; top: 22px; width: 21px; height: 10px; border-radius: 6px 5px 4px 7px; background: linear-gradient(#1E4A29, #0C2214);"></div>
-              <div style="position: absolute; left: -5px; top: 29px; width: 6px; height: 3.5px; border-radius: 2px 0 0 2px; background: #EFE7D2; opacity: .55;"></div>
-              <div style="position: absolute; left: 1px; top: 29px; width: 6px; height: 3.5px; border-radius: 2px 0 0 2px; background: #EFE7D2; opacity: .4;"></div>
-            </div>
-            <div data-el="legFR" style="position: absolute; left: 54px; top: 62px; width: 13px; height: 30px; transform-origin: 6px 4px; will-change: transform;">
-              <div style="position: absolute; left: 0; top: 0; width: 13px; height: 26px; border-radius: 7px 7px 5px 5px; background: linear-gradient(#377144 0 16%, #245430 52%, #12301B 100%);"></div>
-              <div style="position: absolute; left: -5px; top: 22px; width: 21px; height: 10px; border-radius: 6px 5px 4px 7px; background: linear-gradient(#1E4A29, #0C2214);"></div>
-              <div style="position: absolute; left: -5px; top: 29px; width: 6px; height: 3.5px; border-radius: 2px 0 0 2px; background: #EFE7D2; opacity: .55;"></div>
-              <div style="position: absolute; left: 1px; top: 29px; width: 6px; height: 3.5px; border-radius: 2px 0 0 2px; background: #EFE7D2; opacity: .4;"></div>
-            </div>
-          </div>
-        </div>
-
-        <div data-el="bshadow" style="position: absolute; left: 42%; bottom: 18.6vh; width: 17px; height: 6px; border-radius: 50%; background: rgba(8,26,20,.4); filter: blur(1px); will-change: transform;"></div>
-
-        <div data-el="divot" style="position: absolute; left: 42%; bottom: 19vh; width: 30px; height: 22px; opacity: 0; will-change: transform;">
-          <div style="position: absolute; left: 2px; top: 12px; width: 6px; height: 4px; border-radius: 2px; background: #14352A;"></div>
-          <div style="position: absolute; left: 12px; top: 4px; width: 5px; height: 4px; border-radius: 2px; background: #1B4331;"></div>
-          <div style="position: absolute; left: 20px; top: 10px; width: 7px; height: 4px; border-radius: 2px; background: #14352A;"></div>
-          <div style="position: absolute; left: 8px; top: 0; width: 4px; height: 3px; border-radius: 2px; background: #2A5D44;"></div>
-        </div>
-
-        <div data-el="trail2" style="position: absolute; left: 42%; bottom: 19.5vh; width: 15px; height: 15px; border-radius: 999px; background: rgba(255,253,247,.16); will-change: transform;"></div>
-        <div data-el="trail1" style="position: absolute; left: 42%; bottom: 19.5vh; width: 15px; height: 15px; border-radius: 999px; background: rgba(255,253,247,.26); will-change: transform;"></div>
-        <div data-el="trail0" style="position: absolute; left: 42%; bottom: 19.5vh; width: 15px; height: 15px; border-radius: 999px; background: rgba(255,253,247,.4); will-change: transform;"></div>
-
-        <div data-el="ball" style="position: absolute; left: 42%; bottom: 19.5vh; width: 15px; height: 15px; will-change: transform;">
-          <div data-el="ballspin" style="position: absolute; inset: 0; border-radius: 999px; background: radial-gradient(circle at 34% 28%, #FFFFFF 0 34%, #F6EEDF 62%, #CFC3AC 100%); box-shadow: 0 1px 3px rgba(8,26,20,.4); will-change: transform;">
-            <div style="position: absolute; left: 3px; top: 8px; width: 3px; height: 3px; border-radius: 999px; background: rgba(20,53,42,.13);"></div>
-            <div style="position: absolute; left: 8px; top: 4px; width: 2px; height: 2px; border-radius: 999px; background: rgba(20,53,42,.12);"></div>
-            <div style="position: absolute; left: 6px; top: 11px; width: 2px; height: 2px; border-radius: 999px; background: rgba(20,53,42,.1);"></div>
-          </div>
-        </div>
-
-        <div style="position: absolute; left: 42%; bottom: 19vh; margin-left: 5px; width: 5px; height: 9px; border-radius: 2px; background: #FFF0D2; opacity: .75;"></div>
-
-        <div data-el="flash" style="position: absolute; left: 42%; bottom: 18.8vh; margin-left: -13px; width: 42px; height: 42px; border-radius: 999px; background: radial-gradient(circle, rgba(255,253,247,.85) 0 22%, rgba(255,240,210,.25) 45%, transparent 70%); opacity: 0;"></div>
 
         <div style="position: absolute; left: -10%; right: -10%; bottom: 28vh; height: 7vh; background: linear-gradient(rgba(255,176,138,.3), rgba(255,176,138,0)); filter: blur(7px); pointer-events: none;"></div>
 
@@ -1753,9 +1737,9 @@ class Component extends DCLogic {
     const r = this.rootRef.current;
     if (!r) return;
     this.el = {};
-    ['track', 'cam', 'clouds', 'haze', 'sun', 'trees', 'fg', 'veil', 'app', 'title', 'ball', 'ballspin',
-      'bshadow', 'trail0', 'trail1', 'trail2', 'divot', 'flash', 'golfer', 'gshadow', 'flip', 'torso', 'hips',
-      'head', 'arms', 'club', 'blur', 'legFL', 'legFR', 'legBL', 'legBR', 'distflag', 'restball', 'nav', 'map']
+    ['track', 'cam', 'clouds', 'haze', 'sun', 'trees', 'fg', 'veil', 'app', 'title', 'ballWrap', 'ballspin',
+      'bshadow', 'trail0', 'trail1', 'trail2', 'lanepath', 'gator1tail', 'gator2tail', 'splash0', 'splash1',
+      'nav', 'map']
       .forEach((k) => { this.el[k] = r.querySelector('[data-el="' + k + '"]'); });
 
     this.onResize = () => { if (!this.locked) this.renderIntro(performance.now() - this.t0); };
@@ -1809,11 +1793,11 @@ class Component extends DCLogic {
   }
 
   /* ---------- intro reel ----------
-     The swing choreography below is a pure function of one progress value, so
-     going from scroll-driven to timed only changes where that value comes
-     from. Order: the swing plays out, the title rises in over the resting
-     scene, then the whole thing fades to the app. */
-  reel = { swing: 3600, titleIn: 750, hold: 2850, out: 550 };
+     The putt-putt choreography below is a pure function of one progress
+     value, so going from scroll-driven to timed only changes where that
+     value comes from. Order: the ball rolls the hole, the title rises in
+     over the resting scene, then the whole thing fades to the app. */
+  reel = { swing: 4200, titleIn: 750, hold: 2850, out: 550 };
 
   playIntro() {
     const r = this.rootRef.current;
@@ -1879,118 +1863,57 @@ class Component extends DCLogic {
     if (e.clouds) e.clouds.style.opacity = 0.1 + 0.14 * rise;
     if (e.trees) e.trees.style.transform = 'translateX(' + (-p * 14) + 'px) translateY(' + (rise * 4) + 'px)';
     if (e.fg) e.fg.style.transform = 'translateX(' + (p * 46) + 'px) translateY(' + (cam * 10) + 'px)';
-    if (e.distflag) e.distflag.style.opacity = 0.2 + 0.8 * seg(p, 0.28, 0.68);
 
-    /* --- gator: crawls in, turns around, whips the ball with its tail ---
-       Phases: crawl 0-.34, settle to .44, turn to .56, wind up to .66,
-       whip into contact at .705, follow through, settle. Contact has to land
-       on .705 because that is when the ball flight starts. */
+    /* --- putt-putt hole: the ball rides the drawn lane path, two gator
+       obstacles swing their tails clear just ahead of it, and it drops into
+       the cup for a little splash. Everything is keyed off t, the ball's own
+       0-1 progress along the hole (a sub-range of p so it tees up, then
+       rests, before and after rolling). --- */
+    const t = ease(seg(p, 0.08, 0.86));
+    const path = e.lanepath;
 
-    const crawl = ease(seg(p, 0.02, 0.34));
-    const gait = 1 - seg(p, 0.30, 0.38);
-    const step = seg(p, 0.02, 0.34) * Math.PI * 2 * 3.4;
+    if (path && path.getTotalLength) {
+      const len = path.getTotalLength();
+      const pt = path.getPointAtLength(t * len);
+      const arrive = seg(t, 0.965, 1);
+      const scale = lerp(1, 0.15, arrive);
 
-    if (e.golfer) {
-      const bob = Math.sin(step * 2) * 1.6 * gait;
-      e.golfer.style.transform = 'translate(' + lerp(-vw * 0.75 - 240, 0, crawl) + 'px,' + bob + 'px)';
+      if (e.ballWrap) {
+        e.ballWrap.setAttribute('transform', 'translate(' + pt.x.toFixed(2) + ',' + pt.y.toFixed(2) + ') scale(' + scale.toFixed(3) + ')');
+      }
+      if (e.ballspin) e.ballspin.style.transform = 'rotate(' + (t * len * 32) + 'deg)';
+      if (e.bshadow) {
+        e.bshadow.setAttribute('cx', pt.x.toFixed(2));
+        e.bshadow.setAttribute('cy', (pt.y + 0.4).toFixed(2));
+        e.bshadow.style.opacity = arrive > 0 ? 0.4 * (1 - arrive) : 0.4;
+      }
+      [0, 1, 2].forEach((i) => {
+        const el = e['trail' + i];
+        if (!el) return;
+        const tt = clamp(t - 0.012 * (i + 1), 0, 1);
+        const q = path.getPointAtLength(tt * len);
+        el.setAttribute('cx', q.x.toFixed(2));
+        el.setAttribute('cy', q.y.toFixed(2));
+        el.style.opacity = (t > 0.01 && arrive < 1) ? (0.5 - i * 0.14) : 0;
+      });
+
+      // Splash rings bloom once the ball reaches the cup, so they only ever
+      // read as "just went in", never as a preview.
+      [0, 1].forEach((i) => {
+        const el = e['splash' + i];
+        if (!el) return;
+        const st = seg(t, 0.97 + i * 0.012, 1);
+        el.setAttribute('r', (2 + st * 5).toFixed(2));
+        el.style.opacity = st > 0 ? (1 - st) * 0.8 : 0;
+      });
+
+      // Each gator flicks its tail clear right as the ball passes its bend
+      // in the lane, then settles back across the rough once it's by.
+      const g1 = seg(t, 0.26, 0.38) - seg(t, 0.38, 0.48);
+      if (e.gator1tail) e.gator1tail.style.transform = 'rotate(' + lerp(6, -120, clamp(g1, 0, 1)) + 'deg)';
+      const g2 = seg(t, 0.80, 0.90) - seg(t, 0.90, 0.97);
+      if (e.gator2tail) e.gator2tail.style.transform = 'rotate(' + lerp(-6, 90, clamp(g2, 0, 1)) + 'deg)';
     }
-
-    // The turn: scaleX through zero reads as the body swinging round, and
-    // keeps the tail on the correct side before and after.
-    if (e.flip) {
-      const turn = ease(seg(p, 0.44, 0.56));
-      const sx = lerp(-1, 1, turn);
-      const lift = 1 + Math.sin(Math.PI * seg(p, 0.44, 0.56)) * 0.07;
-      e.flip.style.transform = 'scaleX(' + sx.toFixed(3) + ') scaleY(' + lift.toFixed(3) + ')';
-    }
-
-    // Tail. Natural direction is down, so -90 points it straight out behind.
-    let tailA;
-    if (p < 0.56) tailA = -84;
-    else if (p < 0.66) tailA = lerp(-84, -172, ease(seg(p, 0.56, 0.66)));
-    else if (p < 0.705) tailA = lerp(-172, -57, ease(seg(p, 0.66, 0.705)));
-    else if (p < 0.84) tailA = lerp(-57, -20, ease(seg(p, 0.705, 0.84)));
-    else tailA = lerp(-20, -74, ease(seg(p, 0.84, 1)));
-
-    // The outer segment lags on the way round and straightens at contact, so
-    // the tail cracks rather than swinging like a plank.
-    let tipA;
-    if (p < 0.56) tipA = 15;
-    else if (p < 0.66) tipA = lerp(15, 42, ease(seg(p, 0.56, 0.66)));
-    else if (p < 0.705) tipA = lerp(42, 0, ease(seg(p, 0.66, 0.705)));
-    else if (p < 0.80) tipA = lerp(0, -28, ease(seg(p, 0.705, 0.80)));
-    else tipA = lerp(-28, 13, ease(seg(p, 0.80, 1)));
-
-    const coil = p < 0.66 ? -7 * ease(seg(p, 0.56, 0.66)) : lerp(-7, 10, ease(seg(p, 0.66, 0.84)));
-
-    if (e.torso) e.torso.style.transform = 'rotate(' + (coil * 0.5 + Math.sin(step) * 1.4 * gait) + 'deg)';
-    if (e.hips) e.hips.style.transform = 'rotate(' + coil * 0.7 + 'deg)';
-    if (e.head) {
-      const look = seg(p, 0.58, 0.70) * 9 - seg(p, 0.72, 0.9) * 5;
-      e.head.style.transform = 'rotate(' + (-coil * 0.5 + look + Math.sin(step + 1) * 2.2 * gait) + 'deg)';
-    }
-    if (e.arms) e.arms.style.transform = 'rotate(' + tailA + 'deg)';
-    if (e.club) e.club.style.transform = 'rotate(' + tipA + 'deg)';
-    if (e.blur) {
-      e.blur.style.transform = 'rotate(' + (tipA + 14) + 'deg)';
-      e.blur.style.opacity = Math.max(seg(p, 0.63, 0.70) * 0.85, (1 - seg(p, 0.72, 0.82)) * seg(p, 0.66, 0.72) * 0.9);
-    }
-    if (e.gshadow) e.gshadow.style.transform = 'scaleX(' + (1 + Math.abs(coil) * 0.004) + ')';
-
-    // Diagonal gait while walking, then a brace through the strike.
-    const legs = [['legFR', 0], ['legBL', 0.6], ['legFL', Math.PI], ['legBR', Math.PI + 0.6]];
-    legs.forEach(([k, ph]) => {
-      const el = e[k];
-      if (!el) return;
-      const walkA = Math.sin(step + ph) * 22 * gait;
-      const brace = (k === 'legBR' || k === 'legBL')
-        ? (p < 0.66 ? -4 * ease(seg(p, 0.56, 0.66)) : lerp(-4, 12, ease(seg(p, 0.66, 0.86))))
-        : (p < 0.66 ? 5 * ease(seg(p, 0.56, 0.66)) : lerp(5, -6, ease(seg(p, 0.66, 0.86))));
-      el.style.transform = 'rotate(' + (walkA + brace) + 'deg)';
-    });
-
-    /* --- ball flight --- */
-    const flight = (t) => {
-      const tc = clamp(t, 0, 1);
-      return {
-        // The ball sits at left:42% and the sun is centred at 50%, so a small
-        // drift right puts the flight straight up the middle of the sunset
-        // rather than squirting out to the right.
-        x: tc * vw * 0.09,
-        y: -Math.pow(tc, 0.62) * vh * 0.36,
-        s: lerp(1, 0.18, tc)
-      };
-    };
-    const t0 = seg(p, 0.705, 0.95);
-    const f = flight(t0);
-    if (e.ball) {
-      e.ball.style.transform = 'translate(' + f.x + 'px,' + f.y + 'px) scale(' + f.s + ')';
-      e.ball.style.opacity = t0 > 0.97 ? 0 : 1;
-    }
-    if (e.ballspin) e.ballspin.style.transform = 'rotate(' + t0 * 1080 + 'deg)';
-    [0, 1, 2].forEach((i) => {
-      const el = e['trail' + i];
-      if (!el) return;
-      const tt = t0 - 0.035 * (i + 1);
-      if (tt <= 0 || t0 >= 0.99) { el.style.opacity = 0; return; }
-      const q = flight(tt);
-      el.style.opacity = (1 - t0) * (1 - i * 0.22);
-      el.style.transform = 'translate(' + q.x + 'px,' + q.y + 'px) scale(' + q.s * (0.9 - i * 0.15) + ')';
-    });
-    if (e.bshadow) {
-      e.bshadow.style.transform = 'translateX(' + f.x * 0.94 + 'px) scale(' + lerp(1, 0.5, t0) + ',' + lerp(1, 0.6, t0) + ')';
-      e.bshadow.style.opacity = t0 > 0.97 ? 0 : 0.4 - t0 * 0.28;
-    }
-    if (e.flash) {
-      const ft = seg(p, 0.7, 0.745);
-      e.flash.style.opacity = Math.sin(Math.PI * ft) * 0.9;
-    }
-    if (e.divot) {
-      const dt = seg(p, 0.71, 0.85);
-      e.divot.style.opacity = Math.sin(Math.PI * Math.pow(dt, 0.7)) * 0.9;
-      e.divot.style.transform = 'translate(' + dt * 30 + 'px,' + -dt * 20 + 'px) scale(' + (1 + dt * 0.7) + ')';
-    }
-    if (e.restball) e.restball.style.opacity = seg(p, 0.95, 0.995);
 
     // The title is the payoff, so it arrives once the ball has settled.
     const out = clamp(outP, 0, 1);
