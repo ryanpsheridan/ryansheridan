@@ -1264,10 +1264,15 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <ellipse cx="58" cy="85" rx="18" ry="6" fill="url(#pond)" style="filter: blur(1px); animation: ripple 5.5s ease-in-out infinite;"/>
             <ellipse cx="36" cy="28" rx="14" ry="4.5" fill="url(#pond)" style="filter: blur(1px); animation: ripple 6.5s ease-in-out infinite .8s;"/>
 
+            <!-- A constant-width lane gives the eye nothing to read as depth,
+                 so a ball travelling up the frame looks like it is climbing.
+                 The two ribbons below are generated from this centreline by
+                 buildLane(), tapering toward the cup; the ball, its shadow and
+                 the gators shrink on the same gradient. -->
             <path data-el="lanepath" d="M50 96 C 30 84 18 76 24 64 C 30 52 46 44 50 40 C 54 36 72 32 68 20 C 66 14 58 14 50 14" fill="none" stroke="none"/>
-            <path d="M50 96 C 30 84 18 76 24 64 C 30 52 46 44 50 40 C 54 36 72 32 68 20 C 66 14 58 14 50 14" fill="none" stroke="#EFE6CC" stroke-opacity=".5" stroke-width="9.6" stroke-linecap="round"/>
-            <path d="M50 96 C 30 84 18 76 24 64 C 30 52 46 44 50 40 C 54 36 72 32 68 20 C 66 14 58 14 50 14" fill="none" stroke="#4C9463" stroke-width="7.4" stroke-linecap="round"/>
-            <path d="M50 96 C 30 84 18 76 24 64 C 30 52 46 44 50 40 C 54 36 72 32 68 20 C 66 14 58 14 50 14" fill="none" stroke="rgba(253,246,232,.4)" stroke-width=".7" stroke-dasharray="1.4 3.2" stroke-linecap="round" style="animation: dash 1.4s linear infinite;"/>
+            <path data-el="laneedge" fill="#EFE6CC" fill-opacity=".5"/>
+            <path data-el="lanetop" fill="#4C9463"/>
+            <path d="M50 96 C 30 84 18 76 24 64 C 30 52 46 44 50 40 C 54 36 72 32 68 20 C 66 14 58 14 50 14" fill="none" stroke="rgba(253,246,232,.4)" stroke-width=".8" stroke-dasharray="1.4 3.2" stroke-linecap="round" style="animation: dash 1.4s linear infinite;"/>
 
             <!-- Crocs are drawn in profile rather than from above: the long
                  boxy snout, the toothed jaw line and the sawtooth ridge down
@@ -1275,7 +1280,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                  and none of them survive a top-down view. The snapping head is
                  a second drawing swapped in on the beat, not a hinged jaw —
                  rotating a jaw opens a gap no static mouth shape can fill. -->
-            <g transform="translate(48,79.5) rotate(3) scale(-.44,.44)">
+            <g transform="translate(48,79.5) rotate(3) scale(-.47,.47)">
               <ellipse cx="-1" cy="1" rx="37" ry="3.2" fill="rgba(8,26,20,.34)" style="filter: blur(1.6px);"/>
 
               <path d="M8.6 -5.6 C 11 -4.6 11.8 -2.6 11.4 -0.6 L 7.6 -0.6 C 6.8 -2.6 6.8 -4.4 8.6 -5.6 Z" fill="#26401D"/>
@@ -1332,7 +1337,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
               <ellipse cx="15.6" cy="-13" rx=".55" ry="1.45" fill="#12200F"/>
             </g>
 
-            <g transform="translate(47,31) rotate(-2) scale(.38)">
+            <g transform="translate(47,31) rotate(-2) scale(.35)">
               <ellipse cx="-1" cy="1" rx="37" ry="3.2" fill="rgba(8,26,20,.34)" style="filter: blur(1.6px);"/>
 
               <path d="M8.6 -5.6 C 11 -4.6 11.8 -2.6 11.4 -0.6 L 7.6 -0.6 C 6.8 -2.6 6.8 -4.4 8.6 -5.6 Z" fill="#26401D"/>
@@ -1851,10 +1856,12 @@ class Component extends DCLogic {
     if (!r) return;
     this.el = {};
     ['track', 'cam', 'clouds', 'haze', 'sun', 'trees', 'fg', 'veil', 'app', 'title', 'ballWrap', 'ballspin',
-      'bshadow', 'trail0', 'trail1', 'trail2', 'lanepath', 'splash0', 'splash1',
+      'bshadow', 'trail0', 'trail1', 'trail2', 'lanepath', 'laneedge', 'lanetop', 'splash0', 'splash1',
       'gator1tail', 'gator1head', 'gator1open', 'gator2tail', 'gator2head', 'gator2open',
       'nav', 'map']
       .forEach((k) => { this.el[k] = r.querySelector('[data-el="' + k + '"]'); });
+
+    this.buildLane();
 
     this.onResize = () => { if (!this.locked) this.renderIntro(performance.now() - this.t0); };
     window.addEventListener('resize', this.onResize);
@@ -1912,6 +1919,38 @@ class Component extends DCLogic {
      value comes from. Order: the ball rolls the hole, the title rises in
      over the resting scene, then the whole thing fades to the app. */
   reel = { roll: 4200, titleAt: 1650, titleIn: 700, hold: 1500, out: 550 };
+
+  /* Widen the lane toward the viewer. SVG strokes are one width end to end,
+     so the two visible ribbons are filled outlines walked off the centreline:
+     sample a point, take the tangent from its neighbours, step out along the
+     normal by a half-width that shrinks with distance, and close the loop.
+     The tee end runs off the bottom of the frame, so it needs no end cap. */
+  lane = { near: 1.55, far: 0.95 };
+
+  buildLane() {
+    const e = this.el || {};
+    const path = e.lanepath;
+    if (!path || !path.getTotalLength) return;
+    const L = path.getTotalLength();
+    const ribbon = (base) => {
+      const near = [], far = [];
+      for (let i = 0; i <= 64; i++) {
+        const s = i / 64, at = s * L;
+        const p = path.getPointAtLength(at);
+        const a = path.getPointAtLength(Math.max(0, at - 0.5));
+        const b = path.getPointAtLength(Math.min(L, at + 0.5));
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const m = Math.hypot(dx, dy) || 1;
+        const w = base * lerp(this.lane.near, this.lane.far, s) / 2;
+        near.push([p.x - dy / m * w, p.y + dx / m * w]);
+        far.push([p.x + dy / m * w, p.y - dx / m * w]);
+      }
+      return 'M' + near.concat(far.reverse())
+        .map((c) => c[0].toFixed(2) + ' ' + c[1].toFixed(2)).join('L') + 'Z';
+    };
+    if (e.laneedge) e.laneedge.setAttribute('d', ribbon(9.6));
+    if (e.lanetop) e.lanetop.setAttribute('d', ribbon(7.4));
+  }
 
   playIntro() {
     const r = this.rootRef.current;
@@ -1986,14 +2025,21 @@ class Component extends DCLogic {
        the cup for a little splash. Everything is keyed off t, the ball's own
        0-1 progress along the hole (a sub-range of p so it tees up, then
        rests, before and after rolling). --- */
-    const t = ease(seg(p, 0.08, 0.86));
+    /* A struck putt leaves fast and dies at the hole, so the roll eases out
+       rather than in and out. Accelerating away from the tee was the other
+       half of why the ball looked like it was being pushed up a slope. */
+    const struck = seg(p, 0.08, 0.86);
+    const t = 1 - Math.pow(1 - struck, 1.45);
     const path = e.lanepath;
 
     if (path && path.getTotalLength) {
       const len = path.getTotalLength();
       const pt = path.getPointAtLength(t * len);
       const arrive = seg(t, 0.965, 1);
-      const scale = lerp(1, 0.15, arrive);
+      // Same near-to-far gradient the lane is built on, so the ball shrinks
+      // into the distance at exactly the rate the lane narrows.
+      const depth = lerp(this.lane.near, this.lane.far, t);
+      const scale = depth * lerp(1, 0.15, arrive);
 
       if (e.ballWrap) {
         e.ballWrap.setAttribute('transform', 'translate(' + pt.x.toFixed(2) + ',' + pt.y.toFixed(2) + ') scale(' + scale.toFixed(3) + ')');
@@ -2001,7 +2047,9 @@ class Component extends DCLogic {
       if (e.ballspin) e.ballspin.style.transform = 'rotate(' + (t * len * 32) + 'deg)';
       if (e.bshadow) {
         e.bshadow.setAttribute('cx', pt.x.toFixed(2));
-        e.bshadow.setAttribute('cy', (pt.y + 0.4).toFixed(2));
+        e.bshadow.setAttribute('cy', (pt.y + 0.4 * depth).toFixed(2));
+        e.bshadow.setAttribute('rx', (3 * depth).toFixed(2));
+        e.bshadow.setAttribute('ry', (1.1 * depth).toFixed(2));
         e.bshadow.style.opacity = arrive > 0 ? 0.4 * (1 - arrive) : 0.4;
       }
       [0, 1, 2].forEach((i) => {
@@ -2011,6 +2059,7 @@ class Component extends DCLogic {
         const q = path.getPointAtLength(tt * len);
         el.setAttribute('cx', q.x.toFixed(2));
         el.setAttribute('cy', q.y.toFixed(2));
+        el.setAttribute('r', ((1.3 - i * 0.15) * lerp(this.lane.near, this.lane.far, tt)).toFixed(2));
         el.style.opacity = (t > 0.01 && arrive < 1) ? (0.5 - i * 0.14) : 0;
       });
 
