@@ -1134,14 +1134,24 @@ svg.leaflet-image-layer.leaflet-interactive path {
   .leaflet-popup-content { margin: 12px 14px; font-size: 13px; line-height: 1.45 }
   .leaflet-bar a { border-radius: 0 }
 </style>
+<style>
+/* iOS Safari resolves 100vh to the LARGE viewport (as if the browser chrome
+   were hidden), so a 100vh shell stands ~110-140px taller than what you can
+   actually see. The sticky tab bar then pins to the bottom of that oversized
+   box, below the fold, and scrolling the page to reach it drags the sticky
+   header off the top. dvh tracks the visible viewport, so the shell matches
+   the screen and both stay put. */
+:root { --appvh: 100vh; }
+@supports (height: 100dvh) { :root { --appvh: 100dvh; } }
+</style>
 </helmet>
 
-<div style="height: 100vh; background: #0B231B; display: flex; justify-content: center; overflow: hidden;">
-<div ref="{{ rootRef }}" style="position: relative; width: 100%; max-width: 440px; height: 100vh; overflow-x: hidden; overflow-y: auto; background: #EFE8D8; color: #16211C; font-family: 'IBM Plex Sans', system-ui, sans-serif; box-shadow: 0 0 0 1px rgba(253,246,232,.08), 0 24px 70px rgba(0,0,0,.5); -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+<div style="height: var(--appvh); background: #0B231B; display: flex; justify-content: center; overflow: hidden;">
+<div ref="{{ rootRef }}" style="position: relative; width: 100%; max-width: 440px; height: var(--appvh); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; background: #EFE8D8; color: #16211C; font-family: 'IBM Plex Sans', system-ui, sans-serif; box-shadow: 0 0 0 1px rgba(253,246,232,.08), 0 24px 70px rgba(0,0,0,.5); -webkit-overflow-scrolling: touch; scrollbar-width: none;">
 
   <sc-if value="{{ introOn }}" hint-placeholder-val="{{ true }}">
-    <div data-el="track" style="height: 380vh; position: relative;">
-      <div style="position: sticky; top: 0; height: 100vh; overflow: hidden; background: linear-gradient(#141C4A 0%, #3B2260 26%, #8A3568 46%, #D0574F 64%, #E8913F 78%, #1D4634 100%);">
+    <div data-el="track" style="height: calc(var(--appvh) * 3.8); position: relative;">
+      <div style="position: sticky; top: 0; height: var(--appvh); overflow: hidden; background: linear-gradient(#141C4A 0%, #3B2260 26%, #8A3568 46%, #D0574F 64%, #E8913F 78%, #1D4634 100%);">
 
         <div data-el="cam" style="position: absolute; inset: 0; will-change: transform;">
 
