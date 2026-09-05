@@ -1340,9 +1340,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
     </div>
   </sc-if>
 
-  <div data-el="app" style="position: relative; padding: 0 16px 128px;">
+  <div data-el="app" style="position: relative; padding: 0 20px 128px;">
 
-    <div style="position: sticky; top: 0; z-index: 40; margin: 0 -16px; padding: 14px 16px 12px; background: rgba(239,232,216,.95); backdrop-filter: blur(12px); border-bottom: 1px solid #D3C6A9; box-shadow: 0 6px 18px -12px rgba(20,53,42,.35);">
+    <div style="position: sticky; top: 0; z-index: 40; margin: 0 -20px; padding: 16px 20px 14px; background: rgba(239,232,216,.95); backdrop-filter: blur(12px); border-bottom: 1px solid #D3C6A9; box-shadow: 0 6px 18px -12px rgba(20,53,42,.35);">
       <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
         <div>
           <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: clamp(16px, 5vw, 20px); letter-spacing: -.02em; color: #14352A;">Florida Golf Trip 2026</div>
@@ -1355,14 +1355,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
       </div>
     </div>
 
-    <div style="display: {{ showTrip }}; padding-top: 18px; animation: softin .3s ease both;">
+    <div style="display: {{ showTrip }}; padding-top: 22px; animation: softin .3s ease both;">
       <div style="margin-top: 4px; display: flex; align-items: baseline; justify-content: space-between;">
         <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 17px; color: #14352A;">The plan</div>
         <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #54634F;">4 days</div>
       </div>
-      <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+      <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 14px;">
         <sc-for list="{{ days }}" as="d" hint-placeholder-count="4">
-          <div style="display: grid; grid-template-columns: 62px 1fr; gap: 14px; padding: 15px 16px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
+          <div style="display: grid; grid-template-columns: 62px 1fr; gap: 16px; padding: 17px 18px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
             <div>
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .1em; color: #54634F;">{{ d.dow }}</div>
               <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 26px; line-height: 1.05; color: #14352A;">{{ d.num }}</div>
@@ -1383,7 +1383,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </sc-for>
       </div>
 
-      <div style="margin-top: 22px; padding: 16px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
+      <div style="margin-top: 22px; padding: 18px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
         <div style="display: flex; align-items: center; gap: 10px;">
           <div style="flex: none; width: 30px; height: 30px; border-radius: 9px; background: #2A9D95;"></div>
           <div>
@@ -1394,7 +1394,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <a href="https://www.splitwise.com/join/mewNfMDa1W6+x028z?v=e" target="_blank" rel="noopener" style="margin-top: 13px; display: block; min-height: 44px; box-sizing: border-box; padding: 13px; border-radius: 13px; background: #14352A; color: #FFF8EA; font-size: 13.5px; font-weight: 600; text-align: center;">Join the group</a>
       </div>
 
-      <div style="margin-top: 14px; padding: 16px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
+      <div style="margin-top: 16px; padding: 18px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
         <div style="display: flex; align-items: center; gap: 14px;">
           <img src="/golftrip/assets/photo-bigx.jpg" alt="" loading="lazy" style="flex: none; width: 92px; height: 92px; border-radius: 14px; object-fit: cover; display: block; background: #DCD3BF;">
           <div>
@@ -1432,7 +1432,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </div>
       </div>
 
-      <div style="margin-top: 14px; display: {{ wxDaysDisplay }}; gap: 10px; overflow-x: auto; scrollbar-width: none;">
+      <div style="margin-top: 16px; display: {{ wxDaysDisplay }}; gap: 12px; overflow-x: auto; scrollbar-width: none;">
         <sc-for list="{{ wxDays }}" as="d" hint-placeholder-count="4">
           <div style="flex: none; width: 92px; padding: 14px 12px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
             <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .08em; color: #54634F;">{{ d.label }}</div>
@@ -1445,12 +1445,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </sc-for>
       </div>
 
-      <a href="https://www.google.com/search?q=weather+miromar+lakes+fl" target="_blank" rel="noopener" style="margin-top: 14px; display: flex; align-items: center; justify-content: space-between; padding: 15px 16px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
+      <a href="https://www.google.com/search?q=weather+miromar+lakes+fl" target="_blank" rel="noopener" style="margin-top: 16px; display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
         <span style="font-size: 14px; font-weight: 600; color: #14352A;">Full forecast on Google</span>
         <span style="width: 8px; height: 8px; border-right: 2px solid #C86A34; border-top: 2px solid #C86A34; transform: rotate(45deg);"></span>
       </a>
 
-      <div style="margin-top: 14px; padding: 16px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
+      <div style="margin-top: 16px; padding: 18px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
         <div style="font-size: 14px; font-weight: 600; color: #14352A;">September in southwest Florida</div>
         <div style="margin-top: 6px; font-size: 13px; color: #54634F; line-height: 1.55; text-wrap: pretty;">Hot and humid with afternoon storms most days. Morning tee times are the play — both confirmed rounds go off before 10, which should keep us ahead of the pop-ups.</div>
       </div>
@@ -1458,8 +1458,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
       </div>
     </div>
 
-    <div style="display: {{ showGolf }}; padding-top: 18px; animation: softin .3s ease both;">
-      <div style="display: flex; flex-direction: column; gap: 14px;">
+    <div style="display: {{ showGolf }}; padding-top: 22px; animation: softin .3s ease both;">
+      <div style="display: flex; flex-direction: column; gap: 16px;">
         <sc-for list="{{ courses }}" as="c" hint-placeholder-count="4">
           <div style="background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 20px; box-shadow: 0 1px 3px rgba(20,53,42,.07); overflow: hidden;">
             <div style="position: relative; aspect-ratio: 16 / 9; background: #DCD3BF; overflow: hidden;">
@@ -1471,7 +1471,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
               </div>
               <div style="position: absolute; left: 16px; right: 16px; bottom: 13px; font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 22px; line-height: 1.12; letter-spacing: -.02em; color: #FFF8EA; text-shadow: 0 2px 10px rgba(8,26,20,.6);">{{ c.name }}</div>
             </div>
-            <div style="padding: 16px;">
+            <div style="padding: 18px;">
               <div style="font-size: 13px; color: #54634F; line-height: 1.5;">{{ c.address }}</div>
               <div style="margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div style="padding: 11px 12px; background: #F3ECDB; border-radius: 13px;">
@@ -1505,8 +1505,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div style="margin-top: 16px; font-size: 12.5px; color: #54634F; line-height: 1.55; text-wrap: pretty;">Thursday is the only round still open — Ryan and Gustavo tee it up at Stoneybrook while Matt and Oscar are in the air. Friday and Saturday are paid in full; Tiburón runs dynamic pricing, so a re-book would land somewhere else.</div>
     </div>
 
-    <div style="display: {{ showEats }}; padding-top: 18px; animation: softin .3s ease both;">
-      <div style="display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: {{ showEats }}; padding-top: 22px; animation: softin .3s ease both;">
+      <div style="display: flex; flex-direction: column; gap: 16px;">
         <sc-for list="{{ eats }}" as="r" hint-placeholder-count="4">
           <div style="background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 20px; box-shadow: 0 1px 3px rgba(20,53,42,.07); overflow: hidden;">
             <sc-if value="{{ r.photo }}" hint-placeholder-val="{{ true }}">
@@ -1522,7 +1522,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 <div style="position: absolute; left: 16px; right: 16px; bottom: 13px; font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 21px; line-height: 1.12; letter-spacing: -.02em; color: #FFF8EA; text-shadow: 0 2px 10px rgba(8,26,20,.6);">{{ r.name }}</div>
               </div>
             </sc-if>
-            <div style="padding: 16px;">
+            <div style="padding: 18px;">
             <sc-if value="{{ r.noPhoto }}" hint-placeholder-val="{{ false }}">
               <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;">
                 <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 19px; letter-spacing: -.015em; color: #14352A;">{{ r.name }}</div>
@@ -1550,13 +1550,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
       </div>
     </div>
 
-    <div style="display: {{ showMap }}; padding-top: 18px; animation: softin .3s ease both;">
+    <div style="display: {{ showMap }}; padding-top: 22px; animation: softin .3s ease both;">
       <div style="display: {{ ctlFlex }}; padding: 4px; background: #E4DBC6; border-radius: 999px;">
         <button type="button" sc-camel-on-click="{{ setList }}" style="flex: 1; min-height: 40px; border: none; border-radius: 999px; background: {{ listBtnBg }}; color: {{ listBtnInk }}; font-family: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;">List</button>
         <button type="button" sc-camel-on-click="{{ setMapView }}" style="flex: 1; min-height: 40px; border: none; border-radius: 999px; background: {{ mapBtnBg }}; color: {{ mapBtnInk }}; font-family: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;">Map</button>
       </div>
 
-      <div style="display: {{ ctlBlock }}; margin: 14px -16px 0; padding: 0 16px; overflow-x: auto; scrollbar-width: none;">
+      <div style="display: {{ ctlBlock }}; margin: 18px -20px 0; padding: 0 20px; overflow-x: auto; scrollbar-width: none;">
         <div style="display: flex; gap: 8px; width: max-content; padding-bottom: 2px;">
           <sc-for list="{{ chips }}" as="ch" hint-placeholder-count="4">
             <button type="button" sc-camel-on-click="{{ ch.onClick }}" style="min-height: 38px; padding: 9px 15px; border: 1px solid {{ ch.border }}; border-radius: 999px; background: {{ ch.bg }}; color: {{ ch.ink }}; font-family: inherit; font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer;">{{ ch.label }}</button>
@@ -1564,7 +1564,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </div>
       </div>
 
-      <div style="display: {{ mapWrapDisplay }}; margin-top: 14px; position: relative; z-index: 0; isolation: isolate; border: 1px solid #DBCFB5; border-radius: 20px; box-shadow: 0 1px 3px rgba(20,53,42,.07); overflow: hidden;">
+      <div style="display: {{ mapWrapDisplay }}; margin-top: 18px; position: relative; z-index: 0; isolation: isolate; border: 1px solid #DBCFB5; border-radius: 20px; box-shadow: 0 1px 3px rgba(20,53,42,.07); overflow: hidden;">
         <div data-el="map" style="height: 60vh; min-height: 330px;"></div>
         <div style="display: {{ baseDisplay }}; position: absolute; left: 12px; right: 12px; top: 12px; z-index: 500; padding: 11px 14px; background: rgba(255,253,247,.96); border-radius: 999px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .04em; color: #14352A; text-align: center; box-shadow: 0 4px 14px rgba(8,26,20,.22);">10733 Mirasol Drive #211, Miromar Lakes</div>
         <div style="display: {{ baseDisplay }}; position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 500; padding: 15px 16px; background: #FFFDF7; border-radius: 18px; box-shadow: 0 12px 30px rgba(8,26,20,.3);">
@@ -1577,7 +1577,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </div>
       </div>
 
-      <div style="display: {{ mapListDisplay }}; margin-top: 14px; flex-direction: column; gap: 10px;">
+      <div style="display: {{ mapListDisplay }}; margin-top: 18px; flex-direction: column; gap: 14px;">
         <sc-for list="{{ visiblePlaces }}" as="p" hint-placeholder-count="5">
           <div style="padding: 15px 16px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
             <div style="display: flex; align-items: center; gap: 10px;">
@@ -1601,7 +1601,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
       </div>
 
-  <div data-el="nav" style="position: sticky; bottom: 0; z-index: 60; padding: 0 16px calc(14px + env(safe-area-inset-bottom)); pointer-events: none;">
+  <div data-el="nav" style="position: sticky; bottom: 0; z-index: 60; padding: 0 20px calc(14px + env(safe-area-inset-bottom)); pointer-events: none;">
     <div style="display: flex; gap: 1px; padding: 5px; background: rgba(20,53,42,.96); backdrop-filter: blur(14px); border-radius: 999px; box-shadow: 0 12px 30px rgba(20,53,42,.28); pointer-events: auto;">
       <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
         <button type="button" sc-camel-on-click="{{ t.onClick }}" style="flex: 1 1 auto; white-space: nowrap; min-height: 46px; padding: 0 7px; border: none; border-radius: 999px; background: {{ t.bg }}; color: {{ t.ink }}; font-family: inherit; font-size: 11.5px; font-weight: 600; letter-spacing: -.01em; cursor: pointer;">{{ t.label }}</button>
