@@ -1150,7 +1150,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 <div ref="{{ rootRef }}" style="position: relative; width: 100%; max-width: 440px; height: var(--appvh); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; background: #EFE8D8; color: #16211C; font-family: 'IBM Plex Sans', system-ui, sans-serif; box-shadow: 0 0 0 1px rgba(253,246,232,.08), 0 24px 70px rgba(0,0,0,.5); -webkit-overflow-scrolling: touch; scrollbar-width: none;">
 
   <sc-if value="{{ introOn }}" hint-placeholder-val="{{ true }}">
-    <div data-el="track" style="height: calc(var(--appvh) * 3.8); position: relative;">
+    <div data-el="track" style="height: var(--appvh); position: relative;">
       <div style="position: sticky; top: 0; height: var(--appvh); overflow: hidden; background: linear-gradient(#141C4A 0%, #3B2260 26%, #8A3568 46%, #D0574F 64%, #E8913F 78%, #1D4634 100%);">
 
         <div data-el="cam" style="position: absolute; inset: 0; will-change: transform;">
@@ -1263,13 +1263,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <div style="margin-top: 12px; font-size: 13.5px; color: rgba(255,248,234,.72);">Fort Myers · Estero · Miromar Lakes</div>
         </div>
 
-        <div data-el="hint" style="position: absolute; left: 0; right: 0; bottom: 5vh; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: .14em; color: rgba(255,248,234,.75);">
-          <div>scroll to swing</div>
-          <div style="margin: 8px auto 0; width: 10px; height: 10px; border-right: 2px solid #E9B98A; border-bottom: 2px solid #E9B98A; transform: rotate(45deg); animation: nudge 1.7s ease-in-out infinite;"></div>
-        </div>
-
-        <div data-el="fin" style="position: absolute; left: 0; right: 0; bottom: 15vh; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: .14em; color: rgba(255,248,234,.8); opacity: 0;">striped it — keep going</div>
-
+        
+        
         <div data-el="veil" style="position: absolute; inset: 0; background: #EFE8D8; opacity: 0; pointer-events: none;"></div>
 
         <button type="button" sc-camel-on-click="{{ skipIntro }}" style="position: absolute; right: 10px; top: 10px; min-height: 44px; min-width: 72px; padding: 8px 13px; border: 1px solid rgba(253,246,232,.28); border-radius: 999px; background: rgba(253,246,232,.08); color: #FFF8EA; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; cursor: pointer;">skip</button>
@@ -1661,13 +1656,14 @@ class Component extends DCLogic {
       'head', 'arms', 'club', 'blur', 'legRear', 'legFront', 'distflag', 'restball', 'nav', 'map']
       .forEach((k) => { this.el[k] = r.querySelector('[data-el="' + k + '"]'); });
 
-    this.onScroll = () => {
-      if (this.raf) return;
-      this.raf = requestAnimationFrame(() => { this.raf = null; this.frame(); });
-    };
-    r.addEventListener('scroll', this.onScroll, { passive: true });
-    window.addEventListener('resize', this.onScroll);
-    this.frame();
+    this.onResize = () => { if (!this.locked) this.renderIntro(performance.now() - this.t0); };
+    window.addEventListener('resize', this.onResize);
+
+    // An autoplaying reel is exactly the kind of motion this media query is
+    // for, so honour it and drop straight into the app.
+    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!this.el.track || reduced) this.finishIntro();
+    else this.playIntro();
 
     this.loadWeather();
     this.registerSW();
@@ -1706,49 +1702,67 @@ class Component extends DCLogic {
   };
 
   componentWillUnmount() {
-    const r = this.rootRef.current;
-    if (r && this.onScroll) r.removeEventListener('scroll', this.onScroll);
-    window.removeEventListener('resize', this.onScroll);
+    if (this.raf) cancelAnimationFrame(this.raf);
+    window.removeEventListener('resize', this.onResize);
   }
 
-  /* ---------- scroll-driven swing ---------- */
-  frame() {
+  /* ---------- intro reel ----------
+     The swing choreography below is a pure function of one progress value, so
+     going from scroll-driven to timed only changes where that value comes
+     from. Order: the swing plays out, the title rises in over the resting
+     scene, then the whole thing fades to the app. */
+  reel = { swing: 3600, titleIn: 750, hold: 850, out: 550 };
+
+  playIntro() {
+    const r = this.rootRef.current;
+    const e = this.el || {};
+    // Nothing should be scrollable while the reel runs.
+    if (r) { r.scrollTop = 0; this.prevOverflowY = r.style.overflowY; r.style.overflowY = 'hidden'; }
+    if (e.nav) { e.nav.style.opacity = 0; e.nav.style.visibility = 'hidden'; }
+    if (e.title) e.title.style.opacity = 0;
+
+    this.t0 = performance.now();
+    this.renderIntro(0);           // place everything before the first paint
+    const tick = (now) => {
+      if (this.locked) return;
+      if (this.renderIntro(now - this.t0)) { this.finishIntro(); return; }
+      this.raf = requestAnimationFrame(tick);
+    };
+    this.raf = requestAnimationFrame(tick);
+  }
+
+  renderIntro(ms) {
+    const R = this.reel;
+    const swing = clamp(ms / R.swing, 0, 1);
+    const title = clamp((ms - R.swing) / R.titleIn, 0, 1);
+    const out = clamp((ms - R.swing - R.titleIn - R.hold) / R.out, 0, 1);
+    this.frame(swing, title, out);
+    return out >= 1;
+  }
+
+  finishIntro = () => {
+    if (this.locked) return;
+    this.locked = true;
+    if (this.raf) { cancelAnimationFrame(this.raf); this.raf = null; }
+    const r = this.rootRef.current;
+    const e = this.el || {};
+    if (e.track) e.track.style.display = 'none';
+    if (r) { r.scrollTop = 0; r.style.overflowY = this.prevOverflowY || 'auto'; }
+    if (e.app) e.app.style.animation = 'softin .55s cubic-bezier(.2,.7,.2,1) both';
+    if (e.nav) {
+      e.nav.style.transition = 'opacity .45s ease';
+      e.nav.style.opacity = 1;
+      e.nav.style.transform = 'none';
+      e.nav.style.visibility = 'visible';
+    }
+  };
+
+  frame(p, titleP, outP) {
     const r = this.rootRef.current;
     if (!r) return;
     const vh = r.clientHeight, vw = r.clientWidth;
-    const track = this.el && this.el.track;
-    const span = track ? track.offsetHeight - vh : 0;
-    const p = span > 0 ? clamp(r.scrollTop / span, 0, 1) : 1;
     const e = this.el || {};
-
-    if (e.nav) {
-      const on = span > 0 ? seg(p, 0.93, 1) : 1;
-      e.nav.style.opacity = on;
-      e.nav.style.transform = 'translateY(' + (1 - on) * 20 + 'px)';
-      e.nav.style.visibility = on < 0.02 ? 'hidden' : 'visible';
-    }
-    if (!track) return;
-
-    // the swing plays once — at the end the runway collapses and the app locks in
-    if (!this.locked && span > 0 && p >= 0.995) {
-      this.locked = true;
-      track.style.display = 'none';
-      r.scrollTop = 0;
-      if (e.app) e.app.style.animation = 'softin .55s cubic-bezier(.2,.7,.2,1) both';
-      if (e.nav) {
-        e.nav.style.transition = 'opacity .45s ease';
-        e.nav.style.opacity = 1; e.nav.style.transform = 'none'; e.nav.style.visibility = 'visible';
-      }
-      return;
-    }
-    if (this.locked) return;
-
-    if (e.title) {
-      const t = seg(p, 0.02, 0.28);
-      e.title.style.opacity = 1 - t;
-      e.title.style.transform = 'translateY(' + -t * 46 + 'px) scale(' + (1 - t * 0.04) + ')';
-    }
-    if (e.hint) e.hint.style.opacity = 1 - seg(p, 0, 0.08);
+    if (this.locked || !e.track) return;
 
     // camera: eases in on impact, then pulls out with the ball
     const cam = seg(p, 0.62, 0.96);
@@ -1838,8 +1852,14 @@ class Component extends DCLogic {
       e.divot.style.transform = 'translate(' + dt * 30 + 'px,' + -dt * 20 + 'px) scale(' + (1 + dt * 0.7) + ')';
     }
     if (e.restball) e.restball.style.opacity = seg(p, 0.95, 0.995);
-    const out = seg(p, 0.93, 0.995);
-    if (e.fin) e.fin.style.opacity = seg(p, 0.88, 0.95) * 0.95 * (1 - out);
+
+    // The title is the payoff, so it arrives once the ball has settled.
+    const out = clamp(outP, 0, 1);
+    if (e.title) {
+      const ti = ease(clamp(titleP, 0, 1));
+      e.title.style.opacity = ti * (1 - out);
+      e.title.style.transform = 'translateY(' + lerp(28, 0, ti) + 'px) scale(' + lerp(0.965, 1, ti) + ')';
+    }
     if (e.veil) e.veil.style.opacity = out;
     if (e.cam) e.cam.style.filter = out > 0 ? 'blur(' + (out * 5).toFixed(2) + 'px)' : 'none';
   }
@@ -1849,10 +1869,7 @@ class Component extends DCLogic {
     return t ? t.offsetHeight : 0;
   }
 
-  skipIntro = () => {
-    const r = this.rootRef.current;
-    if (r) r.scrollTo({ top: this.appTop(), behavior: 'smooth' });
-  };
+  skipIntro = () => { this.finishIntro(); };
 
   go = (tab) => () => {
     this.setState({ tab });
