@@ -1,4 +1,5 @@
-const CACHE = "golftrip-v3";
+const CACHE = "golftrip-v4";
+const NET_TIMEOUT = 3000;
 
 // The page needs its runtime, React, Leaflet, fonts and photos to render at
 // all, so the whole asset set is precached rather than left to runtime
@@ -69,6 +70,26 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
+function save(req, res) {
+  if (res && res.ok) {
+    const copy = res.clone();
+    caches.open(CACHE).then((cache) => cache.put(req, copy));
+  }
+  return res;
+}
+
+// Reject rather than hang, so a dead connection falls back to cache quickly
+// instead of leaving the page on a white screen.
+function fromNetwork(req, ms) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error("timeout")), ms);
+    fetch(req).then(
+      (res) => { clearTimeout(timer); resolve(res); },
+      (err) => { clearTimeout(timer); reject(err); }
+    );
+  });
+}
+
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
@@ -76,18 +97,25 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
+  const isDoc = req.mode === "navigate" ||
+    (req.headers.get("accept") || "").indexOf("text/html") !== -1;
+
+  if (isDoc) {
+    // The page changes on every deploy, so try the network first: cache-first
+    // here means you always see the previous version until a second reload.
+    event.respondWith(
+      fromNetwork(req, NET_TIMEOUT)
+        .then((res) => save(req, res))
+        .catch(() => caches.match(req).then((c) => c || caches.match("/golftrip/")))
+    );
+    return;
+  }
+
+  // Assets are uuid-named and immutable, so the cache is authoritative and
+  // there is nothing to revalidate.
   event.respondWith(
-    caches.match(req).then((cached) => {
-      const network = fetch(req)
-        .then((res) => {
-          if (res && res.ok) {
-            const copy = res.clone();
-            caches.open(CACHE).then((cache) => cache.put(req, copy));
-          }
-          return res;
-        })
-        .catch(() => cached);
-      return cached || network;
-    })
+    caches.match(req).then((cached) =>
+      cached || fetch(req).then((res) => save(req, res)).catch(() => cached)
+    )
   );
 });
