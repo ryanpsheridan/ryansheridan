@@ -1232,50 +1232,132 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <path d="M-10 24 Q 50 4 110 24 L 110 110 L -10 110 Z" fill="url(#turf)"/>
             <path d="M-10 24 Q 50 4 110 24" fill="none" stroke="rgba(253,246,232,.06)" stroke-width="1.4"/>
 
-            <ellipse cx="15" cy="70" rx="15" ry="8" fill="url(#pond)" style="filter: blur(1px); animation: ripple 5.5s ease-in-out infinite;"/>
-            <ellipse cx="81" cy="22" rx="13" ry="6.5" fill="url(#pond)" style="filter: blur(1px); animation: ripple 6.5s ease-in-out infinite .8s;"/>
+            <ellipse cx="58" cy="85" rx="18" ry="6" fill="url(#pond)" style="filter: blur(1px); animation: ripple 5.5s ease-in-out infinite;"/>
+            <ellipse cx="36" cy="28" rx="14" ry="4.5" fill="url(#pond)" style="filter: blur(1px); animation: ripple 6.5s ease-in-out infinite .8s;"/>
 
             <path data-el="lanepath" d="M50 96 C 30 84 18 76 24 64 C 30 52 46 44 50 40 C 54 36 72 32 68 20 C 66 14 58 14 50 14" fill="none" stroke="none"/>
             <path d="M50 96 C 30 84 18 76 24 64 C 30 52 46 44 50 40 C 54 36 72 32 68 20 C 66 14 58 14 50 14" fill="none" stroke="#EFE6CC" stroke-opacity=".5" stroke-width="9.6" stroke-linecap="round"/>
             <path d="M50 96 C 30 84 18 76 24 64 C 30 52 46 44 50 40 C 54 36 72 32 68 20 C 66 14 58 14 50 14" fill="none" stroke="#4C9463" stroke-width="7.4" stroke-linecap="round"/>
             <path d="M50 96 C 30 84 18 76 24 64 C 30 52 46 44 50 40 C 54 36 72 32 68 20 C 66 14 58 14 50 14" fill="none" stroke="rgba(253,246,232,.4)" stroke-width=".7" stroke-dasharray="1.4 3.2" stroke-linecap="round" style="animation: dash 1.4s linear infinite;"/>
 
-            <g transform="translate(14,66) rotate(-6)">
-              <ellipse cx="-4" cy="4" rx="10" ry="3.6" fill="rgba(8,26,20,.28)" style="filter: blur(1px);"/>
-              <ellipse cx="-2" cy="-2.8" rx="1.05" ry="1.05" fill="#22401F"/>
-              <ellipse cx="2" cy="-3.2" rx="1" ry="1" fill="#22401F"/>
-              <ellipse cx="6" cy="-2.9" rx="1" ry="1" fill="#22401F"/>
-              <ellipse cx="0" cy="0" rx="9" ry="3.6" fill="#3F6B3A"/>
-              <ellipse cx="8" cy="0.2" rx="3.6" ry="1.9" fill="#3F6B3A"/>
-              <path d="M8.6 1.1 C 10.4 1.6 11.6 1.2 12 0.2 C 11.4 0 10 0 8.6 1.1 Z" fill="#0E1F10"/>
-              <path d="M6.5 -1.2 L 7.6 -2.3 L 7.9 -0.9 Z" fill="#FDF6E8"/>
-              <path d="M9.2 -1.3 L 10.2 -2.2 L 10.3 -0.8 Z" fill="#FDF6E8"/>
-              <ellipse cx="7.2" cy="-1.7" rx=".85" ry=".85" fill="#FDF6E8"/>
-              <ellipse cx="9.6" cy="-1.5" rx=".85" ry=".85" fill="#FDF6E8"/>
-              <ellipse cx="7.2" cy="-1.5" rx=".38" ry=".38" fill="#12200F"/>
-              <ellipse cx="9.6" cy="-1.3" rx=".38" ry=".38" fill="#12200F"/>
-              <g data-el="gator1tail" style="transform-origin: -8px 0px; transform: rotate(6deg);">
-                <path d="M-8 -1.7 C -16 -5.4 -25 -4.2 -29 0 C -25 4.2 -16 5.4 -8 1.7 Z" fill="#2C5028"/>
+            <!-- Crocs are drawn in profile rather than from above: the long
+                 boxy snout, the toothed jaw line and the sawtooth ridge down
+                 the back are the cues that read as "crocodile" at this size,
+                 and none of them survive a top-down view. The snapping head is
+                 a second drawing swapped in on the beat, not a hinged jaw —
+                 rotating a jaw opens a gap no static mouth shape can fill. -->
+            <g transform="translate(48,79.5) rotate(3) scale(-.44,.44)">
+              <ellipse cx="-1" cy="1" rx="37" ry="3.2" fill="rgba(8,26,20,.34)" style="filter: blur(1.6px);"/>
+
+              <path d="M8.6 -5.6 C 11 -4.6 11.8 -2.6 11.4 -0.6 L 7.6 -0.6 C 6.8 -2.6 6.8 -4.4 8.6 -5.6 Z" fill="#26401D"/>
+              <path d="M-10.6 -5.6 C -8.2 -4.6 -7.4 -2.6 -7.8 -0.6 L -11.6 -0.6 C -12.4 -2.6 -12.4 -4.4 -10.6 -5.6 Z" fill="#26401D"/>
+
+              <g data-el="gator1tail" style="transform-origin: -17px -6.8px;">
+                <path d="M-16 -9.8 C -23 -9.2 -30 -7.8 -37 -5.2 C -39.4 -4.3 -41 -3.6 -42.2 -2.7 C -40.4 -1.6 -38.2 -1.6 -35.8 -2.3 C -29.6 -4 -23 -4.6 -16 -4.5 Z" fill="#3A5628"/>
+                <path d="M-20.6 -9.6 L -19.4 -12.6 L -18 -9.4 Z" fill="#26401D"/>
+                <path d="M-25.6 -8.8 L -24.6 -11.4 L -23.4 -8.6 Z" fill="#26401D"/>
+                <path d="M-30.4 -7.6 L -29.6 -9.8 L -28.6 -7.3 Z" fill="#26401D"/>
+                <path d="M-34.6 -6.2 L -34 -8 L -33.2 -5.9 Z" fill="#26401D"/>
               </g>
+
+              <path d="M13.6 -6.2 C 8 -4.4 0 -3.4 -6 -3.6 C -10 -3.7 -14 -4 -17 -4.6 L -17 -9.4 C -14.6 -11.2 -10.6 -12.6 -6 -13.2 C 0 -14 6 -13.4 12.4 -11.6 Z" fill="#405E2C"/>
+              <path d="M12.4 -11.6 C 6 -13.4 0 -14 -6 -13.2 C -10.6 -12.6 -14.6 -11.2 -17 -9.4 L -17 -7.8 C -14 -9.8 -10 -11 -6 -11.4 C 0 -12 6 -11.6 12.4 -10.2 Z" fill="#2C4620"/>
+              <path d="M-17 -4.6 C -14 -4 -10 -3.7 -6 -3.6 C 0 -3.4 8 -4.4 13.6 -6.2 L 13.4 -7.6 C 8 -6 0 -5.1 -6 -5.3 C -10 -5.4 -14 -5.7 -17 -6.2 Z" fill="#8FA55E"/>
+
+              <path d="M8.6 -12 L 9.8 -14.4 L 11 -12.6 Z" fill="#24391A"/>
+              <path d="M3.6 -13.1 L 4.8 -15.7 L 6 -13.4 Z" fill="#24391A"/>
+              <path d="M-1.4 -13.6 L -.2 -16.2 L 1 -13.8 Z" fill="#24391A"/>
+              <path d="M-6.4 -13.5 L -5.2 -16 L -4 -13.7 Z" fill="#24391A"/>
+              <path d="M-11.2 -12.7 L -10 -15 L -8.8 -13 Z" fill="#24391A"/>
+              <path d="M-15.2 -11 L -14.2 -13 L -13.2 -11.4 Z" fill="#24391A"/>
+
+              <path d="M10.2 -5.8 C 12.8 -5.2 13.8 -2.8 13.4 -.8 L 17 -.6 C 17.6 .2 17.2 1 16 1 L 10.6 1 C 9.2 -1 8.6 -3.8 10.2 -5.8 Z" fill="#456630"/>
+              <path d="M-9 -5.8 C -11.6 -5.2 -12.6 -2.8 -12.2 -.8 L -15.8 -.6 C -16.4 .2 -16 1 -14.8 1 L -9.4 1 C -8 -1 -7.4 -3.8 -9 -5.8 Z" fill="#456630"/>
+
+              <g data-el="gator1head">
+                <path d="M12 -13 C 13.2 -15.5 16.8 -15.5 17.8 -13 L 21 -11.7 C 26 -11.9 31 -11.5 34.2 -10.7 C 36.1 -10 36.1 -7.9 34.4 -7.3 C 30 -6.7 24 -6.3 20 -6.1 L 13.4 -5.6 C 12.2 -8 12 -10.6 12 -13 Z" fill="#456630"/>
+                <path d="M14.6 -6 C 21 -6.6 28 -7 34.8 -7.6" fill="none" stroke="#233A18" stroke-width=".8" stroke-linecap="round"/>
+                <path d="M31.6 -7.4 L 32.6 -5.2 L 30.6 -7.3 Z" fill="#F6EFDD"/>
+                <path d="M27.4 -7.1 L 28.4 -4.9 L 26.4 -7 Z" fill="#F6EFDD"/>
+                <path d="M23.2 -6.8 L 24.2 -4.6 L 22.2 -6.7 Z" fill="#F6EFDD"/>
+                <path d="M19 -6.5 L 20 -4.4 L 18 -6.4 Z" fill="#F6EFDD"/>
+                <ellipse cx="32.6" cy="-9.6" rx="1" ry=".8" fill="#24391A"/>
+              </g>
+
+              <g data-el="gator1open" opacity="0">
+                <path d="M13 -8.6 L 35.4 -12.4 L 35.8 -3.4 L 13.6 -6.4 Z" fill="#6E2C3E"/>
+                <path d="M12 -13 C 13.2 -15.5 16.8 -15.5 17.8 -13 L 21 -12.3 C 26 -12.9 31 -13.3 34.6 -13.5 C 36.4 -13.1 36.6 -11.3 34.9 -10.7 C 30 -9.9 22 -9.2 13.6 -8.6 C 12.4 -10 12 -11.6 12 -13 Z" fill="#456630"/>
+                <path d="M32 -10.9 L 33 -8.7 L 31 -10.8 Z" fill="#F6EFDD"/>
+                <path d="M27.8 -10.4 L 28.8 -8.2 L 26.8 -10.3 Z" fill="#F6EFDD"/>
+                <path d="M23.6 -9.9 L 24.6 -7.7 L 22.6 -9.8 Z" fill="#F6EFDD"/>
+                <path d="M19.4 -9.4 L 20.4 -7.2 L 18.4 -9.3 Z" fill="#F6EFDD"/>
+                <path d="M13.4 -6.4 C 20 -5.6 28 -4.3 34.6 -3.1 C 36 -2.5 35.8 -1 34.2 -.8 C 27 -1.7 19 -3.1 13.2 -4.4 C 12.6 -5 12.8 -6 13.4 -6.4 Z" fill="#3E5A2A"/>
+                <path d="M30.4 -3.4 L 31.4 -5.6 L 29.4 -3.7 Z" fill="#F6EFDD"/>
+                <path d="M26.2 -4.2 L 27.2 -6.4 L 25.2 -4.5 Z" fill="#F6EFDD"/>
+                <path d="M22 -5 L 23 -7.2 L 21 -5.3 Z" fill="#F6EFDD"/>
+                <ellipse cx="33" cy="-12.4" rx="1" ry=".8" fill="#24391A"/>
+              </g>
+
+              <path d="M13.6 -14.4 C 14.8 -15.9 16.6 -15.9 17.6 -14.4" fill="none" stroke="#2C4620" stroke-width="1.2" stroke-linecap="round"/>
+              <ellipse cx="15.6" cy="-13" rx="2" ry="1.85" fill="#E8B23F"/>
+              <ellipse cx="15.6" cy="-13" rx=".55" ry="1.45" fill="#12200F"/>
             </g>
 
-            <g transform="translate(83,20) rotate(6)">
-              <ellipse cx="4" cy="4" rx="9" ry="3.2" fill="rgba(8,26,20,.28)" style="filter: blur(1px);"/>
-              <ellipse cx="2" cy="-2.5" rx=".95" ry=".95" fill="#1F3B1C"/>
-              <ellipse cx="-1.8" cy="-2.9" rx=".9" ry=".9" fill="#1F3B1C"/>
-              <ellipse cx="-5.4" cy="-2.6" rx=".9" ry=".9" fill="#1F3B1C"/>
-              <ellipse cx="0" cy="0" rx="8" ry="3.2" fill="#38623A"/>
-              <ellipse cx="-7.2" cy="0.2" rx="3.2" ry="1.7" fill="#38623A"/>
-              <path d="M-7.7 1 C -9.3 1.4 -10.4 1 -10.7 .2 C -10.2 0 -8.9 0 -7.7 1 Z" fill="#0E1F10"/>
-              <path d="M-5.8 -1.1 L -6.8 -2.1 L -7.1 -0.8 Z" fill="#FDF6E8"/>
-              <path d="M-8.2 -1.2 L -9.1 -2 L -9.2 -0.7 Z" fill="#FDF6E8"/>
-              <ellipse cx="-6.4" cy="-1.5" rx=".76" ry=".76" fill="#FDF6E8"/>
-              <ellipse cx="-8.5" cy="-1.3" rx=".76" ry=".76" fill="#FDF6E8"/>
-              <ellipse cx="-6.4" cy="-1.3" rx=".34" ry=".34" fill="#12200F"/>
-              <ellipse cx="-8.5" cy="-1.1" rx=".34" ry=".34" fill="#12200F"/>
-              <g data-el="gator2tail" style="transform-origin: 7px 0px; transform: rotate(-6deg);">
-                <path d="M7 -1.5 C 14 -4.9 22.6 -3.8 26.2 0 C 22.6 3.8 14 4.9 7 1.5 Z" fill="#193317"/>
+            <g transform="translate(47,31) rotate(-2) scale(.38)">
+              <ellipse cx="-1" cy="1" rx="37" ry="3.2" fill="rgba(8,26,20,.34)" style="filter: blur(1.6px);"/>
+
+              <path d="M8.6 -5.6 C 11 -4.6 11.8 -2.6 11.4 -0.6 L 7.6 -0.6 C 6.8 -2.6 6.8 -4.4 8.6 -5.6 Z" fill="#26401D"/>
+              <path d="M-10.6 -5.6 C -8.2 -4.6 -7.4 -2.6 -7.8 -0.6 L -11.6 -0.6 C -12.4 -2.6 -12.4 -4.4 -10.6 -5.6 Z" fill="#26401D"/>
+
+              <g data-el="gator2tail" style="transform-origin: -17px -6.8px;">
+                <path d="M-16 -9.8 C -23 -9.2 -30 -7.8 -37 -5.2 C -39.4 -4.3 -41 -3.6 -42.2 -2.7 C -40.4 -1.6 -38.2 -1.6 -35.8 -2.3 C -29.6 -4 -23 -4.6 -16 -4.5 Z" fill="#3A5628"/>
+                <path d="M-20.6 -9.6 L -19.4 -12.6 L -18 -9.4 Z" fill="#26401D"/>
+                <path d="M-25.6 -8.8 L -24.6 -11.4 L -23.4 -8.6 Z" fill="#26401D"/>
+                <path d="M-30.4 -7.6 L -29.6 -9.8 L -28.6 -7.3 Z" fill="#26401D"/>
+                <path d="M-34.6 -6.2 L -34 -8 L -33.2 -5.9 Z" fill="#26401D"/>
               </g>
+
+              <path d="M13.6 -6.2 C 8 -4.4 0 -3.4 -6 -3.6 C -10 -3.7 -14 -4 -17 -4.6 L -17 -9.4 C -14.6 -11.2 -10.6 -12.6 -6 -13.2 C 0 -14 6 -13.4 12.4 -11.6 Z" fill="#405E2C"/>
+              <path d="M12.4 -11.6 C 6 -13.4 0 -14 -6 -13.2 C -10.6 -12.6 -14.6 -11.2 -17 -9.4 L -17 -7.8 C -14 -9.8 -10 -11 -6 -11.4 C 0 -12 6 -11.6 12.4 -10.2 Z" fill="#2C4620"/>
+              <path d="M-17 -4.6 C -14 -4 -10 -3.7 -6 -3.6 C 0 -3.4 8 -4.4 13.6 -6.2 L 13.4 -7.6 C 8 -6 0 -5.1 -6 -5.3 C -10 -5.4 -14 -5.7 -17 -6.2 Z" fill="#8FA55E"/>
+
+              <path d="M8.6 -12 L 9.8 -14.4 L 11 -12.6 Z" fill="#24391A"/>
+              <path d="M3.6 -13.1 L 4.8 -15.7 L 6 -13.4 Z" fill="#24391A"/>
+              <path d="M-1.4 -13.6 L -.2 -16.2 L 1 -13.8 Z" fill="#24391A"/>
+              <path d="M-6.4 -13.5 L -5.2 -16 L -4 -13.7 Z" fill="#24391A"/>
+              <path d="M-11.2 -12.7 L -10 -15 L -8.8 -13 Z" fill="#24391A"/>
+              <path d="M-15.2 -11 L -14.2 -13 L -13.2 -11.4 Z" fill="#24391A"/>
+
+              <path d="M10.2 -5.8 C 12.8 -5.2 13.8 -2.8 13.4 -.8 L 17 -.6 C 17.6 .2 17.2 1 16 1 L 10.6 1 C 9.2 -1 8.6 -3.8 10.2 -5.8 Z" fill="#456630"/>
+              <path d="M-9 -5.8 C -11.6 -5.2 -12.6 -2.8 -12.2 -.8 L -15.8 -.6 C -16.4 .2 -16 1 -14.8 1 L -9.4 1 C -8 -1 -7.4 -3.8 -9 -5.8 Z" fill="#456630"/>
+
+              <g data-el="gator2head">
+                <path d="M12 -13 C 13.2 -15.5 16.8 -15.5 17.8 -13 L 21 -11.7 C 26 -11.9 31 -11.5 34.2 -10.7 C 36.1 -10 36.1 -7.9 34.4 -7.3 C 30 -6.7 24 -6.3 20 -6.1 L 13.4 -5.6 C 12.2 -8 12 -10.6 12 -13 Z" fill="#456630"/>
+                <path d="M14.6 -6 C 21 -6.6 28 -7 34.8 -7.6" fill="none" stroke="#233A18" stroke-width=".8" stroke-linecap="round"/>
+                <path d="M31.6 -7.4 L 32.6 -5.2 L 30.6 -7.3 Z" fill="#F6EFDD"/>
+                <path d="M27.4 -7.1 L 28.4 -4.9 L 26.4 -7 Z" fill="#F6EFDD"/>
+                <path d="M23.2 -6.8 L 24.2 -4.6 L 22.2 -6.7 Z" fill="#F6EFDD"/>
+                <path d="M19 -6.5 L 20 -4.4 L 18 -6.4 Z" fill="#F6EFDD"/>
+                <ellipse cx="32.6" cy="-9.6" rx="1" ry=".8" fill="#24391A"/>
+              </g>
+
+              <g data-el="gator2open" opacity="0">
+                <path d="M13 -8.6 L 35.4 -12.4 L 35.8 -3.4 L 13.6 -6.4 Z" fill="#6E2C3E"/>
+                <path d="M12 -13 C 13.2 -15.5 16.8 -15.5 17.8 -13 L 21 -12.3 C 26 -12.9 31 -13.3 34.6 -13.5 C 36.4 -13.1 36.6 -11.3 34.9 -10.7 C 30 -9.9 22 -9.2 13.6 -8.6 C 12.4 -10 12 -11.6 12 -13 Z" fill="#456630"/>
+                <path d="M32 -10.9 L 33 -8.7 L 31 -10.8 Z" fill="#F6EFDD"/>
+                <path d="M27.8 -10.4 L 28.8 -8.2 L 26.8 -10.3 Z" fill="#F6EFDD"/>
+                <path d="M23.6 -9.9 L 24.6 -7.7 L 22.6 -9.8 Z" fill="#F6EFDD"/>
+                <path d="M19.4 -9.4 L 20.4 -7.2 L 18.4 -9.3 Z" fill="#F6EFDD"/>
+                <path d="M13.4 -6.4 C 20 -5.6 28 -4.3 34.6 -3.1 C 36 -2.5 35.8 -1 34.2 -.8 C 27 -1.7 19 -3.1 13.2 -4.4 C 12.6 -5 12.8 -6 13.4 -6.4 Z" fill="#3E5A2A"/>
+                <path d="M30.4 -3.4 L 31.4 -5.6 L 29.4 -3.7 Z" fill="#F6EFDD"/>
+                <path d="M26.2 -4.2 L 27.2 -6.4 L 25.2 -4.5 Z" fill="#F6EFDD"/>
+                <path d="M22 -5 L 23 -7.2 L 21 -5.3 Z" fill="#F6EFDD"/>
+                <ellipse cx="33" cy="-12.4" rx="1" ry=".8" fill="#24391A"/>
+              </g>
+
+              <path d="M13.6 -14.4 C 14.8 -15.9 16.6 -15.9 17.6 -14.4" fill="none" stroke="#2C4620" stroke-width="1.2" stroke-linecap="round"/>
+              <ellipse cx="15.6" cy="-13" rx="2" ry="1.85" fill="#E8B23F"/>
+              <ellipse cx="15.6" cy="-13" rx=".55" ry="1.45" fill="#12200F"/>
             </g>
 
             <ellipse cx="50" cy="14" rx="6.2" ry="2.6" fill="rgba(8,26,20,.3)" style="filter: blur(.6px);"/>
@@ -1738,7 +1820,8 @@ class Component extends DCLogic {
     if (!r) return;
     this.el = {};
     ['track', 'cam', 'clouds', 'haze', 'sun', 'trees', 'fg', 'veil', 'app', 'title', 'ballWrap', 'ballspin',
-      'bshadow', 'trail0', 'trail1', 'trail2', 'lanepath', 'gator1tail', 'gator2tail', 'splash0', 'splash1',
+      'bshadow', 'trail0', 'trail1', 'trail2', 'lanepath', 'splash0', 'splash1',
+      'gator1tail', 'gator1head', 'gator1open', 'gator2tail', 'gator2head', 'gator2open',
       'nav', 'map']
       .forEach((k) => { this.el[k] = r.querySelector('[data-el="' + k + '"]'); });
 
@@ -1907,12 +1990,20 @@ class Component extends DCLogic {
         el.style.opacity = st > 0 ? (1 - st) * 0.8 : 0;
       });
 
-      // Each gator flicks its tail clear right as the ball passes its bend
-      // in the lane, then settles back across the rough once it's by.
-      const g1 = seg(t, 0.26, 0.38) - seg(t, 0.38, 0.48);
-      if (e.gator1tail) e.gator1tail.style.transform = 'rotate(' + lerp(6, -120, clamp(g1, 0, 1)) + 'deg)';
-      const g2 = seg(t, 0.80, 0.90) - seg(t, 0.90, 0.97);
-      if (e.gator2tail) e.gator2tail.style.transform = 'rotate(' + lerp(-6, 90, clamp(g2, 0, 1)) + 'deg)';
+      /* Each croc lunges at the ball as it rolls past: the closed head swaps
+         for the open one and the tail kicks up. sin(pi * x) opens and shuts
+         the beat on its own, so both ends of the window sit at rest. The
+         second croc is mirrored, so its rotations are negated. */
+      // Windows peak where the ball actually passes each snout: t .19 and .73.
+      [[1, Math.sin(Math.PI * seg(t, 0.10, 0.28)), -1],
+       [2, Math.sin(Math.PI * seg(t, 0.64, 0.82)), 1]].forEach(([n, snap, dir]) => {
+        const shut = e['gator' + n + 'head'], open = e['gator' + n + 'open'], tail = e['gator' + n + 'tail'];
+        const gaping = snap > 0.5 ? 1 : 0;
+        if (shut) shut.style.opacity = 1 - gaping;
+        if (open) open.style.opacity = gaping;
+        // A slow idle sway keeps them alive before the ball ever arrives.
+        if (tail) tail.style.transform = 'rotate(' + dir * (Math.sin(p * 15) * 2.5 + snap * 26) + 'deg)';
+      });
     }
 
     // The title is the payoff, so it arrives once the ball has settled.
