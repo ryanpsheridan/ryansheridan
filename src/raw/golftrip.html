@@ -1501,19 +1501,27 @@ svg.leaflet-image-layer.leaflet-interactive path {
       </div>
       <div class="rise" style="margin-top: 14px; display: flex; flex-direction: column; gap: 14px;">
         <sc-for list="{{ days }}" as="d" hint-placeholder-count="4">
-          <div style="display: grid; grid-template-columns: 62px 1fr; gap: 16px; padding: 17px 18px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
-            <div>
-              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .1em; color: #54634F;">{{ d.dow }}</div>
-              <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 26px; line-height: 1.05; color: #14352A;">{{ d.num }}</div>
-              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #7B8A7F;">Sept</div>
+          <div style="background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06); overflow: hidden;">
+            <!-- A tinted band per day gives the itinerary the colour the other
+                 tabs get from their photos, and the icons give the eye
+                 something to land on besides a wall of small text. -->
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 16px; background: {{ d.bg }};">
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: .12em; color: {{ d.accent }};">{{ d.dow }} · SEPT {{ d.num }}</div>
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .06em; color: {{ d.accent }}; opacity: .72;">{{ d.summary }}</div>
             </div>
-            <div style="border-left: 1px solid #EFE6D3; padding-left: 14px; display: flex; flex-direction: column; gap: 7px;">
+            <div style="padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 13px;">
               <sc-for list="{{ d.items }}" as="it" hint-placeholder-count="2">
-                <div style="display: flex; gap: 9px; align-items: flex-start;">
-                  <div style="flex: none; margin-top: 6px; width: 6px; height: 6px; border-radius: 999px; background: {{ it.dot }};"></div>
-                  <div>
+                <div style="display: flex; gap: 12px; align-items: flex-start;">
+                  <div style="flex: none; width: 30px; height: 30px; border-radius: 999px; background: {{ it.tint }}; display: flex; align-items: center; justify-content: center;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="{{ it.ink }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <g style="display: {{ it.tv }}"><path d="M21.5 3.5 2.5 10.4 10.1 13.4 13.1 21Z"/><path d="M10.1 13.4 21.5 3.5"/></g>
+                      <g style="display: {{ it.gf }}"><path d="M6.5 21V3.2l11 4.1-11 4.1"/></g>
+                      <g style="display: {{ it.dn }}"><path d="M7 3v7.5a2.6 2.6 0 0 0 5.2 0V3M9.6 13V21"/><path d="M18.5 3c-1.7 1.9-2.4 4.6-2.4 7.2 0 1.5.8 2.4 2.4 2.6V21"/></g>
+                    </svg>
+                  </div>
+                  <div style="padding-top: 3px;">
                     <div style="font-size: 14.5px; font-weight: 600; color: #16211C;">{{ it.title }}</div>
-                    <div style="font-size: 12.5px; color: #54634F; margin-top: 1px;">{{ it.meta }}</div>
+                    <div style="font-size: 12.5px; color: #54634F; margin-top: 2px; line-height: 1.4;">{{ it.meta }}</div>
                   </div>
                 </div>
               </sc-for>
@@ -1522,6 +1530,26 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </sc-for>
       </div>
 
+
+      <div style="margin-top: 26px; padding: 18px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <img src="/golftrip/assets/logo-splitwise.png" alt="" loading="lazy" style="flex: none; width: 92px; height: 92px; border-radius: 14px; object-fit: cover; display: block; background: #DCD3BF;">
+          <div>
+            <div style="font-size: 15px; font-weight: 600; color: #14352A;">Splitwise — Fort Myers R2</div>
+          </div>
+        </div>
+        <a href="https://www.splitwise.com/join/mewNfMDa1W6+x028z?v=e" target="_blank" rel="noopener" style="margin-top: 13px; display: block; min-height: 44px; box-sizing: border-box; padding: 13px; border-radius: 13px; background: #1CC29F; color: #06281A; font-size: 13.5px; font-weight: 700; text-align: center;">Join the group</a>
+      </div>
+
+      <div style="margin-top: 16px; padding: 18px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <img src="/golftrip/assets/photo-bigx.jpg" alt="" loading="lazy" style="flex: none; width: 92px; height: 92px; border-radius: 14px; object-fit: cover; display: block; background: #DCD3BF;">
+          <div>
+            <div style="font-size: 15px; font-weight: 600; color: #14352A;">Gangbusters Golf ⛳</div>
+          </div>
+        </div>
+        <a href="https://open.spotify.com/playlist/6gBCbxdvMbwsC6XSMPWIgc" target="_blank" rel="noopener" style="margin-top: 13px; display: block; min-height: 44px; box-sizing: border-box; padding: 13px; border-radius: 13px; background: #1DB954; color: #06281A; font-size: 13.5px; font-weight: 700; text-align: center;">Open in Spotify</a>
+      </div>
 
       <div style="margin-top: 26px; display: flex; align-items: baseline; justify-content: space-between;">
         <div style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: #14352A;">Weather</div>
@@ -1564,28 +1592,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </sc-for>
       </div>
     
-      </div>
-
-      <div style="margin-top: 26px; padding: 18px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
-        <div style="display: flex; align-items: center; gap: 14px;">
-          <img src="/golftrip/assets/logo-splitwise.png" alt="" loading="lazy" style="flex: none; width: 92px; height: 92px; border-radius: 14px; object-fit: cover; display: block; background: #DCD3BF;">
-          <div>
-            <div style="font-size: 15px; font-weight: 600; color: #14352A;">Splitwise — Fort Myers R2</div>
-            <div style="margin-top: 3px; font-size: 12.5px; color: #54634F; line-height: 1.45;">Green fees, groceries, the bar tab — all of it goes here.</div>
-          </div>
-        </div>
-        <a href="https://www.splitwise.com/join/mewNfMDa1W6+x028z?v=e" target="_blank" rel="noopener" style="margin-top: 13px; display: block; min-height: 44px; box-sizing: border-box; padding: 13px; border-radius: 13px; background: #1CC29F; color: #06281A; font-size: 13.5px; font-weight: 700; text-align: center;">Join the group</a>
-      </div>
-
-      <div style="margin-top: 16px; padding: 18px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
-        <div style="display: flex; align-items: center; gap: 14px;">
-          <img src="/golftrip/assets/photo-bigx.jpg" alt="" loading="lazy" style="flex: none; width: 92px; height: 92px; border-radius: 14px; object-fit: cover; display: block; background: #DCD3BF;">
-          <div>
-            <div style="font-size: 15px; font-weight: 600; color: #14352A;">Gangbusters Golf ⛳</div>
-            <div style="margin-top: 3px; font-size: 12.5px; color: #54634F; line-height: 1.45;">Cart tunes for the week. Add whatever you want to it.</div>
-          </div>
-        </div>
-        <a href="https://open.spotify.com/playlist/6gBCbxdvMbwsC6XSMPWIgc" target="_blank" rel="noopener" style="margin-top: 13px; display: block; min-height: 44px; box-sizing: border-box; padding: 13px; border-radius: 13px; background: #1DB954; color: #06281A; font-size: 13.5px; font-weight: 700; text-align: center;">Open in Spotify</a>
       </div>
     </div>
 
@@ -1757,6 +1763,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
 }">
 const OWM_KEY = 'b72af3f83bb49e28d8ef2e78c74bd9c8';
 const CONDO = { lat: 26.4685, lng: -81.7440 };
+
+/* Itinerary glyphs. Two paths each so one table covers every shape; the
+   flag only needs one, so its second path is empty. */
+const ICON = {
+  travel: { tint: '#F7E4D6', ink: '#B3551F', tv: 'inline', gf: 'none', dn: 'none' },
+  golf: { tint: '#E1EFE7', ink: '#24614A', tv: 'none', gf: 'inline', dn: 'none' },
+  dining: { tint: '#F7E2EA', ink: '#A62C58', tv: 'none', gf: 'none', dn: 'inline' }
+};
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const seg = (p, a, b) => clamp((p - a) / (b - a), 0, 1);
@@ -2479,21 +2493,22 @@ class Component extends DCLogic {
       ],
 
       days: [
-        { dow: 'Thu', num: '17', items: [
-          { dot: '#C86A34', title: 'Ryan + Gustavo land at RSW', meta: '~12:30 pm · pick up the car, then the condo' },
-          { dot: '#2A6B4C', title: 'Stoneybrook — Ryan + Gustavo', meta: '9–18 holes with a cart · book from the road' },
-          { dot: '#7B8A7F', title: 'Matt + Oscar arrive later', meta: 'Brewery' }
+        { dow: 'THU', num: '17', accent: '#B3551F', bg: '#F7E9DC', summary: 'Travel + 9 holes', items: [
+          { ...ICON.travel, title: 'Ryan + Gustavo land at RSW', meta: '~12:30 pm · pick up the car, then the condo' },
+          { ...ICON.golf, title: 'Stoneybrook — Ryan + Gustavo', meta: '9–18 holes with a cart · book from the road' },
+          { ...ICON.travel, title: 'Matt + Oscar arrive later', meta: 'Later flights — they meet everyone at the condo' },
+          { ...ICON.dining, title: 'Brewery', meta: 'Dinner once the whole group has landed' }
         ] },
-        { dow: 'Fri', num: '18', items: [
-          { dot: '#2A6B4C', title: 'Saltleaf Golf Preserve — The Preserve', meta: '8:40 am tee time · confirmed' },
-          { dot: '#D8467A', title: 'Brewery', meta: 'Dinner and taps in one stop' }
+        { dow: 'FRI', num: '18', accent: '#24614A', bg: '#E2EFE6', summary: '18 at Saltleaf', items: [
+          { ...ICON.golf, title: 'Saltleaf Golf Preserve — The Preserve', meta: '8:40 am tee time · confirmed' },
+          { ...ICON.dining, title: 'Brewery', meta: 'Dinner and taps in one stop' }
         ] },
-        { dow: 'Sat', num: '19', items: [
-          { dot: '#2A6B4C', title: 'Tiburón Golf Club — Black Course', meta: '9:40 am tee time · confirmed' },
-          { dot: '#D8467A', title: 'Dinner at Blue Water Beach Grill', meta: 'Walkable from the condo — no one has to drive' }
+        { dow: 'SAT', num: '19', accent: '#A62C58', bg: '#F7E2EA', summary: '18 at Tiburón', items: [
+          { ...ICON.golf, title: 'Tiburón Golf Club — Black Course', meta: '9:40 am tee time · confirmed' },
+          { ...ICON.dining, title: 'Dinner at Blue Water Beach Grill', meta: 'Walkable from the condo — no one has to drive' }
         ] },
-        { dow: 'Sun', num: '20', items: [
-          { dot: '#C86A34', title: 'Out on DL1395', meta: '8:10 am from RSW · leave the condo by 6:30' }
+        { dow: 'SUN', num: '20', accent: '#4A5A50', bg: '#E8EAE4', summary: 'Fly home', items: [
+          { ...ICON.travel, title: 'Out on DL1395', meta: '8:10 am from RSW · leave the condo by 6:30' }
         ] }
       ],
 
