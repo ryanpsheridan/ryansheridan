@@ -1141,6 +1141,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
   a:hover { color: #C86A34; }
   @keyframes nudge { 0%, 100% { transform: translateY(0); opacity: .55 } 50% { transform: translateY(7px); opacity: 1 } }
   @keyframes softin { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
+  /* The reel exits pushing into the lens and whiting out to the app's own
+     background colour, so the app enters still zoomed and settles. Same
+     movement continued, rather than a cut between two worlds. */
+  @keyframes arrive { from { opacity: 0; transform: scale(1.055) } 26% { opacity: 1 } to { opacity: 1; transform: none } }
   @keyframes flutter { 0%, 100% { transform: skewY(0deg) scaleX(1) } 35% { transform: skewY(-7deg) scaleX(.9) } 70% { transform: skewY(5deg) scaleX(.97) } }
   @keyframes drift { from { transform: translateX(0) } to { transform: translateX(60px) } }
   @keyframes sway { 0%, 100% { transform: rotate(-1.5deg) } 50% { transform: rotate(2deg) } }
@@ -1478,7 +1482,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     </div>
   </sc-if>
 
-  <div data-el="app" style="position: relative; padding: 0 20px 128px;">
+  <div data-el="app" style="position: relative; transform-origin: 50% 0; padding: 0 20px 128px;">
 
     <div style="position: sticky; top: 0; z-index: 40; margin: 0 -20px; padding: 16px 20px 14px; background: rgba(239,232,216,.95); backdrop-filter: blur(12px); border-bottom: 1px solid #D3C6A9; box-shadow: 0 6px 18px -12px rgba(20,53,42,.35);">
       <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
@@ -1997,7 +2001,7 @@ class Component extends DCLogic {
      value, so going from scroll-driven to timed only changes where that
      value comes from. Order: the ball rolls the hole, the title rises in
      over the resting scene, then the whole thing fades to the app. */
-  reel = { roll: 6300, titleAt: 3650, titleIn: 700, hold: 2450, out: 550 };
+  reel = { roll: 6300, titleAt: 5650, titleIn: 750, hold: 2000, out: 750 };
 
   /* Widen the lane toward the viewer. SVG strokes are one width end to end,
      so the two visible ribbons are filled outlines walked off the centreline:
@@ -2105,7 +2109,7 @@ class Component extends DCLogic {
     const e = this.el || {};
     if (e.track) e.track.style.display = 'none';
     if (r) { r.scrollTop = 0; r.style.overflowY = this.prevOverflowY || 'auto'; }
-    if (e.app) e.app.style.animation = 'softin .55s cubic-bezier(.2,.7,.2,1) both';
+    if (e.app) e.app.style.animation = 'arrive .62s cubic-bezier(.16,.84,.32,1) both';
     if (e.nav) {
       e.nav.style.transition = 'opacity .45s ease';
       e.nav.style.opacity = 1;
@@ -2121,11 +2125,15 @@ class Component extends DCLogic {
     const e = this.el || {};
     if (this.locked || !e.track) return;
 
-    // camera: eases in on impact, then pulls out with the ball
-    const cam = seg(p, 0.62, 0.96);
-    if (e.cam) e.cam.style.transform = 'translateY(' + (-cam * vh * 0.045) + 'px) scale(' + (1 + cam * 0.06) + ')';
+    /* Everything converges on the moment the ball drops: the sun finishes
+       its rise just before it, the camera settles exactly on it, and the
+       title arrives just after as the payoff. Previously these four landed
+       at four unrelated times and nothing ever felt resolved. */
+    const cam = seg(p, 0.58, 0.88);
+    const leaving = clamp(outP, 0, 1);
+    if (e.cam) e.cam.style.transform = 'translateY(' + (-cam * vh * 0.045) + 'px) scale(' + (1 + cam * 0.06 + leaving * 0.1) + ')';
 
-    const rise = ease(seg(p, 0, 1));
+    const rise = ease(seg(p, 0, 0.80));
     if (e.sun) e.sun.style.transform = 'translateY(' + lerp(140, 8, rise) + 'px) scale(' + lerp(0.86, 1.04, rise) + ')';
     if (e.haze) {
       e.haze.style.transform = 'translateY(' + lerp(140, 8, rise) + 'px) scale(' + lerp(0.92, 1.1, rise) + ')';
@@ -2241,10 +2249,11 @@ class Component extends DCLogic {
     if (e.title) {
       const ti = ease(clamp(titleP, 0, 1));
       e.title.style.opacity = ti * (1 - out);
-      e.title.style.transform = 'translateY(' + lerp(28, 0, ti) + 'px) scale(' + lerp(0.965, 1, ti) + ')';
+      // on the way out it drifts toward the lens with the rest of the scene
+      e.title.style.transform = 'translateY(' + lerp(28, 0, ti) + 'px) scale(' + (lerp(0.965, 1, ti) + out * 0.07) + ')';
     }
-    if (e.veil) e.veil.style.opacity = out;
-    if (e.cam) e.cam.style.filter = out > 0 ? 'blur(' + (out * 5).toFixed(2) + 'px)' : 'none';
+    if (e.veil) e.veil.style.opacity = Math.pow(out, 1.5);
+    if (e.cam) e.cam.style.filter = out > 0 ? 'blur(' + (out * 7).toFixed(2) + 'px)' : 'none';
   }
 
   appTop() {
