@@ -1620,7 +1620,28 @@ svg.leaflet-image-layer.leaflet-interactive path {
               <div style="position: absolute; left: 16px; right: 16px; bottom: 13px; font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 22px; line-height: 1.12; letter-spacing: -.02em; color: #FFF8EA; text-shadow: 0 2px 10px rgba(8,26,20,.6);">{{ c.name }}</div>
             </div>
             <div style="padding: 18px;">
-              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: .09em; color: #54634F;">{{ c.day }}</div>
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: .09em; color: #54634F;">{{ c.day }}</div>
+                <sc-if value="{{ c.type }}" hint-placeholder-val="{{ true }}">
+                  <div style="flex: none; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .05em; color: #8A9188;">{{ c.type }}</div>
+                </sc-if>
+              </div>
+              <sc-if value="{{ c.rating }}" hint-placeholder-val="{{ true }}">
+                <div style="margin-top: 14px; padding: 12px 4px; border-top: 1px solid #E7DEC8; border-bottom: 1px solid #E7DEC8; display: grid; grid-template-columns: 1fr 1fr 1fr;">
+                  <div>
+                    <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 21px; letter-spacing: -.02em; color: #14352A;">{{ c.rating }}</div>
+                    <div style="margin-top: 2px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .08em; color: #6C7A6E;">RATING</div>
+                  </div>
+                  <div style="border-left: 1px solid #E7DEC8; padding-left: 14px;">
+                    <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 21px; letter-spacing: -.02em; color: #14352A;">{{ c.conditions }}</div>
+                    <div style="margin-top: 2px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .08em; color: #6C7A6E;">CONDITIONS</div>
+                  </div>
+                  <div style="border-left: 1px solid #E7DEC8; padding-left: 14px;">
+                    <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 21px; letter-spacing: -.02em; color: #14352A;">{{ c.zone }}</div>
+                    <div style="margin-top: 2px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .08em; color: #6C7A6E;">ZONE PCTL</div>
+                  </div>
+                </div>
+              </sc-if>
               <div style="margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div style="padding: 11px 12px; background: #F3ECDB; border-radius: 13px;">
                   <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .09em; color: #54634F;">Tee time</div>
@@ -1799,17 +1820,9 @@ const COURSES = [
     lat: 26.3400, lng: -81.8080,
     day: 'Day 2 — Fri, Sept 18', status: 'confirmed', statusLabel: 'Confirmed',
     teeTime: '8:40 am', price: '$140.64', priceNote: '$562.54 total · 4 players',
+    type: 'Public · 18 holes', rating: '87.6', conditions: '9.1', zone: '49%',
     photo: (window.__resources && window.__resources.photoSaltleaf) || 'photos/saltleaf.jpg', confirmation: '429535097',
     notes: 'Raymond Floyd rebuilt the old Raptor Bay course here in 2022, back with the same architect he first drew it with 24 years earlier. Leave the condo by 7:50 to make the tee sheet comfortably.'
-  },
-  {
-    id: 'saltleaf9', name: 'Saltleaf Golf Preserve — The Leaf', category: 'golf',
-    address: '23001 Coconut Point Resort Drive, Bonita Springs, FL 34134',
-    lat: 26.3408, lng: -81.8072,
-    day: 'Day 2 — Fri, Sept 18', status: 'optional', statusLabel: 'Optional',
-    teeTime: 'Walk on after 18', price: 'Pay if we play', priceNote: 'nobody is committed',
-    photo: (window.__resources && window.__resources.photoSaltleaf) || 'photos/saltleaf.jpg',
-    notes: 'Nine-hole par-3 short course on the same property, so there is no drive between rounds. Raymond Floyd laid it out alongside the big course. Only if legs and daylight hold up.'
   },
   {
     id: 'tiburon', name: 'Tiburón Golf Club — Black Course', category: 'golf',
@@ -1817,6 +1830,7 @@ const COURSES = [
     lat: 26.2470, lng: -81.7900,
     day: 'Day 3 — Sat, Sept 19', status: 'confirmed', statusLabel: 'Confirmed',
     teeTime: '9:40 am', price: '$181.70', priceNote: '$726.80 total · 4 players',
+    type: 'Semi-private · 18 holes', rating: '92.2', conditions: '9.5', zone: '77%',
     photo: (window.__resources && window.__resources.photoTiburon) || 'photos/tiburon.jpg', confirmation: '429539576',
     notes: 'The big one. Greg Norman built it in 2001 with no conventional rough anywhere — pine straw and red coquina shell waste bunkers instead, so a wayward tee shot is usually still playable.'
   }
@@ -2488,10 +2502,10 @@ class Component extends DCLogic {
         ...c,
         mapsUrl: dir(c.address),
         telUrl: c.phone ? tel(c.phone) : null,
-        teeNote: c.status === 'confirmed' ? 'confirmed' : c.status === 'optional' ? 'no booking needed' : 'call the shop',
+        teeNote: c.status === 'confirmed' ? 'confirmed' : 'call the shop',
         // amber means "do something"; a maybe should not shout like a to-do
-        pillBg: c.status === 'confirmed' ? '#1F5C3E' : c.status === 'optional' ? '#E4DBC6' : '#E8A33F',
-        pillInk: c.status === 'confirmed' ? '#FFF8EA' : c.status === 'optional' ? '#4A5A50' : '#2E2208'
+        pillBg: c.status === 'confirmed' ? '#1F5C3E' : '#E8A33F',
+        pillInk: c.status === 'confirmed' ? '#FFF8EA' : '#2E2208'
       })),
 
       eats: EATS.concat(BREWS).map((r) => ({
@@ -2521,7 +2535,6 @@ class Component extends DCLogic {
         ] },
         { dow: 'FRI', num: '18', items: [
           { ...ICON.golf, title: 'Saltleaf Golf Preserve — The Preserve', meta: '8:40 am tee time · confirmed' },
-          { ...ICON.golf, title: 'The Leaf — optional nine', meta: 'Par-3 short course on the same property, if we are up for it' },
           { ...ICON.dining, title: 'Brewery', meta: 'Dinner and taps in one stop' }
         ] },
         { dow: 'SAT', num: '19', items: [
