@@ -1146,7 +1146,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   @keyframes sway { 0%, 100% { transform: rotate(-1.5deg) } 50% { transform: rotate(2deg) } }
   @keyframes swayb { 0%, 100% { transform: rotate(1.5deg) } 50% { transform: rotate(-2deg) } }
   @keyframes ripple { 0%, 100% { transform: scale(1); opacity: .55 } 50% { transform: scale(1.05); opacity: .72 } }
-  @keyframes dash { from { stroke-dashoffset: 0 } to { stroke-dashoffset: -9.2 } }
   .leaflet-container { font-family: "IBM Plex Sans", system-ui, sans-serif; background: #E8EFE6; }
   .leaflet-popup-content-wrapper { border-radius: 14px; box-shadow: 0 10px 30px rgba(20,53,42,.18) }
   .leaflet-popup-content { margin: 12px 14px; font-size: 13px; line-height: 1.45 }
@@ -1261,18 +1260,32 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <path d="M-10 24 Q 50 4 110 24 L 110 110 L -10 110 Z" fill="url(#turf)"/>
             <path d="M-10 24 Q 50 4 110 24" fill="none" stroke="rgba(253,246,232,.06)" stroke-width="1.4"/>
 
+            <!-- Mown bands. Their spacing opens up toward the viewer, which
+                 does most of the work of reading the turf as a ground plane
+                 running away from you rather than a wall standing up. -->
+            <g fill="rgba(255,246,226,.05)">
+              <rect x="-10" y="26" width="120" height="3.2"/>
+              <rect x="-10" y="32.4" width="120" height="4"/>
+              <rect x="-10" y="40.4" width="120" height="5"/>
+              <rect x="-10" y="50.4" width="120" height="6.4"/>
+              <rect x="-10" y="63.2" width="120" height="8.2"/>
+              <rect x="-10" y="79.6" width="120" height="10.6"/>
+              <rect x="-10" y="100.8" width="120" height="13.6"/>
+            </g>
+
             <ellipse cx="58" cy="85" rx="18" ry="6" fill="url(#pond)" style="filter: blur(1px); animation: ripple 5.5s ease-in-out infinite;"/>
             <ellipse cx="36" cy="28" rx="14" ry="4.5" fill="url(#pond)" style="filter: blur(1px); animation: ripple 6.5s ease-in-out infinite .8s;"/>
 
-            <!-- A constant-width lane gives the eye nothing to read as depth,
-                 so a ball travelling up the frame looks like it is climbing.
-                 The two ribbons below are generated from this centreline by
-                 buildLane(), tapering toward the cup; the ball, its shadow and
-                 the gators shrink on the same gradient. -->
-            <path data-el="lanepath" d="M50 96 C 30 84 18 76 24 64 C 30 52 46 44 50 40 C 54 36 72 32 68 20 C 66 14 58 14 50 14" fill="none" stroke="none"/>
-            <path data-el="laneedge" fill="#EFE6CC" fill-opacity=".5"/>
+            <!-- The hole runs dead straight from the gator to the cup. A
+                 constant-width fairway would give the eye nothing to read as
+                 depth, so the two ribbons below are generated from this
+                 centreline by buildLane(), tapering toward the green; the
+                 ball, its shadow and the gators shrink on the same gradient. -->
+            <ellipse cx="50" cy="15.5" rx="16" ry="6" fill="#5AA271"/>
+            <ellipse cx="50" cy="15.5" rx="16" ry="6" fill="none" stroke="#EFE6CC" stroke-opacity=".34" stroke-width="1.4"/>
+            <path data-el="lanepath" d="M50 100 L 50 14" fill="none" stroke="none"/>
+            <path data-el="laneedge" fill="#EFE6CC" fill-opacity=".17"/>
             <path data-el="lanetop" fill="#4C9463"/>
-            <path d="M50 96 C 30 84 18 76 24 64 C 30 52 46 44 50 40 C 54 36 72 32 68 20 C 66 14 58 14 50 14" fill="none" stroke="rgba(253,246,232,.4)" stroke-width=".8" stroke-dasharray="1.4 3.2" stroke-linecap="round" style="animation: dash 1.4s linear infinite;"/>
 
             <!-- Crocs are drawn in profile rather than from above: the long
                  boxy snout, the toothed jaw line and the sawtooth ridge down
@@ -1280,7 +1293,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
                  and none of them survive a top-down view. The snapping head is
                  a second drawing swapped in on the beat, not a hinged jaw —
                  rotating a jaw opens a gap no static mouth shape can fill. -->
-            <g transform="translate(48,79.5) rotate(3) scale(-.47,.47)">
+            <g transform="translate(30,81) rotate(2) scale(-.5,.5)">
               <ellipse cx="-1" cy="1" rx="37" ry="3.2" fill="rgba(8,26,20,.34)" style="filter: blur(1.6px);"/>
 
               <path d="M8.6 -5.6 C 11 -4.6 11.8 -2.6 11.4 -0.6 L 7.6 -0.6 C 6.8 -2.6 6.8 -4.4 8.6 -5.6 Z" fill="#26401D"/>
@@ -1337,7 +1350,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
               <ellipse cx="15.6" cy="-13" rx=".55" ry="1.45" fill="#12200F"/>
             </g>
 
-            <g transform="translate(47,31) rotate(-2) scale(.35)">
+            <g transform="translate(66,31) rotate(-3) scale(-.35,.35)">
               <ellipse cx="-1" cy="1" rx="37" ry="3.2" fill="rgba(8,26,20,.34)" style="filter: blur(1.6px);"/>
 
               <path d="M8.6 -5.6 C 11 -4.6 11.8 -2.6 11.4 -0.6 L 7.6 -0.6 C 6.8 -2.6 6.8 -4.4 8.6 -5.6 Z" fill="#26401D"/>
@@ -1925,13 +1938,43 @@ class Component extends DCLogic {
      sample a point, take the tangent from its neighbours, step out along the
      normal by a half-width that shrinks with distance, and close the loop.
      The tee end runs off the bottom of the frame, so it needs no end cap. */
-  lane = { near: 1.55, far: 0.95 };
+  lane = { near: 1.55, far: 0.95 };      // how much nearer things are drawn
+  laneW = { near: 3.4, far: 1.25 };      // the fairway itself recedes harder
+
+  /* Where the tail meets the ball, and the ball's flight. Each entry is a
+     bounce: `end` is how far up the ground track it comes down, `apex` how
+     high it got. Both shrink each time, which is what restitution looks
+     like; after the last one it rolls flat into the cup. */
+  contact = 0.11;
+  launchY = 83;
+  launchAt = 0;
+  hops = [{ end: 0.50, apex: 16 }, { end: 0.75, apex: 6 }, { end: 0.90, apex: 2 }];
+
+  hopAt(u) {
+    let from = 0;
+    for (let i = 0; i < this.hops.length; i++) {
+      const h = this.hops[i];
+      if (u < h.end) {
+        const x = (u - from) / (h.end - from);
+        return 4 * h.apex * x * (1 - x);
+      }
+      from = h.end;
+    }
+    return 0;
+  }
 
   buildLane() {
     const e = this.el || {};
     const path = e.lanepath;
     if (!path || !path.getTotalLength) return;
     const L = path.getTotalLength();
+
+    // Where along the fairway the ball is teed up, found rather than hardcoded
+    // so it survives any change to the centreline.
+    for (let i = 0; i <= 240; i++) {
+      const at = i / 240 * L;
+      if (path.getPointAtLength(at).y <= this.launchY) { this.launchAt = at; break; }
+    }
     const ribbon = (base) => {
       const near = [], far = [];
       for (let i = 0; i <= 64; i++) {
@@ -1941,7 +1984,7 @@ class Component extends DCLogic {
         const b = path.getPointAtLength(Math.min(L, at + 0.5));
         const dx = b.x - a.x, dy = b.y - a.y;
         const m = Math.hypot(dx, dy) || 1;
-        const w = base * lerp(this.lane.near, this.lane.far, s) / 2;
+        const w = base * lerp(this.laneW.near, this.laneW.far, s) / 2;
         near.push([p.x - dy / m * w, p.y + dx / m * w]);
         far.push([p.x + dy / m * w, p.y - dx / m * w]);
       }
@@ -2020,47 +2063,61 @@ class Component extends DCLogic {
     if (e.trees) e.trees.style.transform = 'translateX(' + (-p * 14) + 'px) translateY(' + (rise * 4) + 'px)';
     if (e.fg) e.fg.style.transform = 'translateX(' + (p * 46) + 'px) translateY(' + (cam * 10) + 'px)';
 
-    /* --- putt-putt hole: the ball rides the drawn lane path, two gator
-       obstacles swing their tails clear just ahead of it, and it drops into
-       the cup for a little splash. Everything is keyed off t, the ball's own
-       0-1 progress along the hole (a sub-range of p so it tees up, then
-       rests, before and after rolling). --- */
-    /* A struck putt leaves fast and dies at the hole, so the roll eases out
-       rather than in and out. Accelerating away from the tee was the other
-       half of why the ball looked like it was being pushed up a slope. */
-    const struck = seg(p, 0.08, 0.86);
-    const t = 1 - Math.pow(1 - struck, 1.45);
+    /* --- the hole: the near gator's tail launches the ball, it carries up
+       the fairway, loses energy over three shrinking bounces and rolls the
+       last stretch into the cup. `u` is progress along the ground track and
+       `hop` is height above it, kept separate so the shadow can stay on the
+       ground while the ball rides above it — which is what sells the arc. --- */
+    const flight = seg(p, this.contact, 0.88);
+    const u = 1 - Math.pow(1 - flight, 1.7);   // air and each bounce cost speed
     const path = e.lanepath;
 
     if (path && path.getTotalLength) {
       const len = path.getTotalLength();
-      const pt = path.getPointAtLength(t * len);
-      const arrive = seg(t, 0.965, 1);
-      // Same near-to-far gradient the lane is built on, so the ball shrinks
-      // into the distance at exactly the rate the lane narrows.
-      const depth = lerp(this.lane.near, this.lane.far, t);
-      const scale = depth * lerp(1, 0.15, arrive);
+      const at = lerp(this.launchAt, len, u);
+      const g = path.getPointAtLength(at);
+      const hop = this.hopAt(u);
+      const arrive = seg(u, 0.97, 1);
+      // Same near-to-far gradient the fairway is built on, so the ball shrinks
+      // into the distance at exactly the rate the fairway narrows.
+      const depth = lerp(this.lane.near, this.lane.far, at / len);
+
+      // Squash on the way through each impact, and nowhere else.
+      let squash = 0;
+      this.hops.forEach((h) => {
+        const d = Math.abs(u - h.end);
+        if (d < 0.022) squash = Math.max(squash, 1 - d / 0.022);
+      });
+      const drop = lerp(1, 0.15, arrive);
+      const sx = depth * (1 + 0.28 * squash) * drop;
+      const sy = depth * (1 - 0.24 * squash) * drop;
 
       if (e.ballWrap) {
-        e.ballWrap.setAttribute('transform', 'translate(' + pt.x.toFixed(2) + ',' + pt.y.toFixed(2) + ') scale(' + scale.toFixed(3) + ')');
+        e.ballWrap.setAttribute('transform', 'translate(' + g.x.toFixed(2) + ',' +
+          (g.y - hop * depth).toFixed(2) + ') scale(' + sx.toFixed(3) + ',' + sy.toFixed(3) + ')');
       }
-      if (e.ballspin) e.ballspin.style.transform = 'rotate(' + (t * len * 32) + 'deg)';
+      if (e.ballspin) e.ballspin.style.transform = 'rotate(' + (u * len * 26) + 'deg)';
+
+      // The shadow never leaves the ground; it just tightens and fades as the
+      // ball climbs away from it.
+      const air = clamp(hop / 16, 0, 1);
       if (e.bshadow) {
-        e.bshadow.setAttribute('cx', pt.x.toFixed(2));
-        e.bshadow.setAttribute('cy', (pt.y + 0.4 * depth).toFixed(2));
-        e.bshadow.setAttribute('rx', (3 * depth).toFixed(2));
-        e.bshadow.setAttribute('ry', (1.1 * depth).toFixed(2));
-        e.bshadow.style.opacity = arrive > 0 ? 0.4 * (1 - arrive) : 0.4;
+        e.bshadow.setAttribute('cx', g.x.toFixed(2));
+        e.bshadow.setAttribute('cy', (g.y + 0.4 * depth).toFixed(2));
+        e.bshadow.setAttribute('rx', (3 * depth * (1 - 0.45 * air)).toFixed(2));
+        e.bshadow.setAttribute('ry', (1.1 * depth * (1 - 0.45 * air)).toFixed(2));
+        e.bshadow.style.opacity = (0.4 * (1 - 0.6 * air) * (1 - arrive)).toFixed(3);
       }
+      // Dust only kicks up once it is running along the ground.
       [0, 1, 2].forEach((i) => {
         const el = e['trail' + i];
         if (!el) return;
-        const tt = clamp(t - 0.012 * (i + 1), 0, 1);
-        const q = path.getPointAtLength(tt * len);
+        const uu = clamp(u - 0.014 * (i + 1), 0, 1);
+        const q = path.getPointAtLength(lerp(this.launchAt, len, uu));
         el.setAttribute('cx', q.x.toFixed(2));
         el.setAttribute('cy', q.y.toFixed(2));
-        el.setAttribute('r', ((1.3 - i * 0.15) * lerp(this.lane.near, this.lane.far, tt)).toFixed(2));
-        el.style.opacity = (t > 0.01 && arrive < 1) ? (0.5 - i * 0.14) : 0;
+        el.setAttribute('r', ((1.3 - i * 0.15) * lerp(this.lane.near, this.lane.far, uu)).toFixed(2));
+        el.style.opacity = (u > 0.88 && arrive < 1) ? (0.45 - i * 0.13) : 0;
       });
 
       // Splash rings bloom once the ball reaches the cup, so they only ever
@@ -2068,25 +2125,40 @@ class Component extends DCLogic {
       [0, 1].forEach((i) => {
         const el = e['splash' + i];
         if (!el) return;
-        const st = seg(t, 0.97 + i * 0.012, 1);
+        const st = seg(u, 0.972 + i * 0.008, 1);
         el.setAttribute('r', (2 + st * 5).toFixed(2));
         el.style.opacity = st > 0 ? (1 - st) * 0.8 : 0;
       });
 
-      /* Each croc lunges at the ball as it rolls past: the closed head swaps
-         for the open one and the tail kicks up. sin(pi * x) opens and shuts
-         the beat on its own, so both ends of the window sit at rest. The
-         second croc is mirrored, so its rotations are negated. */
-      // Windows peak where the ball actually passes each snout: t .19 and .73.
-      [[1, Math.sin(Math.PI * seg(t, 0.10, 0.28)), -1],
-       [2, Math.sin(Math.PI * seg(t, 0.64, 0.82)), 1]].forEach(([n, snap, dir]) => {
-        const shut = e['gator' + n + 'head'], open = e['gator' + n + 'open'], tail = e['gator' + n + 'tail'];
-        const gaping = snap > 0.5 ? 1 : 0;
+      /* The near gator swings: coil back, whip through the ball on `contact`,
+         then settle. Contact has to land exactly there because that is the
+         frame the ball leaves. Both gators are mirrored, so the rotations
+         that reach the screen are the negatives of these. */
+      /* Angles here are screen-space, negated on the way out because the
+         gator is mirrored. Rest lies at +9deg and the ball sits at +25deg
+         off the tail's pivot, so the sweep is timed to pass through 25 exactly
+         on `contact` and follow through past it. */
+      let swing;
+      if (p < 0.045) swing = lerp(0, -46, ease(seg(p, 0, 0.045)));
+      else if (p < this.contact) swing = lerp(-46, 16, ease(seg(p, 0.045, this.contact)));
+      else if (p < 0.17) swing = lerp(16, 34, ease(seg(p, this.contact, 0.17)));
+      else swing = lerp(34, 0, ease(seg(p, 0.17, 0.42)));
+      if (e.gator1tail) e.gator1tail.style.transform = 'rotate(' + (-swing).toFixed(2) + 'deg)';
+
+      // It gapes with the effort of the swing; the one up by the green lunges
+      // as the ball comes down off its second bounce right by its nose.
+      const grunt = Math.sin(Math.PI * seg(p, 0.04, 0.19));
+      const lunge = Math.sin(Math.PI * seg(u, 0.66, 0.84));
+      [[1, grunt], [2, lunge]].forEach(([n, s]) => {
+        const shut = e['gator' + n + 'head'], open = e['gator' + n + 'open'];
+        const gaping = s > 0.5 ? 1 : 0;
         if (shut) shut.style.opacity = 1 - gaping;
         if (open) open.style.opacity = gaping;
-        // A slow idle sway keeps them alive before the ball ever arrives.
-        if (tail) tail.style.transform = 'rotate(' + dir * (Math.sin(p * 15) * 2.5 + snap * 26) + 'deg)';
       });
+      // A slow idle sway keeps the far one alive before the ball arrives.
+      if (e.gator2tail) {
+        e.gator2tail.style.transform = 'rotate(' + (-(Math.sin(p * 15) * 2.5 + lunge * 24)).toFixed(2) + 'deg)';
+      }
     }
 
     // The title is the payoff, so it arrives once the ball has settled.
