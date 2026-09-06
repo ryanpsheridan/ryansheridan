@@ -1136,8 +1136,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
 <style>
   /* All scrolling happens inside the shell, so the document itself must never
      scroll. When it could, a viewport unit that came back taller than the
-     screen let the page slide: the reel's first line went under the status
-     bar and this background colour showed as a band beneath the ground. */
+     screen let the page slide: the header went under the status bar and this
+     background colour showed as a band at the foot of the page. */
   html, body { margin: 0; padding: 0; background: #14352A; height: 100%; overflow: hidden; overscroll-behavior: none; }
   body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
   * { -webkit-tap-highlight-color: transparent; }
@@ -1145,10 +1145,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   a:hover { color: #C86A34; }
   @keyframes nudge { 0%, 100% { transform: translateY(0); opacity: .55 } 50% { transform: translateY(7px); opacity: 1 } }
   @keyframes softin { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
-  /* The reel exits pushing into the lens and whiting out to the app's own
-     background colour, so the app enters still zoomed and settles. Same
-     movement continued, rather than a cut between two worlds. */
-  @keyframes arrive { from { opacity: 0; transform: scale(1.055) } 26% { opacity: 1 } to { opacity: 1; transform: none } }
   @keyframes flutter { 0%, 100% { transform: skewY(0deg) scaleX(1) } 35% { transform: skewY(-7deg) scaleX(.9) } 70% { transform: skewY(5deg) scaleX(.97) } }
   @keyframes drift { from { transform: translateX(0) } to { transform: translateX(60px) } }
   @keyframes sway { 0%, 100% { transform: rotate(-1.5deg) } 50% { transform: rotate(2deg) } }
@@ -1177,6 +1173,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
       transition-duration: .001ms !important;
     }
   }
+  /* Loading screen. The orbit and the ring share one duration, so the croc
+     always sits at the head of the arc it is drawing. */
+  @keyframes orbit { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+  @keyframes counterspin { from { transform: rotate(0deg) } to { transform: rotate(-360deg) } }
+  @keyframes drawring { from { stroke-dashoffset: 389.6 } to { stroke-dashoffset: 0 } }
+  @keyframes bob { from { transform: translateY(-2.5px) } to { transform: translateY(2.5px) } }
+  @keyframes dotbob { 0%, 100% { transform: translateY(0); opacity: .3 } 50% { transform: translateY(-5px); opacity: 1 } }
+  @keyframes liftin { from { opacity: 0; transform: translateY(14px) } to { opacity: 1; transform: none } }
+  /* backwards, not both: the logo keeps its press feedback once this ends. */
+  @keyframes logopop { from { opacity: 0; transform: scale(.55) } 55% { opacity: 1 } to { opacity: 1; transform: none } }
   @keyframes ripple { 0%, 100% { transform: scale(1); opacity: .55 } 50% { transform: scale(1.05); opacity: .72 } }
   .leaflet-container { font-family: "IBM Plex Sans", system-ui, sans-serif; background: #E8EFE6; }
   .leaflet-popup-content-wrapper { border-radius: 14px; box-shadow: 0 10px 30px rgba(20,53,42,.18) }
@@ -1224,290 +1230,68 @@ svg.leaflet-image-layer.leaflet-interactive path {
 <div style="height: var(--appvh); background: #0B231B; display: flex; justify-content: center; overflow: hidden;">
 <div ref="{{ rootRef }}" style="position: relative; width: 100%; max-width: 440px; height: var(--appvh); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; background: #EFE8D8; color: #16211C; font-family: 'IBM Plex Sans', system-ui, sans-serif; box-shadow: 0 0 0 1px rgba(253,246,232,.08), 0 24px 70px rgba(0,0,0,.5); -webkit-overflow-scrolling: touch; scrollbar-width: none;">
 
+  <!-- The loading screen is one five second beat: the crocodile swims a lap of
+       the ring while the ring draws in behind it, then flies to the corner and
+       lands as the home button. Sitting on the app's own background means
+       there is no world to cross into at the end of it. -->
   <sc-if value="{{ introOn }}" hint-placeholder-val="{{ true }}">
-    <div data-el="track" style="height: var(--appvh); position: relative;">
-      <div style="position: sticky; top: 0; height: var(--appvh); overflow: hidden; background: linear-gradient(#141C4A 0%, #3B2260 26%, #8A3568 46%, #D0574F 64%, #E8913F 78%, #1D4634 100%);">
+    <div data-el="loader" style="position: absolute; inset: 0; z-index: 60; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; background: #EFE8D8;">
 
-        <div data-el="cam" style="position: absolute; inset: 0; will-change: transform;">
+      <div style="position: relative; width: 148px; height: 148px;">
+        <svg data-el="loadtrack" viewBox="0 0 148 148" width="148" height="148" style="position: absolute; inset: 0; display: block; transform: rotate(-90deg); transition: opacity .4s ease;">
+          <circle cx="74" cy="74" r="62" fill="none" stroke="#DED2B6" stroke-width="2.5"/>
+          <circle data-el="loadring" cx="74" cy="74" r="62" fill="none" stroke="#1F5C3E" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="389.6" stroke-dashoffset="389.6" style="animation: drawring 5s linear both; transition: opacity .4s ease;"/>
+        </svg>
 
-        <div data-el="clouds" style="position: absolute; left: -20%; right: -20%; top: 12%; height: 14%; opacity: .3; background: radial-gradient(54px 9px at 20% 40%, rgba(255,246,226,.85) 0 55%, transparent 58%), radial-gradient(78px 11px at 54% 72%, rgba(255,246,226,.7) 0 55%, transparent 58%), radial-gradient(62px 8px at 84% 26%, rgba(255,246,226,.6) 0 55%, transparent 58%); background-repeat: no-repeat; animation: drift 34s linear infinite alternate;"></div>
-
-        <div data-el="haze" style="position: absolute; left: 50%; top: 30%; width: 96%; aspect-ratio: 1 / 1; margin-left: -48%; border-radius: 999px; background: radial-gradient(circle, rgba(255,127,168,.34) 0 38%, rgba(255,146,120,.14) 58%, transparent 72%); will-change: transform;"></div>
-
-        <!-- The sun settles below the headline rather than behind it: cream
-             type on the bright centre of the disc was the one place on this
-             page where contrast fell apart. -->
-        <div data-el="sun" style="position: absolute; left: 50%; top: 34%; width: 56%; aspect-ratio: 1 / 1; margin-left: -28%; border-radius: 999px; overflow: hidden; background: radial-gradient(circle at 50% 38%, #FFD2A8 0 18%, #FFAF8C 42%, #FF87A6 68%, #E4607F 100%); filter: blur(.4px); will-change: transform;">
-          <div style="position: absolute; left: -6%; right: -6%; top: 61%; height: 5%; background: #40204F; opacity: .32; filter: blur(4px);"></div>
-          <div style="position: absolute; left: -6%; right: -6%; top: 75%; height: 6%; background: #3A1B4A; opacity: .3; filter: blur(5px);"></div>
-          <div style="position: absolute; left: -6%; right: -6%; top: 88%; height: 7%; background: #35184A; opacity: .28; filter: blur(6px);"></div>
-        </div>
-
-        <!-- Palms flank both edges at four heights. Each sits on a zero-height
-             baseline so `bottom` reads as depth up the slope, and the blur and
-             opacity fall off with distance. -->
-        <div data-el="trees" style="position: absolute; left: 0; right: 0; bottom: 41%; height: 0; will-change: transform;">
-
-          <svg viewBox="0 0 60 100" width="95" height="158" style="position: absolute; left: -18px; bottom: -18px; display: block; overflow: visible; filter: blur(1.4px); opacity: .95; animation: sway 6.5s ease-in-out infinite; transform-origin: 51px 158px;">
-            <path d="M30 100 C 25 78 32 54 33 34 L 37 34 C 36 55 31 79 35 100 Z" fill="#07160F"/>
-            <g transform="translate(34,33)" fill="#07160F">
-              <path d="M0 0 C 12 -10 34 -10 46 -2 C 32 2 12 4 0 0 Z" transform="rotate(-56)"/>
-              <path d="M0 0 C 12 -8 32 -6 44 4 C 30 6 12 6 0 0 Z" transform="rotate(-18)"/>
-              <path d="M0 0 C 12 -4 30 2 40 12 C 26 10 10 6 0 0 Z" transform="rotate(20)"/>
-              <path d="M0 0 C 10 2 24 10 32 22 C 20 16 8 8 0 0 Z" transform="rotate(56)"/>
-              <path d="M0 0 C 8 4 16 14 20 26 C 10 18 4 8 0 0 Z" transform="rotate(86)"/>
-            </g>
+        <!-- The croc rides a wrapper that spins about the ring's centre, so it
+             stays tangent to the circle the whole way round without any
+             per-frame maths. It is a plain element rather than part of the
+             ring's SVG because it has to fly out of here and land on the
+             header, which means it needs its own transform. -->
+        <div data-el="croctrack" style="position: absolute; inset: 0; animation: orbit 5s linear both;">
+          <!-- The counter-turn cancels the orbit exactly, since both are linear
+               over the same five seconds. Without it the croc is drawn in side
+               profile going round a loop, so it spends half the lap belly-up. -->
+          <div data-el="croclevel" style="position: absolute; left: 50%; top: 1px; margin-left: -37px; width: 74px; height: 19px; animation: counterspin 5s linear both;">
+          <svg data-el="loadcroc" viewBox="-44 -18 82 21" width="74" height="19" style="display: block; overflow: visible; animation: bob 1.15s ease-in-out infinite alternate;">
+            <path d="M8.6 -5.6 C 11 -4.6 11.8 -2.6 11.4 -0.6 L 7.6 -0.6 C 6.8 -2.6 6.8 -4.4 8.6 -5.6 Z" fill="#26401D"/>
+            <path d="M-10.6 -5.6 C -8.2 -4.6 -7.4 -2.6 -7.8 -0.6 L -11.6 -0.6 C -12.4 -2.6 -12.4 -4.4 -10.6 -5.6 Z" fill="#26401D"/>
+            <path d="M-16 -9.8 C -23 -9.2 -30 -7.8 -37 -5.2 C -39.4 -4.3 -41 -3.6 -42.2 -2.7 C -40.4 -1.6 -38.2 -1.6 -35.8 -2.3 C -29.6 -4 -23 -4.6 -16 -4.5 Z" fill="#3A5628"/>
+            <path d="M-20.6 -9.6 L -19.4 -12.6 L -18 -9.4 Z" fill="#26401D"/>
+            <path d="M-25.6 -8.8 L -24.6 -11.4 L -23.4 -8.6 Z" fill="#26401D"/>
+            <path d="M-30.4 -7.6 L -29.6 -9.8 L -28.6 -7.3 Z" fill="#26401D"/>
+            <path d="M-34.6 -6.2 L -34 -8 L -33.2 -5.9 Z" fill="#26401D"/>
+            <path d="M13.6 -6.2 C 8 -4.4 0 -3.4 -6 -3.6 C -10 -3.7 -14 -4 -17 -4.6 L -17 -9.4 C -14.6 -11.2 -10.6 -12.6 -6 -13.2 C 0 -14 6 -13.4 12.4 -11.6 Z" fill="#405E2C"/>
+            <path d="M12.4 -11.6 C 6 -13.4 0 -14 -6 -13.2 C -10.6 -12.6 -14.6 -11.2 -17 -9.4 L -17 -7.8 C -14 -9.8 -10 -11 -6 -11.4 C 0 -12 6 -11.6 12.4 -10.2 Z" fill="#2C4620"/>
+            <path d="M-17 -4.6 C -14 -4 -10 -3.7 -6 -3.6 C 0 -3.4 8 -4.4 13.6 -6.2 L 13.4 -7.6 C 8 -6 0 -5.1 -6 -5.3 C -10 -5.4 -14 -5.7 -17 -6.2 Z" fill="#8FA55E"/>
+            <path d="M8.6 -12 L 9.8 -14.4 L 11 -12.6 Z" fill="#24391A"/>
+            <path d="M3.6 -13.1 L 4.8 -15.7 L 6 -13.4 Z" fill="#24391A"/>
+            <path d="M-1.4 -13.6 L -.2 -16.2 L 1 -13.8 Z" fill="#24391A"/>
+            <path d="M-6.4 -13.5 L -5.2 -16 L -4 -13.7 Z" fill="#24391A"/>
+            <path d="M-11.2 -12.7 L -10 -15 L -8.8 -13 Z" fill="#24391A"/>
+            <path d="M-15.2 -11 L -14.2 -13 L -13.2 -11.4 Z" fill="#24391A"/>
+            <path d="M10.2 -5.8 C 12.8 -5.2 13.8 -2.8 13.4 -.8 L 17 -.6 C 17.6 .2 17.2 1 16 1 L 10.6 1 C 9.2 -1 8.6 -3.8 10.2 -5.8 Z" fill="#456630"/>
+            <path d="M-9 -5.8 C -11.6 -5.2 -12.6 -2.8 -12.2 -.8 L -15.8 -.6 C -16.4 .2 -16 1 -14.8 1 L -9.4 1 C -8 -1 -7.4 -3.8 -9 -5.8 Z" fill="#456630"/>
+            <path d="M12 -13 C 13.2 -15.5 16.8 -15.5 17.8 -13 L 21 -11.7 C 26 -11.9 31 -11.5 34.2 -10.7 C 36.1 -10 36.1 -7.9 34.4 -7.3 C 30 -6.7 24 -6.3 20 -6.1 L 13.4 -5.6 C 12.2 -8 12 -10.6 12 -13 Z" fill="#456630"/>
+            <path d="M14.6 -6 C 21 -6.6 28 -7 34.8 -7.6" fill="none" stroke="#233A18" stroke-width=".8" stroke-linecap="round"/>
+            <path d="M31.6 -7.4 L 32.6 -5.2 L 30.6 -7.3 Z" fill="#F6EFDD"/>
+            <path d="M27.4 -7.1 L 28.4 -4.9 L 26.4 -7 Z" fill="#F6EFDD"/>
+            <path d="M23.2 -6.8 L 24.2 -4.6 L 22.2 -6.7 Z" fill="#F6EFDD"/>
+            <path d="M19 -6.5 L 20 -4.4 L 18 -6.4 Z" fill="#F6EFDD"/>
+            <ellipse cx="32.6" cy="-9.6" rx="1" ry=".8" fill="#24391A"/>
           </svg>
-
-          <svg viewBox="0 0 60 100" width="62" height="104" style="position: absolute; left: 70px; bottom: 22px; display: block; overflow: visible; filter: blur(2.6px); opacity: .66; animation: swayb 8.6s ease-in-out infinite -1.4s; transform-origin: 33px 104px;">
-            <path d="M30 100 C 25 78 32 54 33 34 L 37 34 C 36 55 31 79 35 100 Z" fill="#0A1D12"/>
-            <g transform="translate(34,33) scale(-1,1)" fill="#0A1D12">
-              <path d="M0 0 C 12 -10 34 -10 46 -2 C 32 2 12 4 0 0 Z" transform="rotate(-48)"/>
-              <path d="M0 0 C 12 -8 32 -6 44 4 C 30 6 12 6 0 0 Z" transform="rotate(-12)"/>
-              <path d="M0 0 C 12 -4 30 2 40 12 C 26 10 10 6 0 0 Z" transform="rotate(26)"/>
-              <path d="M0 0 C 10 2 24 10 32 22 C 20 16 8 8 0 0 Z" transform="rotate(62)"/>
-            </g>
-          </svg>
-
-          <svg viewBox="0 0 60 100" width="83" height="138" style="position: absolute; right: -22px; bottom: -12px; display: block; overflow: visible; filter: blur(1.8px); opacity: .9; animation: swayb 7.4s ease-in-out infinite -.6s; transform-origin: 44px 138px;">
-            <path d="M30 100 C 25 78 32 54 33 34 L 37 34 C 36 55 31 79 35 100 Z" fill="#07160F"/>
-            <g transform="translate(34,33) scale(-1,1)" fill="#07160F">
-              <path d="M0 0 C 12 -10 34 -10 46 -2 C 32 2 12 4 0 0 Z" transform="rotate(-54)"/>
-              <path d="M0 0 C 12 -8 32 -6 44 4 C 30 6 12 6 0 0 Z" transform="rotate(-16)"/>
-              <path d="M0 0 C 12 -4 30 2 40 12 C 26 10 10 6 0 0 Z" transform="rotate(22)"/>
-              <path d="M0 0 C 10 2 24 10 32 22 C 20 16 8 8 0 0 Z" transform="rotate(58)"/>
-              <path d="M0 0 C 8 4 16 14 20 26 C 10 18 4 8 0 0 Z" transform="rotate(88)"/>
-            </g>
-          </svg>
-
-          <svg viewBox="0 0 60 100" width="55" height="92" style="position: absolute; right: 74px; bottom: 26px; display: block; overflow: visible; filter: blur(2.9px); opacity: .6; animation: sway 9.2s ease-in-out infinite -2.2s; transform-origin: 29px 92px;">
-            <path d="M30 100 C 25 78 32 54 33 34 L 37 34 C 36 55 31 79 35 100 Z" fill="#0A1D12"/>
-            <g transform="translate(34,33)" fill="#0A1D12">
-              <path d="M0 0 C 12 -10 34 -10 46 -2 C 32 2 12 4 0 0 Z" transform="rotate(-44)"/>
-              <path d="M0 0 C 12 -8 32 -6 44 4 C 30 6 12 6 0 0 Z" transform="rotate(-8)"/>
-              <path d="M0 0 C 12 -4 30 2 40 12 C 26 10 10 6 0 0 Z" transform="rotate(30)"/>
-              <path d="M0 0 C 10 2 24 10 32 22 C 20 16 8 8 0 0 Z" transform="rotate(66)"/>
-            </g>
-          </svg>
+          </div>
         </div>
+      </div>
 
-        <!-- Putt-putt hole: a single SVG scene replaces the old stacked-div
-             golfer so the ball, gators and green read as one drawn illustration
-             instead of dozens of flat clip-art shapes. The ball's own position
-             each frame comes from sampling data-el="lanepath" with
-             getPointAtLength, so it always rides exactly on the drawn curve. -->
-        <div data-el="scene" style="position: absolute; left: -10%; right: -10%; bottom: -6%; height: 58%; overflow: hidden;">
-          <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block;">
-            <defs>
-              <linearGradient id="turf" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#3E8259"/>
-                <stop offset="45%" stop-color="#2C6144"/>
-                <stop offset="100%" stop-color="#15402D"/>
-              </linearGradient>
-              <radialGradient id="pond" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#1B3A3A"/>
-                <stop offset="100%" stop-color="#122A2A" stop-opacity="0"/>
-              </radialGradient>
-              <radialGradient id="ballg" cx="35%" cy="30%" r="70%">
-                <stop offset="0%" stop-color="#FFFFFF"/>
-                <stop offset="62%" stop-color="#F6EEDF"/>
-                <stop offset="100%" stop-color="#CFC3AC"/>
-              </radialGradient>
-            </defs>
-
-            <path d="M-10 24 Q 50 4 110 24 L 110 110 L -10 110 Z" fill="url(#turf)"/>
-            <path d="M-10 24 Q 50 4 110 24" fill="none" stroke="rgba(253,246,232,.06)" stroke-width="1.4"/>
-
-            <!-- Mown bands. Their spacing opens up toward the viewer, which
-                 does most of the work of reading the turf as a ground plane
-                 running away from you rather than a wall standing up. -->
-            <g fill="rgba(255,246,226,.05)">
-              <rect x="-10" y="26" width="120" height="3.2"/>
-              <rect x="-10" y="32.4" width="120" height="4"/>
-              <rect x="-10" y="40.4" width="120" height="5"/>
-              <rect x="-10" y="50.4" width="120" height="6.4"/>
-              <rect x="-10" y="63.2" width="120" height="8.2"/>
-              <rect x="-10" y="79.6" width="120" height="10.6"/>
-              <rect x="-10" y="100.8" width="120" height="13.6"/>
-            </g>
-
-            <ellipse cx="58" cy="85" rx="18" ry="6" fill="url(#pond)" style="filter: blur(1px); animation: ripple 5.5s ease-in-out infinite;"/>
-            <ellipse cx="36" cy="28" rx="14" ry="4.5" fill="url(#pond)" style="filter: blur(1px); animation: ripple 6.5s ease-in-out infinite .8s;"/>
-
-            <!-- The hole runs dead straight from the gator to the cup. A
-                 constant-width fairway would give the eye nothing to read as
-                 depth, so the two ribbons below are generated from this
-                 centreline by buildLane(), tapering toward the green; the
-                 ball, its shadow and the gators shrink on the same gradient. -->
-            <ellipse cx="50" cy="15.5" rx="16" ry="6" fill="#5AA271"/>
-            <ellipse cx="50" cy="15.5" rx="16" ry="6" fill="none" stroke="#EFE6CC" stroke-opacity=".34" stroke-width="1.4"/>
-            <path data-el="lanepath" d="M50 100 L 50 14" fill="none" stroke="none"/>
-            <path data-el="laneedge" fill="#EFE6CC" fill-opacity=".17"/>
-            <path data-el="lanetop" fill="#4C9463"/>
-
-            <!-- Crocs are drawn in profile rather than from above: the long
-                 boxy snout, the toothed jaw line and the sawtooth ridge down
-                 the back are the cues that read as "crocodile" at this size,
-                 and none of them survive a top-down view. The snapping head is
-                 a second drawing swapped in on the beat, not a hinged jaw —
-                 rotating a jaw opens a gap no static mouth shape can fill. -->
-            <g transform="translate(30,81) rotate(2) scale(-.5,.5)">
-              <ellipse cx="-1" cy="1" rx="37" ry="3.2" fill="rgba(8,26,20,.34)" style="filter: blur(1.6px);"/>
-
-              <path d="M8.6 -5.6 C 11 -4.6 11.8 -2.6 11.4 -0.6 L 7.6 -0.6 C 6.8 -2.6 6.8 -4.4 8.6 -5.6 Z" fill="#26401D"/>
-              <path d="M-10.6 -5.6 C -8.2 -4.6 -7.4 -2.6 -7.8 -0.6 L -11.6 -0.6 C -12.4 -2.6 -12.4 -4.4 -10.6 -5.6 Z" fill="#26401D"/>
-
-              <g data-el="gator1tail" style="transform-origin: -17px -6.8px;">
-                <path d="M-16 -9.8 C -23 -9.2 -30 -7.8 -37 -5.2 C -39.4 -4.3 -41 -3.6 -42.2 -2.7 C -40.4 -1.6 -38.2 -1.6 -35.8 -2.3 C -29.6 -4 -23 -4.6 -16 -4.5 Z" fill="#3A5628"/>
-                <path d="M-20.6 -9.6 L -19.4 -12.6 L -18 -9.4 Z" fill="#26401D"/>
-                <path d="M-25.6 -8.8 L -24.6 -11.4 L -23.4 -8.6 Z" fill="#26401D"/>
-                <path d="M-30.4 -7.6 L -29.6 -9.8 L -28.6 -7.3 Z" fill="#26401D"/>
-                <path d="M-34.6 -6.2 L -34 -8 L -33.2 -5.9 Z" fill="#26401D"/>
-              </g>
-
-              <path d="M13.6 -6.2 C 8 -4.4 0 -3.4 -6 -3.6 C -10 -3.7 -14 -4 -17 -4.6 L -17 -9.4 C -14.6 -11.2 -10.6 -12.6 -6 -13.2 C 0 -14 6 -13.4 12.4 -11.6 Z" fill="#405E2C"/>
-              <path d="M12.4 -11.6 C 6 -13.4 0 -14 -6 -13.2 C -10.6 -12.6 -14.6 -11.2 -17 -9.4 L -17 -7.8 C -14 -9.8 -10 -11 -6 -11.4 C 0 -12 6 -11.6 12.4 -10.2 Z" fill="#2C4620"/>
-              <path d="M-17 -4.6 C -14 -4 -10 -3.7 -6 -3.6 C 0 -3.4 8 -4.4 13.6 -6.2 L 13.4 -7.6 C 8 -6 0 -5.1 -6 -5.3 C -10 -5.4 -14 -5.7 -17 -6.2 Z" fill="#8FA55E"/>
-
-              <path d="M8.6 -12 L 9.8 -14.4 L 11 -12.6 Z" fill="#24391A"/>
-              <path d="M3.6 -13.1 L 4.8 -15.7 L 6 -13.4 Z" fill="#24391A"/>
-              <path d="M-1.4 -13.6 L -.2 -16.2 L 1 -13.8 Z" fill="#24391A"/>
-              <path d="M-6.4 -13.5 L -5.2 -16 L -4 -13.7 Z" fill="#24391A"/>
-              <path d="M-11.2 -12.7 L -10 -15 L -8.8 -13 Z" fill="#24391A"/>
-              <path d="M-15.2 -11 L -14.2 -13 L -13.2 -11.4 Z" fill="#24391A"/>
-
-              <path d="M10.2 -5.8 C 12.8 -5.2 13.8 -2.8 13.4 -.8 L 17 -.6 C 17.6 .2 17.2 1 16 1 L 10.6 1 C 9.2 -1 8.6 -3.8 10.2 -5.8 Z" fill="#456630"/>
-              <path d="M-9 -5.8 C -11.6 -5.2 -12.6 -2.8 -12.2 -.8 L -15.8 -.6 C -16.4 .2 -16 1 -14.8 1 L -9.4 1 C -8 -1 -7.4 -3.8 -9 -5.8 Z" fill="#456630"/>
-
-              <g data-el="gator1head">
-                <path d="M12 -13 C 13.2 -15.5 16.8 -15.5 17.8 -13 L 21 -11.7 C 26 -11.9 31 -11.5 34.2 -10.7 C 36.1 -10 36.1 -7.9 34.4 -7.3 C 30 -6.7 24 -6.3 20 -6.1 L 13.4 -5.6 C 12.2 -8 12 -10.6 12 -13 Z" fill="#456630"/>
-                <path d="M14.6 -6 C 21 -6.6 28 -7 34.8 -7.6" fill="none" stroke="#233A18" stroke-width=".8" stroke-linecap="round"/>
-                <path d="M31.6 -7.4 L 32.6 -5.2 L 30.6 -7.3 Z" fill="#F6EFDD"/>
-                <path d="M27.4 -7.1 L 28.4 -4.9 L 26.4 -7 Z" fill="#F6EFDD"/>
-                <path d="M23.2 -6.8 L 24.2 -4.6 L 22.2 -6.7 Z" fill="#F6EFDD"/>
-                <path d="M19 -6.5 L 20 -4.4 L 18 -6.4 Z" fill="#F6EFDD"/>
-                <ellipse cx="32.6" cy="-9.6" rx="1" ry=".8" fill="#24391A"/>
-              </g>
-
-              <g data-el="gator1open" opacity="0">
-                <path d="M13 -8.6 L 35.4 -12.4 L 35.8 -3.4 L 13.6 -6.4 Z" fill="#6E2C3E"/>
-                <path d="M12 -13 C 13.2 -15.5 16.8 -15.5 17.8 -13 L 21 -12.3 C 26 -12.9 31 -13.3 34.6 -13.5 C 36.4 -13.1 36.6 -11.3 34.9 -10.7 C 30 -9.9 22 -9.2 13.6 -8.6 C 12.4 -10 12 -11.6 12 -13 Z" fill="#456630"/>
-                <path d="M32 -10.9 L 33 -8.7 L 31 -10.8 Z" fill="#F6EFDD"/>
-                <path d="M27.8 -10.4 L 28.8 -8.2 L 26.8 -10.3 Z" fill="#F6EFDD"/>
-                <path d="M23.6 -9.9 L 24.6 -7.7 L 22.6 -9.8 Z" fill="#F6EFDD"/>
-                <path d="M19.4 -9.4 L 20.4 -7.2 L 18.4 -9.3 Z" fill="#F6EFDD"/>
-                <path d="M13.4 -6.4 C 20 -5.6 28 -4.3 34.6 -3.1 C 36 -2.5 35.8 -1 34.2 -.8 C 27 -1.7 19 -3.1 13.2 -4.4 C 12.6 -5 12.8 -6 13.4 -6.4 Z" fill="#3E5A2A"/>
-                <path d="M30.4 -3.4 L 31.4 -5.6 L 29.4 -3.7 Z" fill="#F6EFDD"/>
-                <path d="M26.2 -4.2 L 27.2 -6.4 L 25.2 -4.5 Z" fill="#F6EFDD"/>
-                <path d="M22 -5 L 23 -7.2 L 21 -5.3 Z" fill="#F6EFDD"/>
-                <ellipse cx="33" cy="-12.4" rx="1" ry=".8" fill="#24391A"/>
-              </g>
-
-              <path d="M13.6 -14.4 C 14.8 -15.9 16.6 -15.9 17.6 -14.4" fill="none" stroke="#2C4620" stroke-width="1.2" stroke-linecap="round"/>
-              <ellipse cx="15.6" cy="-13" rx="2" ry="1.85" fill="#E8B23F"/>
-              <ellipse cx="15.6" cy="-13" rx=".55" ry="1.45" fill="#12200F"/>
-            </g>
-
-            <g transform="translate(66,31) rotate(-3) scale(-.35,.35)">
-              <ellipse cx="-1" cy="1" rx="37" ry="3.2" fill="rgba(8,26,20,.34)" style="filter: blur(1.6px);"/>
-
-              <path d="M8.6 -5.6 C 11 -4.6 11.8 -2.6 11.4 -0.6 L 7.6 -0.6 C 6.8 -2.6 6.8 -4.4 8.6 -5.6 Z" fill="#26401D"/>
-              <path d="M-10.6 -5.6 C -8.2 -4.6 -7.4 -2.6 -7.8 -0.6 L -11.6 -0.6 C -12.4 -2.6 -12.4 -4.4 -10.6 -5.6 Z" fill="#26401D"/>
-
-              <g data-el="gator2tail" style="transform-origin: -17px -6.8px;">
-                <path d="M-16 -9.8 C -23 -9.2 -30 -7.8 -37 -5.2 C -39.4 -4.3 -41 -3.6 -42.2 -2.7 C -40.4 -1.6 -38.2 -1.6 -35.8 -2.3 C -29.6 -4 -23 -4.6 -16 -4.5 Z" fill="#3A5628"/>
-                <path d="M-20.6 -9.6 L -19.4 -12.6 L -18 -9.4 Z" fill="#26401D"/>
-                <path d="M-25.6 -8.8 L -24.6 -11.4 L -23.4 -8.6 Z" fill="#26401D"/>
-                <path d="M-30.4 -7.6 L -29.6 -9.8 L -28.6 -7.3 Z" fill="#26401D"/>
-                <path d="M-34.6 -6.2 L -34 -8 L -33.2 -5.9 Z" fill="#26401D"/>
-              </g>
-
-              <path d="M13.6 -6.2 C 8 -4.4 0 -3.4 -6 -3.6 C -10 -3.7 -14 -4 -17 -4.6 L -17 -9.4 C -14.6 -11.2 -10.6 -12.6 -6 -13.2 C 0 -14 6 -13.4 12.4 -11.6 Z" fill="#405E2C"/>
-              <path d="M12.4 -11.6 C 6 -13.4 0 -14 -6 -13.2 C -10.6 -12.6 -14.6 -11.2 -17 -9.4 L -17 -7.8 C -14 -9.8 -10 -11 -6 -11.4 C 0 -12 6 -11.6 12.4 -10.2 Z" fill="#2C4620"/>
-              <path d="M-17 -4.6 C -14 -4 -10 -3.7 -6 -3.6 C 0 -3.4 8 -4.4 13.6 -6.2 L 13.4 -7.6 C 8 -6 0 -5.1 -6 -5.3 C -10 -5.4 -14 -5.7 -17 -6.2 Z" fill="#8FA55E"/>
-
-              <path d="M8.6 -12 L 9.8 -14.4 L 11 -12.6 Z" fill="#24391A"/>
-              <path d="M3.6 -13.1 L 4.8 -15.7 L 6 -13.4 Z" fill="#24391A"/>
-              <path d="M-1.4 -13.6 L -.2 -16.2 L 1 -13.8 Z" fill="#24391A"/>
-              <path d="M-6.4 -13.5 L -5.2 -16 L -4 -13.7 Z" fill="#24391A"/>
-              <path d="M-11.2 -12.7 L -10 -15 L -8.8 -13 Z" fill="#24391A"/>
-              <path d="M-15.2 -11 L -14.2 -13 L -13.2 -11.4 Z" fill="#24391A"/>
-
-              <path d="M10.2 -5.8 C 12.8 -5.2 13.8 -2.8 13.4 -.8 L 17 -.6 C 17.6 .2 17.2 1 16 1 L 10.6 1 C 9.2 -1 8.6 -3.8 10.2 -5.8 Z" fill="#456630"/>
-              <path d="M-9 -5.8 C -11.6 -5.2 -12.6 -2.8 -12.2 -.8 L -15.8 -.6 C -16.4 .2 -16 1 -14.8 1 L -9.4 1 C -8 -1 -7.4 -3.8 -9 -5.8 Z" fill="#456630"/>
-
-              <g data-el="gator2head">
-                <path d="M12 -13 C 13.2 -15.5 16.8 -15.5 17.8 -13 L 21 -11.7 C 26 -11.9 31 -11.5 34.2 -10.7 C 36.1 -10 36.1 -7.9 34.4 -7.3 C 30 -6.7 24 -6.3 20 -6.1 L 13.4 -5.6 C 12.2 -8 12 -10.6 12 -13 Z" fill="#456630"/>
-                <path d="M14.6 -6 C 21 -6.6 28 -7 34.8 -7.6" fill="none" stroke="#233A18" stroke-width=".8" stroke-linecap="round"/>
-                <path d="M31.6 -7.4 L 32.6 -5.2 L 30.6 -7.3 Z" fill="#F6EFDD"/>
-                <path d="M27.4 -7.1 L 28.4 -4.9 L 26.4 -7 Z" fill="#F6EFDD"/>
-                <path d="M23.2 -6.8 L 24.2 -4.6 L 22.2 -6.7 Z" fill="#F6EFDD"/>
-                <path d="M19 -6.5 L 20 -4.4 L 18 -6.4 Z" fill="#F6EFDD"/>
-                <ellipse cx="32.6" cy="-9.6" rx="1" ry=".8" fill="#24391A"/>
-              </g>
-
-              <g data-el="gator2open" opacity="0">
-                <path d="M13 -8.6 L 35.4 -12.4 L 35.8 -3.4 L 13.6 -6.4 Z" fill="#6E2C3E"/>
-                <path d="M12 -13 C 13.2 -15.5 16.8 -15.5 17.8 -13 L 21 -12.3 C 26 -12.9 31 -13.3 34.6 -13.5 C 36.4 -13.1 36.6 -11.3 34.9 -10.7 C 30 -9.9 22 -9.2 13.6 -8.6 C 12.4 -10 12 -11.6 12 -13 Z" fill="#456630"/>
-                <path d="M32 -10.9 L 33 -8.7 L 31 -10.8 Z" fill="#F6EFDD"/>
-                <path d="M27.8 -10.4 L 28.8 -8.2 L 26.8 -10.3 Z" fill="#F6EFDD"/>
-                <path d="M23.6 -9.9 L 24.6 -7.7 L 22.6 -9.8 Z" fill="#F6EFDD"/>
-                <path d="M19.4 -9.4 L 20.4 -7.2 L 18.4 -9.3 Z" fill="#F6EFDD"/>
-                <path d="M13.4 -6.4 C 20 -5.6 28 -4.3 34.6 -3.1 C 36 -2.5 35.8 -1 34.2 -.8 C 27 -1.7 19 -3.1 13.2 -4.4 C 12.6 -5 12.8 -6 13.4 -6.4 Z" fill="#3E5A2A"/>
-                <path d="M30.4 -3.4 L 31.4 -5.6 L 29.4 -3.7 Z" fill="#F6EFDD"/>
-                <path d="M26.2 -4.2 L 27.2 -6.4 L 25.2 -4.5 Z" fill="#F6EFDD"/>
-                <path d="M22 -5 L 23 -7.2 L 21 -5.3 Z" fill="#F6EFDD"/>
-                <ellipse cx="33" cy="-12.4" rx="1" ry=".8" fill="#24391A"/>
-              </g>
-
-              <path d="M13.6 -14.4 C 14.8 -15.9 16.6 -15.9 17.6 -14.4" fill="none" stroke="#2C4620" stroke-width="1.2" stroke-linecap="round"/>
-              <ellipse cx="15.6" cy="-13" rx="2" ry="1.85" fill="#E8B23F"/>
-              <ellipse cx="15.6" cy="-13" rx=".55" ry="1.45" fill="#12200F"/>
-            </g>
-
-            <ellipse cx="50" cy="14" rx="6.2" ry="2.6" fill="rgba(8,26,20,.3)" style="filter: blur(.6px);"/>
-            <ellipse cx="50" cy="14" rx="5" ry="2" fill="#0B2419"/>
-            <ellipse cx="50" cy="14" rx="5.6" ry="2.35" fill="none" stroke="rgba(253,246,232,.4)" stroke-width=".5"/>
-            <circle data-el="splash0" cx="50" cy="14" r="2" fill="none" stroke="rgba(253,246,232,.7)" stroke-width=".6" opacity="0"/>
-            <circle data-el="splash1" cx="50" cy="14" r="2" fill="none" stroke="rgba(253,246,232,.5)" stroke-width=".5" opacity="0"/>
-            <line x1="50" y1="14" x2="50" y2="3" stroke="#F6EFDD" stroke-width=".7" stroke-linecap="round"/>
-            <polygon points="50,3 61,5.6 50,8.6" fill="#FF7FA8" style="transform-box: fill-box; transform-origin: 0% 50%; animation: flutter 3.4s ease-in-out infinite;"/>
-
-            <circle data-el="trail2" cx="50" cy="96" r="1" fill="rgba(255,253,247,.16)"/>
-            <circle data-el="trail1" cx="50" cy="96" r="1.15" fill="rgba(255,253,247,.26)"/>
-            <circle data-el="trail0" cx="50" cy="96" r="1.3" fill="rgba(255,253,247,.4)"/>
-            <ellipse data-el="bshadow" cx="50" cy="96" rx="3" ry="1.1" fill="rgba(8,26,20,.4)"/>
-
-            <g data-el="ballWrap" transform="translate(50,96)">
-              <g data-el="ballspin">
-                <circle r="2.6" fill="url(#ballg)"/>
-                <circle cx=".9" cy="-.6" r=".38" fill="rgba(20,53,42,.14)"/>
-                <circle cx="-.5" cy=".9" r=".3" fill="rgba(20,53,42,.12)"/>
-                <circle cx=".3" cy="1.3" r=".26" fill="rgba(20,53,42,.1)"/>
-              </g>
-            </g>
-          </svg>
+      <div data-el="loadtype" style="text-align: center; animation: liftin .8s cubic-bezier(.2,.7,.2,1) .2s both; transition: opacity .35s ease;">
+        <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: clamp(20px, 6.4vw, 26px); letter-spacing: -.02em; color: #14352A;">Florida Golf Trip 2026</div>
+        <div style="margin-top: 7px; font-family: 'IBM Plex Mono', monospace; font-size: clamp(10px, 3vw, 11.5px); letter-spacing: .12em; color: #54634F;">SEPT 17 &ndash; 20 &middot; FORT MYERS</div>
+        <div style="margin-top: 18px; display: flex; align-items: center; justify-content: center; gap: 7px;">
+          <div style="width: 6px; height: 6px; border-radius: 999px; background: #1F5C3E; animation: dotbob 1.3s ease-in-out infinite;"></div>
+          <div style="width: 6px; height: 6px; border-radius: 999px; background: #1F5C3E; animation: dotbob 1.3s ease-in-out .16s infinite;"></div>
+          <div style="width: 6px; height: 6px; border-radius: 999px; background: #1F5C3E; animation: dotbob 1.3s ease-in-out .32s infinite;"></div>
         </div>
-
-        <div style="position: absolute; left: -10%; right: -10%; bottom: 28%; height: 7%; background: linear-gradient(rgba(255,176,138,.3), rgba(255,176,138,0)); filter: blur(7px); pointer-events: none;"></div>
-
-
-          <div style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(125% 92% at 50% 44%, rgba(0,0,0,0) 38%, rgba(10,18,34,.42) 100%);"></div>
-        </div>
-
-        <!-- The drop shadow is belt-and-braces: the sun now rests clear of the
-             type, but on a short viewport the gap closes and the shadow keeps
-             the headline legible either way. -->
-        <div data-el="title" style="position: absolute; left: 0; right: 0; top: 8%; padding: 0 26px; text-align: center; text-shadow: 0 2px 20px rgba(12,20,40,.55); will-change: transform, opacity;">
-          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .18em; color: #FFC7A0;">Sept 17 – 20, 2026</div>
-          <div style="margin-top: 10px; font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: clamp(34px, 12.8vw, 50px); line-height: .94; letter-spacing: -.03em; color: #FFF8EA;">Florida<br>Golf Trip <span style="color: #FF7FA8; text-shadow: 0 0 18px rgba(255,127,168,.55);">2026</span></div>
-        </div>
-
-        
-        
-        <div data-el="veil" style="position: absolute; inset: 0; background: #EFE8D8; opacity: 0; pointer-events: none;"></div>
-
-        <button type="button" sc-camel-on-click="{{ skipIntro }}" style="position: absolute; right: 10px; top: 10px; min-height: 44px; min-width: 72px; padding: 8px 13px; border: 1px solid rgba(253,246,232,.28); border-radius: 999px; background: rgba(253,246,232,.08); color: #FFF8EA; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .1em; cursor: pointer;">skip</button>
       </div>
     </div>
   </sc-if>
@@ -1516,9 +1300,41 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     <div style="position: sticky; top: 0; z-index: 40; margin: 0 -20px; padding: 16px 20px 14px; background: rgba(239,232,216,.95); backdrop-filter: blur(12px); border-bottom: 1px solid #D3C6A9; box-shadow: 0 6px 18px -12px rgba(20,53,42,.35);">
       <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-        <div>
-          <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: clamp(16px, 5vw, 20px); letter-spacing: -.02em; color: #14352A;">Florida Golf Trip 2026</div>
-          <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #54634F;">Sept 17–20</div>
+        <div style="display: flex; align-items: center; gap: 11px; min-width: 0;">
+          <!-- Where the loading croc lands, and the way back to the trip tab. -->
+          <button data-el="logo" type="button" sc-camel-on-click="{{ goHome }}" aria-label="Back to the trip tab" style="flex: none; width: 42px; height: 42px; display: grid; place-items: center; padding: 0; border: 1px solid #D3C6A9; border-radius: 14px; background: #FFFDF7; cursor: pointer;">
+            <svg viewBox="-44 -18 82 21" width="30" height="8" style="display: block; overflow: visible;">
+              <path d="M8.6 -5.6 C 11 -4.6 11.8 -2.6 11.4 -0.6 L 7.6 -0.6 C 6.8 -2.6 6.8 -4.4 8.6 -5.6 Z" fill="#26401D"/>
+              <path d="M-10.6 -5.6 C -8.2 -4.6 -7.4 -2.6 -7.8 -0.6 L -11.6 -0.6 C -12.4 -2.6 -12.4 -4.4 -10.6 -5.6 Z" fill="#26401D"/>
+              <path d="M-16 -9.8 C -23 -9.2 -30 -7.8 -37 -5.2 C -39.4 -4.3 -41 -3.6 -42.2 -2.7 C -40.4 -1.6 -38.2 -1.6 -35.8 -2.3 C -29.6 -4 -23 -4.6 -16 -4.5 Z" fill="#3A5628"/>
+              <path d="M-20.6 -9.6 L -19.4 -12.6 L -18 -9.4 Z" fill="#26401D"/>
+              <path d="M-25.6 -8.8 L -24.6 -11.4 L -23.4 -8.6 Z" fill="#26401D"/>
+              <path d="M-30.4 -7.6 L -29.6 -9.8 L -28.6 -7.3 Z" fill="#26401D"/>
+              <path d="M-34.6 -6.2 L -34 -8 L -33.2 -5.9 Z" fill="#26401D"/>
+              <path d="M13.6 -6.2 C 8 -4.4 0 -3.4 -6 -3.6 C -10 -3.7 -14 -4 -17 -4.6 L -17 -9.4 C -14.6 -11.2 -10.6 -12.6 -6 -13.2 C 0 -14 6 -13.4 12.4 -11.6 Z" fill="#405E2C"/>
+              <path d="M12.4 -11.6 C 6 -13.4 0 -14 -6 -13.2 C -10.6 -12.6 -14.6 -11.2 -17 -9.4 L -17 -7.8 C -14 -9.8 -10 -11 -6 -11.4 C 0 -12 6 -11.6 12.4 -10.2 Z" fill="#2C4620"/>
+              <path d="M-17 -4.6 C -14 -4 -10 -3.7 -6 -3.6 C 0 -3.4 8 -4.4 13.6 -6.2 L 13.4 -7.6 C 8 -6 0 -5.1 -6 -5.3 C -10 -5.4 -14 -5.7 -17 -6.2 Z" fill="#8FA55E"/>
+              <path d="M8.6 -12 L 9.8 -14.4 L 11 -12.6 Z" fill="#24391A"/>
+              <path d="M3.6 -13.1 L 4.8 -15.7 L 6 -13.4 Z" fill="#24391A"/>
+              <path d="M-1.4 -13.6 L -.2 -16.2 L 1 -13.8 Z" fill="#24391A"/>
+              <path d="M-6.4 -13.5 L -5.2 -16 L -4 -13.7 Z" fill="#24391A"/>
+              <path d="M-11.2 -12.7 L -10 -15 L -8.8 -13 Z" fill="#24391A"/>
+              <path d="M-15.2 -11 L -14.2 -13 L -13.2 -11.4 Z" fill="#24391A"/>
+              <path d="M10.2 -5.8 C 12.8 -5.2 13.8 -2.8 13.4 -.8 L 17 -.6 C 17.6 .2 17.2 1 16 1 L 10.6 1 C 9.2 -1 8.6 -3.8 10.2 -5.8 Z" fill="#456630"/>
+              <path d="M-9 -5.8 C -11.6 -5.2 -12.6 -2.8 -12.2 -.8 L -15.8 -.6 C -16.4 .2 -16 1 -14.8 1 L -9.4 1 C -8 -1 -7.4 -3.8 -9 -5.8 Z" fill="#456630"/>
+              <path d="M12 -13 C 13.2 -15.5 16.8 -15.5 17.8 -13 L 21 -11.7 C 26 -11.9 31 -11.5 34.2 -10.7 C 36.1 -10 36.1 -7.9 34.4 -7.3 C 30 -6.7 24 -6.3 20 -6.1 L 13.4 -5.6 C 12.2 -8 12 -10.6 12 -13 Z" fill="#456630"/>
+              <path d="M14.6 -6 C 21 -6.6 28 -7 34.8 -7.6" fill="none" stroke="#233A18" stroke-width=".8" stroke-linecap="round"/>
+              <path d="M31.6 -7.4 L 32.6 -5.2 L 30.6 -7.3 Z" fill="#F6EFDD"/>
+              <path d="M27.4 -7.1 L 28.4 -4.9 L 26.4 -7 Z" fill="#F6EFDD"/>
+              <path d="M23.2 -6.8 L 24.2 -4.6 L 22.2 -6.7 Z" fill="#F6EFDD"/>
+              <path d="M19 -6.5 L 20 -4.4 L 18 -6.4 Z" fill="#F6EFDD"/>
+              <ellipse cx="32.6" cy="-9.6" rx="1" ry=".8" fill="#24391A"/>
+            </svg>
+          </button>
+          <div style="min-width: 0;">
+            <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: clamp(15px, 4.4vw, 19px); letter-spacing: -.02em; color: #14352A;">Florida Golf Trip 2026</div>
+            <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #54634F;">Sept 17–20</div>
+          </div>
         </div>
         <div style="flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-width: 72px; padding: 11px 14px; border-radius: 18px; background: #14352A; color: #FFF8EA;">
           <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 21px; line-height: 1;">{{ daysOut }}</div>
@@ -1827,10 +1643,6 @@ const ICON = {
   dining: { tv: 'none', gf: 'none', dn: 'inline' }
 };
 
-const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-const seg = (p, a, b) => clamp((p - a) / (b - a), 0, 1);
-const lerp = (a, b, t) => a + (b - a) * t;
-const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
 const dir = (q) => 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(q);
 const tel = (p) => 'tel:' + p.replace(/[^0-9]/g, '');
 
@@ -1972,32 +1784,20 @@ class Component extends DCLogic {
     const r = this.rootRef.current;
     if (!r) return;
     this.el = {};
-    ['track', 'cam', 'clouds', 'haze', 'sun', 'trees', 'veil', 'app', 'title', 'ballWrap', 'ballspin',
-      'bshadow', 'trail0', 'trail1', 'trail2', 'lanepath', 'laneedge', 'lanetop', 'splash0', 'splash1',
-      'gator1tail', 'gator1head', 'gator1open', 'gator2tail', 'gator2head', 'gator2open',
-      'navpill', 'tabslide', 'chippill', 'chipslide',
-      'nav', 'map']
+    ['loader', 'loadtrack', 'loadring', 'loadtype', 'croctrack', 'croclevel', 'loadcroc', 'logo',
+      'app', 'navpill', 'tabslide', 'chippill', 'chipslide', 'nav', 'map']
       .forEach((k) => { this.el[k] = r.querySelector('[data-el="' + k + '"]'); });
 
-    this.buildLane();
     this.syncTabSlide();
 
-    this.onResize = () => {
-      this.syncTabSlide();
-      if (!this.locked) this.renderIntro(performance.now() - this.t0);
-    };
+    this.onResize = this.syncTabSlide;
     window.addEventListener('resize', this.onResize);
 
-    // An autoplaying reel is exactly the kind of motion this media query is
-    // for, so honour it and drop straight into the app.
+    // Five seconds of animation is exactly what this media query is for, so
+    // honour it and drop straight into the app.
     const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    // The reel needs vertical room to read: sky, sun, horizon and fairway all
-    // stacked. Under ~480px of shell — a phone held sideways, or a small
-    // window — the hole crops out of frame and there is nothing to watch, so
-    // skip it rather than show a broken frame.
-    const tooShort = this.el.track && this.el.track.getBoundingClientRect().height < 480;
-    if (!this.el.track || reduced || tooShort) this.finishIntro();
-    else this.playIntro();
+    if (!this.el.loader || reduced) this.finishLoad();
+    else this.playLoader();
 
     this.loadWeather();
     this.registerSW();
@@ -2051,124 +1851,83 @@ class Component extends DCLogic {
   };
 
   componentWillUnmount() {
-    if (this.raf) cancelAnimationFrame(this.raf);
+    if (this.loadTimer) clearTimeout(this.loadTimer);
     window.removeEventListener('resize', this.onResize);
   }
 
-  /* ---------- intro reel ----------
-     The putt-putt choreography below is a pure function of one progress
-     value, so going from scroll-driven to timed only changes where that
-     value comes from. Order: the ball rolls the hole, the title rises in
-     over the resting scene, then the whole thing fades to the app. */
-  reel = { roll: 6300, titleAt: 5650, titleIn: 750, hold: 2000, out: 750 };
+  /* ---------- loading screen ----------
+     Five seconds, then the croc flies to the corner and becomes the home
+     button. The animation itself is all CSS; the only thing JavaScript has
+     to know is where the croc is going, and that has to be measured because
+     the header logo moves with the length of the title. */
+  LOAD_MS = 5000;
+  FLIGHT_MS = 640;
 
-  /* Widen the lane toward the viewer. SVG strokes are one width end to end,
-     so the two visible ribbons are filled outlines walked off the centreline:
-     sample a point, take the tangent from its neighbours, step out along the
-     normal by a half-width that shrinks with distance, and close the loop.
-     The tee end runs off the bottom of the frame, so it needs no end cap. */
-  lane = { near: 1.55, far: 0.95 };      // how much nearer things are drawn
-  laneW = { near: 3.4, far: 1.25 };      // the fairway itself recedes harder
-
-  /* Beats of the swing, in ms from the top of the reel. The scene holds
-     still until swingAt, which gives the eye a moment to take in the hole
-     before anything moves. Kept absolute rather than as fractions of `roll`
-     because the pause makes the fractions meaningless to read. */
-  swingAt = 2000;      // the gator starts to coil
-  contactAt = 2460;    // the tail meets the ball
-
-  /* The ball's flight. Each entry is a bounce: `end` is how far up the
-     ground track it comes down, `apex` how high it got. Both shrink each
-     time, which is what restitution looks like; after the last one it rolls
-     flat into the cup. */
-  launchY = 83;
-  launchAt = 0;
-  hops = [{ end: 0.50, apex: 16 }, { end: 0.75, apex: 6 }, { end: 0.90, apex: 2 }];
-
-  hopAt(u) {
-    let from = 0;
-    for (let i = 0; i < this.hops.length; i++) {
-      const h = this.hops[i];
-      if (u < h.end) {
-        const x = (u - from) / (h.end - from);
-        return 4 * h.apex * x * (1 - x);
-      }
-      from = h.end;
-    }
-    return 0;
-  }
-
-  buildLane() {
-    const e = this.el || {};
-    const path = e.lanepath;
-    if (!path || !path.getTotalLength) return;
-    const L = path.getTotalLength();
-
-    // Where along the fairway the ball is teed up, found rather than hardcoded
-    // so it survives any change to the centreline.
-    for (let i = 0; i <= 240; i++) {
-      const at = i / 240 * L;
-      if (path.getPointAtLength(at).y <= this.launchY) { this.launchAt = at; break; }
-    }
-    const ribbon = (base) => {
-      const near = [], far = [];
-      for (let i = 0; i <= 64; i++) {
-        const s = i / 64, at = s * L;
-        const p = path.getPointAtLength(at);
-        const a = path.getPointAtLength(Math.max(0, at - 0.5));
-        const b = path.getPointAtLength(Math.min(L, at + 0.5));
-        const dx = b.x - a.x, dy = b.y - a.y;
-        const m = Math.hypot(dx, dy) || 1;
-        const w = base * lerp(this.laneW.near, this.laneW.far, s) / 2;
-        near.push([p.x - dy / m * w, p.y + dx / m * w]);
-        far.push([p.x + dy / m * w, p.y - dx / m * w]);
-      }
-      return 'M' + near.concat(far.reverse())
-        .map((c) => c[0].toFixed(2) + ' ' + c[1].toFixed(2)).join('L') + 'Z';
-    };
-    if (e.laneedge) e.laneedge.setAttribute('d', ribbon(9.6));
-    if (e.lanetop) e.lanetop.setAttribute('d', ribbon(7.4));
-  }
-
-  playIntro() {
+  playLoader() {
     const r = this.rootRef.current;
     const e = this.el || {};
-    // Nothing should be scrollable while the reel runs.
+    // Nothing should be scrollable underneath the loader.
     if (r) { r.scrollTop = 0; this.prevOverflowY = r.style.overflowY; r.style.overflowY = 'hidden'; }
     if (e.nav) { e.nav.style.opacity = 0; e.nav.style.visibility = 'hidden'; }
-    if (e.title) e.title.style.opacity = 0;
-
-    this.t0 = performance.now();
-    this.renderIntro(0);           // place everything before the first paint
-    const tick = (now) => {
-      if (this.locked) return;
-      if (this.renderIntro(now - this.t0)) { this.finishIntro(); return; }
-      this.raf = requestAnimationFrame(tick);
-    };
-    this.raf = requestAnimationFrame(tick);
+    if (e.logo) e.logo.style.opacity = 0;
+    this.loadTimer = setTimeout(this.flyCrocHome, this.LOAD_MS);
   }
 
-  renderIntro(ms) {
-    const R = this.reel;
-    // The title no longer queues behind the ball: it lands about a third of
-    // the way through the roll and the hole finishes underneath it, which
-    // gets the copy readable ~2.5s earlier and shortens the whole reel.
-    const roll = clamp(ms / R.roll, 0, 1);
-    const title = clamp((ms - R.titleAt) / R.titleIn, 0, 1);
-    const out = clamp((ms - R.roll - R.hold) / R.out, 0, 1);
-    this.frame(roll, title, out);
-    return out >= 1;
-  }
+  /* The orbit is one full turn over the same five seconds, so the croc ends
+     its lap back at the top of the ring and there is no jump when the
+     animation is cleared. From there it is one transition to the header. */
+  flyCrocHome = () => {
+    if (this.locked) return;
+    const e = this.el || {};
+    const croc = e.loadcroc, logo = e.logo;
+    if (!croc || !logo) { this.finishLoad(); return; }
 
-  finishIntro = () => {
+    if (e.croctrack) e.croctrack.style.animation = 'none';
+    if (e.croclevel) e.croclevel.style.animation = 'none';
+    croc.style.animation = 'none';
+
+    // Measured against the logo's own artwork rather than the button around
+    // it, so the two drawings land at the same size in the same place and the
+    // swap is invisible.
+    const mark = logo.querySelector('svg') || logo;
+    const from = croc.getBoundingClientRect();
+    const to = mark.getBoundingClientRect();
+    if (!from.width || !to.width) { this.finishLoad(); return; }
+
+    const scale = to.width / from.width;
+    const dx = (to.left + to.width / 2) - (from.left + from.width / 2);
+    const dy = (to.top + to.height / 2) - (from.top + from.height / 2);
+
+    croc.style.transition = 'transform ' + this.FLIGHT_MS + 'ms cubic-bezier(.55,.02,.25,1)';
+    requestAnimationFrame(() => {
+      croc.style.transform = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(' + scale.toFixed(3) + ')';
+    });
+
+    // The ring and the type clear out while it travels, and the background
+    // goes transparent so the app is already there when it lands.
+    if (e.loadtrack) e.loadtrack.style.opacity = 0;
+    if (e.loadtype) e.loadtype.style.opacity = 0;
+    if (e.loader) {
+      e.loader.style.transition = 'background-color ' + this.FLIGHT_MS + 'ms ease';
+      e.loader.style.backgroundColor = 'rgba(239,232,216,0)';
+    }
+    this.loadTimer = setTimeout(this.finishLoad, this.FLIGHT_MS);
+  };
+
+  finishLoad = () => {
     if (this.locked) return;
     this.locked = true;
-    if (this.raf) { cancelAnimationFrame(this.raf); this.raf = null; }
+    if (this.loadTimer) { clearTimeout(this.loadTimer); this.loadTimer = null; }
     const r = this.rootRef.current;
     const e = this.el || {};
-    if (e.track) e.track.style.display = 'none';
+    // The flying croc and the real logo swap in the same frame, which is why
+    // nothing else on the page is allowed to move at this moment.
+    if (e.loader) e.loader.style.display = 'none';
+    if (e.logo) {
+      e.logo.style.opacity = 1;
+      e.logo.style.animation = 'logopop .5s cubic-bezier(.2,1.5,.4,1) backwards';
+    }
     if (r) { r.scrollTop = 0; r.style.overflowY = this.prevOverflowY || 'auto'; }
-    if (e.app) e.app.style.animation = 'arrive .62s cubic-bezier(.16,.84,.32,1) both';
     if (e.nav) {
       e.nav.style.transition = 'opacity .45s ease';
       e.nav.style.opacity = 1;
@@ -2177,161 +1936,23 @@ class Component extends DCLogic {
     }
   };
 
-  frame(p, titleP, outP) {
-    const r = this.rootRef.current;
-    if (!r) return;
-    const vh = r.clientHeight, vw = r.clientWidth;
-    const e = this.el || {};
-    if (this.locked || !e.track) return;
-
-    /* Everything converges on the moment the ball drops: the sun finishes
-       its rise just before it, the camera settles exactly on it, and the
-       title arrives just after as the payoff. Previously these four landed
-       at four unrelated times and nothing ever felt resolved. */
-    const cam = seg(p, 0.58, 0.88);
-    const leaving = clamp(outP, 0, 1);
-    if (e.cam) e.cam.style.transform = 'translateY(' + (-cam * vh * 0.045) + 'px) scale(' + (1 + cam * 0.06 + leaving * 0.1) + ')';
-
-    const rise = ease(seg(p, 0, 0.80));
-    if (e.sun) e.sun.style.transform = 'translateY(' + lerp(140, 8, rise) + 'px) scale(' + lerp(0.86, 1.04, rise) + ')';
-    if (e.haze) {
-      e.haze.style.transform = 'translateY(' + lerp(140, 8, rise) + 'px) scale(' + lerp(0.92, 1.1, rise) + ')';
-      e.haze.style.opacity = 0.5 + 0.5 * rise;
-    }
-    if (e.clouds) e.clouds.style.opacity = 0.1 + 0.14 * rise;
-    if (e.trees) e.trees.style.transform = 'translateX(' + (-p * 14) + 'px) translateY(' + (rise * 4) + 'px)';
-
-    /* --- the hole: the near gator's tail launches the ball, it carries up
-       the fairway, loses energy over three shrinking bounces and rolls the
-       last stretch into the cup. `u` is progress along the ground track and
-       `hop` is height above it, kept separate so the shadow can stay on the
-       ground while the ball rides above it — which is what sells the arc. --- */
-    // `at` is taken further down for a path length, so this one is `beat`.
-    const beat = (ms) => ms / this.reel.roll;  // absolute beat -> fraction of p
-    const flight = seg(p, beat(this.contactAt), 0.88);
-    const u = 1 - Math.pow(1 - flight, 1.7);   // air and each bounce cost speed
-    const path = e.lanepath;
-
-    if (path && path.getTotalLength) {
-      const len = path.getTotalLength();
-      const at = lerp(this.launchAt, len, u);
-      const g = path.getPointAtLength(at);
-      const hop = this.hopAt(u);
-      const arrive = seg(u, 0.97, 1);
-      // Same near-to-far gradient the fairway is built on, so the ball shrinks
-      // into the distance at exactly the rate the fairway narrows.
-      const depth = lerp(this.lane.near, this.lane.far, at / len);
-
-      // Squash on the way through each impact, and nowhere else.
-      let squash = 0;
-      this.hops.forEach((h) => {
-        const d = Math.abs(u - h.end);
-        if (d < 0.022) squash = Math.max(squash, 1 - d / 0.022);
-      });
-      const drop = lerp(1, 0.15, arrive);
-      const sx = depth * (1 + 0.28 * squash) * drop;
-      const sy = depth * (1 - 0.24 * squash) * drop;
-
-      if (e.ballWrap) {
-        e.ballWrap.setAttribute('transform', 'translate(' + g.x.toFixed(2) + ',' +
-          (g.y - hop * depth).toFixed(2) + ') scale(' + sx.toFixed(3) + ',' + sy.toFixed(3) + ')');
-      }
-      if (e.ballspin) e.ballspin.style.transform = 'rotate(' + (u * len * 26) + 'deg)';
-
-      // The shadow never leaves the ground; it just tightens and fades as the
-      // ball climbs away from it.
-      const air = clamp(hop / 16, 0, 1);
-      if (e.bshadow) {
-        e.bshadow.setAttribute('cx', g.x.toFixed(2));
-        e.bshadow.setAttribute('cy', (g.y + 0.4 * depth).toFixed(2));
-        e.bshadow.setAttribute('rx', (3 * depth * (1 - 0.45 * air)).toFixed(2));
-        e.bshadow.setAttribute('ry', (1.1 * depth * (1 - 0.45 * air)).toFixed(2));
-        e.bshadow.style.opacity = (0.4 * (1 - 0.6 * air) * (1 - arrive)).toFixed(3);
-      }
-      // Dust only kicks up once it is running along the ground.
-      [0, 1, 2].forEach((i) => {
-        const el = e['trail' + i];
-        if (!el) return;
-        const uu = clamp(u - 0.014 * (i + 1), 0, 1);
-        const q = path.getPointAtLength(lerp(this.launchAt, len, uu));
-        el.setAttribute('cx', q.x.toFixed(2));
-        el.setAttribute('cy', q.y.toFixed(2));
-        el.setAttribute('r', ((1.3 - i * 0.15) * lerp(this.lane.near, this.lane.far, uu)).toFixed(2));
-        el.style.opacity = (u > 0.88 && arrive < 1) ? (0.45 - i * 0.13) : 0;
-      });
-
-      // Splash rings bloom once the ball reaches the cup, so they only ever
-      // read as "just went in", never as a preview.
-      [0, 1].forEach((i) => {
-        const el = e['splash' + i];
-        if (!el) return;
-        const st = seg(u, 0.972 + i * 0.008, 1);
-        el.setAttribute('r', (2 + st * 5).toFixed(2));
-        el.style.opacity = st > 0 ? (1 - st) * 0.8 : 0;
-      });
-
-      /* The near gator swings: coil back, whip through the ball on `contact`,
-         then settle. Contact has to land exactly there because that is the
-         frame the ball leaves. Both gators are mirrored, so the rotations
-         that reach the screen are the negatives of these. */
-      /* Angles here are screen-space, negated on the way out because the
-         gator is mirrored. Rest lies at +9deg and the ball sits at +25deg
-         off the tail's pivot, so the sweep is timed to pass through 25 exactly
-         on `contact` and follow through past it. */
-      const coil = this.swingAt, hit = this.contactAt;
-      let swing;
-      if (p < beat(coil)) swing = 0;                                                     // holds still
-      else if (p < beat(coil + 190)) swing = lerp(0, -46, ease(seg(p, beat(coil), beat(coil + 190))));
-      else if (p < beat(hit)) swing = lerp(-46, 16, ease(seg(p, beat(coil + 190), beat(hit))));
-      else if (p < beat(hit + 290)) swing = lerp(16, 34, ease(seg(p, beat(hit), beat(hit + 290))));
-      else swing = lerp(34, 0, ease(seg(p, beat(hit + 290), beat(hit + 1300))));
-      if (e.gator1tail) e.gator1tail.style.transform = 'rotate(' + (-swing).toFixed(2) + 'deg)';
-
-      // It gapes with the effort of the swing; the one up by the green lunges
-      // as the ball comes down off its second bounce right by its nose.
-      const grunt = Math.sin(Math.PI * seg(p, beat(coil), beat(hit + 420)));
-      const lunge = Math.sin(Math.PI * seg(u, 0.66, 0.84));
-      [[1, grunt], [2, lunge]].forEach(([n, s]) => {
-        const shut = e['gator' + n + 'head'], open = e['gator' + n + 'open'];
-        const gaping = s > 0.5 ? 1 : 0;
-        if (shut) shut.style.opacity = 1 - gaping;
-        if (open) open.style.opacity = gaping;
-      });
-      // A slow idle sway keeps the far one alive before the ball arrives.
-      if (e.gator2tail) {
-        e.gator2tail.style.transform = 'rotate(' + (-(Math.sin(p * 15) * 2.5 + lunge * 24)).toFixed(2) + 'deg)';
-      }
-    }
-
-    // The title is the payoff, so it arrives once the ball has settled.
-    const out = clamp(outP, 0, 1);
-    if (e.title) {
-      const ti = ease(clamp(titleP, 0, 1));
-      e.title.style.opacity = ti * (1 - out);
-      // on the way out it drifts toward the lens with the rest of the scene
-      e.title.style.transform = 'translateY(' + lerp(28, 0, ti) + 'px) scale(' + (lerp(0.965, 1, ti) + out * 0.07) + ')';
-    }
-    if (e.veil) e.veil.style.opacity = Math.pow(out, 1.5);
-    if (e.cam) e.cam.style.filter = out > 0 ? 'blur(' + (out * 7).toFixed(2) + 'px)' : 'none';
-  }
-
-  appTop() {
-    const t = this.el && this.el.track;
-    return t ? t.offsetHeight : 0;
-  }
-
-  skipIntro = () => { this.finishIntro(); };
-
   go = (tab) => () => {
     this.setState({ tab });
     const r = this.rootRef.current;
-    if (r && r.scrollTop > this.appTop()) r.scrollTo({ top: this.appTop() });
+    if (r && r.scrollTop > 0) r.scrollTo({ top: 0 });
+  };
+
+  // The logo is the way home: the trip tab, scrolled to the top.
+  goHome = () => {
+    this.setState({ tab: 'trip' });
+    const r = this.rootRef.current;
+    if (r) r.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   goMap = () => {
     this.setState({ tab: 'map', filter: 'all' });
     const r = this.rootRef.current;
-    if (r) r.scrollTo({ top: this.appTop(), behavior: 'smooth' });
+    if (r) r.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   /* ---------- map ---------- */
@@ -2516,7 +2137,7 @@ class Component extends DCLogic {
 
     return {
       introOn: this.props.introEnabled !== false,
-      skipIntro: this.skipIntro,
+      goHome: this.goHome,
       goMap: this.goMap,
       rootRef: this.rootRef,
       tabs, chips,
