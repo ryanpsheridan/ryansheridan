@@ -1662,6 +1662,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div style="display: {{ ctlFlex }}; padding: 4px; background: #E4DBC6; border-radius: 999px;">
         <button type="button" sc-camel-on-click="{{ setList }}" style="flex: 1; min-height: 40px; border: none; border-radius: 999px; background: {{ listBtnBg }}; color: {{ listBtnInk }}; font-family: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;">List</button>
         <button type="button" sc-camel-on-click="{{ setMapView }}" style="flex: 1; min-height: 40px; border: none; border-radius: 999px; background: {{ mapBtnBg }}; color: {{ mapBtnInk }}; font-family: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;">Map</button>
+        <button type="button" sc-camel-on-click="{{ recenterBase }}" style="flex: 1; min-height: 40px; border: none; border-radius: 999px; background: {{ baseBtnBg }}; color: {{ baseBtnInk }}; font-family: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;">Base</button>
       </div>
 
       <div style="display: {{ ctlBlock }}; margin: 18px -20px 0; padding: 0 20px; overflow-x: auto; scrollbar-width: none;">
@@ -1709,14 +1710,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
       </div>
 
-  <!-- Docked rather than floating: the bar runs the full width and sits flush
-       on the bottom edge, so it reads as the edge of the app instead of a
-       control hovering over the page. Being opaque and full-bleed, it needs no
-       scrim behind it — nothing can scroll out from under it. -->
-  <div data-el="nav" style="position: sticky; bottom: 0; z-index: 60; display: flex; gap: 2px; padding: 10px 10px calc(10px + env(safe-area-inset-bottom)); background: #14352A; border-radius: 30px 30px 0 0; box-shadow: 0 -10px 26px rgba(20,53,42,.16);">
-    <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
-      <button type="button" sc-camel-on-click="{{ t.onClick }}" style="flex: 1 1 auto; white-space: nowrap; min-height: 46px; padding: 0 7px; border: none; border-radius: 999px; background: {{ t.bg }}; color: {{ t.ink }}; font-family: inherit; font-size: 11.5px; font-weight: 600; letter-spacing: -.01em; cursor: pointer;">{{ t.label }}</button>
-    </sc-for>
+  <div data-el="nav" style="position: sticky; bottom: 0; z-index: 60; padding: 0 20px calc(14px + env(safe-area-inset-bottom)); pointer-events: none;">
+    <!-- The page would otherwise scroll through the gap under the pill and out
+         the bottom of the screen, which makes the bar read as something
+         floating over the content. Fading the page out beneath it settles it. -->
+    <div style="position: absolute; left: 0; right: 0; bottom: 0; height: calc(100% + 40px); background: linear-gradient(rgba(239,232,216,0) 0%, rgba(239,232,216,.92) 46%, #EFE8D8 72%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; gap: 2px; padding: 5px; background: #14352A; border-radius: 999px; box-shadow: 0 12px 30px rgba(20,53,42,.28); pointer-events: auto;">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+        <button type="button" sc-camel-on-click="{{ t.onClick }}" style="flex: 1 1 auto; white-space: nowrap; min-height: 46px; padding: 0 7px; border: none; border-radius: 999px; background: {{ t.bg }}; color: {{ t.ink }}; font-family: inherit; font-size: 13px; font-weight: 600; letter-spacing: -.01em; cursor: pointer;">{{ t.label }}</button>
+      </sc-for>
+    </div>
   </div>
 </div>
 </div>
@@ -2332,13 +2335,16 @@ class Component extends DCLogic {
   /* ---------- render values ---------- */
   renderVals() {
     const s = this.state;
-    const tabs = [['trip', 'Trip'], ['golf', 'Golf'], ['eats', 'Eats & Drank'], ['map', 'Map'], ['base', 'Base']]
+    // Base rides along with Map: it is the same pane, so it lights the same tab.
+    const onMap = s.tab === 'map' || s.tab === 'base';
+    const tabs = [['trip', 'Trip'], ['golf', 'Golf'], ['eats', 'Eats & Drank'], ['map', 'Map']]
       .map(([id, label]) => ({
         id, label,
-        bg: s.tab === id ? (id === 'base' ? '#E8A33F' : '#FFF8EA') : 'transparent',
-        ink: s.tab === id ? (id === 'base' ? '#2E2208' : '#14352A') : 'rgba(255,248,234,.86)',
+        bg: (id === 'map' ? onMap : s.tab === id) ? '#FFF8EA' : 'transparent',
+        ink: (id === 'map' ? onMap : s.tab === id) ? '#14352A' : 'rgba(255,248,234,.86)',
         onClick: this.go(id)
       }));
+    const atBase = s.tab === 'base';
 
     const chipDefs = [['all', 'All stops'], ['golf', 'Golf'], ['eats', 'Food + drink'], ['stay', 'Stay']];
     const chips = chipDefs.map(([id, label]) => ({
@@ -2381,18 +2387,21 @@ class Component extends DCLogic {
       showGolf: s.tab === 'golf' ? 'block' : 'none',
       showEats: s.tab === 'eats' ? 'block' : 'none',
       showMap: (s.tab === 'map' || s.tab === 'base') ? 'block' : 'none',
-      ctlFlex: s.tab === 'map' ? 'flex' : 'none',
+      ctlFlex: (s.tab === 'map' || s.tab === 'base') ? 'flex' : 'none',
       ctlBlock: s.tab === 'map' ? 'block' : 'none',
       baseDisplay: s.tab === 'base' ? 'block' : 'none',
       recenterBase: this.recenterBase,
       priceDisplay: showPrices ? 'block' : 'none',
 
-      listBtnBg: s.mapMode === 'list' ? '#FFFDF7' : 'transparent',
-      listBtnInk: s.mapMode === 'list' ? '#14352A' : '#54634F',
-      mapBtnBg: s.mapMode === 'map' ? '#FFFDF7' : 'transparent',
-      mapBtnInk: s.mapMode === 'map' ? '#14352A' : '#54634F',
-      setList: () => this.setState({ mapMode: 'list' }),
-      setMapView: () => this.setState({ mapMode: 'map' }),
+      listBtnBg: (!atBase && s.mapMode === 'list') ? '#FFFDF7' : 'transparent',
+      listBtnInk: (!atBase && s.mapMode === 'list') ? '#14352A' : '#54634F',
+      mapBtnBg: (!atBase && s.mapMode === 'map') ? '#FFFDF7' : 'transparent',
+      mapBtnInk: (!atBase && s.mapMode === 'map') ? '#14352A' : '#54634F',
+      baseBtnBg: atBase ? '#FFFDF7' : 'transparent',
+      baseBtnInk: atBase ? '#14352A' : '#54634F',
+      // Coming back from base has to clear the tab, not just the map mode.
+      setList: () => this.setState({ tab: 'map', mapMode: 'list' }),
+      setMapView: () => this.setState({ tab: 'map', mapMode: 'map' }),
       mapWrapDisplay: (s.tab === 'base' || s.mapMode === 'map') ? 'block' : 'none',
       mapListDisplay: (s.tab === 'map' && s.mapMode === 'list') ? 'flex' : 'none',
       visiblePlaces: places,
