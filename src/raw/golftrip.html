@@ -3,22 +3,22 @@
 <meta charset="utf-8">
 <script>window.__resources = {"photoStoneybrook":"/golftrip/assets/731ca771-afc1-4989-a381-20de594ad8f6.jpg","photoSaltleaf":"/golftrip/assets/368889f2-af08-45de-a255-ba458ae36e7a.jpg","photoTiburon":"/golftrip/assets/38cf5d1d-187f-4007-ba71-a098de64b86f.jpg","https://unpkg.com/react@18.3.1/umd/react.production.min.js":"/golftrip/assets/68f363a0-a5a1-443c-aa2c-dc812f1b2842.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"/golftrip/assets/a012dc2b-d35c-4046-8b93-8030db9bddf3.js"};</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Florida Golf Trip 2026</title>
+<title>Fort Myers Golf Trip</title>
 <meta name="description" content="Sept 17-20, 2026 · Fort Myers, Estero and Miromar Lakes.">
 <meta name="robots" content="noindex, nofollow">
 
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Florida Golf Trip 2026">
-<meta property="og:title" content="Florida Golf Trip 2026">
+<meta property="og:site_name" content="Fort Myers Golf Trip">
+<meta property="og:title" content="Fort Myers Golf Trip">
 <meta property="og:description" content="Sept 17-20, 2026 · Fort Myers, Estero and Miromar Lakes.">
 <meta property="og:url" content="https://ryansheridan.studio/golftrip/">
 <meta property="og:image" content="https://ryansheridan.studio/golftrip/og-golftrip.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Florida Golf Trip 2026">
+<meta property="og:image:alt" content="Fort Myers Golf Trip">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Florida Golf Trip 2026">
+<meta name="twitter:title" content="Fort Myers Golf Trip">
 <meta name="twitter:description" content="Sept 17-20, 2026 · Fort Myers, Estero and Miromar Lakes.">
 <meta name="twitter:image" content="https://ryansheridan.studio/golftrip/og-golftrip.jpg">
 
@@ -1176,6 +1176,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   /* Loading screen. The orbit and the ring share one duration, so the croc
      always sits at the head of the arc it is drawing. */
   @keyframes orbit { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+  @keyframes ballspin { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
   @keyframes counterspin { from { transform: rotate(0deg) } to { transform: rotate(-360deg) } }
   @keyframes drawring { from { stroke-dashoffset: 389.6 } to { stroke-dashoffset: 0 } }
   @keyframes bob { from { transform: translateY(-2.5px) } to { transform: translateY(2.5px) } }
@@ -1248,6 +1249,66 @@ svg.leaflet-image-layer.leaflet-interactive path {
              per-frame maths. It is a plain element rather than part of the
              ring's SVG because it has to fly out of here and land on the
              header, which means it needs its own transform. -->
+        <!-- The ball body and its highlight hold still; only the dimples turn,
+             because a light source that spins with the ball reads as a sticker
+             rather than a sphere. The drop shadow is what separates white on
+             cream, which a stroke alone could not do without looking drawn. -->
+        <svg data-el="loadball" viewBox="0 0 100 100" width="62" height="62" style="position: absolute; left: 50%; top: 50%; margin: -31px 0 0 -31px; display: block; filter: drop-shadow(0 3px 7px rgba(20,53,42,.18)); transition: opacity .35s ease;">
+          <defs>
+            <clipPath id="ballclip"><circle cx="50" cy="50" r="46"/></clipPath>
+            <radialGradient id="ballshade" cx="34%" cy="28%" r="82%">
+              <stop offset="0" stop-color="#FFFFFF"/>
+              <stop offset="52%" stop-color="#FFFFFF" stop-opacity="0"/>
+              <stop offset="100%" stop-color="#A8A08A" stop-opacity=".55"/>
+            </radialGradient>
+          </defs>
+          <circle cx="50" cy="50" r="46" fill="#FFFDF7"/>
+          <g clip-path="url(#ballclip)">
+            <g style="animation: ballspin 2.4s linear infinite; transform-origin: 50px 50px;">
+              <circle cx="31.7" cy="18.3" r="3.5" fill="rgba(20,53,42,0.093)"/>
+              <circle cx="43.9" cy="18.3" r="3.5" fill="rgba(20,53,42,0.101)"/>
+              <circle cx="56.1" cy="18.3" r="3.5" fill="rgba(20,53,42,0.101)"/>
+              <circle cx="68.3" cy="18.3" r="3.5" fill="rgba(20,53,42,0.093)"/>
+              <circle cx="25.6" cy="28.9" r="3.5" fill="rgba(20,53,42,0.101)"/>
+              <circle cx="37.8" cy="28.9" r="3.5" fill="rgba(20,53,42,0.114)"/>
+              <circle cx="50.0" cy="28.9" r="3.5" fill="rgba(20,53,42,0.119)"/>
+              <circle cx="62.2" cy="28.9" r="3.5" fill="rgba(20,53,42,0.114)"/>
+              <circle cx="74.4" cy="28.9" r="3.5" fill="rgba(20,53,42,0.101)"/>
+              <circle cx="19.5" cy="39.4" r="3.5" fill="rgba(20,53,42,0.101)"/>
+              <circle cx="31.7" cy="39.4" r="3.5" fill="rgba(20,53,42,0.119)"/>
+              <circle cx="43.9" cy="39.4" r="3.5" fill="rgba(20,53,42,0.134)"/>
+              <circle cx="56.1" cy="39.4" r="3.5" fill="rgba(20,53,42,0.134)"/>
+              <circle cx="68.3" cy="39.4" r="3.5" fill="rgba(20,53,42,0.119)"/>
+              <circle cx="80.5" cy="39.4" r="3.5" fill="rgba(20,53,42,0.101)"/>
+              <circle cx="13.4" cy="50.0" r="3.5" fill="rgba(20,53,42,0.093)"/>
+              <circle cx="25.6" cy="50.0" r="3.5" fill="rgba(20,53,42,0.114)"/>
+              <circle cx="37.8" cy="50.0" r="3.5" fill="rgba(20,53,42,0.134)"/>
+              <circle cx="50.0" cy="50.0" r="3.5" fill="rgba(20,53,42,0.155)"/>
+              <circle cx="62.2" cy="50.0" r="3.5" fill="rgba(20,53,42,0.134)"/>
+              <circle cx="74.4" cy="50.0" r="3.5" fill="rgba(20,53,42,0.114)"/>
+              <circle cx="86.6" cy="50.0" r="3.5" fill="rgba(20,53,42,0.093)"/>
+              <circle cx="19.5" cy="60.6" r="3.5" fill="rgba(20,53,42,0.101)"/>
+              <circle cx="31.7" cy="60.6" r="3.5" fill="rgba(20,53,42,0.119)"/>
+              <circle cx="43.9" cy="60.6" r="3.5" fill="rgba(20,53,42,0.134)"/>
+              <circle cx="56.1" cy="60.6" r="3.5" fill="rgba(20,53,42,0.134)"/>
+              <circle cx="68.3" cy="60.6" r="3.5" fill="rgba(20,53,42,0.119)"/>
+              <circle cx="80.5" cy="60.6" r="3.5" fill="rgba(20,53,42,0.101)"/>
+              <circle cx="25.6" cy="71.1" r="3.5" fill="rgba(20,53,42,0.101)"/>
+              <circle cx="37.8" cy="71.1" r="3.5" fill="rgba(20,53,42,0.114)"/>
+              <circle cx="50.0" cy="71.1" r="3.5" fill="rgba(20,53,42,0.119)"/>
+              <circle cx="62.2" cy="71.1" r="3.5" fill="rgba(20,53,42,0.114)"/>
+              <circle cx="74.4" cy="71.1" r="3.5" fill="rgba(20,53,42,0.101)"/>
+              <circle cx="31.7" cy="81.7" r="3.5" fill="rgba(20,53,42,0.093)"/>
+              <circle cx="43.9" cy="81.7" r="3.5" fill="rgba(20,53,42,0.101)"/>
+              <circle cx="56.1" cy="81.7" r="3.5" fill="rgba(20,53,42,0.101)"/>
+              <circle cx="68.3" cy="81.7" r="3.5" fill="rgba(20,53,42,0.093)"/>
+            </g>
+            <circle cx="50" cy="50" r="46" fill="url(#ballshade)"/>
+          </g>
+          <ellipse cx="35" cy="29" rx="12" ry="8" fill="#FFFFFF" opacity=".8" transform="rotate(-28 35 29)"/>
+          <circle cx="50" cy="50" r="45.4" fill="none" stroke="#CFC3A5" stroke-width="1.2"/>
+        </svg>
+
         <div data-el="croctrack" style="position: absolute; inset: 0; animation: orbit 5s linear both;">
           <!-- The counter-turn cancels the orbit exactly, since both are linear
                over the same five seconds. Without it the croc is drawn in side
@@ -1285,8 +1346,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
       </div>
 
       <div data-el="loadtype" style="text-align: center; animation: liftin .8s cubic-bezier(.2,.7,.2,1) .2s both; transition: opacity .35s ease;">
-        <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: clamp(20px, 6.4vw, 26px); letter-spacing: -.02em; color: #14352A;">Florida Golf Trip 2026</div>
-        <div style="margin-top: 7px; font-family: 'IBM Plex Mono', monospace; font-size: clamp(10px, 3vw, 11.5px); letter-spacing: .12em; color: #54634F;">SEPT 17 &ndash; 20 &middot; FORT MYERS</div>
+        <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: clamp(20px, 6.4vw, 26px); letter-spacing: -.02em; color: #14352A;">Fort Myers Golf Trip</div>
+        <div style="margin-top: 7px; font-family: 'IBM Plex Mono', monospace; font-size: clamp(10px, 3vw, 11.5px); letter-spacing: .12em; color: #54634F;">SEPT 17 &ndash; 20, 2026</div>
         <div style="margin-top: 18px; display: flex; align-items: center; justify-content: center; gap: 7px;">
           <div style="width: 6px; height: 6px; border-radius: 999px; background: #1F5C3E; animation: dotbob 1.3s ease-in-out infinite;"></div>
           <div style="width: 6px; height: 6px; border-radius: 999px; background: #1F5C3E; animation: dotbob 1.3s ease-in-out .16s infinite;"></div>
@@ -1332,8 +1393,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
             </svg>
           </button>
           <div style="min-width: 0;">
-            <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: clamp(15px, 4.4vw, 19px); letter-spacing: -.02em; color: #14352A;">Florida Golf Trip 2026</div>
-            <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #54634F;">Sept 17–20</div>
+            <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: clamp(15px, 4.4vw, 19px); letter-spacing: -.02em; color: #14352A;">Fort Myers Golf Trip</div>
+            <div style="margin-top: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #54634F;">Sept 17–20, 2026</div>
           </div>
         </div>
         <div style="flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-width: 72px; padding: 11px 14px; border-radius: 18px; background: #14352A; color: #FFF8EA;">
@@ -1784,7 +1845,7 @@ class Component extends DCLogic {
     const r = this.rootRef.current;
     if (!r) return;
     this.el = {};
-    ['loader', 'loadtrack', 'loadring', 'loadtype', 'croctrack', 'croclevel', 'loadcroc', 'logo',
+    ['loader', 'loadtrack', 'loadring', 'loadball', 'loadtype', 'croctrack', 'croclevel', 'loadcroc', 'logo',
       'app', 'navpill', 'tabslide', 'chippill', 'chipslide', 'nav', 'map']
       .forEach((k) => { this.el[k] = r.querySelector('[data-el="' + k + '"]'); });
 
@@ -1906,6 +1967,7 @@ class Component extends DCLogic {
     // The ring and the type clear out while it travels, and the background
     // goes transparent so the app is already there when it lands.
     if (e.loadtrack) e.loadtrack.style.opacity = 0;
+    if (e.loadball) e.loadball.style.opacity = 0;
     if (e.loadtype) e.loadtype.style.opacity = 0;
     if (e.loader) {
       e.loader.style.transition = 'background-color ' + this.FLIGHT_MS + 'ms ease';
