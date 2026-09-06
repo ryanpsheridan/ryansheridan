@@ -1145,6 +1145,30 @@ svg.leaflet-image-layer.leaflet-interactive path {
   @keyframes drift { from { transform: translateX(0) } to { transform: translateX(60px) } }
   @keyframes sway { 0%, 100% { transform: rotate(-1.5deg) } 50% { transform: rotate(2deg) } }
   @keyframes swayb { 0%, 100% { transform: rotate(1.5deg) } 50% { transform: rotate(-2deg) } }
+  /* Cards arrive one after another rather than all at once. */
+  @keyframes risein { from { opacity: 0; transform: translateY(14px) } to { opacity: 1; transform: none } }
+  .rise > * { animation: risein .5s cubic-bezier(.2,.7,.2,1) both; }
+  .rise > *:nth-child(1) { animation-delay: .02s }
+  .rise > *:nth-child(2) { animation-delay: .07s }
+  .rise > *:nth-child(3) { animation-delay: .12s }
+  .rise > *:nth-child(4) { animation-delay: .17s }
+  .rise > *:nth-child(5) { animation-delay: .22s }
+  .rise > *:nth-child(6) { animation-delay: .27s }
+  /* Anything tappable acknowledges the tap. */
+  .tapin { transition: transform .2s cubic-bezier(.2,.7,.2,1), box-shadow .2s ease; }
+  .tapin:active { transform: scale(.93); }
+  button, a { -webkit-tap-highlight-color: transparent; }
+  [sc-camel-on-click], .card a { transition: transform .18s cubic-bezier(.2,.7,.2,1); }
+  [sc-camel-on-click]:active { transform: scale(.97); }
+  .card { transition: transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .25s ease; }
+  .card:active { transform: scale(.994); }
+  /* Someone who has asked for less motion gets the layout, not the show. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+    }
+  }
   @keyframes ripple { 0%, 100% { transform: scale(1); opacity: .55 } 50% { transform: scale(1.05); opacity: .72 } }
   .leaflet-container { font-family: "IBM Plex Sans", system-ui, sans-serif; background: #E8EFE6; }
   .leaflet-popup-content-wrapper { border-radius: 14px; box-shadow: 0 10px 30px rgba(20,53,42,.18) }
@@ -1433,7 +1457,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
         <div style="position: absolute; left: -10%; right: -10%; bottom: 28vh; height: 7vh; background: linear-gradient(rgba(255,176,138,.3), rgba(255,176,138,0)); filter: blur(7px); pointer-events: none;"></div>
 
-        <div data-el="fg" style="position: absolute; left: -10%; right: -10%; bottom: -2vh; height: 9vh; background: repeating-linear-gradient(84deg, rgba(10,33,24,.85) 0 3px, transparent 3px 14px), linear-gradient(transparent, #0A2118 78%); filter: blur(3.5px); will-change: transform;"></div>
 
           <div style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(125% 92% at 50% 44%, rgba(0,0,0,0) 38%, rgba(10,18,34,.42) 100%);"></div>
         </div>
@@ -1473,10 +1496,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <div style="display: {{ showTrip }}; padding-top: 22px; animation: softin .3s ease both;">
 
       <div style="margin-top: 4px; display: flex; align-items: baseline; justify-content: space-between;">
-        <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 17px; color: #14352A;">The plan</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: #14352A;">Itinerary</div>
         <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #54634F;">4 days</div>
       </div>
-      <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 14px;">
+      <div class="rise" style="margin-top: 14px; display: flex; flex-direction: column; gap: 14px;">
         <sc-for list="{{ days }}" as="d" hint-placeholder-count="4">
           <div style="display: grid; grid-template-columns: 62px 1fr; gap: 16px; padding: 17px 18px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
             <div>
@@ -1501,7 +1524,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 
       <div style="margin-top: 26px; display: flex; align-items: baseline; justify-content: space-between;">
-        <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 17px; color: #14352A;">Weather</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: #14352A;">Weather</div>
         <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #54634F;">next 5 days</div>
       </div>
       <div style="margin-top: 12px;">
@@ -1567,7 +1590,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     </div>
 
     <div style="display: {{ showGolf }}; padding-top: 22px; animation: softin .3s ease both;">
-      <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div class="rise" style="display: flex; flex-direction: column; gap: 16px;">
         <sc-for list="{{ courses }}" as="c" hint-placeholder-count="4">
           <div style="background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 20px; box-shadow: 0 1px 3px rgba(20,53,42,.07); overflow: hidden;">
             <div style="position: relative; aspect-ratio: 16 / 9; background: #DCD3BF; overflow: hidden;">
@@ -1614,9 +1637,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
     </div>
 
     <div style="display: {{ showEats }}; padding-top: 22px; animation: softin .3s ease both;">
-      <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div class="rise" style="display: flex; flex-direction: column; gap: 16px;">
         <sc-for list="{{ eats }}" as="r" hint-placeholder-count="4">
-          <div style="background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 20px; box-shadow: 0 1px 3px rgba(20,53,42,.07); overflow: hidden;">
+          <div class="card" style="background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 20px; box-shadow: 0 1px 3px rgba(20,53,42,.07); overflow: hidden;">
             <sc-if value="{{ r.photo }}" hint-placeholder-val="{{ true }}">
               <div style="position: relative; aspect-ratio: 16 / 9; background: #DCD3BF; overflow: hidden;">
                 <img src="{{ r.photo }}" alt="{{ r.name }}" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;">
@@ -1627,7 +1650,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
                   </sc-if>
                   <div style="flex: none; margin-left: auto; padding: 6px 11px; border-radius: 999px; background: {{ r.tagBg }}; color: {{ r.tagInk }}; font-size: 11px; font-weight: 600; box-shadow: 0 2px 8px rgba(8,26,20,.3);">{{ r.tag }}</div>
                 </div>
-                <div style="position: absolute; left: 16px; right: 16px; bottom: 13px; font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 21px; line-height: 1.12; letter-spacing: -.02em; color: #FFF8EA; text-shadow: 0 2px 10px rgba(8,26,20,.6);">{{ r.name }}</div>
+                <div style="position: absolute; left: 16px; right: 66px; bottom: 13px; font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 21px; line-height: 1.12; letter-spacing: -.02em; color: #FFF8EA; text-shadow: 0 2px 10px rgba(8,26,20,.6);">{{ r.name }}</div>
+                <a href="{{ r.mapsUrl }}" target="_blank" rel="noopener" aria-label="Directions to {{ r.name }}" class="tapin" style="position: absolute; right: 14px; bottom: 12px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 999px; background: rgba(255,248,234,.94); box-shadow: 0 4px 14px rgba(8,26,20,.34);">
+                  <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#14352A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                </a>
               </div>
             </sc-if>
             <div style="padding: 18px;">
@@ -1640,7 +1666,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <div style="margin-top: 5px; font-size: 13px; color: #54634F; line-height: 1.5;">{{ r.address }}</div>
             <div style="margin-top: 10px; font-size: 13.5px; color: #435349; line-height: 1.55;">{{ r.notes }}</div>
             <div style="margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px;">
-              <a href="{{ r.mapsUrl }}" target="_blank" rel="noopener" style="flex: 1 1 calc(50% - 4px); min-height: 44px; box-sizing: border-box; padding: 12px; border-radius: 13px; background: #14352A; color: #FFF8EA; font-size: 13.5px; font-weight: 600; text-align: center;">Directions</a>
+              <sc-if value="{{ r.noPhoto }}" hint-placeholder-val="{{ false }}">
+                <a href="{{ r.mapsUrl }}" target="_blank" rel="noopener" style="flex: 1 1 calc(50% - 4px); min-height: 44px; box-sizing: border-box; padding: 12px; border-radius: 13px; background: #14352A; color: #FFF8EA; font-size: 13.5px; font-weight: 600; text-align: center;">Directions</a>
+              </sc-if>
               <sc-if value="{{ r.telUrl }}" hint-placeholder-val="{{ false }}">
                 <a href="{{ r.telUrl }}" style="flex: 1 1 calc(50% - 4px); min-height: 44px; box-sizing: border-box; padding: 12px; border-radius: 13px; border: 1px solid #CFC2A6; color: #14352A; font-size: 13.5px; font-weight: 600; text-align: center;">Call</a>
               </sc-if>
@@ -1659,21 +1687,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
     </div>
 
     <div style="display: {{ showMap }}; padding-top: 22px; animation: softin .3s ease both;">
-      <div style="display: {{ ctlFlex }}; padding: 4px; background: #E4DBC6; border-radius: 999px;">
-        <button type="button" sc-camel-on-click="{{ setList }}" style="flex: 1; min-height: 40px; border: none; border-radius: 999px; background: {{ listBtnBg }}; color: {{ listBtnInk }}; font-family: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;">List</button>
-        <button type="button" sc-camel-on-click="{{ setMapView }}" style="flex: 1; min-height: 40px; border: none; border-radius: 999px; background: {{ mapBtnBg }}; color: {{ mapBtnInk }}; font-family: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;">Map</button>
-        <button type="button" sc-camel-on-click="{{ recenterBase }}" style="flex: 1; min-height: 40px; border: none; border-radius: 999px; background: {{ baseBtnBg }}; color: {{ baseBtnInk }}; font-family: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;">Base</button>
+      <div data-el="chippill" style="display: {{ ctlBlock }}; position: relative; padding: 4px; background: #E4DBC6; border-radius: 999px;">
+        <div data-el="chipslide" style="position: absolute; left: 0; top: 4px; bottom: 4px; width: 0; border-radius: 999px; background: #FFFDF7; box-shadow: 0 1px 3px rgba(20,53,42,.14); transition: transform .38s cubic-bezier(.34,1.26,.64,1), width .38s cubic-bezier(.34,1.26,.64,1);"></div>
+        <sc-for list="{{ chips }}" as="ch" hint-placeholder-count="4">
+          <button type="button" data-active="{{ ch.active }}" sc-camel-on-click="{{ ch.onClick }}" style="position: relative; flex: 1; min-height: 40px; border: none; border-radius: 999px; background: transparent; color: {{ ch.ink }}; font-family: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: color .3s ease;">{{ ch.label }}</button>
+        </sc-for>
       </div>
 
-      <div style="display: {{ ctlBlock }}; margin: 18px -20px 0; padding: 0 20px; overflow-x: auto; scrollbar-width: none;">
-        <div style="display: flex; gap: 8px; width: max-content; padding-bottom: 2px;">
-          <sc-for list="{{ chips }}" as="ch" hint-placeholder-count="4">
-            <button type="button" sc-camel-on-click="{{ ch.onClick }}" style="min-height: 38px; padding: 9px 15px; border: 1px solid {{ ch.border }}; border-radius: 999px; background: {{ ch.bg }}; color: {{ ch.ink }}; font-family: inherit; font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer;">{{ ch.label }}</button>
-          </sc-for>
-        </div>
-      </div>
-
-      <div style="display: {{ mapWrapDisplay }}; margin-top: 18px; position: relative; z-index: 0; isolation: isolate; border: 1px solid #DBCFB5; border-radius: 20px; box-shadow: 0 1px 3px rgba(20,53,42,.07); overflow: hidden;">
+      <div style="margin-top: 18px; position: relative; z-index: 0; isolation: isolate; border: 1px solid #DBCFB5; border-radius: 20px; box-shadow: 0 1px 3px rgba(20,53,42,.07); overflow: hidden;">
         <div data-el="map" style="height: 60vh; min-height: 330px;"></div>
         <div style="display: {{ baseDisplay }}; position: absolute; left: 12px; right: 12px; top: 12px; z-index: 500; padding: 11px 14px; background: rgba(255,253,247,.96); border-radius: 999px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .04em; color: #14352A; text-align: center; box-shadow: 0 4px 14px rgba(8,26,20,.22);">10733 Mirasol Drive #211, Miromar Lakes</div>
         <div style="display: {{ baseDisplay }}; position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 500; padding: 15px 16px; background: #FFFDF7; border-radius: 18px; box-shadow: 0 12px 30px rgba(8,26,20,.3);">
@@ -1686,7 +1707,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </div>
       </div>
 
-      <div style="display: {{ mapListDisplay }}; margin-top: 18px; flex-direction: column; gap: 14px;">
+      <div style="margin-top: 18px; display: flex; flex-direction: column; gap: 14px;">
         <sc-for list="{{ visiblePlaces }}" as="p" hint-placeholder-count="5">
           <div style="padding: 15px 16px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
             <div style="display: flex; align-items: center; gap: 10px;">
@@ -1715,9 +1736,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
          the bottom of the screen, which makes the bar read as something
          floating over the content. Fading the page out beneath it settles it. -->
     <div style="position: absolute; left: 0; right: 0; bottom: 0; height: calc(100% + 40px); background: linear-gradient(rgba(239,232,216,0) 0%, rgba(239,232,216,.92) 46%, #EFE8D8 72%); pointer-events: none;"></div>
-    <div style="position: relative; display: flex; gap: 2px; padding: 5px; background: #14352A; border-radius: 999px; box-shadow: 0 12px 30px rgba(20,53,42,.28); pointer-events: auto;">
+    <div data-el="navpill" style="position: relative; display: flex; gap: 2px; padding: 5px; background: #14352A; border-radius: 999px; box-shadow: 0 12px 30px rgba(20,53,42,.28); pointer-events: auto;">
+      <!-- One pill that slides to the active tab, rather than a background
+           snapping on and off five separate buttons. syncTabSlide() measures
+           the live button because the labels are different widths. -->
+      <div data-el="tabslide" style="position: absolute; left: 0; top: 5px; bottom: 5px; width: 0; border-radius: 999px; background: #FFF8EA; transition: transform .42s cubic-bezier(.34,1.26,.64,1), width .42s cubic-bezier(.34,1.26,.64,1);"></div>
       <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
-        <button type="button" sc-camel-on-click="{{ t.onClick }}" style="flex: 1 1 auto; white-space: nowrap; min-height: 46px; padding: 0 7px; border: none; border-radius: 999px; background: {{ t.bg }}; color: {{ t.ink }}; font-family: inherit; font-size: 13px; font-weight: 600; letter-spacing: -.01em; cursor: pointer;">{{ t.label }}</button>
+        <button type="button" data-active="{{ t.active }}" sc-camel-on-click="{{ t.onClick }}" style="position: relative; flex: 1 1 auto; white-space: nowrap; min-height: 54px; padding: 0 9px; border: none; border-radius: 999px; background: transparent; color: {{ t.ink }}; font-family: inherit; font-size: 15px; font-weight: 600; letter-spacing: -.01em; cursor: pointer; transition: color .3s ease;">{{ t.label }}</button>
       </sc-for>
     </div>
   </div>
@@ -1748,7 +1773,7 @@ const COURSES = [
     day: 'Day 1 — Thu, Sept 17', status: 'open', statusLabel: 'Not booked yet',
     teeTime: 'Book on arrival', price: '$60–80', priceNote: 'estimate · Ryan + Gustavo',
     photo: (window.__resources && window.__resources.photoStoneybrook) || 'photos/stoneybrook.jpg',
-    notes: '9 or 18 holes, cart required, no walking. Ryan and Gustavo play this one after landing — call from the car for an afternoon slot.'
+    notes: 'Gordon Lewis and Jed Azinger design from 1999, and at 7,314 yards off the back tees it is the longest card of the week. Cart required, no walking — call from the car for an afternoon slot.'
   },
   {
     id: 'saltleaf', name: 'Saltleaf Golf Preserve — The Preserve', category: 'golf',
@@ -1757,7 +1782,7 @@ const COURSES = [
     day: 'Day 2 — Fri, Sept 18', status: 'confirmed', statusLabel: 'Confirmed',
     teeTime: '8:40 am', price: '$140.64', priceNote: '$562.54 total · 4 players',
     photo: (window.__resources && window.__resources.photoSaltleaf) || 'photos/saltleaf.jpg', confirmation: '429535097',
-    notes: '18-hole championship course. Leave the condo by 7:50 to make the tee sheet comfortably.'
+    notes: 'Raymond Floyd rebuilt the old Raptor Bay course here in 2022, back with the same architect he first drew it with 24 years earlier. Leave the condo by 7:50 to make the tee sheet comfortably.'
   },
   {
     id: 'tiburon', name: 'Tiburón Golf Club — Black Course', category: 'golf',
@@ -1766,7 +1791,7 @@ const COURSES = [
     day: 'Day 3 — Sat, Sept 19', status: 'confirmed', statusLabel: 'Confirmed',
     teeTime: '9:40 am', price: '$181.70', priceNote: '$726.80 total · 4 players',
     photo: (window.__resources && window.__resources.photoTiburon) || 'photos/tiburon.jpg', confirmation: '429539576',
-    notes: 'The big one. Resort dynamic pricing, so the actual charge may land above the estimate.'
+    notes: 'The big one. Greg Norman built it in 2001 with no conventional rough anywhere — pine straw and red coquina shell waste bunkers instead, so a wayward tee shot is usually still playable.'
   }
 ];
 
@@ -1799,6 +1824,15 @@ const EATS = [
     notes: 'Pre-round fuel. Close enough to the condo for a 7 am stop before Saltleaf.'
   },
   {
+    id: 'lowbrow', name: 'LowBrow Pizza & Beer', category: 'eats', tag: 'Pizza + wings',
+    address: '3148 Tamiami Trail E, Naples, FL 34112',
+    lat: 26.1345, lng: -81.7706, phone: '(239) 529-6919',
+    photo: '/golftrip/assets/photo-lowbrow.jpg',
+    website: 'https://www.lowbrowpizzaandbeer.com',
+    maps: 'https://maps.app.goo.gl/tpkEDUdqPTcfXoiX7',
+    notes: 'Wood-fired pies and parmesan wings in East Naples. Worth the drive on a Tiburón day — it is close to the course.'
+  },
+  {
     id: 'twinpeaks', name: 'Twin Peaks', category: 'eats', tag: 'Sports bar',
     address: '16411 Corporate Commerce Way, Fort Myers, FL 33913',
     lat: 26.5205, lng: -81.7515, phone: '(239) 245-9559',
@@ -1811,10 +1845,10 @@ const EATS = [
 
 const BREWS = [
   {
-    id: 'fmbrew', name: 'Fort Myers Brewing Company', category: 'eats', tag: 'Brewery',
+    id: 'fmbrew', name: 'Fort Myers Brewing Company', category: 'eats', tag: 'Brewery + food trucks',
     address: '12811 Commerce Lakes Dr #28, Fort Myers, FL 33913',
     lat: 26.5410, lng: -81.7660,
-    photo: '/golftrip/assets/photo-fmbrew.jpg', badge: 'Food trucks',
+    photo: '/golftrip/assets/photo-fmbrew.jpg',
     website: 'https://www.fmbrew.com', tapList: 'https://www.fmbrew.com/our-brews/core-beers/',
     maps: 'https://www.google.com/maps/search/?api=1&query=Fort+Myers+Brewing+Company',
     notes: 'Friday night plan. Big taproom with a food truck park out front, so dinner and beer are the same stop.'
@@ -1856,7 +1890,7 @@ function miles(a, b) {
 
 class Component extends DCLogic {
   state = {
-    tab: 'trip', mapMode: 'map', filter: 'all',
+    tab: 'trip', filter: 'all',
     wx: null, wxDays: [], wxErr: false, wxAt: null,
     a2hs: false, canInstall: false, iosHint: false
   };
@@ -1866,15 +1900,20 @@ class Component extends DCLogic {
     const r = this.rootRef.current;
     if (!r) return;
     this.el = {};
-    ['track', 'cam', 'clouds', 'haze', 'sun', 'trees', 'fg', 'veil', 'app', 'title', 'ballWrap', 'ballspin',
+    ['track', 'cam', 'clouds', 'haze', 'sun', 'trees', 'veil', 'app', 'title', 'ballWrap', 'ballspin',
       'bshadow', 'trail0', 'trail1', 'trail2', 'lanepath', 'laneedge', 'lanetop', 'splash0', 'splash1',
       'gator1tail', 'gator1head', 'gator1open', 'gator2tail', 'gator2head', 'gator2open',
+      'navpill', 'tabslide', 'chippill', 'chipslide',
       'nav', 'map']
       .forEach((k) => { this.el[k] = r.querySelector('[data-el="' + k + '"]'); });
 
     this.buildLane();
+    this.syncTabSlide();
 
-    this.onResize = () => { if (!this.locked) this.renderIntro(performance.now() - this.t0); };
+    this.onResize = () => {
+      this.syncTabSlide();
+      if (!this.locked) this.renderIntro(performance.now() - this.t0);
+    };
     window.addEventListener('resize', this.onResize);
 
     // An autoplaying reel is exactly the kind of motion this media query is
@@ -1891,8 +1930,8 @@ class Component extends DCLogic {
   componentDidUpdate(prevProps, prevState) {
     const t = this.state.tab;
     const prev = prevState || {};
+    this.syncTabSlide();
     if (t === 'map' || t === 'base') { this.initMap(); this.syncMarkers(); }
-    if (prev.mapMode !== this.state.mapMode && this.map) setTimeout(() => this.map.invalidateSize(), 60);
     if (prev.tab !== t && this.map) {
       setTimeout(() => {
         if (!this.map) return;
@@ -1907,6 +1946,21 @@ class Component extends DCLogic {
       }, 70);
     }
   }
+
+  /* Segments are content-width, so the sliding pill has to be measured off
+     the live button rather than computed from an index. Serves the bottom
+     nav and the map filters both. */
+  syncTabSlide = () => {
+    const e = this.el || {};
+    [['navpill', 'tabslide'], ['chippill', 'chipslide']].forEach(([p, sl]) => {
+      const pill = e[p], slide = e[sl];
+      if (!pill || !slide) return;
+      const on = pill.querySelector('button[data-active="1"]');
+      if (!on || !on.offsetWidth) return;
+      slide.style.width = on.offsetWidth + 'px';
+      slide.style.transform = 'translateX(' + on.offsetLeft + 'px)';
+    });
+  };
 
   focusBase = () => {
     if (!this.map) return;
@@ -2065,7 +2119,6 @@ class Component extends DCLogic {
     }
     if (e.clouds) e.clouds.style.opacity = 0.1 + 0.14 * rise;
     if (e.trees) e.trees.style.transform = 'translateX(' + (-p * 14) + 'px) translateY(' + (rise * 4) + 'px)';
-    if (e.fg) e.fg.style.transform = 'translateX(' + (p * 46) + 'px) translateY(' + (cam * 10) + 'px)';
 
     /* --- the hole: the near gator's tail launches the ball, it carries up
        the fairway, loses energy over three shrinking bounces and rolls the
@@ -2194,7 +2247,7 @@ class Component extends DCLogic {
   };
 
   goMap = () => {
-    this.setState({ tab: 'map', mapMode: 'map' });
+    this.setState({ tab: 'map', filter: 'all' });
     const r = this.rootRef.current;
     if (r) r.scrollTo({ top: this.appTop(), behavior: 'smooth' });
   };
@@ -2340,19 +2393,23 @@ class Component extends DCLogic {
     const tabs = [['trip', 'Trip'], ['golf', 'Golf'], ['eats', 'Eats & Drank'], ['map', 'Map']]
       .map(([id, label]) => ({
         id, label,
-        bg: (id === 'map' ? onMap : s.tab === id) ? '#FFF8EA' : 'transparent',
+        active: (id === 'map' ? onMap : s.tab === id) ? '1' : '0',
         ink: (id === 'map' ? onMap : s.tab === id) ? '#14352A' : 'rgba(255,248,234,.86)',
         onClick: this.go(id)
       }));
-    const atBase = s.tab === 'base';
 
-    const chipDefs = [['all', 'All stops'], ['golf', 'Golf'], ['eats', 'Food + drink'], ['stay', 'Stay']];
+    // Short labels so four segments fit a phone without scrolling. Picking
+    // "Stay" is the way into the condo view now that Base has no tab of its
+    // own — it is the same intent, so it flies there and shows the card.
+    const chipDefs = [['all', 'All'], ['golf', 'Golf'], ['eats', 'Food'], ['stay', 'Stay']];
     const chips = chipDefs.map(([id, label]) => ({
       label,
-      bg: s.filter === id ? '#14352A' : '#FFFDF7',
-      ink: s.filter === id ? '#FFF8EA' : '#3C4E42',
-      border: s.filter === id ? '#14352A' : '#DDD2BB',
-      onClick: () => this.setState({ filter: id })
+      active: s.filter === id ? '1' : '0',
+      ink: s.filter === id ? '#14352A' : '#54634F',
+      onClick: () => {
+        this.setState({ filter: id, tab: id === 'stay' ? 'base' : 'map' });
+        if (id === 'stay') this.focusBase();
+      }
     }));
 
     const places = this.allPlaces()
@@ -2387,23 +2444,11 @@ class Component extends DCLogic {
       showGolf: s.tab === 'golf' ? 'block' : 'none',
       showEats: s.tab === 'eats' ? 'block' : 'none',
       showMap: (s.tab === 'map' || s.tab === 'base') ? 'block' : 'none',
-      ctlFlex: (s.tab === 'map' || s.tab === 'base') ? 'flex' : 'none',
-      ctlBlock: s.tab === 'map' ? 'block' : 'none',
+      ctlBlock: (s.tab === 'map' || s.tab === 'base') ? 'flex' : 'none',
       baseDisplay: s.tab === 'base' ? 'block' : 'none',
       recenterBase: this.recenterBase,
       priceDisplay: showPrices ? 'block' : 'none',
 
-      listBtnBg: (!atBase && s.mapMode === 'list') ? '#FFFDF7' : 'transparent',
-      listBtnInk: (!atBase && s.mapMode === 'list') ? '#14352A' : '#54634F',
-      mapBtnBg: (!atBase && s.mapMode === 'map') ? '#FFFDF7' : 'transparent',
-      mapBtnInk: (!atBase && s.mapMode === 'map') ? '#14352A' : '#54634F',
-      baseBtnBg: atBase ? '#FFFDF7' : 'transparent',
-      baseBtnInk: atBase ? '#14352A' : '#54634F',
-      // Coming back from base has to clear the tab, not just the map mode.
-      setList: () => this.setState({ tab: 'map', mapMode: 'list' }),
-      setMapView: () => this.setState({ tab: 'map', mapMode: 'map' }),
-      mapWrapDisplay: (s.tab === 'base' || s.mapMode === 'map') ? 'block' : 'none',
-      mapListDisplay: (s.tab === 'map' && s.mapMode === 'list') ? 'flex' : 'none',
       visiblePlaces: places,
 
       courses: COURSES.map((c) => ({
@@ -2437,11 +2482,11 @@ class Component extends DCLogic {
         { dow: 'Thu', num: '17', items: [
           { dot: '#C86A34', title: 'Ryan + Gustavo land at RSW', meta: '~12:30 pm · pick up the car, then the condo' },
           { dot: '#2A6B4C', title: 'Stoneybrook — Ryan + Gustavo', meta: '9–18 holes with a cart · book from the road' },
-          { dot: '#7B8A7F', title: 'Matt + Oscar arrive later', meta: 'Dinner at Backyard Social' }
+          { dot: '#7B8A7F', title: 'Matt + Oscar arrive later', meta: 'Brewery' }
         ] },
         { dow: 'Fri', num: '18', items: [
           { dot: '#2A6B4C', title: 'Saltleaf Golf Preserve — The Preserve', meta: '8:40 am tee time · confirmed' },
-          { dot: '#D8467A', title: 'Fort Myers Brewing Company', meta: 'Food trucks out front · dinner and taps in one stop' }
+          { dot: '#D8467A', title: 'Brewery', meta: 'Dinner and taps in one stop' }
         ] },
         { dow: 'Sat', num: '19', items: [
           { dot: '#2A6B4C', title: 'Tiburón Golf Club — Black Course', meta: '9:40 am tee time · confirmed' },

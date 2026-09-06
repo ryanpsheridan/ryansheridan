@@ -1,4 +1,4 @@
-const CACHE = "golftrip-v7";
+const CACHE = "golftrip-v8";
 const NET_TIMEOUT = 3000;
 
 // The page needs its runtime, React, Leaflet, fonts and photos to render at
@@ -13,6 +13,7 @@ const ASSETS = [
   "/golftrip/assets/photo-chubby.jpg",
   "/golftrip/assets/photo-fmbrew.jpg",
   "/golftrip/assets/photo-palmcity.jpg",
+  "/golftrip/assets/photo-lowbrow.jpg",
   "/golftrip/assets/photo-twinpeaks.jpg",
   "/golftrip/assets/logo-splitwise.png",
   "/golftrip/",
