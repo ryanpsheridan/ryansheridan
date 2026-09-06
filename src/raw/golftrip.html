@@ -1931,7 +1931,7 @@ class Component extends DCLogic {
      value, so going from scroll-driven to timed only changes where that
      value comes from. Order: the ball rolls the hole, the title rises in
      over the resting scene, then the whole thing fades to the app. */
-  reel = { roll: 4200, titleAt: 1650, titleIn: 700, hold: 1500, out: 550 };
+  reel = { roll: 6300, titleAt: 1650, titleIn: 700, hold: 450, out: 550 };
 
   /* Widen the lane toward the viewer. SVG strokes are one width end to end,
      so the two visible ribbons are filled outlines walked off the centreline:
@@ -1941,11 +1941,17 @@ class Component extends DCLogic {
   lane = { near: 1.55, far: 0.95 };      // how much nearer things are drawn
   laneW = { near: 3.4, far: 1.25 };      // the fairway itself recedes harder
 
-  /* Where the tail meets the ball, and the ball's flight. Each entry is a
-     bounce: `end` is how far up the ground track it comes down, `apex` how
-     high it got. Both shrink each time, which is what restitution looks
-     like; after the last one it rolls flat into the cup. */
-  contact = 0.11;
+  /* Beats of the swing, in ms from the top of the reel. The scene holds
+     still until swingAt, which gives the eye a moment to take in the hole
+     before anything moves. Kept absolute rather than as fractions of `roll`
+     because the pause makes the fractions meaningless to read. */
+  swingAt = 2000;      // the gator starts to coil
+  contactAt = 2460;    // the tail meets the ball
+
+  /* The ball's flight. Each entry is a bounce: `end` is how far up the
+     ground track it comes down, `apex` how high it got. Both shrink each
+     time, which is what restitution looks like; after the last one it rolls
+     flat into the cup. */
   launchY = 83;
   launchAt = 0;
   hops = [{ end: 0.50, apex: 16 }, { end: 0.75, apex: 6 }, { end: 0.90, apex: 2 }];
@@ -2068,7 +2074,9 @@ class Component extends DCLogic {
        last stretch into the cup. `u` is progress along the ground track and
        `hop` is height above it, kept separate so the shadow can stay on the
        ground while the ball rides above it — which is what sells the arc. --- */
-    const flight = seg(p, this.contact, 0.88);
+    // `at` is taken further down for a path length, so this one is `beat`.
+    const beat = (ms) => ms / this.reel.roll;  // absolute beat -> fraction of p
+    const flight = seg(p, beat(this.contactAt), 0.88);
     const u = 1 - Math.pow(1 - flight, 1.7);   // air and each bounce cost speed
     const path = e.lanepath;
 
@@ -2138,16 +2146,18 @@ class Component extends DCLogic {
          gator is mirrored. Rest lies at +9deg and the ball sits at +25deg
          off the tail's pivot, so the sweep is timed to pass through 25 exactly
          on `contact` and follow through past it. */
+      const coil = this.swingAt, hit = this.contactAt;
       let swing;
-      if (p < 0.045) swing = lerp(0, -46, ease(seg(p, 0, 0.045)));
-      else if (p < this.contact) swing = lerp(-46, 16, ease(seg(p, 0.045, this.contact)));
-      else if (p < 0.17) swing = lerp(16, 34, ease(seg(p, this.contact, 0.17)));
-      else swing = lerp(34, 0, ease(seg(p, 0.17, 0.42)));
+      if (p < beat(coil)) swing = 0;                                                     // holds still
+      else if (p < beat(coil + 190)) swing = lerp(0, -46, ease(seg(p, beat(coil), beat(coil + 190))));
+      else if (p < beat(hit)) swing = lerp(-46, 16, ease(seg(p, beat(coil + 190), beat(hit))));
+      else if (p < beat(hit + 290)) swing = lerp(16, 34, ease(seg(p, beat(hit), beat(hit + 290))));
+      else swing = lerp(34, 0, ease(seg(p, beat(hit + 290), beat(hit + 1300))));
       if (e.gator1tail) e.gator1tail.style.transform = 'rotate(' + (-swing).toFixed(2) + 'deg)';
 
       // It gapes with the effort of the swing; the one up by the green lunges
       // as the ball comes down off its second bounce right by its nose.
-      const grunt = Math.sin(Math.PI * seg(p, 0.04, 0.19));
+      const grunt = Math.sin(Math.PI * seg(p, beat(coil), beat(hit + 420)));
       const lunge = Math.sin(Math.PI * seg(u, 0.66, 0.84));
       [[1, grunt], [2, lunge]].forEach(([n, s]) => {
         const shut = e['gator' + n + 'head'], open = e['gator' + n + 'open'];
