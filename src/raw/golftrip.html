@@ -1579,9 +1579,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </div>
       </div>
 
-      <div style="margin-top: 16px; display: {{ wxDaysDisplay }}; gap: 12px; overflow-x: auto; scrollbar-width: none;">
+      <div style="margin: 16px -20px 0; padding: 0 20px; display: {{ wxDaysDisplay }}; gap: 12px; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x proximity;">
         <sc-for list="{{ wxDays }}" as="d" hint-placeholder-count="4">
-          <div style="flex: none; width: 92px; padding: 14px 12px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
+          <div style="flex: none; box-sizing: border-box; width: 39%; min-width: 118px; scroll-snap-align: start; padding: 14px 12px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
             <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .08em; color: #54634F;">{{ d.label }}</div>
             <div style="margin-top: 1px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .04em; color: #8A9686;">{{ d.date }}</div>
             <div style="margin-top: 9px; height: 4px; border-radius: 2px; background: {{ d.bar }};"></div>
@@ -1657,8 +1657,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
                   <div style="flex: none; margin-left: auto; padding: 6px 11px; border-radius: 999px; background: {{ r.tagBg }}; color: {{ r.tagInk }}; font-size: 11px; font-weight: 600; box-shadow: 0 2px 8px rgba(8,26,20,.3);">{{ r.tag }}</div>
                 </div>
                 <div style="position: absolute; left: 16px; right: 66px; bottom: 13px; font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 21px; line-height: 1.12; letter-spacing: -.02em; color: #FFF8EA; text-shadow: 0 2px 10px rgba(8,26,20,.6);">{{ r.name }}</div>
-                <a href="{{ r.mapsUrl }}" target="_blank" rel="noopener" aria-label="Directions to {{ r.name }}" class="tapin" style="position: absolute; right: 14px; bottom: 12px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 999px; background: rgba(255,248,234,.94); box-shadow: 0 4px 14px rgba(8,26,20,.34);">
-                  <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="#14352A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                <a href="{{ r.mapsUrl }}" target="_blank" rel="noopener" aria-label="Directions to {{ r.name }}" class="tapin" style="position: absolute; right: 14px; bottom: 12px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 999px; background: #14352A; box-shadow: 0 4px 14px rgba(8,26,20,.42);">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#FFF8EA" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="display: block; transform: translateY(1px);"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                 </a>
               </div>
             </sc-if>
@@ -1741,7 +1741,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <!-- The page would otherwise scroll through the gap under the pill and out
          the bottom of the screen, which makes the bar read as something
          floating over the content. Fading the page out beneath it settles it. -->
-    <div style="position: absolute; left: 0; right: 0; bottom: 0; height: calc(100% + 40px); background: linear-gradient(rgba(239,232,216,0) 0%, rgba(239,232,216,.92) 46%, #EFE8D8 72%); pointer-events: none;"></div>
+    <div style="position: absolute; left: 0; right: 0; bottom: 0; height: calc(100% + 40px); background: linear-gradient(rgba(239,232,216,0) 0%, rgba(239,232,216,.46) 46%, rgba(239,232,216,.5) 72%); pointer-events: none;"></div>
     <div data-el="navpill" style="position: relative; display: flex; gap: 2px; padding: 5px; background: #14352A; border-radius: 999px; box-shadow: 0 12px 30px rgba(20,53,42,.28); pointer-events: auto;">
       <!-- One pill that slides to the active tab, rather than a background
            snapping on and off five separate buttons. syncTabSlide() measures
@@ -1997,7 +1997,7 @@ class Component extends DCLogic {
      value, so going from scroll-driven to timed only changes where that
      value comes from. Order: the ball rolls the hole, the title rises in
      over the resting scene, then the whole thing fades to the app. */
-  reel = { roll: 6300, titleAt: 3650, titleIn: 700, hold: 450, out: 550 };
+  reel = { roll: 6300, titleAt: 3650, titleIn: 700, hold: 2450, out: 550 };
 
   /* Widen the lane toward the viewer. SVG strokes are one width end to end,
      so the two visible ribbons are filled outlines walked off the centreline:
