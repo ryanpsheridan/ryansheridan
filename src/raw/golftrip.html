@@ -1203,7 +1203,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
    against one height inside a box of another, which is what put the intro's
    horizon in the wrong place on iOS: too high and the sun disappears behind
    it, too low and the background shows as a band under the ground. */
-:root { --appvh: 100vh; }
+:root {
+  --appvh: 100vh;
+  /* Named so the layout reads clearly and so both can be overridden in a test;
+     env() itself cannot be faked in a desktop browser. */
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+}
 @supports (height: 100dvh) { :root { --appvh: 100dvh; } }
 </style>
 <script>
@@ -1227,8 +1233,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
     // Pinch-zoom also shrinks the visual viewport, and resizing the app under
     // someone who is zoomed in to read something is not the goal here.
     if (vv.scale && vv.scale > 1.01) return;
-    var h = standalone() ? Math.max(window.innerHeight, vv.height) : vv.height;
-    document.documentElement.style.setProperty('--appvh', Math.round(h) + 'px');
+    var de = document.documentElement;
+    // Installed on an iPhone 16 Pro, an 874pt screen reports 812 through both
+    // visualViewport and innerHeight, which left the tab bar floating 62pt off
+    // the bottom. There is no chrome to measure around in standalone, so hand
+    // the job back to dvh, which does cover the painted area.
+    if (standalone()) { de.style.removeProperty('--appvh'); return; }
+    de.style.setProperty('--appvh', Math.round(vv.height) + 'px');
   };
   apply();
   vv.addEventListener('resize', apply);
@@ -1368,7 +1379,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
   <div data-el="app" style="position: relative; transform-origin: 50% 0; padding: 0 20px 128px;">
 
-    <div style="position: sticky; top: 0; z-index: 40; margin: 0 -20px; padding: 16px 20px 14px; background: rgba(239,232,216,.95); backdrop-filter: blur(12px); border-bottom: 1px solid #D3C6A9; box-shadow: 0 6px 18px -12px rgba(20,53,42,.35);">
+    <div style="position: sticky; top: 0; z-index: 40; margin: 0 -20px; padding: calc(16px + var(--sat)) 20px 14px; background: rgba(239,232,216,.95); backdrop-filter: blur(12px); border-bottom: 1px solid #D3C6A9; box-shadow: 0 6px 18px -12px rgba(20,53,42,.35);">
       <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
         <div style="display: flex; align-items: center; gap: 11px; min-width: 0;">
           <!-- Where the loading croc lands, and the way back to the trip tab. -->
@@ -1678,7 +1689,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
       </div>
 
-  <div data-el="nav" style="position: sticky; bottom: 0; z-index: 60; padding: 0 20px calc(14px + env(safe-area-inset-bottom)); pointer-events: none;">
+  <div data-el="nav" style="position: sticky; bottom: 0; z-index: 60; padding: 0 20px calc(14px + var(--sab)); pointer-events: none;">
     <!-- The page would otherwise scroll through the gap under the pill and out
          the bottom of the screen, which makes the bar read as something
          floating over the content. Fading the page out beneath it settles it. -->

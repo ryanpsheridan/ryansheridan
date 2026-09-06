@@ -1,4 +1,4 @@
-const CACHE = "golftrip-v15";
+const CACHE = "golftrip-v16";
 const NET_TIMEOUT = 3000;
 
 // The page needs its runtime, React, Leaflet, fonts and photos to render at
