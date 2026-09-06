@@ -1713,9 +1713,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
        on the bottom edge, so it reads as the edge of the app instead of a
        control hovering over the page. Being opaque and full-bleed, it needs no
        scrim behind it — nothing can scroll out from under it. -->
-  <div data-el="nav" style="position: sticky; bottom: 0; z-index: 60; display: flex; gap: 2px; padding: 7px 8px calc(7px + env(safe-area-inset-bottom)); background: rgba(20,53,42,.97); backdrop-filter: blur(14px); box-shadow: 0 -10px 26px rgba(20,53,42,.16);">
+  <div data-el="nav" style="position: sticky; bottom: 0; z-index: 60; display: flex; gap: 2px; padding: 10px 10px calc(10px + env(safe-area-inset-bottom)); background: #14352A; border-radius: 30px 30px 0 0; box-shadow: 0 -10px 26px rgba(20,53,42,.16);">
     <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
-      <button type="button" sc-camel-on-click="{{ t.onClick }}" style="flex: 1 1 auto; white-space: nowrap; min-height: 44px; padding: 0 7px; border: none; border-radius: 999px; background: {{ t.bg }}; color: {{ t.ink }}; font-family: inherit; font-size: 11.5px; font-weight: 600; letter-spacing: -.01em; cursor: pointer;">{{ t.label }}</button>
+      <button type="button" sc-camel-on-click="{{ t.onClick }}" style="flex: 1 1 auto; white-space: nowrap; min-height: 46px; padding: 0 7px; border: none; border-radius: 999px; background: {{ t.bg }}; color: {{ t.ink }}; font-family: inherit; font-size: 11.5px; font-weight: 600; letter-spacing: -.01em; cursor: pointer;">{{ t.label }}</button>
     </sc-for>
   </div>
 </div>
