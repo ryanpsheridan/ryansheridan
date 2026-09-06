@@ -1540,16 +1540,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
           </div>
         </sc-for>
       </div>
-
-      <a href="https://www.google.com/search?q=weather+miromar+lakes+fl" target="_blank" rel="noopener" style="margin-top: 16px; display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
-        <span style="font-size: 14px; font-weight: 600; color: #14352A;">Full forecast on Google</span>
-        <span style="width: 8px; height: 8px; border-right: 2px solid #C86A34; border-top: 2px solid #C86A34; transform: rotate(45deg);"></span>
-      </a>
-
-      <div style="margin-top: 16px; padding: 18px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
-        <div style="font-size: 14px; font-weight: 600; color: #14352A;">September in southwest Florida</div>
-        <div style="margin-top: 6px; font-size: 13px; color: #54634F; line-height: 1.55; text-wrap: pretty;">Hot and humid with afternoon storms most days. Morning tee times are the play — both confirmed rounds go off before 10, which should keep us ahead of the pop-ups.</div>
-      </div>
     
       </div>
 
@@ -1720,7 +1710,12 @@ svg.leaflet-image-layer.leaflet-interactive path {
       </div>
 
   <div data-el="nav" style="position: sticky; bottom: 0; z-index: 60; padding: 0 20px calc(14px + env(safe-area-inset-bottom)); pointer-events: none;">
-    <div style="display: flex; gap: 1px; padding: 5px; background: rgba(20,53,42,.96); backdrop-filter: blur(14px); border-radius: 999px; box-shadow: 0 12px 30px rgba(20,53,42,.28); pointer-events: auto;">
+    <!-- Without this the page scrolls clean through the gap under the pill and
+         out the bottom of the screen, which makes the bar read as something
+         floating over the content rather than the edge of the app. Fading the
+         page out beneath it docks it. -->
+    <div style="position: absolute; left: 0; right: 0; bottom: 0; height: calc(100% + 40px); background: linear-gradient(rgba(239,232,216,0) 0%, rgba(239,232,216,.92) 46%, #EFE8D8 72%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; gap: 1px; padding: 5px; background: rgba(20,53,42,.96); backdrop-filter: blur(14px); border-radius: 999px; box-shadow: 0 12px 30px rgba(20,53,42,.28); pointer-events: auto;">
       <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
         <button type="button" sc-camel-on-click="{{ t.onClick }}" style="flex: 1 1 auto; white-space: nowrap; min-height: 46px; padding: 0 7px; border: none; border-radius: 999px; background: {{ t.bg }}; color: {{ t.ink }}; font-family: inherit; font-size: 11.5px; font-weight: 600; letter-spacing: -.01em; cursor: pointer;">{{ t.label }}</button>
       </sc-for>
@@ -2344,7 +2339,7 @@ class Component extends DCLogic {
       .map(([id, label]) => ({
         id, label,
         bg: s.tab === id ? (id === 'base' ? '#E8A33F' : '#FFF8EA') : 'transparent',
-        ink: s.tab === id ? (id === 'base' ? '#2E2208' : '#14352A') : 'rgba(255,248,234,.72)',
+        ink: s.tab === id ? (id === 'base' ? '#2E2208' : '#14352A') : 'rgba(255,248,234,.86)',
         onClick: this.go(id)
       }));
 
@@ -2466,7 +2461,7 @@ class Component extends DCLogic {
 
       wxTemp: wx ? wx.temp + '°' : s.wxErr ? '—' : '··',
       wxDesc: wx ? wx.desc.charAt(0).toUpperCase() + wx.desc.slice(1) : s.wxErr ? 'Live weather unavailable' : 'Loading conditions',
-      wxFeels: wx ? 'Feels like ' + wx.feels + '°' : 'Tap through to Google below',
+      wxFeels: wx ? 'Feels like ' + wx.feels + '°' : 'Check again when you have signal',
       wxStats: wx ? [
         { label: 'Humidity', value: wx.humidity + '%' },
         { label: 'Wind', value: wx.wind + ' mph' },
