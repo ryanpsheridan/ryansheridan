@@ -1841,6 +1841,7 @@ const COURSES = [
     lat: 26.4200, lng: -81.7900,
     day: 'Day 1 — Thu, Sept 17', status: 'open', statusLabel: 'Not booked yet',
     teeTime: 'Book on arrival', price: '$60–80', priceNote: 'estimate · Ryan + Gustavo',
+    type: 'Public · 18 holes', rating: '78.1', conditions: '8.0', zone: '19%',
     photo: (window.__resources && window.__resources.photoStoneybrook) || 'photos/stoneybrook.jpg',
     notes: 'Gordon Lewis and Jed Azinger design from 1999, and at 7,314 yards off the back tees it is the longest card of the week. Cart required, no walking — call from the car for an afternoon slot.'
   },
@@ -2563,7 +2564,6 @@ class Component extends DCLogic {
 
       days: [
         { dow: 'THU', num: '17', items: [
-          { ...ICON.travel, title: 'Ryan + Gustavo land at RSW', meta: 'Pick up the car, then the condo' },
           { ...ICON.golf, title: 'Stoneybrook — Ryan + Gustavo', meta: '9–18 holes with a cart · book from the road' },
           { ...ICON.travel, title: 'Matt + Oscar arrive later', meta: 'Later flights — they meet everyone at the condo' },
           { ...ICON.dining, title: 'Brewery', meta: 'Dinner once the whole group has landed' }
