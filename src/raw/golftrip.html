@@ -1134,7 +1134,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
 </style>
 <script src="/golftrip/assets/0d276d84-f013-4338-b172-9895cdb0db0e.js"></script>
 <style>
-  html, body { margin: 0; padding: 0; background: #14352A; }
+  /* All scrolling happens inside the shell, so the document itself must never
+     scroll. When it could, a viewport unit that came back taller than the
+     screen let the page slide: the reel's first line went under the status
+     bar and this background colour showed as a band beneath the ground. */
+  html, body { margin: 0; padding: 0; background: #14352A; height: 100%; overflow: hidden; overscroll-behavior: none; }
   body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
   * { -webkit-tap-highlight-color: transparent; }
   a { color: #1E4A38; text-decoration: none; }
@@ -1195,6 +1199,26 @@ svg.leaflet-image-layer.leaflet-interactive path {
 :root { --appvh: 100vh; }
 @supports (height: 100dvh) { :root { --appvh: 100dvh; } }
 </style>
+<script>
+(function () {
+  // dvh is the right idea but the browsers disagree on it: iOS Chrome counts
+  // its bottom toolbar differently from Safari, and an answer even slightly
+  // taller than the screen is enough to push the headline off the top.
+  // visualViewport reports what is actually on screen, so prefer it and let
+  // the CSS above stand as the fallback.
+  var vv = window.visualViewport;
+  if (!vv) return;
+  var apply = function () {
+    // Pinch-zoom also shrinks the visual viewport, and resizing the app under
+    // someone who is zoomed in to read something is not the goal here.
+    if (vv.scale && vv.scale > 1.01) return;
+    document.documentElement.style.setProperty('--appvh', Math.round(vv.height) + 'px');
+  };
+  apply();
+  vv.addEventListener('resize', apply);
+  window.addEventListener('orientationchange', function () { setTimeout(apply, 260); });
+})();
+</script>
 </helmet>
 
 <div style="height: var(--appvh); background: #0B231B; display: flex; justify-content: center; overflow: hidden;">
