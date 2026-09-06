@@ -1138,7 +1138,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
      scroll. When it could, a viewport unit that came back taller than the
      screen let the page slide: the header went under the status bar and this
      background colour showed as a band at the foot of the page. */
-  html, body { margin: 0; padding: 0; background: #14352A; height: 100%; overflow: hidden; overscroll-behavior: none; }
+  html, body { margin: 0; padding: 0; background: #EFE8D8; height: 100%; overflow: hidden; overscroll-behavior: none; }
   body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
   * { -webkit-tap-highlight-color: transparent; }
   a { color: #1E4A38; text-decoration: none; }
@@ -1215,11 +1215,20 @@ svg.leaflet-image-layer.leaflet-interactive path {
   // the CSS above stand as the fallback.
   var vv = window.visualViewport;
   if (!vv) return;
+  // Installed, there is no browser chrome to duck, and visualViewport comes
+  // back short of the painted area — which left a strip of the page background
+  // showing along the bottom safe area. innerHeight is the whole screen there,
+  // and an over-tall shell is harmless now that the document cannot scroll.
+  var standalone = function () {
+    return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+      window.navigator.standalone === true;
+  };
   var apply = function () {
     // Pinch-zoom also shrinks the visual viewport, and resizing the app under
     // someone who is zoomed in to read something is not the goal here.
     if (vv.scale && vv.scale > 1.01) return;
-    document.documentElement.style.setProperty('--appvh', Math.round(vv.height) + 'px');
+    var h = standalone() ? Math.max(window.innerHeight, vv.height) : vv.height;
+    document.documentElement.style.setProperty('--appvh', Math.round(h) + 'px');
   };
   apply();
   vv.addEventListener('resize', apply);
