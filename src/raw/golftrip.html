@@ -1495,9 +1495,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     <div style="display: {{ showTrip }}; padding-top: 22px; animation: softin .3s ease both;">
 
-      <div style="margin-top: 4px; display: flex; align-items: baseline; justify-content: space-between;">
+      <div style="margin-top: 4px;">
         <div style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: #14352A;">Itinerary</div>
-        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #54634F;">4 days</div>
       </div>
       <div class="rise" style="margin-top: 14px; display: flex; flex-direction: column; gap: 14px;">
         <sc-for list="{{ days }}" as="d" hint-placeholder-count="4">
@@ -1505,9 +1504,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
             <!-- A tinted band per day gives the itinerary the colour the other
                  tabs get from their photos, and the icons give the eye
                  something to land on besides a wall of small text. -->
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 16px; background: #E2EFE6;">
+            <div style="padding: 11px 16px; background: #E2EFE6;">
               <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: .12em; color: #24614A;">{{ d.dow }} · SEPT {{ d.num }}</div>
-              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .06em; color: #24614A; opacity: .72;">{{ d.summary }}</div>
             </div>
             <div style="padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 13px;">
               <sc-for list="{{ d.items }}" as="it" hint-placeholder-count="2">
@@ -1531,9 +1529,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
       </div>
 
 
-      <div style="margin-top: 26px; display: flex; align-items: baseline; justify-content: space-between;">
+      <div style="margin-top: 26px;">
         <div style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: #14352A;">Shared</div>
-        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #54634F;">join both</div>
       </div>
 
       <div style="margin-top: 12px; padding: 18px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
@@ -1556,9 +1553,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
         <a href="https://open.spotify.com/playlist/6gBCbxdvMbwsC6XSMPWIgc" target="_blank" rel="noopener" style="margin-top: 13px; display: block; min-height: 44px; box-sizing: border-box; padding: 13px; border-radius: 13px; background: #1DB954; color: #06281A; font-size: 13.5px; font-weight: 700; text-align: center;">Open in Spotify</a>
       </div>
 
-      <div style="margin-top: 26px; display: flex; align-items: baseline; justify-content: space-between;">
+      <div style="margin-top: 26px;">
         <div style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: #14352A;">Weather</div>
-        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #54634F;">next 5 days</div>
       </div>
       <div style="margin-top: 12px;">
       <div style="padding: 20px; border-radius: 22px; background: linear-gradient(#1B2650 0%, #6B2F63 52%, #C1594F 100%); color: #FFF8EA; position: relative; overflow: hidden;">
@@ -1584,7 +1580,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
         </div>
       </div>
 
-      <div style="margin: 16px -20px 0; padding: 0 20px; display: {{ wxDaysDisplay }}; gap: 12px; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x proximity;">
+      <div style="margin: 16px -20px 0 0; padding-right: 20px; display: {{ wxDaysDisplay }}; gap: 12px; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x proximity;">
         <sc-for list="{{ wxDays }}" as="d" hint-placeholder-count="4">
           <div style="flex: none; box-sizing: border-box; width: 39%; min-width: 118px; scroll-snap-align: start; padding: 14px 12px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
             <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .08em; color: #54634F;">{{ d.label }}</div>
@@ -1676,16 +1672,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
                 <div style="flex: none; padding: 5px 10px; border-radius: 999px; background: {{ r.tagBg }}; color: {{ r.tagInk }}; font-size: 11px; font-weight: 600;">{{ r.tag }}</div>
               </div>
             </sc-if>
-            <div style="display: flex; align-items: flex-start; gap: 14px;">
-              <div style="flex: 1 1 75%; font-size: 13.5px; color: #435349; line-height: 1.55;">{{ r.notes }}</div>
-              <a href="{{ r.mapsUrl }}" target="_blank" rel="noopener" aria-label="Directions to {{ r.name }}" class="tapin" style="flex: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 999px; background: #14352A; box-shadow: 0 3px 10px rgba(8,26,20,.26);">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#FFF8EA" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="display: block; transform: translateY(1px);"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-              </a>
-            </div>
+            <div style="font-size: 13.5px; color: #435349; line-height: 1.55;">{{ r.notes }}</div>
             <div style="margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px;">
-              <sc-if value="{{ r.noPhoto }}" hint-placeholder-val="{{ false }}">
-                <a href="{{ r.mapsUrl }}" target="_blank" rel="noopener" style="flex: 1 1 calc(50% - 4px); min-height: 44px; box-sizing: border-box; padding: 12px; border-radius: 13px; background: #14352A; color: #FFF8EA; font-size: 13.5px; font-weight: 600; text-align: center;">Directions</a>
-              </sc-if>
+              <a href="{{ r.mapsUrl }}" target="_blank" rel="noopener" style="flex: 1 1 100%; min-height: 44px; box-sizing: border-box; padding: 12px; border-radius: 13px; background: #14352A; color: #FFF8EA; font-size: 13.5px; font-weight: 600; text-align: center;">Directions</a>
               <sc-if value="{{ r.telUrl }}" hint-placeholder-val="{{ false }}">
                 <a href="{{ r.telUrl }}" style="flex: 1 1 calc(50% - 4px); min-height: 44px; box-sizing: border-box; padding: 12px; border-radius: 13px; border: 1px solid #CFC2A6; color: #14352A; font-size: 13.5px; font-weight: 600; text-align: center;">Call</a>
               </sc-if>
@@ -1707,7 +1696,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <div data-el="chippill" style="display: {{ ctlBlock }}; position: relative; padding: 4px; background: #E4DBC6; border-radius: 999px;">
         <div data-el="chipslide" style="position: absolute; left: 0; top: 4px; bottom: 4px; width: 0; border-radius: 999px; background: #FFFDF7; box-shadow: 0 1px 3px rgba(20,53,42,.14); transition: transform .38s cubic-bezier(.34,1.26,.64,1), width .38s cubic-bezier(.34,1.26,.64,1);"></div>
         <sc-for list="{{ chips }}" as="ch" hint-placeholder-count="4">
-          <button type="button" data-active="{{ ch.active }}" sc-camel-on-click="{{ ch.onClick }}" style="position: relative; flex: 1; min-height: 40px; border: none; border-radius: 999px; background: transparent; color: {{ ch.ink }}; font-family: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: color .3s ease;">{{ ch.label }}</button>
+          <button type="button" data-active="{{ ch.active }}" sc-camel-on-click="{{ ch.onClick }}" style="position: relative; flex: 1; min-height: 40px; border: none; border-radius: 999px; background: transparent; color: {{ ch.ink }}; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; letter-spacing: .02em; cursor: pointer; transition: color .3s ease;">{{ ch.label }}</button>
         </sc-for>
       </div>
 
@@ -1759,7 +1748,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
            the live button because the labels are different widths. -->
       <div data-el="tabslide" style="position: absolute; left: 0; top: 5px; bottom: 5px; width: 0; border-radius: 999px; background: #FFF8EA; transition: transform .42s cubic-bezier(.34,1.26,.64,1), width .42s cubic-bezier(.34,1.26,.64,1);"></div>
       <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
-        <button type="button" data-active="{{ t.active }}" sc-camel-on-click="{{ t.onClick }}" style="position: relative; flex: 1 1 auto; white-space: nowrap; min-height: 54px; padding: 0 9px; border: none; border-radius: 999px; background: transparent; color: {{ t.ink }}; font-family: inherit; font-size: 15px; font-weight: 600; letter-spacing: -.01em; cursor: pointer; transition: color .3s ease;">{{ t.label }}</button>
+        <button type="button" data-active="{{ t.active }}" sc-camel-on-click="{{ t.onClick }}" style="position: relative; flex: 1 1 auto; white-space: nowrap; min-height: 54px; padding: 0 6px; border: none; border-radius: 999px; background: transparent; color: {{ t.ink }}; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; letter-spacing: -.01em; cursor: pointer; transition: color .3s ease;">{{ t.label }}</button>
       </sc-for>
     </div>
   </div>
@@ -2505,21 +2494,21 @@ class Component extends DCLogic {
       ],
 
       days: [
-        { dow: 'THU', num: '17', summary: 'Travel + 9 holes', items: [
+        { dow: 'THU', num: '17', items: [
           { ...ICON.travel, title: 'Ryan + Gustavo land at RSW', meta: '~12:30 pm · pick up the car, then the condo' },
           { ...ICON.golf, title: 'Stoneybrook — Ryan + Gustavo', meta: '9–18 holes with a cart · book from the road' },
           { ...ICON.travel, title: 'Matt + Oscar arrive later', meta: 'Later flights — they meet everyone at the condo' },
           { ...ICON.dining, title: 'Brewery', meta: 'Dinner once the whole group has landed' }
         ] },
-        { dow: 'FRI', num: '18', summary: '18 at Saltleaf', items: [
+        { dow: 'FRI', num: '18', items: [
           { ...ICON.golf, title: 'Saltleaf Golf Preserve — The Preserve', meta: '8:40 am tee time · confirmed' },
           { ...ICON.dining, title: 'Brewery', meta: 'Dinner and taps in one stop' }
         ] },
-        { dow: 'SAT', num: '19', summary: '18 at Tiburón', items: [
+        { dow: 'SAT', num: '19', items: [
           { ...ICON.golf, title: 'Tiburón Golf Club — Black Course', meta: '9:40 am tee time · confirmed' },
           { ...ICON.dining, title: 'Dinner at Blue Water Beach Grill', meta: 'Walkable from the condo — no one has to drive' }
         ] },
-        { dow: 'SUN', num: '20', summary: 'Fly home', items: [
+        { dow: 'SUN', num: '20', items: [
           { ...ICON.travel, title: 'Out on DL1395', meta: '8:10 am from RSW · leave the condo by 6:30' }
         ] }
       ],
