@@ -1694,7 +1694,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
          the bottom of the screen, which makes the bar read as something
          floating over the content. Fading the page out beneath it settles it. -->
     <div style="position: absolute; left: 0; right: 0; bottom: 0; height: calc(100% + 40px); background: linear-gradient(rgba(239,232,216,0) 0%, rgba(239,232,216,.46) 46%, rgba(239,232,216,.5) 72%); pointer-events: none;"></div>
-    <div data-el="navpill" style="position: relative; display: flex; gap: 2px; padding: 5px; background: #14352A; border-radius: 999px; box-shadow: 0 12px 30px rgba(20,53,42,.28); pointer-events: auto;">
+    <div data-el="navpill" style="position: relative; display: flex; gap: 2px; padding: 5px; background: #14352A; border-radius: 999px; box-shadow: 0 12px 30px rgba(20,53,42,.28); pointer-events: auto; transform-origin: 50% 100%; transition: transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s ease;">
       <!-- One pill that slides to the active tab, rather than a background
            snapping on and off five separate buttons. syncTabSlide() measures
            the live button because the labels are different widths. -->
@@ -1874,6 +1874,29 @@ class Component extends DCLogic {
     this.onResize = this.syncTabSlide;
     window.addEventListener('resize', this.onResize);
 
+    // The tab bar gets out of the way while you are reading and comes back the
+    // instant you scroll up. Scrolling fires far more often than it needs to be
+    // acted on, so the reading and the write are held to one a frame.
+    this.lastY = 0;
+    this.navTick = false;
+    this.onShellScroll = () => {
+      if (this.navTick) return;
+      this.navTick = true;
+      requestAnimationFrame(() => {
+        this.navTick = false;
+        const sc = this.rootRef.current;
+        if (!sc) return;
+        const y = sc.scrollTop;
+        const dy = y - this.lastY;
+        this.lastY = y;
+        // The threshold keeps a thumb resting on the screen from flickering it.
+        if (y <= 24) this.setNavCompact(false);
+        else if (dy > 6 && y > 90) this.setNavCompact(true);
+        else if (dy < -6) this.setNavCompact(false);
+      });
+    };
+    r.addEventListener('scroll', this.onShellScroll, { passive: true });
+
     // Five seconds of animation is exactly what this media query is for, so
     // honour it and drop straight into the app.
     const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1934,6 +1957,8 @@ class Component extends DCLogic {
   componentWillUnmount() {
     if (this.loadTimer) clearTimeout(this.loadTimer);
     window.removeEventListener('resize', this.onResize);
+    const r = this.rootRef.current;
+    if (r && this.onShellScroll) r.removeEventListener('scroll', this.onShellScroll);
   }
 
   /* ---------- loading screen ----------
@@ -2018,8 +2043,26 @@ class Component extends DCLogic {
     }
   };
 
+  /* .82 rather than a rounder number: the buttons are 54px tall, and this is
+     the smallest scale that still leaves them on the 44px tap target. Scaling
+     rather than resizing also means syncTabSlide's offsetWidth and offsetLeft
+     stay true, since a transform does not touch layout. */
+  NAV_COMPACT = 0.82;
+
+  setNavCompact = (on) => {
+    if (this.navCompact === on) return;
+    this.navCompact = on;
+    const pill = this.el && this.el.navpill;
+    if (!pill) return;
+    pill.style.transform = on ? 'scale(' + this.NAV_COMPACT + ')' : 'scale(1)';
+    // The shadow tightens as it shrinks, so it reads as settling closer to the
+    // page rather than as the same bar drawn smaller.
+    pill.style.boxShadow = on ? '0 6px 16px rgba(20,53,42,.22)' : '0 12px 30px rgba(20,53,42,.28)';
+  };
+
   go = (tab) => () => {
     this.setState({ tab });
+    this.setNavCompact(false);
     const r = this.rootRef.current;
     if (r && r.scrollTop > 0) r.scrollTo({ top: 0 });
   };
@@ -2027,6 +2070,7 @@ class Component extends DCLogic {
   // The logo is the way home: the trip tab, scrolled to the top.
   goHome = () => {
     this.setState({ tab: 'trip' });
+    this.setNavCompact(false);
     const r = this.rootRef.current;
     if (r) r.scrollTo({ top: 0, behavior: 'smooth' });
   };
