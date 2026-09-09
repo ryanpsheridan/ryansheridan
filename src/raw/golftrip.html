@@ -1173,13 +1173,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
       transition-duration: .001ms !important;
     }
   }
-  /* Loading screen. The orbit and the ring share one duration, so the croc
-     always sits at the head of the arc it is drawing. */
-  @keyframes orbit { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+  /* Loading screen. */
   @keyframes ballspin { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
-  @keyframes counterspin { from { transform: rotate(0deg) } to { transform: rotate(-360deg) } }
   @keyframes drawring { from { stroke-dashoffset: 389.6 } to { stroke-dashoffset: 0 } }
-  @keyframes bob { from { transform: translateY(-2.5px) } to { transform: translateY(2.5px) } }
   @keyframes dotbob { 0%, 100% { transform: translateY(0); opacity: .3 } 50% { transform: translateY(-5px); opacity: 1 } }
   @keyframes liftin { from { opacity: 0; transform: translateY(14px) } to { opacity: 1; transform: none } }
   /* backwards, not both: the logo keeps its press feedback once this ends. */
@@ -1251,24 +1247,19 @@ svg.leaflet-image-layer.leaflet-interactive path {
 <div style="height: var(--appvh); background: #0B231B; display: flex; justify-content: center; overflow: hidden;">
 <div ref="{{ rootRef }}" style="position: relative; width: 100%; max-width: 440px; height: var(--appvh); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; background: #EFE8D8; color: #16211C; font-family: 'IBM Plex Sans', system-ui, sans-serif; box-shadow: 0 0 0 1px rgba(253,246,232,.08), 0 24px 70px rgba(0,0,0,.5); -webkit-overflow-scrolling: touch; scrollbar-width: none;">
 
-  <!-- The loading screen is one five second beat: the crocodile swims a lap of
-       the ring while the ring draws in behind it, then flies to the corner and
-       lands as the home button. Sitting on the app's own background means
-       there is no world to cross into at the end of it. -->
+  <!-- The loading screen is one three second beat: the ring draws in around
+       the spinning ball, then fades to reveal the app already underneath.
+       Sitting on the app's own background means there is no world to cross
+       into at the end of it. -->
   <sc-if value="{{ introOn }}" hint-placeholder-val="{{ true }}">
     <div data-el="loader" style="position: absolute; inset: 0; z-index: 60; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; background: #EFE8D8;">
 
       <div style="position: relative; width: 148px; height: 148px;">
         <svg data-el="loadtrack" viewBox="0 0 148 148" width="148" height="148" style="position: absolute; inset: 0; display: block; transform: rotate(-90deg); transition: opacity .4s ease;">
           <circle cx="74" cy="74" r="62" fill="none" stroke="#DED2B6" stroke-width="2.5"/>
-          <circle data-el="loadring" cx="74" cy="74" r="62" fill="none" stroke="#1F5C3E" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="389.6" stroke-dashoffset="389.6" style="animation: drawring 5s linear both; transition: opacity .4s ease;"/>
+          <circle data-el="loadring" cx="74" cy="74" r="62" fill="none" stroke="#1F5C3E" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="389.6" stroke-dashoffset="389.6" style="animation: drawring 3s linear both; transition: opacity .4s ease;"/>
         </svg>
 
-        <!-- The croc rides a wrapper that spins about the ring's centre, so it
-             stays tangent to the circle the whole way round without any
-             per-frame maths. It is a plain element rather than part of the
-             ring's SVG because it has to fly out of here and land on the
-             header, which means it needs its own transform. -->
         <!-- The ball body and its highlight hold still; only the dimples turn,
              because a light source that spins with the ball reads as a sticker
              rather than a sphere. The drop shadow is what separates white on
@@ -1329,40 +1320,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <circle cx="50" cy="50" r="45.4" fill="none" stroke="#CFC3A5" stroke-width="1.2"/>
         </svg>
 
-        <div data-el="croctrack" style="position: absolute; inset: 0; animation: orbit 5s linear both;">
-          <!-- The counter-turn cancels the orbit exactly, since both are linear
-               over the same five seconds. Without it the croc is drawn in side
-               profile going round a loop, so it spends half the lap belly-up. -->
-          <div data-el="croclevel" style="position: absolute; left: 50%; top: 1px; margin-left: -37px; width: 74px; height: 19px; animation: counterspin 5s linear both;">
-          <svg data-el="loadcroc" viewBox="-44 -18 82 21" width="74" height="19" style="display: block; overflow: visible; animation: bob 1.15s ease-in-out infinite alternate;">
-            <path d="M8.6 -5.6 C 11 -4.6 11.8 -2.6 11.4 -0.6 L 7.6 -0.6 C 6.8 -2.6 6.8 -4.4 8.6 -5.6 Z" fill="#26401D"/>
-            <path d="M-10.6 -5.6 C -8.2 -4.6 -7.4 -2.6 -7.8 -0.6 L -11.6 -0.6 C -12.4 -2.6 -12.4 -4.4 -10.6 -5.6 Z" fill="#26401D"/>
-            <path d="M-16 -9.8 C -23 -9.2 -30 -7.8 -37 -5.2 C -39.4 -4.3 -41 -3.6 -42.2 -2.7 C -40.4 -1.6 -38.2 -1.6 -35.8 -2.3 C -29.6 -4 -23 -4.6 -16 -4.5 Z" fill="#3A5628"/>
-            <path d="M-20.6 -9.6 L -19.4 -12.6 L -18 -9.4 Z" fill="#26401D"/>
-            <path d="M-25.6 -8.8 L -24.6 -11.4 L -23.4 -8.6 Z" fill="#26401D"/>
-            <path d="M-30.4 -7.6 L -29.6 -9.8 L -28.6 -7.3 Z" fill="#26401D"/>
-            <path d="M-34.6 -6.2 L -34 -8 L -33.2 -5.9 Z" fill="#26401D"/>
-            <path d="M13.6 -6.2 C 8 -4.4 0 -3.4 -6 -3.6 C -10 -3.7 -14 -4 -17 -4.6 L -17 -9.4 C -14.6 -11.2 -10.6 -12.6 -6 -13.2 C 0 -14 6 -13.4 12.4 -11.6 Z" fill="#405E2C"/>
-            <path d="M12.4 -11.6 C 6 -13.4 0 -14 -6 -13.2 C -10.6 -12.6 -14.6 -11.2 -17 -9.4 L -17 -7.8 C -14 -9.8 -10 -11 -6 -11.4 C 0 -12 6 -11.6 12.4 -10.2 Z" fill="#2C4620"/>
-            <path d="M-17 -4.6 C -14 -4 -10 -3.7 -6 -3.6 C 0 -3.4 8 -4.4 13.6 -6.2 L 13.4 -7.6 C 8 -6 0 -5.1 -6 -5.3 C -10 -5.4 -14 -5.7 -17 -6.2 Z" fill="#8FA55E"/>
-            <path d="M8.6 -12 L 9.8 -14.4 L 11 -12.6 Z" fill="#24391A"/>
-            <path d="M3.6 -13.1 L 4.8 -15.7 L 6 -13.4 Z" fill="#24391A"/>
-            <path d="M-1.4 -13.6 L -.2 -16.2 L 1 -13.8 Z" fill="#24391A"/>
-            <path d="M-6.4 -13.5 L -5.2 -16 L -4 -13.7 Z" fill="#24391A"/>
-            <path d="M-11.2 -12.7 L -10 -15 L -8.8 -13 Z" fill="#24391A"/>
-            <path d="M-15.2 -11 L -14.2 -13 L -13.2 -11.4 Z" fill="#24391A"/>
-            <path d="M10.2 -5.8 C 12.8 -5.2 13.8 -2.8 13.4 -.8 L 17 -.6 C 17.6 .2 17.2 1 16 1 L 10.6 1 C 9.2 -1 8.6 -3.8 10.2 -5.8 Z" fill="#456630"/>
-            <path d="M-9 -5.8 C -11.6 -5.2 -12.6 -2.8 -12.2 -.8 L -15.8 -.6 C -16.4 .2 -16 1 -14.8 1 L -9.4 1 C -8 -1 -7.4 -3.8 -9 -5.8 Z" fill="#456630"/>
-            <path d="M12 -13 C 13.2 -15.5 16.8 -15.5 17.8 -13 L 21 -11.7 C 26 -11.9 31 -11.5 34.2 -10.7 C 36.1 -10 36.1 -7.9 34.4 -7.3 C 30 -6.7 24 -6.3 20 -6.1 L 13.4 -5.6 C 12.2 -8 12 -10.6 12 -13 Z" fill="#456630"/>
-            <path d="M14.6 -6 C 21 -6.6 28 -7 34.8 -7.6" fill="none" stroke="#233A18" stroke-width=".8" stroke-linecap="round"/>
-            <path d="M31.6 -7.4 L 32.6 -5.2 L 30.6 -7.3 Z" fill="#F6EFDD"/>
-            <path d="M27.4 -7.1 L 28.4 -4.9 L 26.4 -7 Z" fill="#F6EFDD"/>
-            <path d="M23.2 -6.8 L 24.2 -4.6 L 22.2 -6.7 Z" fill="#F6EFDD"/>
-            <path d="M19 -6.5 L 20 -4.4 L 18 -6.4 Z" fill="#F6EFDD"/>
-            <ellipse cx="32.6" cy="-9.6" rx="1" ry=".8" fill="#24391A"/>
-          </svg>
-          </div>
-        </div>
       </div>
 
       <div data-el="loadtype" style="text-align: center; animation: liftin .8s cubic-bezier(.2,.7,.2,1) .2s both; transition: opacity .35s ease;">
@@ -1385,7 +1342,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
     <div data-el="hdr" style="position: sticky; top: 0; z-index: 40; margin: 0 -20px; padding: calc(16px + var(--sat)) 20px 14px; background: rgba(239,232,216,.95); backdrop-filter: blur(12px); border-bottom: 1px solid #D3C6A9; box-shadow: 0 6px 18px -12px rgba(20,53,42,.35);">
       <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
         <div style="display: flex; align-items: center; gap: 11px; min-width: 0;">
-          <!-- Where the loading croc lands, and the way back to the trip tab. -->
+          <!-- The way back to the trip tab. -->
           <button data-el="logo" type="button" sc-camel-on-click="{{ goHome }}" aria-label="Back to the trip tab" style="flex: none; width: 42px; height: 42px; display: grid; place-items: center; padding: 0; border: 1px solid #D3C6A9; border-radius: 14px; background: #FFFDF7; cursor: pointer;">
             <svg viewBox="-44 -18 82 21" width="30" height="8" style="display: block; overflow: visible;">
               <path d="M8.6 -5.6 C 11 -4.6 11.8 -2.6 11.4 -0.6 L 7.6 -0.6 C 6.8 -2.6 6.8 -4.4 8.6 -5.6 Z" fill="#26401D"/>
@@ -1872,7 +1829,7 @@ class Component extends DCLogic {
     const r = this.rootRef.current;
     if (!r) return;
     this.el = {};
-    ['loader', 'loadtrack', 'loadring', 'loadball', 'loadtype', 'loadskip', 'croctrack', 'croclevel', 'loadcroc', 'logo',
+    ['loader', 'loadtrack', 'loadring', 'loadball', 'loadtype', 'loadskip', 'logo',
       'app', 'hdr', 'navpill', 'tabslide', 'chippill', 'chipslide', 'nav', 'map']
       .forEach((k) => { this.el[k] = r.querySelector('[data-el="' + k + '"]'); });
 
@@ -1913,7 +1870,7 @@ class Component extends DCLogic {
     };
     r.addEventListener('scroll', this.onShellScroll, { passive: true });
 
-    // Five seconds of animation is exactly what this media query is for, so
+    // Three seconds of animation is exactly what this media query is for, so
     // honour it and drop straight into the app.
     const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!this.el.loader || reduced) this.finishLoad();
@@ -1980,12 +1937,10 @@ class Component extends DCLogic {
   }
 
   /* ---------- loading screen ----------
-     Five seconds, then the croc flies to the corner and becomes the home
-     button. The animation itself is all CSS; the only thing JavaScript has
-     to know is where the croc is going, and that has to be measured because
-     the header logo moves with the length of the title. */
-  LOAD_MS = 5000;
-  FLIGHT_MS = 640;
+     Three seconds, then the loader fades out to reveal the app, which is
+     already sitting underneath it. */
+  LOAD_MS = 3000;
+  FADE_MS = 400;
 
   playLoader() {
     const r = this.rootRef.current;
@@ -1994,67 +1949,28 @@ class Component extends DCLogic {
     if (r) { r.scrollTop = 0; this.prevOverflowY = r.style.overflowY; r.style.overflowY = 'hidden'; }
     if (e.nav) { e.nav.style.opacity = 0; e.nav.style.visibility = 'hidden'; }
     if (e.logo) e.logo.style.opacity = 0;
-    this.loadTimer = setTimeout(this.flyCrocHome, this.LOAD_MS);
+    this.loadTimer = setTimeout(this.fadeLoader, this.LOAD_MS);
   }
 
-  /* The orbit is one full turn over the same five seconds, so the croc ends
-     its lap back at the top of the ring and there is no jump when the
-     animation is cleared. From there it is one transition to the header. */
-  flyCrocHome = () => {
+  fadeLoader = () => {
     if (this.locked) return;
     const e = this.el || {};
-    const croc = e.loadcroc, logo = e.logo;
-    if (!croc || !logo) { this.finishLoad(); return; }
 
-    // Clearing an animation snaps the element back to its unanimated state, so
-    // pin the current angles first. On the full five seconds those are 0 and
-    // the pinning is a no-op; on a skip it is what stops the croc jumping to
-    // the top of the ring before it flies.
-    [e.croctrack, e.croclevel].forEach((el) => {
-      if (!el) return;
-      const t = getComputedStyle(el).transform;
-      el.style.animation = 'none';
-      if (t && t !== 'none') el.style.transform = t;
-    });
-    croc.style.animation = 'none';
-
-    // Measured against the logo's own artwork rather than the button around
-    // it, so the two drawings land at the same size in the same place and the
-    // swap is invisible.
-    const mark = logo.querySelector('svg') || logo;
-    const from = croc.getBoundingClientRect();
-    const to = mark.getBoundingClientRect();
-    if (!from.width || !to.width) { this.finishLoad(); return; }
-
-    const scale = to.width / from.width;
-    const dx = (to.left + to.width / 2) - (from.left + from.width / 2);
-    const dy = (to.top + to.height / 2) - (from.top + from.height / 2);
-
-    croc.style.transition = 'transform ' + this.FLIGHT_MS + 'ms cubic-bezier(.55,.02,.25,1)';
-    requestAnimationFrame(() => {
-      croc.style.transform = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(' + scale.toFixed(3) + ')';
-    });
-
-    // The ring and the type clear out while it travels, and the background
-    // goes transparent so the app is already there when it lands.
     if (e.loadtrack) e.loadtrack.style.opacity = 0;
     if (e.loadball) e.loadball.style.opacity = 0;
     if (e.loadtype) e.loadtype.style.opacity = 0;
     if (e.loadskip) { e.loadskip.style.opacity = 0; e.loadskip.style.pointerEvents = 'none'; }
     if (e.loader) {
-      e.loader.style.transition = 'background-color ' + this.FLIGHT_MS + 'ms ease';
+      e.loader.style.transition = 'background-color ' + this.FADE_MS + 'ms ease';
       e.loader.style.backgroundColor = 'rgba(239,232,216,0)';
     }
-    this.loadTimer = setTimeout(this.finishLoad, this.FLIGHT_MS);
+    this.loadTimer = setTimeout(this.finishLoad, this.FADE_MS);
   };
 
-  /* Skipping runs the same flight rather than cutting to the app: the logo
-     appearing out of nowhere is the one thing the whole screen exists to
-     avoid. */
   skipLoad = () => {
     if (this.locked) return;
     if (this.loadTimer) { clearTimeout(this.loadTimer); this.loadTimer = null; }
-    this.flyCrocHome();
+    this.fadeLoader();
   };
 
   finishLoad = () => {
@@ -2063,8 +1979,6 @@ class Component extends DCLogic {
     if (this.loadTimer) { clearTimeout(this.loadTimer); this.loadTimer = null; }
     const r = this.rootRef.current;
     const e = this.el || {};
-    // The flying croc and the real logo swap in the same frame, which is why
-    // nothing else on the page is allowed to move at this moment.
     if (e.loader) e.loader.style.display = 'none';
     if (e.logo) {
       e.logo.style.opacity = 1;
