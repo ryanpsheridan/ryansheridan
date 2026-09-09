@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html><head>
 <meta charset="utf-8">
-<script>window.__resources = {"photoStoneybrook":"/golftrip/assets/731ca771-afc1-4989-a381-20de594ad8f6.jpg","photoSaltleaf":"/golftrip/assets/368889f2-af08-45de-a255-ba458ae36e7a.jpg","photoTiburon":"/golftrip/assets/38cf5d1d-187f-4007-ba71-a098de64b86f.jpg","https://unpkg.com/react@18.3.1/umd/react.production.min.js":"/golftrip/assets/68f363a0-a5a1-443c-aa2c-dc812f1b2842.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"/golftrip/assets/a012dc2b-d35c-4046-8b93-8030db9bddf3.js"};</script>
+<script>window.__resources = {"photoSaltleaf":"/golftrip/assets/368889f2-af08-45de-a255-ba458ae36e7a.jpg","photoTiburon":"/golftrip/assets/38cf5d1d-187f-4007-ba71-a098de64b86f.jpg","https://unpkg.com/react@18.3.1/umd/react.production.min.js":"/golftrip/assets/68f363a0-a5a1-443c-aa2c-dc812f1b2842.js","https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js":"/golftrip/assets/a012dc2b-d35c-4046-8b93-8030db9bddf3.js"};</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fort Myers Golf Trip</title>
 <meta name="description" content="Sept 17-20, 2026 · Fort Myers, Estero and Miromar Lakes.">
@@ -1735,14 +1735,15 @@ const tel = (p) => 'tel:' + p.replace(/[^0-9]/g, '');
 
 const COURSES = [
   {
-    id: 'stoneybrook', name: 'Stoneybrook Golf Club', category: 'golf',
-    address: '21251 Stoneybrook Golf Blvd, Estero, FL 33928',
-    lat: 26.4200, lng: -81.7900,
+    id: 'sancarlos', name: 'San Carlos Golf Club', category: 'golf',
+    address: '7420 Constitution Cir, Fort Myers, FL 33967',
+    lat: 26.5217, lng: -81.7822,
+    phone: '(239) 267-3131', website: 'https://www.sancarlosgolfclub.com/',
     day: 'Day 1 — Thu, Sept 17', status: 'open', statusLabel: 'Not booked yet',
     teeTime: 'Book on arrival', price: '$60–80', priceNote: 'estimate · Ryan + Gustavo',
-    type: 'Public · 18 holes', rating: '78.1', conditions: '8.0', zone: '19%',
-    photo: (window.__resources && window.__resources.photoStoneybrook) || 'photos/stoneybrook.jpg',
-    notes: 'Gordon Lewis and Jed Azinger design from 1999, and at 7,314 yards off the back tees it is the longest card of the week. Cart required, no walking — call from the car for an afternoon slot.'
+    type: 'Semi-private · 18 holes', rating: '77.3', conditions: '8.1', zone: '16%',
+    photo: (window.__resources && window.__resources.photoSanCarlos) || 'photos/sancarlos.jpg',
+    notes: 'Fort Myers semi-private course — call ahead to confirm a tee time before heading over.'
   },
   {
     id: 'saltleaf', name: 'Saltleaf Golf Preserve — The Preserve', category: 'golf',
@@ -2382,7 +2383,7 @@ class Component extends DCLogic {
 
       days: [
         { dow: 'THU', num: '17', items: [
-          { ...ICON.golf, courseId: 'stoneybrook', title: 'Stoneybrook — Ryan + Gustavo', meta: '9–18 holes with a cart · book from the road' },
+          { ...ICON.golf, courseId: 'sancarlos', title: 'San Carlos — Ryan + Gustavo', meta: '9–18 holes with a cart · book from the road' },
           { ...ICON.travel, title: 'Matt + Oscar arrive later', meta: 'Later flights — they meet everyone at the condo' },
           { ...ICON.dining, title: 'Brewery', meta: 'Dinner once the whole group has landed' }
         ] },
