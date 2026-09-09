@@ -1374,6 +1374,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
           <div style="width: 6px; height: 6px; border-radius: 999px; background: #1F5C3E; animation: dotbob 1.3s ease-in-out .32s infinite;"></div>
         </div>
       </div>
+
+      <!-- Fades in a second late: offered, rather than the first thing you see. -->
+      <button data-el="loadskip" type="button" sc-camel-on-click="{{ skipLoad }}" style="position: absolute; left: 0; right: 0; bottom: calc(34px + var(--sab)); margin: 0 auto; width: max-content; min-height: 44px; padding: 0 22px; border: 1px solid #D3C6A9; border-radius: 999px; background: transparent; color: #54634F; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .12em; cursor: pointer; animation: liftin .5s ease 1.1s both; transition: opacity .3s ease;">SKIP</button>
     </div>
   </sc-if>
 
@@ -1694,7 +1697,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
          the bottom of the screen, which makes the bar read as something
          floating over the content. Fading the page out beneath it settles it. -->
     <div style="position: absolute; left: 0; right: 0; bottom: 0; height: calc(100% + 40px); background: linear-gradient(rgba(239,232,216,0) 0%, rgba(239,232,216,.46) 46%, rgba(239,232,216,.5) 72%); pointer-events: none;"></div>
-    <div data-el="navpill" style="position: relative; display: flex; gap: 2px; padding: 5px; background: #14352A; border-radius: 999px; box-shadow: 0 12px 30px rgba(20,53,42,.28); pointer-events: auto; transform-origin: 50% 100%; transition: transform .44s cubic-bezier(.24,.62,.24,1) 90ms, box-shadow .44s ease 90ms;">
+    <div data-el="navpill" style="position: relative; display: flex; gap: 2px; padding: 5px; background: #14352A; border-radius: 999px; box-shadow: 0 12px 30px rgba(20,53,42,.28); pointer-events: auto; transform-origin: 50% 100%; will-change: transform; transition: transform .5s cubic-bezier(.32,.72,.24,1) 70ms;">
       <!-- One pill that slides to the active tab, rather than a background
            snapping on and off five separate buttons. syncTabSlide() measures
            the live button because the labels are different widths. -->
@@ -1865,7 +1868,7 @@ class Component extends DCLogic {
     const r = this.rootRef.current;
     if (!r) return;
     this.el = {};
-    ['loader', 'loadtrack', 'loadring', 'loadball', 'loadtype', 'croctrack', 'croclevel', 'loadcroc', 'logo',
+    ['loader', 'loadtrack', 'loadring', 'loadball', 'loadtype', 'loadskip', 'croctrack', 'croclevel', 'loadcroc', 'logo',
       'app', 'navpill', 'tabslide', 'chippill', 'chipslide', 'nav', 'map']
       .forEach((k) => { this.el[k] = r.querySelector('[data-el="' + k + '"]'); });
 
@@ -1878,6 +1881,7 @@ class Component extends DCLogic {
     // instant you scroll up. Scrolling fires far more often than it needs to be
     // acted on, so the reading and the write are held to one a frame.
     this.lastY = 0;
+    this.navAcc = 0;
     this.navTick = false;
     this.onShellScroll = () => {
       if (this.navTick) return;
@@ -1886,13 +1890,21 @@ class Component extends DCLogic {
         this.navTick = false;
         const sc = this.rootRef.current;
         if (!sc) return;
-        const y = sc.scrollTop;
+        // Momentum scrolling and rubber banding both report direction changes
+        // that the finger never made, so clamp out the overscroll first.
+        const y = Math.max(0, Math.min(sc.scrollTop, sc.scrollHeight - sc.clientHeight));
         const dy = y - this.lastY;
         this.lastY = y;
-        // The threshold keeps a thumb resting on the screen from flickering it.
-        if (y <= 24) this.setNavCompact(false);
-        else if (dy > 6 && y > 90) this.setNavCompact(true);
-        else if (dy < -6) this.setNavCompact(false);
+        if (!dy) return;
+
+        // Distance in one direction, reset the moment it reverses. Reacting to
+        // a single frame's delta is what made it flip on the wobble at the end
+        // of a flick; this asks for a deliberate 34px of travel instead.
+        this.navAcc = (dy > 0) === (this.navAcc > 0) ? this.navAcc + dy : dy;
+
+        if (y <= 24) { this.navAcc = 0; this.setNavCompact(false); }
+        else if (this.navAcc > 34 && y > 90) this.setNavCompact(true);
+        else if (this.navAcc < -34) this.setNavCompact(false);
       });
     };
     r.addEventListener('scroll', this.onShellScroll, { passive: true });
@@ -1988,8 +2000,16 @@ class Component extends DCLogic {
     const croc = e.loadcroc, logo = e.logo;
     if (!croc || !logo) { this.finishLoad(); return; }
 
-    if (e.croctrack) e.croctrack.style.animation = 'none';
-    if (e.croclevel) e.croclevel.style.animation = 'none';
+    // Clearing an animation snaps the element back to its unanimated state, so
+    // pin the current angles first. On the full five seconds those are 0 and
+    // the pinning is a no-op; on a skip it is what stops the croc jumping to
+    // the top of the ring before it flies.
+    [e.croctrack, e.croclevel].forEach((el) => {
+      if (!el) return;
+      const t = getComputedStyle(el).transform;
+      el.style.animation = 'none';
+      if (t && t !== 'none') el.style.transform = t;
+    });
     croc.style.animation = 'none';
 
     // Measured against the logo's own artwork rather than the button around
@@ -2014,11 +2034,21 @@ class Component extends DCLogic {
     if (e.loadtrack) e.loadtrack.style.opacity = 0;
     if (e.loadball) e.loadball.style.opacity = 0;
     if (e.loadtype) e.loadtype.style.opacity = 0;
+    if (e.loadskip) { e.loadskip.style.opacity = 0; e.loadskip.style.pointerEvents = 'none'; }
     if (e.loader) {
       e.loader.style.transition = 'background-color ' + this.FLIGHT_MS + 'ms ease';
       e.loader.style.backgroundColor = 'rgba(239,232,216,0)';
     }
     this.loadTimer = setTimeout(this.finishLoad, this.FLIGHT_MS);
+  };
+
+  /* Skipping runs the same flight rather than cutting to the app: the logo
+     appearing out of nowhere is the one thing the whole screen exists to
+     avoid. */
+  skipLoad = () => {
+    if (this.locked) return;
+    if (this.loadTimer) { clearTimeout(this.loadTimer); this.loadTimer = null; }
+    this.flyCrocHome();
   };
 
   finishLoad = () => {
@@ -2052,12 +2082,12 @@ class Component extends DCLogic {
   setNavCompact = (on) => {
     if (this.navCompact === on) return;
     this.navCompact = on;
+    this.navAcc = 0;
     const pill = this.el && this.el.navpill;
     if (!pill) return;
+    // Transform only. A box-shadow of this size repaints its blur on every
+    // frame it changes, which is most of what the jumpiness was.
     pill.style.transform = on ? 'scale(' + this.NAV_COMPACT + ')' : 'scale(1)';
-    // The shadow tightens as it shrinks, so it reads as settling closer to the
-    // page rather than as the same bar drawn smaller.
-    pill.style.boxShadow = on ? '0 6px 16px rgba(20,53,42,.22)' : '0 12px 30px rgba(20,53,42,.28)';
   };
 
   go = (tab) => () => {
@@ -2264,6 +2294,7 @@ class Component extends DCLogic {
     return {
       introOn: this.props.introEnabled !== false,
       goHome: this.goHome,
+      skipLoad: this.skipLoad,
       goMap: this.goMap,
       rootRef: this.rootRef,
       tabs, chips,
