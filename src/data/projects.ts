@@ -560,13 +560,20 @@ export const projects: Project[] = [
   {
     slug: "figma-project-starter",
     title: "Figma Project Starter",
-    thumbnail: "/project-figma-starter-hero.gif",
+    thumbnail: "/project-figma-starter-brand-modes.gif",
     showOnHomepage: true,
     tags: ["Claude Skill", "Automation", "Design System"],
     tools: ["Claude", "Figma", "Asana"],
     client: "Commerce (Internal)",
     clientUrl: "https://www.commerce.com/",
     content: [
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          { src: "/project-figma-starter-start.gif", caption: "Starting a run with a bare Asana ticket link" },
+        ],
+      },
       {
         type: "imageGrid",
         framed: true,
@@ -581,13 +588,6 @@ export const projects: Project[] = [
         type: "text",
         heading: "The Problem With Starting a File",
         body: `<p>Every new ticket meant the same setup before any real design work could start. Duplicate the file starter template. Name the file and the cover. Type the title onto the cover. Type your initials. Paste the Asana link into the ticket widget. Move the file into the right brand folder. None of it was hard, but it was repetitive, easy to get slightly wrong, and it happened dozens of times a month across a team working in four brand folders at once.</p><p>I built a Claude skill to remove that setup entirely. Give it an Asana ticket, and it builds a fully structured Figma file: correct brand mode, the right folder, the cover filled in, ready to design in.</p>`,
-      },
-      {
-        type: "imageGrid",
-        framed: true,
-        images: [
-          { src: "/project-figma-starter-start.gif", caption: "Starting a run with a bare Asana ticket link" },
-        ],
       },
       {
         type: "text",
