@@ -560,7 +560,7 @@ export const projects: Project[] = [
   {
     slug: "figma-project-starter",
     title: "Figma Project Starter",
-    thumbnail: "/project-figma-starter1.jpg",
+    thumbnail: "/project-figma-starter-hero.gif",
     showOnHomepage: true,
     tags: ["Automation", "Design System"],
     tools: ["Claude", "Figma", "Asana"],
@@ -572,8 +572,8 @@ export const projects: Project[] = [
         framed: true,
         images: [
           {
-            src: "/project-figma-starter1.jpg",
-            caption: "Claude chat running /figma-project-starter against a bare Asana link, showing the reasoning trail and finished file link",
+            src: "/project-figma-starter-hero.gif",
+            caption: "Claude finishing a run of /figma-project-starter, with the reasoning trail and finished file link",
           },
         ],
       },
@@ -583,9 +583,23 @@ export const projects: Project[] = [
         body: `<p>Every new ticket meant the same setup before any real design work could start. Duplicate the file starter template. Name the file and the cover. Type the title onto the cover. Type your initials. Paste the Asana link into the ticket widget. Move the file into the right brand folder. None of it was hard, but it was repetitive, easy to get slightly wrong, and it happened dozens of times a month across a team working in four brand folders at once.</p><p>I built a Claude skill to remove that setup entirely. Give it an Asana ticket, and it builds a fully structured Figma file: correct brand mode, the right folder, the cover filled in, ready to design in.</p>`,
       },
       {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          { src: "/project-figma-starter-start.gif", caption: "Starting a run with a bare Asana ticket link" },
+        ],
+      },
+      {
         type: "text",
         heading: "How It Works",
         body: `<p>The skill runs on a simple structure: a four-page starter template (Working, a divider, Cover, Archive), Working first so the file opens straight into active work. Connect Figma and Asana once in Claude, then start a new chat and either type /figma-project-starter, drop in an Asana link, or just ask in plain language, something like "here's my ticket, can you set up a Figma file for this."</p><p>From there it reads the ticket, works out which brand it belongs to, duplicates the template, fills in the cover with the ticket title, REQ number (hyperlinked back to Asana), and your initials, sets the correct brand mode at the page level, and files the result in the right brand folder. One manual step is left: Figma doesn't allow setting a thumbnail programmatically, so you right-click the cover frame and choose "Set as thumbnail" yourself.</p><p>What I like most about how it runs is that it doesn't just hand you a file. It shows its work. When the brand isn't obvious from the ticket alone, it says so and shows the judgment call it made rather than guessing silently, so nothing ships on-brand by accident.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          { src: "/project-figma-starter-brand-modes.gif", caption: "Switching through brand variable modes on the cover page" },
+        ],
       },
       {
         type: "text",
@@ -596,8 +610,7 @@ export const projects: Project[] = [
         type: "imageGrid",
         framed: true,
         images: [
-          { src: "/project-figma-starter2.jpg", caption: "Marketing Design team folder structure by brand" },
-          { src: "/project-figma-starter3.jpg", caption: "BigCommerce folder showing live files with filled covers, REQ numbers, and initials" },
+          { src: "/project-figma-starter-folder.png", caption: "Feedonomics brand folder in the shared Figma team, every cover filled in with title, REQ number, and initials" },
         ],
       },
       {
