@@ -573,6 +573,11 @@ export const projects: Project[] = [
         body: `<p>Every new ticket meant the same setup before any real design work could start. Duplicate the file starter template. Name the file and the cover. Type the title onto the cover. Type your initials. Paste the Asana link into the ticket widget. Move the file into the right brand folder. None of it was hard, but it was repetitive, easy to get slightly wrong, and it happened dozens of times a month across a team working in four brand folders at once.</p><p>I built a Claude skill to remove that setup entirely. Give it an Asana ticket, and it builds a fully structured Figma file: correct brand mode, the right folder, the cover filled in, ready to design in.</p>`,
       },
       {
+        type: "text",
+        heading: "How It Works",
+        body: `<p>The skill runs on a simple structure: a four-page starter template (Working, a divider, Cover, Archive), Working first so the file opens straight into active work. Connect Figma and Asana once in Claude, then start a new chat and either type /figma-project-starter, drop in an Asana link, or just ask in plain language, something like "here's my ticket, can you set up a Figma file for this."</p>`,
+      },
+      {
         type: "imageGrid",
         framed: true,
         images: [
@@ -581,8 +586,7 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        heading: "How It Works",
-        body: `<p>The skill runs on a simple structure: a four-page starter template (Working, a divider, Cover, Archive), Working first so the file opens straight into active work. Connect Figma and Asana once in Claude, then start a new chat and either type /figma-project-starter, drop in an Asana link, or just ask in plain language, something like "here's my ticket, can you set up a Figma file for this."</p><p>From there it reads the ticket, works out which brand it belongs to, duplicates the template, fills in the cover with the ticket title, REQ number (hyperlinked back to Asana), and your initials, sets the correct brand mode at the page level, and files the result in the right brand folder. One manual step is left: Figma doesn't allow setting a thumbnail programmatically, so you right-click the cover frame and choose "Set as thumbnail" yourself.</p>`,
+        body: `<p>From there it reads the ticket, works out which brand it belongs to, duplicates the template, fills in the cover with the ticket title, REQ number (hyperlinked back to Asana), and your initials, sets the correct brand mode at the page level, and files the result in the right brand folder. One manual step is left: Figma doesn't allow setting a thumbnail programmatically, so you right-click the cover frame and choose "Set as thumbnail" yourself.</p>`,
       },
       {
         type: "imageGrid",
