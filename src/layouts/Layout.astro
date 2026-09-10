@@ -39,7 +39,7 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -70,10 +70,10 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
     box-sizing: border-box;
   }
 
-  /* Matches Inter's box metrics so the fallback system font doesn't reflow
+  /* Matches Geist's box metrics so the fallback system font doesn't reflow
      layout once the webfont swaps in (prevents CLS on first load). */
   @font-face {
-    font-family: "Inter Fallback";
+    font-family: "Geist Fallback";
     src: local("Arial");
     ascent-override: 90.44%;
     descent-override: 22.52%;
@@ -88,7 +88,7 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
     --color-border: #e5e5e5;
     --color-tag-bg: #f9f9f9;
     --color-tag-text: #7a7a7a;
-    --font-sans: "Inter", "Inter Fallback", -apple-system, system-ui, sans-serif;
+    --font-sans: "Geist", "Geist Fallback", -apple-system, system-ui, sans-serif;
     --font-mono: "IBM Plex Mono", "Courier New", monospace;
     --max-width: 1140px;
     --content-width: 656px;
@@ -127,6 +127,7 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
 
   body {
     font-family: var(--font-sans);
+    font-weight: 300;
     background: var(--color-bg);
     color: var(--color-text);
     line-height: 1.6;
@@ -164,7 +165,7 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
     line-height: 1;
     padding: 5px 12px;
     border: 1px solid var(--color-border);
-    border-radius: 999px;
+    border-radius: 4px;
     color: var(--color-text-muted);
   }
 
