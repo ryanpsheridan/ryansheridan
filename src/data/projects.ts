@@ -592,7 +592,10 @@ export const projects: Project[] = [
         type: "imageGrid",
         framed: true,
         images: [
-          { src: "/project-figma-starter-brand-modes.gif", caption: "Switching through brand variable modes on the cover page" },
+          {
+            src: "/project-figma-starter-hero.gif",
+            caption: "Claude finishing a run of /figma-project-starter, with the reasoning trail and finished file link",
+          },
         ],
       },
       {
@@ -603,10 +606,7 @@ export const projects: Project[] = [
         type: "imageGrid",
         framed: true,
         images: [
-          {
-            src: "/project-figma-starter-hero.gif",
-            caption: "Claude finishing a run of /figma-project-starter, with the reasoning trail and finished file link",
-          },
+          { src: "/project-figma-starter-brand-modes.gif", caption: "Switching through brand variable modes on the cover page" },
         ],
       },
       {
