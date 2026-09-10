@@ -208,7 +208,7 @@ export const projects: Project[] = [
   {
     slug: "rhow-coffee",
     title: "RHOW Coffee",
-    thumbnail: "/project-rhow-coffee01.jpg",
+    thumbnail: "/project-rhow-coffee02.jpg",
     showOnHomepage: true,
     tags: ["Branding", "Illustration"],
     tools: ["Adobe Illustrator", "Figma"],
@@ -243,7 +243,7 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: ["/project-rhow-coffee02.jpg"],
+        images: ["/project-rhow-coffee01.jpg"],
       },
       {
         type: "imageGrid",
