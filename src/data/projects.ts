@@ -558,12 +558,23 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "The Problem With Starting a File",
-        body: `<p>Every new ticket meant the same setup before any real design work could start. Duplicate the file starter template. Name the file and the cover. Type the title onto the cover. Type your initials. Paste the Asana link into the ticket widget. Move the file into the right brand folder. None of it was hard, but it was repetitive, easy to get slightly wrong, and it happened dozens of times a month across a team working in four brand folders at once.</p><p>I built a Claude skill to remove that setup entirely. Give it an Asana ticket, and it builds a fully structured Figma file: correct brand mode, the right folder, the cover filled in, ready to design in.</p>`,
+        body: `<p>Every new ticket meant the same setup before any real design work could start:</p><ul><li>Duplicating the file starter template</li><li>Naming the file and typing the title onto the cover</li><li>Typing your initials onto the cover</li><li>Pasting the Asana link into the ticket widget</li><li>Moving the file into the right brand folder afterward</li><li>Coworkers not being able to find your file</li></ul><p>None of it was hard, but it was repetitive, easy to get slightly wrong, and it happened dozens of times a month across a team working in four brand folders at once. On top of that, every designer's file was structured a little differently, so there was no shared sense of where anything lived from file to file.</p><p>I built a Claude skill to remove that setup entirely and bring some consistency to it. Give it an Asana ticket, and it builds a fully structured Figma file: correct brand mode, the right folder, the cover filled in, ready to design in.</p>`,
       },
       {
         type: "text",
         heading: "How It Works",
-        body: `<p>The skill runs on a simple structure: a four-page starter template (Working, a divider, Cover, Archive), Working first so the file opens straight into active work. Connect Figma and Asana once in Claude, then start a new chat and either type /figma-project-starter, drop in an Asana link, or just ask in plain language, something like "here's my ticket, can you set up a Figma file for this."</p>`,
+        body: `<p>The skill runs on a simple structure: a four-page starter template (Working, a divider, Cover, Archive), Working first so the file opens straight into active work.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          { src: "/figma-file-starter-layers.png", caption: "The same four-page structure — Working, a divider, Cover, Archive — on every file" },
+        ],
+      },
+      {
+        type: "text",
+        body: `<p>Connect Figma and Asana once in Claude, then start a new chat and either type /figma-project-starter, drop in an Asana link, or just ask in plain language, something like "here's my ticket, can you set up a Figma file for this."</p>`,
       },
       {
         type: "imageGrid",

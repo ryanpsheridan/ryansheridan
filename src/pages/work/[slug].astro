@@ -402,6 +402,19 @@ const { project } = Astro.props;
     margin-bottom: 0;
   }
 
+  .body :global(ul) {
+    margin: 0 0 var(--space-3);
+    padding-left: var(--space-5);
+  }
+
+  .body :global(li) {
+    margin-bottom: var(--space-2);
+  }
+
+  .body :global(li:last-child) {
+    margin-bottom: 0;
+  }
+
   .body :global(h3) {
     font-size: var(--text-md);
     font-weight: 300;
