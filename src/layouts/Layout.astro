@@ -39,7 +39,7 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -89,6 +89,7 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
     --color-tag-bg: #f9f9f9;
     --color-tag-text: #7a7a7a;
     --font-sans: "Inter", "Inter Fallback", -apple-system, system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", "Courier New", monospace;
     --max-width: 1140px;
     --content-width: 656px;
     --page-padding: 40px;
@@ -157,6 +158,7 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
   .badge {
     display: inline-flex;
     align-items: center;
+    font-family: var(--font-mono);
     font-size: 12px;
     font-weight: 400;
     line-height: 1;

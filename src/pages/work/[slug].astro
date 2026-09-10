@@ -227,6 +227,7 @@ const { project } = Astro.props;
   .breadcrumbs {
     max-width: var(--max-width);
     margin: 0 auto var(--space-5);
+    font-family: var(--font-mono);
     font-size: var(--text-sm);
     display: flex;
     align-items: center;
@@ -299,12 +300,15 @@ const { project } = Astro.props;
   }
 
   .meta-label {
+    font-family: var(--font-mono);
     font-size: var(--text-xs);
     letter-spacing: 0.02em;
+    text-transform: uppercase;
     color: var(--color-text-muted);
   }
 
   .meta-value {
+    font-family: var(--font-mono);
     font-size: var(--text-base);
     color: var(--color-text);
   }
@@ -425,6 +429,7 @@ const { project } = Astro.props;
   }
 
   .image-item figcaption {
+    font-family: var(--font-mono);
     font-size: var(--text-xs);
     letter-spacing: 0.02em;
     color: var(--color-text-muted);
@@ -476,6 +481,7 @@ const { project } = Astro.props;
   }
 
   .compare-live-link {
+    font-family: var(--font-mono);
     font-size: var(--text-xs);
     color: var(--color-text-muted);
     white-space: nowrap;
@@ -490,6 +496,7 @@ const { project } = Astro.props;
   }
 
   .compare-tab {
+    font-family: var(--font-mono);
     font-size: var(--text-xs);
     letter-spacing: 0.02em;
     color: var(--color-text-muted);
@@ -572,6 +579,7 @@ const { project } = Astro.props;
   }
 
   .component-chip {
+    font-family: var(--font-mono);
     font-size: var(--text-sm);
     color: var(--color-text-muted);
     line-height: 1;
@@ -594,6 +602,7 @@ const { project } = Astro.props;
   }
 
   .back-link {
+    font-family: var(--font-mono);
     font-size: var(--text-sm);
     color: var(--color-text-muted);
     transition: color 0.2s;
