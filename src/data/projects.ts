@@ -615,17 +615,17 @@ export const projects: Project[] = [
         body: `<p>I shipped this as a real tool, not a demo. I wrote the setup instructions, walked the team through the new process in Slack, recorded two short before/after clips showing the manual way next to the new one, and asked people to test it and flag anything broken. It's since become part of how the marketing design team actually starts projects, running across the Feedonomics, BigCommerce, Commerce, and Makeswift brand folders inside our shared Figma team.</p>`,
       },
       {
+        type: "text",
+        heading: "Where It Landed",
+        body: `<p>This wasn't built to be clever. It was built because five minutes of file setup, repeated constantly across a team, adds up to a lot of lost time and a lot of small inconsistencies. The measure of whether it worked isn't the AI part, it's whether a designer can open a ticket and get straight to designing without thinking about the file at all. That's what it does now.</p>`,
+      },
+      {
         type: "imageGrid",
         framed: true,
         images: [
           { src: "/project-figma-starter-folder.png", caption: "Feedonomics brand folder in the shared Figma team, every cover filled in with title, REQ number, and initials" },
           { src: "/project-figma-starter-cover-example.png", caption: "Another finished cover, built for a BigCommerce ticket in the same run" },
         ],
-      },
-      {
-        type: "text",
-        heading: "Where It Landed",
-        body: `<p>This wasn't built to be clever. It was built because five minutes of file setup, repeated constantly across a team, adds up to a lot of lost time and a lot of small inconsistencies. The measure of whether it worked isn't the AI part, it's whether a designer can open a ticket and get straight to designing without thinking about the file at all. That's what it does now.</p>`,
       },
     ],
   },
