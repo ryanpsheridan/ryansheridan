@@ -199,12 +199,14 @@ const projects = getHomepageProjects();
     white-space: nowrap;
     opacity: 0;
     transform: translateY(6px);
-    transition: opacity 0.65s ease 0.15s, transform 0.65s ease 0.15s;
+    color: var(--color-text-muted);
+    transition: opacity 0.65s ease 0.15s, transform 0.65s ease 0.15s, color 0.4s ease 0.8s;
   }
 
   .reveal-wrap.visible .reveal-inner {
     opacity: 1;
     transform: translateY(0);
+    color: var(--color-text);
   }
 
   .right-panel {
@@ -300,6 +302,7 @@ const projects = getHomepageProjects();
     .reveal-inner {
       opacity: 1 !important;
       transform: none !important;
+      color: var(--color-text) !important;
       transition: none !important;
     }
 
