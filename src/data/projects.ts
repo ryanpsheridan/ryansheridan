@@ -562,7 +562,7 @@ export const projects: Project[] = [
     title: "Figma Project Starter",
     thumbnail: "/project-figma-starter-hero.gif",
     showOnHomepage: true,
-    tags: ["Automation", "Design System"],
+    tags: ["Claude Skill", "Automation", "Design System"],
     tools: ["Claude", "Figma", "Asana"],
     client: "Commerce (Internal)",
     clientUrl: "https://www.commerce.com/",
@@ -611,6 +611,7 @@ export const projects: Project[] = [
         framed: true,
         images: [
           { src: "/project-figma-starter-folder.png", caption: "Feedonomics brand folder in the shared Figma team, every cover filled in with title, REQ number, and initials" },
+          { src: "/project-figma-starter-cover-example.png", caption: "Another finished cover, built for a BigCommerce ticket in the same run" },
         ],
       },
       {
