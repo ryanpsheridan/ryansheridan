@@ -1,0 +1,535 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout title="Resume | Ryan Sheridan" description="Ryan Sheridan is a Principal Designer at Commerce, leading design systems and web experience across multiple brands.">
+  <Nav />
+  <main class="resume-page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <span class="current">Resume</span>
+    </nav>
+
+    <div class="resume-toolbar">
+      <button id="print-btn" type="button">Download PDF</button>
+    </div>
+
+    <div class="sheet">
+      <header class="resume-header">
+        <div class="resume-heading">
+          <h1>Ryan Sheridan</h1>
+          <p class="role">Principal Designer, Design Systems</p>
+        </div>
+        <ul class="contact-list">
+          <li><a href="mailto:ryansheridandesign@gmail.com">ryansheridandesign@gmail.com</a></li>
+          <li>Buda, TX</li>
+          <li><a href="https://www.ryansheridan.studio/" target="_blank" rel="noopener noreferrer">Portfolio</a></li>
+          <li><a href="https://www.linkedin.com/in/ryansheridandesign/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+        </ul>
+      </header>
+
+      <div class="divider"><hr /></div>
+
+      <section class="summary">
+        <p>
+          Principal Designer with 8+ years building and scaling design systems, brand
+          infrastructure, and web experience across multiple brands at Commerce and
+          BigCommerce. I work at the intersection of design and engineering: tokens,
+          component libraries, governance, and the rules that let a system hold up at
+          scale.
+        </p>
+      </section>
+
+      <div class="divider"><hr /></div>
+
+      <section class="experience">
+        <h2>Experience</h2>
+
+        <div class="job">
+          <div class="job-head">
+            <span class="job-title">Principal Designer, Design Systems</span>
+            <span class="job-period">Apr 2025 – Present</span>
+          </div>
+          <span class="job-company">Commerce · Austin, TX (Hybrid)</span>
+          <ul class="job-bullets">
+            <li>Unified design tokens and components across Commerce, BigCommerce, Feedonomics, and Makeswift into one multi-brand Figma system, replacing four separate approaches with a single shared source of truth.</li>
+            <li>Built a suite of internal AI tools that automate design system work, including token audits, brand-mode setup, file scaffolding, and page production, cutting manual setup time and enforcing brand consistency without manual review.</li>
+            <li>Partnered directly with engineering to align design and code on token architecture, reducing drift between design intent and production implementation.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <div class="job-head">
+            <span class="job-title">Lead Web Designer, Design Systems</span>
+            <span class="job-period">Jun 2024 – Mar 2025</span>
+          </div>
+          <span class="job-company">Commerce · Austin, TX (Hybrid)</span>
+          <ul class="job-bullets">
+            <li>Led design systems and web experience for Commerce, the parent company of BigCommerce, following the corporate restructure.</li>
+            <li>Led the design side of migrating bigcommerce.com into the commerce-web monorepo, defining which components were shared across brands versus built separately, in partnership with engineering.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <div class="job-head">
+            <span class="job-title">Lead Web Designer</span>
+            <span class="job-period">Sep 2023 – Jun 2024</span>
+          </div>
+          <span class="job-company">BigCommerce · Austin, TX</span>
+          <ul class="job-bullets">
+            <li>Owned the internal component library end to end: audited, simplified, and rebuilt components to cut technical debt and speed up delivery for design and engineering.</li>
+            <li>Established documentation and governance patterns that made the system self-serve for teams outside of design.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <div class="job-head">
+            <span class="job-title">Senior Visual Designer</span>
+            <span class="job-period">Sep 2020 – Sep 2023</span>
+          </div>
+          <span class="job-company">BigCommerce · Austin, TX</span>
+          <ul class="job-bullets">
+            <li>Led the migration from Sketch to Figma, building the libraries, marketing templates, web components, and documentation that became the team's new foundation.</li>
+            <li>Built and maintained a shared image library for design and marketing, cutting asset production time across teams.</li>
+            <li>Drove UI design for key marketing web campaigns alongside ongoing systems work.</li>
+          </ul>
+        </div>
+
+        <div class="job job-condensed">
+          <div class="job-head">
+            <span class="job-title">UI Designer / Graphic Designer</span>
+            <span class="job-period">2016 – 2018</span>
+          </div>
+          <span class="job-company">TicketCity · Austin, TX</span>
+          <ul class="job-bullets">
+            <li>Designed landing pages, email, and brand marketing assets for a range of ticketing and event campaigns.</li>
+            <li>Contributed to early website design work, building the ticket search-to-checkout flow, from event and seat selection through purchase, in partnership with a small engineering team.</li>
+          </ul>
+        </div>
+
+        <div class="job job-condensed">
+          <div class="job-head">
+            <span class="job-title">Graphic Designer, Freelance</span>
+            <span class="job-period">2014 – 2016</span>
+          </div>
+          <span class="job-company">Austin, TX</span>
+          <ul class="job-bullets">
+            <li>Designed print and digital work across signage, social, web banners, and supplement packaging and labels for a range of clients.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="divider"><hr /></div>
+
+      <section class="skills-section">
+        <h2>Skills</h2>
+        <div class="skills-grid">
+          <div class="skill-group">
+            <h3>Design Systems</h3>
+            <ul>
+              <li>Design tokens</li>
+              <li>Component libraries</li>
+              <li>Governance & documentation</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3>Tools</h3>
+            <ul>
+              <li>Figma</li>
+              <li>Framer</li>
+              <li>Webflow</li>
+              <li>Makeswift</li>
+            </ul>
+          </div>
+          <div class="skill-group">
+            <h3>AI Workflows</h3>
+            <ul>
+              <li>Claude Code</li>
+              <li>Claude Design</li>
+              <li>Model Context Protocol</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider"><hr /></div>
+
+      <section class="education-section">
+        <h2>Education</h2>
+        <div class="education-item">
+          <span class="education-name">Fort Lewis College</span>
+          <span class="education-meta">Bachelor of Arts (BA), Graphic Design · 2008 – 2013</span>
+        </div>
+      </section>
+
+      <div class="divider"><hr /></div>
+
+      <section class="certification-section">
+        <h2>Certification</h2>
+        <div class="certification-item">
+          <a href="https://www.udemy.com/certificate/UC-18d85801-2609-449f-b7ed-fefe40a5db46/" target="_blank" rel="noopener noreferrer" class="certification-name">User Experience (UX): The Ultimate Guide to Usability and UX</a>
+          <span class="certification-meta">Udemy · 2024</span>
+        </div>
+      </section>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  document.getElementById("print-btn")?.addEventListener("click", () => window.print());
+</script>
+
+<style>
+  .resume-page {
+    padding: 80px var(--page-padding) 0;
+  }
+
+  .breadcrumbs {
+    max-width: var(--content-width);
+    margin: 0 auto 32px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .breadcrumbs a {
+    color: var(--color-text-muted);
+    transition: color 0.2s;
+  }
+
+  .breadcrumbs a:hover {
+    color: var(--color-text);
+  }
+
+  .breadcrumbs .sep {
+    color: var(--color-border);
+  }
+
+  .breadcrumbs .current {
+    color: var(--color-text);
+  }
+
+  .resume-toolbar {
+    max-width: var(--content-width);
+    margin: 0 auto 24px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  #print-btn {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-text);
+    background: none;
+    border: 1px solid var(--color-border);
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  #print-btn:hover {
+    border-color: var(--color-text);
+  }
+
+  .sheet {
+    max-width: var(--content-width);
+    margin: 0 auto;
+  }
+
+  .resume-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  h1 {
+    font-size: clamp(28px, 1.5rem + 1vw, 40px);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+
+  .role {
+    font-size: 15px;
+    color: var(--color-text-muted);
+  }
+
+  .contact-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: right;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text-muted);
+  }
+
+  .contact-list a {
+    text-decoration: underline;
+    text-decoration-color: var(--color-border);
+    text-underline-offset: 3px;
+    transition: color 0.2s, text-decoration-color 0.2s;
+  }
+
+  .contact-list a:hover {
+    color: var(--color-text);
+    text-decoration-color: var(--color-text);
+  }
+
+  .divider {
+    margin: 40px 0;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  h2 {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--color-text-muted);
+    margin-bottom: 24px;
+  }
+
+  .summary p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--color-text);
+  }
+
+  .experience {
+    display: block;
+  }
+
+  .job {
+    margin-bottom: 28px;
+  }
+
+  .job:last-child {
+    margin-bottom: 0;
+  }
+
+  .job-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .job-title {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .job-period {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  .job-company {
+    display: block;
+    font-size: 14px;
+    color: var(--color-text-muted);
+    margin-top: 2px;
+    margin-bottom: 10px;
+  }
+
+  .job-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .job-bullets li {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-text);
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .job-bullets li::before {
+    content: "–";
+    position: absolute;
+    left: 0;
+    color: var(--color-text-muted);
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .skill-group h3 {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+    color: var(--color-text);
+  }
+
+  .skill-group ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .skill-group li {
+    font-size: 13px;
+    color: var(--color-text-muted);
+  }
+
+  .education-item,
+  .certification-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .education-name,
+  .certification-name {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+  }
+
+  .certification-name {
+    text-decoration: underline;
+    text-decoration-color: var(--color-border);
+    text-underline-offset: 3px;
+    transition: color 0.2s, text-decoration-color 0.2s;
+  }
+
+  .certification-name:hover {
+    color: var(--color-text-muted);
+    text-decoration-color: var(--color-text-muted);
+  }
+
+  .education-meta,
+  .certification-meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 640px) {
+    .resume-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .contact-list {
+      text-align: left;
+    }
+
+    .skills-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media print {
+    :global(nav),
+    :global(footer),
+    .breadcrumbs,
+    .resume-toolbar {
+      display: none !important;
+    }
+
+    @page {
+      margin: 0.7in 0.75in;
+    }
+
+    .resume-page {
+      padding: 0;
+    }
+
+    .sheet {
+      max-width: 100%;
+    }
+
+    body {
+      font-size: 13.5px;
+    }
+
+    h1 {
+      font-size: 30px;
+    }
+
+    .divider {
+      margin: 20px 0;
+    }
+
+    h2 {
+      margin-bottom: 14px;
+    }
+
+    .resume-header {
+      align-items: flex-start;
+    }
+
+    .summary p {
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .job {
+      margin-bottom: 18px;
+      break-inside: avoid;
+    }
+
+    .job-title {
+      font-size: 15px;
+    }
+
+    .job-company {
+      margin-bottom: 6px;
+    }
+
+    .job-bullets {
+      gap: 5px;
+    }
+
+    .job-bullets li {
+      font-size: 12.5px;
+      line-height: 1.55;
+    }
+
+    .skills-grid {
+      gap: 24px;
+    }
+
+    .skill-group h3 {
+      margin-bottom: 10px;
+    }
+
+    .skill-group ul {
+      gap: 5px;
+    }
+
+    .skill-group li {
+      font-size: 12px;
+    }
+
+    a {
+      color: var(--color-text) !important;
+    }
+  }
+</style>
