@@ -98,26 +98,25 @@ import Footer from "../components/Footer.astro";
           </ul>
         </div>
 
-        <div class="job">
+        <div class="job job-condensed">
           <div class="job-head">
-            <span class="job-title">Visual Designer</span>
-            <span class="job-period">Jun 2018 – Sep 2020</span>
+            <span class="job-title">UI Designer / Graphic Designer</span>
+            <span class="job-period">2016 – 2018</span>
           </div>
-          <span class="job-company">BigCommerce · Austin, TX</span>
+          <span class="job-company">TicketCity · Austin, TX</span>
           <ul class="job-bullets">
-            <li>Designed marketing and web assets across the brand, building early groundwork for what became the company's design system.</li>
+            <li>Designed landing pages, email, and brand marketing assets; built the visual language for a range of ticketing and event campaigns.</li>
           </ul>
         </div>
 
         <div class="job job-condensed">
           <div class="job-head">
-            <span class="job-title">Early Career, UI &amp; Graphic Design</span>
-            <span class="job-period">2014 – 2018</span>
+            <span class="job-title">Graphic Designer, Freelance</span>
+            <span class="job-period">2014 – 2016</span>
           </div>
-          <span class="job-company">TicketCity &amp; Freelance · Austin, TX</span>
+          <span class="job-company">Austin, TX</span>
           <ul class="job-bullets">
-            <li>UI Designer / Graphic Designer, TicketCity (2016 – 2018): landing pages, email, and brand marketing assets.</li>
-            <li>Graphic Designer, Freelance (2014 – 2016): print and digital work across signage, social, and app visual assets.</li>
+            <li>Designed print and digital work across signage, social, and app visual assets for a range of clients.</li>
           </ul>
         </div>
       </section>
@@ -268,7 +267,8 @@ import Footer from "../components/Footer.astro";
     flex-direction: column;
     gap: 4px;
     text-align: right;
-    font-size: 13px;
+    font-family: var(--font-mono);
+    font-size: 12px;
     color: var(--color-text-muted);
   }
 
@@ -294,9 +294,10 @@ import Footer from "../components/Footer.astro";
   }
 
   h2 {
-    font-size: 14px;
-    font-weight: 300;
-    letter-spacing: -0.01em;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0;
     color: var(--color-text-muted);
     margin-bottom: 24px;
   }
@@ -334,7 +335,8 @@ import Footer from "../components/Footer.astro";
   }
 
   .job-period {
-    font-size: 13px;
+    font-family: var(--font-mono);
+    font-size: 12px;
     color: var(--color-text-muted);
     white-space: nowrap;
   }
@@ -424,7 +426,8 @@ import Footer from "../components/Footer.astro";
 
   .education-meta,
   .certification-meta {
-    font-size: 13px;
+    font-family: var(--font-mono);
+    font-size: 12px;
     color: var(--color-text-muted);
   }
 
