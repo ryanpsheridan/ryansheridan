@@ -46,6 +46,29 @@ const projects = getHomepageProjects();
 </Layout>
 
 <script>
+  function splitIntoChars(root: HTMLElement) {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const textNodes: Text[] = [];
+    let node: Node | null;
+    while ((node = walker.nextNode())) textNodes.push(node as Text);
+
+    let i = 0;
+    textNodes.forEach((textNode) => {
+      const frag = document.createDocumentFragment();
+      for (const ch of textNode.textContent ?? "") {
+        const span = document.createElement("span");
+        span.className = "char";
+        span.textContent = ch;
+        span.style.transitionDelay = `${150 + i * 26}ms`;
+        frag.appendChild(span);
+        i++;
+      }
+      textNode.parentNode?.replaceChild(frag, textNode);
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>(".reveal-inner").forEach((el) => splitIntoChars(el));
+
   const revealTargets = document.querySelectorAll<HTMLElement>("[data-reveal-index]");
   const rows = document.querySelectorAll<HTMLElement>(".project-row");
 
@@ -182,28 +205,23 @@ const projects = getHomepageProjects();
   }
 
   .reveal-wrap {
-    display: inline-grid;
-    grid-template-columns: 0fr;
+    display: inline;
     vertical-align: bottom;
-    transition: grid-template-columns 1.05s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .reveal-wrap.visible {
-    grid-template-columns: 1fr;
   }
 
   .reveal-inner {
+    display: inline;
+  }
+
+  :global(.char) {
     display: inline-block;
-    min-width: 0;
-    overflow: hidden;
-    white-space: nowrap;
     opacity: 0;
     transform: translateY(6px);
     color: var(--color-text-muted);
-    transition: opacity 0.9s ease 0.15s, transform 0.9s ease 0.15s, color 0.9s ease 0.15s;
+    transition: opacity 0.5s ease, transform 0.5s ease, color 0.5s ease;
   }
 
-  .reveal-wrap.visible .reveal-inner {
+  :global(.reveal-wrap.visible .char) {
     opacity: 1;
     transform: translateY(0);
     color: var(--color-text);
@@ -294,12 +312,7 @@ const projects = getHomepageProjects();
     }
 
     /* Show everything immediately on mobile; skip the scroll/entrance choreography. */
-    .reveal-wrap {
-      grid-template-columns: 1fr !important;
-      transition: none !important;
-    }
-
-    .reveal-inner {
+    :global(.char) {
       opacity: 1 !important;
       transform: none !important;
       color: var(--color-text) !important;
