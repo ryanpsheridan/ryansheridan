@@ -335,11 +335,15 @@ import Footer from "../components/Footer.astro";
     font-weight: 500;
     letter-spacing: -0.01em;
     color: var(--color-text);
-    transition: color 0.2s;
+    text-decoration: underline;
+    text-decoration-color: var(--color-border);
+    text-underline-offset: 3px;
+    transition: color 0.2s, text-decoration-color 0.2s;
   }
 
   .certification-name:hover {
     color: var(--color-text-muted);
+    text-decoration-color: var(--color-text-muted);
   }
 
   .certification-desc {

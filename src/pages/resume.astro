@@ -153,14 +153,6 @@ import Footer from "../components/Footer.astro";
               <li>Model Context Protocol</li>
             </ul>
           </div>
-          <div class="skill-group">
-            <h3>Practice</h3>
-            <ul>
-              <li>Design/engineering partnership</li>
-              <li>Design ops</li>
-              <li>Cross-functional leadership</li>
-            </ul>
-          </div>
         </div>
       </section>
 
@@ -179,7 +171,7 @@ import Footer from "../components/Footer.astro";
       <section class="certification-section">
         <h2>Certification</h2>
         <div class="certification-item">
-          <span class="certification-name">User Experience (UX): The Ultimate Guide to Usability and UX</span>
+          <a href="https://www.udemy.com/certificate/UC-18d85801-2609-449f-b7ed-fefe40a5db46/" target="_blank" rel="noopener noreferrer" class="certification-name">User Experience (UX): The Ultimate Guide to Usability and UX</a>
           <span class="certification-meta">Udemy · 2024</span>
         </div>
       </section>
@@ -375,7 +367,7 @@ import Footer from "../components/Footer.astro";
 
   .skills-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
   }
 
@@ -411,6 +403,19 @@ import Footer from "../components/Footer.astro";
     font-size: 16px;
     font-weight: 500;
     letter-spacing: -0.01em;
+    color: var(--color-text);
+  }
+
+  .certification-name {
+    text-decoration: underline;
+    text-decoration-color: var(--color-border);
+    text-underline-offset: 3px;
+    transition: color 0.2s, text-decoration-color 0.2s;
+  }
+
+  .certification-name:hover {
+    color: var(--color-text-muted);
+    text-decoration-color: var(--color-text-muted);
   }
 
   .education-meta,
