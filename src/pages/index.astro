@@ -56,6 +56,10 @@ const projects = getHomepageProjects();
     textNodes.forEach((textNode) => {
       const frag = document.createDocumentFragment();
       for (const ch of textNode.textContent ?? "") {
+        if (ch === " ") {
+          frag.appendChild(document.createTextNode(" "));
+          continue;
+        }
         const span = document.createElement("span");
         span.className = "char";
         span.textContent = ch;
