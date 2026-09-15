@@ -225,14 +225,12 @@ export const projects: Project[] = [
         images: ["/project-rhow-coffee07.jpg"],
       },
       {
+        type: "text",
+        body: `<p>A single lockup was never going to cover everything. The identity had to hold up on a cup sleeve, a front window, and a sign read from across the lot, so the primary mark was drawn out into a small suite. The full badge keeps the circular RHOW COFFEE type when there is room for it. When there isn't, the swan steps out of the circle and sits beside the wordmark on its own. The same geometry sits underneath either version, and that is what keeps them reading as one brand instead of three loosely related ones.</p>`,
+      },
+      {
         type: "imageGrid",
-        images: [
-          {
-            src: "/rhow-logo-suite-animated.svg",
-            caption:
-              "The secondary marks, drawn from the same geometry as the primary logo so the identity holds together at any size.",
-          },
-        ],
+        images: ["/rhow-logo-suite-animated.svg"],
       },
       {
         type: "text",
@@ -248,7 +246,7 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        heading: "Brand in Use",
+        heading: "A Look Around the Shop",
         body: `<p>See the full brand book in motion in <a href="https://www.instagram.com/p/DTDZLLxkU5z/" target="_blank" rel="noopener noreferrer">this Instagram video</a>.</p>`,
       },
       {
