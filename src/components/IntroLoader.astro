@@ -13,7 +13,7 @@
  * the page directly rather than a scrim that never lifts.
  */
 interface Props {
-  /** Shortest the intro can last, ms. Long enough to read the count. */
+  /** How long the count takes to climb, ms. The intro lasts at least this. */
   minDuration?: number;
   /** Longest it can last, ms. It always hands off, even if a font stalls. */
   maxDuration?: number;
@@ -21,7 +21,7 @@ interface Props {
   dissipate?: number;
 }
 
-const { minDuration = 1400, maxDuration = 2800, dissipate = 1600 } = Astro.props;
+const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props;
 ---
 
 <div
@@ -128,7 +128,7 @@ const { minDuration = 1400, maxDuration = 2800, dissipate = 1600 } = Astro.props
     min-width: 3ch;
     text-align: center;
     font-family: var(--font-mono);
-    font-size: clamp(56px, 11vw, 132px);
+    font-size: clamp(28px, 5.5vw, 66px);
     font-weight: 400;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.04em;
@@ -137,7 +137,7 @@ const { minDuration = 1400, maxDuration = 2800, dissipate = 1600 } = Astro.props
 
   .intro-pct {
     font-family: var(--font-mono);
-    font-size: clamp(18px, 3vw, 32px);
+    font-size: clamp(9px, 1.5vw, 16px);
     color: var(--color-text-muted);
     line-height: 1;
     margin-left: 0.1em;
@@ -168,8 +168,8 @@ const { minDuration = 1400, maxDuration = 2800, dissipate = 1600 } = Astro.props
   const field = document.querySelector<HTMLElement>(".cursor-field");
 
   if (intro && countEl) {
-    const minDuration = Number(intro.dataset.min) || 1400;
-    const maxDuration = Number(intro.dataset.max) || 2800;
+    const minDuration = Number(intro.dataset.min) || 6000;
+    const maxDuration = Number(intro.dataset.max) || 7200;
     const dissipate = Number(intro.dataset.dissipate) || 1600;
     const started = performance.now();
 
@@ -231,18 +231,30 @@ const { minDuration = 1400, maxDuration = 2800, dissipate = 1600 } = Astro.props
         return;
       }
 
-      // Never claim done before the floor, always hand off by the ceiling.
-      const ceiling = elapsed < minDuration ? 0.97 : 1;
-      shown += (Math.min(target, ceiling) - shown) * 0.06;
+      // Pace the climb across the whole duration rather than chasing the real
+      // signal, which on a static site resolves almost immediately and would
+      // park the count near 100 for the rest of the wait. The real signal is
+      // still a ceiling, so a genuinely slow load holds the count back.
+      const pace = Math.min(1, elapsed / minDuration);
+      shown += (Math.min(target, pace) - shown) * 0.2;
 
       countEl.textContent = String(Math.min(Math.round(shown * 100), 100));
 
-      if (shown > 0.995 && elapsed >= minDuration) {
+      if (elapsed >= minDuration && target >= 1) {
         finish();
         return;
       }
       requestAnimationFrame(tick);
     }
+
+    // Six seconds is a long hold on a site that is already parsed. Any
+    // deliberate input means "I am ready", so let it through rather than
+    // trapping someone behind the animation.
+    const skip = () => finish();
+    window.addEventListener("pointerdown", skip, { once: true });
+    window.addEventListener("keydown", skip, { once: true });
+    window.addEventListener("wheel", skip, { once: true, passive: true });
+    window.addEventListener("touchstart", skip, { once: true, passive: true });
 
     // Run the field at full strength for the intro. Nothing aims it: the
     // cursor drives it exactly as it does anywhere else, so the wait is
