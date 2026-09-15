@@ -64,6 +64,15 @@ interface Props {
    * `data-yield` on the element and dispatching `cursorfield:update`.
    */
   yieldTo?: number;
+  /**
+   * Show a pool on load, before any pointer has moved. Without this the field
+   * is invisible until the cursor moves, so anyone who lands on the page and
+   * sits still sees nothing at all.
+   */
+  showOnLoad?: boolean;
+  /** Where that first pool sits, as fractions of the box. */
+  originX?: number;
+  originY?: number;
   /** CSS height, ignored when `fixed`. */
   height?: string;
   class?: string;
@@ -80,6 +89,9 @@ const {
   feather = 220,
   scrollDrag = 0.6,
   yieldTo = 1,
+  showOnLoad = true,
+  originX = 0.5,
+  originY = 0.5,
   fixed = false,
   height = "420px",
   class: className = "",
@@ -99,6 +111,9 @@ const {
   data-feather={feather}
   data-scroll-drag={scrollDrag}
   data-yield={yieldTo}
+  data-show-on-load={showOnLoad ? "true" : "false"}
+  data-origin-x={originX}
+  data-origin-y={originY}
   aria-hidden="true"
 >
   <canvas></canvas>
@@ -257,6 +272,11 @@ const {
     const regionWidth = Number(root.dataset.regionWidth) || 1140;
     const feather = Number(root.dataset.feather) || 220;
     const scrollDrag = Number(root.dataset.scrollDrag) || 0;
+    const showOnLoad = root.dataset.showOnLoad !== "false";
+    // Named seed* rather than origin*: originX/originY below are the grid's
+    // pixel offsets, which is a different thing entirely.
+    const seedFracX = Number(root.dataset.originX ?? 0.5);
+    const seedFracY = Number(root.dataset.originY ?? 0.5);
     const bounded = region !== "full";
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -346,6 +366,21 @@ const {
       }
 
       return 1;
+    }
+
+    /**
+     * Place a pool without waiting for a pointer. Strength still eases up from
+     * zero so it arrives rather than pops, and `seeded` means the first real
+     * cursor move glides here-to-there instead of snapping.
+     */
+    function seedAtOrigin() {
+      if (!showOnLoad || seeded) return;
+      if (width === 0 || height === 0) return;
+      targetX = currentX = lastX = width * seedFracX;
+      targetY = currentY = lastY = height * seedFracY;
+      seeded = true;
+      targetStrength = 1;
+      start();
     }
 
     function influence(x: number, y: number) {
@@ -498,6 +533,7 @@ const {
     // it, and a texture draws once.
     if (!canHover.matches || reduceMotion.matches) {
       layout();
+      seedAtOrigin();
       new ResizeObserver(() => layout()).observe(root);
       return;
     }
@@ -540,6 +576,7 @@ const {
     ).observe(root);
 
     layout();
+    seedAtOrigin();
   }
 
   function initAll() {
