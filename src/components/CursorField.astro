@@ -144,6 +144,13 @@ const {
     px: number;
     py: number;
     ink: [number, number, number];
+    /**
+     * Global strength multiplier. Applied by each variant to its *final*
+     * opacity, never folded into `t` beforehand: `t` feeds a squared easing
+     * curve, so attenuating it there compounds and the field disappears far
+     * faster than the number suggests.
+     */
+    yieldFactor: number;
   };
 
   function smoothstep(k: number) {
@@ -171,8 +178,10 @@ const {
   const VARIANTS = {
     dots: {
       fades: false,
-      draw(env: Env, x: number, y: number, t: number) {
+      draw(env: Env, x: number, y: number, rawT: number) {
         const { ctx, ink } = env;
+        // Dots use t linearly for size and color, so scaling here is safe.
+        const t = rawT * env.yieldFactor;
         // Rest tone is a lightened version of the ceiling, so one color prop
         // drives both ends of the ramp.
         const base = 255 - (255 - ink[0]) * 0.35;
@@ -191,7 +200,7 @@ const {
         const { ctx, px, py, ink } = env;
         // Bias the alpha curve so the pool closes well inside the reach
         // instead of trailing a wide haze out to the edge.
-        const alpha = t * t * (3 - 2 * t);
+        const alpha = t * t * (3 - 2 * t) * env.yieldFactor;
         if (alpha < 0.012) return;
 
         const radius = 3.2 + 1.8 * t;
@@ -336,12 +345,11 @@ const {
       if (dist >= reach) return 0;
       const linear = 1 - dist / reach;
       const t = linear * linear * (3 - 2 * linear) * strength;
-      const scaled = t * yieldFactor;
-      return bounded ? scaled * mask(x, y) : scaled;
+      return bounded ? t * mask(x, y) : t;
     }
 
     function draw(full = false) {
-      const env: Env = { ctx, px: currentX, py: currentY, ink };
+      const env: Env = { ctx, px: currentX, py: currentY, ink, yieldFactor };
 
       if (variant.fades) {
         // Clear only what the pool covered on the way here, then redraw just

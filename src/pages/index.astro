@@ -97,7 +97,7 @@ const projects = getHomepageProjects();
 
     if (field) {
       const progress = Math.min(1, index / lastRevealIndex);
-      field.dataset.yield = String(1 - 0.72 * progress);
+      field.dataset.yield = String(1 - 0.45 * progress);
       field.dispatchEvent(new CustomEvent("cursorfield:update"));
     }
   }
