@@ -1,0 +1,378 @@
+---
+/**
+ * CursorField — a grid of small marks that reacts to the pointer.
+ *
+ * Two variants share one engine:
+ *   dots    — filled dots that grow and darken near the cursor. The grid stays
+ *             faintly visible at rest, so it reads as a texture.
+ *   compass — open rings with a needle aimed at the cursor. The field fades to
+ *             nothing outside a tight pool, so anywhere the cursor is not is
+ *             pure background.
+ *
+ * Marks never go darker than #d8d8d8, which holds 13.3:1 for body text
+ * (#111111) and 3.0:1 for muted text (#7a7a7a) if either lands on one. The
+ * compass variant only ever gets lighter than that, since it fades by alpha.
+ *
+ * Renders to canvas, eases the pointer so the pool trails slightly behind it,
+ * and stays blank for touch input and for people who prefer reduced motion.
+ */
+interface Props {
+  /** Which mark to draw. */
+  variant?: "dots" | "compass";
+  /** Distance between mark centers, in px. */
+  gap?: number;
+  /** How far the cursor's influence reaches, in px. */
+  reach?: number;
+  /** Darkest the marks ever get. Going below #d8d8d8 starts failing muted text. */
+  color?: string;
+  /**
+   * Pin to the viewport instead of flowing in the layout. Use this to run the
+   * field behind a whole page, where it works as a light the cursor carries.
+   */
+  fixed?: boolean;
+  /** CSS height, ignored when `fixed`. */
+  height?: string;
+  class?: string;
+}
+
+const {
+  variant = "dots",
+  gap = variant === "compass" ? 30 : 28,
+  reach = variant === "compass" ? 170 : 240,
+  color = "#d8d8d8",
+  fixed = false,
+  height = "420px",
+  class: className = "",
+} = Astro.props;
+---
+
+<div
+  class:list={["cursor-field", { "is-fixed": fixed }, className]}
+  style={`--cursor-field-height: ${height}`}
+  data-variant={variant}
+  data-gap={gap}
+  data-reach={reach}
+  data-color={color}
+  aria-hidden="true"
+>
+  <canvas></canvas>
+</div>
+
+<style>
+  .cursor-field {
+    position: relative;
+    width: 100%;
+    height: var(--cursor-field-height);
+    pointer-events: none;
+  }
+
+  .cursor-field.is-fixed {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .cursor-field canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<script>
+  const TAU = Math.PI * 2;
+
+  function parseColor(value: string): [number, number, number] {
+    const hex = value.trim();
+    if (hex.startsWith("#")) {
+      const body =
+        hex.length === 4
+          ? hex.slice(1).split("").map((c) => c + c).join("")
+          : hex.slice(1);
+      const int = parseInt(body, 16);
+      return [(int >> 16) & 255, (int >> 8) & 255, int & 255];
+    }
+    const match = hex.match(/-?\d+(\.\d+)?/g);
+    if (match && match.length >= 3) {
+      return [Number(match[0]), Number(match[1]), Number(match[2])];
+    }
+    return [216, 216, 216];
+  }
+
+  type Env = {
+    ctx: CanvasRenderingContext2D;
+    px: number;
+    py: number;
+    ink: [number, number, number];
+  };
+
+  /**
+   * Each variant reports whether it fades to nothing at the edge of its reach.
+   * A fading field can skip every mark outside the pool and clear only the
+   * region the pool touched, which is what makes a full-viewport canvas cheap.
+   */
+  const VARIANTS = {
+    dots: {
+      fades: false,
+      draw(env: Env, x: number, y: number, t: number) {
+        const { ctx, ink } = env;
+        // Rest tone is a lightened version of the ceiling, so one color prop
+        // drives both ends of the ramp.
+        const base = 255 - (255 - ink[0]) * 0.35;
+        const r = 1.4 + 3.2 * t;
+        const c = Math.round(base + (ink[0] - base) * t);
+        ctx.fillStyle = `rgb(${c}, ${c}, ${c})`;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, TAU);
+        ctx.fill();
+      },
+    },
+
+    compass: {
+      fades: true,
+      draw(env: Env, x: number, y: number, t: number) {
+        const { ctx, px, py, ink } = env;
+        // Bias the alpha curve so the pool closes well inside the reach
+        // instead of trailing a wide haze out to the edge.
+        const alpha = t * t * (3 - 2 * t);
+        if (alpha < 0.012) return;
+
+        const radius = 3.2 + 1.8 * t;
+        ctx.globalAlpha = alpha;
+        ctx.strokeStyle = `rgb(${ink[0]}, ${ink[1]}, ${ink[2]})`;
+        ctx.lineWidth = 0.7 + t * 0.6;
+
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, TAU);
+        ctx.stroke();
+
+        // The needle points at the cursor and extends toward full diameter,
+        // so the whole field resolves into one radial reading.
+        const angle = Math.atan2(py - y, px - x);
+        const reachOut = radius * t;
+        if (reachOut > 0.4) {
+          const dx = Math.cos(angle) * reachOut;
+          const dy = Math.sin(angle) * reachOut;
+          ctx.beginPath();
+          ctx.moveTo(x - dx, y - dy);
+          ctx.lineTo(x + dx, y + dy);
+          ctx.stroke();
+        }
+        ctx.globalAlpha = 1;
+      },
+    },
+  } as const;
+
+  function initField(root: HTMLElement) {
+    if (root.dataset.fieldReady === "true") return;
+    root.dataset.fieldReady = "true";
+
+    const canvas = root.querySelector("canvas");
+    if (!(canvas instanceof HTMLCanvasElement)) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const name = (root.dataset.variant || "dots") as keyof typeof VARIANTS;
+    const variant = VARIANTS[name] ?? VARIANTS.dots;
+    const gap = Number(root.dataset.gap) || 28;
+    const reach = Number(root.dataset.reach) || 240;
+    const ink = parseColor(root.dataset.color || "#d8d8d8");
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+    let width = 0;
+    let height = 0;
+    let cols = 0;
+    let rows = 0;
+    let originX = 0;
+    let originY = 0;
+    let frame = 0;
+    let visible = true;
+
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let lastX = 0;
+    let lastY = 0;
+    let strength = 0;
+    let targetStrength = 0;
+    let seeded = false;
+
+    function layout() {
+      const rect = root.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = rect.width;
+      height = rect.height;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      cols = Math.max(Math.round(width / gap), 1) + 1;
+      rows = Math.max(Math.round(height / gap), 1) + 1;
+      originX = (width - (cols - 1) * gap) / 2;
+      originY = (height - (rows - 1) * gap) / 2;
+
+      lastX = currentX;
+      lastY = currentY;
+      draw(true);
+    }
+
+    function influence(dx: number, dy: number) {
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist >= reach) return 0;
+      const linear = 1 - dist / reach;
+      return linear * linear * (3 - 2 * linear) * strength;
+    }
+
+    function draw(full = false) {
+      const env: Env = { ctx, px: currentX, py: currentY, ink };
+
+      if (variant.fades) {
+        // Clear only what the pool covered on the way here, then redraw just
+        // the marks inside it. Everything else is untouched background.
+        const pad = reach + 4;
+        if (full) {
+          ctx.clearRect(0, 0, width, height);
+        } else {
+          const x0 = Math.min(lastX, currentX) - pad;
+          const y0 = Math.min(lastY, currentY) - pad;
+          const x1 = Math.max(lastX, currentX) + pad;
+          const y1 = Math.max(lastY, currentY) + pad;
+          ctx.clearRect(x0, y0, x1 - x0, y1 - y0);
+        }
+
+        if (strength > 0.004) {
+          const c0 = Math.max(0, Math.floor((currentX - reach - originX) / gap));
+          const c1 = Math.min(cols - 1, Math.ceil((currentX + reach - originX) / gap));
+          const r0 = Math.max(0, Math.floor((currentY - reach - originY) / gap));
+          const r1 = Math.min(rows - 1, Math.ceil((currentY + reach - originY) / gap));
+
+          for (let row = r0; row <= r1; row++) {
+            const y = originY + row * gap;
+            for (let col = c0; col <= c1; col++) {
+              const x = originX + col * gap;
+              const t = influence(x - currentX, y - currentY);
+              if (t > 0) variant.draw(env, x, y, t);
+            }
+          }
+        }
+        lastX = currentX;
+        lastY = currentY;
+        return;
+      }
+
+      ctx.clearRect(0, 0, width, height);
+      for (let row = 0; row < rows; row++) {
+        const y = originY + row * gap;
+        for (let col = 0; col < cols; col++) {
+          const x = originX + col * gap;
+          variant.draw(env, x, y, influence(x - currentX, y - currentY));
+        }
+      }
+    }
+
+    function tick() {
+      currentX += (targetX - currentX) * 0.14;
+      currentY += (targetY - currentY) * 0.14;
+      strength += (targetStrength - strength) * 0.1;
+      draw();
+
+      const settled =
+        Math.abs(targetX - currentX) < 0.4 &&
+        Math.abs(targetY - currentY) < 0.4 &&
+        Math.abs(targetStrength - strength) < 0.004;
+
+      if (settled) {
+        currentX = targetX;
+        currentY = targetY;
+        strength = targetStrength;
+        draw();
+        frame = 0;
+        return;
+      }
+      frame = requestAnimationFrame(tick);
+    }
+
+    function start() {
+      if (frame === 0 && visible) frame = requestAnimationFrame(tick);
+    }
+
+    function onPointerMove(event: PointerEvent) {
+      if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
+      const rect = root.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      const margin = reach * 0.5;
+      if (
+        x < -margin ||
+        y < -margin ||
+        x > rect.width + margin ||
+        y > rect.height + margin
+      ) {
+        targetStrength = 0;
+        start();
+        return;
+      }
+
+      targetX = x;
+      targetY = y;
+      if (!seeded) {
+        // Light up under the cursor rather than sliding in from a corner.
+        currentX = lastX = x;
+        currentY = lastY = y;
+        seeded = true;
+      }
+      targetStrength = 1;
+      start();
+    }
+
+    function onPointerLeave() {
+      targetStrength = 0;
+      start();
+    }
+
+    // No pointer to follow: a fading field stays blank, a texture draws once.
+    if (!canHover.matches || reduceMotion.matches) {
+      if (!variant.fades) {
+        layout();
+        new ResizeObserver(() => layout()).observe(root);
+      }
+      return;
+    }
+
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    document.addEventListener("pointerleave", onPointerLeave);
+
+    new ResizeObserver(() => layout()).observe(root);
+
+    new IntersectionObserver(
+      (entries) => {
+        visible = entries[0].isIntersecting;
+        if (!visible && frame) {
+          cancelAnimationFrame(frame);
+          frame = 0;
+        } else if (visible) {
+          start();
+        }
+      },
+      { rootMargin: "100px" },
+    ).observe(root);
+
+    layout();
+  }
+
+  function initAll() {
+    document
+      .querySelectorAll<HTMLElement>(".cursor-field")
+      .forEach((el) => initField(el));
+  }
+
+  initAll();
+  document.addEventListener("astro:page-load", initAll);
+</script>

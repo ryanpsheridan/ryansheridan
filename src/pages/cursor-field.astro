@@ -2,12 +2,12 @@
 import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
-import DotGrid from "../components/DotGrid.astro";
+import CursorField from "../components/CursorField.astro";
 ---
 
 <Layout
-  title="Dot Grid — Ryan Sheridan"
-  description="A cursor-reactive dot grid pattern."
+  title="Cursor Field — Ryan Sheridan"
+  description="Cursor-reactive grid patterns."
 >
   <Nav />
   <main class="dot-grid-page">
@@ -29,7 +29,7 @@ import DotGrid from "../components/DotGrid.astro";
     <section class="demo">
       <h2>Default</h2>
       <div class="panel">
-        <DotGrid />
+        <CursorField variant="dots" />
       </div>
       <p class="caption">
         28px grid, 240px falloff. Reads as a flat texture until the cursor is
@@ -40,7 +40,7 @@ import DotGrid from "../components/DotGrid.astro";
     <section class="demo">
       <h2>Tighter grid, wider falloff</h2>
       <div class="panel">
-        <DotGrid gap={20} dotSize={1.1} maxDotSize={3.4} radius={280} height="360px" />
+        <CursorField variant="dots" gap={20} reach={280} height="360px" />
       </div>
       <p class="caption">
         Denser dots with a broader reach, so the highlight reads as a soft pool
@@ -49,21 +49,21 @@ import DotGrid from "../components/DotGrid.astro";
     </section>
 
     <section class="demo">
-      <h2>Larger dots, tight falloff</h2>
+      <h2>Compass rings, tight pool</h2>
       <div class="panel">
-        <DotGrid gap={34} dotSize={2} maxDotSize={7} radius={150} height="360px" />
+        <CursorField variant="compass" gap={34} reach={150} height="360px" />
       </div>
       <p class="caption">
-        Fewer, chunkier dots with a short reach. The most graphic of the three,
-        but it gets there through dot size rather than a darker color, so it
-        stays as safe behind text as the others.
+        Open rings with a needle aimed at the cursor. This variant fades out
+        entirely at the edge of its reach, so everywhere the cursor is not stays
+        plain white rather than holding a resting texture.
       </p>
     </section>
 
     <section class="demo">
       <h2>As a section background</h2>
       <div class="panel overlay-panel">
-        <DotGrid gap={26} radius={240} height="100%" class="overlay-grid" />
+        <CursorField variant="compass" gap={26} reach={190} height="100%" class="overlay-grid" />
         <div class="overlay-content">
           <p class="eyebrow">Design Systems</p>
           <h3>One source of truth across four brands.</h3>
