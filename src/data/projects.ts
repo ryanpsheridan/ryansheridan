@@ -99,7 +99,7 @@ export const projects: Project[] = [
   {
     slug: "feedonomics-rebrand-design-system",
     title: "Feedonomics Rebrand & Design System",
-    thumbnail: "/feedonomics-featured.gif",
+    thumbnail: "/feedonomics-featured-animated.svg",
     showOnHomepage: true,
     tags: ["Design System", "Web Design"],
     tools: ["Figma", "Makeswift", "Contentful"],

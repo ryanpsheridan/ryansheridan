@@ -1,5 +1,6 @@
 ---
 import { getHomepageProjects } from "../data/projects";
+import Media from "./Media.astro";
 
 const projects = getHomepageProjects();
 ---
@@ -11,7 +12,7 @@ const projects = getHomepageProjects();
         projects.map((project) => (
           <a href={`/work/${project.slug}`} class="project-card">
             <div class="project-thumbnail">
-              {project.thumbnail && <img src={project.thumbnail} alt={project.title} loading="lazy" />}
+              {project.thumbnail && <Media src={project.thumbnail} alt={project.title} />}
             </div>
             <h3>{project.title}</h3>
             <div class="badge-list tags">
@@ -44,7 +45,7 @@ const projects = getHomepageProjects();
     display: block;
   }
 
-  .project-card:hover img {
+  .project-card:hover :global(img) {
     opacity: 0.85;
   }
 
@@ -55,7 +56,7 @@ const projects = getHomepageProjects();
     background: var(--color-tag-bg);
   }
 
-  .project-thumbnail img {
+  .project-thumbnail :global(img) {
     width: 100%;
     height: 100%;
     object-fit: cover;

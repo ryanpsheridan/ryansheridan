@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
+import Media from "../../components/Media.astro";
 import { projects } from "../../data/projects";
 import type { GetStaticPaths } from "astro";
 
@@ -32,7 +33,7 @@ const { project } = Astro.props;
       <div class="project-main">
         {project.thumbnail && (
           <div class="hero-image">
-            <img src={project.thumbnail} alt={project.title} />
+            <Media src={project.thumbnail} alt={project.title} loading="eager" />
           </div>
         )}
 
@@ -61,7 +62,7 @@ const { project } = Astro.props;
                       return (
                         <figure class="image-item">
                           {caption && <figcaption>{caption}</figcaption>}
-                          <img src={src} alt="" class="lightbox-trigger" />
+                          <Media src={src} alt="" class="lightbox-trigger" />
                         </figure>
                       );
                     })}
@@ -86,7 +87,7 @@ const { project } = Astro.props;
                         const caption = typeof img === "string" ? undefined : img.caption;
                         return (
                           <figure class="carousel-item">
-                            <img src={src} alt={caption || ""} class="lightbox-trigger" loading="lazy" />
+                            <Media src={src} alt={caption || ""} class="lightbox-trigger" />
                             {caption && <figcaption>{caption}</figcaption>}
                           </figure>
                         );
@@ -127,10 +128,10 @@ const { project } = Astro.props;
                     </div>
                     <div class="compare-frame">
                       <div class="compare-pane" data-pane="before">
-                        <img src={block.before.src} alt={block.before.label || "Before"} class="lightbox-trigger" />
+                        <Media src={block.before.src} alt={block.before.label || "Before"} class="lightbox-trigger" />
                       </div>
                       <div class="compare-pane is-active" data-pane="after">
-                        <img src={block.after.src} alt={block.after.label || "After"} class="lightbox-trigger" />
+                        <Media src={block.after.src} alt={block.after.label || "After"} class="lightbox-trigger" />
                       </div>
                     </div>
                   </div>
@@ -373,7 +374,7 @@ const { project } = Astro.props;
     overflow: hidden;
   }
 
-  .hero-image img {
+  .hero-image :global(img) {
     width: 100%;
     display: block;
     border: 1px solid var(--color-border);
@@ -489,7 +490,7 @@ const { project } = Astro.props;
     margin-bottom: var(--space-2);
   }
 
-  .image-grid img {
+  .image-grid :global(img) {
     width: 100%;
     display: block;
     border: 1px solid var(--color-border);
@@ -539,7 +540,7 @@ const { project } = Astro.props;
     scroll-snap-align: start;
   }
 
-  .carousel-item img {
+  .carousel-item :global(img) {
     width: 100%;
     aspect-ratio: 3 / 4;
     object-fit: cover;
@@ -692,7 +693,7 @@ const { project } = Astro.props;
     display: block;
   }
 
-  .compare-pane img {
+  .compare-pane :global(img) {
     width: 100%;
     display: block;
     cursor: zoom-in;
