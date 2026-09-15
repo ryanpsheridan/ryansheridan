@@ -11,7 +11,7 @@ const projects = getHomepageProjects();
 
 <Layout title="Ryan Sheridan — Designing systems, sites and brands." description="Portfolio of Ryan Sheridan, Principal Designer specializing in design systems, marketing sites, and brand infrastructure.">
   <Nav />
-  <CursorField variant="compass" region="vignette" fixed />
+  <CursorField variant="compass" region="vignette" yieldTo={0} fixed />
   <IntroLoader />
   <main class="split-layout">
     <div class="split-inner">
@@ -80,11 +80,6 @@ const projects = getHomepageProjects();
   const revealTargets = document.querySelectorAll<HTMLElement>("[data-reveal-index]");
   const rows = document.querySelectorAll<HTMLElement>(".project-row");
 
-  // The headline writes itself as you scroll, one reveal per project row. The
-  // background field reads the same progress inversely, so it holds the empty
-  // panel early and steps back as the text claims it.
-  const field = document.querySelector<HTMLElement>(".cursor-field");
-  const lastRevealIndex = Math.max(1, rows.length - 1);
   let revealed = -1;
 
   function revealUpTo(index: number) {
@@ -96,16 +91,6 @@ const projects = getHomepageProjects();
       if (revealIndex > index) return;
       el.classList.add("visible");
     });
-
-    if (field) {
-      const progress = Math.min(1, index / lastRevealIndex);
-      const resting = String(1 - 0.45 * progress);
-      // pageYield is the page's own resting strength. The intro reads it while
-      // it settles the field back down, so the two never fight.
-      field.dataset.pageYield = resting;
-      field.dataset.yield = resting;
-      field.dispatchEvent(new CustomEvent("cursorfield:update"));
-    }
   }
 
   const observer = new IntersectionObserver(
