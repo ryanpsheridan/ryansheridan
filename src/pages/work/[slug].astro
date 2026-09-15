@@ -107,9 +107,9 @@ const { project } = Astro.props;
                       {block.groups.map((group) => (
                         <div class="component-table-group">
                           <h3>{group.category}</h3>
-                          <div class="component-chip-list">
+                          <div class="badge-list component-chip-list">
                             {group.items.map((item) => (
-                              <span class="component-chip">{item}</span>
+                              <span class="badge">{item}</span>
                             ))}
                           </div>
                         </div>
@@ -583,21 +583,11 @@ const { project } = Astro.props;
     margin: 0;
   }
 
+  /* Chips here are the global .badge component so the article and the
+     project sidebar stay visually identical. This only adds the grid
+     alignment the component table needs. */
   .component-chip-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
     align-content: flex-start;
-  }
-
-  .component-chip {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    line-height: 1;
-    padding: 7px 14px;
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
   }
 
   @media (max-width: 640px) {

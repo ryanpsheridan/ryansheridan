@@ -1,0 +1,287 @@
+---
+/**
+ * DotGrid — a grid of dots that grow and darken near the cursor.
+ *
+ * Renders to a canvas so the dot count stays cheap, eases the pointer so the
+ * highlight trails slightly behind it, and falls back to a flat static grid
+ * for touch input and for people who prefer reduced motion.
+ */
+interface Props {
+  /** Distance between dot centers, in px. */
+  gap?: number;
+  /** Dot radius at rest, in px. */
+  dotSize?: number;
+  /** Dot radius directly under the cursor, in px. */
+  maxDotSize?: number;
+  /** How far the cursor's influence reaches, in px. */
+  radius?: number;
+  /** Dot color at rest. */
+  baseColor?: string;
+  /** Dot color directly under the cursor. */
+  activeColor?: string;
+  /** CSS height of the grid area. */
+  height?: string;
+  class?: string;
+}
+
+const {
+  gap = 28,
+  dotSize = 1.4,
+  maxDotSize = 4.2,
+  radius = 240,
+  baseColor = "#e3e3e3",
+  activeColor = "#9c9c9c",
+  height = "420px",
+  class: className = "",
+} = Astro.props;
+---
+
+<div
+  class:list={["dot-grid", className]}
+  style={`--dot-grid-height: ${height}`}
+  data-gap={gap}
+  data-dot-size={dotSize}
+  data-max-dot-size={maxDotSize}
+  data-radius={radius}
+  data-base-color={baseColor}
+  data-active-color={activeColor}
+  aria-hidden="true"
+>
+  <canvas></canvas>
+</div>
+
+<style>
+  .dot-grid {
+    position: relative;
+    width: 100%;
+    height: var(--dot-grid-height);
+  }
+
+  .dot-grid canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<script>
+  type Dot = { x: number; y: number };
+
+  function parseColor(value: string): [number, number, number] {
+    const hex = value.trim();
+    if (hex.startsWith("#")) {
+      const body =
+        hex.length === 4
+          ? hex
+              .slice(1)
+              .split("")
+              .map((c) => c + c)
+              .join("")
+          : hex.slice(1);
+      const int = parseInt(body, 16);
+      return [(int >> 16) & 255, (int >> 8) & 255, int & 255];
+    }
+    const match = hex.match(/-?\d+(\.\d+)?/g);
+    if (match && match.length >= 3) {
+      return [Number(match[0]), Number(match[1]), Number(match[2])];
+    }
+    return [229, 229, 229];
+  }
+
+  function initDotGrid(root: HTMLElement) {
+    if (root.dataset.dotGridReady === "true") return;
+    root.dataset.dotGridReady = "true";
+
+    const canvas = root.querySelector("canvas");
+    if (!(canvas instanceof HTMLCanvasElement)) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const gap = Number(root.dataset.gap) || 28;
+    const dotSize = Number(root.dataset.dotSize) || 1.4;
+    const maxDotSize = Number(root.dataset.maxDotSize) || 4.2;
+    const radius = Number(root.dataset.radius) || 240;
+    const base = parseColor(root.dataset.baseColor || "#e3e3e3");
+    const active = parseColor(root.dataset.activeColor || "#9c9c9c");
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+    let dots: Dot[] = [];
+    let width = 0;
+    let height = 0;
+    let frame = 0;
+    let visible = true;
+
+    // Where the pointer is, where the highlight currently is, and how much
+    // influence it has. Easing these is what gives the grid its soft trail.
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let targetStrength = 0;
+    let strength = 0;
+    let seeded = false;
+
+    function layout() {
+      const rect = root.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = rect.width;
+      height = rect.height;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const cols = Math.max(Math.round(width / gap), 1) + 1;
+      const rows = Math.max(Math.round(height / gap), 1) + 1;
+      const offsetX = (width - (cols - 1) * gap) / 2;
+      const offsetY = (height - (rows - 1) * gap) / 2;
+
+      dots = [];
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          dots.push({ x: offsetX + col * gap, y: offsetY + row * gap });
+        }
+      }
+      draw();
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      const reach = radius * radius;
+      const sizeRange = maxDotSize - dotSize;
+
+      for (const dot of dots) {
+        let t = 0;
+        if (strength > 0.001) {
+          const dx = dot.x - currentX;
+          const dy = dot.y - currentY;
+          const dist2 = dx * dx + dy * dy;
+          if (dist2 < reach) {
+            const linear = 1 - Math.sqrt(dist2) / radius;
+            // smoothstep keeps the edge of the highlight from banding
+            t = linear * linear * (3 - 2 * linear) * strength;
+          }
+        }
+
+        const r = dotSize + sizeRange * t;
+        const cr = Math.round(base[0] + (active[0] - base[0]) * t);
+        const cg = Math.round(base[1] + (active[1] - base[1]) * t);
+        const cb = Math.round(base[2] + (active[2] - base[2]) * t);
+
+        ctx.beginPath();
+        ctx.fillStyle = `rgb(${cr}, ${cg}, ${cb})`;
+        ctx.arc(dot.x, dot.y, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function tick() {
+      currentX += (targetX - currentX) * 0.14;
+      currentY += (targetY - currentY) * 0.14;
+      strength += (targetStrength - strength) * 0.1;
+
+      draw();
+
+      const settled =
+        Math.abs(targetX - currentX) < 0.4 &&
+        Math.abs(targetY - currentY) < 0.4 &&
+        Math.abs(targetStrength - strength) < 0.004;
+
+      if (settled) {
+        // Snap to the target and stop burning frames until the pointer moves.
+        currentX = targetX;
+        currentY = targetY;
+        strength = targetStrength;
+        draw();
+        frame = 0;
+        return;
+      }
+      frame = requestAnimationFrame(tick);
+    }
+
+    function start() {
+      if (frame === 0 && visible) frame = requestAnimationFrame(tick);
+    }
+
+    function onPointerMove(event: PointerEvent) {
+      if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
+      const rect = root.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      // Keep following slightly past the edges so the highlight glides out of
+      // the grid instead of snapping off at the boundary.
+      const margin = radius * 0.5;
+      const inRange =
+        x > -margin &&
+        y > -margin &&
+        x < rect.width + margin &&
+        y < rect.height + margin;
+
+      if (!inRange) {
+        targetStrength = 0;
+        start();
+        return;
+      }
+
+      targetX = x;
+      targetY = y;
+      if (!seeded) {
+        // First sighting: place the highlight under the cursor rather than
+        // sliding it in from the corner.
+        currentX = x;
+        currentY = y;
+        seeded = true;
+      }
+      targetStrength = 1;
+      start();
+    }
+
+    function onPointerLeave() {
+      targetStrength = 0;
+      start();
+    }
+
+    // Static grid: draw once, skip every listener.
+    if (!canHover.matches || reduceMotion.matches) {
+      layout();
+      const observer = new ResizeObserver(() => layout());
+      observer.observe(root);
+      return;
+    }
+
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    document.addEventListener("pointerleave", onPointerLeave);
+
+    const resizeObserver = new ResizeObserver(() => layout());
+    resizeObserver.observe(root);
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        visible = entries[0].isIntersecting;
+        if (!visible && frame) {
+          cancelAnimationFrame(frame);
+          frame = 0;
+        } else if (visible) {
+          start();
+        }
+      },
+      { rootMargin: "100px" },
+    );
+    io.observe(root);
+
+    layout();
+  }
+
+  function initAll() {
+    document
+      .querySelectorAll<HTMLElement>(".dot-grid")
+      .forEach((el) => initDotGrid(el));
+  }
+
+  initAll();
+  // Astro view transitions swap the DOM without a full reload.
+  document.addEventListener("astro:page-load", initAll);
+</script>
