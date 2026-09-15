@@ -208,7 +208,7 @@ export const projects: Project[] = [
   {
     slug: "rhow-coffee",
     title: "RHOW Coffee",
-    thumbnail: "/project-rhow-coffee02.jpg",
+    thumbnail: "/rhow-logo-spec-animated-dark.svg",
     showOnHomepage: true,
     tags: ["Branding", "Illustration"],
     tools: ["Adobe Illustrator", "Figma"],
