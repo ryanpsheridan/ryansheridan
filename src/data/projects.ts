@@ -365,7 +365,7 @@ export const projects: Project[] = [
   {
     slug: "commerce-multi-brand-system",
     title: "Multi-brand Design System",
-    thumbnail: "/project-multi-brand2.jpg",
+    thumbnail: "/project-multi-brand3.jpg",
     showOnHomepage: true,
     tags: ["Design System"],
     tools: ["Figma"],
@@ -381,7 +381,7 @@ export const projects: Project[] = [
         type: "imageGrid",
         images: [
           "/project-multi-brand1.jpg",
-          "/project-multi-brand3.jpg",
+          "/project-multi-brand2.jpg",
         ],
       },
       {
