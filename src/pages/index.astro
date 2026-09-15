@@ -78,12 +78,28 @@ const projects = getHomepageProjects();
   const revealTargets = document.querySelectorAll<HTMLElement>("[data-reveal-index]");
   const rows = document.querySelectorAll<HTMLElement>(".project-row");
 
+  // The headline writes itself as you scroll, one reveal per project row. The
+  // background field reads the same progress inversely, so it holds the empty
+  // panel early and steps back as the text claims it.
+  const field = document.querySelector<HTMLElement>(".cursor-field");
+  const lastRevealIndex = Math.max(1, rows.length - 1);
+  let revealed = -1;
+
   function revealUpTo(index: number) {
+    if (index <= revealed) return;
+    revealed = index;
+
     revealTargets.forEach((el) => {
       const revealIndex = Number(el.dataset.revealIndex);
       if (revealIndex > index) return;
       el.classList.add("visible");
     });
+
+    if (field) {
+      const progress = Math.min(1, index / lastRevealIndex);
+      field.dataset.yield = String(1 - 0.72 * progress);
+      field.dispatchEvent(new CustomEvent("cursorfield:update"));
+    }
   }
 
   const observer = new IntersectionObserver(

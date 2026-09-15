@@ -52,6 +52,12 @@ interface Props {
    * field behind a whole page, where it works as a light the cursor carries.
    */
   fixed?: boolean;
+  /**
+   * Global multiplier on the field's strength, 0..1. A page can lower this to
+   * make the field give way to content. Update it live by setting
+   * `data-yield` on the element and dispatching `cursorfield:update`.
+   */
+  yieldTo?: number;
   /** CSS height, ignored when `fixed`. */
   height?: string;
   class?: string;
@@ -66,6 +72,7 @@ const {
   regionScale = 0.62,
   regionWidth = 1140,
   feather = 220,
+  yieldTo = 1,
   fixed = false,
   height = "420px",
   class: className = "",
@@ -83,6 +90,7 @@ const {
   data-region-scale={regionScale}
   data-region-width={regionWidth}
   data-feather={feather}
+  data-yield={yieldTo}
   aria-hidden="true"
 >
   <canvas></canvas>
@@ -254,6 +262,12 @@ const {
     let targetStrength = 0;
     let seeded = false;
 
+    function readYield() {
+      const v = Number(root.dataset.yield);
+      return Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 1;
+    }
+    let yieldFactor = readYield();
+
     function layout() {
       const rect = root.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) return;
@@ -322,7 +336,8 @@ const {
       if (dist >= reach) return 0;
       const linear = 1 - dist / reach;
       const t = linear * linear * (3 - 2 * linear) * strength;
-      return bounded ? t * mask(x, y) : t;
+      const scaled = t * yieldFactor;
+      return bounded ? scaled * mask(x, y) : scaled;
     }
 
     function draw(full = false) {
@@ -441,6 +456,13 @@ const {
       }
       return;
     }
+
+    // A page can hand the field a new yield at any time, e.g. to step back as
+    // its own content arrives.
+    root.addEventListener("cursorfield:update", () => {
+      yieldFactor = readYield();
+      draw(true);
+    });
 
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     document.addEventListener("pointerleave", onPointerLeave);
