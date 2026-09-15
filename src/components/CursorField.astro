@@ -26,6 +26,14 @@ interface Props {
   /** Darkest the marks ever get. Going below #d8d8d8 starts failing muted text. */
   color?: string;
   /**
+   * Hold the field to one quadrant of its box. The named quadrant runs at full
+   * strength and the effect eases away across `feather` px beyond it, so the
+   * boundary bleeds instead of cutting. "none" lets it run everywhere.
+   */
+  anchor?: "none" | "top-left" | "top-right" | "bottom-left" | "bottom-right";
+  /** How far the anchor bleeds past its quadrant, in px. */
+  feather?: number;
+  /**
    * Pin to the viewport instead of flowing in the layout. Use this to run the
    * field behind a whole page, where it works as a light the cursor carries.
    */
@@ -38,8 +46,10 @@ interface Props {
 const {
   variant = "dots",
   gap = variant === "compass" ? 30 : 28,
-  reach = variant === "compass" ? 170 : 240,
+  reach = variant === "compass" ? 210 : 240,
   color = "#d8d8d8",
+  anchor = "none",
+  feather = 220,
   fixed = false,
   height = "420px",
   class: className = "",
@@ -53,6 +63,8 @@ const {
   data-gap={gap}
   data-reach={reach}
   data-color={color}
+  data-anchor={anchor}
+  data-feather={feather}
   aria-hidden="true"
 >
   <canvas></canvas>
@@ -107,6 +119,23 @@ const {
     py: number;
     ink: [number, number, number];
   };
+
+  function smoothstep(k: number) {
+    if (k <= 0) return 0;
+    if (k >= 1) return 1;
+    return k * k * (3 - 2 * k);
+  }
+
+  /**
+   * Full strength on the keeping side of `edge`, easing to nothing across
+   * `feather` px on the far side. This is what turns a quadrant boundary into
+   * a bleed rather than a cut.
+   */
+  function band(value: number, edge: number, feather: number, keepBelow: boolean) {
+    const inside = keepBelow ? edge - value : value - edge;
+    if (inside >= 0) return 1;
+    return smoothstep(1 + inside / feather);
+  }
 
   /**
    * Each variant reports whether it fades to nothing at the edge of its reach.
@@ -179,6 +208,11 @@ const {
     const gap = Number(root.dataset.gap) || 28;
     const reach = Number(root.dataset.reach) || 240;
     const ink = parseColor(root.dataset.color || "#d8d8d8");
+    const anchor = root.dataset.anchor || "none";
+    const feather = Number(root.dataset.feather) || 220;
+    const anchored = anchor !== "none";
+    const keepLeft = anchor.endsWith("left");
+    const keepTop = anchor.startsWith("top");
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -222,11 +256,25 @@ const {
       draw(true);
     }
 
-    function influence(dx: number, dy: number) {
+    /** How much of the anchor quadrant a given point sits in, 0..1. */
+    function mask(x: number, y: number) {
+      if (!anchored) return 1;
+      // keepBelow is true when the kept side is the smaller coordinate: left
+      // for x, top for y.
+      return (
+        band(x, width / 2, feather, keepLeft) *
+        band(y, height / 2, feather, keepTop)
+      );
+    }
+
+    function influence(x: number, y: number) {
+      const dx = x - currentX;
+      const dy = y - currentY;
       const dist = Math.sqrt(dx * dx + dy * dy);
       if (dist >= reach) return 0;
       const linear = 1 - dist / reach;
-      return linear * linear * (3 - 2 * linear) * strength;
+      const t = linear * linear * (3 - 2 * linear) * strength;
+      return anchored ? t * mask(x, y) : t;
     }
 
     function draw(full = false) {
@@ -256,8 +304,8 @@ const {
             const y = originY + row * gap;
             for (let col = c0; col <= c1; col++) {
               const x = originX + col * gap;
-              const t = influence(x - currentX, y - currentY);
-              if (t > 0) variant.draw(env, x, y, t);
+              const t = influence(x, y);
+              if (t > 0.002) variant.draw(env, x, y, t);
             }
           }
         }
@@ -271,7 +319,7 @@ const {
         const y = originY + row * gap;
         for (let col = 0; col < cols; col++) {
           const x = originX + col * gap;
-          variant.draw(env, x, y, influence(x - currentX, y - currentY));
+          variant.draw(env, x, y, influence(x, y));
         }
       }
     }
