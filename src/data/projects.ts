@@ -218,7 +218,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Design Philosophy",
-        body: `<p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">Rhow Coffee</a> is a specialty coffee shop in Massillon, Ohio, owned by David Hurley. The name is shorthand for his own philosophy, Rise Humbly Over Worry, control what you can control and let the rest go. That mindset shaped what he wanted the shop to be: less a place to grab a cup and go, more a room built for staying awhile, whether that's a business meeting, a first date, or old friends catching up.</p><p>The identity needed to hold that same restraint. The brand is built around a custom-traced logotype and a swan mark, anchored by a palette of shadow grey, parchment, steel blue, and dark walnut. David specifically asked for a swan, a nod to black swan latte art, and a mark that carries some personal meaning for him. Geometric and architectural, but warm enough to feel like a place worth lingering in.</p>`,
+        body: `<p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">Rhow Coffee</a> is a specialty coffee shop in Massillon, Ohio, owned by David Hurley. The name is shorthand for his own philosophy, Rise Humbly Over Worry, control what you can control and let the rest go. That mindset shaped what he wanted the shop to be: less a place to grab a cup and go, more a room built for staying awhile, whether that's a business meeting, a first date, or old friends catching up.</p><p>The identity needed to hold that same restraint. The brand is built around a custom-traced logotype and a swan mark, anchored by a palette of shadow grey, parchment, steel blue, blue slate, and dark walnut. David specifically asked for a swan, a nod to black swan latte art, and a mark that carries some personal meaning for him. Geometric and architectural, but warm enough to feel like a place worth lingering in.</p>`,
       },
       {
         type: "imageGrid",
@@ -231,6 +231,14 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: ["/rhow-logo-suite-animated.svg"],
+      },
+      {
+        type: "text",
+        body: `<p>Color carries the rest of it. The near black and the warm off white do most of the everyday work, one holding the mark and the other giving it room to breathe. The blues came in as a cooler counterweight, enough contrast to keep the system from going flat without ever competing with the swan. Dark walnut is the only genuinely warm note in the set, and it stays rare on purpose, which is what makes it register when it does show up.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: ["/rhow-palette-animated.svg"],
       },
       {
         type: "text",
