@@ -18,6 +18,13 @@ export interface ImageGridBlock {
   sideBySide?: boolean;
 }
 
+export interface CarouselBlock {
+  type: "carousel";
+  images: (string | ImageGridImage)[];
+  /** Slides visible at once on desktop. Defaults to 3. */
+  perView?: number;
+}
+
 export interface CompareBlock {
   type: "compare";
   before: { src: string; label?: string };
@@ -43,6 +50,7 @@ export interface DividerBlock {
 export type ContentBlock =
   | TextBlock
   | ImageGridBlock
+  | CarouselBlock
   | CompareBlock
   | ComponentTableBlock
   | DividerBlock;
@@ -221,10 +229,6 @@ export const projects: Project[] = [
         body: `<p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">Rhow Coffee</a> is a specialty coffee shop in Massillon, Ohio, owned by David Hurley. The name is shorthand for his own philosophy, Rise Humbly Over Worry, control what you can control and let the rest go. That mindset shaped what he wanted the shop to be: less a place to grab a cup and go, more a room built for staying awhile, whether that's a business meeting, a first date, or old friends catching up.</p><p>The identity needed to hold that same restraint. The brand is built around a custom-traced logotype and a swan mark, anchored by a palette of shadow grey, parchment, steel blue, blue slate, and dark walnut. David specifically asked for a swan, a nod to black swan latte art, and a mark that carries some personal meaning for him. Geometric and architectural, but warm enough to feel like a place worth lingering in.</p>`,
       },
       {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee07.jpg"],
-      },
-      {
         type: "text",
         body: `<p>A single lockup was never going to cover everything. The identity had to hold up on a cup sleeve, a front window, and a sign read from across the lot, so the primary mark was drawn out into a small suite. The full badge keeps the circular RHOW COFFEE type when there is room for it. When there isn't, the swan steps out of the circle and sits beside the wordmark on its own. The same geometry sits underneath either version, and that is what keeps them reading as one brand instead of three loosely related ones.</p>`,
       },
@@ -259,6 +263,10 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
+        images: ["/project-rhow-coffee07.jpg"],
+      },
+      {
+        type: "imageGrid",
         images: ["/project-rhow-coffee01.jpg"],
       },
       {
@@ -270,28 +278,15 @@ export const projects: Project[] = [
         body: "",
       },
       {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee15.png"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee08.jpg"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee03.jpg"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee05.jpg"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee14.png"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee16.png"],
+        type: "carousel",
+        images: [
+          "/project-rhow-coffee15.png",
+          "/project-rhow-coffee08.jpg",
+          "/project-rhow-coffee03.jpg",
+          "/project-rhow-coffee05.jpg",
+          "/project-rhow-coffee14.png",
+          "/project-rhow-coffee16.png",
+        ],
       },
     ],
   },
