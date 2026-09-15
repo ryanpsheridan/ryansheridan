@@ -53,6 +53,12 @@ interface Props {
    */
   fixed?: boolean;
   /**
+   * How much a scroll drags the pool against the scroll direction, 0..1.
+   * Scrolling down pulls the pool up, and the pointer easing springs it back,
+   * so the field has weight when the cursor is still. 0 disables it.
+   */
+  scrollDrag?: number;
+  /**
    * Global multiplier on the field's strength, 0..1. A page can lower this to
    * make the field give way to content. Update it live by setting
    * `data-yield` on the element and dispatching `cursorfield:update`.
@@ -72,6 +78,7 @@ const {
   regionScale = 0.62,
   regionWidth = 1140,
   feather = 220,
+  scrollDrag = 0.6,
   yieldTo = 1,
   fixed = false,
   height = "420px",
@@ -90,6 +97,7 @@ const {
   data-region-scale={regionScale}
   data-region-width={regionWidth}
   data-feather={feather}
+  data-scroll-drag={scrollDrag}
   data-yield={yieldTo}
   aria-hidden="true"
 >
@@ -247,6 +255,7 @@ const {
     const regionScale = Number(root.dataset.regionScale) || 0.62;
     const regionWidth = Number(root.dataset.regionWidth) || 1140;
     const feather = Number(root.dataset.feather) || 220;
+    const scrollDrag = Number(root.dataset.scrollDrag) || 0;
     const bounded = region !== "full";
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -464,6 +473,26 @@ const {
       }
       return;
     }
+
+    // Scrolling with a still cursor would otherwise leave the pool frozen in
+    // viewport space. Displace it against the scroll and let the pointer
+    // easing haul it back, which reads as the field having weight. The offset
+    // settles at a size proportional to scroll speed, then unwinds on stop.
+    let lastScrollY = window.scrollY;
+
+    function onScroll() {
+      const y = window.scrollY;
+      const delta = y - lastScrollY;
+      lastScrollY = y;
+      if (!seeded || reduceMotion.matches || scrollDrag === 0) return;
+
+      currentY -= delta * scrollDrag;
+      const limit = reach * 1.2;
+      currentY = Math.max(targetY - limit, Math.min(targetY + limit, currentY));
+      start();
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
 
     // A page can hand the field a new yield at any time, e.g. to step back as
     // its own content arrives.
