@@ -2,12 +2,14 @@
 import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
+import CursorField from "../components/CursorField.astro";
 
 const email = "ryansheridandesign@gmail.com";
 ---
 
 <Layout title="Contact — Ryan Sheridan" description="Get in touch with Ryan Sheridan.">
   <Nav />
+  <CursorField variant="compass" region="vignette" fixed />
   <main class="contact-page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href="/">Home</a>
@@ -39,6 +41,10 @@ const email = "ryansheridandesign@gmail.com";
 <style>
   .contact-page {
     padding: 80px var(--page-padding) 160px;
+    /* Sit above the fixed CursorField. It has no background of its own, so
+       the page still reads as plain white. */
+    position: relative;
+    z-index: 1;
   }
 
   .breadcrumbs {

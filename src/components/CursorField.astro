@@ -249,7 +249,8 @@ const {
     const name = (root.dataset.variant || "dots") as keyof typeof VARIANTS;
     const variant = VARIANTS[name] ?? VARIANTS.dots;
     const gap = Number(root.dataset.gap) || 28;
-    const reach = Number(root.dataset.reach) || 240;
+    // Live, so a page can open the field wide and contract it back.
+    let reach = Number(root.dataset.reach) || 240;
     const ink = parseColor(root.dataset.color || "#d8d8d8");
     const region = root.dataset.region || "full";
     const regionScale = Number(root.dataset.regionScale) || 0.62;
@@ -465,12 +466,39 @@ const {
       start();
     }
 
-    // No pointer to follow: a fading field stays blank, a texture draws once.
-    if (!canHover.matches || reduceMotion.matches) {
-      if (!variant.fades) {
-        layout();
-        new ResizeObserver(() => layout()).observe(root);
+    // A page can hand the field a new yield at any time, e.g. to step back as
+    // its own content arrives.
+    root.addEventListener("cursorfield:update", () => {
+      yieldFactor = readYield();
+      const nextReach = Number(root.dataset.reach);
+      if (Number.isFinite(nextReach) && nextReach > 0) reach = nextReach;
+      // Full clear: a shrinking reach leaves marks outside the new dirty rect.
+      draw(true);
+    });
+
+    // Drive the pool from script, for the moments before a cursor exists.
+    // `snap` places it outright instead of easing it across the viewport.
+    // Registered before the no-pointer bail-out below, so an intro can still
+    // drive the field on a device that will never send a pointermove.
+    root.addEventListener("cursorfield:aim", (event) => {
+      const detail = (event as CustomEvent).detail || {};
+      if (typeof detail.x !== "number" || typeof detail.y !== "number") return;
+      targetX = detail.x;
+      targetY = detail.y;
+      if (!seeded || detail.snap) {
+        currentX = lastX = detail.x;
+        currentY = lastY = detail.y;
+        seeded = true;
       }
+      targetStrength = detail.strength === 0 ? 0 : 1;
+      start();
+    });
+
+    // No pointer to follow: a fading field stays blank unless something aims
+    // it, and a texture draws once.
+    if (!canHover.matches || reduceMotion.matches) {
+      layout();
+      new ResizeObserver(() => layout()).observe(root);
       return;
     }
 
@@ -493,14 +521,6 @@ const {
     }
 
     window.addEventListener("scroll", onScroll, { passive: true });
-
-    // A page can hand the field a new yield at any time, e.g. to step back as
-    // its own content arrives.
-    root.addEventListener("cursorfield:update", () => {
-      yieldFactor = readYield();
-      draw(true);
-    });
-
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     document.addEventListener("pointerleave", onPointerLeave);
 

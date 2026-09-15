@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import CursorField from "../components/CursorField.astro";
+import IntroLoader from "../components/IntroLoader.astro";
 import { getHomepageProjects } from "../data/projects";
 
 const projects = getHomepageProjects();
@@ -10,7 +11,8 @@ const projects = getHomepageProjects();
 
 <Layout title="Ryan Sheridan — Designing systems, sites and brands." description="Portfolio of Ryan Sheridan, Principal Designer specializing in design systems, marketing sites, and brand infrastructure.">
   <Nav />
-  <CursorField variant="compass" region="inset" fixed />
+  <CursorField variant="compass" region="vignette" fixed />
+  <IntroLoader />
   <main class="split-layout">
     <div class="split-inner">
       <div class="left-panel">
@@ -97,7 +99,11 @@ const projects = getHomepageProjects();
 
     if (field) {
       const progress = Math.min(1, index / lastRevealIndex);
-      field.dataset.yield = String(1 - 0.45 * progress);
+      const resting = String(1 - 0.45 * progress);
+      // pageYield is the page's own resting strength. The intro reads it while
+      // it settles the field back down, so the two never fight.
+      field.dataset.pageYield = resting;
+      field.dataset.yield = resting;
       field.dispatchEvent(new CustomEvent("cursorfield:update"));
     }
   }

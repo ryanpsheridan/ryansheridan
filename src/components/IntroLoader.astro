@@ -1,0 +1,261 @@
+---
+/**
+ * IntroLoader — a first-visit intro that hands off to the page behind it.
+ *
+ * The compass field is the loading indicator: its pool sweeps left to right as
+ * the count climbs, so the pattern is doing the work rather than decorating it.
+ * On completion the scrim fades and the field settles back to the page's own
+ * strength over a couple of seconds, so the texture on the homepage reads as
+ * what the intro left behind.
+ *
+ * It shows once per session, never when the page is restored from bfcache,
+ * and never under reduced motion. It is rendered hidden and only revealed by
+ * the inline script below, so a browser without JS sees the page directly
+ * rather than a scrim that never lifts.
+ */
+interface Props {
+  /** Shortest the intro can last, ms. Stops it flashing on a warm cache. */
+  minDuration?: number;
+  /** Longest it can last, ms. It always hands off, even if a font stalls. */
+  maxDuration?: number;
+  /** How long the field takes to settle to the page's own strength, ms. */
+  dissipate?: number;
+  /** How much wider the field runs during the intro, as a multiple of reach. */
+  spread?: number;
+}
+
+const {
+  minDuration = 900,
+  maxDuration = 2600,
+  dissipate = 2200,
+  spread = 2.6,
+} = Astro.props;
+---
+
+<div
+  class="intro"
+  id="intro"
+  data-min={minDuration}
+  data-max={maxDuration}
+  data-dissipate={dissipate}
+  data-spread={spread}
+  hidden
+>
+  <div class="intro-inner">
+    <span class="intro-mark">ryan sheridan design</span>
+    <span class="intro-count" id="intro-count">000</span>
+  </div>
+</div>
+
+<script is:inline>
+  // Runs before paint so the scrim either appears immediately or never, with
+  // no flash of the page in between.
+  (function () {
+    var el = document.getElementById("intro");
+    if (!el) return;
+
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var seen = false;
+    try {
+      seen = sessionStorage.getItem("intro-seen") === "1";
+    } catch (e) {
+      seen = false;
+    }
+
+    if (reduce || seen) {
+      el.remove();
+      return;
+    }
+
+    el.hidden = false;
+    document.documentElement.classList.add("intro-open");
+    try {
+      sessionStorage.setItem("intro-seen", "1");
+    } catch (e) {}
+  })();
+</script>
+
+<style is:global>
+  /* Hold the page still underneath, and lift the field above the scrim so the
+     same instance that runs the intro is the one the page keeps. */
+  html.intro-open,
+  html.intro-open body {
+    overflow: hidden;
+  }
+
+  html.intro-open .cursor-field.is-fixed {
+    z-index: 60;
+  }
+
+  /* The nav sits above the scrim on its own z-index, which would put a second
+     wordmark on screen during the intro. Fade it in with the page instead. */
+  html.intro-open nav {
+    opacity: 0;
+  }
+
+  nav {
+    transition: opacity 0.5s ease 0.2s;
+  }
+</style>
+
+<style>
+  .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: var(--color-bg);
+    opacity: 1;
+    transition: opacity 0.6s ease;
+  }
+
+  .intro.is-done {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .intro-inner {
+    position: absolute;
+    inset: 0;
+    z-index: 70;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--page-padding);
+    pointer-events: none;
+  }
+
+  .intro-mark,
+  .intro-count {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: 1;
+  }
+
+  .intro-count {
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text);
+  }
+
+  @media (max-width: 640px) {
+    .intro-mark {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const intro = document.getElementById("intro");
+  const countEl = document.getElementById("intro-count");
+  const field = document.querySelector<HTMLElement>(".cursor-field");
+
+  if (intro && countEl) {
+    const minDuration = Number(intro.dataset.min) || 900;
+    const maxDuration = Number(intro.dataset.max) || 2600;
+    const dissipate = Number(intro.dataset.dissipate) || 2200;
+    const spread = Number(intro.dataset.spread) || 2.6;
+    const started = performance.now();
+
+    // The count follows real signals rather than a timer, but eases toward
+    // them so it reads as a measurement instead of a series of jumps.
+    let target = 0.08;
+    let shown = 0;
+    let finished = false;
+
+    const bump = (to: number) => {
+      target = Math.max(target, Math.min(1, to));
+    };
+
+    document.fonts?.ready.then(() => bump(0.55));
+    if (document.readyState === "complete") bump(1);
+    else window.addEventListener("load", () => bump(1), { once: true });
+
+    function aim(progress: number) {
+      if (!field) return;
+      // The pool sweeps across as the count climbs: the pattern is the bar.
+      const x = window.innerWidth * (0.16 + 0.68 * progress);
+      const y = window.innerHeight * 0.5;
+      field.dispatchEvent(
+        new CustomEvent("cursorfield:aim", {
+          detail: { x, y, snap: progress < 0.02 },
+        }),
+      );
+    }
+
+    function settleField() {
+      if (!field) return;
+      // The intro runs the field wide open. Contracting that back to the
+      // page's own reach is what reads as the pattern dissipating: at the top
+      // of the homepage the resting strength is already full, so fading
+      // opacity alone would be a no-op.
+      const fromReach = wideReach;
+      const toReach = pageReach;
+      const fromYield = 1;
+      const startedAt = performance.now();
+
+      const step = () => {
+        // Re-read each frame: the page may still be revising its resting
+        // strength while we settle, e.g. a scroll advancing the reveal.
+        const toYield = Number(field.dataset.pageYield ?? 1);
+        const k = Math.min(1, (performance.now() - startedAt) / dissipate);
+        const eased = k * k * (3 - 2 * k);
+        field.dataset.reach = String(fromReach + (toReach - fromReach) * eased);
+        field.dataset.yield = String(fromYield + (toYield - fromYield) * eased);
+        field.dispatchEvent(new CustomEvent("cursorfield:update"));
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
+    function finish() {
+      if (finished) return;
+      finished = true;
+      countEl.textContent = "100";
+      intro.classList.add("is-done");
+      document.documentElement.classList.remove("intro-open");
+      settleField();
+      window.setTimeout(() => intro.remove(), 700);
+    }
+
+    function tick() {
+      const elapsed = performance.now() - started;
+
+      // Never claim done before the floor, always hand off by the ceiling.
+      const ceiling = elapsed < minDuration ? 0.96 : 1;
+      shown += (Math.min(target, ceiling) - shown) * 0.08;
+
+      if (elapsed >= maxDuration) {
+        finish();
+        return;
+      }
+
+      const pct = Math.round(shown * 100);
+      countEl.textContent = String(Math.min(pct, 100)).padStart(3, "0");
+      aim(shown);
+
+      if (shown > 0.995 && elapsed >= minDuration) {
+        finish();
+        return;
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // Remember the page's own resting values before the intro overrides them,
+    // then open the field wide for the duration of the count.
+    let pageReach = 210;
+    let wideReach = 210;
+
+    if (field) {
+      pageReach = Number(field.dataset.reach) || 210;
+      wideReach = Math.round(pageReach * spread);
+      field.dataset.pageYield = field.dataset.yield ?? "1";
+      field.dataset.yield = "1";
+      field.dataset.reach = String(wideReach);
+      field.dispatchEvent(new CustomEvent("cursorfield:update"));
+    }
+
+    aim(0);
+    requestAnimationFrame(tick);
+  }
+</script>
