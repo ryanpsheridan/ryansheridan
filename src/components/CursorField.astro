@@ -26,12 +26,26 @@ interface Props {
   /** Darkest the marks ever get. Going below #d8d8d8 starts failing muted text. */
   color?: string;
   /**
-   * Hold the field to one quadrant of its box. The named quadrant runs at full
-   * strength and the effect eases away across `feather` px beyond it, so the
-   * boundary bleeds instead of cutting. "none" lets it run everywhere.
+   * Where the field is allowed to show. Any boundary here eases away across
+   * `feather` px rather than cutting.
+   *
+   *   full      — everywhere the cursor goes.
+   *   inset     — a centered box at `regionScale` of the box, so it keeps the
+   *               same proportions as the viewport and reads as a safe area.
+   *   column    — the left half, which lines up with the homepage split.
+   *   container — a centered band `regionWidth` wide, matching the content
+   *               column, so the page margins stay clean.
+   *   vignette  — no boundary at all, just strength falling off from center.
+   *
+   * A boundary that matches nothing in the layout reads as a bug, so the
+   * bounded options here either sit on a real layout edge or stay centered.
    */
-  anchor?: "none" | "top-left" | "top-right" | "bottom-left" | "bottom-right";
-  /** How far the anchor bleeds past its quadrant, in px. */
+  region?: "full" | "inset" | "column" | "container" | "vignette";
+  /** For inset and vignette: how much of the box runs at full strength, 0..1. */
+  regionScale?: number;
+  /** For container: width of the centered band, in px. */
+  regionWidth?: number;
+  /** How far a boundary bleeds past its edge, in px. */
   feather?: number;
   /**
    * Pin to the viewport instead of flowing in the layout. Use this to run the
@@ -48,7 +62,9 @@ const {
   gap = variant === "compass" ? 30 : 28,
   reach = variant === "compass" ? 210 : 240,
   color = "#d8d8d8",
-  anchor = "none",
+  region = "full",
+  regionScale = 0.62,
+  regionWidth = 1140,
   feather = 220,
   fixed = false,
   height = "420px",
@@ -63,7 +79,9 @@ const {
   data-gap={gap}
   data-reach={reach}
   data-color={color}
-  data-anchor={anchor}
+  data-region={region}
+  data-region-scale={regionScale}
+  data-region-width={regionWidth}
   data-feather={feather}
   aria-hidden="true"
 >
@@ -208,11 +226,11 @@ const {
     const gap = Number(root.dataset.gap) || 28;
     const reach = Number(root.dataset.reach) || 240;
     const ink = parseColor(root.dataset.color || "#d8d8d8");
-    const anchor = root.dataset.anchor || "none";
+    const region = root.dataset.region || "full";
+    const regionScale = Number(root.dataset.regionScale) || 0.62;
+    const regionWidth = Number(root.dataset.regionWidth) || 1140;
     const feather = Number(root.dataset.feather) || 220;
-    const anchored = anchor !== "none";
-    const keepLeft = anchor.endsWith("left");
-    const keepTop = anchor.startsWith("top");
+    const bounded = region !== "full";
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -256,15 +274,45 @@ const {
       draw(true);
     }
 
-    /** How much of the anchor quadrant a given point sits in, 0..1. */
+    /** How much the region lets through at a given point, 0..1. */
     function mask(x: number, y: number) {
-      if (!anchored) return 1;
-      // keepBelow is true when the kept side is the smaller coordinate: left
-      // for x, top for y.
-      return (
-        band(x, width / 2, feather, keepLeft) *
-        band(y, height / 2, feather, keepTop)
-      );
+      const midX = width / 2;
+      const midY = height / 2;
+
+      if (region === "inset") {
+        const halfW = (width * regionScale) / 2;
+        const halfH = (height * regionScale) / 2;
+        return (
+          band(x, midX - halfW, feather, false) *
+          band(x, midX + halfW, feather, true) *
+          band(y, midY - halfH, feather, false) *
+          band(y, midY + halfH, feather, true)
+        );
+      }
+
+      if (region === "column") {
+        return band(x, midX, feather, true);
+      }
+
+      if (region === "container") {
+        const halfW = Math.min(regionWidth, width) / 2;
+        return (
+          band(x, midX - halfW, feather, false) *
+          band(x, midX + halfW, feather, true)
+        );
+      }
+
+      if (region === "vignette") {
+        // Normalized radius: 0 at center, 1 at the edge midpoints.
+        const dx = (x - midX) / midX;
+        const dy = (y - midY) / midY;
+        const r = Math.sqrt(dx * dx + dy * dy);
+        const inner = regionScale;
+        const outer = regionScale + 0.55;
+        return smoothstep((outer - r) / (outer - inner));
+      }
+
+      return 1;
     }
 
     function influence(x: number, y: number) {
@@ -274,7 +322,7 @@ const {
       if (dist >= reach) return 0;
       const linear = 1 - dist / reach;
       const t = linear * linear * (3 - 2 * linear) * strength;
-      return anchored ? t * mask(x, y) : t;
+      return bounded ? t * mask(x, y) : t;
     }
 
     function draw(full = false) {
