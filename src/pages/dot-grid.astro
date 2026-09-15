@@ -19,6 +19,11 @@ import DotGrid from "../components/DotGrid.astro";
         cursor rather than tracking it exactly, which is what gives the pattern
         its weight. Move your cursor across each panel.
       </p>
+      <p class="intro note">
+        The dots top out at #d8d8d8, light enough that text layered on top
+        keeps its contrast: 13.3:1 for body text and 3.0:1 for muted text even
+        when a character lands directly on a dot at full strength.
+      </p>
     </header>
 
     <section class="demo">
@@ -27,7 +32,7 @@ import DotGrid from "../components/DotGrid.astro";
         <DotGrid />
       </div>
       <p class="caption">
-        28px grid, 200px falloff. Reads as a flat texture until the cursor is
+        28px grid, 240px falloff. Reads as a flat texture until the cursor is
         near it.
       </p>
     </section>
@@ -46,18 +51,12 @@ import DotGrid from "../components/DotGrid.astro";
     <section class="demo">
       <h2>Larger dots, tight falloff</h2>
       <div class="panel">
-        <DotGrid
-          gap={34}
-          dotSize={2}
-          maxDotSize={7}
-          radius={150}
-          activeColor="#6f6f6f"
-          height="360px"
-        />
+        <DotGrid gap={34} dotSize={2} maxDotSize={7} radius={150} height="360px" />
       </div>
       <p class="caption">
-        Fewer, chunkier dots with a short reach and a darker active color. The
-        most graphic of the three.
+        Fewer, chunkier dots with a short reach. The most graphic of the three,
+        but it gets there through dot size rather than a darker color, so it
+        stays as safe behind text as the others.
       </p>
     </section>
 
@@ -68,6 +67,11 @@ import DotGrid from "../components/DotGrid.astro";
         <div class="overlay-content">
           <p class="eyebrow">Design Systems</p>
           <h3>One source of truth across four brands.</h3>
+          <p class="overlay-muted">
+            This paragraph uses the muted text color, the hardest case to keep
+            readable over the pattern. Run the cursor underneath it to see the
+            darkest the dots ever get behind live text.
+          </p>
         </div>
       </div>
       <p class="caption">
@@ -102,6 +106,11 @@ import DotGrid from "../components/DotGrid.astro";
   .intro {
     color: var(--color-text-muted);
     font-size: var(--text-md);
+  }
+
+  .note {
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
   }
 
   .demo {
@@ -165,5 +174,11 @@ import DotGrid from "../components/DotGrid.astro";
     font-weight: 300;
     letter-spacing: -0.02em;
     line-height: 1.2;
+  }
+
+  .overlay-muted {
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
   }
 </style>

@@ -15,9 +15,17 @@ interface Props {
   maxDotSize?: number;
   /** How far the cursor's influence reaches, in px. */
   radius?: number;
-  /** Dot color at rest. */
+  /**
+   * Dot color at rest. Keep this light: the pattern is meant to sit behind
+   * content, so every dot is potentially a text background.
+   */
   baseColor?: string;
-  /** Dot color directly under the cursor. */
+  /**
+   * Dot color directly under the cursor, i.e. the darkest the pattern ever
+   * gets. The default tops out at #d8d8d8, which holds 13.3:1 for body text
+   * (#111111) and 3.0:1 for muted text (#7a7a7a) when either sits directly on
+   * top of a dot. Going darker than this starts failing muted text.
+   */
   activeColor?: string;
   /** CSS height of the grid area. */
   height?: string;
@@ -27,10 +35,10 @@ interface Props {
 const {
   gap = 28,
   dotSize = 1.4,
-  maxDotSize = 4.2,
+  maxDotSize = 4.6,
   radius = 240,
-  baseColor = "#e3e3e3",
-  activeColor = "#9c9c9c",
+  baseColor = "#ededed",
+  activeColor = "#d8d8d8",
   height = "420px",
   class: className = "",
 } = Astro.props;
@@ -99,10 +107,10 @@ const {
 
     const gap = Number(root.dataset.gap) || 28;
     const dotSize = Number(root.dataset.dotSize) || 1.4;
-    const maxDotSize = Number(root.dataset.maxDotSize) || 4.2;
+    const maxDotSize = Number(root.dataset.maxDotSize) || 4.6;
     const radius = Number(root.dataset.radius) || 240;
-    const base = parseColor(root.dataset.baseColor || "#e3e3e3");
-    const active = parseColor(root.dataset.activeColor || "#9c9c9c");
+    const base = parseColor(root.dataset.baseColor || "#ededed");
+    const active = parseColor(root.dataset.activeColor || "#d8d8d8");
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
