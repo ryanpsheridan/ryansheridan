@@ -225,6 +225,16 @@ export const projects: Project[] = [
         images: ["/project-rhow-coffee07.jpg"],
       },
       {
+        type: "imageGrid",
+        images: [
+          {
+            src: "/rhow-logo-suite-animated.svg",
+            caption:
+              "The secondary marks, drawn from the same geometry as the primary logo so the identity holds together at any size.",
+          },
+        ],
+      },
+      {
         type: "text",
         heading: "From the Door to the Cup",
         body: `<p>The brand shows up everywhere in the shop, on signage, the front door, the menu display, and the retail shelving. That consistency was the goal from the start. Every piece of the identity was designed to hold up across physical touchpoints without losing the quiet, refined feel of the primary mark.</p><p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">You can follow RHOW Coffee Instagram here.</a></p>`,
