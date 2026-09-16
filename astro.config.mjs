@@ -8,7 +8,17 @@ export default defineConfig({
   site: 'https://ryansheridan.studio',
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/ohio') && !page.includes('/apartment') && !page.includes('/golftrip'),
+      // Anything that carries noindex stays out of the sitemap too, so the
+      // two never disagree about what belongs in search.
+      filter: (page) =>
+        ![
+          '/ohio',
+          '/apartment',
+          '/golftrip',
+          '/cursor-field',
+          '/maze-field',
+          '/homepage-variations',
+        ].some((path) => page.includes(path)),
     }),
   ]
 });

@@ -3,10 +3,15 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  /**
+   * Keep this page out of search. Off by default: the site is indexable, and
+   * a page opts out only if it is a demo, a private share, or an error page.
+   */
+  noindex?: boolean;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || "https://ryansheridan.studio");
-const { title, description = "Ryan Sheridan — Principal Designer specializing in design systems, marketing sites, and brand infrastructure.", ogImage = "/og-default.png" } = Astro.props;
+const { title, description = "Ryan Sheridan — Principal Designer specializing in design systems, marketing sites, and brand infrastructure.", ogImage = "/og-default.png", noindex = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -18,7 +23,7 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="robots" content="noindex, nofollow" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonicalURL.href} />
     <title>{title}</title>
