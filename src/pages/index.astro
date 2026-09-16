@@ -10,9 +10,12 @@ const projects = getHomepageProjects();
 ---
 
 <Layout title="Ryan Sheridan — Designing systems, sites and brands." description="Portfolio of Ryan Sheridan, Principal Designer specializing in design systems, marketing sites, and brand infrastructure.">
+  {/* First in the document on purpose: the intro's blocking inline script
+      stamps the page before the nav below it can paint, otherwise the nav
+      flashes for a frame before the scrim covers it. */}
+  <IntroLoader />
   <Nav />
   <CursorField variant="compass" region="vignette" yieldTo={0} fixed />
-  <IntroLoader />
   <main class="split-layout">
     <div class="split-inner">
       <div class="left-panel">

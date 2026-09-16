@@ -55,10 +55,6 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
 
     if (reduce || seen) {
       el.remove();
-      // The field has no life outside the intro on a page that rests at zero,
-      // so drop it rather than leaving an inert canvas listening for a cursor.
-      var f = document.querySelector(".cursor-field");
-      if (f && Number(f.dataset.yield) === 0) f.remove();
       return;
     }
 
@@ -110,13 +106,11 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
 
   .intro-count {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    right: var(--page-padding);
+    bottom: var(--page-padding);
     z-index: 70;
     display: flex;
     align-items: baseline;
-    justify-content: center;
     pointer-events: none;
     color: var(--color-text);
   }
@@ -126,9 +120,9 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
        number shunting sideways as digits are added. */
     display: inline-block;
     min-width: 3ch;
-    text-align: center;
+    text-align: right;
     font-family: var(--font-mono);
-    font-size: clamp(28px, 5.5vw, 66px);
+    font-size: clamp(14px, 2.75vw, 33px);
     font-weight: 400;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.04em;
@@ -137,7 +131,7 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
 
   .intro-pct {
     font-family: var(--font-mono);
-    font-size: clamp(9px, 1.5vw, 16px);
+    font-size: clamp(7px, 0.75vw, 8px);
     color: var(--color-text-muted);
     line-height: 1;
     margin-left: 0.1em;
@@ -167,6 +161,10 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
   const countEl = document.getElementById("intro-count");
   const field = document.querySelector<HTMLElement>(".cursor-field");
 
+  // Skipped intro: the field has no life outside it on a page that rests at
+  // zero, so drop it rather than leave an inert canvas listening for a cursor.
+  if (!intro && field && Number(field.dataset.yield) === 0) field.remove();
+
   if (intro && countEl) {
     const minDuration = Number(intro.dataset.min) || 6000;
     const maxDuration = Number(intro.dataset.max) || 7200;
@@ -178,6 +176,39 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
     let target = 0;
     let shown = 0;
     let finished = false;
+
+    /**
+     * A real load surges and stalls, it does not sweep evenly. Cut the run
+     * into segments at irregular points in both time and progress, then walk
+     * them: a segment that covers little progress over a long stretch reads as
+     * a stall, the reverse reads as a jump.
+     *
+     * Each cut is blended halfway back toward an even spread, which keeps the
+     * irregularity from ever producing a dead stop or a leap from 20 to 90.
+     */
+    function cuts(count: number) {
+      const raw = Array.from({ length: count - 1 }, () => Math.random()).sort(
+        (a, b) => a - b,
+      );
+      const all = [0, ...raw, 1];
+      return all.map((v, i) => 0.5 * v + 0.5 * (i / (all.length - 1)));
+    }
+
+    const SEGMENTS = 7;
+    const atTime = cuts(SEGMENTS);
+    const atValue = cuts(SEGMENTS);
+
+    /** Progress at a given fraction of the run, 0..1, always increasing. */
+    function paceAt(k: number) {
+      if (k <= 0) return 0;
+      if (k >= 1) return 1;
+      let i = 1;
+      while (i < atTime.length - 1 && atTime[i] < k) i++;
+      const span = atTime[i] - atTime[i - 1];
+      const local = span <= 0 ? 1 : (k - atTime[i - 1]) / span;
+      const eased = local * local * (3 - 2 * local);
+      return atValue[i - 1] + (atValue[i] - atValue[i - 1]) * eased;
+    }
 
     const bump = (to: number) => {
       target = Math.max(target, Math.min(1, to));
@@ -235,8 +266,8 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
       // signal, which on a static site resolves almost immediately and would
       // park the count near 100 for the rest of the wait. The real signal is
       // still a ceiling, so a genuinely slow load holds the count back.
-      const pace = Math.min(1, elapsed / minDuration);
-      shown += (Math.min(target, pace) - shown) * 0.2;
+      const pace = paceAt(Math.min(1, elapsed / minDuration));
+      shown += (Math.min(target, pace) - shown) * 0.25;
 
       countEl.textContent = String(Math.min(Math.round(shown * 100), 100));
 
