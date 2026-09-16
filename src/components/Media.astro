@@ -37,7 +37,13 @@ function intrinsicRatio(publicPath: string): string | undefined {
     if (/\.(png|jpe?g)$/i.test(file)) {
       const buf = fs.readFileSync(file);
 
-      if (/\.png$/i.test(file)) {
+      // Sniff the header rather than trusting the extension: a PNG saved as
+      // .jpg would otherwise be walked as JPEG segments and yield a bogus
+      // ratio, which stretches the image on the page.
+      const isPng = buf.length > 24 &&
+        buf.readUInt32BE(0) === 0x89504e47 && buf.readUInt32BE(4) === 0x0d0a1a0a;
+
+      if (isPng) {
         // IHDR always leads a PNG: width and height are big-endian at 16 and 20.
         return `${buf.readUInt32BE(16)} / ${buf.readUInt32BE(20)}`;
       }
