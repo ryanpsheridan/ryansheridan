@@ -18,6 +18,13 @@ export interface ImageGridBlock {
   sideBySide?: boolean;
 }
 
+export interface CarouselBlock {
+  type: "carousel";
+  images: (string | ImageGridImage)[];
+  /** Slides visible at once on desktop. Defaults to 3. */
+  perView?: number;
+}
+
 export interface CompareBlock {
   type: "compare";
   before: { src: string; label?: string };
@@ -43,6 +50,7 @@ export interface DividerBlock {
 export type ContentBlock =
   | TextBlock
   | ImageGridBlock
+  | CarouselBlock
   | CompareBlock
   | ComponentTableBlock
   | DividerBlock;
@@ -91,7 +99,7 @@ export const projects: Project[] = [
   {
     slug: "feedonomics-rebrand-design-system",
     title: "Feedonomics Rebrand & Design System",
-    thumbnail: "/feedonomics-featured.gif",
+    thumbnail: "/feedonomics-featured-animated.svg",
     showOnHomepage: true,
     tags: ["Design System", "Web Design"],
     tools: ["Figma", "Makeswift", "Contentful"],
@@ -208,7 +216,7 @@ export const projects: Project[] = [
   {
     slug: "rhow-coffee",
     title: "RHOW Coffee",
-    thumbnail: "/project-rhow-coffee02.jpg",
+    thumbnail: "/rhow-logo-spec-animated-dark.svg",
     showOnHomepage: true,
     tags: ["Branding", "Illustration"],
     tools: ["Adobe Illustrator", "Figma"],
@@ -218,11 +226,23 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Design Philosophy",
-        body: `<p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">Rhow Coffee</a> is a specialty coffee shop in Massillon, Ohio, owned by David Hurley. The name is shorthand for his own philosophy, Rise Humbly Over Worry, control what you can control and let the rest go. That mindset shaped what he wanted the shop to be: less a place to grab a cup and go, more a room built for staying awhile, whether that's a business meeting, a first date, or old friends catching up.</p><p>The identity needed to hold that same restraint. The brand is built around a custom-traced logotype and a swan mark, anchored by a palette of shadow grey, parchment, steel blue, and dark walnut. David specifically asked for a swan, a nod to black swan latte art, and a mark that carries some personal meaning for him. Geometric and architectural, but warm enough to feel like a place worth lingering in.</p>`,
+        body: `<p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">Rhow Coffee</a> is a specialty coffee shop in Massillon, Ohio, owned by David Hurley. The name is shorthand for his own philosophy, Rise Humbly Over Worry, control what you can control and let the rest go. That mindset shaped what he wanted the shop to be: less a place to grab a cup and go, more a room built for staying awhile, whether that's a business meeting, a first date, or old friends catching up.</p><p>The identity needed to hold that same restraint. The brand is built around a custom-traced logotype and a swan mark, anchored by a palette of shadow grey, parchment, steel blue, blue slate, and dark walnut. David specifically asked for a swan, a nod to black swan latte art, and a mark that carries some personal meaning for him. Geometric and architectural, but warm enough to feel like a place worth lingering in.</p>`,
+      },
+      {
+        type: "text",
+        body: `<p>A single lockup was never going to cover everything. The identity had to hold up on a cup sleeve, a front window, and a sign read from across the lot, so the primary mark was drawn out into a small suite. The full badge keeps the circular RHOW COFFEE type when there is room for it. When there isn't, the swan steps out of the circle and sits beside the wordmark on its own. The same geometry sits underneath either version, and that is what keeps them reading as one brand instead of three loosely related ones.</p>`,
       },
       {
         type: "imageGrid",
-        images: ["/project-rhow-coffee07.jpg"],
+        images: ["/rhow-logo-suite-animated.svg"],
+      },
+      {
+        type: "text",
+        body: `<p>Color carries the rest of it. The near black and the warm off white do most of the everyday work, one holding the mark and the other giving it room to breathe. The blues came in as a cooler counterweight, enough contrast to keep the system from going flat without ever competing with the swan. Dark walnut is the only genuinely warm note in the set, and it stays rare on purpose, which is what makes it register when it does show up.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: ["/rhow-palette-animated.svg"],
       },
       {
         type: "text",
@@ -238,8 +258,12 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        heading: "Brand in Use",
+        heading: "A Look Around the Shop",
         body: `<p>See the full brand book in motion in <a href="https://www.instagram.com/p/DTDZLLxkU5z/" target="_blank" rel="noopener noreferrer">this Instagram video</a>.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee07.jpg"],
       },
       {
         type: "imageGrid",
@@ -254,28 +278,15 @@ export const projects: Project[] = [
         body: "",
       },
       {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee15.png"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee08.jpg"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee03.jpg"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee05.jpg"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee14.png"],
-      },
-      {
-        type: "imageGrid",
-        images: ["/project-rhow-coffee16.png"],
+        type: "carousel",
+        images: [
+          "/project-rhow-coffee15.png",
+          "/project-rhow-coffee08.jpg",
+          "/project-rhow-coffee03.jpg",
+          "/project-rhow-coffee05.jpg",
+          "/project-rhow-coffee14.png",
+          "/project-rhow-coffee16.png",
+        ],
       },
     ],
   },

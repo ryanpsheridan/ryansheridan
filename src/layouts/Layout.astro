@@ -58,6 +58,52 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
       }
       requestAnimationFrame(raf);
     </script>
+    <script>
+      // Animated SVGs and GIFs render in their own document, so the page can't
+      // pause or restart one from out here. What we can control is when the
+      // browser loads it, which is when its timeline starts. These images ship
+      // without a src and get one as they come into view, so the animation
+      // plays from the first frame for someone actually looking at it.
+      const animated = document.querySelectorAll<HTMLImageElement>("img[data-animate-src]");
+
+      if (animated.length) {
+        const reveal = (img: HTMLImageElement) => {
+          const src = img.dataset.animateSrc;
+          if (src && img.getAttribute("src") !== src) img.setAttribute("src", src);
+        };
+
+        if (!("IntersectionObserver" in window)) {
+          animated.forEach(reveal);
+        } else {
+          // Warm the cache while the page is idle so revealing an image is a
+          // cache hit rather than a visible wait on a few hundred KB.
+          const prefetch = () =>
+            animated.forEach((img) => {
+              const src = img.dataset.animateSrc;
+              if (src) fetch(src, { cache: "force-cache" }).catch(() => {});
+            });
+
+          if ("requestIdleCallback" in window) {
+            (window as any).requestIdleCallback(prefetch, { timeout: 3000 });
+          } else {
+            window.setTimeout(prefetch, 1200);
+          }
+
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                reveal(entry.target as HTMLImageElement);
+                observer.unobserve(entry.target);
+              });
+            },
+            { threshold: 0.01 }
+          );
+
+          animated.forEach((img) => observer.observe(img));
+        }
+      }
+    </script>
   </body>
 </html>
 
@@ -143,6 +189,10 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
     max-width: 100%;
     display: block;
     border-radius: 0;
+    /* Media.astro measures the file at build time and passes the result down,
+       so an image holds its box before it loads. Any rule with a class in it
+       outranks this, which is how the carousel keeps its own crop. */
+    aspect-ratio: var(--media-ratio, auto);
   }
 
   ::selection {

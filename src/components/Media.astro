@@ -1,0 +1,105 @@
+---
+import fs from "node:fs";
+import path from "node:path";
+
+interface Props {
+  src: string;
+  alt?: string;
+  class?: string;
+  loading?: "lazy" | "eager";
+}
+
+const { src, alt = "", class: className, loading = "lazy" } = Astro.props;
+
+/**
+ * An animated SVG or GIF inside an <img> is its own document. The page can't
+ * reach in to pause it, and scripts inside it don't run, so the only moment we
+ * control is when the browser loads it. Withholding src until the image is on
+ * screen makes the load itself the start cue.
+ */
+const isAnimated = /\.(svg|gif)(?:[?#].*)?$/i.test(src);
+
+/**
+ * Reserve the right box up front so neither a deferred animation nor a
+ * lazy-loaded photo shifts the page when it arrives.
+ */
+function intrinsicRatio(publicPath: string): string | undefined {
+  if (!publicPath.startsWith("/")) return undefined;
+  const file = path.join(process.cwd(), "public", publicPath.split(/[?#]/)[0]);
+
+  try {
+    if (/\.(png|jpe?g)$/i.test(file)) {
+      const buf = fs.readFileSync(file);
+
+      if (/\.png$/i.test(file)) {
+        // IHDR always leads a PNG: width and height are big-endian at 16 and 20.
+        return `${buf.readUInt32BE(16)} / ${buf.readUInt32BE(20)}`;
+      }
+
+      // JPEG: walk the segment headers to the start-of-frame, which carries size.
+      let offset = 2;
+      while (offset < buf.length - 9) {
+        if (buf[offset] !== 0xff) {
+          offset++;
+          continue;
+        }
+        const marker = buf[offset + 1];
+        const isFrame = marker >= 0xc0 && marker <= 0xcf &&
+          marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc;
+        if (isFrame) return `${buf.readUInt16BE(offset + 7)} / ${buf.readUInt16BE(offset + 5)}`;
+        offset += 2 + buf.readUInt16BE(offset + 2);
+      }
+      return undefined;
+    }
+
+    if (/\.svg$/i.test(file)) {
+      const head = fs.readFileSync(file, "utf8").slice(0, 4000);
+      const tag = head.match(/<svg[^>]*>/i)?.[0];
+      if (!tag) return undefined;
+
+      const width = tag.match(/\bwidth="([\d.]+)(?:px)?"/i)?.[1];
+      const height = tag.match(/\bheight="([\d.]+)(?:px)?"/i)?.[1];
+      if (width && height) return `${width} / ${height}`;
+
+      const viewBox = tag.match(/\bviewBox="[-\d.]+\s+[-\d.]+\s+([\d.]+)\s+([\d.]+)"/i);
+      if (viewBox) return `${viewBox[1]} / ${viewBox[2]}`;
+      return undefined;
+    }
+
+    if (/\.gif$/i.test(file)) {
+      const header = Buffer.alloc(10);
+      const fd = fs.openSync(file, "r");
+      fs.readSync(fd, header, 0, 10, 0);
+      fs.closeSync(fd);
+      return `${header.readUInt16LE(6)} / ${header.readUInt16LE(8)}`;
+    }
+  } catch {
+    // Remote or missing file: fall back to whatever the stylesheet already sets.
+  }
+
+  return undefined;
+}
+
+const ratio = intrinsicRatio(src);
+// Handed over as a custom property, not aspect-ratio itself, so a stylesheet
+// that wants a deliberate crop (the carousel's 3/4 frame) still wins.
+const sizing = ratio ? `--media-ratio: ${ratio}` : undefined;
+---
+
+{
+  isAnimated ? (
+    <>
+      <img
+        data-animate-src={src}
+        alt={alt}
+        class={className}
+        style={sizing}
+      />
+      <noscript>
+        <img src={src} alt={alt} class={className} />
+      </noscript>
+    </>
+  ) : (
+    <img src={src} alt={alt} class={className} loading={loading} style={sizing} />
+  )
+}
