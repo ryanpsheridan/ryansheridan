@@ -72,6 +72,15 @@ interface Props {
   /** Where that exit sits, as fractions of the box. */
   exitX?: number;
   exitY?: number;
+  /**
+   * A CSS selector for the element the exit should sit on, which beats
+   * exitX/exitY when it matches something. Point this at whatever the exit
+   * turns into and the ring stands exactly where that thing will appear, so
+   * the reward lands in the layout rather than floating over it. The element
+   * has to hold its box while hidden (visibility, not display) for this to
+   * mean anything.
+   */
+  exitOn?: string;
   /** Label drawn under the exit. Keep it to a word. */
   exitLabel?: string;
   /**
@@ -99,6 +108,7 @@ const {
   exit = false,
   exitX = 0.78,
   exitY = 0.6,
+  exitOn = "",
   exitLabel = "EXIT",
   fixed = false,
   height = "420px",
@@ -123,6 +133,7 @@ const {
   data-exit={exit ? "true" : "false"}
   data-exit-x={exitX}
   data-exit-y={exitY}
+  data-exit-on={exitOn}
   data-exit-label={exitLabel}
   aria-hidden="true"
 >
@@ -305,6 +316,7 @@ const {
     const wantsExit = root.dataset.exit === "true";
     const exitFracX = Number(root.dataset.exitX ?? 0.78);
     const exitFracY = Number(root.dataset.exitY ?? 0.6);
+    const exitOn = root.dataset.exitOn || "";
     const exitLabel = root.dataset.exitLabel || "";
     // A ball wider than the corridor would wedge in every doorway.
     const radius = Math.min(Number(root.dataset.ballRadius) || 6, cell * 0.28);
@@ -341,6 +353,9 @@ const {
     let exitPointX = 0;
     let exitPointY = 0;
     let solved = false;
+    let anchoredX = 0;
+    let anchoredY = 0;
+    let syncQueued = false;
     let clearing = false;
     let clearedAt = 0;
     /** Once the maze is gone it stays gone, including across a resize. */
@@ -477,11 +492,69 @@ const {
      * inside the box so it is never half off the edge. A maze with somewhere
      * to get to is a puzzle; one without is wallpaper.
      */
+    /** Center of the anchor element in the field's own coordinates. */
+    function anchorPoint(): [number, number] | null {
+      if (!exitOn) return null;
+      // Never the field itself or anything wrapping it: this element carries
+      // the selector in a data attribute, so a selector written against data
+      // attributes can match it, and anchoring to the field would put the exit
+      // in the middle of the viewport rather than on the target.
+      const anchor = Array.from(document.querySelectorAll(exitOn)).find(
+        (el) => el !== root && !el.contains(root),
+      );
+      const box = anchor?.getBoundingClientRect();
+      // A zero box means the element is display:none or not laid out yet,
+      // which would put the exit in the top left corner.
+      if (!box || (box.width === 0 && box.height === 0)) return null;
+      const here = root.getBoundingClientRect();
+      return [box.left + box.width / 2 - here.left, box.top + box.height / 2 - here.top];
+    }
+
     function placeExit() {
       if (!wantsExit || !maze) return;
-      const room = roomAt(width * exitFracX, height * exitFracY);
-      [exitPointX, exitPointY] = holdIn(room, roomCenterX(room), roomCenterY(room));
+      const point = anchorPoint();
+      const x = point ? point[0] : width * exitFracX;
+      const y = point ? point[1] : height * exitFracY;
+      anchoredX = x;
+      anchoredY = y;
+
+      const room = roomAt(x, y);
+      [exitPointX, exitPointY] = holdIn(room, x, y);
       paintExit();
+    }
+
+    /**
+     * Follow the anchor when it moves under us. The exit is placed once at
+     * startup, but the thing it sits on keeps moving afterwards: a webfont
+     * swapping in reflows the copy above it, and a fixed field stays put while
+     * the page scrolls beneath it. Either one strands the ring somewhere the
+     * button no longer is, which makes the maze quietly unsolvable.
+     *
+     * Repaints the same maze rather than carving a new one, so the corridors
+     * someone is already running do not change under them.
+     */
+    function syncExit() {
+      syncQueued = false;
+      if (!wantsExit || !exitOn || !maze || clearing || cleared) return;
+      const point = anchorPoint();
+      if (!point) return;
+      if (Math.abs(point[0] - anchoredX) < 0.5 && Math.abs(point[1] - anchoredY) < 0.5) return;
+
+      paintMaze();
+      placeExit();
+      applyFade();
+      if (wantsBall) {
+        drawBall(true);
+      } else {
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(backing, 0, 0, backing.width, backing.height, 0, 0, width, height);
+      }
+    }
+
+    function scheduleSync() {
+      if (syncQueued || cleared) return;
+      syncQueued = true;
+      requestAnimationFrame(syncExit);
     }
 
     /**
@@ -510,11 +583,33 @@ const {
       bctx.globalAlpha = 1;
     }
 
-    /** Drop the ball in the room under the center of the box. */
+    /**
+     * Drop the ball in the room under the center of the box, or, when there is
+     * an exit, in whichever quarter of the box sits furthest from it. An exit
+     * in the middle of the layout would otherwise start within reach of a
+     * centered ball, and the first nudge would solve the maze by accident.
+     */
     function placeBall() {
       if (!maze) return;
-      const col = Math.min(maze.cols - 1, Math.max(0, Math.floor((width / 2 - originX) / cell)));
-      const row = Math.min(maze.rows - 1, Math.max(0, Math.floor((height / 2 - originY) / cell)));
+      let spawnX = width / 2;
+      let spawnY = height / 2;
+
+      if (wantsExit) {
+        let best = -1;
+        for (const [fx, fy] of [[0.2, 0.25], [0.8, 0.25], [0.2, 0.75], [0.8, 0.75]]) {
+          const x = width * fx;
+          const y = height * fy;
+          const away = Math.hypot(x - exitPointX, y - exitPointY);
+          if (away > best) {
+            best = away;
+            spawnX = x;
+            spawnY = y;
+          }
+        }
+      }
+
+      const col = Math.min(maze.cols - 1, Math.max(0, Math.floor((spawnX - originX) / cell)));
+      const row = Math.min(maze.rows - 1, Math.max(0, Math.floor((spawnY - originY) / cell)));
       ballX = lastDrawX = wallX(col) + cell / 2;
       ballY = lastDrawY = wallY(row) + cell / 2;
       if (!aimed) {
@@ -947,6 +1042,11 @@ const {
       replan();
       start();
     }
+
+    // A webfont landing is the common case, and it arrives well after layout.
+    document.fonts?.ready.then(scheduleSync).catch(() => {});
+    window.addEventListener("scroll", scheduleSync, { passive: true });
+    window.addEventListener("resize", scheduleSync);
 
     if (!wantsBall) {
       layout();

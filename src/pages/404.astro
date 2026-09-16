@@ -20,8 +20,7 @@ import MazeField from "../components/MazeField.astro";
     trail={48}
     fade={0.8}
     exit
-    exitX={0.78}
-    exitY={0.56}
+    exitOn="[data-exit-slot]"
     exitLabel="EXIT"
     fixed
   />
@@ -34,60 +33,53 @@ import MazeField from "../components/MazeField.astro";
         have moved. The work is all still here, two doors down.
       </p>
 
-      <div class="nf-links">
-        <a href="/work" class="nf-button">View all work</a>
+      <!--
+        Where the maze runs, these start hidden and the exit ring is drawn on
+        the primary button's box, so solving the maze puts the buttons exactly
+        where the ring was. They keep their space either way: hidden by
+        visibility, never display, or the ring would have nothing to sit on.
+      -->
+      <div class="nf-links" data-links>
+        <a href="/work" class="nf-button" data-exit-slot>View all work</a>
         <a href="/" class="nf-plain">Back home <span class="arrow">&nearr;</span></a>
       </div>
     </div>
   </main>
-
-  <!--
-    What the exit turns into. Hidden until the maze is solved, so it is out of
-    the tab order for everyone who never plays, and the page works exactly the
-    same without it: it is a second way to a link that is already on the page.
-  -->
-  <a class="nf-door" data-door href="/" hidden>
-    <span class="nf-door-label">Home</span>
-    <span class="nf-door-arrow" aria-hidden="true">&nearr;</span>
-  </a>
-
   <Footer />
 </Layout>
 
 <script>
   /**
-   * The maze dissolves itself when the ball reaches the exit and tells us
-   * where the exit was. Put the door there, and let the walls finish clearing
-   * before it arrives, so the two read as one movement rather than a swap.
+   * The buttons arrive when the maze is solved, once its walls have cleared.
+   *
+   * Tab brings them straight back: the maze needs a cursor, and someone
+   * driving the page from the keyboard can't play it, so the first Tab drops
+   * the game and hands over the links. Without that, this page would hide its
+   * own navigation from anyone not using a mouse.
    */
-  function armDoor() {
-    const door = document.querySelector<HTMLAnchorElement>("[data-door]");
-    if (!door || door.dataset.armed === "true") return;
-    door.dataset.armed = "true";
+  function armLinks() {
+    const links = document.querySelector<HTMLElement>("[data-links]");
+    if (!links || links.dataset.armed === "true") return;
+    links.dataset.armed = "true";
+
+    const reveal = () => links.classList.add("is-shown");
 
     document.addEventListener(
       "mazefield:solved",
       (event) => {
         const detail = (event as CustomEvent).detail || {};
-        if (typeof detail.x !== "number" || typeof detail.y !== "number") return;
-
-        door.style.left = `${detail.x}px`;
-        door.style.top = `${detail.y}px`;
-        door.hidden = false;
-
-        window.setTimeout(
-          // Two frames: one for the browser to lay the door out, one for the
-          // transition to have a state to run from.
-          () => requestAnimationFrame(() => door.classList.add("is-shown")),
-          Math.max(Number(detail.settleIn) || 0, 0) * 0.62,
-        );
+        window.setTimeout(reveal, Math.max(Number(detail.settleIn) || 0, 0) * 0.62);
       },
       { once: true },
     );
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Tab") reveal();
+    }, { once: true });
   }
 
-  armDoor();
-  document.addEventListener("astro:page-load", armDoor);
+  armLinks();
+  document.addEventListener("astro:page-load", armLinks);
 </script>
 
 <style>
@@ -100,10 +92,12 @@ import MazeField from "../components/MazeField.astro";
     min-height: calc(100vh - var(--nav-height) - 200px);
     display: flex;
     align-items: center;
+    justify-content: center;
   }
 
   .nf-inner {
-    max-width: 520px;
+    max-width: 560px;
+    text-align: center;
   }
 
   .nf-code {
@@ -132,8 +126,36 @@ import MazeField from "../components/MazeField.astro";
   .nf-links {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-4);
     flex-wrap: wrap;
+  }
+
+  /*
+    Only where the maze actually renders: a pointer that hovers, a viewport
+    wide enough, and no reduced-motion preference. Anywhere else there is no
+    game to solve, so the buttons are simply there. A browser that doesn't
+    understand the query fails it, which also leaves them visible.
+  */
+  @media (hover: hover) and (pointer: fine) and (min-width: 641px) and (prefers-reduced-motion: no-preference) {
+    .nf-links {
+      opacity: 0;
+      visibility: hidden;
+      /* Scaled from the center rather than nudged up: the ring sits on this
+         row's box, so anything that moves the box breaks the handoff. */
+      transform: scale(0.94);
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0s linear 0.6s;
+    }
+
+    .nf-links.is-shown {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition-delay: 0s;
+    }
   }
 
   .nf-button {
@@ -168,59 +190,6 @@ import MazeField from "../components/MazeField.astro";
 
   .arrow {
     font-size: var(--text-xs);
-  }
-
-  /* Fixed, because the field it replaces was fixed: the door stands where the
-     ring stood. Centered on that point rather than hung off it. */
-  .nf-door {
-    position: fixed;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    width: 104px;
-    height: 104px;
-    margin: -52px 0 0 -52px;
-    border: 1px solid var(--color-text);
-    border-radius: 50%;
-    background: var(--color-bg);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-text);
-    opacity: 0;
-    transform: scale(0.82);
-    transition:
-      opacity 0.55s ease,
-      transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-      background 0.2s ease,
-      color 0.2s ease;
-  }
-
-  .nf-door.is-shown {
-    opacity: 1;
-    transform: none;
-  }
-
-  .nf-door:hover,
-  .nf-door:focus-visible {
-    background: var(--color-text);
-    color: var(--color-bg);
-  }
-
-  .nf-door-arrow {
-    font-size: 11px;
-    opacity: 0.7;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .nf-door {
-      transition: opacity 0.2s ease;
-      transform: none;
-    }
   }
 
   @media (max-width: 640px) {
