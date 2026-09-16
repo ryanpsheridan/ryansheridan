@@ -2,11 +2,8 @@
 /**
  * IntroLoader — a first-visit intro that hands off to the page behind it.
  *
- * The compass field runs on top of the scrim behaving exactly as it does
- * anywhere else, so the wait is something you can play with rather than watch.
- * A count climbs from 0 to 100 in the middle of the screen. On completion the
- * scrim lifts and the field fades out completely, which is the whole reason
- * the pattern exists: it belongs to the load, not to the page.
+ * A count climbs from 0 to 100 in the middle of the screen, on nothing but the
+ * page's own background. Then the scrim lifts.
  *
  * Shows once per session, never under reduced motion. It is rendered hidden
  * and only revealed by the inline script below, so a browser without JS sees
@@ -17,11 +14,9 @@ interface Props {
   minDuration?: number;
   /** Longest it can last, ms. It always hands off, even if a font stalls. */
   maxDuration?: number;
-  /** How long the field takes to fade out after the hand-off, ms. */
-  dissipate?: number;
 }
 
-const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props;
+const { minDuration = 4500, maxDuration = 5400 } = Astro.props;
 ---
 
 <div
@@ -29,7 +24,6 @@ const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props
   id="intro"
   data-min={minDuration}
   data-max={maxDuration}
-  data-dissipate={dissipate}
   hidden
 >
   <div class="intro-count" aria-hidden="true">
@@ -66,15 +60,10 @@ const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props
 </script>
 
 <style is:global>
-  /* Hold the page still underneath, and lift the field above the scrim so the
-     same instance that runs the intro is the one that fades out after it. */
+  /* Hold the page still underneath. */
   html.intro-open,
   html.intro-open body {
     overflow: hidden;
-  }
-
-  html.intro-open .cursor-field.is-fixed {
-    z-index: 60;
   }
 
   /* The nav sits above the scrim on its own z-index, so the real wordmark can
@@ -84,14 +73,6 @@ const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props
      finishes assembling rather than snapping into place. */
   html.intro-open .hamburger {
     opacity: 0;
-  }
-
-  /* The nav outranks the scrim, and its opaque background would paint over the
-     count now that the count sits on the nav row. The scrim behind it is the
-     same colour, so dropping the background for the duration costs nothing and
-     the nav's own children keep their place above it. */
-  html.intro-open nav {
-    background: transparent;
   }
 
   .hamburger {
@@ -116,20 +97,16 @@ const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props
 
   .intro-count {
     position: absolute;
-    /* Centered on the nav row, so the count sits between the wordmark and the
-       spot the hamburger will take. Spanning the page padding rather than
-       using left: 50% puts it on the nav's own centre line, which the
-       scrollbar gutter would otherwise shift it off. The offset is the nav's
-       own construction: its 18px padding plus half the 32px hamburger. Not
-       --nav-height, which reads 74px against a row that measures 68px. */
-    top: calc(18px + 16px);
-    left: var(--page-padding);
-    right: var(--page-padding);
-    transform: translateY(-50%);
+    /* Dead centre of the screen, the same on every size. The count is the only
+       thing on the scrim, so it has no row to line up with and nothing to sit
+       out of the way of. Its own box is a fixed width, so centering the box
+       holds the digits still rather than sliding them as the number grows. */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 70;
     display: flex;
     align-items: baseline;
-    justify-content: center;
     pointer-events: none;
     color: var(--color-text);
   }
@@ -141,7 +118,7 @@ const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props
     min-width: 3ch;
     text-align: right;
     font-family: var(--font-mono);
-    font-size: clamp(14px, 2.75vw, 33px);
+    font-size: clamp(17.5px, 3.4375vw, 41.25px);
     font-weight: 400;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.04em;
@@ -150,23 +127,15 @@ const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props
 
   .intro-pct {
     font-family: var(--font-mono);
-    font-size: clamp(7px, 0.75vw, 8px);
+    font-size: clamp(8.75px, 0.9375vw, 10px);
     color: var(--color-text-muted);
     line-height: 1;
     margin-left: 0.1em;
   }
 
+  /* Phones keep the size they had: the 25% bump is a desktop change, and the
+     clamp above would otherwise bottom out smaller than this. */
   @media (max-width: 640px) {
-    /* Centered on a phone: the count is the only thing on the screen there,
-       since the field is disabled on devices without a cursor. */
-    .intro-count {
-      right: auto;
-      bottom: auto;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-
     .intro-num {
       font-size: 31.5px;
     }
@@ -180,16 +149,10 @@ const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props
 <script>
   const intro = document.getElementById("intro");
   const countEl = document.getElementById("intro-count");
-  const field = document.querySelector<HTMLElement>(".cursor-field");
-
-  // Skipped intro: the field has no life outside it on a page that rests at
-  // zero, so drop it rather than leave an inert canvas listening for a cursor.
-  if (!intro && field && Number(field.dataset.yield) === 0) field.remove();
 
   if (intro && countEl) {
     const minDuration = Number(intro.dataset.min) || 4500;
     const maxDuration = Number(intro.dataset.max) || 5400;
-    const dissipate = Number(intro.dataset.dissipate) || 1600;
     const started = performance.now();
 
     // The count follows real signals rather than a timer, but eases toward
@@ -239,39 +202,12 @@ const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props
     if (document.readyState === "complete") bump(1);
     else window.addEventListener("load", () => bump(1), { once: true });
 
-    // The page's own resting strength. On the homepage this is 0: the field
-    // belongs to the intro and should leave with it.
-    const pageYield = Number(field?.dataset.yield ?? 1);
-
-    function fadeOut() {
-      if (!field) return;
-      const from = 1;
-      const startedAt = performance.now();
-
-      const step = () => {
-        const k = Math.min(1, (performance.now() - startedAt) / dissipate);
-        const eased = k * k * (3 - 2 * k);
-        field.dataset.yield = String(from + (pageYield - from) * eased);
-        field.dispatchEvent(new CustomEvent("cursorfield:update"));
-
-        if (k < 1) {
-          requestAnimationFrame(step);
-          return;
-        }
-        // Fully gone: take the canvas with it rather than leaving it to
-        // redraw nothing on every pointer move.
-        if (pageYield === 0) field.remove();
-      };
-      requestAnimationFrame(step);
-    }
-
     function finish() {
       if (finished) return;
       finished = true;
       countEl.textContent = "100";
       intro.classList.add("is-done");
       document.documentElement.classList.remove("intro-open");
-      fadeOut();
       window.setTimeout(() => intro.remove(), 700);
     }
 
@@ -307,14 +243,6 @@ const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props
     window.addEventListener("keydown", skip, { once: true });
     window.addEventListener("wheel", skip, { once: true, passive: true });
     window.addEventListener("touchstart", skip, { once: true, passive: true });
-
-    // Run the field at full strength for the intro. Nothing aims it: the
-    // cursor drives it exactly as it does anywhere else, so the wait is
-    // something you can push around.
-    if (field) {
-      field.dataset.yield = "1";
-      field.dispatchEvent(new CustomEvent("cursorfield:update"));
-    }
 
     requestAnimationFrame(tick);
   }
