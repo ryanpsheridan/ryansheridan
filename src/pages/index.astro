@@ -26,6 +26,13 @@ const projects = getHomepageProjects();
           <p class="tagline"><span class="reveal-wrap" data-reveal-index="3"><span class="reveal-inner">Based out of Austin, Texas</span></span></p>
           <a href="/work" class="view-all-link" data-reveal-index={projects.length - 1}>View all work</a>
         </div>
+        {/* Decorative: the work below is reachable by scrolling whether or not
+            anyone sees this, so it is hidden from assistive tech rather than
+            announced as something to act on. */}
+        <div class="scroll-cue" data-scroll-cue aria-hidden="true">
+          <span class="scroll-cue-label">Scroll</span>
+          <span class="scroll-cue-line"></span>
+        </div>
       </div>
       <div class="right-panel">
         {projects.map((project, i) => {
@@ -135,6 +142,58 @@ const projects = getHomepageProjects();
 
   updateSpacer();
   window.addEventListener("resize", updateSpacer);
+
+  /**
+   * The scroll cue: arrives once the page is actually ready to be scrolled,
+   * leaves the first time it is.
+   *
+   * It waits out the intro rather than counting frames against it, so it never
+   * animates behind the scrim or lands before the headline has.
+   */
+  const cue = document.querySelector<HTMLElement>("[data-scroll-cue]");
+
+  if (cue) {
+    let shown = false;
+    let gone = false;
+
+    const reveal = () => {
+      if (gone || shown) return;
+      shown = true;
+      cue.classList.add("visible");
+    };
+
+    const dismiss = () => {
+      if (gone) return;
+      gone = true;
+      cue.classList.add("is-gone");
+      window.removeEventListener("scroll", onScroll);
+    };
+
+    // Anything past a stray trackpad twitch counts as having found the scroll.
+    function onScroll() {
+      if (window.scrollY > 40) dismiss();
+    }
+
+    const root = document.documentElement;
+
+    if (root.classList.contains("intro-open")) {
+      // The intro drops this class on hand-off; that is the page's own signal
+      // that it is on screen, and it beats guessing at the intro's duration.
+      const watcher = new MutationObserver(() => {
+        if (root.classList.contains("intro-open")) return;
+        watcher.disconnect();
+        window.setTimeout(reveal, 900);
+      });
+      watcher.observe(root, { attributes: true, attributeFilter: ["class"] });
+    } else {
+      window.setTimeout(reveal, 1200);
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    // Landing mid-page, on a refresh or a back-navigation, means the cue has
+    // nothing to say.
+    if (window.scrollY > 40) dismiss();
+  }
 </script>
 
 <style>
@@ -210,6 +269,93 @@ const projects = getHomepageProjects();
   .view-all-link.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  /*
+    Sits on the headline's own left edge at the foot of the sticky panel, so it
+    reads as part of that column rather than as furniture dropped on the page.
+    The panel is sticky, which makes it the containing block for this.
+  */
+  .scroll-cue {
+    position: absolute;
+    left: 0;
+    bottom: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    /* Never in the way of the headline or the button above it. */
+    pointer-events: none;
+  }
+
+  .scroll-cue.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Its job is done the moment the page moves. Up and out, rather than a
+     straight fade, so it reads as leaving with the scroll. */
+  .scroll-cue.is-gone {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  .scroll-cue-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  /* A hairline in the border tone with one darker segment running down it. The
+     line holds the shape; the segment is the only thing that moves. */
+  .scroll-cue-line {
+    position: relative;
+    width: 1px;
+    height: 64px;
+    background: var(--color-border);
+    overflow: hidden;
+  }
+
+  .scroll-cue-line::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 1px;
+    height: 38%;
+    background: var(--color-text);
+    animation: scroll-cue-travel 2.6s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+  }
+
+  @keyframes scroll-cue-travel {
+    0% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    30% {
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(264%);
+      opacity: 0;
+    }
+  }
+
+  /* Reduced motion keeps the mark and drops the travel: the affordance is the
+     point, the animation is only how it asks. */
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-cue-line::after {
+      animation: none;
+      height: 100%;
+      opacity: 0.35;
+    }
   }
 
   .entrance-hidden {
@@ -315,7 +461,19 @@ const projects = getHomepageProjects();
       width: 100%;
       height: auto;
       padding: 120px 0 var(--space-8);
+      flex-direction: column;
       align-items: flex-start;
+    }
+
+    /* No sticky panel to pin to here, so it just follows the headline and
+       points at the work stacked underneath it. */
+    .scroll-cue {
+      position: static;
+      margin-top: var(--space-6);
+    }
+
+    .scroll-cue-line {
+      height: 48px;
     }
 
     .headline-block {
@@ -343,6 +501,13 @@ const projects = getHomepageProjects();
       opacity: 1 !important;
       transform: none !important;
       transition: none !important;
+    }
+
+    /* Shown outright like everything else on mobile, but still able to leave
+       on scroll, so is-gone keeps its say here. */
+    .scroll-cue:not(.is-gone) {
+      opacity: 1;
+      transform: none;
     }
   }
 </style>
