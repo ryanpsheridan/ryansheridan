@@ -26,13 +26,6 @@ const projects = getHomepageProjects();
           <p class="tagline"><span class="reveal-wrap" data-reveal-index="3"><span class="reveal-inner">Based out of Austin, Texas</span></span></p>
           <a href="/work" class="view-all-link" data-reveal-index={projects.length - 1}>View all work</a>
         </div>
-        {/* Decorative: the work below is reachable by scrolling whether or not
-            anyone sees this, so it is hidden from assistive tech rather than
-            announced as something to act on. */}
-        <div class="scroll-cue" data-scroll-cue aria-hidden="true">
-          <span class="scroll-cue-label">Scroll</span>
-          <span class="scroll-cue-line"></span>
-        </div>
       </div>
       <div class="right-panel">
         {projects.map((project, i) => {
@@ -55,6 +48,16 @@ const projects = getHomepageProjects();
       </div>
     </div>
   </main>
+
+  {/* Outside main so it can hold the left margin for the whole page rather
+      than the headline panel. Decorative: the work is reachable by scrolling
+      whether or not anyone sees this, so it is hidden from assistive tech
+      rather than announced as something to act on. */}
+  <div class="scroll-rail" data-scroll-rail aria-hidden="true">
+    <span class="scroll-rail-label">Scroll</span>
+    <span class="scroll-rail-track"><span class="scroll-rail-fill"></span></span>
+  </div>
+
   <Footer />
 </Layout>
 
@@ -144,34 +147,45 @@ const projects = getHomepageProjects();
   window.addEventListener("resize", updateSpacer);
 
   /**
-   * The scroll cue: arrives once the page is actually ready to be scrolled,
-   * leaves the first time it is.
+   * The scroll rail: an invitation until the page moves, a progress reading
+   * after that, and back to an invitation if someone returns to the top.
    *
    * It waits out the intro rather than counting frames against it, so it never
-   * animates behind the scrim or lands before the headline has.
+   * animates behind the scrim.
    */
-  const cue = document.querySelector<HTMLElement>("[data-scroll-cue]");
+  const rail = document.querySelector<HTMLElement>("[data-scroll-rail]");
 
-  if (cue) {
+  if (rail) {
     let shown = false;
-    let gone = false;
+    let scrolled = false;
+    let queued = false;
 
     const reveal = () => {
-      if (gone || shown) return;
+      if (shown) return;
       shown = true;
-      cue.classList.add("visible");
+      rail.classList.add("visible");
     };
 
-    const dismiss = () => {
-      if (gone) return;
-      gone = true;
-      cue.classList.add("is-gone");
-      window.removeEventListener("scroll", onScroll);
-    };
+    function measure() {
+      queued = false;
+      // How far the document can travel. A page shorter than the viewport has
+      // nowhere to go, so it reads as untouched rather than as complete.
+      const span = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = span > 0 ? Math.min(Math.max(window.scrollY / span, 0), 1) : 0;
+      rail.style.setProperty("--progress", String(progress));
 
-    // Anything past a stray trackpad twitch counts as having found the scroll.
+      // A stray trackpad twitch is not a scroll, and returning to the top puts
+      // the invitation back rather than leaving a rail reading zero.
+      const moved = window.scrollY > 40;
+      if (moved === scrolled) return;
+      scrolled = moved;
+      rail.classList.toggle("is-scrolled", moved);
+    }
+
     function onScroll() {
-      if (window.scrollY > 40) dismiss();
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(measure);
     }
 
     const root = document.documentElement;
@@ -190,9 +204,11 @@ const projects = getHomepageProjects();
     }
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    // Landing mid-page, on a refresh or a back-navigation, means the cue has
-    // nothing to say.
-    if (window.scrollY > 40) dismiss();
+    // The document's height is what progress is measured against, and both the
+    // spacer above and a resize change it.
+    window.addEventListener("resize", onScroll);
+    // Landing mid-page, on a refresh or a back-navigation, starts in progress.
+    measure();
   }
 </script>
 
@@ -272,66 +288,106 @@ const projects = getHomepageProjects();
   }
 
   /*
-    Sits on the headline's own left edge at the foot of the sticky panel, so it
-    reads as part of that column rather than as furniture dropped on the page.
-    The panel is sticky, which makes it the containing block for this.
+    A rail in the left margin, centered on the screen and fixed there, so it
+    holds one position for the whole page instead of belonging to any section.
+
+    It is two things in sequence. Before the page moves it is an invitation: a
+    segment travels down the track under a label. Once the page moves it is a
+    reading of how far through you are, the same track filling from the top.
+    Nothing is swapped out between the two; the fill and the traveller trade
+    places on one line.
+
+    Sized to live inside the page's own margin: a quarter of the space either
+    side of the content column puts it between the viewport edge and the text,
+    and the clamp keeps it off both when that space runs out.
   */
-  .scroll-cue {
-    position: absolute;
-    left: 0;
-    bottom: var(--space-6);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+  .scroll-rail {
+    position: fixed;
+    left: clamp(14px, calc((100vw - var(--max-width)) / 4), 72px);
+    top: 50%;
+    /* The rail's box is the track and nothing else, so this centers the line
+       itself. The label hangs off it absolutely for the same reason: in flow
+       it would push the track down by its own height and the bar would sit
+       below the middle of the screen. */
+    height: 180px;
+    transform: translateY(-50%);
+    z-index: 3;
     opacity: 0;
-    transform: translateY(6px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-    /* Never in the way of the headline or the button above it. */
+    transition: opacity 0.8s ease;
     pointer-events: none;
   }
 
-  .scroll-cue.visible {
+  .scroll-rail.visible {
     opacity: 1;
-    transform: none;
   }
 
-  /* Its job is done the moment the page moves. Up and out, rather than a
-     straight fade, so it reads as leaving with the scroll. */
-  .scroll-cue.is-gone {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-
-  .scroll-cue-label {
+  /* Vertical, because the margin it sits in is narrower than the word. */
+  .scroll-rail-label {
+    position: absolute;
+    bottom: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%);
     font-family: var(--font-mono);
     font-size: 10px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--color-text-muted);
+    writing-mode: vertical-rl;
+    transition: opacity 0.5s ease;
   }
 
-  /* A hairline in the border tone with one darker segment running down it. The
-     line holds the shape; the segment is the only thing that moves. */
-  .scroll-cue-line {
+  /* The label is the invitation, and the invitation is spent once the page
+     moves. The track carries on as the progress reading. */
+  .scroll-rail.is-scrolled .scroll-rail-label {
+    opacity: 0;
+  }
+
+  .scroll-rail-track {
     position: relative;
+    display: block;
     width: 1px;
-    height: 64px;
+    height: 100%;
     background: var(--color-border);
     overflow: hidden;
   }
 
-  .scroll-cue-line::after {
+  /* Progress. Scaled rather than resized, so it is a transform per frame
+     instead of a layout pass, and anchored to the top so it grows downward. */
+  .scroll-rail-fill {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 1px;
+    height: 100%;
+    background: var(--color-text);
+    transform-origin: top;
+    transform: scaleY(var(--progress, 0));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .scroll-rail.is-scrolled .scroll-rail-fill {
+    opacity: 1;
+  }
+
+  /* The traveller: only ever visible before the first scroll, which is what
+     keeps the rail an invitation until it has a reading to give. */
+  .scroll-rail-track::after {
     content: "";
     position: absolute;
     inset: 0 auto auto 0;
     width: 1px;
-    height: 38%;
+    height: 22%;
     background: var(--color-text);
-    animation: scroll-cue-travel 2.6s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+    animation: scroll-rail-travel 2.6s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+    transition: opacity 0.4s ease;
   }
 
-  @keyframes scroll-cue-travel {
+  .scroll-rail.is-scrolled .scroll-rail-track::after {
+    opacity: 0;
+    animation: none;
+  }
+
+  @keyframes scroll-rail-travel {
     0% {
       transform: translateY(-100%);
       opacity: 0;
@@ -343,18 +399,18 @@ const projects = getHomepageProjects();
       opacity: 1;
     }
     100% {
-      transform: translateY(264%);
+      transform: translateY(455%);
       opacity: 0;
     }
   }
 
-  /* Reduced motion keeps the mark and drops the travel: the affordance is the
-     point, the animation is only how it asks. */
+  /* Reduced motion keeps both readings and drops the travel: the invitation
+     becomes a still mark, the progress still tracks. */
   @media (prefers-reduced-motion: reduce) {
-    .scroll-cue-line::after {
+    .scroll-rail-track::after {
       animation: none;
       height: 100%;
-      opacity: 0.35;
+      opacity: 0.3;
     }
   }
 
@@ -465,16 +521,18 @@ const projects = getHomepageProjects();
       align-items: flex-start;
     }
 
-    /* No sticky panel to pin to here, so it just follows the headline and
-       points at the work stacked underneath it. */
-    .scroll-cue {
-      position: static;
-      margin-top: var(--space-6);
+    /* The margin is only the page padding here, so the label goes and the
+       track alone holds the edge. */
+    .scroll-rail {
+      left: 8px;
+      height: 120px;
     }
 
-    .scroll-cue-line {
-      height: 48px;
+    .scroll-rail-label {
+      display: none;
     }
+
+
 
     .headline-block {
       transform: none;
@@ -503,11 +561,10 @@ const projects = getHomepageProjects();
       transition: none !important;
     }
 
-    /* Shown outright like everything else on mobile, but still able to leave
-       on scroll, so is-gone keeps its say here. */
-    .scroll-cue:not(.is-gone) {
+    /* Shown outright like everything else on mobile; the rail's own states
+       carry on from there. */
+    .scroll-rail {
       opacity: 1;
-      transform: none;
     }
   }
 </style>
