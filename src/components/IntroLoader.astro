@@ -16,7 +16,7 @@ interface Props {
   maxDuration?: number;
 }
 
-const { minDuration = 4500, maxDuration = 5400 } = Astro.props;
+const { minDuration = 3375, maxDuration = 4050 } = Astro.props;
 ---
 
 <div
@@ -151,8 +151,8 @@ const { minDuration = 4500, maxDuration = 5400 } = Astro.props;
   const countEl = document.getElementById("intro-count");
 
   if (intro && countEl) {
-    const minDuration = Number(intro.dataset.min) || 4500;
-    const maxDuration = Number(intro.dataset.max) || 5400;
+    const minDuration = Number(intro.dataset.min) || 3375;
+    const maxDuration = Number(intro.dataset.max) || 4050;
     const started = performance.now();
 
     // The count follows real signals rather than a timer, but eases toward
