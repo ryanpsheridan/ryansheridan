@@ -174,12 +174,14 @@ const projects = getHomepageProjects();
       const progress = span > 0 ? Math.min(Math.max(window.scrollY / span, 0), 1) : 0;
       rail.style.setProperty("--progress", String(progress));
 
-      // A stray trackpad twitch is not a scroll, and returning to the top puts
-      // the invitation back rather than leaving a rail reading zero.
-      const moved = window.scrollY > 40;
-      if (moved === scrolled) return;
-      scrolled = moved;
-      rail.classList.toggle("is-scrolled", moved);
+      // One way only. Someone who has scrolled knows how, and being told again
+      // on the way back up reads as the page forgetting. A stray trackpad
+      // twitch is not a scroll, hence the threshold. From here the rail is
+      // only ever a progress reading, including at the top, where it reads
+      // empty rather than inviting.
+      if (scrolled || window.scrollY <= 40) return;
+      scrolled = true;
+      rail.classList.add("is-scrolled");
     }
 
     function onScroll() {
