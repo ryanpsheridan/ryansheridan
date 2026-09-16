@@ -49,6 +49,14 @@ interface Props {
   /** How far the ball lifts the wall tone around it, in px. 0 disables it. */
   glow?: number;
   /**
+   * Fade the maze out toward the edges of the box, keeping an oval of it at
+   * full strength. The number is how much of the box that oval covers, 0..1,
+   * measured to the edge midpoints, so 0.8 is the inner 80%. The fade runs a
+   * quarter of the box past it, which puts the corners at nothing. 0 disables
+   * it and the maze runs edge to edge.
+   */
+  fade?: number;
+  /**
    * How many of the ball's recent positions trail behind it. The trail is the
    * route it actually took, so it reads as a thread paid out behind you. 0 is
    * a bare ball.
@@ -85,6 +93,7 @@ const {
   speed = 6,
   braid = 0.55,
   glow = 150,
+  fade = 0,
   trail = 26,
   exit = false,
   exitX = 0.78,
@@ -108,6 +117,7 @@ const {
   data-speed={speed}
   data-braid={braid}
   data-glow={glow}
+  data-fade={fade}
   data-trail={trail}
   data-exit={exit ? "true" : "false"}
   data-exit-x={exitX}
@@ -153,6 +163,15 @@ const {
 
 <script>
   const TAU = Math.PI * 2;
+
+  /** How far past the full-strength oval the fade takes to reach nothing. */
+  const FADE_RUN = 0.25;
+
+  function smoothstep(k: number) {
+    if (k <= 0) return 0;
+    if (k >= 1) return 1;
+    return k * k * (3 - 2 * k);
+  }
 
   /**
    * A maze on a cols x rows grid of rooms.
@@ -274,6 +293,7 @@ const {
     const speed = Number(root.dataset.speed) || 6;
     const braid = Number(root.dataset.braid ?? 0.55);
     const glow = Number(root.dataset.glow ?? 150);
+    const fade = Math.max(Number(root.dataset.fade ?? 0), 0);
     const trailLength = Math.max(Number(root.dataset.trail ?? 0), 0);
     const wantsExit = root.dataset.exit === "true";
     const exitFracX = Number(root.dataset.exitX ?? 0.78);
@@ -351,6 +371,7 @@ const {
 
       paintMaze();
       placeExit();
+      applyFade();
       placeBall();
       ctx.clearRect(0, 0, width, height);
       ctx.drawImage(backing, 0, 0, backing.width, backing.height, 0, 0, width, height);
@@ -384,6 +405,52 @@ const {
         }
       }
       bctx.stroke();
+    }
+
+    /** How much the oval mask lets through at a point, 0..1. */
+    function fadeAt(x: number, y: number) {
+      if (fade <= 0) return 1;
+      const cx = width / 2;
+      const cy = height / 2;
+      const dx = (x - cx) / cx;
+      const dy = (y - cy) / cy;
+      const r = Math.hypot(dx, dy);
+      return smoothstep((fade + FADE_RUN - r) / FADE_RUN);
+    }
+
+    /**
+     * Mask the painted maze down to an oval, once, rather than testing every
+     * wall against a falloff as it is drawn. Scaling the space before building
+     * the gradient is what makes the mask an ellipse that follows the box
+     * rather than a circle inside it.
+     *
+     * Everything drawn live over the blit (the glow) applies fadeAt itself, so
+     * the moving parts sit inside the same oval as the walls underneath them.
+     */
+    function applyFade() {
+      if (fade <= 0) return;
+      const cx = width / 2;
+      const cy = height / 2;
+      if (cx <= 0 || cy <= 0) return;
+
+      bctx.save();
+      bctx.globalCompositeOperation = "destination-in";
+      bctx.translate(cx, cy);
+      bctx.scale(1, cy / cx);
+
+      const gradient = bctx.createRadialGradient(
+        0, 0, fade * cx,
+        0, 0, (fade + FADE_RUN) * cx,
+      );
+      // Stepped because a linear ramp between two stops reads as a hard ring
+      // at the inner edge; this traces the same smoothstep fadeAt uses.
+      for (let i = 0; i <= 8; i++) {
+        const t = i / 8;
+        gradient.addColorStop(t, `rgba(0, 0, 0, ${1 - smoothstep(t)})`);
+      }
+      bctx.fillStyle = gradient;
+      bctx.fillRect(-cx, -cx, width, cx * 2);
+      bctx.restore();
     }
 
     /**
@@ -719,7 +786,7 @@ const {
           if (row < rows && v[col + row * (cols + 1)]) {
             const x = Math.round(wallX(col)) + 0.5;
             const y = wallY(row);
-            const a = falloff(x, y + cell / 2);
+            const a = falloff(x, y + cell / 2) * fadeAt(x, y + cell / 2);
             if (a > 0.02) {
               ctx.globalAlpha = a;
               ctx.beginPath();
@@ -731,7 +798,7 @@ const {
           if (col < cols && h[col + row * cols]) {
             const y = Math.round(wallY(row)) + 0.5;
             const x = wallX(col);
-            const a = falloff(x + cell / 2, y);
+            const a = falloff(x + cell / 2, y) * fadeAt(x + cell / 2, y);
             if (a > 0.02) {
               ctx.globalAlpha = a;
               ctx.beginPath();

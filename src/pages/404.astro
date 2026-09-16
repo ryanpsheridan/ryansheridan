@@ -18,6 +18,7 @@ import MazeField from "../components/MazeField.astro";
     speed={7}
     glow={170}
     trail={48}
+    fade={0.8}
     exit
     exitX={0.78}
     exitY={0.56}
@@ -37,33 +38,10 @@ import MazeField from "../components/MazeField.astro";
         <a href="/work" class="nf-button">View all work</a>
         <a href="/" class="nf-plain">Back home <span class="arrow">&nearr;</span></a>
       </div>
-
-      <!-- The dot and the marked exit explain themselves; this is the only
-           acknowledgement that anyone worked it out. -->
-      <p class="nf-solved" data-solved role="status">Out. Nicely done.</p>
     </div>
   </main>
   <Footer />
 </Layout>
-
-<script>
-  // The maze fires this once, when the ball reaches the exit. Everything on
-  // the page works without it; this is the reward for playing along.
-  function armMaze() {
-    const solved = document.querySelector<HTMLElement>("[data-solved]");
-    if (!solved || solved.dataset.armed === "true") return;
-    solved.dataset.armed = "true";
-
-    document.addEventListener(
-      "mazefield:solved",
-      () => solved.classList.add("is-shown"),
-      { once: true },
-    );
-  }
-
-  armMaze();
-  document.addEventListener("astro:page-load", armMaze);
-</script>
 
 <style>
   .not-found {
@@ -78,7 +56,6 @@ import MazeField from "../components/MazeField.astro";
   }
 
   .nf-inner {
-    position: relative;
     max-width: 520px;
   }
 
@@ -103,28 +80,6 @@ import MazeField from "../components/MazeField.astro";
     line-height: 1.8;
     color: var(--color-text-muted);
     margin-bottom: var(--space-6);
-  }
-
-  /* Out of flow, under the links: appearing must not shove anything while
-     someone is steering the dot toward it. */
-  .nf-solved {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    margin-top: var(--space-4);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-    opacity: 0;
-    transform: translateY(4px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-
-  .nf-solved.is-shown {
-    opacity: 1;
-    transform: none;
   }
 
   .nf-links {
@@ -166,20 +121,6 @@ import MazeField from "../components/MazeField.astro";
 
   .arrow {
     font-size: var(--text-xs);
-  }
-
-  /* Matches the cutoffs MazeField hides itself at: no maze, nothing that
-     could ever be solved. */
-  @media (max-width: 640px), (hover: none), (pointer: coarse) {
-    .nf-solved {
-      display: none;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .nf-solved {
-      display: none;
-    }
   }
 
   @media (max-width: 640px) {
