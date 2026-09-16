@@ -13,6 +13,10 @@
  * texture. Park the cursor on the far side of a wall and the ball takes the
  * long way round to reach it.
  *
+ * A trail marks the corridors the ball came through, and an optional `exit`
+ * gives the maze somewhere to get to: reaching it fires `mazefield:solved`,
+ * which bubbles, so a page can make a small event of it.
+ *
  * Walls top out at #d8d8d8, which holds 13.3:1 for body text (#111111) and
  * 3.0:1 for muted text (#7a7a7a) if either lands on one, so the field can sit
  * behind live copy. Walls near the ball lift slightly above that rest tone,
@@ -45,6 +49,23 @@ interface Props {
   /** How far the ball lifts the wall tone around it, in px. 0 disables it. */
   glow?: number;
   /**
+   * How many of the ball's recent positions trail behind it. The trail is the
+   * route it actually took, so it reads as a thread paid out behind you. 0 is
+   * a bare ball.
+   */
+  trail?: number;
+  /**
+   * Mark one room as a way out and fire `mazefield:solved` on this element the
+   * first time the ball reaches it. The event bubbles, so a page can listen on
+   * document and respond to it.
+   */
+  exit?: boolean;
+  /** Where that exit sits, as fractions of the box. */
+  exitX?: number;
+  exitY?: number;
+  /** Label drawn under the exit. Keep it to a word. */
+  exitLabel?: string;
+  /**
    * Pin to the viewport instead of flowing in the layout, to run the maze
    * behind a whole page.
    */
@@ -55,7 +76,7 @@ interface Props {
 }
 
 const {
-  cell = 56,
+  cell = 44,
   color = "#e4e4e4",
   activeColor = "#d8d8d8",
   lineWidth = 1,
@@ -64,6 +85,11 @@ const {
   speed = 6,
   braid = 0.55,
   glow = 150,
+  trail = 26,
+  exit = false,
+  exitX = 0.78,
+  exitY = 0.6,
+  exitLabel = "EXIT",
   fixed = false,
   height = "420px",
   class: className = "",
@@ -82,6 +108,11 @@ const {
   data-speed={speed}
   data-braid={braid}
   data-glow={glow}
+  data-trail={trail}
+  data-exit={exit ? "true" : "false"}
+  data-exit-x={exitX}
+  data-exit-y={exitY}
+  data-exit-label={exitLabel}
   aria-hidden="true"
 >
   <canvas></canvas>
@@ -235,7 +266,7 @@ const {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const cell = Math.max(Number(root.dataset.cell) || 56, 24);
+    const cell = Math.max(Number(root.dataset.cell) || 44, 20);
     const color = root.dataset.color || "#e4e4e4";
     const activeColor = root.dataset.activeColor || "#d8d8d8";
     const lineWidth = Number(root.dataset.lineWidth) || 1;
@@ -243,6 +274,11 @@ const {
     const speed = Number(root.dataset.speed) || 6;
     const braid = Number(root.dataset.braid ?? 0.55);
     const glow = Number(root.dataset.glow ?? 150);
+    const trailLength = Math.max(Number(root.dataset.trail ?? 0), 0);
+    const wantsExit = root.dataset.exit === "true";
+    const exitFracX = Number(root.dataset.exitX ?? 0.78);
+    const exitFracY = Number(root.dataset.exitY ?? 0.6);
+    const exitLabel = root.dataset.exitLabel || "";
     // A ball wider than the corridor would wedge in every doorway.
     const radius = Math.min(Number(root.dataset.ballRadius) || 6, cell * 0.28);
     // Half the stroke plus the ball, so the ball stops against the wall face
@@ -273,6 +309,11 @@ const {
     let lastDrawX = 0;
     let lastDrawY = 0;
     let aimed = false;
+    /** Recent ball positions, flat x,y pairs, oldest first. */
+    const trail: number[] = [];
+    let exitPointX = 0;
+    let exitPointY = 0;
+    let solved = false;
     /** Rooms left to walk through, and how far along them the ball is. */
     let path: number[] = [];
     let step = 0;
@@ -309,6 +350,7 @@ const {
       maze = carve(cols, rows, braid);
 
       paintMaze();
+      placeExit();
       placeBall();
       ctx.clearRect(0, 0, width, height);
       ctx.drawImage(backing, 0, 0, backing.width, backing.height, 0, 0, width, height);
@@ -344,6 +386,44 @@ const {
       bctx.stroke();
     }
 
+    /**
+     * Put the way out in a room near the given corner of the box, and hold it
+     * inside the box so it is never half off the edge. A maze with somewhere
+     * to get to is a puzzle; one without is wallpaper.
+     */
+    function placeExit() {
+      if (!wantsExit || !maze) return;
+      const room = roomAt(width * exitFracX, height * exitFracY);
+      [exitPointX, exitPointY] = holdIn(room, roomCenterX(room), roomCenterY(room));
+      paintExit();
+    }
+
+    /**
+     * Onto the backing canvas, so the blit that restores the maze behind the
+     * ball restores the exit with it. Redrawn once on solving, filled in.
+     */
+    function paintExit() {
+      if (!wantsExit) return;
+      const r = Math.min(cell * 0.3, 13);
+
+      bctx.strokeStyle = ballColor;
+      bctx.fillStyle = ballColor;
+      bctx.lineWidth = 1.2;
+      bctx.globalAlpha = solved ? 1 : 0.38;
+      bctx.beginPath();
+      bctx.arc(exitPointX, exitPointY, r, 0, TAU);
+      solved ? bctx.fill() : bctx.stroke();
+
+      if (exitLabel) {
+        bctx.globalAlpha = solved ? 0.9 : 0.42;
+        bctx.font = "500 9px 'IBM Plex Mono', ui-monospace, monospace";
+        bctx.textAlign = "center";
+        bctx.textBaseline = "middle";
+        bctx.fillText(exitLabel, exitPointX, exitPointY + r + 9);
+      }
+      bctx.globalAlpha = 1;
+    }
+
     /** Drop the ball in the room under the center of the box. */
     function placeBall() {
       if (!maze) return;
@@ -356,7 +436,9 @@ const {
         targetY = ballY;
       }
       // The maze is recarved on every resize, so any route through the old one
-      // is meaningless now.
+      // is meaningless now, and so is the thread showing where the ball has
+      // been in it.
+      trail.length = 0;
       path = [];
       step = 0;
       goalRoom = -1;
@@ -514,6 +596,30 @@ const {
         if (step < path.length) step++;
       }
 
+      if (trailLength > 0) {
+        if (moved) {
+          trail.push(ballX, ballY);
+          while (trail.length > trailLength * 2) trail.splice(0, 2);
+        } else if (trail.length) {
+          // Reel the thread in when the ball stops, so a parked ball ends up
+          // bare rather than wearing a frozen tail.
+          trail.splice(0, 2);
+        }
+      }
+
+      if (wantsExit && !solved && moved) {
+        const reached = Math.hypot(ballX - exitPointX, ballY - exitPointY);
+        // Anywhere inside the marker counts. Asking for the exact center
+        // would turn the last inch into pixel-hunting.
+        if (reached < Math.min(cell * 0.3, 13) + radius * 0.5) {
+          solved = true;
+          paintExit();
+          root.dispatchEvent(
+            new CustomEvent("mazefield:solved", { bubbles: true }),
+          );
+        }
+      }
+
       return moved;
     }
 
@@ -525,12 +631,22 @@ const {
         ctx.clearRect(0, 0, width, height);
         ctx.drawImage(backing, 0, 0, backing.width, backing.height, 0, 0, width, height);
       } else {
-        // Restore only the band the ball crossed, straight off the backing
-        // canvas, so the maze underneath never has to be re-stroked.
-        const x0 = Math.min(lastDrawX, ballX) - pad;
-        const y0 = Math.min(lastDrawY, ballY) - pad;
-        const w = Math.abs(ballX - lastDrawX) + pad * 2;
-        const h = Math.abs(ballY - lastDrawY) + pad * 2;
+        // Restore only the band the ball and its trail cover, straight off the
+        // backing canvas, so the maze underneath never has to be re-stroked.
+        let minX = Math.min(lastDrawX, ballX);
+        let minY = Math.min(lastDrawY, ballY);
+        let maxX = Math.max(lastDrawX, ballX);
+        let maxY = Math.max(lastDrawY, ballY);
+        for (let i = 0; i < trail.length; i += 2) {
+          if (trail[i] < minX) minX = trail[i];
+          if (trail[i] > maxX) maxX = trail[i];
+          if (trail[i + 1] < minY) minY = trail[i + 1];
+          if (trail[i + 1] > maxY) maxY = trail[i + 1];
+        }
+        const x0 = minX - pad;
+        const y0 = minY - pad;
+        const w = maxX - minX + pad * 2;
+        const h = maxY - minY + pad * 2;
         ctx.clearRect(x0, y0, w, h);
         ctx.drawImage(
           backing,
@@ -546,6 +662,7 @@ const {
       }
 
       if (glow > 0) paintGlow();
+      if (trail.length >= 4) paintTrail();
 
       ctx.fillStyle = ballColor;
       ctx.beginPath();
@@ -554,6 +671,30 @@ const {
 
       lastDrawX = ballX;
       lastDrawY = ballY;
+    }
+
+    /**
+     * The thread behind the ball: the corridors it actually came through,
+     * thinning and fading back toward the oldest point.
+     */
+    function paintTrail() {
+      const points = trail.length / 2;
+      ctx.strokeStyle = ballColor;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      for (let i = 0; i < points - 1; i++) {
+        const k = (i + 1) / points;
+        ctx.globalAlpha = k * k * 0.32;
+        ctx.lineWidth = radius * (0.25 + 0.65 * k);
+        ctx.beginPath();
+        ctx.moveTo(trail[i * 2], trail[i * 2 + 1]);
+        ctx.lineTo(trail[i * 2 + 2], trail[i * 2 + 3]);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      ctx.lineCap = "square";
+      ctx.lineJoin = "miter";
     }
 
     /**
@@ -614,7 +755,7 @@ const {
     function tick() {
       const moved = advance();
       drawBall();
-      if (!moved && step >= path.length) {
+      if (!moved && step >= path.length && trail.length === 0) {
         frame = 0;
         return;
       }

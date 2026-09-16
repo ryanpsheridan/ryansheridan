@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
-import CursorField from "../components/CursorField.astro";
+import MazeField from "../components/MazeField.astro";
 ---
 
 <Layout
@@ -10,15 +10,42 @@ import CursorField from "../components/CursorField.astro";
   description="That page doesn't exist."
 >
   <Nav />
-  <CursorField variant="compass" region="vignette" regionScale={0.7} fixed />
+  <MazeField
+    cell={34}
+    color="#ebebeb"
+    activeColor="#d8d8d8"
+    ballRadius={5}
+    speed={7}
+    glow={170}
+    trail={48}
+    exit
+    exitX={0.78}
+    exitY={0.56}
+    exitLabel="EXIT"
+    fixed
+  />
   <main class="not-found">
     <div class="nf-inner">
-      <p class="nf-code">404</p>
-      <h1>This page doesn't exist.</h1>
+      <p class="nf-code">404 / dead end</p>
+      <h1>You've taken a wrong turn.</h1>
       <p class="nf-body">
-        The link may be out of date, or the page may have moved. The work is
-        all still here.
+        This page doesn't exist. The link may be out of date, or the page may
+        have moved. The work is all still here, two doors down.
       </p>
+
+      <!-- Hover-only: on touch and under reduced motion the maze never
+           renders, so an instruction for driving it would be nonsense. -->
+      <p class="nf-play" data-play>
+        <span class="nf-play-dot" aria-hidden="true"></span>
+        <span class="nf-play-copy">
+          The dot follows your cursor, but only through the corridors. See if
+          you can walk it to the exit.
+        </span>
+      </p>
+      <p class="nf-solved" data-solved role="status">
+        Out. Nicely done. The way home is right below you.
+      </p>
+
       <div class="nf-links">
         <a href="/work" class="nf-button">View all work</a>
         <a href="/" class="nf-plain">Back home <span class="arrow">&nearr;</span></a>
@@ -27,6 +54,29 @@ import CursorField from "../components/CursorField.astro";
   </main>
   <Footer />
 </Layout>
+
+<script>
+  // The maze fires this once, when the ball reaches the exit. Everything on
+  // the page works without it; this is the reward for playing along.
+  function armMaze() {
+    const solved = document.querySelector<HTMLElement>("[data-solved]");
+    const play = document.querySelector<HTMLElement>("[data-play]");
+    if (!solved || solved.dataset.armed === "true") return;
+    solved.dataset.armed = "true";
+
+    document.addEventListener(
+      "mazefield:solved",
+      () => {
+        play?.classList.add("is-done");
+        solved.classList.add("is-shown");
+      },
+      { once: true },
+    );
+  }
+
+  armMaze();
+  document.addEventListener("astro:page-load", armMaze);
+</script>
 
 <style>
   .not-found {
@@ -64,7 +114,55 @@ import CursorField from "../components/CursorField.astro";
     font-size: var(--text-base);
     line-height: 1.8;
     color: var(--color-text-muted);
+    margin-bottom: var(--space-5);
+  }
+
+  .nf-play {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    max-width: 440px;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2);
+    transition: opacity 0.4s ease;
+  }
+
+  /* The instruction has served its purpose once the exit is reached, but
+     removing it would reflow the copy under the cursor mid-play. */
+  .nf-play.is-done {
+    opacity: 0.35;
+  }
+
+  .nf-play-dot {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-text);
+    transform: translateY(-1px);
+  }
+
+  .nf-solved {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+    color: var(--color-text);
     margin-bottom: var(--space-6);
+    /* Laid out from the start, just invisible: revealing it must not shove
+       the links down while someone is steering the dot at them. */
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .nf-solved.is-shown {
+    opacity: 1;
+    transform: none;
   }
 
   .nf-links {
@@ -106,6 +204,26 @@ import CursorField from "../components/CursorField.astro";
 
   .arrow {
     font-size: var(--text-xs);
+  }
+
+  /* Matches the cutoffs MazeField hides itself at. No maze, no game to
+     explain, and the copy closes back up around the missing line. */
+  @media (max-width: 640px), (hover: none), (pointer: coarse) {
+    .nf-play,
+    .nf-solved {
+      display: none;
+    }
+
+    .nf-body {
+      margin-bottom: var(--space-6);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nf-play,
+    .nf-solved {
+      display: none;
+    }
   }
 
   @media (max-width: 640px) {

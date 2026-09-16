@@ -21,9 +21,10 @@ import MazeField from "../components/MazeField.astro";
         way round to reach you.
       </p>
       <p class="intro note">
-        Test page only. Contact, About, and 404 still run the compass cursor
-        field. Walls top out at #d8d8d8, the same ceiling as that pattern, so
-        body text keeps 13.3:1 and muted text 3.0:1 if either lands on one.
+        The 404 page runs this pattern for real. Contact still uses the compass
+        cursor field. Walls top out at #d8d8d8, the same ceiling as that
+        pattern, so body text keeps 13.3:1 and muted text 3.0:1 if either lands
+        on one.
       </p>
     </header>
 
@@ -33,20 +34,21 @@ import MazeField from "../components/MazeField.astro";
         <MazeField />
       </div>
       <p class="caption">
-        56px rooms, 55% of dead ends braided back open. Braiding leaves loops in
+        44px rooms, 55% of dead ends braided back open. Braiding leaves loops in
         the maze, so the ball usually has a way around rather than one forced
-        route.
+        route. The thread behind the ball is the route it actually took.
       </p>
     </section>
 
     <section class="demo">
       <h2>Tighter rooms, quicker ball</h2>
       <div class="panel">
-        <MazeField cell={36} ballRadius={4} speed={7.5} glow={120} height="360px" />
+        <MazeField cell={28} ballRadius={4} speed={7.5} glow={120} height="360px" />
       </div>
       <p class="caption">
-        Smaller rooms read as texture rather than architecture, and the ball
-        covers ground fast enough that the corridors feel like a route.
+        28px rooms read as texture rather than architecture, and the ball covers
+        ground fast enough that the corridors feel like a route rather than a
+        slog.
       </p>
     </section>
 
@@ -59,6 +61,18 @@ import MazeField from "../components/MazeField.astro";
         Every dead end left in place. Exactly one route between any two rooms,
         so the ball's path is forced: it doubles back out of blind corridors and
         the travel reads as longer and more deliberate.
+      </p>
+    </section>
+
+    <section class="demo">
+      <h2>With a way out</h2>
+      <div class="panel">
+        <MazeField cell={34} exit exitX={0.82} exitY={0.5} height="360px" />
+      </div>
+      <p class="caption">
+        An exit gives the maze somewhere to get to. Walking the ball onto it
+        fires <code>mazefield:solved</code>, which bubbles, so the page around
+        it can make a small event of the win. This is what the 404 page runs.
       </p>
     </section>
 
