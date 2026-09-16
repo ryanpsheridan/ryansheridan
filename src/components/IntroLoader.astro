@@ -153,6 +153,16 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
     .intro-mark {
       display: none;
     }
+
+    /* Larger on a phone: the count is the only thing on the screen there,
+       since the field is disabled on devices without a cursor. */
+    .intro-num {
+      font-size: 21px;
+    }
+
+    .intro-pct {
+      font-size: 10.5px;
+    }
   }
 </style>
 
