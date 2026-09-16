@@ -1,0 +1,193 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import MazeField from "../components/MazeField.astro";
+---
+
+<Layout
+  title="Maze Field — Ryan Sheridan"
+  description="A generated maze background with a ball the cursor drags through it."
+>
+  <Nav />
+  <main class="maze-page">
+    <header class="page-head">
+      <h1>Maze field</h1>
+      <p class="intro">
+        A perfect maze carved by randomized depth-first search, drawn behind the
+        content. The ball routes to the room the cursor is in the way the maze
+        allows, threading the gaps between rows and columns and never crossing a
+        wall. Park the cursor on the far side of a wall and it takes the long
+        way round to reach you.
+      </p>
+      <p class="intro note">
+        Test page only. Contact, About, and 404 still run the compass cursor
+        field. Walls top out at #d8d8d8, the same ceiling as that pattern, so
+        body text keeps 13.3:1 and muted text 3.0:1 if either lands on one.
+      </p>
+    </header>
+
+    <section class="demo">
+      <h2>Default</h2>
+      <div class="panel">
+        <MazeField />
+      </div>
+      <p class="caption">
+        56px rooms, 55% of dead ends braided back open. Braiding leaves loops in
+        the maze, so the ball usually has a way around rather than one forced
+        route.
+      </p>
+    </section>
+
+    <section class="demo">
+      <h2>Tighter rooms, quicker ball</h2>
+      <div class="panel">
+        <MazeField cell={36} ballRadius={4} speed={7.5} glow={120} height="360px" />
+      </div>
+      <p class="caption">
+        Smaller rooms read as texture rather than architecture, and the ball
+        covers ground fast enough that the corridors feel like a route.
+      </p>
+    </section>
+
+    <section class="demo">
+      <h2>Perfect maze, no braiding</h2>
+      <div class="panel">
+        <MazeField cell={64} braid={0} speed={5} height="360px" />
+      </div>
+      <p class="caption">
+        Every dead end left in place. Exactly one route between any two rooms,
+        so the ball's path is forced: it doubles back out of blind corridors and
+        the travel reads as longer and more deliberate.
+      </p>
+    </section>
+
+    <section class="demo">
+      <h2>As a page background</h2>
+      <div class="panel overlay-panel">
+        <MazeField cell={48} class="overlay-maze" height="100%" />
+        <div class="overlay-content">
+          <p class="eyebrow">Contact</p>
+          <h3>Let's work together.</h3>
+          <p class="overlay-muted">
+            This paragraph uses the muted text color, the hardest case to keep
+            readable over the pattern. Run the ball underneath it to see the
+            walls at their darkest behind live text.
+          </p>
+        </div>
+      </div>
+      <p class="caption">
+        The same component behind content. It is marked aria-hidden and ignores
+        pointer events, so it never interferes with text or links. Set
+        <code>fixed</code> to pin it to the viewport behind a whole page.
+      </p>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .maze-page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--space-7) var(--page-padding) var(--space-8);
+  }
+
+  .page-head {
+    max-width: var(--content-width);
+    margin-bottom: var(--space-7);
+  }
+
+  h1 {
+    font-size: var(--text-3xl);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: var(--space-3);
+  }
+
+  .intro {
+    color: var(--color-text-muted);
+    font-size: var(--text-md);
+  }
+
+  .note {
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
+  }
+
+  .demo {
+    margin-bottom: var(--space-7);
+  }
+
+  .demo h2 {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .panel {
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    overflow: hidden;
+  }
+
+  .caption {
+    margin-top: var(--space-3);
+    max-width: var(--content-width);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .caption code {
+    font-family: var(--font-mono);
+    font-size: 0.92em;
+  }
+
+  .overlay-panel {
+    position: relative;
+    height: 380px;
+  }
+
+  .overlay-panel :global(.overlay-maze) {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .overlay-content {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-6);
+    max-width: 520px;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  .overlay-content h3 {
+    font-size: var(--text-2xl);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .overlay-muted {
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+</style>

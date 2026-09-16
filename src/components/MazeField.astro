@@ -1,0 +1,674 @@
+---
+/**
+ * MazeField — a generated maze drawn behind content, with a ball the pointer
+ * drags through it.
+ *
+ * The maze is a perfect maze carved by randomized depth-first search on a grid
+ * of `cell`px rooms, so every opening in it is a real opening: the gaps between
+ * rows and columns are the only way through, and the ball has to find them.
+ *
+ * The ball is not a cursor follower. It solves the maze toward the room the
+ * cursor is in, threading the gaps between rows and columns and never crossing
+ * a wall, which is what makes the pattern feel like a maze rather than a
+ * texture. Park the cursor on the far side of a wall and the ball takes the
+ * long way round to reach it.
+ *
+ * Walls top out at #d8d8d8, which holds 13.3:1 for body text (#111111) and
+ * 3.0:1 for muted text (#7a7a7a) if either lands on one, so the field can sit
+ * behind live copy. Walls near the ball lift slightly above that rest tone,
+ * which is the only part that moves once the ball settles.
+ *
+ * Blank for touch input and for people who prefer reduced motion, where it
+ * falls back to the maze alone with no ball.
+ */
+interface Props {
+  /** Room size, in px. Bigger rooms read as architecture, smaller as texture. */
+  cell?: number;
+  /** Wall tone at rest. Going below #d8d8d8 starts failing muted text. */
+  color?: string;
+  /** Wall tone for the rooms the ball is in. Stays behind text, so keep it light. */
+  activeColor?: string;
+  /** Wall stroke width, in px. */
+  lineWidth?: number;
+  /** The ball. */
+  ballColor?: string;
+  /** Ball radius, in px. Clamped so it always fits a corridor. */
+  ballRadius?: number;
+  /** Top speed, in px per frame. */
+  speed?: number;
+  /**
+   * How many dead ends get opened back up, 0..1. A perfect maze is all dead
+   * ends and the ball spends its time reversing; braiding a share of them
+   * leaves loops, so there is usually a way around.
+   */
+  braid?: number;
+  /** How far the ball lifts the wall tone around it, in px. 0 disables it. */
+  glow?: number;
+  /**
+   * Pin to the viewport instead of flowing in the layout, to run the maze
+   * behind a whole page.
+   */
+  fixed?: boolean;
+  /** CSS height, ignored when `fixed`. */
+  height?: string;
+  class?: string;
+}
+
+const {
+  cell = 56,
+  color = "#e4e4e4",
+  activeColor = "#d8d8d8",
+  lineWidth = 1,
+  ballColor = "#111111",
+  ballRadius = 6,
+  speed = 6,
+  braid = 0.55,
+  glow = 150,
+  fixed = false,
+  height = "420px",
+  class: className = "",
+} = Astro.props;
+---
+
+<div
+  class:list={["maze-field", { "is-fixed": fixed }, className]}
+  style={`--maze-field-height: ${height}`}
+  data-cell={cell}
+  data-color={color}
+  data-active-color={activeColor}
+  data-line-width={lineWidth}
+  data-ball-color={ballColor}
+  data-ball-radius={ballRadius}
+  data-speed={speed}
+  data-braid={braid}
+  data-glow={glow}
+  aria-hidden="true"
+>
+  <canvas></canvas>
+</div>
+
+<style>
+  .maze-field {
+    position: relative;
+    width: 100%;
+    height: var(--maze-field-height);
+    pointer-events: none;
+  }
+
+  .maze-field.is-fixed {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .maze-field canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* The ball is driven by a cursor, so the field has no job without one.
+     Hidden rather than skipped in script: display:none gives the canvas a
+     zero-sized box, which layout() bails out of, so nothing is measured or
+     drawn and it heals itself if the viewport grows past the cutoff. */
+  @media (max-width: 640px), (hover: none), (pointer: coarse) {
+    .maze-field {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const TAU = Math.PI * 2;
+
+  /**
+   * A maze on a cols x rows grid of rooms.
+   *
+   * Walls live on the edges between rooms, not in the rooms themselves:
+   *   v[col + row * (cols + 1)] is the wall left of room (col, row)
+   *   h[col + row * cols]       is the wall above room (col, row)
+   * so the outer boundary is just the first and last index of each run.
+   */
+  type Maze = {
+    cols: number;
+    rows: number;
+    v: Uint8Array;
+    h: Uint8Array;
+  };
+
+  function carve(cols: number, rows: number, braid: number): Maze {
+    const v = new Uint8Array((cols + 1) * rows).fill(1);
+    const h = new Uint8Array(cols * (rows + 1)).fill(1);
+    const seen = new Uint8Array(cols * rows);
+
+    // Randomized DFS. Iterative, because a viewport-sized maze is deep enough
+    // to blow a recursive one's stack.
+    const stack: number[] = [0];
+    seen[0] = 1;
+    const dirs = [0, 1, 2, 3];
+
+    while (stack.length) {
+      const here = stack[stack.length - 1];
+      const col = here % cols;
+      const row = (here / cols) | 0;
+
+      // Fisher-Yates on the four directions, so no direction is favored.
+      for (let i = 3; i > 0; i--) {
+        const j = (Math.random() * (i + 1)) | 0;
+        const t = dirs[i];
+        dirs[i] = dirs[j];
+        dirs[j] = t;
+      }
+
+      let moved = false;
+      for (let i = 0; i < 4; i++) {
+        const dir = dirs[i];
+        const nc = col + (dir === 1 ? 1 : dir === 3 ? -1 : 0);
+        const nr = row + (dir === 2 ? 1 : dir === 0 ? -1 : 0);
+        if (nc < 0 || nr < 0 || nc >= cols || nr >= rows) continue;
+        const next = nc + nr * cols;
+        if (seen[next]) continue;
+
+        if (dir === 0) h[col + row * cols] = 0;
+        else if (dir === 2) h[col + (row + 1) * cols] = 0;
+        else if (dir === 3) v[col + row * (cols + 1)] = 0;
+        else v[col + 1 + row * (cols + 1)] = 0;
+
+        seen[next] = 1;
+        stack.push(next);
+        moved = true;
+        break;
+      }
+
+      if (!moved) stack.pop();
+    }
+
+    if (braid > 0) braidDeadEnds(cols, rows, v, h, braid);
+    return { cols, rows, v, h };
+  }
+
+  /**
+   * Open a share of the dead ends back up. Interior walls only, so the maze
+   * stays sealed at its border and the ball can never wander off the grid.
+   */
+  function braidDeadEnds(
+    cols: number,
+    rows: number,
+    v: Uint8Array,
+    h: Uint8Array,
+    rate: number,
+  ) {
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const walls: Array<[Uint8Array, number]> = [];
+        if (h[col + row * cols]) walls.push([h, col + row * cols]);
+        if (h[col + (row + 1) * cols]) walls.push([h, col + (row + 1) * cols]);
+        if (v[col + row * (cols + 1)]) walls.push([v, col + row * (cols + 1)]);
+        if (v[col + 1 + row * (cols + 1)]) walls.push([v, col + 1 + row * (cols + 1)]);
+        if (walls.length !== 3) continue;
+        if (Math.random() > rate) continue;
+
+        // Only the walls with a room on the other side are candidates.
+        const inner = walls.filter(([arr, idx]) => {
+          if (arr === h) {
+            const r = (idx / cols) | 0;
+            return r > 0 && r < rows;
+          }
+          const c = idx % (cols + 1);
+          return c > 0 && c < cols;
+        });
+        if (!inner.length) continue;
+        const pick = inner[(Math.random() * inner.length) | 0];
+        pick[0][pick[1]] = 0;
+      }
+    }
+  }
+
+  function initMaze(root: HTMLElement) {
+    if (root.dataset.mazeReady === "true") return;
+    root.dataset.mazeReady = "true";
+
+    const canvas = root.querySelector("canvas");
+    if (!(canvas instanceof HTMLCanvasElement)) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const cell = Math.max(Number(root.dataset.cell) || 56, 24);
+    const color = root.dataset.color || "#e4e4e4";
+    const activeColor = root.dataset.activeColor || "#d8d8d8";
+    const lineWidth = Number(root.dataset.lineWidth) || 1;
+    const ballColor = root.dataset.ballColor || "#111111";
+    const speed = Number(root.dataset.speed) || 6;
+    const braid = Number(root.dataset.braid ?? 0.55);
+    const glow = Number(root.dataset.glow ?? 150);
+    // A ball wider than the corridor would wedge in every doorway.
+    const radius = Math.min(Number(root.dataset.ballRadius) || 6, cell * 0.28);
+    // Half the stroke plus the ball, so the ball stops against the wall face
+    // rather than overlapping it.
+    const clearance = radius + lineWidth / 2;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const wantsBall = canHover.matches && !reduceMotion.matches;
+
+    // The maze is static, so it gets drawn once to its own canvas and blitted
+    // back a rectangle at a time. Only the ball's neighborhood is ever redrawn.
+    const backing = document.createElement("canvas");
+    const bctx = backing.getContext("2d");
+    if (!bctx) return;
+
+    let maze: Maze | null = null;
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let originX = 0;
+    let originY = 0;
+
+    let ballX = 0;
+    let ballY = 0;
+    let targetX = 0;
+    let targetY = 0;
+    let lastDrawX = 0;
+    let lastDrawY = 0;
+    let aimed = false;
+    /** Rooms left to walk through, and how far along them the ball is. */
+    let path: number[] = [];
+    let step = 0;
+    let goalRoom = -1;
+    let frame = 0;
+    let visible = true;
+
+    function wallX(col: number) {
+      return originX + col * cell;
+    }
+    function wallY(row: number) {
+      return originY + row * cell;
+    }
+
+    function layout() {
+      const rect = root.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = rect.width;
+      height = rect.height;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      backing.width = canvas.width;
+      backing.height = canvas.height;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      // Overshoot by a room on each side and center the grid, so the maze runs
+      // past the edges of the box instead of ending on a visible border.
+      const cols = Math.max(Math.ceil(width / cell) + 1, 2);
+      const rows = Math.max(Math.ceil(height / cell) + 1, 2);
+      originX = (width - cols * cell) / 2;
+      originY = (height - rows * cell) / 2;
+      maze = carve(cols, rows, braid);
+
+      paintMaze();
+      placeBall();
+      ctx.clearRect(0, 0, width, height);
+      ctx.drawImage(backing, 0, 0, backing.width, backing.height, 0, 0, width, height);
+      if (wantsBall) drawBall(true);
+    }
+
+    function paintMaze() {
+      if (!maze) return;
+      const { cols, rows, v, h } = maze;
+      bctx.clearRect(0, 0, width, height);
+      bctx.strokeStyle = color;
+      bctx.lineWidth = lineWidth;
+      bctx.lineCap = "square";
+      bctx.beginPath();
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col <= cols; col++) {
+          if (!v[col + row * (cols + 1)]) continue;
+          // Half-pixel offset lands a 1px stroke on the pixel, not across two.
+          const x = Math.round(wallX(col)) + 0.5;
+          bctx.moveTo(x, wallY(row));
+          bctx.lineTo(x, wallY(row + 1));
+        }
+      }
+      for (let row = 0; row <= rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          if (!h[col + row * cols]) continue;
+          const y = Math.round(wallY(row)) + 0.5;
+          bctx.moveTo(wallX(col), y);
+          bctx.lineTo(wallX(col + 1), y);
+        }
+      }
+      bctx.stroke();
+    }
+
+    /** Drop the ball in the room under the center of the box. */
+    function placeBall() {
+      if (!maze) return;
+      const col = Math.min(maze.cols - 1, Math.max(0, Math.floor((width / 2 - originX) / cell)));
+      const row = Math.min(maze.rows - 1, Math.max(0, Math.floor((height / 2 - originY) / cell)));
+      ballX = lastDrawX = wallX(col) + cell / 2;
+      ballY = lastDrawY = wallY(row) + cell / 2;
+      if (!aimed) {
+        targetX = ballX;
+        targetY = ballY;
+      }
+      // The maze is recarved on every resize, so any route through the old one
+      // is meaningless now.
+      path = [];
+      step = 0;
+      goalRoom = -1;
+      if (aimed) replan();
+    }
+
+    function roomAt(x: number, y: number) {
+      if (!maze) return 0;
+      const col = Math.min(maze.cols - 1, Math.max(0, Math.floor((x - originX) / cell)));
+      const row = Math.min(maze.rows - 1, Math.max(0, Math.floor((y - originY) / cell)));
+      return col + row * maze.cols;
+    }
+
+    function roomCenterX(room: number) {
+      return maze ? wallX(room % maze.cols) + cell / 2 : 0;
+    }
+    function roomCenterY(room: number) {
+      return maze ? wallY((room / maze.cols) | 0) + cell / 2 : 0;
+    }
+
+    /** True if the wall between a room and its neighbor in `dir` is open. */
+    function open(col: number, row: number, dir: number) {
+      if (!maze) return false;
+      const { cols, v, h } = maze;
+      if (dir === 0) return !h[col + row * cols];
+      if (dir === 2) return !h[col + (row + 1) * cols];
+      if (dir === 3) return !v[col + row * (cols + 1)];
+      return !v[col + 1 + row * (cols + 1)];
+    }
+
+    /**
+     * Shortest route from one room to another through the open walls only, as
+     * a list of rooms. This is the whole point of the pattern: the ball never
+     * crosses a wall, it goes the way the maze allows, so a cursor two rooms
+     * away across a wall sends it the long way round. Breadth-first over a few
+     * hundred rooms is cheap enough to redo whenever the cursor changes room.
+     */
+    function route(from: number, to: number) {
+      if (!maze || from === to) return [];
+      const { cols, rows } = maze;
+      const count = cols * rows;
+      const prev = new Int32Array(count).fill(-1);
+      const queue = new Int32Array(count);
+      let head = 0;
+      let tail = 0;
+      queue[tail++] = from;
+      prev[from] = from;
+
+      while (head < tail) {
+        const here = queue[head++];
+        if (here === to) break;
+        const col = here % cols;
+        const row = (here / cols) | 0;
+
+        for (let dir = 0; dir < 4; dir++) {
+          const nc = col + (dir === 1 ? 1 : dir === 3 ? -1 : 0);
+          const nr = row + (dir === 2 ? 1 : dir === 0 ? -1 : 0);
+          if (nc < 0 || nr < 0 || nc >= cols || nr >= rows) continue;
+          if (!open(col, row, dir)) continue;
+          const next = nc + nr * cols;
+          if (prev[next] !== -1) continue;
+          prev[next] = here;
+          queue[tail++] = next;
+        }
+      }
+
+      if (prev[to] === -1) return [];
+      const out: number[] = [];
+      for (let at = to; at !== from; at = prev[at]) out.push(at);
+      return out.reverse();
+    }
+
+    function replan() {
+      if (!maze) return;
+      const goal = roomAt(targetX, targetY);
+      if (goal === goalRoom && path.length) return;
+      goalRoom = goal;
+      path = route(roomAt(ballX, ballY), goal);
+      step = 0;
+    }
+
+    /**
+     * A point inside a room, kept off its walls and inside the visible box.
+     *
+     * The grid runs a room past each edge so the maze doesn't end on a visible
+     * border, which leaves the outer rooms centered partly off-canvas. Aiming
+     * at a raw center out there would walk the ball off the edge and back,
+     * which reads as a glitch, so every aim point is pulled into the overlap
+     * of its room and the box. A point moved this way is still inside the same
+     * room, so the leg into it still passes through an open wall.
+     */
+    function holdIn(room: number, x: number, y: number): [number, number] {
+      if (!maze) return [x, y];
+      const pad = clearance + 1;
+      const left = wallX(room % maze.cols);
+      const top = wallY((room / maze.cols) | 0);
+
+      const loX = Math.max(left + pad, clearance);
+      const hiX = Math.min(left + cell - pad, width - clearance);
+      const loY = Math.max(top + pad, clearance);
+      const hiY = Math.min(top + cell - pad, height - clearance);
+
+      return [
+        loX > hiX ? (loX + hiX) / 2 : Math.min(Math.max(x, loX), hiX),
+        loY > hiY ? (loY + hiY) / 2 : Math.min(Math.max(y, loY), hiY),
+      ];
+    }
+
+    /**
+     * Where the ball is heading right now: the next room on the route, or,
+     * once it is in the cursor's room, the cursor itself.
+     */
+    function aim(): [number, number] {
+      if (step < path.length) {
+        const room = path[step];
+        return holdIn(room, roomCenterX(room), roomCenterY(room));
+      }
+      if (goalRoom < 0) return [ballX, ballY];
+      return holdIn(goalRoom, targetX, targetY);
+    }
+
+    /**
+     * Run down the route at a constant speed, spending the frame's budget
+     * across as many waypoints as it reaches. Two room centers on the route
+     * are always separated by an open wall, so a straight line between them
+     * is always inside the maze.
+     */
+    function advance() {
+      let budget = speed;
+      let moved = false;
+
+      while (budget > 0.01) {
+        const [ax, ay] = aim();
+        const dx = ax - ballX;
+        const dy = ay - ballY;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist < 0.4) {
+          if (step < path.length) {
+            step++;
+            continue;
+          }
+          break;
+        }
+
+        // Ease down on the last leg so the ball settles under the cursor
+        // rather than snapping to a stop against it.
+        const pace = step < path.length ? budget : Math.min(budget, Math.max(dist * 0.2, 0.5));
+        const move = Math.min(dist, pace);
+        ballX += (dx / dist) * move;
+        ballY += (dy / dist) * move;
+        budget -= move;
+        moved = true;
+        if (move < dist) break;
+        if (step < path.length) step++;
+      }
+
+      return moved;
+    }
+
+    function drawBall(full = false) {
+      // Wide enough to cover the glow, which lights whole wall segments and so
+      // reaches half a room past its own radius.
+      const pad = Math.max(glow + cell, radius * 4) + 6;
+      if (full) {
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(backing, 0, 0, backing.width, backing.height, 0, 0, width, height);
+      } else {
+        // Restore only the band the ball crossed, straight off the backing
+        // canvas, so the maze underneath never has to be re-stroked.
+        const x0 = Math.min(lastDrawX, ballX) - pad;
+        const y0 = Math.min(lastDrawY, ballY) - pad;
+        const w = Math.abs(ballX - lastDrawX) + pad * 2;
+        const h = Math.abs(ballY - lastDrawY) + pad * 2;
+        ctx.clearRect(x0, y0, w, h);
+        ctx.drawImage(
+          backing,
+          x0 * dpr,
+          y0 * dpr,
+          w * dpr,
+          h * dpr,
+          x0,
+          y0,
+          w,
+          h,
+        );
+      }
+
+      if (glow > 0) paintGlow();
+
+      ctx.fillStyle = ballColor;
+      ctx.beginPath();
+      ctx.arc(ballX, ballY, radius, 0, TAU);
+      ctx.fill();
+
+      lastDrawX = ballX;
+      lastDrawY = ballY;
+    }
+
+    /**
+     * Re-stroke the walls around the ball in the active tone, fading out with
+     * distance, so the ball reads as lighting the corridor it is in.
+     */
+    function paintGlow() {
+      if (!maze) return;
+      const { cols, rows, v, h } = maze;
+      const span = Math.ceil(glow / cell);
+      const c0 = Math.max(0, Math.floor((ballX - originX) / cell) - span);
+      const c1 = Math.min(cols, Math.floor((ballX - originX) / cell) + span);
+      const r0 = Math.max(0, Math.floor((ballY - originY) / cell) - span);
+      const r1 = Math.min(rows, Math.floor((ballY - originY) / cell) + span);
+
+      ctx.strokeStyle = activeColor;
+      ctx.lineWidth = lineWidth;
+      ctx.lineCap = "square";
+
+      for (let row = r0; row <= r1; row++) {
+        for (let col = c0; col <= c1; col++) {
+          if (row < rows && v[col + row * (cols + 1)]) {
+            const x = Math.round(wallX(col)) + 0.5;
+            const y = wallY(row);
+            const a = falloff(x, y + cell / 2);
+            if (a > 0.02) {
+              ctx.globalAlpha = a;
+              ctx.beginPath();
+              ctx.moveTo(x, y);
+              ctx.lineTo(x, y + cell);
+              ctx.stroke();
+            }
+          }
+          if (col < cols && h[col + row * cols]) {
+            const y = Math.round(wallY(row)) + 0.5;
+            const x = wallX(col);
+            const a = falloff(x + cell / 2, y);
+            if (a > 0.02) {
+              ctx.globalAlpha = a;
+              ctx.beginPath();
+              ctx.moveTo(x, y);
+              ctx.lineTo(x + cell, y);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function falloff(x: number, y: number) {
+      const d = Math.hypot(x - ballX, y - ballY);
+      if (d >= glow) return 0;
+      const k = 1 - d / glow;
+      return k * k * (3 - 2 * k);
+    }
+
+    function tick() {
+      const moved = advance();
+      drawBall();
+      if (!moved && step >= path.length) {
+        frame = 0;
+        return;
+      }
+      frame = requestAnimationFrame(tick);
+    }
+
+    function start() {
+      if (frame === 0 && visible && wantsBall) frame = requestAnimationFrame(tick);
+    }
+
+    function onPointerMove(event: PointerEvent) {
+      if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
+      const rect = root.getBoundingClientRect();
+      // Clamped to the box: a cursor out in the margin still reads as a
+      // direction to head in rather than parking the ball.
+      targetX = Math.min(Math.max(event.clientX - rect.left, 0), rect.width);
+      targetY = Math.min(Math.max(event.clientY - rect.top, 0), rect.height);
+      aimed = true;
+      replan();
+      start();
+    }
+
+    if (!wantsBall) {
+      layout();
+      new ResizeObserver(() => layout()).observe(root);
+      return;
+    }
+
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+
+    new ResizeObserver(() => layout()).observe(root);
+
+    new IntersectionObserver(
+      (entries) => {
+        visible = entries[0].isIntersecting;
+        if (!visible && frame) {
+          cancelAnimationFrame(frame);
+          frame = 0;
+        } else if (visible) {
+          start();
+        }
+      },
+      { rootMargin: "100px" },
+    ).observe(root);
+
+    layout();
+  }
+
+  function initAll() {
+    document
+      .querySelectorAll<HTMLElement>(".maze-field")
+      .forEach((el) => initMaze(el));
+  }
+
+  initAll();
+  document.addEventListener("astro:page-load", initAll);
+</script>
