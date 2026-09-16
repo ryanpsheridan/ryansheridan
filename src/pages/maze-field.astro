@@ -71,8 +71,10 @@ import MazeField from "../components/MazeField.astro";
       </div>
       <p class="caption">
         An exit gives the maze somewhere to get to. Walking the ball onto it
-        fires <code>mazefield:solved</code>, which bubbles, so the page around
-        it can make a small event of the win. This is what the 404 page runs.
+        dissolves the maze outward from that point and fires
+        <code>mazefield:solved</code>, which bubbles and carries the exit's
+        position, so the page can stand something real where the ring was. The
+        404 page puts a door home there. Reload to carve a new one.
       </p>
     </section>
 

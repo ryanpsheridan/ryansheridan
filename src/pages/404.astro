@@ -40,8 +40,55 @@ import MazeField from "../components/MazeField.astro";
       </div>
     </div>
   </main>
+
+  <!--
+    What the exit turns into. Hidden until the maze is solved, so it is out of
+    the tab order for everyone who never plays, and the page works exactly the
+    same without it: it is a second way to a link that is already on the page.
+  -->
+  <a class="nf-door" data-door href="/" hidden>
+    <span class="nf-door-label">Home</span>
+    <span class="nf-door-arrow" aria-hidden="true">&nearr;</span>
+  </a>
+
   <Footer />
 </Layout>
+
+<script>
+  /**
+   * The maze dissolves itself when the ball reaches the exit and tells us
+   * where the exit was. Put the door there, and let the walls finish clearing
+   * before it arrives, so the two read as one movement rather than a swap.
+   */
+  function armDoor() {
+    const door = document.querySelector<HTMLAnchorElement>("[data-door]");
+    if (!door || door.dataset.armed === "true") return;
+    door.dataset.armed = "true";
+
+    document.addEventListener(
+      "mazefield:solved",
+      (event) => {
+        const detail = (event as CustomEvent).detail || {};
+        if (typeof detail.x !== "number" || typeof detail.y !== "number") return;
+
+        door.style.left = `${detail.x}px`;
+        door.style.top = `${detail.y}px`;
+        door.hidden = false;
+
+        window.setTimeout(
+          // Two frames: one for the browser to lay the door out, one for the
+          // transition to have a state to run from.
+          () => requestAnimationFrame(() => door.classList.add("is-shown")),
+          Math.max(Number(detail.settleIn) || 0, 0) * 0.62,
+        );
+      },
+      { once: true },
+    );
+  }
+
+  armDoor();
+  document.addEventListener("astro:page-load", armDoor);
+</script>
 
 <style>
   .not-found {
@@ -121,6 +168,59 @@ import MazeField from "../components/MazeField.astro";
 
   .arrow {
     font-size: var(--text-xs);
+  }
+
+  /* Fixed, because the field it replaces was fixed: the door stands where the
+     ring stood. Centered on that point rather than hung off it. */
+  .nf-door {
+    position: fixed;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    width: 104px;
+    height: 104px;
+    margin: -52px 0 0 -52px;
+    border: 1px solid var(--color-text);
+    border-radius: 50%;
+    background: var(--color-bg);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text);
+    opacity: 0;
+    transform: scale(0.82);
+    transition:
+      opacity 0.55s ease,
+      transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+      background 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .nf-door.is-shown {
+    opacity: 1;
+    transform: none;
+  }
+
+  .nf-door:hover,
+  .nf-door:focus-visible {
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  .nf-door-arrow {
+    font-size: 11px;
+    opacity: 0.7;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nf-door {
+      transition: opacity 0.2s ease;
+      transform: none;
+    }
   }
 
   @media (max-width: 640px) {

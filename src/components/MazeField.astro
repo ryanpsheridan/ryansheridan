@@ -14,8 +14,9 @@
  * long way round to reach it.
  *
  * A trail marks the corridors the ball came through, and an optional `exit`
- * gives the maze somewhere to get to: reaching it fires `mazefield:solved`,
- * which bubbles, so a page can make a small event of it.
+ * gives the maze somewhere to get to. Reaching it dissolves the maze outward
+ * from that point and fires `mazefield:solved`, which bubbles and carries the
+ * exit's position, so the page can put something real where the ring was.
  *
  * Walls top out at #d8d8d8, which holds 13.3:1 for body text (#111111) and
  * 3.0:1 for muted text (#7a7a7a) if either lands on one, so the field can sit
@@ -166,6 +167,12 @@ const {
 
   /** How far past the full-strength oval the fade takes to reach nothing. */
   const FADE_RUN = 0.25;
+
+  /** How long the maze takes to clear once the ball reaches the exit, in ms. */
+  const DISSOLVE_MS = 1150;
+
+  /** Width of the dissolve's leading edge, in px. A hard edge reads as a wipe. */
+  const DISSOLVE_EDGE = 130;
 
   function smoothstep(k: number) {
     if (k <= 0) return 0;
@@ -334,6 +341,11 @@ const {
     let exitPointX = 0;
     let exitPointY = 0;
     let solved = false;
+    let clearing = false;
+    let clearedAt = 0;
+    /** Once the maze is gone it stays gone, including across a resize. */
+    let cleared = false;
+    let ballAlpha = 1;
     /** Rooms left to walk through, and how far along them the ball is. */
     let path: number[] = [];
     let step = 0;
@@ -368,6 +380,13 @@ const {
       originX = (width - cols * cell) / 2;
       originY = (height - rows * cell) / 2;
       maze = carve(cols, rows, braid);
+
+      // A solved maze does not come back on a resize. Redrawing it would
+      // rebuild the walls someone just cleared.
+      if (cleared) {
+        ctx.clearRect(0, 0, width, height);
+        return;
+      }
 
       paintMaze();
       placeExit();
@@ -634,6 +653,7 @@ const {
      * is always inside the maze.
      */
     function advance() {
+      if (clearing || cleared) return false;
       let budget = speed;
       let moved = false;
 
@@ -680,9 +700,25 @@ const {
         // would turn the last inch into pixel-hunting.
         if (reached < Math.min(cell * 0.3, 13) + radius * 0.5) {
           solved = true;
+          clearing = true;
+          clearedAt = performance.now();
+          // The thread is part of the maze, and the maze is on its way out.
+          trail.length = 0;
           paintExit();
+
+          const rect = root.getBoundingClientRect();
           root.dispatchEvent(
-            new CustomEvent("mazefield:solved", { bubbles: true }),
+            new CustomEvent("mazefield:solved", {
+              bubbles: true,
+              detail: {
+                // Viewport coordinates, so a page can place something fixed
+                // exactly where the ring was.
+                x: rect.left + exitPointX,
+                y: rect.top + exitPointY,
+                // How long to wait for the walls to finish clearing.
+                settleIn: DISSOLVE_MS,
+              },
+            }),
           );
         }
       }
@@ -819,7 +855,72 @@ const {
       return k * k * (3 - 2 * k);
     }
 
+    /**
+     * One frame of the maze clearing: blit the whole field back, then punch a
+     * growing hole in it centered on the exit. Composited rather than redrawn
+     * so the walls leave in the pattern they were drawn in, with a soft edge
+     * that reads as the maze giving way rather than a wipe passing over it.
+     */
+    function drawClearing(t: number) {
+      // Ease out, so it opens fast and finishes gently.
+      const eased = 1 - (1 - t) * (1 - t);
+      const far = Math.max(
+        Math.hypot(exitPointX, exitPointY),
+        Math.hypot(width - exitPointX, exitPointY),
+        Math.hypot(exitPointX, height - exitPointY),
+        Math.hypot(width - exitPointX, height - exitPointY),
+      );
+      const r = eased * (far + DISSOLVE_EDGE);
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.drawImage(backing, 0, 0, backing.width, backing.height, 0, 0, width, height);
+
+      const hole = ctx.createRadialGradient(
+        exitPointX, exitPointY, Math.max(r - DISSOLVE_EDGE, 0),
+        exitPointX, exitPointY, Math.max(r, 0.01),
+      );
+      hole.addColorStop(0, "rgba(0, 0, 0, 1)");
+      hole.addColorStop(1, "rgba(0, 0, 0, 0)");
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.fillStyle = hole;
+      ctx.fillRect(0, 0, width, height);
+      ctx.globalCompositeOperation = "source-over";
+
+      // The ball goes with the corridors it was running; leaving it behind on
+      // a blank page would make it read as a stray mark.
+      ballAlpha = 1 - smoothstep((t - 0.45) / 0.55);
+      if (ballAlpha > 0.004) {
+        ctx.globalAlpha = ballAlpha;
+        ctx.fillStyle = ballColor;
+        ctx.beginPath();
+        ctx.arc(ballX, ballY, radius, 0, TAU);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    function finishClearing() {
+      clearing = false;
+      cleared = true;
+      // Empty the backing too: every later blit would otherwise restore the
+      // maze a rectangle at a time.
+      bctx.clearRect(0, 0, width, height);
+      ctx.clearRect(0, 0, width, height);
+    }
+
     function tick() {
+      if (clearing) {
+        const t = Math.min((performance.now() - clearedAt) / DISSOLVE_MS, 1);
+        drawClearing(t);
+        if (t >= 1) {
+          finishClearing();
+          frame = 0;
+          return;
+        }
+        frame = requestAnimationFrame(tick);
+        return;
+      }
+
       const moved = advance();
       drawBall();
       if (!moved && step >= path.length && trail.length === 0) {
@@ -830,10 +931,12 @@ const {
     }
 
     function start() {
+      if (cleared) return;
       if (frame === 0 && visible && wantsBall) frame = requestAnimationFrame(tick);
     }
 
     function onPointerMove(event: PointerEvent) {
+      if (cleared || clearing) return;
       if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
       const rect = root.getBoundingClientRect();
       // Clamped to the box: a cursor out in the margin still reads as a
