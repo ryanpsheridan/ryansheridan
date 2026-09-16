@@ -21,7 +21,7 @@ import MazeField from "../components/MazeField.astro";
     trail={48}
     fade={0.8}
     exit
-    exitOn="[data-exit-slot]"
+    exitOn="[data-links]"
     exitLabel="EXIT"
     fixed
   />
@@ -36,13 +36,12 @@ import MazeField from "../components/MazeField.astro";
 
       <!--
         Where the maze runs, these start hidden and the exit ring is drawn on
-        the primary button's box, so solving the maze puts the buttons exactly
+        this row's own box, so solving the maze hands the pair back centered on
         where the ring was. They keep their space either way: hidden by
         visibility, never display, or the ring would have nothing to sit on.
       -->
       <div class="nf-links" data-links>
-        <span class="nf-plain nf-spacer" aria-hidden="true">Back home <span class="arrow">&nearr;</span></span>
-        <a href="/work" class="nf-button" data-exit-slot>View all work</a>
+        <a href="/work" class="nf-button">View all work</a>
         <a href="/" class="nf-plain">Back home <span class="arrow">&nearr;</span></a>
       </div>
     </div>
@@ -134,20 +133,6 @@ import MazeField from "../components/MazeField.astro";
   }
 
   /*
-    A mirror of the "Back home" link, standing on the other side of the button.
-    Centering this row centers the pair, which leaves the button itself left of
-    the page by half the other link; the exit ring stands on the button's box,
-    so that offset reads as a ring that missed the middle. Balancing the row
-    puts the button, and therefore the ring, on the center line.
-
-    It carries the same text through the same class so it measures the same,
-    rather than guessing at a width that the copy or the webfont would date.
-  */
-  .nf-spacer {
-    display: none;
-  }
-
-  /*
     Only where the maze actually renders: a pointer that hovers, a viewport
     wide enough, and no reduced-motion preference. Anywhere else there is no
     game to solve, so the buttons are simply there. A browser that doesn't
@@ -171,14 +156,6 @@ import MazeField from "../components/MazeField.astro";
       visibility: visible;
       transform: none;
       transition-delay: 0s;
-    }
-
-    /* Only here, because only here is there a ring to line the button up
-       with. Its own visibility beats the one it would inherit when the row
-       is shown, so it holds its space without ever being drawn. */
-    .nf-spacer {
-      display: block;
-      visibility: hidden;
     }
   }
 

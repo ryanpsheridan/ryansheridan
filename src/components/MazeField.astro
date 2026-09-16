@@ -537,11 +537,11 @@ const {
       anchoredY = y;
 
       // The anchor picks the room; the room places the ring. Holding the
-      // anchor's own point would leave the ring wherever the button's center
-      // happened to fall inside that room, usually off to one side of the
-      // corridor and sometimes hard against a wall. Centering it in the room
-      // puts it in the middle of the path, which is where a way out reads as
-      // deliberate rather than dropped.
+      // anchor's own point would leave the ring wherever that point happened
+      // to fall inside the room, usually off to one side of the corridor and
+      // sometimes hard against a wall. Centering it in the room puts it in the
+      // middle of the path, which is where a way out reads as deliberate
+      // rather than dropped.
       const room = roomAt(x, y);
       [exitPointX, exitPointY] = holdIn(room, roomCenterX(room), roomCenterY(room));
       paintExit();
