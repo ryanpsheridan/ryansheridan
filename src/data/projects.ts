@@ -297,8 +297,8 @@ export const projects: Project[] = [
   {
     slug: "figma-project-starter",
     title: "Figma Project Starter",
-    thumbnail: "/project-figma-starter-brand-modes.gif",
-    showOnHomepage: false,
+    thumbnail: "/skill-slash-command-animated-dark.svg",
+    showOnHomepage: true,
     tags: ["Claude Skill", "Automation", "Design System"],
     tools: ["Claude", "Figma", "Asana"],
     client: "Commerce (Internal)",
