@@ -89,18 +89,28 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
             window.setTimeout(prefetch, 1200);
           }
 
-          const observer = new IntersectionObserver(
-            (entries) => {
-              entries.forEach((entry) => {
-                if (!entry.isIntersecting) return;
-                reveal(entry.target as HTMLImageElement);
-                observer.unobserve(entry.target);
-              });
-            },
-            { threshold: 0.01 }
-          );
+          const observe = () => {
+            const observer = new IntersectionObserver(
+              (entries) => {
+                entries.forEach((entry) => {
+                  if (!entry.isIntersecting) return;
+                  const img = entry.target as HTMLImageElement;
+                  observer.unobserve(img);
+                  // On a paint boundary: handing an SVG its src mid-layout can
+                  // leave a mobile browser showing frame one and never starting.
+                  requestAnimationFrame(() => reveal(img));
+                });
+              },
+              { threshold: 0.01 }
+            );
 
-          animated.forEach((img) => observer.observe(img));
+            animated.forEach((img) => observer.observe(img));
+          };
+
+          // Wait for the page to settle, so an image that starts in view is
+          // revealed under the same conditions as one scrolled to later.
+          if (document.readyState === "complete") observe();
+          else window.addEventListener("load", observe, { once: true });
         }
       }
     </script>
