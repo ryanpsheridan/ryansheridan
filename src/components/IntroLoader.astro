@@ -35,7 +35,6 @@ const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props
   <div class="intro-count" aria-hidden="true">
     <span class="intro-num" id="intro-count">0</span><span class="intro-pct">%</span>
   </div>
-  <span class="intro-mark">ryan sheridan design</span>
 </div>
 
 <script is:inline>
@@ -78,14 +77,17 @@ const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props
     z-index: 60;
   }
 
-  /* The nav sits above the scrim on its own z-index. Fade it in with the
-     page instead, so the intro is one uninterrupted surface. */
-  html.intro-open nav {
+  /* The nav sits above the scrim on its own z-index, so the real wordmark can
+     carry the intro instead of a copy painted onto the scrim. It never fades
+     or moves, which means the hand-off costs it nothing. The hamburger is the
+     one piece held back, arriving a beat after the scrim clears so the nav
+     finishes assembling rather than snapping into place. */
+  html.intro-open .hamburger {
     opacity: 0;
   }
 
-  nav {
-    transition: opacity 0.5s ease 0.2s;
+  .hamburger {
+    transition: opacity 0.5s ease 0.35s;
   }
 </style>
 
@@ -137,23 +139,7 @@ const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props
     margin-left: 0.1em;
   }
 
-  .intro-mark {
-    position: absolute;
-    left: var(--page-padding);
-    bottom: var(--page-padding);
-    z-index: 70;
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    line-height: 1;
-    pointer-events: none;
-  }
-
   @media (max-width: 640px) {
-    .intro-mark {
-      display: none;
-    }
-
     /* Centered on a phone: the count is the only thing on the screen there,
        since the field is disabled on devices without a cursor. */
     .intro-count {
