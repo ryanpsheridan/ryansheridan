@@ -154,8 +154,16 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
       display: none;
     }
 
-    /* Larger on a phone: the count is the only thing on the screen there,
+    /* Centered on a phone: the count is the only thing on the screen there,
        since the field is disabled on devices without a cursor. */
+    .intro-count {
+      right: auto;
+      bottom: auto;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
     .intro-num {
       font-size: 31.5px;
     }
