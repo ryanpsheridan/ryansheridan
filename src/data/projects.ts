@@ -315,13 +315,6 @@ export const projects: Project[] = [
         body: `<p>The skill runs on a simple structure: a four-page starter template (Working, a divider, Cover, Archive), Working first so the file opens straight into active work.</p>`,
       },
       {
-        type: "imageGrid",
-        framed: true,
-        images: [
-          { src: "/figma-file-starter-layers.png", caption: "The same four-page structure — Working, a divider, Cover, Archive — on every file" },
-        ],
-      },
-      {
         type: "text",
         body: `<p>Connect Figma and Asana once in Claude, then start a new chat and either type /figma-project-starter, drop in an Asana link, or just ask in plain language, something like "here's my ticket, can you set up a Figma file for this."</p>`,
       },
