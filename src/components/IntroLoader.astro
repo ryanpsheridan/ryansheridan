@@ -86,6 +86,14 @@ const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props
     opacity: 0;
   }
 
+  /* The nav outranks the scrim, and its opaque background would paint over the
+     count now that the count sits on the nav row. The scrim behind it is the
+     same colour, so dropping the background for the duration costs nothing and
+     the nav's own children keep their place above it. */
+  html.intro-open nav {
+    background: transparent;
+  }
+
   .hamburger {
     transition: opacity 0.5s ease 0.35s;
   }
@@ -108,11 +116,20 @@ const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props
 
   .intro-count {
     position: absolute;
+    /* Centered on the nav row, so the count sits between the wordmark and the
+       spot the hamburger will take. Spanning the page padding rather than
+       using left: 50% puts it on the nav's own centre line, which the
+       scrollbar gutter would otherwise shift it off. The offset is the nav's
+       own construction: its 18px padding plus half the 32px hamburger. Not
+       --nav-height, which reads 74px against a row that measures 68px. */
+    top: calc(18px + 16px);
+    left: var(--page-padding);
     right: var(--page-padding);
-    bottom: var(--page-padding);
+    transform: translateY(-50%);
     z-index: 70;
     display: flex;
     align-items: baseline;
+    justify-content: center;
     pointer-events: none;
     color: var(--color-text);
   }
