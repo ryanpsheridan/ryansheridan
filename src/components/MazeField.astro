@@ -394,6 +394,24 @@ const {
       const rows = Math.max(Math.ceil(height / cell) + 1, 2);
       originX = (width - cols * cell) / 2;
       originY = (height - rows * cell) / 2;
+
+      // Slide the columns so that one room center lands on the exit's anchor.
+      // The exit stands at the center of its room, and whether the middle of
+      // the box is a room center or a wall depends on how many columns happen
+      // to fit, so without this the ring sits half a room off the thing it is
+      // supposed to stand on at about half of all widths. The overshoot above
+      // is a whole room, which is exactly the slack a shift of at most half a
+      // room needs, so the maze still runs past both edges.
+      //
+      // Columns only. The rows would have to move with every scroll of a fixed
+      // field, and the maze would crawl behind the page; the anchor's own
+      // column does not move when the page scrolls.
+      const anchor = wantsExit ? anchorPoint() : null;
+      if (anchor) {
+        const steps = Math.round((anchor[0] - cell / 2 - originX) / cell);
+        originX = anchor[0] - cell / 2 - steps * cell;
+      }
+
       maze = carve(cols, rows, braid);
 
       // A solved maze does not come back on a resize. Redrawing it would
@@ -518,8 +536,14 @@ const {
       anchoredX = x;
       anchoredY = y;
 
+      // The anchor picks the room; the room places the ring. Holding the
+      // anchor's own point would leave the ring wherever the button's center
+      // happened to fall inside that room, usually off to one side of the
+      // corridor and sometimes hard against a wall. Centering it in the room
+      // puts it in the middle of the path, which is where a way out reads as
+      // deliberate rather than dropped.
       const room = roomAt(x, y);
-      [exitPointX, exitPointY] = holdIn(room, x, y);
+      [exitPointX, exitPointY] = holdIn(room, roomCenterX(room), roomCenterY(room));
       paintExit();
     }
 
@@ -577,8 +601,8 @@ const {
         bctx.globalAlpha = solved ? 0.9 : 0.42;
         bctx.font = "500 9px 'IBM Plex Mono', ui-monospace, monospace";
         bctx.textAlign = "center";
-        bctx.textBaseline = "top";
-        bctx.fillText(exitLabel, exitPointX, exitPointY + r + 5);
+        bctx.textBaseline = "middle";
+        bctx.fillText(exitLabel, exitPointX, exitPointY + r + 9);
       }
       bctx.globalAlpha = 1;
     }
