@@ -1,0 +1,300 @@
+---
+/**
+ * IntroLoader — a first-visit intro that hands off to the page behind it.
+ *
+ * The compass field runs on top of the scrim behaving exactly as it does
+ * anywhere else, so the wait is something you can play with rather than watch.
+ * A count climbs from 0 to 100 in the middle of the screen. On completion the
+ * scrim lifts and the field fades out completely, which is the whole reason
+ * the pattern exists: it belongs to the load, not to the page.
+ *
+ * Shows once per session, never under reduced motion. It is rendered hidden
+ * and only revealed by the inline script below, so a browser without JS sees
+ * the page directly rather than a scrim that never lifts.
+ */
+interface Props {
+  /** How long the count takes to climb, ms. The intro lasts at least this. */
+  minDuration?: number;
+  /** Longest it can last, ms. It always hands off, even if a font stalls. */
+  maxDuration?: number;
+  /** How long the field takes to fade out after the hand-off, ms. */
+  dissipate?: number;
+}
+
+const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props;
+---
+
+<div
+  class="intro"
+  id="intro"
+  data-min={minDuration}
+  data-max={maxDuration}
+  data-dissipate={dissipate}
+  hidden
+>
+  <div class="intro-count" aria-hidden="true">
+    <span class="intro-num" id="intro-count">0</span><span class="intro-pct">%</span>
+  </div>
+  <span class="intro-mark">ryan sheridan design</span>
+</div>
+
+<script is:inline>
+  // Runs before paint so the scrim either appears immediately or never, with
+  // no flash of the page in between.
+  (function () {
+    var el = document.getElementById("intro");
+    if (!el) return;
+
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var seen = false;
+    try {
+      seen = sessionStorage.getItem("intro-seen") === "1";
+    } catch (e) {
+      seen = false;
+    }
+
+    if (reduce || seen) {
+      el.remove();
+      return;
+    }
+
+    el.hidden = false;
+    document.documentElement.classList.add("intro-open");
+    try {
+      sessionStorage.setItem("intro-seen", "1");
+    } catch (e) {}
+  })();
+</script>
+
+<style is:global>
+  /* Hold the page still underneath, and lift the field above the scrim so the
+     same instance that runs the intro is the one that fades out after it. */
+  html.intro-open,
+  html.intro-open body {
+    overflow: hidden;
+  }
+
+  html.intro-open .cursor-field.is-fixed {
+    z-index: 60;
+  }
+
+  /* The nav sits above the scrim on its own z-index. Fade it in with the
+     page instead, so the intro is one uninterrupted surface. */
+  html.intro-open nav {
+    opacity: 0;
+  }
+
+  nav {
+    transition: opacity 0.5s ease 0.2s;
+  }
+</style>
+
+<style>
+  .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: var(--color-bg);
+    opacity: 1;
+    transition: opacity 0.6s ease;
+  }
+
+  .intro.is-done {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .intro-count {
+    position: absolute;
+    right: var(--page-padding);
+    bottom: var(--page-padding);
+    z-index: 70;
+    display: flex;
+    align-items: baseline;
+    pointer-events: none;
+    color: var(--color-text);
+  }
+
+  .intro-num {
+    /* Fixed box so 0, 47 and 100 all sit in the same place instead of the
+       number shunting sideways as digits are added. */
+    display: inline-block;
+    min-width: 3ch;
+    text-align: right;
+    font-family: var(--font-mono);
+    font-size: clamp(14px, 2.75vw, 33px);
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .intro-pct {
+    font-family: var(--font-mono);
+    font-size: clamp(7px, 0.75vw, 8px);
+    color: var(--color-text-muted);
+    line-height: 1;
+    margin-left: 0.1em;
+  }
+
+  .intro-mark {
+    position: absolute;
+    left: var(--page-padding);
+    bottom: var(--page-padding);
+    z-index: 70;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  @media (max-width: 640px) {
+    .intro-mark {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const intro = document.getElementById("intro");
+  const countEl = document.getElementById("intro-count");
+  const field = document.querySelector<HTMLElement>(".cursor-field");
+
+  // Skipped intro: the field has no life outside it on a page that rests at
+  // zero, so drop it rather than leave an inert canvas listening for a cursor.
+  if (!intro && field && Number(field.dataset.yield) === 0) field.remove();
+
+  if (intro && countEl) {
+    const minDuration = Number(intro.dataset.min) || 6000;
+    const maxDuration = Number(intro.dataset.max) || 7200;
+    const dissipate = Number(intro.dataset.dissipate) || 1600;
+    const started = performance.now();
+
+    // The count follows real signals rather than a timer, but eases toward
+    // them so it reads as a measurement instead of a series of jumps.
+    let target = 0;
+    let shown = 0;
+    let finished = false;
+
+    /**
+     * A real load surges and stalls, it does not sweep evenly. Cut the run
+     * into segments at irregular points in both time and progress, then walk
+     * them: a segment that covers little progress over a long stretch reads as
+     * a stall, the reverse reads as a jump.
+     *
+     * Each cut is blended halfway back toward an even spread, which keeps the
+     * irregularity from ever producing a dead stop or a leap from 20 to 90.
+     */
+    function cuts(count: number) {
+      const raw = Array.from({ length: count - 1 }, () => Math.random()).sort(
+        (a, b) => a - b,
+      );
+      const all = [0, ...raw, 1];
+      return all.map((v, i) => 0.5 * v + 0.5 * (i / (all.length - 1)));
+    }
+
+    const SEGMENTS = 7;
+    const atTime = cuts(SEGMENTS);
+    const atValue = cuts(SEGMENTS);
+
+    /** Progress at a given fraction of the run, 0..1, always increasing. */
+    function paceAt(k: number) {
+      if (k <= 0) return 0;
+      if (k >= 1) return 1;
+      let i = 1;
+      while (i < atTime.length - 1 && atTime[i] < k) i++;
+      const span = atTime[i] - atTime[i - 1];
+      const local = span <= 0 ? 1 : (k - atTime[i - 1]) / span;
+      const eased = local * local * (3 - 2 * local);
+      return atValue[i - 1] + (atValue[i] - atValue[i - 1]) * eased;
+    }
+
+    const bump = (to: number) => {
+      target = Math.max(target, Math.min(1, to));
+    };
+
+    document.fonts?.ready.then(() => bump(0.55));
+    if (document.readyState === "complete") bump(1);
+    else window.addEventListener("load", () => bump(1), { once: true });
+
+    // The page's own resting strength. On the homepage this is 0: the field
+    // belongs to the intro and should leave with it.
+    const pageYield = Number(field?.dataset.yield ?? 1);
+
+    function fadeOut() {
+      if (!field) return;
+      const from = 1;
+      const startedAt = performance.now();
+
+      const step = () => {
+        const k = Math.min(1, (performance.now() - startedAt) / dissipate);
+        const eased = k * k * (3 - 2 * k);
+        field.dataset.yield = String(from + (pageYield - from) * eased);
+        field.dispatchEvent(new CustomEvent("cursorfield:update"));
+
+        if (k < 1) {
+          requestAnimationFrame(step);
+          return;
+        }
+        // Fully gone: take the canvas with it rather than leaving it to
+        // redraw nothing on every pointer move.
+        if (pageYield === 0) field.remove();
+      };
+      requestAnimationFrame(step);
+    }
+
+    function finish() {
+      if (finished) return;
+      finished = true;
+      countEl.textContent = "100";
+      intro.classList.add("is-done");
+      document.documentElement.classList.remove("intro-open");
+      fadeOut();
+      window.setTimeout(() => intro.remove(), 700);
+    }
+
+    function tick() {
+      const elapsed = performance.now() - started;
+
+      if (elapsed >= maxDuration) {
+        finish();
+        return;
+      }
+
+      // Pace the climb across the whole duration rather than chasing the real
+      // signal, which on a static site resolves almost immediately and would
+      // park the count near 100 for the rest of the wait. The real signal is
+      // still a ceiling, so a genuinely slow load holds the count back.
+      const pace = paceAt(Math.min(1, elapsed / minDuration));
+      shown += (Math.min(target, pace) - shown) * 0.25;
+
+      countEl.textContent = String(Math.min(Math.round(shown * 100), 100));
+
+      if (elapsed >= minDuration && target >= 1) {
+        finish();
+        return;
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // Six seconds is a long hold on a site that is already parsed. Any
+    // deliberate input means "I am ready", so let it through rather than
+    // trapping someone behind the animation.
+    const skip = () => finish();
+    window.addEventListener("pointerdown", skip, { once: true });
+    window.addEventListener("keydown", skip, { once: true });
+    window.addEventListener("wheel", skip, { once: true, passive: true });
+    window.addEventListener("touchstart", skip, { once: true, passive: true });
+
+    // Run the field at full strength for the intro. Nothing aims it: the
+    // cursor drives it exactly as it does anywhere else, so the wait is
+    // something you can push around.
+    if (field) {
+      field.dataset.yield = "1";
+      field.dispatchEvent(new CustomEvent("cursorfield:update"));
+    }
+
+    requestAnimationFrame(tick);
+  }
+</script>

@@ -30,6 +30,13 @@ const year = new Date().getFullYear();
     border-top: 1px solid var(--color-border);
     padding: 64px var(--page-padding) 48px;
     margin-top: 120px;
+    /* Opaque and lifted, matching the nav. A fixed element at z-index 0 paints
+       over static content, so without this the CursorField would sit on top of
+       the footer, and without the background its rings would still show
+       through the footer's own area. */
+    position: relative;
+    z-index: 2;
+    background: var(--color-bg);
   }
 
   .footer-inner {
@@ -46,7 +53,7 @@ const year = new Date().getFullYear();
 
   .footer-logo {
     font-family: var(--font-mono);
-    font-size: 18px;
+    font-size: 14.4px;
     font-weight: 400;
     letter-spacing: -0.01em;
     color: var(--color-text);

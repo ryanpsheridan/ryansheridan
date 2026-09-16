@@ -2,6 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
+import CursorField from "../components/CursorField.astro";
+import IntroLoader from "../components/IntroLoader.astro";
 import { getHomepageProjects } from "../data/projects";
 import Media from "../components/Media.astro";
 
@@ -9,7 +11,12 @@ const projects = getHomepageProjects();
 ---
 
 <Layout title="Ryan Sheridan — Designing systems, sites and brands." description="Portfolio of Ryan Sheridan, Principal Designer specializing in design systems, marketing sites, and brand infrastructure.">
+  {/* First in the document on purpose: the intro's blocking inline script
+      stamps the page before the nav below it can paint, otherwise the nav
+      flashes for a frame before the scrim covers it. */}
+  <IntroLoader />
   <Nav />
+  <CursorField variant="compass" region="vignette" yieldTo={0} fixed />
   <main class="split-layout">
     <div class="split-inner">
       <div class="left-panel">
@@ -77,7 +84,12 @@ const projects = getHomepageProjects();
   const revealTargets = document.querySelectorAll<HTMLElement>("[data-reveal-index]");
   const rows = document.querySelectorAll<HTMLElement>(".project-row");
 
+  let revealed = -1;
+
   function revealUpTo(index: number) {
+    if (index <= revealed) return;
+    revealed = index;
+
     revealTargets.forEach((el) => {
       const revealIndex = Number(el.dataset.revealIndex);
       if (revealIndex > index) return;
@@ -131,6 +143,10 @@ const projects = getHomepageProjects();
   .split-layout {
     min-height: 100vh;
     padding: 0 var(--page-padding);
+    /* Lift the content off the fixed CursorField behind it. The field has no
+       background of its own, so the page still reads as plain white. */
+    position: relative;
+    z-index: 1;
   }
 
   .split-inner {

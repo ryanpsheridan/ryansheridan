@@ -1,0 +1,117 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import CursorField from "../components/CursorField.astro";
+---
+
+<Layout
+  title="Not found — Ryan Sheridan"
+  description="That page doesn't exist."
+>
+  <Nav />
+  <CursorField variant="compass" region="vignette" regionScale={0.7} fixed />
+  <main class="not-found">
+    <div class="nf-inner">
+      <p class="nf-code">404</p>
+      <h1>This page doesn't exist.</h1>
+      <p class="nf-body">
+        The link may be out of date, or the page may have moved. The work is
+        all still here.
+      </p>
+      <div class="nf-links">
+        <a href="/work" class="nf-button">View all work</a>
+        <a href="/" class="nf-plain">Back home <span class="arrow">&nearr;</span></a>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .not-found {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 120px var(--page-padding) 160px;
+    min-height: calc(100vh - var(--nav-height) - 200px);
+    display: flex;
+    align-items: center;
+  }
+
+  .nf-inner {
+    max-width: 520px;
+  }
+
+  .nf-code {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    letter-spacing: 0.12em;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-4);
+  }
+
+  h1 {
+    font-size: clamp(32px, 1.7rem + 1.2vw, 52px);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: var(--space-4);
+  }
+
+  .nf-body {
+    font-size: var(--text-base);
+    line-height: 1.8;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-6);
+  }
+
+  .nf-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .nf-button {
+    display: inline-flex;
+    align-items: center;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-bg);
+    background: var(--color-text);
+    border: 1px solid var(--color-text);
+    border-radius: 999px;
+    padding: 12px 22px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .nf-button:hover {
+    background: #333333;
+    border-color: #333333;
+  }
+
+  .nf-plain {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    transition: color 0.2s;
+  }
+
+  .nf-plain:hover {
+    color: var(--color-text);
+  }
+
+  .arrow {
+    font-size: var(--text-xs);
+  }
+
+  @media (max-width: 640px) {
+    .not-found {
+      padding: 72px var(--page-padding) 96px;
+      min-height: 0;
+    }
+  }
+</style>
