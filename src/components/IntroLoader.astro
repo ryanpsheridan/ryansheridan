@@ -21,7 +21,7 @@ interface Props {
   dissipate?: number;
 }
 
-const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props;
+const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props;
 ---
 
 <div
@@ -184,8 +184,8 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
   if (!intro && field && Number(field.dataset.yield) === 0) field.remove();
 
   if (intro && countEl) {
-    const minDuration = Number(intro.dataset.min) || 6000;
-    const maxDuration = Number(intro.dataset.max) || 7200;
+    const minDuration = Number(intro.dataset.min) || 4500;
+    const maxDuration = Number(intro.dataset.max) || 5400;
     const dissipate = Number(intro.dataset.dissipate) || 1600;
     const started = performance.now();
 
@@ -296,9 +296,9 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
       requestAnimationFrame(tick);
     }
 
-    // Six seconds is a long hold on a site that is already parsed. Any
-    // deliberate input means "I am ready", so let it through rather than
-    // trapping someone behind the animation.
+    // Four and a half seconds is still a hold on a site that is already
+    // parsed. Any deliberate input means "I am ready", so let it through
+    // rather than trapping someone behind the animation.
     const skip = () => finish();
     window.addEventListener("pointerdown", skip, { once: true });
     window.addEventListener("keydown", skip, { once: true });
