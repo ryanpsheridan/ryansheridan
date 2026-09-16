@@ -263,15 +263,15 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: ["/project-rhow-coffee17.jpg"],
-      },
-      {
-        type: "imageGrid",
         images: ["/project-rhow-coffee07.jpg"],
       },
       {
         type: "imageGrid",
         images: ["/project-rhow-coffee01.jpg"],
+      },
+      {
+        type: "imageGrid",
+        images: ["/project-rhow-coffee17.jpg"],
       },
       {
         type: "divider",
@@ -297,7 +297,7 @@ export const projects: Project[] = [
   {
     slug: "figma-project-starter",
     title: "Figma Project Starter",
-    thumbnail: "/project-figma-starter-brand-modes.gif",
+    thumbnail: "/skill-slash-command-animated-dark.svg",
     showOnHomepage: true,
     tags: ["Claude Skill", "Automation", "Design System"],
     tools: ["Claude", "Figma", "Asana"],

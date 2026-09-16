@@ -21,7 +21,7 @@ interface Props {
   dissipate?: number;
 }
 
-const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props;
+const { minDuration = 4500, maxDuration = 5400, dissipate = 1600 } = Astro.props;
 ---
 
 <div
@@ -35,7 +35,6 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
   <div class="intro-count" aria-hidden="true">
     <span class="intro-num" id="intro-count">0</span><span class="intro-pct">%</span>
   </div>
-  <span class="intro-mark">ryan sheridan design</span>
 </div>
 
 <script is:inline>
@@ -78,14 +77,25 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
     z-index: 60;
   }
 
-  /* The nav sits above the scrim on its own z-index. Fade it in with the
-     page instead, so the intro is one uninterrupted surface. */
-  html.intro-open nav {
+  /* The nav sits above the scrim on its own z-index, so the real wordmark can
+     carry the intro instead of a copy painted onto the scrim. It never fades
+     or moves, which means the hand-off costs it nothing. The hamburger is the
+     one piece held back, arriving a beat after the scrim clears so the nav
+     finishes assembling rather than snapping into place. */
+  html.intro-open .hamburger {
     opacity: 0;
   }
 
-  nav {
-    transition: opacity 0.5s ease 0.2s;
+  /* The nav outranks the scrim, and its opaque background would paint over the
+     count now that the count sits on the nav row. The scrim behind it is the
+     same colour, so dropping the background for the duration costs nothing and
+     the nav's own children keep their place above it. */
+  html.intro-open nav {
+    background: transparent;
+  }
+
+  .hamburger {
+    transition: opacity 0.5s ease 0.35s;
   }
 </style>
 
@@ -106,11 +116,20 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
 
   .intro-count {
     position: absolute;
+    /* Centered on the nav row, so the count sits between the wordmark and the
+       spot the hamburger will take. Spanning the page padding rather than
+       using left: 50% puts it on the nav's own centre line, which the
+       scrollbar gutter would otherwise shift it off. The offset is the nav's
+       own construction: its 18px padding plus half the 32px hamburger. Not
+       --nav-height, which reads 74px against a row that measures 68px. */
+    top: calc(18px + 16px);
+    left: var(--page-padding);
     right: var(--page-padding);
-    bottom: var(--page-padding);
+    transform: translateY(-50%);
     z-index: 70;
     display: flex;
     align-items: baseline;
+    justify-content: center;
     pointer-events: none;
     color: var(--color-text);
   }
@@ -137,23 +156,7 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
     margin-left: 0.1em;
   }
 
-  .intro-mark {
-    position: absolute;
-    left: var(--page-padding);
-    bottom: var(--page-padding);
-    z-index: 70;
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    line-height: 1;
-    pointer-events: none;
-  }
-
   @media (max-width: 640px) {
-    .intro-mark {
-      display: none;
-    }
-
     /* Centered on a phone: the count is the only thing on the screen there,
        since the field is disabled on devices without a cursor. */
     .intro-count {
@@ -184,8 +187,8 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
   if (!intro && field && Number(field.dataset.yield) === 0) field.remove();
 
   if (intro && countEl) {
-    const minDuration = Number(intro.dataset.min) || 6000;
-    const maxDuration = Number(intro.dataset.max) || 7200;
+    const minDuration = Number(intro.dataset.min) || 4500;
+    const maxDuration = Number(intro.dataset.max) || 5400;
     const dissipate = Number(intro.dataset.dissipate) || 1600;
     const started = performance.now();
 
@@ -296,9 +299,9 @@ const { minDuration = 6000, maxDuration = 7200, dissipate = 1600 } = Astro.props
       requestAnimationFrame(tick);
     }
 
-    // Six seconds is a long hold on a site that is already parsed. Any
-    // deliberate input means "I am ready", so let it through rather than
-    // trapping someone behind the animation.
+    // Four and a half seconds is still a hold on a site that is already
+    // parsed. Any deliberate input means "I am ready", so let it through
+    // rather than trapping someone behind the animation.
     const skip = () => finish();
     window.addEventListener("pointerdown", skip, { once: true });
     window.addEventListener("keydown", skip, { once: true });
