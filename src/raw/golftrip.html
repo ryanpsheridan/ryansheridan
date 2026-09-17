@@ -1289,7 +1289,17 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
     <div style="display: {{ showTrip }}; padding-top: 22px; animation: softin .3s ease both;">
 
-      <div style="margin-top: 4px;">
+      <!-- The one thing you need with your hands full at the door, so it is
+           the first thing on the tab rather than buried under the itinerary. -->
+      <div style="padding: 16px 18px; background: #14352A; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06); display: flex; align-items: center; justify-content: space-between; gap: 14px;">
+        <div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .12em; color: #9FC2AC;">CONDO</div>
+          <div style="margin-top: 5px; font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: -.02em; color: #FFF8EA;">Door code</div>
+        </div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 30px; letter-spacing: .06em; color: #FFF8EA;">6162</div>
+      </div>
+
+      <div style="margin-top: 22px;">
         <div style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: #14352A;">Itinerary</div>
       </div>
       <div class="rise" style="margin-top: 14px; display: flex; flex-direction: column; gap: 14px;">
