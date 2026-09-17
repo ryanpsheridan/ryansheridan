@@ -1173,14 +1173,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
       transition-duration: .001ms !important;
     }
   }
-  /* Loading screen. */
-  @keyframes ballspin { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
-  @keyframes drawring { from { stroke-dashoffset: 389.6 } to { stroke-dashoffset: 0 } }
-  @keyframes dotbob { 0%, 100% { transform: translateY(0); opacity: .3 } 50% { transform: translateY(-5px); opacity: 1 } }
-  @keyframes liftin { from { opacity: 0; transform: translateY(14px) } to { opacity: 1; transform: none } }
-  /* backwards, not both: the logo keeps its press feedback once this ends. */
-  @keyframes logopop { from { opacity: 0; transform: scale(.55) } 55% { opacity: 1 } to { opacity: 1; transform: none } }
-  @keyframes ripple { 0%, 100% { transform: scale(1); opacity: .55 } 50% { transform: scale(1.05); opacity: .72 } }
   .leaflet-container { font-family: "IBM Plex Sans", system-ui, sans-serif; background: #E8EFE6; }
   .leaflet-popup-content-wrapper { border-radius: 14px; box-shadow: 0 10px 30px rgba(20,53,42,.18) }
   .leaflet-popup-content { margin: 12px 14px; font-size: 13px; line-height: 1.45 }
@@ -1247,95 +1239,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 <div style="height: var(--appvh); background: #0B231B; display: flex; justify-content: center; overflow: hidden;">
 <div ref="{{ rootRef }}" style="position: relative; width: 100%; max-width: 440px; height: var(--appvh); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; background: #EFE8D8; color: #16211C; font-family: 'IBM Plex Sans', system-ui, sans-serif; box-shadow: 0 0 0 1px rgba(253,246,232,.08), 0 24px 70px rgba(0,0,0,.5); -webkit-overflow-scrolling: touch; scrollbar-width: none;">
 
-  <!-- The loading screen is one three second beat: the ring draws in around
-       the spinning ball, then fades to reveal the app already underneath.
-       Sitting on the app's own background means there is no world to cross
-       into at the end of it. -->
-  <sc-if value="{{ introOn }}" hint-placeholder-val="{{ true }}">
-    <div data-el="loader" style="position: absolute; inset: 0; z-index: 60; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; background: #EFE8D8;">
-
-      <div style="position: relative; width: 148px; height: 148px;">
-        <svg data-el="loadtrack" viewBox="0 0 148 148" width="148" height="148" style="position: absolute; inset: 0; display: block; transform: rotate(-90deg); transition: opacity .4s ease;">
-          <circle cx="74" cy="74" r="62" fill="none" stroke="#DED2B6" stroke-width="2.5"/>
-          <circle data-el="loadring" cx="74" cy="74" r="62" fill="none" stroke="#1F5C3E" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="389.6" stroke-dashoffset="389.6" style="animation: drawring 3s linear both; transition: opacity .4s ease;"/>
-        </svg>
-
-        <!-- The ball body and its highlight hold still; only the dimples turn,
-             because a light source that spins with the ball reads as a sticker
-             rather than a sphere. The drop shadow is what separates white on
-             cream, which a stroke alone could not do without looking drawn. -->
-        <svg data-el="loadball" viewBox="0 0 100 100" width="62" height="62" style="position: absolute; left: 50%; top: 50%; margin: -31px 0 0 -31px; display: block; filter: drop-shadow(0 3px 7px rgba(20,53,42,.18)); transition: opacity .35s ease;">
-          <defs>
-            <clipPath id="ballclip"><circle cx="50" cy="50" r="46"/></clipPath>
-            <radialGradient id="ballshade" cx="34%" cy="28%" r="82%">
-              <stop offset="0" stop-color="#FFFFFF"/>
-              <stop offset="52%" stop-color="#FFFFFF" stop-opacity="0"/>
-              <stop offset="100%" stop-color="#A8A08A" stop-opacity=".55"/>
-            </radialGradient>
-          </defs>
-          <circle cx="50" cy="50" r="46" fill="#FFFDF7"/>
-          <g clip-path="url(#ballclip)">
-            <g style="animation: ballspin 2.4s linear infinite; transform-origin: 50px 50px;">
-              <circle cx="31.7" cy="18.3" r="3.5" fill="rgba(20,53,42,0.093)"/>
-              <circle cx="43.9" cy="18.3" r="3.5" fill="rgba(20,53,42,0.101)"/>
-              <circle cx="56.1" cy="18.3" r="3.5" fill="rgba(20,53,42,0.101)"/>
-              <circle cx="68.3" cy="18.3" r="3.5" fill="rgba(20,53,42,0.093)"/>
-              <circle cx="25.6" cy="28.9" r="3.5" fill="rgba(20,53,42,0.101)"/>
-              <circle cx="37.8" cy="28.9" r="3.5" fill="rgba(20,53,42,0.114)"/>
-              <circle cx="50.0" cy="28.9" r="3.5" fill="rgba(20,53,42,0.119)"/>
-              <circle cx="62.2" cy="28.9" r="3.5" fill="rgba(20,53,42,0.114)"/>
-              <circle cx="74.4" cy="28.9" r="3.5" fill="rgba(20,53,42,0.101)"/>
-              <circle cx="19.5" cy="39.4" r="3.5" fill="rgba(20,53,42,0.101)"/>
-              <circle cx="31.7" cy="39.4" r="3.5" fill="rgba(20,53,42,0.119)"/>
-              <circle cx="43.9" cy="39.4" r="3.5" fill="rgba(20,53,42,0.134)"/>
-              <circle cx="56.1" cy="39.4" r="3.5" fill="rgba(20,53,42,0.134)"/>
-              <circle cx="68.3" cy="39.4" r="3.5" fill="rgba(20,53,42,0.119)"/>
-              <circle cx="80.5" cy="39.4" r="3.5" fill="rgba(20,53,42,0.101)"/>
-              <circle cx="13.4" cy="50.0" r="3.5" fill="rgba(20,53,42,0.093)"/>
-              <circle cx="25.6" cy="50.0" r="3.5" fill="rgba(20,53,42,0.114)"/>
-              <circle cx="37.8" cy="50.0" r="3.5" fill="rgba(20,53,42,0.134)"/>
-              <circle cx="50.0" cy="50.0" r="3.5" fill="rgba(20,53,42,0.155)"/>
-              <circle cx="62.2" cy="50.0" r="3.5" fill="rgba(20,53,42,0.134)"/>
-              <circle cx="74.4" cy="50.0" r="3.5" fill="rgba(20,53,42,0.114)"/>
-              <circle cx="86.6" cy="50.0" r="3.5" fill="rgba(20,53,42,0.093)"/>
-              <circle cx="19.5" cy="60.6" r="3.5" fill="rgba(20,53,42,0.101)"/>
-              <circle cx="31.7" cy="60.6" r="3.5" fill="rgba(20,53,42,0.119)"/>
-              <circle cx="43.9" cy="60.6" r="3.5" fill="rgba(20,53,42,0.134)"/>
-              <circle cx="56.1" cy="60.6" r="3.5" fill="rgba(20,53,42,0.134)"/>
-              <circle cx="68.3" cy="60.6" r="3.5" fill="rgba(20,53,42,0.119)"/>
-              <circle cx="80.5" cy="60.6" r="3.5" fill="rgba(20,53,42,0.101)"/>
-              <circle cx="25.6" cy="71.1" r="3.5" fill="rgba(20,53,42,0.101)"/>
-              <circle cx="37.8" cy="71.1" r="3.5" fill="rgba(20,53,42,0.114)"/>
-              <circle cx="50.0" cy="71.1" r="3.5" fill="rgba(20,53,42,0.119)"/>
-              <circle cx="62.2" cy="71.1" r="3.5" fill="rgba(20,53,42,0.114)"/>
-              <circle cx="74.4" cy="71.1" r="3.5" fill="rgba(20,53,42,0.101)"/>
-              <circle cx="31.7" cy="81.7" r="3.5" fill="rgba(20,53,42,0.093)"/>
-              <circle cx="43.9" cy="81.7" r="3.5" fill="rgba(20,53,42,0.101)"/>
-              <circle cx="56.1" cy="81.7" r="3.5" fill="rgba(20,53,42,0.101)"/>
-              <circle cx="68.3" cy="81.7" r="3.5" fill="rgba(20,53,42,0.093)"/>
-            </g>
-            <circle cx="50" cy="50" r="46" fill="url(#ballshade)"/>
-          </g>
-          <ellipse cx="35" cy="29" rx="12" ry="8" fill="#FFFFFF" opacity=".8" transform="rotate(-28 35 29)"/>
-          <circle cx="50" cy="50" r="45.4" fill="none" stroke="#CFC3A5" stroke-width="1.2"/>
-        </svg>
-
-      </div>
-
-      <div data-el="loadtype" style="text-align: center; animation: liftin .8s cubic-bezier(.2,.7,.2,1) .2s both; transition: opacity .35s ease;">
-        <div style="font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: clamp(20px, 6.4vw, 26px); letter-spacing: -.02em; color: #14352A;">Fort Myers Golf Trip</div>
-        <div style="margin-top: 7px; font-family: 'IBM Plex Mono', monospace; font-size: clamp(10px, 3vw, 11.5px); letter-spacing: .12em; color: #54634F;">SEPT 17 &ndash; 20, 2026</div>
-        <div style="margin-top: 18px; display: flex; align-items: center; justify-content: center; gap: 7px;">
-          <div style="width: 6px; height: 6px; border-radius: 999px; background: #1F5C3E; animation: dotbob 1.3s ease-in-out infinite;"></div>
-          <div style="width: 6px; height: 6px; border-radius: 999px; background: #1F5C3E; animation: dotbob 1.3s ease-in-out .16s infinite;"></div>
-          <div style="width: 6px; height: 6px; border-radius: 999px; background: #1F5C3E; animation: dotbob 1.3s ease-in-out .32s infinite;"></div>
-        </div>
-      </div>
-
-      <!-- Fades in a second late: offered, rather than the first thing you see. -->
-      <button data-el="loadskip" type="button" sc-camel-on-click="{{ skipLoad }}" style="position: absolute; left: 0; right: 0; bottom: calc(34px + var(--sab)); margin: 0 auto; width: max-content; min-height: 44px; padding: 0 22px; border: 1px solid #D3C6A9; border-radius: 999px; background: transparent; color: #54634F; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .12em; cursor: pointer; animation: liftin .5s ease 1.1s both; transition: opacity .3s ease;">SKIP</button>
-    </div>
-  </sc-if>
 
   <div data-el="app" style="position: relative; transform-origin: 50% 0; padding: 0 20px 128px;">
 
@@ -1435,6 +1338,19 @@ svg.leaflet-image-layer.leaflet-interactive path {
           </div>
         </div>
         <a href="https://www.splitwise.com/join/mewNfMDa1W6+x028z?v=e" target="_blank" rel="noopener" style="margin-top: 13px; display: block; min-height: 44px; box-sizing: border-box; padding: 13px; border-radius: 13px; background: #1CC29F; color: #06281A; font-size: 13.5px; font-weight: 700; text-align: center;">Join the group</a>
+      </div>
+
+      <!-- Where the house is, without having to leave the trip tab for the map.
+           Its own Leaflet instance, locked down: this one is a picture of the
+           place rather than something to pan around in. -->
+      <div style="margin-top: 16px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06); overflow: hidden;">
+        <div data-el="housemap" style="height: 180px; background: #E8EFE6;"></div>
+        <div style="padding: 16px 18px 18px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .12em; color: #54634F;">The house</div>
+          <div style="margin-top: 5px; font-family: 'Familjen Grotesk', sans-serif; font-weight: 700; font-size: 20px; line-height: 1.15; letter-spacing: -.02em; color: #14352A;">The condo at Miromar Lakes</div>
+          <div style="margin-top: 8px; font-size: 12.5px; color: #54634F; line-height: 1.5;">10733 Mirasol Drive #211, Miromar Lakes, FL 33913</div>
+          <a href="https://www.google.com/maps/dir/?api=1&amp;destination=10733+Mirasol+Drive+211+Miromar+Lakes+FL+33913" target="_blank" rel="noopener" style="margin-top: 13px; display: block; min-height: 44px; box-sizing: border-box; padding: 13px; border-radius: 13px; background: #14352A; color: #FFF8EA; font-size: 13.5px; font-weight: 600; text-align: center;">Directions to the house</a>
+        </div>
       </div>
 
       <div style="margin-top: 16px; padding: 18px; background: #FFFDF7; border: 1px solid #DBCFB5; border-radius: 18px; box-shadow: 0 1px 2px rgba(20,53,42,.06);">
@@ -1616,7 +1532,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
       </div>
 
       <div style="margin-top: 18px; position: relative; z-index: 0; isolation: isolate; border: 1px solid #DBCFB5; border-radius: 20px; box-shadow: 0 1px 3px rgba(20,53,42,.07); overflow: hidden;">
-        <div data-el="map" style="height: calc(var(--appvh) * .6); min-height: 330px;"></div>
+        <!-- Short enough that the place cards under it break the bottom of the
+             screen, so there is something to scroll towards. -->
+        <div data-el="map" style="height: calc(var(--appvh) * .42); min-height: 260px; max-height: 360px;"></div>
         <div style="display: {{ baseDisplay }}; position: absolute; left: 12px; right: 12px; top: 12px; z-index: 500; padding: 11px 14px; background: rgba(255,253,247,.96); border-radius: 999px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: .04em; color: #14352A; text-align: center; box-shadow: 0 4px 14px rgba(8,26,20,.22);">10733 Mirasol Drive #211, Miromar Lakes</div>
         <div style="display: {{ baseDisplay }}; position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 500; padding: 15px 16px; background: #FFFDF7; border-radius: 18px; box-shadow: 0 12px 30px rgba(8,26,20,.3);">
           <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .12em; color: #54634F;">Home base</div>
@@ -1673,7 +1591,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 </x-dc>
 <script type="text/x-dc" data-dc-script="" data-props="{
   &quot;$preview&quot;: { &quot;width&quot;: 430, &quot;height&quot;: 932 },
-  &quot;introEnabled&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot; },
   &quot;showPrices&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Behavior&quot; }
 }">
 const OWM_KEY = 'b72af3f83bb49e28d8ef2e78c74bd9c8';
@@ -1820,8 +1737,8 @@ class Component extends DCLogic {
     const r = this.rootRef.current;
     if (!r) return;
     this.el = {};
-    ['loader', 'loadtrack', 'loadring', 'loadball', 'loadtype', 'loadskip', 'logo',
-      'app', 'hdr', 'navpill', 'tabslide', 'chippill', 'chipslide', 'nav', 'map']
+    ['logo', 'app', 'hdr', 'navpill', 'tabslide', 'chippill', 'chipslide', 'nav',
+      'map', 'housemap']
       .forEach((k) => { this.el[k] = r.querySelector('[data-el="' + k + '"]'); });
 
     this.syncTabSlide();
@@ -1861,15 +1778,10 @@ class Component extends DCLogic {
     };
     r.addEventListener('scroll', this.onShellScroll, { passive: true });
 
-    // Three seconds of animation is exactly what this media query is for, so
-    // honour it and drop straight into the app.
-    const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!this.el.loader || reduced) this.finishLoad();
-    else this.playLoader();
-
     this.loadWeather();
     this.registerSW();
     if (this.state.tab === 'map' || this.state.tab === 'base') this.initMap();
+    this.initHouseMap();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -1878,6 +1790,12 @@ class Component extends DCLogic {
     this.syncTabSlide();
     if (this.pendingCourse && t === 'golf') this.showCourse();
     if (t === 'map' || t === 'base') { this.initMap(); this.syncMarkers(); }
+    // The trip tab is display:none while another tab is up, so the house map
+    // has no size to measure until you come back to it.
+    if (t === 'trip') {
+      this.initHouseMap();
+      if (prev.tab !== t && this.houseMap) setTimeout(() => this.houseMap && this.houseMap.invalidateSize(), 70);
+    }
     if (prev.tab !== t && this.map) {
       setTimeout(() => {
         if (!this.map) return;
@@ -1920,69 +1838,11 @@ class Component extends DCLogic {
   };
 
   componentWillUnmount() {
-    if (this.loadTimer) clearTimeout(this.loadTimer);
     if (this.flashTimer) clearTimeout(this.flashTimer);
     window.removeEventListener('resize', this.onResize);
     const r = this.rootRef.current;
     if (r && this.onShellScroll) r.removeEventListener('scroll', this.onShellScroll);
   }
-
-  /* ---------- loading screen ----------
-     Three seconds, then the loader fades out to reveal the app, which is
-     already sitting underneath it. */
-  LOAD_MS = 3000;
-  FADE_MS = 400;
-
-  playLoader() {
-    const r = this.rootRef.current;
-    const e = this.el || {};
-    // Nothing should be scrollable underneath the loader.
-    if (r) { r.scrollTop = 0; this.prevOverflowY = r.style.overflowY; r.style.overflowY = 'hidden'; }
-    if (e.nav) { e.nav.style.opacity = 0; e.nav.style.visibility = 'hidden'; }
-    if (e.logo) e.logo.style.opacity = 0;
-    this.loadTimer = setTimeout(this.fadeLoader, this.LOAD_MS);
-  }
-
-  fadeLoader = () => {
-    if (this.locked) return;
-    const e = this.el || {};
-
-    if (e.loadtrack) e.loadtrack.style.opacity = 0;
-    if (e.loadball) e.loadball.style.opacity = 0;
-    if (e.loadtype) e.loadtype.style.opacity = 0;
-    if (e.loadskip) { e.loadskip.style.opacity = 0; e.loadskip.style.pointerEvents = 'none'; }
-    if (e.loader) {
-      e.loader.style.transition = 'background-color ' + this.FADE_MS + 'ms ease';
-      e.loader.style.backgroundColor = 'rgba(239,232,216,0)';
-    }
-    this.loadTimer = setTimeout(this.finishLoad, this.FADE_MS);
-  };
-
-  skipLoad = () => {
-    if (this.locked) return;
-    if (this.loadTimer) { clearTimeout(this.loadTimer); this.loadTimer = null; }
-    this.fadeLoader();
-  };
-
-  finishLoad = () => {
-    if (this.locked) return;
-    this.locked = true;
-    if (this.loadTimer) { clearTimeout(this.loadTimer); this.loadTimer = null; }
-    const r = this.rootRef.current;
-    const e = this.el || {};
-    if (e.loader) e.loader.style.display = 'none';
-    if (e.logo) {
-      e.logo.style.opacity = 1;
-      e.logo.style.animation = 'logopop .5s cubic-bezier(.2,1.5,.4,1) backwards';
-    }
-    if (r) { r.scrollTop = 0; r.style.overflowY = this.prevOverflowY || 'auto'; }
-    if (e.nav) {
-      e.nav.style.transition = 'opacity .45s ease';
-      e.nav.style.opacity = 1;
-      e.nav.style.transform = 'none';
-      e.nav.style.visibility = 'visible';
-    }
-  };
 
   /* .82 rather than a rounder number: the buttons are 54px tall, and this is
      the smallest scale that still leaves them on the 44px tap target. Scaling
@@ -2097,6 +1957,25 @@ class Component extends DCLogic {
     const group = L.featureGroup(this.markers);
     this.map.fitBounds(group.getBounds().pad(0.18));
     setTimeout(() => this.map && this.map.invalidateSize(), 80);
+  }
+
+  /* The trip tab's house map. Every interaction is off: it is there to show
+     where the condo is, and the Directions button is the thing to tap. */
+  initHouseMap() {
+    if (this.houseMap || typeof L === 'undefined') return;
+    const node = this.el && this.el.housemap;
+    if (!node || !node.offsetParent) return;
+    this.houseMap = L.map(node, {
+      zoomControl: false, attributionControl: false, dragging: false,
+      scrollWheelZoom: false, doubleClickZoom: false, touchZoom: false,
+      boxZoom: false, keyboard: false, tap: false
+    }).setView([CONDO.lat, CONDO.lng], 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(this.houseMap);
+    L.marker([CONDO.lat, CONDO.lng], { icon: this.icon(STAY), interactive: false }).addTo(this.houseMap);
+    setTimeout(() => this.houseMap && this.houseMap.invalidateSize(), 80);
   }
 
   syncMarkers() {
@@ -2238,9 +2117,7 @@ class Component extends DCLogic {
     const wx = s.wx;
 
     return {
-      introOn: this.props.introEnabled !== false,
       goHome: this.goHome,
-      skipLoad: this.skipLoad,
       goMap: this.goMap,
       rootRef: this.rootRef,
       tabs, chips,
