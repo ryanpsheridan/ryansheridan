@@ -5,9 +5,9 @@
  * A count climbs from 0 to 100 in the middle of the screen, on nothing but the
  * page's own background. Then the scrim lifts.
  *
- * Shows once per session, never under reduced motion. It is rendered hidden
- * and only revealed by the inline script below, so a browser without JS sees
- * the page directly rather than a scrim that never lifts.
+ * Shows once ever per browser, never under reduced motion. It is rendered
+ * hidden and only revealed by the inline script below, so a browser without
+ * JS sees the page directly rather than a scrim that never lifts.
  */
 interface Props {
   /** How long the count takes to climb, ms. The intro lasts at least this. */
@@ -41,7 +41,7 @@ const { minDuration = 1688, maxDuration = 2025 } = Astro.props;
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var seen = false;
     try {
-      seen = sessionStorage.getItem("intro-seen") === "1";
+      seen = localStorage.getItem("intro-seen") === "1";
     } catch (e) {
       seen = false;
     }
@@ -54,7 +54,7 @@ const { minDuration = 1688, maxDuration = 2025 } = Astro.props;
     el.hidden = false;
     document.documentElement.classList.add("intro-open");
     try {
-      sessionStorage.setItem("intro-seen", "1");
+      localStorage.setItem("intro-seen", "1");
     } catch (e) {}
   })();
 </script>
