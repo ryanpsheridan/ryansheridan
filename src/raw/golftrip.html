@@ -1330,6 +1330,11 @@ svg.leaflet-image-layer.leaflet-interactive path {
                   </div>
                 </div>
               </sc-for>
+              <!-- Friday only: one link that already has both stops queued up,
+                   rather than two separate Directions buttons on two rows. -->
+              <sc-if value="{{ d.directionsUrl }}" hint-placeholder-val="{{ false }}">
+                <a href="{{ d.directionsUrl }}" target="_blank" rel="noopener" style="margin-top: 2px; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; box-sizing: border-box; padding: 11px; border-radius: 13px; background: #F2ECDD; color: #14352A; font-size: 13.5px; font-weight: 600; text-align: center;">{{ d.directionsLabel }}</a>
+              </sc-if>
             </div>
           </div>
         </sc-for>
@@ -2170,7 +2175,10 @@ class Component extends DCLogic {
           { ...ICON.travel, title: 'Matt + Oscar arrive later', meta: 'Later flights — they meet everyone at the condo' },
           { ...ICON.dining, title: 'Brewery', meta: 'Dinner once the whole group has landed' }
         ] },
-        { dow: 'FRI', num: '18', items: [
+        { dow: 'FRI', num: '18',
+          directionsUrl: 'https://maps.app.goo.gl/ATQUneNUE1ibV8zy6?g_st=ic',
+          directionsLabel: 'Directions: Skillets → Saltleaf',
+          items: [
           { ...ICON.golf, courseId: 'saltleaf', title: 'Saltleaf Golf Preserve — The Preserve', meta: '8:40 am tee time · confirmed' },
           { ...ICON.dining, title: 'Brewery', meta: 'Dinner and taps in one stop' }
         ] },
