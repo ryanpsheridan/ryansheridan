@@ -29,15 +29,13 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
     <title>{title}</title>
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FT00G2328N"></script>
-    <script>
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-FT00G2328N"></script>
+    <script is:inline>
       window.dataLayer = window.dataLayer || [];
-      function gtag(...args: unknown[]) {
-        dataLayer.push(args);
+      function gtag() {
+        dataLayer.push(arguments);
       }
-      // @ts-ignore
       gtag("js", new Date());
-      // @ts-ignore
       gtag("config", "G-FT00G2328N");
     </script>
 
