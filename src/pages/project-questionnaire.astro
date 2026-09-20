@@ -41,21 +41,6 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
       action={FORMSPREE_ENDPOINT}
       method="POST"
     >
-      <div class="honeypot-field" aria-hidden="true">
-        <label for="hp-field">Leave this field blank</label>
-        <input
-          type="text"
-          id="hp-field"
-          name="_gotcha"
-          tabindex="-1"
-          autocomplete="off"
-          data-lpignore="true"
-          data-1p-ignore="true"
-          data-bwignore="true"
-          data-form-type="other"
-        />
-      </div>
-
       <div class="field">
         <label for="reply-email">Your email <span class="required-marker">*</span></label>
         <input type="email" id="reply-email" name="_replyto" required aria-describedby="email-error" />
@@ -556,13 +541,8 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const honeypot = form.querySelector<HTMLInputElement>('input[name="_gotcha"]');
-    const honeypotFilled = !!honeypot && honeypot.value.trim() !== "";
     const filledTooFast = Date.now() - formLoadTime < MIN_FILL_TIME_MS;
-    // A honeypot fill on its own can be a false positive (browser/password-manager
-    // autofill silently populating the hidden field on a slow, genuine submission),
-    // so only treat it as a bot signal when paired with an implausibly fast fill.
-    if (filledTooFast || (honeypotFilled && Date.now() - formLoadTime < 15000)) {
+    if (filledTooFast) {
       // Likely a bot: pretend it worked without actually submitting.
       form.hidden = true;
       formProgress?.setAttribute("hidden", "");
@@ -812,15 +792,6 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
     margin-bottom: 0;
     min-height: 1.4em;
     line-height: 1.4;
-  }
-
-  .honeypot-field {
-    position: absolute;
-    left: -9999px;
-    top: -9999px;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
   }
 
   .radio-group,
