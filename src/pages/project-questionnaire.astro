@@ -421,8 +421,6 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
   const status = document.querySelector(".submit-status");
   const thankYou = document.querySelector(".thank-you");
   const formProgress = document.querySelector(".form-progress");
-  const formLoadTime = Date.now();
-  const MIN_FILL_TIME_MS = 3000;
 
   const emailField = document.getElementById("reply-email") as HTMLInputElement | null;
   const emailError = document.getElementById("email-error");
@@ -540,15 +538,6 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
 
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
-
-    const filledTooFast = Date.now() - formLoadTime < MIN_FILL_TIME_MS;
-    if (filledTooFast) {
-      // Likely a bot: pretend it worked without actually submitting.
-      form.hidden = true;
-      formProgress?.setAttribute("hidden", "");
-      thankYou?.removeAttribute("hidden");
-      return;
-    }
 
     const submitButton = form.querySelector<HTMLButtonElement>(".submit-button");
     if (submitButton) submitButton.disabled = true;
