@@ -1,0 +1,1148 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<!--
+  A private share for one client, not part of the portfolio. It carries noindex
+  and is filtered out of the sitemap in astro.config.mjs, so the two agree.
+-->
+<Layout
+  title="Ohio Golf Club — Website Review"
+  description="A review of ohiogolfclubindoor.com and how the club shows up in Google and AI assistants."
+  noindex={true}
+>
+  <Nav />
+  <main class="review">
+    <header class="masthead">
+      <p class="stamp">3 September 2026 &nbsp;·&nbsp; Ryan Sheridan</p>
+      <h1>Ohio Golf Club: what&rsquo;s working, and what could work better</h1>
+      <p class="lede">
+        I looked at <a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener">ohiogolfclubindoor.com</a> and at how the club shows up in Google and AI assistants. Your reputation and your pro are
+        doing the work, and doing it well. This is about getting the website to carry more of that load.
+      </p>
+      <p class="lede">
+        Every claim has a link or a screenshot. Where I couldn&rsquo;t verify something, I&rsquo;ve said so.
+      </p>
+    </header>
+
+    <section>
+      <div class="sec-head">
+        <p class="eyebrow">Summary</p>
+        <h2>The short version</h2>
+      </div>
+      <div class="box">
+        <p>
+          <strong>Your information isn&rsquo;t all in the right places.</strong> Some facts aren&rsquo;t on the
+          site at all, like your hours. Others are on the page but not written into the code in the
+          format Google and AI assistants look for, so they fall back to directory sites. Those
+          directories then repeat details that are out of date, including a price you don&rsquo;t charge
+          and an address that isn&rsquo;t yours.
+        </p>
+        <p>
+          <strong>You only have one page really competing.</strong> Lessons, fittings, memberships and
+          leagues are all sections of your homepage. Giving each its own page creates more ways to be
+          found, and lands people on the exact thing they searched for.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <p class="eyebrow">Strengths</p>
+        <h2>What you&rsquo;re already doing well</h2>
+      </div>
+      <div class="wins">
+        <div class="win">
+          <span class="m" aria-hidden="true">&#10003;</span>
+          <div>
+            <h4>You&rsquo;re the top answer for the questions that matter</h4>
+            <p>
+              Tested 2 September: asking an AI assistant where to take indoor golf lessons near Akron,
+              and where to get a serious TrackMan fitting, returned Ohio Golf Club first both times,
+              ahead of GOLFTEC Fairlawn and Golf Galaxy.
+            </p>
+          </div>
+        </div>
+        <div class="win">
+          <span class="m" aria-hidden="true">&#10003;</span>
+          <div>
+            <h4>4.9 stars, with listings showing 85 to 87 reviews</h4>
+            <p>Your strongest marketing asset.</p>
+          </div>
+        </div>
+        <div class="win">
+          <span class="m" aria-hidden="true">&#10003;</span>
+          <div>
+            <h4>Your <a href="https://business.google.com/" target="_blank" rel="noopener">Google Business Profile</a> is doing real work</h4>
+            <p>
+              Rating, category, photos and open-now status all show up in map results. Whoever set it
+              up did a good job.
+            </p>
+          </div>
+        </div>
+        <div class="win">
+          <span class="m" aria-hidden="true">&#10003;</span>
+          <div>
+            <h4>The site is built on current technology</h4>
+            <p>
+              It runs on <a href="https://nextjs.org/" target="_blank" rel="noopener">Next.js</a>, a
+              modern framework, not an aging template. That&rsquo;s a good foundation, and it makes
+              everything below straightforward to add.
+            </p>
+          </div>
+        </div>
+        <div class="win">
+          <span class="m" aria-hidden="true">&#10003;</span>
+          <div>
+            <h4>Booking is properly connected</h4>
+            <p>
+              Bays, lessons and memberships all run through <a href="https://clubcaddie.com/" target="_blank" rel="noopener">Club Caddie</a> rather
+              than being pieced together.
+            </p>
+          </div>
+        </div>
+        <div class="win">
+          <span class="m" aria-hidden="true">&#10003;</span>
+          <div>
+            <h4>Your credentials are genuinely differentiating</h4>
+            <p>
+              GOLFTEC certified, Titleist and Callaway master fitter, 7,500 lessons, 500 fittings.
+              Golf Galaxy can&rsquo;t say that. It just isn&rsquo;t working as hard for you as it could.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <p class="eyebrow">Findings, tagged by priority</p>
+        <h2>What could work better</h2>
+      </div>
+      <div class="stack">
+
+        <article class="item now">
+          <span class="badge now">Costing you now</span>
+          <h3><span class="n">01</span>Your hours aren&rsquo;t on your website</h3>
+          <div class="b">
+            <div>
+              <p>
+                They&rsquo;re not on the <a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener">homepage</a>, the <a href="https://www.ohiogolfclubindoor.com/contact-us" target="_blank" rel="noopener">contact page</a>,
+                or anywhere else. Three directories publish hours for you instead, and no two agree.
+              </p>
+              <div class="tw">
+                <table>
+                  <thead><tr><th>Where</th><th>Hours it shows</th></tr></thead>
+                  <tbody>
+                    <tr><td class="n">Your website</td><td class="bad">Nothing listed</td></tr>
+                    <tr><td class="n"><a href="https://golfsimspot.com/golf-simulator-business/ohio-golf-club/" target="_blank" rel="noopener">Golf Sim Spot</a></td><td>Mon to Fri 9am to 8pm, weekends 9am to 5pm</td></tr>
+                    <tr><td class="n"><a href="https://teebly.io/venue/a290afbe-c14a-4e82-9706-c9399d45dd3a" target="_blank" rel="noopener">Teebly</a></td><td>Daily 8am to 10pm</td></tr>
+                    <tr><td class="n"><a href="https://screengolfers.com/usa/ohio/akron/ohio-golf-club-44333" target="_blank" rel="noopener">Screengolfers</a></td><td>Mon to Sat 8am to 10pm, Sun 8am to 8pm</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <figure>
+              <p class="k">Asked for your hours, an AI assistant didn&rsquo;t read your site. It answered from a directory called GolfSimMap and said so.</p>
+              <img
+                src="/ohio-golf-club/screenshot-1.jpg"
+                alt="Screenshot of an AI assistant listing Ohio Golf Club's hours and citing GolfSimMap as the source."
+                loading="lazy"
+              />
+            </figure>
+            <p>
+              Someone deciding whether to drive over right now can&rsquo;t find out from you. Everyone
+              answering that question on your behalf is reading someone else&rsquo;s page.
+            </p>
+            <div class="opts two">
+              <div class="opt rec">
+                <div class="top"><h4>Publish and correct everywhere</h4><span class="tag b">Recommended</span></div>
+                <p>
+                  Hours on the site, written into the page code in the format search engines look for,
+                  then your Google profile and the three directories updated to match.
+                </p>
+              </div>
+              <div class="opt">
+                <div class="top"><h4>Publish on the site only</h4><span class="tag">Partial</span></div>
+                <p>Visitors can see them. Search engines and AI assistants keep using the directory versions.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="item up">
+          <span class="badge up">Biggest upside</span>
+          <h3><span class="n">02</span>Ask an AI your prices twice and you get two different answers</h3>
+          <div class="b">
+            <figure>
+              <p class="k">Asked one way, it listed every tier correctly, read from your own website.</p>
+              <img
+                src="/ohio-golf-club/screenshot-2.jpg"
+                alt="Screenshot of an AI assistant correctly listing all four Ohio Golf Club membership tiers and prices."
+                loading="lazy"
+              />
+            </figure>
+            <figure>
+              <p class="k">Asked another way the same day, it said your pricing &ldquo;is not published clearly online&rdquo; and offered to go hunting.</p>
+              <img
+                src="/ohio-golf-club/screenshot-3.jpg"
+                alt="Screenshot of an AI assistant saying Ohio Golf Club's membership pricing is not published clearly online."
+                loading="lazy"
+              />
+            </figure>
+            <p>
+              When Google or ChatGPT can&rsquo;t confidently read your page, they go looking elsewhere and
+              land on a directory. That&rsquo;s how the wrong numbers spread, and you have no say in which
+              version someone gets.
+            </p>
+            <div>
+              <p class="k">The fix</p>
+              <p>
+                A standard format, published at <a href="https://schema.org/" target="_blank" rel="noopener">schema.org</a>, for spelling
+                the same facts out in your page&rsquo;s code. Google, Bing and the AI assistants all read
+                it. Visitors never see it.
+              </p>
+              <div class="codes">
+                <div>
+                  <p class="k">On the page today</p>
+                  <pre class="code">&lt;h3&gt;Classic&lt;/h3&gt;
+&lt;p&gt;$200/Month&lt;/p&gt;</pre>
+                </div>
+                <div>
+                  <p class="k">Added alongside it</p>
+                  <pre class="code">&lbrace;
+  "@type": "Offer",
+  "name": "Classic Membership",
+  "price": "200.00",
+  "priceCurrency": "USD"
+&rbrace;</pre>
+                </div>
+              </div>
+              <p class="cap">
+                Left, Google has to guess which line is the membership name and which is the price.
+                Right, it&rsquo;s spelled out and there&rsquo;s nothing to guess. <em>Simplified example, not your actual code.</em>
+              </p>
+            </div>
+            <div>
+              <p class="k">Both put the same facts in the code. The difference is where that code comes from.</p>
+              <div class="opts two">
+                <div class="opt rec">
+                  <div class="top"><h4>One place to edit</h4><span class="tag b">Recommended</span></div>
+                  <p>Built from your page content, so there&rsquo;s one source. Change a price once and both update.</p>
+                </div>
+                <div class="opt">
+                  <div class="top"><h4>Two places to edit</h4><span class="tag">Partial</span></div>
+                  <p>Written separately, so every price change has to be made twice. Miss one and they disagree.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="item up">
+          <span class="badge up">Quick win</span>
+          <h3><span class="n">03</span>All five pages carry the same hidden title</h3>
+          <div class="b">
+            <p>
+              Every page has a title and description written into its code. You don&rsquo;t see them on the
+              page. They&rsquo;re what Google shows as the clickable blue headline in search results, and
+              what appears on your browser tab.
+            </p>
+            <div>
+              <p>Your visible headings are all different and fine. It&rsquo;s the hidden ones underneath that are identical across all five:</p>
+              <ul>
+                <li><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener">Homepage</a></li>
+                <li><a href="https://www.ohiogolfclubindoor.com/team" target="_blank" rel="noopener">Our Team</a></li>
+                <li><a href="https://www.ohiogolfclubindoor.com/contact-us" target="_blank" rel="noopener">Contact Us</a></li>
+                <li><a href="https://www.ohiogolfclubindoor.com/events" target="_blank" rel="noopener">Events &amp; Bar</a></li>
+                <li><a href="https://www.ohiogolfclubindoor.com/carls-place" target="_blank" rel="noopener">Carl&rsquo;s Place</a>, your custom simulator installation page</li>
+              </ul>
+              <p class="after-list">All five say &ldquo;Ohio Golf Club | Premier Indoor Golf Experience&rdquo; with the same description underneath.</p>
+            </div>
+            <p>
+              Google reads that as five copies of one page, so only your homepage really competes.
+              Carl&rsquo;s Place is the clearest example: a separate business line selling home simulator
+              installations, and Google can&rsquo;t tell it apart from your contact page.
+            </p>
+            <p><strong>The fix:</strong> each page gets its own title and description. No second option worth presenting, and the cheapest item here.</p>
+          </div>
+        </article>
+
+        <article class="item up">
+          <span class="badge up">Biggest upside</span>
+          <h3><span class="n">04</span>Your services don&rsquo;t have pages of their own</h3>
+          <div class="b">
+            <p>
+              Lessons, fittings, memberships and bay rentals are sections of the homepage you reach by
+              scrolling. Someone searching for golf lessons in Akron has no page of yours to land on. <a href="https://cornerclubgolf.com/" target="_blank" rel="noopener">The Corner Club</a> already runs separate pages for rates, technology, lessons and leagues.
+            </p>
+            <figure>
+              <p class="k">Today every search funnels to one page. With service pages, each search lands on the thing it asked for.</p>
+              <div class="dw">
+              <svg
+                viewBox="0 0 470 372"
+                role="img"
+                aria-label="Diagram comparing today, where several searches funnel into the homepage, with a proposed structure where each search lands on its own service page with its own booking action."
+                class="diagram"
+              >
+                <defs>
+                  <marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><polygon points="0,1 8,4 0,7" fill="#7a7a7a"></polygon></marker>
+                  <marker id="arb" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><polygon points="0,1 8,4 0,7" fill="#111111"></polygon></marker>
+                </defs>
+                <g>
+                  <text x="0" y="12" font-size="13" font-weight="500" fill="#111111">Today</text>
+                  <g font-size="11.5" fill="#555555" text-anchor="end">
+                    <text x="150" y="42">&ldquo;golf lessons akron&rdquo;</text>
+                    <text x="150" y="66">&ldquo;club fitting akron&rdquo;</text>
+                    <text x="150" y="90">&ldquo;indoor golf akron&rdquo;</text>
+                  </g>
+                  <g stroke="#7a7a7a" stroke-width="1" fill="none">
+                    <path d="M156 38 L184 62"></path>
+                    <path d="M156 62 L184 62"></path>
+                    <path d="M156 86 L184 62"></path>
+                  </g>
+                  <line x1="184" y1="62" x2="205" y2="62" stroke="#7a7a7a" stroke-width="1" marker-end="url(#ar)"></line>
+                  <rect x="212" y="45" width="140" height="34" fill="#ffffff" stroke="#cfcfcf" stroke-width="1"></rect>
+                  <text x="282" y="66" font-size="12.5" text-anchor="middle" fill="#111111">Homepage</text>
+                  <text x="470" y="66" font-size="10.5" fill="#7a7a7a" text-anchor="end">everything lives here</text>
+                  <line x1="0" y1="120" x2="470" y2="120" stroke="#e5e5e5" stroke-width="1"></line>
+                  <text x="0" y="148" font-size="13" font-weight="500" fill="#111111">With service pages</text>
+                  <g font-size="11.5" fill="#555555" text-anchor="end">
+                    <text x="150" y="182">&ldquo;golf lessons akron&rdquo;</text>
+                    <text x="150" y="220">&ldquo;club fitting akron&rdquo;</text>
+                    <text x="150" y="258">&ldquo;golf membership akron&rdquo;</text>
+                    <text x="150" y="296">&ldquo;simulator rental akron&rdquo;</text>
+                    <text x="150" y="334">&ldquo;indoor golf league akron&rdquo;</text>
+                  </g>
+                  <g stroke="#111111" stroke-width="1">
+                    <line x1="158" y1="178" x2="205" y2="178" marker-end="url(#arb)"></line>
+                    <line x1="158" y1="216" x2="205" y2="216" marker-end="url(#arb)"></line>
+                    <line x1="158" y1="254" x2="205" y2="254" marker-end="url(#arb)"></line>
+                    <line x1="158" y1="292" x2="205" y2="292" marker-end="url(#arb)"></line>
+                    <line x1="158" y1="330" x2="205" y2="330" marker-end="url(#arb)"></line>
+                  </g>
+                  <g fill="#f9f9f9" stroke="#111111" stroke-width="1">
+                    <rect x="212" y="165" width="148" height="26"></rect>
+                    <rect x="212" y="203" width="148" height="26"></rect>
+                    <rect x="212" y="241" width="148" height="26"></rect>
+                    <rect x="212" y="279" width="148" height="26"></rect>
+                    <rect x="212" y="317" width="148" height="26"></rect>
+                  </g>
+                  <g font-size="12" fill="#111111">
+                    <text x="222" y="182">Lessons</text>
+                    <text x="222" y="220">Club fitting</text>
+                    <text x="222" y="258">Memberships</text>
+                    <text x="222" y="296">Bay rentals</text>
+                    <text x="222" y="334">Leagues</text>
+                  </g>
+                  <g font-size="10.5" fill="#555555">
+                    <text x="370" y="182">Book</text>
+                    <text x="370" y="220">Book</text>
+                    <text x="370" y="258">Join</text>
+                    <text x="370" y="296">Book</text>
+                    <text x="370" y="334">Sign up</text>
+                  </g>
+                </g>
+              </svg>
+              </div>
+            </figure>
+            <div>
+              <p class="k">Why this is the biggest one</p>
+              <ul>
+                <li><strong>More doors.</strong> Each page can rank for its own searches. A homepage section can&rsquo;t.</li>
+                <li><strong>A shorter path to booking.</strong> Someone searching for club fitting lands on a fitting page with a fitting booking button, instead of your homepage where they have to scroll and work it out.</li>
+                <li><strong>A link you can send.</strong> One URL for lessons that works in an ad, an Instagram bio, or a text.</li>
+                <li><strong>Room to sell.</strong> A fitting page can explain why yours beats a big box store. That case can&rsquo;t be made in a homepage paragraph.</li>
+                <li><strong>You learn what people want.</strong> You&rsquo;d see whether fittings or memberships draw more interest, instead of guessing.</li>
+              </ul>
+            </div>
+            <div class="opts two">
+              <div class="opt rec">
+                <div class="top"><h4>Five pages</h4><span class="tag b">Recommended</span></div>
+                <p>Lessons, club fitting, memberships, bay rentals, leagues. Everything you sell.</p>
+              </div>
+              <div class="opt">
+                <div class="top"><h4>Three pages</h4><span class="tag">Smaller start</span></div>
+                <p>Lessons, fitting and memberships first, the rest added later.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="item now">
+          <span class="badge now">Costing you now</span>
+          <h3><span class="n">05</span>Other sites list the wrong address and price</h3>
+          <div class="b">
+            <div>
+              <p>All three are live right now, and none are under your control.</p>
+              <div class="tw">
+                <table>
+                  <thead><tr><th>Site</th><th>What it says</th><th>Actually</th></tr></thead>
+                  <tbody>
+                    <tr><td class="n"><a href="https://screengolfers.com/usa/ohio/akron/ohio-golf-club-44333" target="_blank" rel="noopener">Screengolfers</a></td><td class="bad">215 Springside Dr, 44333</td><td>2262 S Arlington Rd, 44319</td></tr>
+                    <tr><td class="n"><a href="https://golfsimspot.com/golf-simulator-business/ohio-golf-club/" target="_blank" rel="noopener">Golf Sim Spot</a></td><td class="bad">Membership $250 a month</td><td>Classic is $200 a month</td></tr>
+                    <tr><td class="n"><a href="https://teebly.io/venue/a290afbe-c14a-4e82-9706-c9399d45dd3a" target="_blank" rel="noopener">Teebly</a></td><td>Daily 8am to 10pm</td><td>Conflicts with both others</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <p>
+              The wrong address is almost certainly left over from the move. Directories don&rsquo;t update
+              themselves when a business relocates, so old details sit there until someone corrects
+              them. Not anyone&rsquo;s mistake, but the longer it sits the more sites copy it.
+            </p>
+            <p>
+              Someone following the Screengolfers address drives to a place that isn&rsquo;t you. Someone
+              comparing prices who sees $250 may rule you out before ever reaching your site.
+            </p>
+            <div class="opts two">
+              <div class="opt rec">
+                <div class="top"><h4>Full sweep</h4><span class="tag b">Recommended</span></div>
+                <p>
+                  Correct these three, then the rest, so your name, address, phone and hours match
+                  everywhere. Consistency across listings is one of the things Google uses to rank
+                  local businesses.
+                </p>
+              </div>
+              <div class="opt">
+                <div class="top"><h4>The main three</h4><span class="tag">Smaller start</span></div>
+                <p>Just the listings appearing in searches and AI answers today.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="item">
+          <span class="badge">Worth doing</span>
+          <h3><span class="n">06</span>Your 4.9 rating isn&rsquo;t on your own site</h3>
+          <div class="b">
+            <p>
+              There are member quotes on the homepage, but no rating, no review count, and no way for a
+              member to leave one. It&rsquo;s your strongest proof, missing at the exact moment someone
+              decides whether to book.
+            </p>
+            <div class="opts two">
+              <div class="opt rec">
+                <div class="top"><h4>Show it as text</h4><span class="tag b">Recommended</span></div>
+                <p>
+                  Display the rating and count, link to your Google reviews, refresh occasionally. No
+                  cost, nothing to break, and the number moves slowly enough to stay accurate.
+                </p>
+              </div>
+              <div class="opt">
+                <div class="top"><h4>Pull it automatically</h4><span class="tag">More moving parts</span></div>
+                <p>
+                  Connect to Google so it updates itself. Small ongoing cost, limits on how many reviews
+                  can be pulled, and rules on display. A lot of machinery for a number that barely changes.
+                </p>
+              </div>
+            </div>
+            <div>
+              <p class="k">What this can and can&rsquo;t do</p>
+              <p>
+                <strong>You can</strong> show your rating, your review count and your reviews on your own
+                website, and link people to your Google listing to read more or leave one.
+              </p>
+              <p class="spaced">
+                <strong>You can&rsquo;t</strong> make star ratings appear under your listing in Google search
+                results this way. <a href="https://developers.google.com/search/docs/appearance/structured-data/review-snippet" target="_blank" rel="noopener">Google&rsquo;s own documentation</a> says a business that controls the reviews about itself is &ldquo;ineligible for star review
+                feature&rdquo;, and separately, &ldquo;don&rsquo;t aggregate reviews or ratings from other
+                websites&rdquo;. If anyone offers you stars in search results from this, they&rsquo;re overselling.
+              </p>
+              <p class="spaced">
+                <strong>Still worth doing,</strong> because it&rsquo;s the proof people look for in the seconds
+                before they book, and right now it isn&rsquo;t there.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <article class="item now">
+          <span class="badge now">Time sensitive</span>
+          <h3><span class="n">07</span>No league page, and league season is starting</h3>
+          <div class="b">
+            <p>Your site&rsquo;s own description advertises indoor leagues. There&rsquo;s no page about them.</p>
+            <p>
+              League signups are a deadline, not something people browse for, and a league fills your
+              quietest hours with groups who come back weekly. With outdoor season winding down and new
+              pages taking weeks to months to gain traction in search, a page built now has a shot at
+              this season. One built in December doesn&rsquo;t.
+            </p>
+            <div class="opts two">
+              <div class="opt rec">
+                <div class="top"><h4>Simple page now</h4><span class="tag b">Recommended</span></div>
+                <p>Format, schedule, cost and how to join, live in time for signups.</p>
+              </div>
+              <div class="opt">
+                <div class="top"><h4>Page plus online signup</h4><span class="tag">Fuller build</span></div>
+                <p>Adds registration. Better long term, likely misses this season.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="item">
+          <span class="badge">Worth doing</span>
+          <h3><span class="n">08</span>Form submissions go to your inbox and nowhere else</h3>
+          <div class="b">
+            <p>
+              The <a href="https://www.ohiogolfclubindoor.com/contact-us" target="_blank" rel="noopener">contact form</a> collects name, phone, email, interest and a message. You mentioned those land in your
+              email and go no further, so there&rsquo;s no list you can work from, and no way to see who
+              asked about lessons three months ago and never booked.
+            </p>
+            <div class="opts">
+              <div class="opt rec">
+                <div class="top"><h4>Use what you already pay for</h4><span class="tag b">Check this first</span></div>
+                <p>
+                  <a href="https://clubcaddie.com/solutions/customer-management/" target="_blank" rel="noopener">Club Caddie&rsquo;s customer management</a> already does customer profiles, purchase and playing history, grouping by member type,
+                  and email through <a href="https://mailchimp.com/" target="_blank" rel="noopener">Mailchimp</a> with 12,000 messages a month included. One support ticket would tell us whether it can
+                  take a lead from the website.
+                </p>
+              </div>
+              <div class="opt">
+                <div class="top"><h4>Off the shelf</h4><span class="tag">Low effort</span></div>
+                <p>
+                  Send the form into <a href="https://www.airtable.com/" target="_blank" rel="noopener">Airtable</a> or <a href="https://www.hubspot.com/products/crm" target="_blank" rel="noopener">HubSpot&rsquo;s free CRM</a>.
+                  A working list quickly, nothing custom, no dependency on me.
+                </p>
+              </div>
+              <div class="opt">
+                <div class="top"><h4>Built into your site</h4><span class="tag">Worth exploring</span></div>
+                <p>
+                  A private page listing every inquiry with status and notes, an export button, and a
+                  weekly email of new and stale leads. I&rsquo;d want to scope this properly with you before
+                  committing to it, and only if the first two can&rsquo;t do the job.
+                </p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <p class="eyebrow">After the work</p>
+        <h2>How the site gets updated afterwards</h2>
+      </div>
+      <div class="stack">
+        <div class="lane">
+          <h4>What I&rsquo;d take on</h4>
+          <p>
+            The eight items above. That means editing code inside the site you already have, saved into
+            the same place your code lives today, so your developer can see and review every change I
+            make. I&rsquo;m not rebuilding the site, moving it anywhere, or changing how it looks.
+          </p>
+          <p>
+            I work with AI-assisted development tools, which is how I can move quickly on something like
+            this. What ends up in your codebase is ordinary code either way, and I&rsquo;d write up what I
+            changed and why so anyone can pick it up after me.
+          </p>
+          <p>Your accounts stay in your name. I&rsquo;d be added as a collaborator and can be removed at any point.</p>
+        </div>
+        <div class="lane">
+          <h4>What stays with your current developer</h4>
+          <p>
+            New pages, layout changes, anything visual, and everything he does for you today. If he
+            wants to review my changes before they go live, I&rsquo;d welcome it.
+          </p>
+        </div>
+        <div class="lane">
+          <h4>What I&rsquo;d like to set up for you</h4>
+          <p>A simple screen where you change prices, hours and page text yourself, without touching code or asking anyone.</p>
+          <p>
+            Being straight with you: there are a few well-established tools for this, and I&rsquo;d confirm
+            which one fits your site during the review before putting a timeline or a price on it.
+            It&rsquo;s the piece I most want to get right, because it&rsquo;s what takes the small favours off
+            everyone&rsquo;s plate.
+          </p>
+        </div>
+      </div>
+      <p class="lede closing">
+        None of this is a redesign. It&rsquo;s the information and the code underneath, not the look of the
+        site. If a refresh is ever something you want to talk about, that&rsquo;s a separate conversation.
+      </p>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <p class="eyebrow">Next step</p>
+        <h2>What I&rsquo;d suggest first</h2>
+      </div>
+      <div class="box">
+        <p>
+          Most of the above I could see from outside. To give you real numbers instead of estimates, I
+          need to look properly from the inside. Read access to three things is enough, and I
+          wouldn&rsquo;t change anything at this stage:
+        </p>
+        <ul>
+          <li>
+            <strong><a href="https://search.google.com/search-console" target="_blank" rel="noopener">Google Search Console</a>.</strong> The actual words people type before they find you. That decides which service pages to build
+            first and what each page title should say, rather than us guessing. It also shows the
+            searches where you already sit just off the first page, which are the cheapest wins
+            available, which pages Google has indexed, and real loading-speed data from actual visitors.
+          </li>
+          <li>
+            <strong>Your <a href="https://business.google.com/" target="_blank" rel="noopener">Google Business Profile</a>.</strong> How people find you, and whether they call, ask for directions or click through to the site.
+            Plus what Google currently believes about your hours and location, which is what the
+            directories are competing with.
+          </li>
+          <li>
+            <strong>Wherever the website&rsquo;s code lives.</strong> How it&rsquo;s built and where the content sits,
+            so I can tell you which of the eight items are quick and which are fiddly before quoting anything.
+          </li>
+        </ul>
+        <div class="rate">
+          <p class="v">$75 / hour</p>
+          <p>My rate for the review and the work that follows.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="sources">
+      <p>Checked 2 and 3 September 2026 against public sources:</p>
+      <ul>
+        <li><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener">ohiogolfclubindoor.com</a> and its team, contact, events and Carl&rsquo;s Place pages</li>
+        <li>
+          <a href="https://golfsimspot.com/golf-simulator-business/ohio-golf-club/" target="_blank" rel="noopener">Golf Sim Spot</a>, <a href="https://teebly.io/venue/a290afbe-c14a-4e82-9706-c9399d45dd3a" target="_blank" rel="noopener">Teebly</a> and <a href="https://screengolfers.com/usa/ohio/akron/ohio-golf-club-44333" target="_blank" rel="noopener">Screengolfers</a> listings
+        </li>
+        <li>
+          <a href="https://cornerclubgolf.com/" target="_blank" rel="noopener">The Corner Club</a> and <a href="https://clubcaddie.com/solutions/customer-management/" target="_blank" rel="noopener">Club Caddie</a>
+        </li>
+        <li><a href="https://developers.google.com/search/docs/appearance/structured-data/review-snippet" target="_blank" rel="noopener">Google Search Central, review snippet documentation</a></li>
+        <li>Screenshots of AI assistant responses, captured 2 September 2026</li>
+      </ul>
+      <p class="caveat">
+        I could not verify from outside: your site&rsquo;s loading speed, your exact current review count, or
+        whether Club Caddie can accept a lead from the website. Those are part of what the review would settle.
+      </p>
+    </footer>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  /* One accent, used only where a fact is wrong. Everything else carries its
+     weight through type and rules, the way the rest of the site does. */
+  .review {
+    --wrong: #a33a2f;
+    --sunk: var(--color-tag-bg);
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 40px var(--page-padding) 0;
+  }
+
+  .review :global(p) {
+    text-wrap: pretty;
+  }
+
+  /* Links inside the body copy read as links: the global reset strips
+     underlines, and this page is dense with citations. */
+  .review a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    text-decoration-color: var(--color-border);
+    transition: text-decoration-color 0.2s;
+  }
+
+  .review a:hover {
+    text-decoration-color: var(--color-text);
+  }
+
+  strong {
+    font-weight: 500;
+  }
+
+  /* Masthead */
+
+  .masthead {
+    padding-bottom: var(--space-5);
+    border-bottom: 1px solid var(--color-text);
+  }
+
+  .stamp {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-4);
+  }
+
+  h1 {
+    font-size: clamp(30px, 1.7rem + 1.2vw, 44px);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1.12;
+    margin-bottom: var(--space-3);
+    text-wrap: balance;
+  }
+
+  .lede {
+    font-size: var(--text-md);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .lede + .lede {
+    margin-top: var(--space-2);
+  }
+
+  .closing {
+    margin-top: var(--space-4);
+  }
+
+  /* Sections */
+
+  section {
+    margin-top: var(--space-8);
+  }
+
+  .sec-head {
+    margin-bottom: var(--space-4);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  h2 {
+    font-size: var(--text-xl);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-size: var(--text-md);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+
+  h4 {
+    font-size: var(--text-base);
+    font-weight: 500;
+    line-height: 1.35;
+  }
+
+  /* A label above a figure, table or code sample */
+  .k {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2);
+    line-height: 1.5;
+  }
+
+  /* Strengths */
+
+  .win {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .win:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .win .m {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 3px;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    font-size: 9px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text);
+  }
+
+  .win h4 {
+    margin-bottom: var(--space-1);
+  }
+
+  .win p {
+    color: var(--color-text-muted);
+  }
+
+  /* Findings */
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .item {
+    border: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-text-muted);
+    padding: var(--space-4);
+  }
+
+  /* The two urgency levels are carried by the top rule, so the cards stay
+     scannable at a glance without introducing a second color. */
+  .item.now {
+    border-top: 2px solid var(--color-text);
+  }
+
+  .item.up {
+    border-top: 1px solid var(--color-text);
+  }
+
+  .item h3 {
+    margin-top: var(--space-2);
+  }
+
+  .item h3 .n {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-right: var(--space-2);
+  }
+
+  .b {
+    margin-top: var(--space-3);
+  }
+
+  .b > * + * {
+    margin-top: var(--space-4);
+  }
+
+  .item p {
+    color: var(--color-text-muted);
+  }
+
+  .item ul,
+  .box ul {
+    margin: var(--space-2) 0 0;
+    padding-left: 1.1em;
+    color: var(--color-text-muted);
+  }
+
+  .item li,
+  .box li {
+    margin: var(--space-2) 0;
+  }
+
+  .item li::marker,
+  .box li::marker {
+    color: var(--color-border);
+  }
+
+  .after-list {
+    margin-top: var(--space-2);
+  }
+
+  .spaced {
+    margin-top: var(--space-2);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: 1;
+    padding: 5px 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    color: var(--color-text-muted);
+    background: var(--color-tag-bg);
+  }
+
+  .badge.up {
+    border-color: var(--color-text-muted);
+    color: var(--color-text);
+    background: transparent;
+  }
+
+  .badge.now {
+    border-color: var(--color-text);
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  /* Figures */
+
+  figure {
+    margin: 0;
+  }
+
+  figure img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--color-border);
+  }
+
+  /* Below ~470px the diagram's labels shrink past reading size, so it scrolls
+     sideways in its own track rather than getting smaller. */
+  .dw {
+    overflow-x: auto;
+    margin-top: var(--space-2);
+  }
+
+  .diagram {
+    display: block;
+    width: 100%;
+    min-width: 430px;
+    height: auto;
+    font-family: var(--font-sans);
+  }
+
+  /* Tables */
+
+  .tw {
+    overflow-x: auto;
+    border: 1px solid var(--color-border);
+    margin-top: var(--space-2);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 420px;
+    font-size: var(--text-sm);
+  }
+
+  th,
+  td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+
+  th {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 400;
+    color: var(--color-text-muted);
+    background: var(--color-tag-bg);
+  }
+
+  td {
+    color: var(--color-text-muted);
+  }
+
+  td.n {
+    color: var(--color-text);
+  }
+
+  td.bad {
+    color: var(--wrong);
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Code samples */
+
+  .codes {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+  }
+
+  .code {
+    background: var(--color-tag-bg);
+    border: 1px solid var(--color-border);
+    padding: 12px 13px;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .cap {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--space-2);
+    line-height: 1.5;
+  }
+
+  .cap em {
+    display: block;
+    margin-top: var(--space-1);
+    font-size: var(--text-xs);
+  }
+
+  /* Option pairs */
+
+  .opts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .opt {
+    border: 1px solid var(--color-border);
+    background: var(--color-tag-bg);
+    padding: var(--space-3);
+  }
+
+  .opt.rec {
+    border-color: var(--color-text);
+    background: var(--color-bg);
+  }
+
+  .opt .top {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
+  }
+
+  .opt p {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: 1;
+    padding: 4px 8px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    color: var(--color-text-muted);
+    background: var(--color-bg);
+  }
+
+  .tag.b {
+    border-color: var(--color-text);
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  /* After the work */
+
+  .lane {
+    border: 1px solid var(--color-border);
+    padding: var(--space-4);
+  }
+
+  .lane h4 {
+    margin-bottom: var(--space-2);
+  }
+
+  .lane p {
+    color: var(--color-text-muted);
+  }
+
+  .lane p + p {
+    margin-top: var(--space-2);
+  }
+
+  /* Summary and next step */
+
+  .box {
+    border: 1px solid var(--color-border);
+    padding: var(--space-4);
+  }
+
+  .box p {
+    color: var(--color-text-muted);
+  }
+
+  .box p + p {
+    margin-top: var(--space-3);
+  }
+
+  .rate {
+    background: var(--color-tag-bg);
+    border: 1px solid var(--color-border);
+    padding: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .rate .v {
+    font-family: var(--font-mono);
+    font-size: var(--text-lg);
+    color: var(--color-text);
+    line-height: 1.2;
+  }
+
+  .rate p + p {
+    margin-top: var(--space-1);
+    font-size: var(--text-sm);
+  }
+
+  /* Sources */
+
+  .sources {
+    margin-top: var(--space-7);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-text);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .sources ul {
+    margin: var(--space-2) 0 0;
+    padding-left: 1.1em;
+  }
+
+  .sources li {
+    margin: var(--space-1) 0;
+  }
+
+  .sources li::marker {
+    color: var(--color-border);
+  }
+
+  .caveat {
+    margin-top: var(--space-3);
+  }
+
+  @media (min-width: 600px) {
+    .codes {
+      flex-direction: row;
+    }
+
+    .codes > * {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .opts.two {
+      flex-direction: row;
+    }
+
+    .opts.two > * {
+      flex: 1;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .review {
+      padding-top: var(--space-7);
+    }
+
+    .item {
+      padding: var(--space-5) var(--space-4);
+    }
+  }
+</style>

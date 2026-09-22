@@ -11,7 +11,9 @@ export default defineConfig({
       // Anything that carries noindex stays out of the sitemap too, so the
       // two never disagree about what belongs in search.
       filter: (page) =>
-        !['/apartment', '/golftrip'].some((path) => page.includes(path)),
+        !['/apartment', '/golftrip', '/ohio-golf-club'].some((path) =>
+          page.includes(path)
+        ),
     }),
   ]
 });
