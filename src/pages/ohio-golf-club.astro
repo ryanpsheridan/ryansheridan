@@ -864,11 +864,12 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
 
   /* Masthead */
 
+  /* No rule of its own: the tally's colored rules sit directly below and
+     serve as the divider, so a border here reads as a doubled line. */
   .masthead {
     display: grid;
     gap: var(--space-6);
     padding-bottom: var(--space-6);
-    border-bottom: 1px solid var(--color-text);
   }
 
   h1 {
