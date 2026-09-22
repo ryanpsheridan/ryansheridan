@@ -1,0 +1,200 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img">
+<style>
+.c0,.c1,.c2,.c3{animation-name:resolve;animation-duration:14s;animation-timing-function:cubic-bezier(.4,0,.2,1);animation-iteration-count:infinite}
+.c1{animation-delay:.45s}
+.c2{animation-delay:.9s}
+.c3{animation-delay:1.35s}
+@keyframes resolve{
+0%{opacity:0;transform:translateY(5px)}
+5%{opacity:1;transform:translateY(0)}
+92%{opacity:1;transform:translateY(0)}
+97%{opacity:0;transform:translateY(5px)}
+100%{opacity:0;transform:translateY(5px)}}
+@media (prefers-reduced-motion:reduce){.c0,.c1,.c2,.c3{animation:none;opacity:1;transform:none}}
+</style>
+<rect x="0" y="0" width="1600" height="1000" fill="#DDE1E8"/>
+<defs><clipPath id="panel"><rect x="225" y="180" width="1150" height="638" rx="12"/></clipPath></defs>
+<g clip-path="url(#panel)">
+<rect x="225" y="180" width="1150" height="638" fill="#2C2C2C"/>
+<rect x="225" y="180" width="210" height="638" fill="#262626"/>
+<text x="237" y="198" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" fill="#F0F0F0" text-anchor="start" dominant-baseline="central">Variables</text>
+<rect x="413.5" y="192.5" width="13" height="11" rx="1.5" fill="none" stroke="#CFCFCF" stroke-width="1.1"/>
+<line x1="417.5" y1="192.5" x2="417.5" y2="203.5" stroke="#CFCFCF" stroke-width="1.1"/>
+<rect x="1135" y="190" width="160" height="16" rx="4" fill="#3A3A3A"/>
+<circle cx="1145" cy="198" r="3.2" fill="none" stroke="#9AA0A6" stroke-width="1"/><line x1="1147.4" y1="200.4" x2="1149.4" y2="202.4" stroke="#9AA0A6" stroke-width="1" stroke-linecap="round"/>
+<text x="1154" y="198.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="8" font-weight="400" fill="#8C8C8C" text-anchor="start" dominant-baseline="central">Search</text>
+<circle cx="1306" cy="198" r="6" fill="none" stroke="#9AA0A6" stroke-width="1"/><path d="M1302 198h8M1303.4 195h5.2M1303.4 201h5.2" stroke="#9AA0A6" stroke-width="1" stroke-linecap="round"/>
+<path d="M1328 194.5V191h3.5M1339 201.5V205h-3.5M1328 191l4 4M1339 205l-4-4" stroke="#9AA0A6" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+<path d="M1355 192l10 10M1365 192l-10 10" stroke="#9AA0A6" stroke-width="1.2" stroke-linecap="round"/>
+<text x="237" y="234" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" fill="#F0F0F0" text-anchor="start" dominant-baseline="central">Collections</text>
+<path d="M414 234h11M419.5 228.5v11" stroke="#D0D0D0" stroke-width="1.2" stroke-linecap="round"/>
+<rect x="231" y="255" width="198" height="23" rx="4" fill="#3A3A3A"/>
+<text x="237" y="266.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" fill="#F5F5F5" text-anchor="start" dominant-baseline="central">Brand</text>
+<text x="423" y="266.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#B0B0B0" text-anchor="end" dominant-baseline="central">118</text>
+<text x="237" y="295" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8D8D8" text-anchor="start" dominant-baseline="central">Primitive</text>
+<text x="423" y="295" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#9A9A9A" text-anchor="end" dominant-baseline="central">132</text>
+<line x1="225" y1="315.5" x2="435" y2="315.5" stroke="#3C3C3C" stroke-width="1"/>
+<text x="237" y="335" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" fill="#F0F0F0" text-anchor="start" dominant-baseline="central">Groups</text>
+<path d="M414 331h7M414 335h5M414 339h7M420 333l4 4M424 333l-4 4" stroke="#CFCFCF" stroke-width="1.1" stroke-linecap="round"/>
+<rect x="231" y="357" width="198" height="23" rx="4" fill="#4D5E8E"/>
+<text x="237" y="368" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" fill="#F5F5F5" text-anchor="start" dominant-baseline="central">All</text>
+<text x="423" y="368" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8DEEE" text-anchor="end" dominant-baseline="central">118</text>
+<text x="245" y="397" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8D8D8" text-anchor="start" dominant-baseline="central">Type</text>
+<text x="423" y="397" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#9A9A9A" text-anchor="end" dominant-baseline="central">63</text>
+<text x="258" y="426" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8D8D8" text-anchor="start" dominant-baseline="central">Color</text>
+<text x="423" y="426" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#9A9A9A" text-anchor="end" dominant-baseline="central">9</text>
+<text x="258" y="455" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8D8D8" text-anchor="start" dominant-baseline="central">Typeface</text>
+<text x="423" y="455" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#9A9A9A" text-anchor="end" dominant-baseline="central">2</text>
+<text x="258" y="483" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8D8D8" text-anchor="start" dominant-baseline="central">Font Size</text>
+<text x="423" y="483" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#9A9A9A" text-anchor="end" dominant-baseline="central">13</text>
+<text x="258" y="512" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8D8D8" text-anchor="start" dominant-baseline="central">Letter Spacing</text>
+<text x="423" y="512" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#9A9A9A" text-anchor="end" dominant-baseline="central">13</text>
+<text x="258" y="541" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8D8D8" text-anchor="start" dominant-baseline="central">Line Height</text>
+<text x="423" y="541" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#9A9A9A" text-anchor="end" dominant-baseline="central">13</text>
+<text x="258" y="569" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8D8D8" text-anchor="start" dominant-baseline="central">Weight</text>
+<text x="423" y="569" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#9A9A9A" text-anchor="end" dominant-baseline="central">13</text>
+<text x="245" y="598" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8D8D8" text-anchor="start" dominant-baseline="central">Surface</text>
+<text x="423" y="598" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#9A9A9A" text-anchor="end" dominant-baseline="central">7</text>
+<text x="245" y="627" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8D8D8" text-anchor="start" dominant-baseline="central">Radius</text>
+<text x="423" y="627" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#9A9A9A" text-anchor="end" dominant-baseline="central">12</text>
+<text x="245" y="655" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8D8D8" text-anchor="start" dominant-baseline="central">Spacing</text>
+<text x="423" y="655" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#9A9A9A" text-anchor="end" dominant-baseline="central">17</text>
+<text x="245" y="684" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8D8D8" text-anchor="start" dominant-baseline="central">Layout</text>
+<text x="423" y="684" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#9A9A9A" text-anchor="end" dominant-baseline="central">3</text>
+<text x="245" y="713" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8D8D8" text-anchor="start" dominant-baseline="central">Duration</text>
+<text x="423" y="713" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#9A9A9A" text-anchor="end" dominant-baseline="central">4</text>
+<text x="245" y="742" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8D8D8" text-anchor="start" dominant-baseline="central">Border</text>
+<text x="423" y="742" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#9A9A9A" text-anchor="end" dominant-baseline="central">12</text>
+<text x="258" y="771" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8D8D8" text-anchor="start" dominant-baseline="central">UI</text>
+<text x="423" y="771" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#9A9A9A" text-anchor="end" dominant-baseline="central">7</text>
+<text x="258" y="799" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#D8D8D8" text-anchor="start" dominant-baseline="central">Form</text>
+<text x="423" y="799" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#9A9A9A" text-anchor="end" dominant-baseline="central">2</text>
+<text x="450" y="234" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="500" fill="#E6E6E6" text-anchor="start" dominant-baseline="central">Name</text>
+<text x="630" y="234" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="500" fill="#E6E6E6" text-anchor="start" dominant-baseline="central">Base</text>
+<text x="812" y="234" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="500" fill="#E6E6E6" text-anchor="start" dominant-baseline="central">CM</text>
+<text x="994" y="234" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="500" fill="#E6E6E6" text-anchor="start" dominant-baseline="central">BC</text>
+<text x="1176" y="234" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="500" fill="#E6E6E6" text-anchor="start" dominant-baseline="central">FDX</text>
+<line x1="435" y1="256.5" x2="1375" y2="256.5" stroke="#3C3C3C" stroke-width="1"/>
+<path d="M1345 234h11M1350.5 228.5v11" stroke="#C6C6C6" stroke-width="1.2" stroke-linecap="round"/>
+<line x1="620" y1="257" x2="620" y2="818" stroke="#3A3A3A" stroke-width="1"/>
+<line x1="800" y1="257" x2="800" y2="818" stroke="#3A3A3A" stroke-width="1"/>
+<line x1="982" y1="257" x2="982" y2="818" stroke="#3A3A3A" stroke-width="1"/>
+<line x1="1164" y1="257" x2="1164" y2="818" stroke="#3A3A3A" stroke-width="1"/>
+<line x1="1346" y1="257" x2="1346" y2="818" stroke="#3A3A3A" stroke-width="1"/>
+<text x="450" y="285" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="10.5" font-weight="400" fill="#8C8C8C" text-anchor="start" dominant-baseline="central">Type /</text>
+<text x="485" y="285" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="10.5" font-weight="600" fill="#E6E6E6" text-anchor="start" dominant-baseline="central">Color</text>
+<circle cx="455" cy="322" r="4.6" fill="none" stroke="#9AA0A6" stroke-width="1.1"/><path d="M461 318.2l4.4 3.8-4.4 3.8" fill="none" stroke="#9AA0A6" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="472" y="322" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#DCDCDC" text-anchor="start" dominant-baseline="central">Primary</text>
+<g class="c0"><rect x="630" y="311" width="160" height="22" rx="4" fill="#343434"/><rect x="636" y="316.5" width="11" height="11" rx="2" fill="#0B0B0B" stroke="#5A5A5A" stroke-width="0.6"/><text x="653" y="322.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Black</text></g>
+<g class="c1"><rect x="812" y="311" width="160" height="22" rx="4" fill="#343434"/><rect x="818" y="316.5" width="11" height="11" rx="2" fill="#231672" stroke="#5A5A5A" stroke-width="0.6"/><text x="835" y="322.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/CMRC/Brand/Indigo</text></g>
+<g class="c2"><rect x="994" y="311" width="160" height="22" rx="4" fill="#343434"/><rect x="1000" y="316.5" width="11" height="11" rx="2" fill="#0B0B0B" stroke="#5A5A5A" stroke-width="0.6"/><text x="1017" y="322.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Black</text></g>
+<g class="c3"><rect x="1176" y="311" width="160" height="22" rx="4" fill="#343434"/><rect x="1182" y="316.5" width="11" height="11" rx="2" fill="#0B0B0B" stroke="#5A5A5A" stroke-width="0.6"/><text x="1199" y="322.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Black</text></g>
+<line x1="435" y1="340.5" x2="1375" y2="340.5" stroke="#383838" stroke-width="1"/>
+<circle cx="455" cy="359" r="4.6" fill="none" stroke="#9AA0A6" stroke-width="1.1"/><path d="M461 355.2l4.4 3.8-4.4 3.8" fill="none" stroke="#9AA0A6" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="472" y="359" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#DCDCDC" text-anchor="start" dominant-baseline="central">Secondary</text>
+<g class="c0"><rect x="630" y="348" width="160" height="22" rx="4" fill="#343434"/><rect x="636" y="353.5" width="11" height="11" rx="2" fill="#3F4756" stroke="#5A5A5A" stroke-width="0.6"/><text x="653" y="359.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 800</text></g>
+<g class="c1"><rect x="812" y="348" width="160" height="22" rx="4" fill="#343434"/><rect x="818" y="353.5" width="11" height="11" rx="2" fill="#3F4756" stroke="#5A5A5A" stroke-width="0.6"/><text x="835" y="359.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 800</text></g>
+<g class="c2"><rect x="994" y="348" width="160" height="22" rx="4" fill="#343434"/><rect x="1000" y="353.5" width="11" height="11" rx="2" fill="#3F4756" stroke="#5A5A5A" stroke-width="0.6"/><text x="1017" y="359.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 800</text></g>
+<g class="c3"><rect x="1176" y="348" width="160" height="22" rx="4" fill="#343434"/><rect x="1182" y="353.5" width="11" height="11" rx="2" fill="#3F4756" stroke="#5A5A5A" stroke-width="0.6"/><text x="1199" y="359.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 800</text></g>
+<line x1="435" y1="377.5" x2="1375" y2="377.5" stroke="#383838" stroke-width="1"/>
+<circle cx="455" cy="396" r="4.6" fill="none" stroke="#9AA0A6" stroke-width="1.1"/><path d="M461 392.2l4.4 3.8-4.4 3.8" fill="none" stroke="#9AA0A6" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="472" y="396" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#DCDCDC" text-anchor="start" dominant-baseline="central">Tertiary</text>
+<g class="c0"><rect x="630" y="385" width="160" height="22" rx="4" fill="#343434"/><rect x="636" y="390.5" width="11" height="11" rx="2" fill="#6B7280" stroke="#5A5A5A" stroke-width="0.6"/><text x="653" y="396.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 600</text></g>
+<g class="c1"><rect x="812" y="385" width="160" height="22" rx="4" fill="#343434"/><rect x="818" y="390.5" width="11" height="11" rx="2" fill="#6B7280" stroke="#5A5A5A" stroke-width="0.6"/><text x="835" y="396.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 600</text></g>
+<g class="c2"><rect x="994" y="385" width="160" height="22" rx="4" fill="#343434"/><rect x="1000" y="390.5" width="11" height="11" rx="2" fill="#6B7280" stroke="#5A5A5A" stroke-width="0.6"/><text x="1017" y="396.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 600</text></g>
+<g class="c3"><rect x="1176" y="385" width="160" height="22" rx="4" fill="#343434"/><rect x="1182" y="390.5" width="11" height="11" rx="2" fill="#6B7280" stroke="#5A5A5A" stroke-width="0.6"/><text x="1199" y="396.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 600</text></g>
+<line x1="435" y1="414.5" x2="1375" y2="414.5" stroke="#383838" stroke-width="1"/>
+<circle cx="455" cy="433" r="4.6" fill="none" stroke="#9AA0A6" stroke-width="1.1"/><path d="M461 429.2l4.4 3.8-4.4 3.8" fill="none" stroke="#9AA0A6" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="472" y="433" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#DCDCDC" text-anchor="start" dominant-baseline="central">Inverse</text>
+<g class="c0"><rect x="630" y="422" width="160" height="22" rx="4" fill="#343434"/><rect x="636" y="427.5" width="11" height="11" rx="2" fill="#FFFFFF" stroke="#5A5A5A" stroke-width="0.6"/><text x="653" y="433.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/White</text></g>
+<g class="c1"><rect x="812" y="422" width="160" height="22" rx="4" fill="#343434"/><rect x="818" y="427.5" width="11" height="11" rx="2" fill="#FFFFFF" stroke="#5A5A5A" stroke-width="0.6"/><text x="835" y="433.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/White</text></g>
+<g class="c2"><rect x="994" y="422" width="160" height="22" rx="4" fill="#343434"/><rect x="1000" y="427.5" width="11" height="11" rx="2" fill="#FFFFFF" stroke="#5A5A5A" stroke-width="0.6"/><text x="1017" y="433.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/White</text></g>
+<g class="c3"><rect x="1176" y="422" width="160" height="22" rx="4" fill="#343434"/><rect x="1182" y="427.5" width="11" height="11" rx="2" fill="#FFFFFF" stroke="#5A5A5A" stroke-width="0.6"/><text x="1199" y="433.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/White</text></g>
+<line x1="435" y1="451.5" x2="1375" y2="451.5" stroke="#383838" stroke-width="1"/>
+<circle cx="455" cy="470" r="4.6" fill="none" stroke="#9AA0A6" stroke-width="1.1"/><path d="M461 466.2l4.4 3.8-4.4 3.8" fill="none" stroke="#9AA0A6" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="472" y="470" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#DCDCDC" text-anchor="start" dominant-baseline="central">Inverse Secondary</text>
+<g class="c0"><rect x="630" y="459" width="160" height="22" rx="4" fill="#343434"/><rect x="636" y="464.5" width="11" height="11" rx="2" fill="#C9CDD6" stroke="#5A5A5A" stroke-width="0.6"/><text x="653" y="470.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 300</text></g>
+<g class="c1"><rect x="812" y="459" width="160" height="22" rx="4" fill="#343434"/><rect x="818" y="464.5" width="11" height="11" rx="2" fill="#C9CDD6" stroke="#5A5A5A" stroke-width="0.6"/><text x="835" y="470.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 300</text></g>
+<g class="c2"><rect x="994" y="459" width="160" height="22" rx="4" fill="#343434"/><rect x="1000" y="464.5" width="11" height="11" rx="2" fill="#C9CDD6" stroke="#5A5A5A" stroke-width="0.6"/><text x="1017" y="470.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 300</text></g>
+<g class="c3"><rect x="1176" y="459" width="160" height="22" rx="4" fill="#343434"/><rect x="1182" y="464.5" width="11" height="11" rx="2" fill="#C9CDD6" stroke="#5A5A5A" stroke-width="0.6"/><text x="1199" y="470.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 300</text></g>
+<line x1="435" y1="488.5" x2="1375" y2="488.5" stroke="#383838" stroke-width="1"/>
+<circle cx="455" cy="507" r="4.6" fill="none" stroke="#9AA0A6" stroke-width="1.1"/><path d="M461 503.2l4.4 3.8-4.4 3.8" fill="none" stroke="#9AA0A6" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="472" y="507" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#DCDCDC" text-anchor="start" dominant-baseline="central">Inverse Tertiary</text>
+<g class="c0"><rect x="630" y="496" width="160" height="22" rx="4" fill="#343434"/><rect x="636" y="501.5" width="11" height="11" rx="2" fill="#8A91A0" stroke="#5A5A5A" stroke-width="0.6"/><text x="653" y="507.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 500</text></g>
+<g class="c1"><rect x="812" y="496" width="160" height="22" rx="4" fill="#343434"/><rect x="818" y="501.5" width="11" height="11" rx="2" fill="#8A91A0" stroke="#5A5A5A" stroke-width="0.6"/><text x="835" y="507.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 500</text></g>
+<g class="c2"><rect x="994" y="496" width="160" height="22" rx="4" fill="#343434"/><rect x="1000" y="501.5" width="11" height="11" rx="2" fill="#8A91A0" stroke="#5A5A5A" stroke-width="0.6"/><text x="1017" y="507.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 500</text></g>
+<g class="c3"><rect x="1176" y="496" width="160" height="22" rx="4" fill="#343434"/><rect x="1182" y="501.5" width="11" height="11" rx="2" fill="#8A91A0" stroke="#5A5A5A" stroke-width="0.6"/><text x="1199" y="507.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 500</text></g>
+<line x1="435" y1="525.5" x2="1375" y2="525.5" stroke="#383838" stroke-width="1"/>
+<circle cx="455" cy="544" r="4.6" fill="none" stroke="#9AA0A6" stroke-width="1.1"/><path d="M461 540.2l4.4 3.8-4.4 3.8" fill="none" stroke="#9AA0A6" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="472" y="544" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#DCDCDC" text-anchor="start" dominant-baseline="central">Hyperlink</text>
+<g class="c0"><rect x="630" y="533" width="160" height="22" rx="4" fill="#343434"/><rect x="636" y="538.5" width="11" height="11" rx="2" fill="#2E5BFF" stroke="#5A5A5A" stroke-width="0.6"/><text x="653" y="544.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">...r/CMRC/Secondary/Cobalt</text></g>
+<g class="c1"><rect x="812" y="533" width="160" height="22" rx="4" fill="#343434"/><rect x="818" y="538.5" width="11" height="11" rx="2" fill="#5B4BE0" stroke="#5A5A5A" stroke-width="0.6"/><text x="835" y="544.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/CMRC/Brand/Iris</text></g>
+<g class="c2"><rect x="994" y="533" width="160" height="22" rx="4" fill="#343434"/><rect x="1000" y="538.5" width="11" height="11" rx="2" fill="#2E5BFF" stroke="#5A5A5A" stroke-width="0.6"/><text x="1017" y="544.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/BC/Brand/Blue</text></g>
+<g class="c3"><rect x="1176" y="533" width="160" height="22" rx="4" fill="#343434"/><rect x="1182" y="538.5" width="11" height="11" rx="2" fill="#2149D3" stroke="#5A5A5A" stroke-width="0.6"/><text x="1199" y="544.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/FDX/Brand/Cobalt</text></g>
+<line x1="435" y1="562.5" x2="1375" y2="562.5" stroke="#383838" stroke-width="1"/>
+<circle cx="455" cy="581" r="4.6" fill="none" stroke="#9AA0A6" stroke-width="1.1"/><path d="M461 577.2l4.4 3.8-4.4 3.8" fill="none" stroke="#9AA0A6" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="472" y="581" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#DCDCDC" text-anchor="start" dominant-baseline="central">Inverse Hyperlink</text>
+<g class="c0"><rect x="630" y="570" width="160" height="22" rx="4" fill="#343434"/><rect x="636" y="575.5" width="11" height="11" rx="2" fill="#25D3A4" stroke="#5A5A5A" stroke-width="0.6"/><text x="653" y="581.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">...MRC/Secondary/Mint-jade</text></g>
+<g class="c1"><rect x="812" y="570" width="160" height="22" rx="4" fill="#343434"/><rect x="818" y="575.5" width="11" height="11" rx="2" fill="#5B4BE0" stroke="#5A5A5A" stroke-width="0.6"/><text x="835" y="581.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Type/Color/Hyperlink</text></g>
+<g class="c2"><rect x="994" y="570" width="160" height="22" rx="4" fill="#343434"/><rect x="1000" y="575.5" width="11" height="11" rx="2" fill="#25D3A4" stroke="#5A5A5A" stroke-width="0.6"/><text x="1017" y="581.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/BC/Brand/Green</text></g>
+<g class="c3"><rect x="1176" y="570" width="160" height="22" rx="4" fill="#343434"/><rect x="1182" y="575.5" width="11" height="11" rx="2" fill="#F0997C" stroke="#5A5A5A" stroke-width="0.6"/><text x="1199" y="581.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/FDX/Brand/Peach</text></g>
+<line x1="435" y1="599.5" x2="1375" y2="599.5" stroke="#383838" stroke-width="1"/>
+<circle cx="455" cy="618" r="4.6" fill="none" stroke="#9AA0A6" stroke-width="1.1"/><path d="M461 614.2l4.4 3.8-4.4 3.8" fill="none" stroke="#9AA0A6" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="472" y="618" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#DCDCDC" text-anchor="start" dominant-baseline="central">Disabled</text>
+<g class="c0"><rect x="630" y="607" width="160" height="22" rx="4" fill="#343434"/><rect x="636" y="612.5" width="11" height="11" rx="2" fill="#8A91A0" stroke="#5A5A5A" stroke-width="0.6"/><text x="653" y="618.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">5F6779</text><text x="760" y="618.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="end" dominant-baseline="central">90</text><text x="780" y="618.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#8C8C8C" text-anchor="end" dominant-baseline="central">%</text></g>
+<g class="c1"><rect x="812" y="607" width="160" height="22" rx="4" fill="#343434"/><rect x="818" y="612.5" width="11" height="11" rx="2" fill="#8A91A0" stroke="#5A5A5A" stroke-width="0.6"/><text x="835" y="618.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">5F6779</text><text x="942" y="618.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="end" dominant-baseline="central">90</text><text x="962" y="618.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#8C8C8C" text-anchor="end" dominant-baseline="central">%</text></g>
+<g class="c2"><rect x="994" y="607" width="160" height="22" rx="4" fill="#343434"/><rect x="1000" y="612.5" width="11" height="11" rx="2" fill="#8A91A0" stroke="#5A5A5A" stroke-width="0.6"/><text x="1017" y="618.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Color/Neutrals/Gray 500</text></g>
+<g class="c3"><rect x="1176" y="607" width="160" height="22" rx="4" fill="#343434"/><rect x="1182" y="612.5" width="11" height="11" rx="2" fill="#8A91A0" stroke="#5A5A5A" stroke-width="0.6"/><text x="1199" y="618.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">5F6779</text><text x="1306" y="618.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="end" dominant-baseline="central">90</text><text x="1326" y="618.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#8C8C8C" text-anchor="end" dominant-baseline="central">%</text></g>
+<line x1="435" y1="636.5" x2="1375" y2="636.5" stroke="#383838" stroke-width="1"/>
+<text x="450" y="668" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="10.5" font-weight="400" fill="#8C8C8C" text-anchor="start" dominant-baseline="central">Type /</text>
+<text x="485" y="668" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="10.5" font-weight="600" fill="#E6E6E6" text-anchor="start" dominant-baseline="central">Typeface</text>
+<rect x="450" y="699.5" width="11" height="11" rx="2" fill="none" stroke="#9AA0A6" stroke-width="1.1"/><path d="M452.6 702.6h5.8M455.5 702.6v5.4" stroke="#9AA0A6" stroke-width="1" stroke-linecap="round"/>
+<text x="472" y="705" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#DCDCDC" text-anchor="start" dominant-baseline="central">Primary</text>
+<g class="c0">
+<rect x="630" y="694" width="96" height="22" rx="4" fill="#343434"/>
+<rect x="636" y="699.5" width="11" height="11" rx="2" fill="none" stroke="#9AA0A6" stroke-width="1"/>
+<text x="653" y="705.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Font/Inter</text>
+</g>
+<g class="c1">
+<rect x="812" y="694" width="96" height="22" rx="4" fill="#343434"/>
+<rect x="818" y="699.5" width="11" height="11" rx="2" fill="none" stroke="#9AA0A6" stroke-width="1"/>
+<text x="835" y="705.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Font/Aeonik</text>
+</g>
+<g class="c2">
+<rect x="994" y="694" width="96" height="22" rx="4" fill="#343434"/>
+<rect x="1000" y="699.5" width="11" height="11" rx="2" fill="none" stroke="#9AA0A6" stroke-width="1"/>
+<text x="1017" y="705.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Font/Gotham</text>
+</g>
+<g class="c3">
+<rect x="1176" y="694" width="96" height="22" rx="4" fill="#343434"/>
+<rect x="1182" y="699.5" width="11" height="11" rx="2" fill="none" stroke="#9AA0A6" stroke-width="1"/>
+<text x="1199" y="705.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Font/Aeonik</text>
+</g>
+<line x1="435" y1="723.5" x2="1375" y2="723.5" stroke="#383838" stroke-width="1"/>
+<rect x="450" y="736.5" width="11" height="11" rx="2" fill="none" stroke="#9AA0A6" stroke-width="1.1"/><path d="M452.6 739.6h5.8M455.5 739.6v5.4" stroke="#9AA0A6" stroke-width="1" stroke-linecap="round"/>
+<text x="472" y="742" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#DCDCDC" text-anchor="start" dominant-baseline="central">Secondary</text>
+<g class="c0">
+<rect x="630" y="731" width="96" height="22" rx="4" fill="#343434"/>
+<rect x="636" y="736.5" width="11" height="11" rx="2" fill="none" stroke="#9AA0A6" stroke-width="1"/>
+<text x="653" y="742.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Font/Inter</text>
+</g>
+<g class="c1">
+<rect x="812" y="731" width="96" height="22" rx="4" fill="#343434"/>
+<rect x="818" y="736.5" width="11" height="11" rx="2" fill="none" stroke="#9AA0A6" stroke-width="1"/>
+<text x="835" y="742.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Font/Aeonik</text>
+</g>
+<g class="c2">
+<rect x="994" y="731" width="96" height="22" rx="4" fill="#343434"/>
+<rect x="1000" y="736.5" width="11" height="11" rx="2" fill="none" stroke="#9AA0A6" stroke-width="1"/>
+<text x="1017" y="742.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Font/Gotham</text>
+</g>
+<g class="c3">
+<rect x="1176" y="731" width="122" height="22" rx="4" fill="#343434"/>
+<rect x="1182" y="736.5" width="11" height="11" rx="2" fill="none" stroke="#9AA0A6" stroke-width="1"/>
+<text x="1199" y="742.5" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="9" font-weight="400" fill="#C9CDD6" text-anchor="start" dominant-baseline="central">Font/Aeonik Mono</text>
+</g>
+<line x1="435" y1="760.5" x2="1375" y2="760.5" stroke="#383838" stroke-width="1"/>
+<path d="M450 798h11M455.5 792.5v11" stroke="#9AA0A6" stroke-width="1.2" stroke-linecap="round"/>
+<text x="472" y="798" font-family="Inter, -apple-system, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="400" fill="#B8B8B8" text-anchor="start" dominant-baseline="central">Create variable</text>
+</g>
+</svg>
