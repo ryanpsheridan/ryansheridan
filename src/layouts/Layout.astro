@@ -156,10 +156,32 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
   :root {
     --color-bg: #ffffff;
     --color-text: #111111;
-    --color-text-muted: #7a7a7a;
+    /* Secondary copy sits at ~5.7:1 on white, comfortably past AA, so long
+       passages of it read as text rather than as something switched off. */
+    --color-text-muted: #5c5c60;
     --color-border: #e5e5e5;
     --color-tag-bg: #f9f9f9;
-    --color-tag-text: #7a7a7a;
+    --color-tag-text: #5c5c60;
+
+    /* Links. Chrome (nav, footer, cards, buttons) pins its own color, so this
+       applies to links sitting in running text. */
+    --color-link: #1c4ed8;
+    --color-link-hover: #14379b;
+    --color-link-subtle: #a8bcf1;
+
+    /* Status. Each pairs a text-safe foreground with a tint for fills. The
+       reading is fixed by the shape it sits in, never by hue alone. */
+    --color-positive: #17663f;
+    --color-positive-bg: #eaf4ee;
+    --color-positive-border: #bcdcc9;
+    --color-caution: #8a5000;
+    --color-caution-bg: #fcf3e6;
+    --color-caution-border: #ecd5ad;
+    --color-critical: #a3302a;
+    --color-critical-bg: #fbeeed;
+    --color-critical-border: #eec9c6;
+    --color-accent-bg: #eef2fe;
+    --color-accent-border: #c3d0f6;
     --font-sans: "Geist", "Geist Fallback", -apple-system, system-ui, sans-serif;
     --font-mono: "IBM Plex Mono", "Courier New", monospace;
     --max-width: 1140px;
@@ -207,8 +229,12 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
   }
 
   a {
-    color: inherit;
+    color: var(--color-link);
     text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--color-link-hover);
   }
 
   img {
