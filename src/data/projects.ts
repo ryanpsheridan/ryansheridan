@@ -373,7 +373,7 @@ export const projects: Project[] = [
   {
     slug: "commerce-multi-brand-system",
     title: "Multi-brand Design System",
-    thumbnail: "/project-multi-brand3.jpg",
+    thumbnail: "/figma-variables-thumbnail-fdx-animated.svg",
     showOnHomepage: true,
     tags: ["Design System"],
     tools: ["Figma"],
@@ -434,7 +434,7 @@ export const projects: Project[] = [
   {
     slug: "new-office-blank-canvas",
     title: "New Office, Blank Canvas",
-    thumbnail: "/project-new-office1.png",
+    thumbnail: "/New_Office_Animated.svg",
     showOnHomepage: true,
     tags: ["Illustration"],
     tools: ["Adobe Illustrator"],
