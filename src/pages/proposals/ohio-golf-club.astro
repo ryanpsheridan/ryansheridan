@@ -863,10 +863,6 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
       <aside class="review-sidebar">
         <div class="sidebar-inner">
           <div class="meta-group">
-            <span class="meta-label">Date</span>
-            <p class="meta-value">3 September 2026</p>
-          </div>
-          <div class="meta-group">
             <span class="meta-label">Site reviewed</span>
             <p class="meta-value">
               <a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener">ohiogolfclubindoor.com</a>
@@ -956,6 +952,10 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
   .review-sidebar {
     flex: 1 1 0%;
     min-width: 0;
+    /* The first section in the main column clears the masthead rule by
+       --space-8, so the rail's first label sits on the same baseline as the
+       "Summary" eyebrow beside it. */
+    padding-top: var(--space-8);
   }
 
   .sidebar-inner {
@@ -964,7 +964,6 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
     display: flex;
     flex-direction: column;
     gap: var(--space-5);
-    padding-top: var(--space-2);
     /* On a short viewport the meta plus eight findings can outrun the screen. */
     max-height: calc(100vh - var(--space-8));
     overflow-y: auto;
@@ -1022,6 +1021,7 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
 
   .masthead {
     padding-bottom: var(--space-6);
+    margin-bottom: var(--space-4);
     border-bottom: 1px solid var(--color-border);
   }
 
@@ -1842,6 +1842,7 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
     .review-sidebar {
       order: -1;
       width: 100%;
+      padding-top: 0;
     }
 
     .sidebar-inner {
