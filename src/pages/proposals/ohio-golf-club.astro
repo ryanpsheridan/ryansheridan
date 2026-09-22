@@ -108,12 +108,31 @@ const addons = [
   },
 ];
 
-// The embed at the foot of the page. Swap src (and title) for whatever should
-// sit there; ratio is width / height of the embedded content.
+// The club's live Club Caddie events list, embedded at the foot of the page.
+// The from/to range is rebuilt at build time rather than left at the dates the
+// share URL was copied with, so a redeploy always asks for the coming year
+// instead of a window that has slid into the past.
+const embedWindow = (() => {
+  const mdy = (d: Date) =>
+    [d.getMonth() + 1, d.getDate()].map((n) => String(n).padStart(2, "0")).join("/") +
+    "/" +
+    d.getFullYear();
+  const from = new Date();
+  const to = new Date(from);
+  to.setFullYear(to.getFullYear() + 1);
+  return { from: mdy(from), to: mdy(to) };
+})();
+
+const embedUrl = new URL(
+  "https://apimanager-cc29.clubcaddie.com/events/view/hafdabab/list"
+);
+embedUrl.searchParams.set("from", embedWindow.from);
+embedUrl.searchParams.set("to", embedWindow.to);
+embedUrl.searchParams.set("Interaction", "aklgl3asi2c4uso5hcfamnqk2q");
+
 const embed = {
-  title: "Map of Ohio Golf Club",
-  src: "https://maps.google.com/maps?q=Ohio%20Golf%20Club%2C%20Akron%2C%20OH&output=embed",
-  ratio: "16 / 9",
+  title: "Your events, live from Club Caddie",
+  src: embedUrl.toString(),
 };
 
 const count = (level: string) => findings.filter((f) => f.level === level).length;
@@ -845,16 +864,20 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
 
     <section id="embed">
       <div class="sec-head">
-        <p class="eyebrow">Embed</p>
+        <p class="eyebrow">Live example</p>
         <h2>{embed.title}</h2>
       </div>
-      <div class="embed" style={`aspect-ratio: ${embed.ratio}`}>
+      <p class="k">
+        Showing {embedWindow.from} to {embedWindow.to}. This is the events list Club Caddie already
+        publishes for you, dropped straight onto the page. Nothing here is re-typed, so it can never
+        disagree with your booking system.
+      </p>
+      <div class="embed">
         <iframe
           src={embed.src}
           title={embed.title}
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
-          allowfullscreen
         ></iframe>
       </div>
     </section>
@@ -1730,11 +1753,20 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
 
   /* Embed */
 
+  /* An events list is tall and scrolls inside itself, so the frame gets a
+     height rather than a ratio, and gives back some of it on small screens. */
   .embed {
     position: relative;
     width: 100%;
+    height: 560px;
     border: 1px solid var(--color-border);
     overflow: hidden;
+  }
+
+  @media (max-width: 639px) {
+    .embed {
+      height: 420px;
+    }
   }
 
   .embed iframe {
