@@ -902,6 +902,13 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
     border-top: 1px solid var(--color-border);
   }
 
+  /* The masthead's rule already divides the intro from what follows, so the
+     first group in the rail doesn't add a second one. Same as /work/[slug]. */
+  .meta-group:first-child {
+    padding-top: 0;
+    border-top: none;
+  }
+
   .meta-label {
     font-family: var(--font-mono);
     font-size: var(--text-xs);
