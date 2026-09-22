@@ -1308,7 +1308,9 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
   .stack {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    /* The findings are long cards, so they need more air between them than a
+       tight group would. The colored top rule reads as a divider at this gap. */
+    gap: var(--space-6);
     min-width: 0;
   }
 
