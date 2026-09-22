@@ -151,14 +151,6 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
 >
   <Nav />
   <main class="review">
-    <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="/">Home</a>
-      <span class="sep">/</span>
-      <a href="/proposals">Proposals</a>
-      <span class="sep">/</span>
-      <span class="current">Ohio Golf Club</span>
-    </nav>
-
     <p class="eyebrow">Website review</p>
     <h1>Ohio Golf Club</h1>
 
@@ -1012,34 +1004,6 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
 <style>
   .review {
     padding: 80px var(--page-padding) 0;
-  }
-
-  .breadcrumbs {
-    max-width: var(--max-width);
-    margin: 0 auto var(--space-5);
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-  }
-
-  .breadcrumbs a {
-    color: var(--color-text-muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  .breadcrumbs a:hover {
-    color: var(--color-text);
-  }
-
-  .breadcrumbs .sep {
-    color: var(--color-border);
-  }
-
-  .breadcrumbs .current {
-    color: var(--color-text);
   }
 
   .review > .eyebrow,
