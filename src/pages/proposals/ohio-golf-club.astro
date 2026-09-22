@@ -894,6 +894,74 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
   <Footer />
 </Layout>
 
+<script>
+  // Marks the finding the reader is currently in. The rail scrolls
+  // independently once it outruns the viewport, so the active link is kept in
+  // view there too.
+  const index = document.querySelector<HTMLElement>(".index");
+  const rail = document.querySelector<HTMLElement>(".sidebar-inner");
+  const findings = document.querySelector<HTMLElement>("#findings");
+
+  if (index && findings) {
+    const links = Array.from(index.querySelectorAll<HTMLAnchorElement>("a[href^='#']"));
+    const items = links.map((a) => document.getElementById(a.hash.slice(1)));
+
+    let queued = false;
+    let current = -1;
+
+    const readLine = () => {
+      const nav = parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue("--nav-height")
+      );
+      return (Number.isFinite(nav) ? nav : 74) + 80;
+    };
+
+    const update = () => {
+      queued = false;
+      const line = readLine();
+
+      // The last finding whose top has crossed the line, and nothing once the
+      // whole section has scrolled past.
+      let next = -1;
+      if (findings.getBoundingClientRect().bottom > line) {
+        items.forEach((el, i) => {
+          if (el && el.getBoundingClientRect().top <= line) next = i;
+        });
+      }
+
+      if (next === current) return;
+      current = next;
+
+      links.forEach((a, i) => {
+        if (i === next) a.setAttribute("aria-current", "true");
+        else a.removeAttribute("aria-current");
+      });
+      index.classList.toggle("has-active", next > -1);
+
+      // Keep the active link visible when the rail itself is scrollable.
+      if (rail && next > -1 && rail.scrollHeight > rail.clientHeight) {
+        const link = links[next];
+        const top = link.offsetTop - rail.offsetTop;
+        const bottom = top + link.offsetHeight;
+        if (top < rail.scrollTop) rail.scrollTop = top;
+        else if (bottom > rail.scrollTop + rail.clientHeight) {
+          rail.scrollTop = bottom - rail.clientHeight;
+        }
+      }
+    };
+
+    const queue = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(update);
+    };
+
+    addEventListener("scroll", queue, { passive: true });
+    addEventListener("resize", queue);
+    update();
+  }
+</script>
+
 <style>
   .review {
     padding: 80px var(--page-padding) 0;
@@ -960,12 +1028,14 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
 
   .sidebar-inner {
     position: sticky;
-    top: var(--space-6);
+    /* The nav is sticky too, so the rail has to clear it or its first label
+       slides underneath. Same offset the findings use for scroll-margin. */
+    top: calc(var(--nav-height) + var(--space-4));
     display: flex;
     flex-direction: column;
     gap: var(--space-5);
     /* On a short viewport the meta plus eight findings can outrun the screen. */
-    max-height: calc(100vh - var(--space-8));
+    max-height: calc(100vh - var(--nav-height) - var(--space-6));
     overflow-y: auto;
   }
 
@@ -1207,6 +1277,21 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
   .index-label {
     font-size: var(--text-sm);
     line-height: 1.3;
+  }
+
+  @media (min-width: 900px) {
+    /* Once the reader is inside the findings the rail dims so the current one
+       stands out. Before that .has-active is absent and the list reads flat,
+       the way it does on the stacked layout. Color only: a weight change would
+       reflow the two-line labels. */
+    .index.has-active a {
+      color: var(--color-text-muted);
+    }
+
+    .index.has-active a[aria-current="true"],
+    .index.has-active a[aria-current="true"] .index-n {
+      color: var(--color-text);
+    }
   }
 
   /* Grid and flex children default to min-width: auto, so a wide scroll track
