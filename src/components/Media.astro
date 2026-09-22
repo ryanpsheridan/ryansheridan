@@ -12,19 +12,15 @@ interface Props {
 const { src, alt = "", class: className, loading = "lazy" } = Astro.props;
 
 /**
- * An animated SVG or GIF inside an <img> is its own document. The page can't
- * reach in to pause it, and scripts inside it don't run, so the only moment we
- * control is when the browser loads it. Withholding src until the image is on
- * screen makes the load itself the start cue.
+ * Animated SVGs and GIFs are loaded with a plain src and native lazy loading.
  *
- * Eager images are exempt. They are above the fold, so there is nothing to
- * wait for, and revealing one mid-load has been seen to leave a mobile browser
- * painting the SVG's first frame and never starting it. A plain src, the way
- * the markup read before any of this, is both simpler and more reliable.
+ * This used to withhold src and hand it over on scroll, so the animation
+ * started for someone actually looking at it. On iOS that left the two
+ * smallest animated SVGs painting frame one and never starting, while the
+ * larger ones happened to load slowly enough to escape it. The same files
+ * animate correctly wherever a plain src is used, so that is what we use.
+ * These loops all run forever, so there is nothing to miss by starting early.
  */
-const isAnimated = /\.(svg|gif)(?:[?#].*)?$/i.test(src);
-const defer = isAnimated && loading !== "eager";
-
 /**
  * Reserve the right box up front so neither a deferred animation nor a
  * lazy-loaded photo shifts the page when it arrives.
@@ -98,20 +94,4 @@ const ratio = intrinsicRatio(src);
 const sizing = ratio ? `--media-ratio: ${ratio}` : undefined;
 ---
 
-{
-  defer ? (
-    <>
-      <img
-        data-animate-src={src}
-        alt={alt}
-        class={className}
-        style={sizing}
-      />
-      <noscript>
-        <img src={src} alt={alt} class={className} />
-      </noscript>
-    </>
-  ) : (
-    <img src={src} alt={alt} class={className} loading={loading} style={sizing} />
-  )
-}
+<img src={src} alt={alt} class={className} loading={loading} style={sizing} />

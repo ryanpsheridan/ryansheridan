@@ -74,62 +74,6 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
       }
       requestAnimationFrame(raf);
     </script>
-    <script>
-      // Animated SVGs and GIFs render in their own document, so the page can't
-      // pause or restart one from out here. What we can control is when the
-      // browser loads it, which is when its timeline starts. These images ship
-      // without a src and get one as they come into view, so the animation
-      // plays from the first frame for someone actually looking at it.
-      const animated = document.querySelectorAll<HTMLImageElement>("img[data-animate-src]");
-
-      if (animated.length) {
-        const reveal = (img: HTMLImageElement) => {
-          const src = img.dataset.animateSrc;
-          if (src && img.getAttribute("src") !== src) img.setAttribute("src", src);
-        };
-
-        if (!("IntersectionObserver" in window)) {
-          animated.forEach(reveal);
-        } else {
-          // Warm the cache while the page is idle so revealing an image is a
-          // cache hit rather than a visible wait on a few hundred KB.
-          const prefetch = () =>
-            animated.forEach((img) => {
-              const src = img.dataset.animateSrc;
-              if (src) fetch(src, { cache: "force-cache" }).catch(() => {});
-            });
-
-          if ("requestIdleCallback" in window) {
-            (window as any).requestIdleCallback(prefetch, { timeout: 3000 });
-          } else {
-            window.setTimeout(prefetch, 1200);
-          }
-
-          const observe = () => {
-            const observer = new IntersectionObserver(
-              (entries) => {
-                entries.forEach((entry) => {
-                  if (!entry.isIntersecting) return;
-                  const img = entry.target as HTMLImageElement;
-                  observer.unobserve(img);
-                  // On a paint boundary: handing an SVG its src mid-layout can
-                  // leave a mobile browser showing frame one and never starting.
-                  requestAnimationFrame(() => reveal(img));
-                });
-              },
-              { threshold: 0.01 }
-            );
-
-            animated.forEach((img) => observer.observe(img));
-          };
-
-          // Wait for the page to settle, so an image that starts in view is
-          // revealed under the same conditions as one scrolled to later.
-          if (document.readyState === "complete") observe();
-          else window.addEventListener("load", observe, { once: true });
-        }
-      }
-    </script>
   </body>
 </html>
 
