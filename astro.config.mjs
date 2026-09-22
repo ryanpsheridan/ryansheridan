@@ -15,11 +15,20 @@ export default defineConfig({
     sitemap({
       // Anything that carries noindex stays out of the sitemap too, so the
       // two never disagree about what belongs in search. /proposals covers
-      // the index and every client proposal under it.
+      // the index and every client proposal under it. The field experiments
+      // and the client intake form are linked directly rather than found
+      // through search.
       filter: (page) =>
-        !['/apartment', '/golftrip', '/proposals', '/ohio-golf-club'].some(
-          (path) => page.includes(path)
-        ),
+        ![
+          '/apartment',
+          '/golftrip',
+          '/proposals',
+          '/ohio-golf-club',
+          '/cursor-field',
+          '/maze-field',
+          '/homepage-variations',
+          '/project-questionnaire',
+        ].some((path) => page.includes(path)),
     }),
   ]
 });
