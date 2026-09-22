@@ -856,14 +856,9 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
 
     <section id="embed">
       <div class="sec-head">
-        <p class="eyebrow">Live example</p>
+        <p class="eyebrow">Embed example</p>
         <h2>{embed.title}</h2>
       </div>
-      <p class="k">
-        Showing {embedWindow.from} to {embedWindow.to}. This is the events list Club Caddie already
-        publishes for you, dropped straight onto the page. Nothing here is re-typed, so it can never
-        disagree with your booking system.
-      </p>
       <div class="embed">
         <iframe
           src={embed.src}
@@ -924,6 +919,16 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
                   </li>
                 ))
               }
+            </ol>
+          </nav>
+          <nav class="index solo meta-group" aria-label="Embed example">
+            <span class="meta-label">Embed example</span>
+            <ol>
+              <li>
+                <a href="#embed">
+                  <span class="index-label">{embed.title}</span>
+                </a>
+              </li>
             </ol>
           </nav>
         </div>
@@ -1288,6 +1293,12 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
   .index-label {
     font-size: var(--text-sm);
     line-height: 1.3;
+  }
+
+  /* The findings are numbered; this one entry isn't, so it drops the number
+     column rather than sitting indented against nothing. */
+  .index.solo a {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   @media (min-width: 900px) {
