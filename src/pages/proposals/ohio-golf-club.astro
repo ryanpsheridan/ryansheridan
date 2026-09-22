@@ -6,15 +6,62 @@ import Footer from "../../components/Footer.astro";
 // The index rail and the cover's tally both read from this, so a finding can't
 // be renumbered in one place and not the other.
 const findings = [
-  { n: "01", label: "Hours aren't on your website", level: "critical" },
-  { n: "02", label: "Two answers to the same price question", level: "upside" },
-  { n: "03", label: "Five pages, one hidden title", level: "upside" },
-  { n: "04", label: "Services have no pages of their own", level: "upside" },
-  { n: "05", label: "Wrong address and price elsewhere", level: "critical" },
-  { n: "06", label: "Your 4.9 rating isn't on your site", level: "neutral" },
-  { n: "07", label: "No league page, and season is starting", level: "critical" },
-  { n: "08", label: "Form submissions go nowhere", level: "neutral" },
+  {
+    n: "01",
+    label: "Hours aren't on your website",
+    level: "critical",
+    impact:
+      "Eliminates friction for impulse visitors. When potential customers can instantly verify you\u2019re open, they drive over instead of second-guessing or choosing a competitor.",
+  },
+  {
+    n: "02",
+    label: "Two answers to the same price question",
+    level: "upside",
+    impact:
+      "Captures high-intent AI and search traffic. Clear, structured pricing builds immediate trust and stops potential members from abandoning their search due to outdated directory prices.",
+  },
+  {
+    n: "03",
+    label: "Five pages, one hidden title",
+    level: "upside",
+    impact:
+      "Improves click-through rates from search results. Specific, compelling headlines convince searchers to click your link instead of scrolling past to rival golf centers.",
+  },
+  {
+    n: "04",
+    label: "Services have no pages of their own",
+    level: "upside",
+    impact:
+      "Creates a direct path to booking. Matching a user\u2019s exact search intent (\u201cgolf lessons\u201d) with a dedicated landing page and a clear booking button dramatically increases conversion rates compared to forcing them to search a generic homepage.",
+  },
+  {
+    n: "05",
+    label: "Wrong address and price elsewhere",
+    level: "critical",
+    impact:
+      "Prevents lost sales and wasted trips. Correcting wrong addresses and outdated pricing ensures qualified leads don\u2019t get routed to the wrong location or turned off by incorrect costs.",
+  },
+  {
+    n: "06",
+    label: "Your 4.9 rating isn't on your site",
+    level: "neutral",
+    impact:
+      "Leverages social proof at the decision point. Displaying your 80+ glowing reviews directly next to booking options reassures hesitant visitors and pushes them to commit.",
+  },
+  {
+    n: "07",
+    label: "No league page, and season is starting",
+    level: "critical",
+    impact:
+      "Captures high-value seasonal revenue. A dedicated league page gives teams and solo players all rules, schedules, and signup forms in one shareable link, filling league spots faster.",
+  },
+  {
+    n: "08",
+    label: "Form submissions go nowhere",
+    level: "neutral",
+  },
 ];
+
 
 // Each package line points back at the finding it resolves, so the proposal and
 // the findings above can't drift apart.
@@ -62,6 +109,7 @@ const addons = [
 ];
 
 const count = (level: string) => findings.filter((f) => f.level === level).length;
+const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
 ---
 
 <!--
@@ -239,6 +287,10 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
                   <p>Visitors can see them. Search engines and AI assistants keep using the directory versions.</p>
                 </div>
               </div>
+              <aside class="impact">
+                <p class="impact-k">Conversion impact</p>
+                <p>{impactOf("01")}</p>
+              </aside>
             </div>
           </article>
 
@@ -325,6 +377,10 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
                   </div>
                 </div>
               </div>
+              <aside class="impact">
+                <p class="impact-k">Conversion impact</p>
+                <p>{impactOf("02")}</p>
+              </aside>
             </div>
           </article>
 
@@ -356,6 +412,10 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
                 installations, and Google can&rsquo;t tell it apart from your contact page.
               </p>
               <p><strong>The fix:</strong> each page gets its own title and description. No second option worth presenting, and the cheapest item here.</p>
+              <aside class="impact">
+                <p class="impact-k">Conversion impact</p>
+                <p>{impactOf("03")}</p>
+              </aside>
             </div>
           </article>
 
@@ -460,6 +520,10 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
                   <p>Lessons, fitting and memberships first, the rest added later.</p>
                 </div>
               </div>
+              <aside class="impact">
+                <p class="impact-k">Conversion impact</p>
+                <p>{impactOf("04")}</p>
+              </aside>
             </div>
           </article>
 
@@ -505,6 +569,10 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
                   <p>Just the listings appearing in searches and AI answers today.</p>
                 </div>
               </div>
+              <aside class="impact">
+                <p class="impact-k">Conversion impact</p>
+                <p>{impactOf("05")}</p>
+              </aside>
             </div>
           </article>
 
@@ -550,6 +618,10 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
                   seconds before they book, and right now it isn&rsquo;t there.
                 </p>
               </div>
+              <aside class="impact">
+                <p class="impact-k">Conversion impact</p>
+                <p>{impactOf("06")}</p>
+              </aside>
             </div>
           </article>
 
@@ -576,6 +648,10 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
                   <p>Adds registration. Better long term, likely misses this season.</p>
                 </div>
               </div>
+              <aside class="impact">
+                <p class="impact-k">Conversion impact</p>
+                <p>{impactOf("07")}</p>
+              </aside>
             </div>
           </article>
 
@@ -1444,6 +1520,25 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
     background: var(--color-bg);
     border-color: var(--color-border);
     color: var(--color-text-muted);
+  }
+
+  .impact {
+    background: var(--color-tag-bg);
+    border: 1px solid var(--color-border);
+    border-left: 2px solid var(--color-text);
+    padding: var(--space-3);
+  }
+
+  .impact-k {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  .impact p:last-child {
+    font-size: var(--text-sm);
+    color: var(--color-text);
   }
 
   /* Finding 06's three-way note */
