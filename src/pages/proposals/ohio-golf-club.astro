@@ -108,6 +108,14 @@ const addons = [
   },
 ];
 
+// The embed at the foot of the page. Swap src (and title) for whatever should
+// sit there; ratio is width / height of the embedded content.
+const embed = {
+  title: "Map of Ohio Golf Club",
+  src: "https://maps.google.com/maps?q=Ohio%20Golf%20Club%2C%20Akron%2C%20OH&output=embed",
+  ratio: "16 / 9",
+};
+
 const count = (level: string) => findings.filter((f) => f.level === level).length;
 const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
 ---
@@ -832,6 +840,22 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
             </li>
           </ol>
         </div>
+      </div>
+    </section>
+
+    <section id="embed">
+      <div class="sec-head">
+        <p class="eyebrow">Embed</p>
+        <h2>{embed.title}</h2>
+      </div>
+      <div class="embed" style={`aspect-ratio: ${embed.ratio}`}>
+        <iframe
+          src={embed.src}
+          title={embed.title}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
       </div>
     </section>
 
@@ -1702,6 +1726,23 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
     display: grid;
     gap: var(--space-3);
     align-items: start;
+  }
+
+  /* Embed */
+
+  .embed {
+    position: relative;
+    width: 100%;
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+  }
+
+  .embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
   }
 
   /* Proposal */
