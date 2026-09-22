@@ -66,7 +66,8 @@
   .pupil{animation:blink 24s ease-in-out infinite}
   .disc{animation:turnA 24s cubic-bezier(.65,0,.35,1) infinite}
   .disc2{animation:turnB 24s cubic-bezier(.65,0,.35,1) infinite}
-  /* 24s loop, 3s slots: left disc, blink, bird disc, blink, left disc, blink, bird disc, blink */
+  /* 24s loop, 3s slots: left disc, blink, bird disc, blink, left disc, blink, bird disc,
+     double blink (second one quicker) */
   @keyframes turnA{
     0%,1.25%{transform:rotate(0deg)}10.83%,51.25%{transform:rotate(180deg)}60.83%,100%{transform:rotate(360deg)}}
   @keyframes turnB{
@@ -74,7 +75,7 @@
   @keyframes blink{
     0%,17.5%{transform:scaleY(1)}18.17%{transform:scaleY(.1)}18.83%,42.5%{transform:scaleY(1)}
     43.17%{transform:scaleY(.1)}43.83%,67.5%{transform:scaleY(1)}68.17%{transform:scaleY(.1)}
-    68.83%,92.5%{transform:scaleY(1)}93.17%{transform:scaleY(.1)}93.83%,100%{transform:scaleY(1)}}
+    68.83%,92.5%{transform:scaleY(1)}93.17%{transform:scaleY(.1)}93.83%,94.3%{transform:scaleY(1)}94.75%{transform:scaleY(.1)}95.2%,100%{transform:scaleY(1)}}
   @media (prefers-reduced-motion:reduce){.pupil,.disc,.disc2{animation:none}}
 </style>
 <circle cx="1013.7" cy="345.8" r="22.4" fill="#C1E5E4"/>
