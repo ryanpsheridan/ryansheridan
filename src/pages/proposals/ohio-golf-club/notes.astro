@@ -1,0 +1,630 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Nav from "../../../components/Nav.astro";
+import Footer from "../../../components/Footer.astro";
+
+const sections = [
+  { id: "summary", label: "Meeting summary" },
+  { id: "package", label: "Package direction" },
+  { id: "events", label: "Events & league page" },
+  { id: "crm", label: "Leads & CRM" },
+  { id: "access", label: "Site access & ownership" },
+  { id: "editing", label: "Self-editing" },
+  { id: "design", label: "Design scope" },
+  { id: "context", label: "Business context" },
+  { id: "next-steps", label: "Next steps" },
+  { id: "email-draft", label: "Email draft to Kyle" },
+];
+---
+
+<!--
+  Private notes for a single proposal, not shared with the client. Same
+  noindex treatment as the proposal itself, and /proposals is already
+  filtered out of the sitemap in astro.config.mjs, so this subpath is too.
+  No breadcrumbs here by design — this page is for Ryan's own viewing only,
+  not part of the client-facing navigation.
+-->
+<Layout
+  title="Notes — Ohio Golf Club — Ryan Sheridan"
+  description="Private follow-up notes from the Ohio Golf Club proposal walkthrough."
+  noindex={true}
+>
+  <Nav />
+  <main class="review">
+    <p class="eyebrow">Private notes</p>
+    <h1>Ohio Golf Club</h1>
+
+    <header class="masthead">
+      <p class="lede">
+        Notes from the 50-minute walkthrough with Kyle, where I shared the <a href="/proposals/ohio-golf-club">proposal</a> and we talked through the findings and packages together. For my own reference, not shared with him.
+      </p>
+      <p class="meta-line">Meeting length: ~50 min &middot; Attendee: Kyle</p>
+    </header>
+
+    <div class="review-layout">
+      <div class="review-main">
+        <section id="summary">
+          <div class="sec-head">
+            <p class="eyebrow">Overview</p>
+            <h2>Meeting summary</h2>
+          </div>
+          <div class="box">
+            <p>
+              We walked through the proposal live, in the order it&rsquo;s laid out on the page. Kyle hadn&rsquo;t seen it before this call, so most of the time was me narrating findings 01&ndash;08 while he reacted in real time and filled in context I couldn&rsquo;t get from outside the site (his partner&rsquo;s role, what Club Caddie already does, why two directory listings have the wrong address).
+            </p>
+            <p>
+              Overall read: he&rsquo;s bought in. He said outright that breaking the homepage into five dedicated pages &ldquo;makes a lot of sense,&rdquo; expects he and his partner would sign off on at least the middle or high tier, and specifically liked that this proposal is purely technical &mdash; no redesign pitch attached. He&rsquo;s also thinking a step ahead: a second location is coming, and he wants the lead pipeline solid before he commits to hiring more coaches.
+            </p>
+          </div>
+        </section>
+
+        <section id="package">
+          <div class="sec-head">
+            <p class="eyebrow">Decision</p>
+            <h2>Package direction</h2>
+          </div>
+          <div class="box">
+            <p>
+              He&rsquo;s leaning toward Option 2 (the five dedicated pages) as the real starting point, not Option 1 as a trial. Needs to loop in his partner before confirming, but said &ldquo;even just starting out with this one would be a great first step.&rdquo;
+            </p>
+            <p>He wants to forward the proposal link to his partner and walk him through it the same way we just did.</p>
+          </div>
+        </section>
+
+        <section id="events">
+          <div class="sec-head">
+            <p class="eyebrow">Open question</p>
+            <h2>Events &amp; league page</h2>
+          </div>
+          <div class="box">
+            <p>
+              He wants a real events calendar &mdash; league, golf outing, Thanksgiving tournament, that kind of thing &mdash; visible up front, the way a course keeps a sign-up sheet in the pro shop. Right now the events page is just a &ldquo;host your event here&rdquo; pitch with no upcoming-events list.
+            </p>
+            <p>
+              Naming needs to be nailed down before this gets built: he draws a real distinction between events they host (league, tournaments &mdash; what he wants surfaced as &ldquo;upcoming events&rdquo;) and private bookings (birthday parties, etc., which already route through a separate form to his sister). We landed on treating the events page as the internal/tournament calendar and leaving private bookings as their own path, but didn&rsquo;t settle on final labels.
+            </p>
+            <p>
+              Bigger point that came out of this: Club Caddie already has an events module with embeddable iframes (events list, tee times, memberships), and it supports scheduled open/close dates. Kyle&rsquo;s exact words on why this matters &mdash; last year&rsquo;s league page stayed live for months after registration closed because nobody remembered to email their developer to take it down. Embedding the live Club Caddie feed instead of hand-editing the page fixes that by construction.
+            </p>
+          </div>
+        </section>
+
+        <section id="crm">
+          <div class="sec-head">
+            <p class="eyebrow">Item 08</p>
+            <h2>Leads &amp; CRM</h2>
+          </div>
+          <div class="box">
+            <p>
+              Confirmed: form submissions currently go to email only, nothing captured beyond that. He&rsquo;d independently looked into GoHighLevel already, but flagged it as a lot of overhead to manage. I&rsquo;d floated Airtable or HubSpot&rsquo;s free tier as a lighter starting point, which is still the right call given the goal is just &ldquo;a working list quickly.&rdquo;
+            </p>
+            <p>
+              The real complication: Club Caddie already builds a customer profile the moment someone books a simulator, so there&rsquo;s a second, more-complete customer record living outside whatever CRM catches the web form. He doesn&rsquo;t want a pile of disconnected logins. Worth scoping whether Club Caddie can take a lead handoff directly, or whether the two systems just need to be reconciled manually at first &mdash; this is the &ldquo;check this first&rdquo; option in the proposal, and now confirmed as his actual preference.
+            </p>
+          </div>
+        </section>
+
+        <section id="access">
+          <div class="sec-head">
+            <p class="eyebrow">Blocking item</p>
+            <h2>Site access &amp; ownership</h2>
+          </div>
+          <div class="box">
+            <p>
+              The site was built by a friend, John &mdash; no contract, informal arrangement (lessons in exchange for the work). Kyle has zero backend access: no hosting login, no repo. John pushes a preview link before anything goes live, and that&rsquo;s the extent of what Kyle sees.
+            </p>
+            <p>
+              Kyle recalled the site is on Vercel, possibly GitHub, and believes John would hand over access without friction &mdash; he&rsquo;s already run a &ldquo;we&rsquo;re moving in this direction&rdquo; conversation with him in the past and John was fine with it.
+            </p>
+            <p>
+              Agreed plan: Kyle creates his own Vercel account first, then asks John to transfer the project to it (or reproduce it there) and add both John and me as collaborators. Ownership and control stay with Kyle regardless of who&rsquo;s actively making changes. I said I&rsquo;d follow up by email spelling out exactly what to ask John for &mdash; draft below.
+            </p>
+          </div>
+        </section>
+
+        <section id="editing">
+          <div class="sec-head">
+            <p class="eyebrow">Scoping note</p>
+            <h2>Self-editing capability</h2>
+          </div>
+          <div class="box">
+            <p>
+              Kyle&rsquo;s actual frustration isn&rsquo;t wanting to build pages himself &mdash; it&rsquo;s being stuck behind a middleman for small, obviously-safe text edits (hours, a price, a blurb). He was explicit that anything structural (a new page, a homepage redesign) should still route through me or a developer.
+            </p>
+            <p>
+              This matches the &ldquo;to scope&rdquo; item already in the proposal &mdash; a lightweight page-builder layer for content-only edits, with a short learning curve, while bigger changes stay gated. No commitment yet, just confirmed appetite.
+            </p>
+          </div>
+        </section>
+
+        <section id="design">
+          <div class="sec-head">
+            <p class="eyebrow">Explicitly out of scope, for now</p>
+            <h2>Design scope</h2>
+          </div>
+          <div class="box">
+            <p>
+              He confirmed he wants to hold off on any visual redesign for this round &mdash; explicitly agreed with leaving the current design as-is rather than opening up UX/IX decisions alongside the technical work. I noted I might still tidy up small things like spacing while in there, but won&rsquo;t go further than that without it being a separate conversation.
+            </p>
+          </div>
+        </section>
+
+        <section id="context">
+          <div class="sec-head">
+            <p class="eyebrow">Background</p>
+            <h2>Business context</h2>
+          </div>
+          <div class="box">
+            <p>
+              Second location is planned near their original Springside address &mdash; which explains why directories still show that address as current. Kyle&rsquo;s framing: the site already converts well via word of mouth and strong simulator demand (Oct&ndash;Apr especially) despite minimal marketing, so he expects the technical fixes to compound rather than start from zero. He&rsquo;s holding off on hiring additional coaches until the lead volume justifies it, which is part of why the lead-capture piece (item 08) matters beyond just tidiness.
+            </p>
+            <p>
+              He also mentioned the two 1-star reviews aren&rsquo;t worth chasing &mdash; one was a mis-tagged review meant for a different course (already got it removed), the other was a single frequent visitor upset about turf condition. Consistent with the proposal&rsquo;s framing that the 4.9 rating and review count are the strongest asset as-is.
+            </p>
+          </div>
+        </section>
+
+        <section id="next-steps">
+          <div class="sec-head">
+            <p class="eyebrow">Action items</p>
+            <h2>Next steps</h2>
+          </div>
+          <div class="steps">
+            <div class="step mine">
+              <p class="step-k">Me</p>
+              <ul>
+                <li>Send Kyle the follow-up email on what to request from John (draft below).</li>
+                <li>Once site access is granted: first round targeted at ~2 weeks.</li>
+                <li>Scope whether Club Caddie can accept a lead handoff directly, before recommending Airtable/HubSpot as the fallback.</li>
+                <li>Pin down naming for the events/league page structure before building it.</li>
+              </ul>
+            </div>
+            <div class="step theirs">
+              <p class="step-k">Kyle</p>
+              <ul>
+                <li>Confirm Google Search Console is live (needed ~24 hrs after setup at the time of the call) and grant me access.</li>
+                <li>Grant access to the Google Business Profile.</li>
+                <li>Create his own Vercel account, then reach out to John per the email below.</li>
+                <li>Loop in his partner with the proposal link and confirm which package tier.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="email-draft">
+          <div class="sec-head">
+            <p class="eyebrow">Draft</p>
+            <h2>Email to Kyle: what to send his developer</h2>
+          </div>
+          <div class="box email">
+            <p class="k">Subject: Getting the site set up on your own accounts</p>
+            <pre class="code">Hey Kyle,
+
+Quick recap of what to send John so we can get the site fully under
+your control before I start on anything:
+
+1. Create your own Vercel account first (free), using whatever email
+   you want tied to the business long-term.
+
+2. Ask John to either transfer the existing Vercel project to your
+   new account, or redeploy the same codebase there. Either way
+   works &mdash; the goal is just that the live site ends up hosted
+   under an account you own.
+
+3. Ask him where the code itself lives (GitHub or similar) and to
+   add your new account as an owner/collaborator on that repo too,
+   not just the hosting.
+
+4. Once both of those are set up, add me as a collaborator on both
+   the Vercel project and the repo. I'll work the same way he does
+   today &mdash; pushing changes for review before anything goes live
+   &mdash; except you'll be able to see and control all of it
+   directly instead of going through him for access.
+
+None of this requires him to do any new work, just handing over
+logins/ownership on what he's already built. You keep full control
+either way, and he stays a collaborator if you want him involved in
+anything going forward.
+
+Let me know once you've got the Vercel account created and I can
+help from there if anything's unclear on his end.
+
+Ryan</pre>
+            <p class="cap">Draft only &mdash; adjust tone/specifics before sending to Kyle.</p>
+          </div>
+        </section>
+      </div>
+
+      <aside class="review-sidebar">
+        <div class="sidebar-inner">
+          <div class="meta-group">
+            <span class="meta-label">Client</span>
+            <p class="meta-value">Kyle &mdash; Ohio Golf Club</p>
+          </div>
+          <div class="meta-group">
+            <span class="meta-label">Related</span>
+            <p class="meta-value"><a href="/proposals/ohio-golf-club">Proposal page</a></p>
+          </div>
+          <nav class="index meta-group" aria-label="Sections">
+            <span class="meta-label">On this page</span>
+            <ol>
+              {
+                sections.map((s) => (
+                  <li>
+                    <a href={`#${s.id}`}>
+                      <span class="index-label">{s.label}</span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ol>
+          </nav>
+        </div>
+      </aside>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  // Marks the section the reader is currently in, same behavior as the
+  // proposal page's finding rail.
+  const index = document.querySelector<HTMLElement>(".index");
+  const rail = document.querySelector<HTMLElement>(".sidebar-inner");
+  const main = document.querySelector<HTMLElement>(".review-main");
+
+  if (index && main) {
+    const links = Array.from(index.querySelectorAll<HTMLAnchorElement>("a[href^='#']"));
+    const items = links.map((a) => document.getElementById(a.hash.slice(1)));
+
+    let queued = false;
+    let current = -1;
+
+    const readLine = () => {
+      const nav = parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue("--nav-height")
+      );
+      return (Number.isFinite(nav) ? nav : 74) + 80;
+    };
+
+    const update = () => {
+      queued = false;
+      const line = readLine();
+
+      let next = -1;
+      if (main.getBoundingClientRect().bottom > line) {
+        items.forEach((el, i) => {
+          if (el && el.getBoundingClientRect().top <= line) next = i;
+        });
+      }
+
+      if (next === current) return;
+      current = next;
+
+      links.forEach((a, i) => {
+        if (i === next) a.setAttribute("aria-current", "true");
+        else a.removeAttribute("aria-current");
+      });
+      index.classList.toggle("has-active", next > -1);
+
+      if (rail && next > -1 && rail.scrollHeight > rail.clientHeight) {
+        const link = links[next];
+        const top = link.offsetTop - rail.offsetTop;
+        const bottom = top + link.offsetHeight;
+        if (top < rail.scrollTop) rail.scrollTop = top;
+        else if (bottom > rail.scrollTop + rail.clientHeight) {
+          rail.scrollTop = bottom - rail.clientHeight;
+        }
+      }
+    };
+
+    const queue = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(update);
+    };
+
+    addEventListener("scroll", queue, { passive: true });
+    addEventListener("resize", queue);
+    update();
+  }
+</script>
+
+<style>
+  .review {
+    padding: 80px var(--page-padding) 0;
+  }
+
+  .review > .eyebrow,
+  h1,
+  .masthead {
+    max-width: var(--max-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .review-layout {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-8);
+    padding-bottom: var(--space-8);
+  }
+
+  .review-main {
+    flex: 3 1 0%;
+    min-width: 0;
+  }
+
+  .review-sidebar {
+    flex: 1 1 0%;
+    min-width: 0;
+    padding-top: var(--space-8);
+  }
+
+  .sidebar-inner {
+    position: sticky;
+    top: calc(var(--nav-height) + var(--space-4));
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    max-height: calc(100vh - var(--nav-height) - var(--space-6));
+    overflow-y: auto;
+  }
+
+  .meta-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .meta-group:first-child {
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .meta-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .meta-value {
+    font-size: var(--text-sm);
+    color: var(--color-text);
+  }
+
+  .review p {
+    text-wrap: pretty;
+  }
+
+  .review a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    text-decoration-color: var(--color-link-subtle);
+    transition: text-decoration-color 0.2s, color 0.2s;
+  }
+
+  .review a:hover {
+    text-decoration-color: currentColor;
+  }
+
+  /* Masthead */
+
+  .masthead {
+    padding-bottom: var(--space-6);
+    margin-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  h1 {
+    font-size: clamp(32px, 1.7rem + 1.6vw, 56px);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    margin-bottom: var(--space-6);
+    text-wrap: balance;
+  }
+
+  .lede {
+    font-size: var(--text-md);
+    color: var(--color-text-muted);
+    max-width: 62ch;
+  }
+
+  .meta-line {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-top: var(--space-3);
+  }
+
+  /* Sections */
+
+  section {
+    margin-top: var(--space-8);
+  }
+
+  section:first-child {
+    margin-top: 0;
+  }
+
+  .sec-head {
+    margin-bottom: var(--space-5);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  h2 {
+    font-size: var(--text-2xl);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  .k {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2);
+    line-height: 1.5;
+  }
+
+  .box {
+    border: 1px solid var(--color-border);
+    padding: var(--space-4);
+    scroll-margin-top: calc(var(--nav-height) + var(--space-4));
+  }
+
+  .box p {
+    color: var(--color-text-muted);
+    max-width: 68ch;
+  }
+
+  .box p + p {
+    margin-top: var(--space-3);
+  }
+
+  section {
+    scroll-margin-top: calc(var(--nav-height) + var(--space-4));
+  }
+
+  /* Next steps */
+
+  .steps {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .step {
+    border: 1px solid var(--color-border);
+    border-top: 2px solid var(--color-text-muted);
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .step.mine {
+    border-top-color: var(--color-positive);
+  }
+
+  .step.theirs {
+    border-top-color: var(--color-link);
+  }
+
+  .step-k {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .step ul {
+    padding-left: 1.1em;
+  }
+
+  .step li {
+    color: var(--color-text-muted);
+    margin: var(--space-2) 0;
+    max-width: 60ch;
+  }
+
+  .step li::marker {
+    color: var(--color-text-muted);
+  }
+
+  /* Email draft */
+
+  .email .code {
+    background: var(--color-tag-bg);
+    border: 1px solid var(--color-border);
+    padding: var(--space-4);
+    margin-top: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.65;
+    color: var(--color-text);
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+
+  .cap {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--space-2);
+  }
+
+  /* TOC index, matches the proposal page's finding rail */
+
+  .index ol {
+    list-style: none;
+  }
+
+  .index a {
+    display: block;
+    padding: 6px 0;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .index a:hover .index-label {
+    text-decoration: underline;
+    text-decoration-color: var(--color-link-subtle);
+    text-underline-offset: 2px;
+  }
+
+  .index a:hover {
+    color: var(--color-link);
+  }
+
+  .index-label {
+    font-size: var(--text-sm);
+    line-height: 1.3;
+  }
+
+  @media (min-width: 900px) {
+    .index.has-active a {
+      color: var(--color-text-muted);
+    }
+
+    .index.has-active a[aria-current="true"] {
+      color: var(--color-link);
+    }
+  }
+
+  @media (min-width: 640px) {
+    .steps {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .box {
+      padding: var(--space-5) var(--space-4);
+    }
+  }
+
+  @media (max-width: 899px) {
+    .review-layout {
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+
+    .review-sidebar {
+      order: -1;
+      width: 100%;
+      padding-top: 0;
+    }
+
+    .sidebar-inner {
+      position: static;
+      max-height: none;
+      overflow: visible;
+    }
+  }
+</style>
