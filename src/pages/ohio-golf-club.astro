@@ -16,6 +16,51 @@ const findings = [
   { n: "08", label: "Form submissions go nowhere", level: "neutral" },
 ];
 
+// Each package line points back at the finding it resolves, so the proposal and
+// the findings above can't drift apart.
+const packages = [
+  {
+    option: "Option 1",
+    name: "Core Search & Metadata Fixes",
+    price: "$800 \u2013 $1,200",
+    terms: "fixed fee",
+    desc: "Fixes foundational search issues, duplicate metadata, and inaccurate business data.",
+    lines: [
+      { item: "01", text: "Add verified site hours to code and pages." },
+      { item: "02", text: "Implement JSON-LD Schema markup for membership tiers and pricing." },
+      { item: "03", text: "Add unique, targeted meta titles and descriptions for every existing page." },
+      { item: "06", text: "Add a styled 4.9-star Google rating badge and review counter linking to live reviews." },
+      { item: "05", label: "Bonus", text: "Delivery of a Directory Update Checklist for your team to submit to third-party sites." },
+    ],
+  },
+  {
+    option: "Option 2",
+    name: "Full Optimization & Dedicated Pages",
+    price: "$2,400 \u2013 $2,800",
+    terms: "fixed fee",
+    desc: "Includes everything in Option 1, plus dedicated landing pages to capture search traffic and drive signups.",
+    lines: [
+      { text: "Everything in Option 1 (metadata, schema, hours, review badge, directory checklist)." },
+      { item: "04", text: "Build 5 dedicated service and landing pages: Lessons, Club Fitting, Memberships, Bay Rentals, Leagues." },
+      { item: "07", text: "Build a dedicated League Season info and signup page, content provided by you." },
+    ],
+  },
+];
+
+const addons = [
+  {
+    item: "08",
+    name: "Lead Capture & CRM Integration",
+    price: "TBD, estimated $500 \u2013 $800",
+    desc: "Routing website contact form submissions directly into Club Caddie or a lightweight CRM (Airtable or HubSpot). Scoped after the initial system review.",
+  },
+  {
+    name: "Full Visual Redesign",
+    price: "Custom quote",
+    desc: "Complete update to site layout, branding, and visual design beyond the current Next.js structure.",
+  },
+];
+
 const count = (level: string) => findings.filter((f) => f.level === level).length;
 ---
 
@@ -175,7 +220,6 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
               findings.map((f) => (
                 <li>
                   <a href={`#finding-${f.n}`}>
-                    <span class={`dot is-${f.level}`} aria-hidden="true"></span>
                     <span class="index-n">{f.n}</span>
                     <span class="index-label">{f.label}</span>
                   </a>
@@ -183,22 +227,14 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
               ))
             }
           </ol>
-          <p class="index-key">
-            <span><span class="dot is-critical" aria-hidden="true"></span> Costing you now</span>
-            <span><span class="dot is-upside" aria-hidden="true"></span> Biggest upside</span>
-            <span><span class="dot is-neutral" aria-hidden="true"></span> Worth doing</span>
-          </p>
         </nav>
 
         <div class="stack">
 
           <article class="item critical" id="finding-01">
             <div class="item-head">
-              <p class="n" aria-hidden="true">01</p>
-              <div>
-                <span class="badge critical">Costing you now</span>
-                <h3>Your hours aren&rsquo;t on your website</h3>
-              </div>
+              <span class="badge critical">Costing you now</span>
+              <h3>01 - Your hours aren&rsquo;t on your website</h3>
             </div>
             <div class="b">
               <div>
@@ -254,11 +290,8 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
 
           <article class="item upside" id="finding-02">
             <div class="item-head">
-              <p class="n" aria-hidden="true">02</p>
-              <div>
-                <span class="badge upside">Biggest upside</span>
-                <h3>Ask an AI your prices twice and you get two different answers</h3>
-              </div>
+              <span class="badge upside">Biggest upside</span>
+              <h3>02 - Ask an AI your prices twice and you get two different answers</h3>
             </div>
             <div class="b">
               <div class="figs">
@@ -343,11 +376,8 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
 
           <article class="item upside" id="finding-03">
             <div class="item-head">
-              <p class="n" aria-hidden="true">03</p>
-              <div>
-                <span class="badge upside">Quick win</span>
-                <h3>All five pages carry the same hidden title</h3>
-              </div>
+              <span class="badge upside">Quick win</span>
+              <h3>03 - All five pages carry the same hidden title</h3>
             </div>
             <div class="b">
               <p>
@@ -377,11 +407,8 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
 
           <article class="item upside" id="finding-04">
             <div class="item-head">
-              <p class="n" aria-hidden="true">04</p>
-              <div>
-                <span class="badge upside">Biggest upside</span>
-                <h3>Your services don&rsquo;t have pages of their own</h3>
-              </div>
+              <span class="badge upside">Biggest upside</span>
+              <h3>04 - Your services don&rsquo;t have pages of their own</h3>
             </div>
             <div class="b">
               <p>
@@ -484,11 +511,8 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
 
           <article class="item critical" id="finding-05">
             <div class="item-head">
-              <p class="n" aria-hidden="true">05</p>
-              <div>
-                <span class="badge critical">Costing you now</span>
-                <h3>Other sites list the wrong address and price</h3>
-              </div>
+              <span class="badge critical">Costing you now</span>
+              <h3>05 - Other sites list the wrong address and price</h3>
             </div>
             <div class="b">
               <div>
@@ -532,11 +556,8 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
 
           <article class="item" id="finding-06">
             <div class="item-head">
-              <p class="n" aria-hidden="true">06</p>
-              <div>
-                <span class="badge">Worth doing</span>
-                <h3>Your 4.9 rating isn&rsquo;t on your own site</h3>
-              </div>
+              <span class="badge">Worth doing</span>
+              <h3>06 - Your 4.9 rating isn&rsquo;t on your own site</h3>
             </div>
             <div class="b">
               <p>
@@ -580,11 +601,8 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
 
           <article class="item critical" id="finding-07">
             <div class="item-head">
-              <p class="n" aria-hidden="true">07</p>
-              <div>
-                <span class="badge critical">Time sensitive</span>
-                <h3>No league page, and league season is starting</h3>
-              </div>
+              <span class="badge critical">Time sensitive</span>
+              <h3>07 - No league page, and league season is starting</h3>
             </div>
             <div class="b">
               <p>Your site&rsquo;s own description advertises indoor leagues. There&rsquo;s no page about them.</p>
@@ -609,11 +627,8 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
 
           <article class="item" id="finding-08">
             <div class="item-head">
-              <p class="n" aria-hidden="true">08</p>
-              <div>
-                <span class="badge">Worth doing</span>
-                <h3>Form submissions go to your inbox and nowhere else</h3>
-              </div>
+              <span class="badge">Worth doing</span>
+              <h3>08 - Form submissions go to your inbox and nowhere else</h3>
             </div>
             <div class="b">
               <p>
@@ -695,6 +710,73 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
       </p>
     </section>
 
+
+    <section id="proposal">
+      <div class="sec-head">
+        <p class="eyebrow">Proposal</p>
+        <h2>Ways to do this</h2>
+      </div>
+
+      <div class="hourly">
+        <div>
+          <p class="hourly-k">Standard hourly rate</p>
+          <p class="hourly-v">$125 <span>/ hour</span></p>
+        </div>
+        <p class="hourly-desc">
+          Flexible, pay-as-you-go option for custom scopes, ad-hoc updates, or ongoing consultation.
+        </p>
+      </div>
+
+      <div class="packages">
+        {
+          packages.map((pkg, i) => (
+            <article class={`package${i === packages.length - 1 ? " full" : ""}`}>
+              <p class="pkg-k">{pkg.option}</p>
+              <h3>{pkg.name}</h3>
+              <p class="pkg-price">{pkg.price} <span>{pkg.terms}</span></p>
+              <p class="pkg-desc">{pkg.desc}</p>
+              <ul class="pkg-list">
+                {
+                  pkg.lines.map((line) => (
+                    <li>
+                      {line.item && (
+                        <a class="ref" href={`#finding-${line.item}`}>
+                          {line.label ?? "Item"} {line.item}
+                        </a>
+                      )}
+                      <span>{line.text}</span>
+                    </li>
+                  ))
+                }
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+
+      <div class="addons">
+        <p class="addons-k">Optional add-ons and phase 2</p>
+        <div class="addons-grid">
+          {
+            addons.map((a) => (
+              <div class="addon">
+                <h4>
+                  {a.item && (
+                    <a class="ref" href={`#finding-${a.item}`}>
+                      Item {a.item}
+                    </a>
+                  )}
+                  <span>{a.name}</span>
+                </h4>
+                <p class="addon-price">{a.price}</p>
+                <p>{a.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
     <section>
       <div class="sec-head">
         <p class="eyebrow">Next step</p>
@@ -721,11 +803,6 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
             </li>
           </ol>
         </div>
-        <aside class="rate">
-          <p class="rate-k">Rate</p>
-          <p class="rate-v">$125<span>/ hour</span></p>
-          <p class="rate-note">For the review and the work that follows.</p>
-        </aside>
       </div>
     </section>
 
@@ -835,7 +912,7 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
   }
 
   .cover-meta dd {
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
     color: var(--color-text);
   }
 
@@ -873,8 +950,7 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
   }
 
   .tally-k {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
     margin-top: var(--space-2);
   }
@@ -887,7 +963,6 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
 
   .sec-head {
     margin-bottom: var(--space-5);
-    max-width: 62ch;
   }
 
   .eyebrow {
@@ -919,10 +994,9 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
     line-height: 1.35;
   }
 
-  /* A mono label above a figure, table, code sample or group */
+  /* A label above a figure, table, code sample or group */
   .k {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
     margin-bottom: var(--space-2);
     line-height: 1.5;
@@ -1014,8 +1088,7 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
   }
 
   .index-title,
-  .lane-k,
-  .rate-k {
+  .lane-k {
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     color: var(--color-text-muted);
@@ -1029,7 +1102,7 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
 
   .index a {
     display: grid;
-    grid-template-columns: 8px 22px 1fr;
+    grid-template-columns: 22px minmax(0, 1fr);
     gap: var(--space-2);
     align-items: baseline;
     padding: 10px 0;
@@ -1049,50 +1122,14 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
   }
 
   .index-n {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
   }
 
   .index-label {
     font-size: var(--text-sm);
     line-height: 1.35;
-  }
-
-  .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--color-border);
-    transform: translateY(-1px);
-  }
-
-  .dot.is-critical {
-    background: var(--color-critical);
-  }
-
-  .dot.is-upside {
-    background: var(--color-link);
-  }
-
-  .dot.is-neutral {
-    background: var(--color-text-muted);
-  }
-
-  .index-key {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2) var(--space-3);
-    margin-top: var(--space-3);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--color-text-muted);
-  }
-
-  .index-key > span {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
   }
 
   .stack {
@@ -1117,34 +1154,12 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
     border-top-color: var(--color-link);
   }
 
-  /* The number is the wayfinding in a meeting, so it gets display size and its
-     own column rather than sitting inline with the heading. */
-  .item-head {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: var(--space-3);
-    align-items: start;
-  }
-
-  .n {
-    font-family: var(--font-mono);
-    font-size: 34px;
-    font-weight: 500;
-    line-height: 0.9;
-    letter-spacing: -0.03em;
-    color: var(--color-text-muted);
-  }
-
-  .item.critical .n {
-    color: var(--color-critical);
-  }
-
-  .item.upside .n {
-    color: var(--color-link);
-  }
-
+  /* The status eyebrow sits above, the number is part of the headline, and the
+     headline runs the full width of the card. */
   .item-head h3 {
-    margin-top: var(--space-2);
+    margin-top: var(--space-3);
+    font-size: var(--text-xl);
+    font-variant-numeric: tabular-nums;
   }
 
   .b {
@@ -1226,8 +1241,7 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
   }
 
   .fig-open {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
+    font-size: var(--text-sm);
     white-space: nowrap;
   }
 
@@ -1379,9 +1393,9 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
   }
 
   .opt.alt {
-    border-color: var(--color-caution-border);
-    border-left-color: var(--color-caution);
-    background: var(--color-caution-bg);
+    border-color: var(--color-border);
+    border-left-color: var(--color-text-muted);
+    background: var(--color-tag-bg);
   }
 
   .opt .top {
@@ -1400,8 +1414,9 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
   .tag {
     display: inline-flex;
     align-items: center;
-    font-family: var(--font-mono);
     font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.01em;
     line-height: 1;
     padding: 4px 8px;
     border-radius: 4px;
@@ -1415,8 +1430,8 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
 
   .tag.alt {
     background: var(--color-bg);
-    border-color: var(--color-caution-border);
-    color: var(--color-caution);
+    border-color: var(--color-border);
+    color: var(--color-text-muted);
   }
 
   /* Finding 06's three-way note */
@@ -1495,6 +1510,160 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
     align-items: start;
   }
 
+  /* Proposal */
+
+  .hourly {
+    display: grid;
+    gap: var(--space-3);
+    border: 1px solid var(--color-border);
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .hourly-k,
+  .pkg-k,
+  .addons-k {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  .hourly-v {
+    font-size: var(--text-2xl);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .hourly-v span,
+  .pkg-price span {
+    font-size: var(--text-sm);
+    letter-spacing: 0;
+    color: var(--color-text-muted);
+    margin-left: var(--space-1);
+  }
+
+  .hourly-desc {
+    color: var(--color-text-muted);
+    max-width: 62ch;
+  }
+
+  .packages {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+  }
+
+  .package {
+    border: 1px solid var(--color-border);
+    border-top: 2px solid var(--color-text-muted);
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .package.full {
+    border-top-color: var(--color-positive);
+  }
+
+  .package h3 {
+    font-size: var(--text-lg);
+  }
+
+  .pkg-price {
+    font-size: var(--text-xl);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    margin-top: var(--space-3);
+  }
+
+  .package.full .pkg-price {
+    color: var(--color-positive);
+  }
+
+  .pkg-desc {
+    color: var(--color-text-muted);
+    margin-top: var(--space-2);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .pkg-list {
+    list-style: none;
+    margin-top: var(--space-3);
+  }
+
+  .pkg-list li {
+    display: flex;
+    gap: var(--space-2);
+    align-items: baseline;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    padding: var(--space-2) 0;
+  }
+
+  .pkg-list li + li {
+    border-top: 1px solid var(--color-border);
+  }
+
+  /* A pointer back to the finding this line resolves. */
+  .ref {
+    flex: none;
+    display: inline-block;
+    font-size: var(--text-xs);
+    font-weight: 500;
+    line-height: 1;
+    padding: 4px 7px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background: var(--color-bg);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    transform: translateY(-1px);
+  }
+
+  .review .ref {
+    text-decoration: none;
+  }
+
+  .ref:hover {
+    border-color: var(--color-link);
+    color: var(--color-link);
+  }
+
+  .addons {
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .addons-grid {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .addon {
+    border-left: 2px solid var(--color-caution);
+    padding-left: var(--space-3);
+  }
+
+  .addon h4 {
+    display: flex;
+    gap: var(--space-2);
+    align-items: baseline;
+    margin-bottom: var(--space-1);
+  }
+
+  .addon-price {
+    font-size: var(--text-sm);
+    color: var(--color-caution);
+    margin-bottom: var(--space-2);
+  }
+
+  .addon > p:last-child {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
   .access {
     margin: var(--space-3) 0 0;
     padding-left: 1.2em;
@@ -1506,37 +1675,7 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
   }
 
   .access li::marker {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
     color: var(--color-text-muted);
-  }
-
-  .rate {
-    border: 1px solid var(--color-positive-border);
-    border-top: 2px solid var(--color-positive);
-    background: var(--color-positive-bg);
-    padding: var(--space-4) var(--space-3);
-  }
-
-  .rate-v {
-    font-size: var(--text-3xl);
-    font-weight: 300;
-    letter-spacing: -0.03em;
-    line-height: 1;
-    color: var(--color-positive);
-  }
-
-  .rate-v span {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    letter-spacing: 0;
-    margin-left: var(--space-2);
-  }
-
-  .rate-note {
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    margin-top: var(--space-2);
   }
 
   /* Sources */
@@ -1573,7 +1712,8 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
     .figs.two,
     .codes,
     .opts.two,
-    .next,
+    .packages,
+    .addons-grid,
     .sources {
       grid-template-columns: 1fr 1fr;
     }
@@ -1598,15 +1738,16 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
       gap: var(--space-4);
     }
 
+    .hourly {
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: var(--space-5);
+      align-items: center;
+    }
+
     .wins,
     .lanes,
     .opts.three {
       grid-template-columns: repeat(3, 1fr);
-    }
-
-    .next {
-      grid-template-columns: minmax(0, 1fr) 300px;
-      gap: var(--space-5);
     }
 
     .sources {
