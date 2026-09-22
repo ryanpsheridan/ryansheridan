@@ -1,7 +1,7 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Nav from "../components/Nav.astro";
-import Footer from "../components/Footer.astro";
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
 
 // The index rail and the cover's tally both read from this, so a finding can't
 // be renumbered in one place and not the other.
@@ -65,8 +65,9 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
 ---
 
 <!--
-  A private share for one client, not part of the portfolio. It carries noindex
-  and is filtered out of the sitemap in astro.config.mjs, so the two agree.
+  A client proposal. Everything under /proposals is a private share rather than
+  portfolio work: it carries noindex and the whole branch is filtered out of the
+  sitemap in astro.config.mjs, so the two agree.
 -->
 <Layout
   title="Ohio Golf Club — Website Review"
@@ -256,11 +257,11 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
               <figure>
                 <div class="fig-head">
                   <p class="k">Asked for your hours, an AI assistant didn&rsquo;t read your site. It answered from a directory called GolfSimMap and said so.</p>
-                  <a class="fig-open" href="/ohio-golf-club/screenshot-1.jpg" target="_blank" rel="noopener">Full size &nearr;</a>
+                  <a class="fig-open" href="/proposals/ohio-golf-club/screenshot-1.jpg" target="_blank" rel="noopener">Full size &nearr;</a>
                 </div>
                 <div class="shot">
                   <img
-                    src="/ohio-golf-club/screenshot-1.jpg"
+                    src="/proposals/ohio-golf-club/screenshot-1.jpg"
                     alt="Screenshot of an AI assistant listing Ohio Golf Club's hours and citing GolfSimMap as the source."
                     width="1080"
                     height="311"
@@ -298,11 +299,11 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
                 <figure>
                   <div class="fig-head">
                     <p class="k">Asked one way, it listed every tier correctly, read from your own website.</p>
-                    <a class="fig-open" href="/ohio-golf-club/screenshot-2.jpg" target="_blank" rel="noopener">Full size &nearr;</a>
+                    <a class="fig-open" href="/proposals/ohio-golf-club/screenshot-2.jpg" target="_blank" rel="noopener">Full size &nearr;</a>
                   </div>
                   <div class="shot">
                     <img
-                      src="/ohio-golf-club/screenshot-2.jpg"
+                      src="/proposals/ohio-golf-club/screenshot-2.jpg"
                       alt="Screenshot of an AI assistant correctly listing all four Ohio Golf Club membership tiers and prices."
                       width="1080"
                       height="758"
@@ -313,11 +314,11 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
                 <figure>
                   <div class="fig-head">
                     <p class="k">Asked another way the same day, it said your pricing &ldquo;is not published clearly online&rdquo; and offered to go hunting.</p>
-                    <a class="fig-open" href="/ohio-golf-club/screenshot-3.jpg" target="_blank" rel="noopener">Full size &nearr;</a>
+                    <a class="fig-open" href="/proposals/ohio-golf-club/screenshot-3.jpg" target="_blank" rel="noopener">Full size &nearr;</a>
                   </div>
                   <div class="shot">
                     <img
-                      src="/ohio-golf-club/screenshot-3.jpg"
+                      src="/proposals/ohio-golf-club/screenshot-3.jpg"
                       alt="Screenshot of an AI assistant saying Ohio Golf Club's membership pricing is not published clearly online."
                       width="1080"
                       height="402"
@@ -791,15 +792,15 @@ const count = (level: string) => findings.filter((f) => f.level === level).lengt
           </p>
           <ol class="access">
             <li>
-              <strong><a href="https://search.google.com/search-console" target="_blank" rel="noopener">Google Search Console</a>.</strong> The actual words people type before they find you. That decides which service pages to build first and what each page title should say, rather than us guessing. It also shows the searches where you already sit just off the first page, which are the cheapest wins available, which pages Google has indexed, and real loading-speed data from actual visitors.
+              <strong><a href="https://search.google.com/search-console" target="_blank" rel="noopener">Google Search Console</a>.</strong> The actual words people type to find you. This shows us what people are already searching for so we know exactly which service pages to build first and what titles to give them. It reveals &ldquo;striking-distance&rdquo; searches sitting just off page one (our quickest wins), shows where high search views aren&rsquo;t turning into clicks, confirms which pages are indexed, and provides real loading-speed data from actual visitors.
             </li>
             <li>
               <strong>Your <a href="https://business.google.com/" target="_blank" rel="noopener">Google Business Profile</a>.</strong> How people find you, and whether they call, ask for directions or click through to the site. Plus what Google currently believes about your hours and location, which is what the directories are competing with.
             </li>
             <li>
               <strong>Wherever the website&rsquo;s code lives.</strong> How it&rsquo;s built and where the content
-              sits, so I can tell you which of the eight items are quick and which are fiddly before
-              quoting anything.
+              sits, so I can tell you which of the eight items are quick and which need more time
+              before quoting anything.
             </li>
           </ol>
         </div>

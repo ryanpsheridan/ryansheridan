@@ -1,0 +1,174 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import { proposals, formatProposalDate } from "../../data/proposals";
+
+const sorted = [...proposals].sort((a, b) => b.date.localeCompare(a.date));
+---
+
+<!--
+  Private client work, not portfolio. Noindex here and on every proposal, and
+  the whole branch is filtered out of the sitemap in astro.config.mjs.
+-->
+<Layout
+  title="Proposals — Ryan Sheridan"
+  description="Client proposals and website reviews by Ryan Sheridan."
+  noindex={true}
+>
+  <Nav />
+  <main class="proposals-page">
+    <div class="proposals-inner">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span class="sep">/</span>
+        <span class="current">Proposals</span>
+      </nav>
+      <h1>Proposals</h1>
+      <p class="intro">
+        Client reviews and proposals. Each one is a private share, not indexed and not listed
+        anywhere else on the site.
+      </p>
+
+      <ul class="proposal-list">
+        {
+          sorted.map((proposal) => (
+            <li>
+              <a href={`/proposals/${proposal.slug}`} class="proposal-card">
+                <div class="proposal-main">
+                  <h2>{proposal.client}</h2>
+                  <p class="proposal-kind">{proposal.kind}</p>
+                  <p class="proposal-summary">{proposal.summary}</p>
+                </div>
+                <div class="proposal-meta">
+                  <span class="badge">{proposal.status}</span>
+                  <time datetime={proposal.date}>{formatProposalDate(proposal.date)}</time>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .proposals-page {
+    padding: 80px var(--page-padding) 0;
+  }
+
+  .proposals-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .breadcrumbs {
+    margin-bottom: 32px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .breadcrumbs a {
+    color: var(--color-text-muted);
+    transition: color 0.2s;
+  }
+
+  .breadcrumbs a:hover {
+    color: var(--color-text);
+  }
+
+  .breadcrumbs .sep {
+    color: var(--color-border);
+  }
+
+  .breadcrumbs .current {
+    color: var(--color-text);
+  }
+
+  h1 {
+    font-size: clamp(24px, 1.2rem + 1vw, 40px);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-3);
+  }
+
+  .intro {
+    font-size: var(--text-base);
+    color: var(--color-text-muted);
+    max-width: 62ch;
+    margin-bottom: var(--space-6);
+  }
+
+  .proposal-list {
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .proposal-card {
+    display: grid;
+    gap: var(--space-3);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text);
+  }
+
+  .proposal-main {
+    min-width: 0;
+  }
+
+  .proposal-card h2 {
+    font-size: var(--text-lg);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    transition: opacity 0.15s;
+  }
+
+  .proposal-kind {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--space-1);
+  }
+
+  .proposal-summary {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    max-width: 62ch;
+    margin-top: var(--space-2);
+  }
+
+  .proposal-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .proposal-meta .badge {
+    text-transform: capitalize;
+  }
+
+  @media (hover: hover) {
+    .proposal-card:hover h2 {
+      opacity: 0.6;
+    }
+  }
+
+  @media (min-width: 700px) {
+    .proposal-card {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: var(--space-5);
+    }
+
+    .proposal-meta {
+      justify-content: flex-end;
+      padding-top: 4px;
+    }
+  }
+</style>
