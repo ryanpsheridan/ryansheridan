@@ -99,8 +99,8 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          "/multi-brand-sections-animated.svg",
-          "/multi-brand-library-updates-animated.svg",
+          "/project-multi-brand4.jpg",
+          "/project-multi-brand5.jpg",
         ],
       },
     ],
