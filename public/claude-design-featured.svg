@@ -1,12 +1,34 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="t">
-<title id="t">Claude Design chat panel beside a generated Feedonomics Surface page with a blue gradient hero</title>
+<style>
+.cover{animation:type 12s steps(1,end) infinite}
+.caret{animation:blink 1s steps(1,end) infinite}
+.ph{animation:ph 12s steps(1,end) infinite}
+.send-on{animation:sendon 12s ease infinite}
+.send-btn{transform-origin:536px 945px;animation:press 12s ease infinite}
+.sheen{animation:sheen 12s cubic-bezier(.45,0,.25,1) infinite}
+@keyframes type{0%{transform:translateX(0)}7.50%{transform:translateX(6.7px)}8.13%{transform:translateX(11.2px)}8.70%{transform:translateX(18.6px)}9.47%{transform:translateX(26.1px)}10.00%{transform:translateX(29.8px)}10.72%{transform:translateX(37.2px)}11.37%{transform:translateX(41.0px)}12.90%{transform:translateX(48.4px)}13.61%{transform:translateX(52.1px)}15.13%{transform:translateX(59.6px)}15.81%{transform:translateX(64.0px)}16.34%{transform:translateX(71.5px)}16.87%{transform:translateX(78.9px)}17.55%{transform:translateX(86.4px)}18.40%{transform:translateX(93.8px)}18.95%{transform:translateX(101.3px)}19.54%{transform:translateX(105.0px)}21.30%{transform:translateX(114.0px)}22.20%{transform:translateX(123.6px)}22.94%{transform:translateX(131.8px)}23.60%{transform:translateX(135.5px)}25.51%{transform:translateX(143.0px)}26.03%{transform:translateX(150.4px)}26.89%{transform:translateX(157.1px)}27.51%{transform:translateX(164.6px)}28.07%{transform:translateX(172.0px)}28.62%{transform:translateX(175.8px)}30.24%{transform:translateX(183.2px)}31.08%{transform:translateX(190.7px)}31.66%{transform:translateX(194.4px)}33.40%{transform:translateX(198.1px)}34.17%{transform:translateX(205.5px)}34.82%{transform:translateX(208.5px)}35.55%{transform:translateX(215.2px)}36.08%{transform:translateX(218.9px)}37.60%{transform:translateX(225.6px)}38.19%{transform:translateX(233.1px)}38.97%{transform:translateX(240.5px)}39.65%{transform:translateX(247.2px)}40.28%{transform:translateX(251.0px)}42.02%{transform:translateX(258.4px)}42.71%{transform:translateX(265.9px)}43.34%{transform:translateX(272.6px)}55.42%,100%{transform:translateX(0)}}
+@keyframes blink{0%{opacity:1}50%{opacity:0}100%{opacity:1}}
+@keyframes ph{0%{opacity:1}7.50%{opacity:0}55.42%,100%{opacity:1}}
+@keyframes sendon{0%,7.50%{opacity:0}9.58%,55.42%{opacity:1}57.92%,100%{opacity:0}}
+@keyframes press{0%,52.50%{transform:scale(1)}53.50%{transform:scale(.88)}55.42%,100%{transform:scale(1)}}
+@keyframes sheen{0%,56.25%{transform:translateX(-380px);opacity:0}58.75%{opacity:1}75.42%{transform:translateX(1000px);opacity:1}76.25%,100%{transform:translateX(1000px);opacity:0}}
+@media (prefers-reduced-motion:reduce){
+.cover,.caret,.ph,.send-on,.send-btn,.sheen{animation:none}
+.cover{transform:translateX(272.6px)}
+.caret,.ph,.sheen{opacity:0}
+.send-on{opacity:1}
+}
+</style>
+<title id="t">Claude Design chat panel, with the prompt create a branded PDF based on this copy doc being typed, beside a generated Feedonomics Surface page with a blue gradient hero</title>
 <defs>
 <clipPath id="card"><rect x="640" y="-8" width="815.5" height="902.5" rx="5"/></clipPath>
+<clipPath id="field"><rect x="170" y="880" width="380" height="30"/></clipPath>
 <clipPath id="panel"><rect x="144.5" y="99.5" width="432" height="920" rx="8"/></clipPath>
 <filter id="soft" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="30"/></filter>
 <linearGradient id="panelfade" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0" stop-color="#FFFFFF"/><stop offset=".82" stop-color="#FFFFFF"/><stop offset=".9" stop-color="#FFFBFA"/><stop offset="1" stop-color="#FAF9F8"/>
 </linearGradient>
+<linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/><stop offset=".5" stop-color="#FFFFFF" stop-opacity=".24"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>
 </defs>
 
 <rect width="1600" height="1000" fill="#F4F2EE"/>
@@ -66,6 +88,24 @@
 <circle cx="448.6" cy="722" r="5.3" fill="none" stroke="#A9A9A9" stroke-width=".9"/>
 <path d="M447 720.6c0-1 .7-1.6 1.6-1.6s1.6.6 1.6 1.5c0 1.2-1.6 1.3-1.6 2.4" fill="none" stroke="#A9A9A9" stroke-width=".9" stroke-linecap="round"/>
 <circle cx="448.6" cy="725" r=".55" fill="#A9A9A9"/>
+
+<!-- Prompt composer: the typing animation -->
+<g class="composer">
+<rect x="158.5" y="870.5" width="404" height="102" rx="16" fill="#FFFFFF" stroke="#E4E3DE" stroke-width="1.2"/>
+<text x="178.5 185.2 189.7 197.1 204.6 208.3 215.7 219.5 226.9 230.6 238.1 242.5 250.0 257.4 264.9 272.3 279.8 283.5 292.5 302.1 310.3 314.0 321.5 328.9 335.6 343.1 350.5 354.2 361.7 369.2 372.9 376.6 384.0 387.0 393.7 397.4 404.1 411.6 419.0 425.8 429.5 436.9 444.4" y="899.5" font-family="Inter, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif" font-size="13.4" fill="#262626">create a branded PDF based on this copy doc</text>
+<g clip-path="url(#field)"><g class="cover">
+<rect x="178.5" y="883.5" width="330" height="22" fill="#FFFFFF"/>
+<rect class="caret" x="177.3" y="887.0" width="1.3" height="16" rx=".6" fill="#262626"/>
+</g></g>
+<text class="ph" x="178.5" y="899.5" font-family="Inter, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif" font-size="13.4" fill="#A3A19B">Describe what you want to create…</text>
+<circle cx="184" cy="945" r="13" fill="none" stroke="#E4E3DE" stroke-width="1.1"/>
+<path d="M184 940v10M179 945h10" stroke="#6E6E6E" stroke-width="1.3" stroke-linecap="round"/>
+<g class="send-btn">
+<circle cx="536" cy="945" r="14" fill="#E3E1DB"/>
+<circle class="send-on" cx="536" cy="945" r="14" fill="#C96442"/>
+<path d="M536 951.5v-12.5M530.8 944.2l5.2-5.2 5.2 5.2" fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
 
 <!-- Generated Feedonomics Surface page -->
 <g clip-path="url(#card)">
@@ -378,6 +418,7 @@
 <rect x="1359.2" y="844.3" width="48.5" height="170.3" fill="#193582"/>
 <rect x="1407.1" y="844.3" width="168.5" height="170.3" fill="#183480"/>
 </g>
+<g class="sheen"><rect x="640" y="-300" width="260" height="1500" fill="url(#sheen)" transform="rotate(12 770 450)"/></g>
 </g>
 
 <g class="copy" fill="#FFFFFF">

@@ -405,7 +405,7 @@ export const projects: Project[] = [
     title: "Claude Design: Consistency First",
     description: "What connecting a multi-brand Figma design system to Claude and Claude Design taught me about constraints, governance, and writing rules from failure.",
     ogImage: "/project-claude-design1.jpg",
-    thumbnail: "/project-claude-design1.webp",
+    thumbnail: "/claude-design-featured.svg",
     showOnHomepage: true,
     tags: ["Exploration", "Design System"],
     tools: ["Claude Design", "Figma"],
