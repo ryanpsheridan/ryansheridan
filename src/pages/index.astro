@@ -15,27 +15,40 @@ const projects = getHomepageProjects();
       flashes for a frame before the scrim covers it. */}
   <IntroLoader />
   <Nav />
-  <main class="split-layout">
+  <main class="split-layout" data-blueprint-scope>
     <div class="split-inner">
       <div class="left-panel">
-        <div class="headline-block">
-          <h1 class="sticky-title">
-            <span class="reveal-wrap" data-load-reveal><span class="reveal-inner">Designing <span class="accent">systems</span></span></span><span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner">,</span></span><br />
-            <span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner"><span class="accent">sites</span></span></span><span class="reveal-wrap" data-reveal-index="2"><span class="reveal-inner">{" and "}<span class="accent">brands</span>.</span></span>
+        <div class="headline-block" data-blueprint-scope>
+          <h1 class="sticky-title" data-spec="type" data-spec-name="Display">
+            Designing <span class="accent">systems</span>,<br />
+            <span class="accent">sites</span> and <span class="accent">brands</span>.
           </h1>
-          <p class="tagline"><span class="reveal-wrap" data-reveal-index="3"><span class="reveal-inner">Based out of Austin, Texas</span></span></p>
-          <a href="/work" class="view-all-link" data-reveal-index={projects.length - 1}>View all work</a>
+          <p class="tagline" data-spec="type" data-spec-name="Meta">Based out of Austin, Texas</p>
+          <div class="cta-row">
+            <a href="/work" class="view-all-link">View all work</a>
+            {/* The page drawing its own specs over itself. Plain toggle
+                semantics, and the drawing it adds is hidden from assistive
+                tech, since it describes the page rather than adding to it. */}
+            <button type="button" class="blueprint-toggle" aria-pressed="false" data-blueprint-toggle>
+              <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.25">
+                <rect x="1.5" y="1.5" width="13" height="13" rx="1" />
+                <path d="M1.5 6h13M6 6v8.5" />
+              </svg>
+              <span data-blueprint-label>See the blueprint</span>
+            </button>
+          </div>
+          <div class="blueprint-tags" aria-hidden="true"></div>
         </div>
       </div>
       <div class="right-panel">
         {projects.map((project, i) => {
           const row = (
             <a href={`/work/${project.slug}`} class={`project-row${i === 0 ? " entrance-hidden" : ""}`} data-index={i}>
-              <div class="cell-image">
+              <div class="cell-image" data-spec="box">
                 {project.thumbnail && <Media src={project.thumbnail} alt={project.title} />}
               </div>
               <div class="cell-info">
-                <h2 class="project-title">{project.title}</h2>
+                <h2 class="project-title" data-spec={i === 0 ? "type" : undefined} data-spec-name="Title" data-spec-align="end">{project.title}</h2>
                 <div class="badge-list project-tags">
                   {project.tags.map((tag) => <span class="badge">{tag}</span>)}
                 </div>
@@ -47,6 +60,12 @@ const projects = getHomepageProjects();
         <div class="scroll-spacer"></div>
       </div>
     </div>
+
+    {/* The blueprint's own layers: the panel columns, fixed to the screen so
+        they run the full height as the page scrolls, and the tags for the
+        work column, which scroll with it. */}
+    <div class="blueprint-columns" aria-hidden="true" data-blueprint-columns></div>
+    <div class="blueprint-tags" aria-hidden="true"></div>
   </main>
 
   {/* Outside main so it can hold the left margin for the whole page rather
@@ -62,69 +81,10 @@ const projects = getHomepageProjects();
 </Layout>
 
 <script>
-  function splitIntoChars(root: HTMLElement) {
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-    const textNodes: Text[] = [];
-    let node: Node | null;
-    while ((node = walker.nextNode())) textNodes.push(node as Text);
-
-    let i = 0;
-    textNodes.forEach((textNode) => {
-      const frag = document.createDocumentFragment();
-      for (const ch of textNode.textContent ?? "") {
-        if (ch === " ") {
-          frag.appendChild(document.createTextNode(" "));
-          continue;
-        }
-        const span = document.createElement("span");
-        span.className = "char";
-        span.textContent = ch;
-        span.style.transitionDelay = `${150 + i * 26}ms`;
-        frag.appendChild(span);
-        i++;
-      }
-      textNode.parentNode?.replaceChild(frag, textNode);
-    });
-  }
-
-  document.querySelectorAll<HTMLElement>(".reveal-inner").forEach((el) => splitIntoChars(el));
-
-  const revealTargets = document.querySelectorAll<HTMLElement>("[data-reveal-index]");
   const rows = document.querySelectorAll<HTMLElement>(".project-row");
-
-  let revealed = -1;
-
-  function revealUpTo(index: number) {
-    if (index <= revealed) return;
-    revealed = index;
-
-    revealTargets.forEach((el) => {
-      const revealIndex = Number(el.dataset.revealIndex);
-      if (revealIndex > index) return;
-      el.classList.add("visible");
-    });
-  }
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          revealUpTo(Number((entry.target as HTMLElement).dataset.index));
-        }
-      });
-    },
-    { rootMargin: "-45% 0px -45% 0px" }
-  );
-
-  rows.forEach((row) => observer.observe(row));
-
   const firstProject = document.querySelector<HTMLElement>('.project-row[data-index="0"]');
-  const introWrap = document.querySelector<HTMLElement>(".reveal-wrap[data-load-reveal]");
 
-  requestAnimationFrame(() => {
-    firstProject?.classList.add("visible");
-    setTimeout(() => introWrap?.classList.add("visible"), 400);
-  });
+  requestAnimationFrame(() => firstProject?.classList.add("visible"));
 
   // Size the trailing spacer so the sticky headline releases right as the
   // last project becomes vertically centered in the viewport, instead of
@@ -212,6 +172,165 @@ const projects = getHomepageProjects();
     // Landing mid-page, on a refresh or a back-navigation, starts in progress.
     measure();
   }
+  /**
+   * The blueprint: the page drawing its own specs over itself. The columns,
+   * type specs, frame sizes, and spacing are all measured off the page as it
+   * renders, so resizing the window changes the numbers, and a spacing value
+   * is named after the site's --space token when it lands on one.
+   *
+   * Tags are drawn into the nearest [data-blueprint-scope], so the ones for
+   * the sticky headline travel with it and the ones for the work scroll with
+   * the work.
+   */
+  const page = document.querySelector<HTMLElement>("main[data-blueprint-scope]");
+  const blueprintToggle = document.querySelector<HTMLButtonElement>("[data-blueprint-toggle]");
+  const blueprintLabel = document.querySelector<HTMLElement>("[data-blueprint-label]");
+  const columns = document.querySelector<HTMLElement>("[data-blueprint-columns]");
+
+  if (page && blueprintToggle && blueprintLabel && columns) {
+    const splitInner = page.querySelector<HTMLElement>(".split-inner")!;
+    const panels = [page.querySelector<HTMLElement>(".left-panel")!, page.querySelector<HTMLElement>(".right-panel")!];
+
+    const tokens = getComputedStyle(document.documentElement);
+    const space = new Map<number, string>();
+    for (let n = 1; n <= 8; n++) {
+      const value = parseFloat(tokens.getPropertyValue(`--space-${n}`));
+      if (!Number.isNaN(value)) space.set(value, `space-${n}`);
+    }
+
+    const px = (value: number) => Math.round(value);
+
+    function spacingLabel(distance: number) {
+      const d = px(distance);
+      if (space.has(d)) return `${space.get(d)} · ${d}`;
+      // Two paddings meeting, top of one row against the bottom of the last.
+      if (d % 2 === 0 && space.has(d / 2)) return `${space.get(d / 2)} × 2 · ${d}`;
+      return `${d}`;
+    }
+
+    function typeLabel(el: HTMLElement) {
+      const s = getComputedStyle(el);
+      const size = parseFloat(s.fontSize);
+      const lineHeight = s.lineHeight === "normal" ? "auto" : px(parseFloat(s.lineHeight));
+      const tracking = parseFloat(s.letterSpacing);
+      const em = Number.isNaN(tracking) ? "0" : (tracking / size).toFixed(2);
+      const family = s.fontFamily.split(",")[0].replace(/["']/g, "");
+      return `${el.dataset.specName ?? "Text"} · ${family} ${s.fontWeight} · ${px(size)}/${lineHeight} · ${em}em`;
+    }
+
+    function scopeOf(el: Element) {
+      const scope = el.closest<HTMLElement>("[data-blueprint-scope]") ?? page!;
+      const layer = scope.querySelector<HTMLElement>(":scope > .blueprint-tags")!;
+      const origin = scope.getBoundingClientRect();
+      return { layer, x: origin.left, y: origin.top };
+    }
+
+    function tag(layer: HTMLElement, text: string, x: number, y: number, shift = "") {
+      const el = document.createElement("span");
+      el.className = "blueprint-tag";
+      el.textContent = text;
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      if (shift) el.style.transform = shift;
+      layer.appendChild(el);
+      return el;
+    }
+
+    function vertical(layer: HTMLElement, x: number, top: number, length: number) {
+      const el = document.createElement("span");
+      el.className = "blueprint-line";
+      el.style.left = `${x}px`;
+      el.style.top = `${top}px`;
+      el.style.height = `${length}px`;
+      layer.appendChild(el);
+      tag(layer, spacingLabel(length), x + 8, top + length / 2, "translateY(-50%)");
+    }
+
+    function build() {
+      page!.querySelectorAll(".blueprint-tag, .blueprint-line").forEach((el) => el.remove());
+      if (!page!.classList.contains("is-blueprint")) return;
+
+      // Columns: the layout's real ones. Side by side on desktop, the two
+      // panels; stacked on a phone, one. Judged across only, since the sticky
+      // headline panel drifts vertically as the work scrolls past it.
+      const inner = splitInner.getBoundingClientRect();
+      const [left, right] = panels.map((panel) => panel.getBoundingClientRect());
+      const sideBySide = right.left >= left.right - 1;
+      const count = sideBySide ? 2 : 1;
+      columns.style.left = `${inner.left}px`;
+      columns.style.width = `${inner.width}px`;
+      columns.style.gridTemplateColumns = `repeat(${count}, minmax(0, 1fr))`;
+      if (columns.childElementCount !== count) {
+        columns.replaceChildren(...Array.from({ length: count }, () => document.createElement("span")));
+      }
+
+      const pageScope = scopeOf(page!);
+      tag(
+        pageScope.layer,
+        `${count} col · ${px(inner.width / count)} wide · max ${px(inner.width)}`,
+        right.right - pageScope.x,
+        8,
+        "translateX(-100%)"
+      );
+
+      page!.querySelectorAll<HTMLElement>('[data-spec="type"]').forEach((el) => {
+        const { layer, x, y } = scopeOf(el);
+        const box = el.getBoundingClientRect();
+        const end = el.dataset.specAlign === "end";
+        tag(layer, typeLabel(el), (end ? box.right : box.left) - x, box.top - y - 24, end ? "translateX(-100%)" : "");
+      });
+
+      page!.querySelectorAll<HTMLElement>('[data-spec="box"]').forEach((el) => {
+        const { layer, x, y } = scopeOf(el);
+        const box = el.getBoundingClientRect();
+        tag(layer, `${px(box.width)} × ${px(box.height)}`, box.right - x - 8, box.bottom - y - 8, "translate(-100%, -100%)");
+      });
+
+      // Spacing down the work column: frame to title inside each project,
+      // and the last line of one project to the frame of the next.
+      const { layer, x, y } = pageScope;
+      rows.forEach((row, i) => {
+        const image = row.querySelector<HTMLElement>(".cell-image")!.getBoundingClientRect();
+        const title = row.querySelector<HTMLElement>(".project-title")!.getBoundingClientRect();
+        // The spec'd title carries its own tag in that gap, so it skips the line.
+        const titleEl = row.querySelector<HTMLElement>(".project-title")!;
+        if (!titleEl.dataset.spec && title.top > image.bottom) vertical(layer, image.left - x + 32, image.bottom - y, title.top - image.bottom);
+
+        const next = rows[i + 1];
+        if (!next) return;
+        const tags = row.querySelector<HTMLElement>(".project-tags")!.getBoundingClientRect();
+        const nextImage = next.querySelector<HTMLElement>(".cell-image")!.getBoundingClientRect();
+        if (nextImage.top > tags.bottom) vertical(layer, image.left - x + 32, tags.bottom - y, nextImage.top - tags.bottom);
+      });
+    }
+
+    function setBlueprint(on: boolean) {
+      page!.classList.toggle("is-blueprint", on);
+      blueprintToggle!.setAttribute("aria-pressed", String(on));
+      blueprintLabel!.textContent = on ? "Hide the blueprint" : "See the blueprint";
+      build();
+    }
+
+    blueprintToggle.addEventListener("click", () => setBlueprint(!page.classList.contains("is-blueprint")));
+
+    // Escape puts it away from anywhere, like any overlay, without moving focus.
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && page.classList.contains("is-blueprint")) setBlueprint(false);
+    });
+
+    let queued = false;
+    const rebuild = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        build();
+      });
+    };
+
+    new ResizeObserver(rebuild).observe(page);
+    document.fonts?.ready.then(rebuild);
+  }
 </script>
 
 <style>
@@ -262,31 +381,170 @@ const projects = getHomepageProjects();
     color: var(--color-text-muted);
   }
 
-  .view-all-link {
+  /* Two actions, one clearly first: the work is filled, the blueprint is an
+     outline beside it, so the extra never outranks the reason people came. */
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-top: var(--space-5);
+  }
+
+  .view-all-link,
+  .blueprint-toggle {
     display: inline-flex;
     align-items: center;
-    margin-top: var(--space-5);
+    gap: 8px;
+    font-family: inherit;
     font-size: var(--text-sm);
     font-weight: 500;
     letter-spacing: -0.01em;
+    line-height: 1.6;
+    border-radius: 999px;
+    padding: 11px 22px;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+
+  .view-all-link {
     color: var(--color-bg);
     background: var(--color-text);
     border: 1px solid var(--color-text);
-    border-radius: 999px;
-    padding: 12px 22px;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 0.55s ease 0.15s, transform 0.55s ease 0.15s, background 0.2s;
   }
 
   .view-all-link:hover {
+    color: var(--color-bg);
     background: #333333;
     border-color: #333333;
   }
 
-  .view-all-link.visible {
+  .blueprint-toggle {
+    color: var(--color-text);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+  }
+
+  .blueprint-toggle:hover {
+    border-color: var(--color-text);
+  }
+
+  .blueprint-toggle[aria-pressed="true"] {
+    color: #ffffff;
+    background: var(--blueprint);
+    border-color: var(--blueprint);
+  }
+
+  .view-all-link:focus-visible,
+  .blueprint-toggle:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 3px;
+  }
+
+  /*
+    The blueprint. Drawn in the site's own link blue, so the page is annotated
+    in a color the system already has rather than one invented for it. White
+    on it is 6.7:1.
+  */
+  .split-layout {
+    --blueprint: var(--color-link);
+  }
+
+  .headline-block {
+    position: relative;
+  }
+
+  .blueprint-tags {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .blueprint-columns {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    display: grid;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .split-layout.is-blueprint .blueprint-columns {
     opacity: 1;
-    transform: translateY(0);
+  }
+
+  .blueprint-columns :global(span) {
+    background: color-mix(in srgb, var(--blueprint) 5%, transparent);
+    border-inline: 1px solid color-mix(in srgb, var(--blueprint) 22%, transparent);
+  }
+
+  .split-layout.is-blueprint [data-spec="box"] {
+    outline: 1px dashed var(--blueprint);
+    outline-offset: -1px;
+  }
+
+  .split-layout.is-blueprint [data-spec="type"] {
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--blueprint) 55%, transparent);
+  }
+
+  .blueprint-tags :global(.blueprint-tag) {
+    position: absolute;
+    white-space: nowrap;
+    padding: 3px 6px;
+    border-radius: 3px;
+    background: var(--blueprint);
+    color: #ffffff;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    animation: blueprint-in 0.25s ease both;
+  }
+
+  .blueprint-tags :global(.blueprint-line) {
+    position: absolute;
+    width: 1px;
+    background: var(--blueprint);
+    animation: blueprint-in 0.25s ease both;
+  }
+
+  /* End caps, so a line reads as a measurement rather than a rule. */
+  .blueprint-tags :global(.blueprint-line::before),
+  .blueprint-tags :global(.blueprint-line::after) {
+    content: "";
+    position: absolute;
+    left: -4px;
+    width: 9px;
+    height: 1px;
+    background: var(--blueprint);
+  }
+
+  .blueprint-tags :global(.blueprint-line::before) {
+    top: 0;
+  }
+
+  .blueprint-tags :global(.blueprint-line::after) {
+    bottom: 0;
+  }
+
+  @keyframes blueprint-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .blueprint-columns {
+      transition: none;
+    }
+
+    .blueprint-tags :global(.blueprint-tag),
+    .blueprint-tags :global(.blueprint-line) {
+      animation: none;
+    }
   }
 
   /*
@@ -427,29 +685,6 @@ const projects = getHomepageProjects();
     transform: translateY(0);
   }
 
-  .reveal-wrap {
-    display: inline;
-    vertical-align: bottom;
-  }
-
-  .reveal-inner {
-    display: inline;
-  }
-
-  :global(.char) {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(6px);
-    color: var(--color-text-muted);
-    transition: opacity 0.5s ease, transform 0.5s ease, color 0.5s ease;
-  }
-
-  :global(.reveal-wrap.visible .char) {
-    opacity: 1;
-    transform: translateY(0);
-    color: var(--color-text);
-  }
-
   .right-panel {
     width: 50%;
   }
@@ -542,15 +777,7 @@ const projects = getHomepageProjects();
       padding: var(--space-5) 0;
     }
 
-    /* Show everything immediately on mobile; skip the scroll/entrance choreography. */
-    :global(.char) {
-      opacity: 1 !important;
-      transform: none !important;
-      color: var(--color-text) !important;
-      transition: none !important;
-    }
-
-    .view-all-link,
+    /* Skip the entrance on mobile; the first project is simply there. */
     .entrance-hidden {
       opacity: 1 !important;
       transform: none !important;
