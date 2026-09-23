@@ -23,6 +23,15 @@ const projects = getHomepageProjects();
             Designing <span class="accent">systems</span>,<br />
             <span class="accent">sites</span> and <span class="accent">brands</span>.
           </h1>
+          {/* The way into the blueprint: the page drawing its own specs over
+              itself. The key in the sentence is a real toggle too, for anyone
+              reading with a mouse; the drawing it adds is hidden from
+              assistive tech, since it describes the page rather than adding
+              to it. */}
+          <p class="intro" data-spec="type" data-spec-name="Body">
+            I lead design systems across multiple brands, and build the sites and identities that sit on top of them.{" "}
+            <span class="intro-hint">Press <button type="button" class="kbd-toggle" aria-pressed="false" aria-label="Show the specs (shortcut I)" data-blueprint-toggle>I</button> to see how this page is built.</span>
+          </p>
           <p class="tagline" data-spec="type" data-spec-name="Meta">Based out of Austin, Texas</p>
           <div class="cta-row">
             <a href="/work" class="view-all-link">View all work</a>
@@ -47,28 +56,6 @@ const projects = getHomepageProjects();
           );
           return i === 0 ? <div class="first-project-frame">{row}</div> : row;
         })}
-        {/* The close of the work, and the way into the blueprint: the page
-            drawing its own specs over itself. Plain toggle semantics; the
-            drawing is hidden from assistive tech, since it describes the page
-            rather than adding to it. */}
-        <section class="work-outro" aria-labelledby="work-outro-title">
-          <p class="outro-kicker">That's the work.</p>
-          <h2 class="outro-title" id="work-outro-title">Want to see how this page is put together?</h2>
-          <div class="outro-actions">
-            <button type="button" class="blueprint-toggle" aria-pressed="false" data-blueprint-toggle>
-              {/* An open eye that squints while the specs are up: looking
-                  closer, rather than the crossed-out eye that means hidden. */}
-              <svg class="blueprint-eye" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round">
-                <path class="eye-lid" vector-effect="non-scaling-stroke" d="M1.25 8C3.1 4.7 5.35 3.1 8 3.1s4.9 1.6 6.75 4.9" />
-                <path class="eye-lid" vector-effect="non-scaling-stroke" d="M1.25 8c1.85 3.3 4.1 4.9 6.75 4.9s4.9-1.6 6.75-4.9" />
-                <circle class="eye-pupil" cx="8" cy="8" r="2" />
-              </svg>
-              <span data-blueprint-label>See how I build</span>
-            </button>
-            <p class="outro-shortcut">or press <kbd>I</kbd> anywhere on the page</p>
-          </div>
-          <p class="outro-mobile">Open it on a laptop to see the page draw its own specs.</p>
-        </section>
         <div class="scroll-spacer"></div>
       </div>
     </div>
@@ -164,10 +151,9 @@ const projects = getHomepageProjects();
    */
   const page = document.querySelector<HTMLElement>("main[data-blueprint-scope]");
   const blueprintToggle = document.querySelector<HTMLButtonElement>("[data-blueprint-toggle]");
-  const blueprintLabel = document.querySelector<HTMLElement>("[data-blueprint-label]");
-  const columns = document.querySelector<HTMLElement>("[data-blueprint-columns]");
+    const columns = document.querySelector<HTMLElement>("[data-blueprint-columns]");
 
-  if (page && blueprintToggle && blueprintLabel && columns) {
+  if (page && blueprintToggle && columns) {
     const splitInner = page.querySelector<HTMLElement>(".split-inner")!;
     const panels = [page.querySelector<HTMLElement>(".left-panel")!, page.querySelector<HTMLElement>(".right-panel")!];
 
@@ -287,25 +273,13 @@ const projects = getHomepageProjects();
     function setBlueprint(on: boolean) {
       page!.classList.toggle("is-blueprint", on);
       blueprintToggle!.setAttribute("aria-pressed", String(on));
-      blueprintLabel!.textContent = on ? "Hide the specs" : "See how I build";
+      blueprintToggle!.setAttribute("aria-label", `${on ? "Hide" : "Show"} the specs (shortcut I)`);
       build();
     }
 
     const desktop = window.matchMedia("(min-width: 769px)");
-    const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    // From the end of the work, the specs are drawn where they say the most:
-    // glide back to the headline, then draw them on arrival.
-    blueprintToggle.addEventListener("click", () => {
-      if (page.classList.contains("is-blueprint")) return setBlueprint(false);
-      const lenis = (window as any).lenis;
-      if (window.scrollY < 8) return setBlueprint(true);
-      if (calm.matches || !lenis) {
-        window.scrollTo(0, 0);
-        return setBlueprint(true);
-      }
-      lenis.scrollTo(0, { duration: 1.4, onComplete: () => setBlueprint(true) });
-    });
+    blueprintToggle.addEventListener("click", () => setBlueprint(!page.classList.contains("is-blueprint")));
 
     document.querySelector("[data-blueprint-off]")?.addEventListener("click", () => setBlueprint(false));
 
@@ -386,6 +360,65 @@ const projects = getHomepageProjects();
     color: var(--color-text);
   }
 
+  /* A line or two on what the work is, ending on the way into the
+     blueprint. Held to a reading measure so it never runs the width of the
+     headline. */
+  .intro {
+    max-width: 44ch;
+    margin-top: var(--space-4);
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  /* Its own line, so it reads as an aside to the sentence above it. */
+  .intro-hint {
+    display: block;
+    margin-top: var(--space-2);
+    white-space: nowrap;
+  }
+
+  /* The key in the sentence, drawn as a key and working as one. */
+  .kbd-toggle {
+    display: inline-block;
+    min-width: 1.7em;
+    margin: 0 1px;
+    padding: 0 6px;
+    font-family: var(--font-mono);
+    font-size: 0.82em;
+    line-height: 1.55;
+    text-align: center;
+    vertical-align: 0.1em;
+    color: var(--color-text);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.1s;
+  }
+
+  .kbd-toggle:hover {
+    border-color: var(--color-text);
+  }
+
+  .kbd-toggle:active {
+    transform: translateY(1px);
+  }
+
+  .kbd-toggle[aria-pressed="true"] {
+    color: #ffffff;
+    background: var(--blueprint);
+    border-color: var(--blueprint);
+  }
+
+  /* Room above for the blueprint's Meta tag, which hangs off the top of
+     this line and would otherwise sit on the hint. */
+  .intro + .tagline {
+    margin-top: var(--space-5);
+  }
+
   .tagline {
     margin-top: var(--space-3);
     font-family: var(--font-mono);
@@ -393,8 +426,6 @@ const projects = getHomepageProjects();
     color: var(--color-text-muted);
   }
 
-  /* Two actions, one clearly first: the work is filled, the blueprint is an
-     outline beside it, so the extra never outranks the reason people came. */
   .cta-row {
     display: flex;
     flex-wrap: wrap;
@@ -403,8 +434,7 @@ const projects = getHomepageProjects();
     margin-top: var(--space-5);
   }
 
-  .view-all-link,
-  .blueprint-toggle {
+  .view-all-link {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -430,48 +460,8 @@ const projects = getHomepageProjects();
     border-color: #333333;
   }
 
-  .blueprint-toggle {
-    color: var(--color-text);
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    cursor: pointer;
-  }
-
-  .blueprint-toggle:hover {
-    border-color: var(--color-text);
-  }
-
-
-  .blueprint-toggle[aria-pressed="true"] {
-    color: #ffffff;
-    background: var(--blueprint);
-    border-color: var(--blueprint);
-  }
-
-  .blueprint-eye .eye-lid,
-  .blueprint-eye .eye-pupil {
-    transform-box: view-box;
-    transform-origin: 8px 8px;
-    transition: transform 0.28s cubic-bezier(0.3, 0.7, 0.2, 1);
-  }
-
-  .blueprint-toggle[aria-pressed="true"] .eye-lid {
-    transform: scaleY(0.72);
-  }
-
-  .blueprint-toggle[aria-pressed="true"] .eye-pupil {
-    transform: scale(0.9);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .blueprint-eye .eye-lid,
-    .blueprint-eye .eye-pupil {
-      transition: none;
-    }
-  }
-
   .view-all-link:focus-visible,
-  .blueprint-toggle:focus-visible {
+  .kbd-toggle:focus-visible {
     outline: 2px solid var(--color-text);
     outline-offset: 3px;
   }
@@ -580,48 +570,6 @@ const projects = getHomepageProjects();
     .blueprint-tags :global(.blueprint-line) {
       animation: none;
     }
-  }
-
-  /* The close of the work. It sits in the work column like one more row,
-     so the eye lands on it straight after the last project. */
-  .work-outro {
-    padding: var(--space-3) 0 var(--space-8);
-  }
-
-  .outro-kicker {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    margin-bottom: var(--space-3);
-  }
-
-  .outro-title {
-    font-size: 22px;
-    font-weight: 300;
-    letter-spacing: -0.01em;
-    line-height: 1.35;
-    max-width: 22ch;
-    margin-bottom: var(--space-5);
-  }
-
-  .outro-actions {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--space-3) var(--space-4);
-  }
-
-  .outro-shortcut {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-  }
-
-  .outro-mobile {
-    display: none;
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
   }
 
   kbd {
@@ -775,17 +723,11 @@ const projects = getHomepageProjects();
   }
 
   @media (max-width: 768px) {
-    .outro-actions,
+    /* No keyboard to press and no room for the specs, so the hint and the
+       bar stay desktop only. */
+    .intro-hint,
     .blueprint-bar {
       display: none;
-    }
-
-    .outro-mobile {
-      display: block;
-    }
-
-    .outro-title {
-      margin-bottom: var(--space-3);
     }
 
     .split-inner {
