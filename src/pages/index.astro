@@ -72,9 +72,6 @@ const projects = getHomepageProjects();
 </Layout>
 
 <script>
-  import Snap from "lenis/snap";
-  import type Lenis from "lenis";
-
   const rows = document.querySelectorAll<HTMLElement>(".project-row");
   const firstProject = document.querySelector<HTMLElement>('.project-row[data-index="0"]');
 
@@ -134,49 +131,6 @@ const projects = getHomepageProjects();
 
   updateSpacer();
   window.addEventListener("resize", updateSpacer);
-
-  // A gentle snap: when scrolling comes to rest near a project, ease it so
-  // its image centers on the headline block, the same line the first
-  // project starts on. Proximity only, so a stop between projects stays put.
-  // Desktop only, and off for reduced motion.
-  function snapProjects(lenis: Lenis) {
-    const desktop = window.matchMedia("(min-width: 769px)");
-    const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const snap = new Snap(lenis, {
-      type: "proximity",
-      distanceThreshold: "30%",
-      debounce: 180,
-      duration: 0.9,
-      easing: (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
-    });
-    let removers: Array<() => void> = [];
-
-    function build() {
-      removers.forEach((remove) => remove());
-      removers = [];
-      if (!desktop.matches || calm.matches || !headline) return;
-      const head = headline.getBoundingClientRect();
-      const line = (head.top + head.bottom) / 2;
-      rows.forEach((row, i) => {
-        // The first project already sits on the line at the top of the page.
-        if (i === 0) return removers.push(snap.add(0));
-        const image = row.querySelector<HTMLElement>(".cell-image")!.getBoundingClientRect();
-        removers.push(snap.add(Math.round(image.top + window.scrollY + image.height / 2 - line)));
-      });
-    }
-
-    build();
-    document.fonts?.ready.then(build);
-    window.addEventListener("resize", build);
-    desktop.addEventListener("change", build);
-    calm.addEventListener("change", build);
-    const panel = document.querySelector<HTMLElement>(".right-panel");
-    if (panel) new ResizeObserver(build).observe(panel);
-  }
-
-  const sharedLenis = (window as any).lenis as Lenis | undefined;
-  if (sharedLenis) snapProjects(sharedLenis);
-  else window.addEventListener("lenis:ready", () => snapProjects((window as any).lenis), { once: true });
 
   /**
    * The blueprint: the page drawing its own specs over itself. The columns,

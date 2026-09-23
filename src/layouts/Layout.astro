@@ -113,10 +113,6 @@ const jsonLd = noindex
         requestAnimationFrame(raf);
       }
       requestAnimationFrame(raf);
-      // Shared so a page can build on the same instance (the homepage snaps
-      // its projects with it). The event covers pages whose script runs first.
-      (window as any).lenis = lenis;
-      window.dispatchEvent(new Event("lenis:ready"));
     </script>
   </body>
 </html>
