@@ -1,0 +1,568 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import IntroLoader from "../components/IntroLoader.astro";
+import { getHomepageProjects } from "../data/projects";
+import Media from "../components/Media.astro";
+
+const projects = getHomepageProjects();
+---
+
+{/* The original homepage, kept at its own URL for reference and out of
+    search: noindex here and filtered from the sitemap in astro.config.mjs. */}
+<Layout title="Ryan Sheridan — Designing systems, sites and brands." description="Portfolio of Ryan Sheridan, Principal Designer specializing in design systems, marketing sites, and brand infrastructure." noindex>
+  {/* First in the document on purpose: the intro's blocking inline script
+      stamps the page before the nav below it can paint, otherwise the nav
+      flashes for a frame before the scrim covers it. */}
+  <IntroLoader />
+  <Nav />
+  <main class="split-layout">
+    <div class="split-inner">
+      <div class="left-panel">
+        <div class="headline-block">
+          <h1 class="sticky-title">
+            <span class="reveal-wrap" data-load-reveal><span class="reveal-inner">Designing <span class="accent">systems</span></span></span><span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner">,</span></span><br />
+            <span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner"><span class="accent">sites</span></span></span><span class="reveal-wrap" data-reveal-index="2"><span class="reveal-inner">{" and "}<span class="accent">brands</span>.</span></span>
+          </h1>
+          <p class="tagline"><span class="reveal-wrap" data-reveal-index="3"><span class="reveal-inner">Based out of Austin, Texas</span></span></p>
+          <a href="/work" class="view-all-link" data-reveal-index={projects.length - 1}>View all work</a>
+        </div>
+      </div>
+      <div class="right-panel">
+        {projects.map((project, i) => {
+          const row = (
+            <a href={`/work/${project.slug}`} class={`project-row${i === 0 ? " entrance-hidden" : ""}`} data-index={i}>
+              <div class="cell-image">
+                {project.thumbnail && <Media src={project.thumbnail} alt={project.title} />}
+              </div>
+              <div class="cell-info">
+                <h2 class="project-title">{project.title}</h2>
+                <div class="badge-list project-tags">
+                  {project.tags.map((tag) => <span class="badge">{tag}</span>)}
+                </div>
+              </div>
+            </a>
+          );
+          return i === 0 ? <div class="first-project-frame">{row}</div> : row;
+        })}
+        <div class="scroll-spacer"></div>
+      </div>
+    </div>
+  </main>
+
+  {/* Outside main so it can hold the left margin for the whole page rather
+      than the headline panel. Decorative: the work is reachable by scrolling
+      whether or not anyone sees this, so it is hidden from assistive tech
+      rather than announced as something to act on. */}
+  <div class="scroll-rail" data-scroll-rail aria-hidden="true">
+    <span class="scroll-rail-label">Scroll</span>
+    <span class="scroll-rail-track"><span class="scroll-rail-fill"></span></span>
+  </div>
+
+  <Footer />
+</Layout>
+
+<script>
+  function splitIntoChars(root: HTMLElement) {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const textNodes: Text[] = [];
+    let node: Node | null;
+    while ((node = walker.nextNode())) textNodes.push(node as Text);
+
+    let i = 0;
+    textNodes.forEach((textNode) => {
+      const frag = document.createDocumentFragment();
+      for (const ch of textNode.textContent ?? "") {
+        if (ch === " ") {
+          frag.appendChild(document.createTextNode(" "));
+          continue;
+        }
+        const span = document.createElement("span");
+        span.className = "char";
+        span.textContent = ch;
+        span.style.transitionDelay = `${150 + i * 26}ms`;
+        frag.appendChild(span);
+        i++;
+      }
+      textNode.parentNode?.replaceChild(frag, textNode);
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>(".reveal-inner").forEach((el) => splitIntoChars(el));
+
+  const revealTargets = document.querySelectorAll<HTMLElement>("[data-reveal-index]");
+  const rows = document.querySelectorAll<HTMLElement>(".project-row");
+
+  let revealed = -1;
+
+  function revealUpTo(index: number) {
+    if (index <= revealed) return;
+    revealed = index;
+
+    revealTargets.forEach((el) => {
+      const revealIndex = Number(el.dataset.revealIndex);
+      if (revealIndex > index) return;
+      el.classList.add("visible");
+    });
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          revealUpTo(Number((entry.target as HTMLElement).dataset.index));
+        }
+      });
+    },
+    { rootMargin: "-45% 0px -45% 0px" }
+  );
+
+  rows.forEach((row) => observer.observe(row));
+
+  const firstProject = document.querySelector<HTMLElement>('.project-row[data-index="0"]');
+  const introWrap = document.querySelector<HTMLElement>(".reveal-wrap[data-load-reveal]");
+
+  requestAnimationFrame(() => {
+    firstProject?.classList.add("visible");
+    setTimeout(() => introWrap?.classList.add("visible"), 400);
+  });
+
+  // Size the trailing spacer so the sticky headline releases right as the
+  // last project becomes vertically centered in the viewport, instead of
+  // releasing only once the project has scrolled away entirely.
+  const spacer = document.querySelector<HTMLElement>(".scroll-spacer");
+  const lastRow = rows[rows.length - 1];
+
+  function updateSpacer() {
+    if (!spacer || !lastRow) return;
+    if (window.innerWidth < 769) {
+      spacer.style.height = "0px";
+      return;
+    }
+    const rowHeight = lastRow.getBoundingClientRect().height;
+    const height = Math.max(0, (window.innerHeight - rowHeight) / 2);
+    spacer.style.height = `${height}px`;
+  }
+
+  updateSpacer();
+  window.addEventListener("resize", updateSpacer);
+
+  /**
+   * The scroll rail: an invitation until the page moves, a progress reading
+   * after that, and back to an invitation if someone returns to the top.
+   *
+   * It waits out the intro rather than counting frames against it, so it never
+   * animates behind the scrim.
+   */
+  const rail = document.querySelector<HTMLElement>("[data-scroll-rail]");
+
+  if (rail) {
+    let shown = false;
+    let scrolled = false;
+    let queued = false;
+
+    const reveal = () => {
+      if (shown) return;
+      shown = true;
+      rail.classList.add("visible");
+    };
+
+    function measure() {
+      queued = false;
+      // How far the document can travel. A page shorter than the viewport has
+      // nowhere to go, so it reads as untouched rather than as complete.
+      const span = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = span > 0 ? Math.min(Math.max(window.scrollY / span, 0), 1) : 0;
+      rail.style.setProperty("--progress", String(progress));
+
+      // One way only. Someone who has scrolled knows how, and being told again
+      // on the way back up reads as the page forgetting. A stray trackpad
+      // twitch is not a scroll, hence the threshold. From here the rail is
+      // only ever a progress reading, including at the top, where it reads
+      // empty rather than inviting.
+      if (scrolled || window.scrollY <= 40) return;
+      scrolled = true;
+      rail.classList.add("is-scrolled");
+    }
+
+    function onScroll() {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(measure);
+    }
+
+    const root = document.documentElement;
+
+    if (root.classList.contains("intro-open")) {
+      // The intro drops this class on hand-off; that is the page's own signal
+      // that it is on screen, and it beats guessing at the intro's duration.
+      const watcher = new MutationObserver(() => {
+        if (root.classList.contains("intro-open")) return;
+        watcher.disconnect();
+        window.setTimeout(reveal, 900);
+      });
+      watcher.observe(root, { attributes: true, attributeFilter: ["class"] });
+    } else {
+      window.setTimeout(reveal, 1200);
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    // The document's height is what progress is measured against, and both the
+    // spacer above and a resize change it.
+    window.addEventListener("resize", onScroll);
+    // Landing mid-page, on a refresh or a back-navigation, starts in progress.
+    measure();
+  }
+</script>
+
+<style>
+  .split-layout {
+    min-height: 100vh;
+    padding: 0 var(--page-padding);
+    /* Kept above the intro scrim's stacking context so the hand-off has
+       something to land on. */
+    position: relative;
+    z-index: 1;
+  }
+
+  .split-inner {
+    display: flex;
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .left-panel {
+    position: sticky;
+    top: var(--nav-height);
+    width: 50%;
+    height: calc(100vh - var(--nav-height));
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .headline-block {
+    /* Nudge up to counter the nav bar eating into the visible viewport,
+       so the block reads as centered on the whole page, not just this panel. */
+    transform: translateY(calc(var(--nav-height) / -2));
+  }
+
+  .sticky-title {
+    max-width: 100%;
+    font-size: clamp(2rem, 1.4rem + 2.4vw, 50px);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1.25;
+    color: var(--color-text);
+  }
+
+  .tagline {
+    margin-top: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .view-all-link {
+    display: inline-flex;
+    align-items: center;
+    margin-top: var(--space-5);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-bg);
+    background: var(--color-text);
+    border: 1px solid var(--color-text);
+    border-radius: 999px;
+    padding: 12px 22px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.55s ease 0.15s, transform 0.55s ease 0.15s, background 0.2s;
+  }
+
+  .view-all-link:hover {
+    background: #333333;
+    border-color: #333333;
+  }
+
+  .view-all-link.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /*
+    A rail in the left margin, centered on the screen and fixed there, so it
+    holds one position for the whole page instead of belonging to any section.
+
+    It is two things in sequence. Before the page moves it is an invitation: a
+    segment travels down the track under a label. Once the page moves it is a
+    reading of how far through you are, the same track filling from the top.
+    Nothing is swapped out between the two; the fill and the traveller trade
+    places on one line.
+
+    Sized to live inside the page's own margin: a quarter of the space either
+    side of the content column puts it between the viewport edge and the text,
+    and the clamp keeps it off both when that space runs out.
+  */
+  .scroll-rail {
+    position: fixed;
+    left: clamp(14px, calc((100vw - var(--max-width)) / 4), 72px);
+    top: 50%;
+    /* The rail's box is the track and nothing else, so this centers the line
+       itself. The label hangs off it absolutely for the same reason: in flow
+       it would push the track down by its own height and the bar would sit
+       below the middle of the screen. */
+    height: 180px;
+    transform: translateY(-50%);
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
+  }
+
+  .scroll-rail.visible {
+    opacity: 1;
+  }
+
+  /* Vertical, because the margin it sits in is narrower than the word. */
+  .scroll-rail-label {
+    position: absolute;
+    bottom: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    writing-mode: vertical-rl;
+    transition: opacity 0.5s ease;
+  }
+
+  /* The label is the invitation, and the invitation is spent once the page
+     moves. The track carries on as the progress reading. */
+  .scroll-rail.is-scrolled .scroll-rail-label {
+    opacity: 0;
+  }
+
+  .scroll-rail-track {
+    position: relative;
+    display: block;
+    width: 1px;
+    height: 100%;
+    background: var(--color-border);
+    overflow: hidden;
+  }
+
+  /* Progress. Scaled rather than resized, so it is a transform per frame
+     instead of a layout pass, and anchored to the top so it grows downward. */
+  .scroll-rail-fill {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 1px;
+    height: 100%;
+    background: var(--color-text);
+    transform-origin: top;
+    transform: scaleY(var(--progress, 0));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .scroll-rail.is-scrolled .scroll-rail-fill {
+    opacity: 1;
+  }
+
+  /* The traveller: only ever visible before the first scroll, which is what
+     keeps the rail an invitation until it has a reading to give. */
+  .scroll-rail-track::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 1px;
+    height: 22%;
+    background: var(--color-text);
+    animation: scroll-rail-travel 2.6s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+    transition: opacity 0.4s ease;
+  }
+
+  .scroll-rail.is-scrolled .scroll-rail-track::after {
+    opacity: 0;
+    animation: none;
+  }
+
+  @keyframes scroll-rail-travel {
+    0% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    30% {
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(455%);
+      opacity: 0;
+    }
+  }
+
+  /* Reduced motion keeps both readings and drops the travel: the invitation
+     becomes a still mark, the progress still tracks. */
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-rail-track::after {
+      animation: none;
+      height: 100%;
+      opacity: 0.3;
+    }
+  }
+
+  .entrance-hidden {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .entrance-hidden.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-wrap {
+    display: inline;
+    vertical-align: bottom;
+  }
+
+  .reveal-inner {
+    display: inline;
+  }
+
+  :global(.char) {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(6px);
+    color: var(--color-text-muted);
+    transition: opacity 0.5s ease, transform 0.5s ease, color 0.5s ease;
+  }
+
+  :global(.reveal-wrap.visible .char) {
+    opacity: 1;
+    transform: translateY(0);
+    color: var(--color-text);
+  }
+
+  .right-panel {
+    width: 50%;
+  }
+
+  .scroll-spacer {
+    height: 0;
+  }
+
+  .project-row {
+    display: block;
+    color: var(--color-text);
+    padding: var(--space-8) 0;
+  }
+
+  .cell-image {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--color-tag-bg);
+    margin-bottom: var(--space-4);
+  }
+
+  .cell-image :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .project-title {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-3);
+  }
+
+  @media (hover: hover) {
+    .project-row:hover .cell-image :global(img) {
+      transform: scale(1.03);
+    }
+  }
+
+  .project-tags {
+    margin-bottom: 0;
+  }
+
+  @media (min-width: 769px) {
+    .first-project-frame {
+      min-height: calc(100vh - var(--nav-height));
+      display: flex;
+      align-items: center;
+      transform: translateY(calc(var(--nav-height) / -2));
+    }
+
+    .first-project-frame .project-row {
+      padding-top: 0;
+      padding-bottom: 0;
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .split-inner {
+      flex-direction: column;
+    }
+
+    .left-panel {
+      position: relative;
+      width: 100%;
+      height: auto;
+      padding: 120px 0 var(--space-8);
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .scroll-rail {
+      display: none;
+    }
+
+
+
+    .headline-block {
+      transform: none;
+    }
+
+    .right-panel {
+      width: 100%;
+    }
+
+    .project-row {
+      padding: var(--space-5) 0;
+    }
+
+    /* Show everything immediately on mobile; skip the scroll/entrance choreography. */
+    :global(.char) {
+      opacity: 1 !important;
+      transform: none !important;
+      color: var(--color-text) !important;
+      transition: none !important;
+    }
+
+    .view-all-link,
+    .entrance-hidden {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+
+    /* Shown outright like everything else on mobile; the rail's own states
+       carry on from there. */
+    .scroll-rail {
+      opacity: 1;
+    }
+  }
+</style>

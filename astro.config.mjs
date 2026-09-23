@@ -32,7 +32,7 @@ export default defineConfig({
           '/ohio-golf-club',
           '/cursor-field',
           '/maze-field',
-          '/homepage-variations',
+          '/homepage-1',
         ].some((path) => page.includes(path)),
     }),
   ]
