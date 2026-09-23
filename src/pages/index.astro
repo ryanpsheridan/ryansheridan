@@ -34,7 +34,7 @@ const projects = getHomepageProjects();
                 <rect x="1.5" y="1.5" width="13" height="13" rx="1" />
                 <path d="M1.5 6h13M6 6v8.5" />
               </svg>
-              <span data-blueprint-label>Inspect layout</span>
+              <span data-blueprint-label>See how I build</span>
             </button>
           </div>
           <div class="blueprint-tags" aria-hidden="true"></div>
@@ -267,7 +267,7 @@ const projects = getHomepageProjects();
     function setBlueprint(on: boolean) {
       page!.classList.toggle("is-blueprint", on);
       blueprintToggle!.setAttribute("aria-pressed", String(on));
-      blueprintLabel!.textContent = on ? "Hide layout" : "Inspect layout";
+      blueprintLabel!.textContent = on ? "Hide the specs" : "See how I build";
       build();
     }
 
