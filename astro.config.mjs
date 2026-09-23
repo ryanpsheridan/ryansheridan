@@ -16,8 +16,7 @@ export default defineConfig({
       // Anything that carries noindex stays out of the sitemap too, so the
       // two never disagree about what belongs in search. /proposals covers
       // the index and every client proposal under it. The field experiments
-      // and the client intake form are linked directly rather than found
-      // through search.
+      // are linked directly rather than found through search.
       filter: (page) =>
         ![
           '/apartment',
@@ -27,7 +26,6 @@ export default defineConfig({
           '/cursor-field',
           '/maze-field',
           '/homepage-variations',
-          '/project-questionnaire',
         ].some((path) => page.includes(path)),
     }),
   ]
