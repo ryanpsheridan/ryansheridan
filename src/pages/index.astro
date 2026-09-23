@@ -26,19 +26,6 @@ const projects = getHomepageProjects();
           <p class="tagline" data-spec="type" data-spec-name="Meta">Based out of Austin, Texas</p>
           <div class="cta-row">
             <a href="/work" class="view-all-link">View all work</a>
-            {/* The page drawing its own specs over itself. Plain toggle
-                semantics, and the drawing it adds is hidden from assistive
-                tech, since it describes the page rather than adding to it. */}
-            <button type="button" class="blueprint-toggle is-latent" aria-pressed="false" data-blueprint-toggle>
-              {/* An open eye that squints while the specs are up: looking
-                  closer, rather than the crossed-out eye that means hidden. */}
-              <svg class="blueprint-eye" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round">
-                <path class="eye-lid" vector-effect="non-scaling-stroke" d="M1.25 8C3.1 4.7 5.35 3.1 8 3.1s4.9 1.6 6.75 4.9" />
-                <path class="eye-lid" vector-effect="non-scaling-stroke" d="M1.25 8c1.85 3.3 4.1 4.9 6.75 4.9s4.9-1.6 6.75-4.9" />
-                <circle class="eye-pupil" cx="8" cy="8" r="2" />
-              </svg>
-              <span data-blueprint-label>See how I build</span>
-            </button>
           </div>
           <div class="blueprint-tags" aria-hidden="true"></div>
         </div>
@@ -60,6 +47,28 @@ const projects = getHomepageProjects();
           );
           return i === 0 ? <div class="first-project-frame">{row}</div> : row;
         })}
+        {/* The close of the work, and the way into the blueprint: the page
+            drawing its own specs over itself. Plain toggle semantics; the
+            drawing is hidden from assistive tech, since it describes the page
+            rather than adding to it. */}
+        <section class="work-outro" aria-labelledby="work-outro-title">
+          <p class="outro-kicker">That's the work.</p>
+          <h2 class="outro-title" id="work-outro-title">Want to see how this page is put together?</h2>
+          <div class="outro-actions">
+            <button type="button" class="blueprint-toggle" aria-pressed="false" data-blueprint-toggle>
+              {/* An open eye that squints while the specs are up: looking
+                  closer, rather than the crossed-out eye that means hidden. */}
+              <svg class="blueprint-eye" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round">
+                <path class="eye-lid" vector-effect="non-scaling-stroke" d="M1.25 8C3.1 4.7 5.35 3.1 8 3.1s4.9 1.6 6.75 4.9" />
+                <path class="eye-lid" vector-effect="non-scaling-stroke" d="M1.25 8c1.85 3.3 4.1 4.9 6.75 4.9s4.9-1.6 6.75-4.9" />
+                <circle class="eye-pupil" cx="8" cy="8" r="2" />
+              </svg>
+              <span data-blueprint-label>See how I build</span>
+            </button>
+            <p class="outro-shortcut">or press <kbd>I</kbd> anywhere on the page</p>
+          </div>
+          <p class="outro-mobile">Open it on a laptop to see the page draw its own specs.</p>
+        </section>
         <div class="scroll-spacer"></div>
       </div>
     </div>
@@ -69,6 +78,14 @@ const projects = getHomepageProjects();
         work column, which scroll with it. */}
     <div class="blueprint-columns" aria-hidden="true" data-blueprint-columns></div>
     <div class="blueprint-tags" aria-hidden="true"></div>
+
+    {/* The toggle lives at the end of the work, so while the specs are up
+        this is the way out wherever you are on the page. */}
+    <div class="blueprint-bar" data-blueprint-bar>
+      <span class="blueprint-bar-label">Specs on</span>
+      <button type="button" class="blueprint-bar-hide" data-blueprint-off>Hide</button>
+      <span class="blueprint-bar-keys"><kbd>I</kbd> or <kbd>Esc</kbd></span>
+    </div>
   </main>
 
   <Footer />
@@ -274,45 +291,38 @@ const projects = getHomepageProjects();
       build();
     }
 
-    blueprintToggle.addEventListener("click", () => setBlueprint(!page.classList.contains("is-blueprint")));
+    const desktop = window.matchMedia("(min-width: 769px)");
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    // From the end of the work, the specs are drawn where they say the most:
+    // glide back to the headline, then draw them on arrival.
+    blueprintToggle.addEventListener("click", () => {
+      if (page.classList.contains("is-blueprint")) return setBlueprint(false);
+      const lenis = (window as any).lenis;
+      if (window.scrollY < 8) return setBlueprint(true);
+      if (calm.matches || !lenis) {
+        window.scrollTo(0, 0);
+        return setBlueprint(true);
+      }
+      lenis.scrollTo(0, { duration: 1.4, onComplete: () => setBlueprint(true) });
+    });
+
+    document.querySelector("[data-blueprint-off]")?.addEventListener("click", () => setBlueprint(false));
 
     // Escape puts it away from anywhere, like any overlay, without moving focus.
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && page.classList.contains("is-blueprint")) setBlueprint(false);
     });
 
-    // The easter egg: the toggle stays out of sight (and out of the tab
-    // order) until the last project reaches the center line, a small reward
-    // for having gone through all the work. Once found it stays for the rest
-    // of the visit. Desktop only; the stacked mobile layout hides it outright.
-    const FOUND_KEY = "blueprint-found";
-    const reveal = () => {
-      blueprintToggle.classList.remove("is-latent");
-      try {
-        sessionStorage.setItem(FOUND_KEY, "1");
-      } catch {}
-    };
-    let found = false;
-    try {
-      found = sessionStorage.getItem(FOUND_KEY) === "1";
-    } catch {}
-    const lastImage = rows[rows.length - 1]?.querySelector<HTMLElement>(".cell-image");
-    if (found || !lastImage) {
-      reveal();
-    } else {
-      // A one-pixel band across the middle of the screen. Crossing it counts,
-      // and so does already being past it, which covers a fast fling and a
-      // reload partway down the page.
-      const finder = new IntersectionObserver(
-        ([entry]) => {
-          if (!entry.isIntersecting && entry.boundingClientRect.top > window.innerHeight / 2) return;
-          finder.disconnect();
-          reveal();
-        },
-        { rootMargin: "-50% 0px -50% 0px" }
-      );
-      finder.observe(lastImage);
-    }
+    // I toggles it in place, from anywhere on the page. Left alone while
+    // typing or holding a modifier, so it never steals a browser shortcut.
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "i" && event.key !== "I") return;
+      if (event.metaKey || event.ctrlKey || event.altKey || event.repeat || !desktop.matches) return;
+      const target = event.target as HTMLElement | null;
+      if (target?.closest("input, textarea, select, [contenteditable]")) return;
+      setBlueprint(!page.classList.contains("is-blueprint"));
+    });
 
     // Leaving the desktop layout with the specs up would strand them with
     // no way to put them away.
@@ -431,21 +441,6 @@ const projects = getHomepageProjects();
     border-color: var(--color-text);
   }
 
-  /* Hidden until found, but still holding its place, so nothing in the
-     headline block moves when it arrives. visibility also keeps it out of
-     the tab order and away from screen readers until then. */
-  .blueprint-toggle.is-latent {
-    opacity: 0;
-    transform: translateY(6px);
-    visibility: hidden;
-    pointer-events: none;
-  }
-
-  /* Arrives a beat after the last project settles on the line. */
-  .blueprint-toggle:not(.is-latent) {
-    transition: background 0.2s, border-color 0.2s, color 0.2s,
-      opacity 0.5s ease 0.15s, transform 0.5s ease 0.15s;
-  }
 
   .blueprint-toggle[aria-pressed="true"] {
     color: #ffffff;
@@ -472,14 +467,6 @@ const projects = getHomepageProjects();
     .blueprint-eye .eye-lid,
     .blueprint-eye .eye-pupil {
       transition: none;
-    }
-
-    .blueprint-toggle.is-latent {
-      transform: none;
-    }
-
-    .blueprint-toggle:not(.is-latent) {
-      transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.3s ease;
     }
   }
 
@@ -595,6 +582,125 @@ const projects = getHomepageProjects();
     }
   }
 
+  /* The close of the work. It sits in the work column like one more row,
+     so the eye lands on it straight after the last project. */
+  .work-outro {
+    padding: var(--space-3) 0 var(--space-8);
+  }
+
+  .outro-kicker {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .outro-title {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    max-width: 22ch;
+    margin-bottom: var(--space-5);
+  }
+
+  .outro-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-4);
+  }
+
+  .outro-shortcut {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .outro-mobile {
+    display: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  kbd {
+    display: inline-block;
+    min-width: 1.7em;
+    padding: 1px 6px;
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--color-text);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+  }
+
+  /* While the specs are up: a small bar pinned to the bottom of the screen,
+     in the blueprint's own blue, so there is always a way out. */
+  .blueprint-bar {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 6px 6px 16px;
+    font-size: var(--text-sm);
+    color: #ffffff;
+    background: var(--blueprint);
+    border-radius: 999px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, 8px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
+  }
+
+  .split-layout.is-blueprint .blueprint-bar {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .blueprint-bar-label {
+    font-weight: 500;
+  }
+
+  .blueprint-bar-hide {
+    font: inherit;
+    font-weight: 500;
+    color: var(--blueprint);
+    background: #ffffff;
+    border: 0;
+    border-radius: 999px;
+    padding: 5px 14px;
+    cursor: pointer;
+  }
+
+  .blueprint-bar-hide:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+  }
+
+  .blueprint-bar-keys {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    opacity: 0.85;
+    padding-right: 10px;
+  }
+
+  .blueprint-bar kbd {
+    color: #ffffff;
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
   .entrance-hidden {
     opacity: 0;
     transform: translateY(10px);
@@ -669,8 +775,17 @@ const projects = getHomepageProjects();
   }
 
   @media (max-width: 768px) {
-    .blueprint-toggle {
+    .outro-actions,
+    .blueprint-bar {
       display: none;
+    }
+
+    .outro-mobile {
+      display: block;
+    }
+
+    .outro-title {
+      margin-bottom: var(--space-3);
     }
 
     .split-inner {
