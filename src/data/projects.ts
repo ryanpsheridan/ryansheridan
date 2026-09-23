@@ -401,12 +401,159 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: "claude-design-case-study-pdfs",
+    title: "Case Study PDFs in Claude Design",
+    description: "A Claude Design template that turns a case study URL or copy doc into an on-brand BigCommerce PDF, ready for designers to finish in Figma.",
+    ogImage: "/project-claude-design-pdf1.jpg",
+    thumbnail: "/claude-design-pdf-covers-animated.svg",
+    showOnHomepage: true,
+    tags: ["Design System", "Automation"],
+    tools: ["Claude Design", "Figma", "html.to.design"],
+    client: "BigCommerce",
+    clientUrl: "https://www.bigcommerce.com/",
+    content: [
+      {
+        type: "text",
+        heading: "The Opportunity",
+        body: `<p>Case study PDFs are a steady request for our design team. The content almost always exists already, either as a live case study page on <a href="https://www.bigcommerce.com/case-study/" target="_blank" rel="noopener noreferrer">BigCommerce.com</a> or as a copy doc from marketing. Turning it into an on-brand PDF still meant a designer laying it out page by page.</p><p>The opportunity was to let <strong>Claude Design</strong> handle the first 80%. Give it a URL or a copy doc, get back a PDF that is already on brand, with the layout, type, pagination, and cover done. Export it to Figma, and the design team finishes the last 20%: adding imagery and fixing small spacing issues.</p><p>Here is what this covers:</p><ul><li>The goals the system had to meet</li><li>The layout patterns everything is built on</li><li>The randomized cover, designed with Rob</li><li>The workflow from Claude Design to Figma</li><li>What I recommend, and the key decisions I made</li></ul>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          {
+            src: "/project-claude-design-pdf-start-screen.webp",
+            alt: "Claude Design start screen with the design system menu open, listing the Commerce, BigCommerce, and Feedonomics marketing systems",
+            caption: "Every PDF starts by picking the BigCommerce design system in Claude Design",
+          },
+        ],
+      },
+      {
+        type: "text",
+        heading: "The Goals",
+        body: `<p>Before designing any pages, I wrote down what the system had to do:</p><ul><li><strong>Take any input.</strong> A live case study URL, a copy doc, or both, plus the customer logo and a few product or lifestyle images.</li><li><strong>Produce the same result every time.</strong> Same margins, same type, same structure, no matter who runs it or how they word the prompt.</li><li><strong>Follow the live case study page.</strong> The PDF should mirror the page's flow (Challenge, Solution, Results, Looking ahead) and still work when a copy doc arrives in a different order.</li><li><strong>Reach Figma cleanly.</strong> Designers should be finishing the file, not rebuilding it.</li></ul><p>The main insight: consistency had to come from the template, not the prompt. If a rule only exists in a prompt, it depends on someone typing it. If it lives in the template, everyone gets it for free.</p>`,
+      },
+      {
+        type: "text",
+        heading: "Design Approach: Patterns First",
+        body: `<p>My focus from the start was finding patterns that repeat. I started with margins, padding, and spacing for each type of page, then worked out what information a case study actually shows and how it should be ordered. Everything else is built on those decisions.</p><p>The template has four kinds of pages, and each has its own layout:</p>`,
+      },
+      {
+        type: "componentTable",
+        groups: [
+          {
+            category: "Cover",
+            items: ["Two patterned color bands, randomized", "BigCommerce and customer logo lockup", "One-sentence outcome headline", "Three stats that shrink to fit on one line"],
+          },
+          {
+            category: "Hero + Key Highlights",
+            items: ["Product image in a gray frame", "Challenge, Solution, and Results in three columns", "About the customer"],
+          },
+          {
+            category: "Flow Pages",
+            items: ["Eyebrow, rule, and headline for every section", "66% copy column with a 26% quote rail", "Capability list and partner chips", "Images kept inside the copy column"],
+          },
+          {
+            category: "Closing",
+            items: ["Looking ahead section", "Full-width CTA bar, or a compact rail card when it won't fit"],
+          },
+          {
+            category: "Every Page",
+            items: ["8.5 × 11in", "0.65in margins", "Footer 0.5in from the bottom edge", "Two-digit page numbers"],
+          },
+        ],
+      },
+      {
+        type: "imageGrid",
+        images: [
+          {
+            src: "/project-claude-design-pdf-layout-spec.webp",
+            alt: "Two Laser Clinics case study pages marked up with the 0.65in margins, the section headers, the 66% copy column, the 26% quote rail, and the footer",
+            caption: "The layout rules on two generated pages",
+          },
+        ],
+      },
+      {
+        type: "text",
+        body: `<p>I spent the most time on the rules you only notice when they break. These are the ones that separate a real PDF from a long web page cut into pieces:</p><ul><li><strong>Footers stay at the bottom of every page.</strong> Brand, customer, and page number sit 0.5in from the edge whether the page is full or half empty.</li><li><strong>Page numbers are always right.</strong> They're set while the pages are built, so adding or removing a paragraph never leaves a stale number behind.</li><li><strong>Headings stay with their content.</strong> Section headers are kept with the next block, so a headline never ends up alone at the bottom of a page.</li><li><strong>Quotes stay in the rail.</strong> A pull quote that won't fit moves to the next page's rail and lines up with the top of its section. It never drops into the copy column.</li><li><strong>Pages break after the fonts load.</strong> Measuring with fallback fonts shifts every break, so the template waits for the real ones.</li><li><strong>Images get room.</strong> 24px of padding inside the gray frame and at least 28px above and below, so copy never sits tight against an image.</li></ul>`,
+      },
+      {
+        type: "text",
+        heading: "The Cover, With Rob",
+        body: `<p>I brought in <a href="https://www.linkedin.com/in/robrodriguezwork/" target="_blank" rel="noopener noreferrer"><strong>Rob Rodriguez</strong></a>, the brand designer I also worked with on the <a href="/work/feedonomics-rebrand-design-system">Feedonomics rebrand</a>. Rob designed the cover and its illustration variants: three line patterns (plus signs, circles, and radiating lines) set on the BigCommerce system's pale tints, Mist, Rose, Mauve, and Lemon.</p><p>I set the cover up so every PDF picks two different patterns and two different tints at random. That makes 72 possible covers. Every one is slightly different, and every one is clearly part of the same family, so a stack of case studies looks like a series instead of copies.</p><p>The BigCommerce design system doesn't allow patterns in general, so the cover bands live inside this template and nowhere else. The randomness has limits, and those limits are what keep it on brand.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [
+          {
+            src: "/project-claude-design-pdf-covers.webp",
+            alt: "Six case study cover variations, each pairing two different patterns and pastel tints above the same placeholder headline and stats",
+            caption: "Six of the cover variations: same structure, different pairings",
+          },
+        ],
+      },
+      {
+        type: "text",
+        heading: "The Workflow",
+        body: `<p>The template lives inside the BigCommerce design system I built in Claude Design, next to the tokens, type, components, slide system, and a one-pager and whitepaper template. Running it takes a few steps:</p><ol><li><strong>Start in Claude Design.</strong> Choose the BigCommerce design system, drop in a copy doc or case study URL, and ask for a case study PDF. Attach the customer logo and a couple of product or lifestyle images.</li><li><strong>Refine in the chat.</strong> If copy length, layout, or image placement is off, fix it in Claude Design first. It's faster to iterate there than after export.</li><li><strong>Export as standalone HTML.</strong> This bakes the fonts, logo, and every image into one file, so there are no linked assets left to break.</li><li><strong>Import with html.to.design.</strong> Auto layout, styles and variables, existing local styles, hyperlinks, and HTML layer names on, then ungroup in Figma.</li><li><strong>Finish in Figma.</strong> Designers add final imagery, clean up any spacing or type that shifted during import, and check the hyperlinks.</li></ol><p>To roll it out, I walked the design team through the whole flow in a working session with a live demo. The goal was simple: everyone runs a case study at least once and leaves knowing which route to use.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          {
+            src: "/project-claude-design-pdf-design-system.webp",
+            alt: "The Marketing BigCommerce design system in Claude Design, with the Case Study One-Pager and One-Pager Whitepaper templates listed above the brand, color, and component pages",
+            caption: "The case study template sits inside the BigCommerce design system",
+          },
+        ],
+      },
+      {
+        type: "text",
+        heading: "The Output",
+        body: `<p>Two case studies from the system, for <strong>Laser Clinics</strong> and <strong>Mizuno USA</strong>. They're different customers with different amounts of copy, built on the same margins, footer, section structure, and cover family.</p>`,
+      },
+      {
+        type: "carousel",
+        images: [
+          { src: "/project-claude-design-pdf-laser-01.webp", alt: "Laser Clinics case study cover with plus-sign and circle bands, the headline Laser Clinics gives its digital experience a glow up with BigCommerce, and three stats", caption: "01 · Cover" },
+          { src: "/project-claude-design-pdf-laser-02.webp", alt: "Laser Clinics case study page with a laptop mockup of the Laser Clinics site above the Challenge, Solution, and Results highlights", caption: "02 · Key highlights" },
+          { src: "/project-claude-design-pdf-laser-03.webp", alt: "Laser Clinics case study Challenge and Solution sections with a customer quote in the right rail", caption: "03 · Challenge" },
+          { src: "/project-claude-design-pdf-laser-04.webp", alt: "Laser Clinics case study page with a two-column capability list and two pull quotes in the right rail", caption: "04 · Solution" },
+          { src: "/project-claude-design-pdf-laser-05.webp", alt: "Laser Clinics case study page about localized clinic pages, with a tablet mockup and quotes in the rail", caption: "05 · Solution, continued" },
+          { src: "/project-claude-design-pdf-laser-06.webp", alt: "Laser Clinics case study Results section with outcome stats and a customer quote", caption: "06 · Results" },
+          { src: "/project-claude-design-pdf-laser-07.webp", alt: "Laser Clinics case study Looking ahead section with partner chips and a closing call to action bar", caption: "07 · Looking ahead" },
+        ],
+      },
+      {
+        type: "imageGrid",
+        images: [
+          {
+            src: "/project-claude-design-pdf-mizuno.webp",
+            alt: "Mizuno USA case study cover with line and plus-sign bands next to its Challenge page with a quote in the right rail",
+            caption: "Mizuno USA: a different cover pairing on the same template",
+          },
+        ],
+      },
+      {
+        type: "text",
+        heading: "My Recommendation",
+        body: `<p>Treat case study PDFs as an 80/20 job. Claude Design is very good at structure: layout, type, pagination, and staying on brand across seven pages. Designers are still the right people for the last 20%, choosing imagery and catching the small spacing issues an import can introduce. That matches how we tiered Claude Design in the <a href="/work/claude-design-consistency-first-design-second">first exploration</a>: PDFs go through design, and the system does the heavy lifting first.</p><p>In practice, that means three things. Keep the rules in the template, not in the prompt. Refine in Claude Design before exporting, while changes are cheap. And make standalone HTML with html.to.design the default route into Figma, so every file arrives with its fonts and images intact.</p>`,
+      },
+      {
+        type: "text",
+        heading: "Key Takeaways",
+        body: `<ul><li><strong>Patterns before pages.</strong> I locked margins, padding, and spacing for every page type before designing a single case study.</li><li><strong>Mirror the live page, accept a copy doc.</strong> The structure follows the case study page, but the input can come in any shape.</li><li><strong>Let the template own pagination.</strong> Footers, page numbers, headings, quotes, and image spacing are rules, not things someone has to check by hand.</li><li><strong>Randomize inside a family.</strong> 72 covers from three patterns and four tints, all clearly the same brand.</li><li><strong>Split the work 80/20.</strong> Claude builds the structure, and designers finish the imagery and polish.</li><li><strong>Hand off in one file.</strong> Standalone HTML keeps fonts, logos, and images together on the way into Figma.</li></ul>`,
+      },
+    ],
+  },
+  {
     slug: "claude-design-consistency-first-design-second",
     title: "Claude Design: Consistency First",
     description: "What connecting a multi-brand Figma design system to Claude and Claude Design taught me about constraints, governance, and writing rules from failure.",
     ogImage: "/project-claude-design1.jpg",
     thumbnail: "/claude-design-featured.svg",
-    showOnHomepage: true,
+    showOnHomepage: false,
     tags: ["Exploration", "Design System"],
     tools: ["Claude Design", "Figma"],
     client: "Commerce",
