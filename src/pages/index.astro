@@ -23,13 +23,6 @@ const projects = getHomepageProjects();
             <span class="reveal-wrap" data-load-reveal><span class="reveal-inner">Designing <span class="accent">systems</span></span></span><span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner">,</span></span><br />
             <span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner"><span class="accent">sites</span></span></span><span class="reveal-wrap" data-reveal-index="2"><span class="reveal-inner">{" and "}<span class="accent">brands</span>.</span></span>
           </h1>
-          {/* Plain prose, not split into characters: it is the sentence search
-              engines and AI assistants quote about Ryan, so it fades in whole
-              with the tagline rather than typing out letter by letter. */}
-          <p class="intro" data-reveal-index="3">
-            I'm Ryan Sheridan, a Principal Designer at Commerce leading
-            multi-brand design systems, marketing sites, and brand identity work.
-          </p>
           <p class="tagline"><span class="reveal-wrap" data-reveal-index="3"><span class="reveal-inner">Based out of Austin, Texas</span></span></p>
           <a href="/work" class="view-all-link" data-reveal-index={projects.length - 1}>View all work</a>
         </div>
@@ -267,22 +260,6 @@ const projects = getHomepageProjects();
     font-family: var(--font-mono);
     font-size: var(--text-sm);
     color: var(--color-text-muted);
-  }
-
-  .intro {
-    max-width: 440px;
-    margin-top: var(--space-4);
-    font-size: var(--text-base);
-    line-height: 1.6;
-    color: var(--color-text-muted);
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 0.55s ease 0.15s, transform 0.55s ease 0.15s;
-  }
-
-  .intro.visible {
-    opacity: 1;
-    transform: translateY(0);
   }
 
   .view-all-link {
@@ -573,7 +550,6 @@ const projects = getHomepageProjects();
       transition: none !important;
     }
 
-    .intro,
     .view-all-link,
     .entrance-hidden {
       opacity: 1 !important;
