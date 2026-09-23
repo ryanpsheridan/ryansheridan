@@ -10,6 +10,7 @@ export default defineConfig({
     // The Ohio Golf Club review was shared from the site root before the
     // /proposals branch existed, so the old link keeps working.
     '/ohio-golf-club': '/proposals/ohio-golf-club',
+    '/project-questionnaire': '/start-a-project',
   },
   integrations: [
     sitemap({
