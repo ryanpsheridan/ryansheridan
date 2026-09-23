@@ -2,9 +2,14 @@
 import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
+import { breadcrumbSchema } from "../data/schema";
 ---
 
-<Layout title="Resume | Ryan Sheridan" description="Ryan Sheridan is a Principal Designer at Commerce, leading design systems and web experience across multiple brands.">
+<Layout
+  title="Resume | Ryan Sheridan"
+  description="Resume of Ryan Sheridan, Principal Designer: 8+ years building multi-brand design systems, design tokens, and web experience at Commerce and BigCommerce."
+  schema={[breadcrumbSchema([{ name: "Resume", path: "/resume" }])]}
+>
   <Nav />
   <main class="resume-page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -26,7 +31,7 @@ import Footer from "../components/Footer.astro";
         <ul class="contact-list">
           <li><a href="mailto:ryansheridandesign@gmail.com">ryansheridandesign@gmail.com</a></li>
           <li>Buda, TX</li>
-          <li><a href="https://www.ryansheridan.studio/" target="_blank" rel="noopener noreferrer">Portfolio</a></li>
+          <li><a href="https://ryansheridan.studio/" target="_blank" rel="noopener noreferrer">Portfolio</a></li>
           <li><a href="https://www.linkedin.com/in/ryansheridandesign/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
         </ul>
       </header>

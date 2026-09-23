@@ -3,6 +3,15 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  /** Describes ogImage for screen readers in link previews. */
+  ogImageAlt?: string;
+  /** "article" for case studies, "profile" for the about page. */
+  ogType?: "website" | "article" | "profile";
+  /**
+   * Page-level schema.org nodes, merged into the site graph below. Reference
+   * the shared nodes by id (PERSON_ID, WEBSITE_ID) rather than repeating them.
+   */
+  schema?: Record<string, unknown>[];
   /**
    * Keep this page out of search. Off by default: the site is indexable, and
    * a page opts out only if it is a demo, a private share, or an error page.
@@ -10,8 +19,33 @@ interface Props {
   noindex?: boolean;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || "https://ryansheridan.studio");
-const { title, description = "Ryan Sheridan — Principal Designer specializing in design systems, marketing sites, and brand infrastructure.", ogImage = "/og-default.png", noindex = false } = Astro.props;
+import { SITE_URL, personSchema, websiteSchema } from "../data/schema";
+
+// Internal links, the sitemap, and Vercel (trailingSlash: false) all use the
+// bare path, so the canonical drops the trailing slash the build adds too.
+// Two spellings of one URL split ranking signals between them.
+const pathname = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const canonicalURL = new URL(pathname, Astro.site || SITE_URL);
+const {
+  title,
+  description = "Ryan Sheridan is a Principal Designer specializing in design systems, marketing sites, and brand infrastructure.",
+  ogImage = "/og-default.png",
+  ogImageAlt = "Ryan Sheridan, Principal Designer",
+  ogType = "website",
+  schema = [],
+  noindex = false,
+} = Astro.props;
+const ogImageURL = new URL(ogImage, canonicalURL.origin).href;
+
+// One graph per page: who Ryan is and what the site is, then whatever the
+// page adds. Search engines and AI assistants read this to tie every page back
+// to the same person. Noindex pages skip it, since nothing should cite them.
+const jsonLd = noindex
+  ? undefined
+  : JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [personSchema, websiteSchema, ...schema],
+    }).replace(/</g, "\\u003c");
 ---
 
 <!doctype html>
@@ -40,17 +74,23 @@ const { title, description = "Ryan Sheridan — Principal Designer specializing 
     </script>
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Ryan Sheridan" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:url" content={canonicalURL.href} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(ogImage, canonicalURL.origin).href} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:alt" content={ogImageAlt} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL(ogImage, canonicalURL.origin).href} />
+    <meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+
+    {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

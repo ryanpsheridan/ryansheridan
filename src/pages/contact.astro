@@ -3,11 +3,21 @@ import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import CursorField from "../components/CursorField.astro";
+import { PERSON_ID, breadcrumbSchema } from "../data/schema";
 
 const email = "ryansheridandesign@gmail.com";
+
+const schema = [
+  { "@type": "ContactPage", about: { "@id": PERSON_ID } },
+  breadcrumbSchema([{ name: "Contact", path: "/contact" }]),
+];
 ---
 
-<Layout title="Contact — Ryan Sheridan" description="Get in touch with Ryan Sheridan.">
+<Layout
+  title="Contact — Ryan Sheridan"
+  description="Contact Ryan Sheridan about design systems, brand identity, or a new website. Email directly, or start a website project and share what you need."
+  schema={schema}
+>
   <Nav />
   <CursorField variant="compass" region="vignette" fixed />
   <main class="contact-page">

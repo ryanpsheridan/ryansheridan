@@ -5,6 +5,7 @@ import Footer from "../../components/Footer.astro";
 import Media from "../../components/Media.astro";
 import { projects } from "../../data/projects";
 import type { GetStaticPaths } from "astro";
+import { breadcrumbSchema, projectSchema } from "../../data/schema";
 
 export const getStaticPaths: GetStaticPaths = () => {
   return projects.map((project) => ({
@@ -14,9 +15,24 @@ export const getStaticPaths: GetStaticPaths = () => {
 };
 
 const { project } = Astro.props;
+
+const schema = [
+  projectSchema(project),
+  breadcrumbSchema([
+    { name: "Work", path: "/work" },
+    { name: project.title, path: `/work/${project.slug}` },
+  ]),
+];
 ---
 
-<Layout title={`${project.title} — Ryan Sheridan`} description={`${project.title} — a ${project.tags.join(", ").toLowerCase()} project by Ryan Sheridan.`} ogImage={project.thumbnail || "/og-default.png"}>
+<Layout
+  title={`${project.title} — Ryan Sheridan`}
+  description={project.description}
+  ogImage={project.ogImage ?? project.thumbnail}
+  ogImageAlt={project.title}
+  ogType="article"
+  schema={schema}
+>
   <Nav />
   <main class="project-page">
     <nav class="breadcrumbs" aria-label="Breadcrumb">

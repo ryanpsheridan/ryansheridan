@@ -4,11 +4,34 @@ import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import Media from "../../components/Media.astro";
 import { projects } from "../../data/projects";
+import { SITE_URL, WEBSITE_ID, breadcrumbSchema } from "../../data/schema";
 
 const allTags = [...new Set(projects.flatMap((p) => p.tags))];
+
+const schema = [
+  {
+    "@type": "CollectionPage",
+    name: "All work",
+    isPartOf: { "@id": WEBSITE_ID },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: projects.map((project, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        url: `${SITE_URL}/work/${project.slug}`,
+        name: project.title,
+      })),
+    },
+  },
+  breadcrumbSchema([{ name: "Work", path: "/work" }]),
+];
 ---
 
-<Layout title="Work — Ryan Sheridan" description="Selected design work by Ryan Sheridan — brand systems, marketing sites, and design infrastructure.">
+<Layout
+  title="Work — Ryan Sheridan"
+  description="Case studies by Ryan Sheridan: multi-brand design systems, brand identities, Webflow and Makeswift websites, illustration, and AI design workflows."
+  schema={schema}
+>
   <Nav />
   <main class="work-page">
     <div class="work-inner">
@@ -49,7 +72,7 @@ const allTags = [...new Set(projects.flatMap((p) => p.tags))];
                   alt={project.title}
                 />}
               </div>
-              <h3>{project.title}</h3>
+              <h2>{project.title}</h2>
               <div class="badge-list tags">
                 {project.tags.map((tag) => <span class="badge">{tag}</span>)}
               </div>
@@ -181,7 +204,7 @@ const allTags = [...new Set(projects.flatMap((p) => p.tags))];
     object-fit: cover;
   }
 
-  .project-card h3 {
+  .project-card h2 {
     font-size: var(--text-lg);
     font-weight: 300;
     margin-bottom: var(--space-3);
@@ -190,7 +213,7 @@ const allTags = [...new Set(projects.flatMap((p) => p.tags))];
   }
 
   @media (hover: hover) {
-    .project-card:hover h3 {
+    .project-card:hover h2 {
       opacity: 0.6;
     }
   }

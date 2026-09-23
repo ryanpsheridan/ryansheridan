@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/ohio-golf-club", "destination": "/proposals/ohio-golf-club", "permanent": true },
+    { "source": "/project-questionnaire", "destination": "/start-a-project", "permanent": true }
+  ]
+}

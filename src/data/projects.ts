@@ -58,7 +58,14 @@ export type ContentBlock =
 export interface Project {
   slug: string;
   title: string;
+  /** Meta description and structured-data summary. Written for search results, so keep it near 150 characters. */
+  description: string;
   thumbnail: string;
+  /**
+   * Link-preview image when the thumbnail is animated SVG, which social
+   * platforms and search can't render. A still, ideally 1.91:1 or 16:10.
+   */
+  ogImage?: string;
   showOnHomepage: boolean;
   tags: string[];
   tools: string[];
@@ -72,6 +79,8 @@ export const projects: Project[] = [
   {
     slug: "commerce-multi-brand-system",
     title: "Multi-brand Design System",
+    description: "Four separate Figma libraries for Commerce, BigCommerce, Feedonomics, and Makeswift, merged into one multi-brand design system with shared tokens and brand modes.",
+    ogImage: "/project-multi-brand1.jpg",
     thumbnail: "/figma-variables-thumbnail-fdx-animated.svg",
     showOnHomepage: true,
     tags: ["Design System"],
@@ -108,6 +117,8 @@ export const projects: Project[] = [
   {
     slug: "feedonomics-rebrand-design-system",
     title: "Feedonomics Rebrand & Design System",
+    description: "A Feedonomics brand refresh that grew into a full rebrand, a new design system, and a move of the marketing site into Makeswift.",
+    ogImage: "/project-feedonomics1.jpg",
     thumbnail: "/feedonomics-featured-animated.svg",
     showOnHomepage: true,
     tags: ["Design System", "Web Design"],
@@ -225,6 +236,8 @@ export const projects: Project[] = [
   {
     slug: "rhow-coffee",
     title: "RHOW Coffee",
+    description: "Brand identity for RHOW Coffee, a specialty coffee shop in Massillon, Ohio: a swan mark, logo suite, color palette, and illustration.",
+    ogImage: "/project-rhow-coffee02.jpg",
     thumbnail: "/rhow-logo-spec-animated-dark.svg",
     showOnHomepage: true,
     tags: ["Branding", "Illustration"],
@@ -306,6 +319,8 @@ export const projects: Project[] = [
   {
     slug: "figma-project-starter",
     title: "Figma Project Starter",
+    description: "A Claude skill that turns an Asana ticket into a ready-to-design Figma file: template, cover, brand mode, and folder, set up in one step.",
+    ogImage: "/figma-thumbnail-cover.png",
     thumbnail: "/skill-slash-command-animated-dark.svg",
     showOnHomepage: true,
     tags: ["Claude Skill", "Automation", "Design System"],
@@ -382,6 +397,7 @@ export const projects: Project[] = [
   {
     slug: "claude-design-consistency-first-design-second",
     title: "Claude Design: Consistency First",
+    description: "What connecting a multi-brand Figma design system to Claude and Claude Design taught me about constraints, governance, and writing rules from failure.",
     thumbnail: "/project-claude-design1.jpg",
     showOnHomepage: true,
     tags: ["Exploration", "Design System"],
@@ -409,6 +425,8 @@ export const projects: Project[] = [
   {
     slug: "flow-stays",
     title: "Flow Stays",
+    description: "Brand identity for Flow Stays, a focus retreat concept: a badge, cairn, and wordmark logo suite built on forest greens and a single apricot accent.",
+    ogImage: "/project-flow-stays1.jpg",
     thumbnail: "/flow-stays-logo-spec-animated.svg",
     showOnHomepage: false,
     tags: ["Branding"],
@@ -446,6 +464,8 @@ export const projects: Project[] = [
   {
     slug: "new-office-blank-canvas",
     title: "New Office, Blank Canvas",
+    description: "A large geometric wall mural illustrated for a new BigCommerce office, built from bold shapes, stripes, and a stylized bird.",
+    ogImage: "/project-new-office1.png",
     thumbnail: "/New_Office_Animated.svg",
     showOnHomepage: true,
     tags: ["Illustration"],
@@ -465,6 +485,7 @@ export const projects: Project[] = [
   {
     slug: "bynum-golf",
     title: "Bynum Golf",
+    description: "A Webflow website for golf coach Billy Bynum that helps new and returning students learn about his programs and book private or virtual lessons.",
     thumbnail: "/project-bynum-golf1.jpg",
     showOnHomepage: false,
     tags: ["Web Design"],
@@ -489,6 +510,7 @@ export const projects: Project[] = [
   {
     slug: "10-year-anniversary",
     title: "10 Year Anniversary",
+    description: "A retro, streetwear-inspired graphic celebrating ten years of BigCommerce, taken from a type lockup all the way onto apparel.",
     thumbnail: "/project-10-year1.jpg",
     showOnHomepage: false,
     tags: ["Branding", "Apparel"],
@@ -513,6 +535,7 @@ export const projects: Project[] = [
   {
     slug: "five-star-vacation-home-rental",
     title: "Five Star Vacation Home Rental",
+    description: "A Webflow website for Five Star Vacation Home Rentals, presenting high-end short-term rentals across Austin and the Texas Hill Country.",
     thumbnail: "/project-five-star1.jpg",
     showOnHomepage: false,
     tags: ["Web Design"],
@@ -537,6 +560,7 @@ export const projects: Project[] = [
   {
     slug: "mc-salon-spa-studio",
     title: "MC Salon Spa & Studio",
+    description: "A full rebuild of the MC Salon Spa & Studio website, moved from Squarespace to Webflow with a custom ecommerce store built in.",
     thumbnail: "/project-mc-salon1.jpg",
     showOnHomepage: false,
     tags: ["Web Design"],
@@ -572,6 +596,7 @@ export const projects: Project[] = [
   {
     slug: "bc-for-b2b-campaign",
     title: "BC for B2B Campaign",
+    description: "A BigCommerce campaign aimed at B2B buyers, built on custom isometric illustrations carried across ebooks, social assets, and ad creative.",
     thumbnail: "/project-b2b-campaign1.jpg",
     showOnHomepage: false,
     tags: ["Illustration", "Branding"],
@@ -620,6 +645,7 @@ export const projects: Project[] = [
   {
     slug: "a-quarter-in-design",
     title: "A Quarter in Design",
+    description: "A quarterly report designed in InDesign that shows a design team's output: productivity data, process improvements, campaign highlights, and illustration.",
     thumbnail: "/project-quarter-in-design1.jpg",
     showOnHomepage: false,
     tags: ["Visual Design"],
