@@ -29,7 +29,7 @@ const projects = getHomepageProjects();
             {/* The page drawing its own specs over itself. Plain toggle
                 semantics, and the drawing it adds is hidden from assistive
                 tech, since it describes the page rather than adding to it. */}
-            <button type="button" class="blueprint-toggle" aria-pressed="false" data-blueprint-toggle>
+            <button type="button" class="blueprint-toggle is-latent" aria-pressed="false" data-blueprint-toggle>
               {/* An open eye that squints while the specs are up: looking
                   closer, rather than the crossed-out eye that means hidden. */}
               <svg class="blueprint-eye" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round">
@@ -281,6 +281,45 @@ const projects = getHomepageProjects();
       if (event.key === "Escape" && page.classList.contains("is-blueprint")) setBlueprint(false);
     });
 
+    // The easter egg: the toggle stays out of sight (and out of the tab
+    // order) until the last project reaches the center line, a small reward
+    // for having gone through all the work. Once found it stays for the rest
+    // of the visit. Desktop only; the stacked mobile layout hides it outright.
+    const FOUND_KEY = "blueprint-found";
+    const reveal = () => {
+      blueprintToggle.classList.remove("is-latent");
+      try {
+        sessionStorage.setItem(FOUND_KEY, "1");
+      } catch {}
+    };
+    let found = false;
+    try {
+      found = sessionStorage.getItem(FOUND_KEY) === "1";
+    } catch {}
+    const lastImage = rows[rows.length - 1]?.querySelector<HTMLElement>(".cell-image");
+    if (found || !lastImage) {
+      reveal();
+    } else {
+      // A one-pixel band across the middle of the screen. Crossing it counts,
+      // and so does already being past it, which covers a fast fling and a
+      // reload partway down the page.
+      const finder = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting && entry.boundingClientRect.top > window.innerHeight / 2) return;
+          finder.disconnect();
+          reveal();
+        },
+        { rootMargin: "-50% 0px -50% 0px" }
+      );
+      finder.observe(lastImage);
+    }
+
+    // Leaving the desktop layout with the specs up would strand them with
+    // no way to put them away.
+    window.matchMedia("(max-width: 768px)").addEventListener("change", (event) => {
+      if (event.matches && page.classList.contains("is-blueprint")) setBlueprint(false);
+    });
+
     let queued = false;
     const rebuild = () => {
       if (queued) return;
@@ -392,6 +431,22 @@ const projects = getHomepageProjects();
     border-color: var(--color-text);
   }
 
+  /* Hidden until found, but still holding its place, so nothing in the
+     headline block moves when it arrives. visibility also keeps it out of
+     the tab order and away from screen readers until then. */
+  .blueprint-toggle.is-latent {
+    opacity: 0;
+    transform: translateY(6px);
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* Arrives a beat after the last project settles on the line. */
+  .blueprint-toggle:not(.is-latent) {
+    transition: background 0.2s, border-color 0.2s, color 0.2s,
+      opacity 0.5s ease 0.15s, transform 0.5s ease 0.15s;
+  }
+
   .blueprint-toggle[aria-pressed="true"] {
     color: #ffffff;
     background: var(--blueprint);
@@ -417,6 +472,14 @@ const projects = getHomepageProjects();
     .blueprint-eye .eye-lid,
     .blueprint-eye .eye-pupil {
       transition: none;
+    }
+
+    .blueprint-toggle.is-latent {
+      transform: none;
+    }
+
+    .blueprint-toggle:not(.is-latent) {
+      transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.3s ease;
     }
   }
 
@@ -606,6 +669,10 @@ const projects = getHomepageProjects();
   }
 
   @media (max-width: 768px) {
+    .blueprint-toggle {
+      display: none;
+    }
+
     .split-inner {
       flex-direction: column;
     }
