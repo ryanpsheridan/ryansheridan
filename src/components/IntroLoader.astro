@@ -68,11 +68,13 @@ const { minDuration = 1688, maxDuration = 2025 } = Astro.props;
 
   /* The nav sits above the scrim on its own z-index, so the real wordmark can
      carry the intro instead of a copy painted onto the scrim. It never fades
-     or moves, which means the hand-off costs it nothing. The hamburger is the
-     one piece held back, arriving a beat after the scrim clears so the nav
+     or moves, which means the hand-off costs it nothing. The nav actions are
+     the pieces held back, arriving a beat after the scrim clears so the nav
      finishes assembling rather than snapping into place. */
-  html.intro-open .hamburger {
+  html.intro-open .hamburger,
+  html.intro-open .view-all-work {
     opacity: 0;
+    pointer-events: none;
   }
 
   .hamburger {

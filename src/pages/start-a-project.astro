@@ -1,0 +1,979 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzennjv";
+
+const pageTitle = "Start a Website Project | Ryan Sheridan, Austin Web Designer";
+const pageDescription =
+  "Planning a new website or redesign? Tell me about your business and goals. Design-first web design and development from Austin, TX, with technical SEO built in from day one.";
+
+const faqs = [
+  {
+    q: "What kind of projects do you take on?",
+    a: "Mostly websites: marketing sites, small business sites, portfolios, and redesigns of sites that have outgrown themselves. I also take on branding and marketing design work, either on its own or alongside a new site.",
+  },
+  {
+    q: "Do you design, build, or both?",
+    a: "Both. Some projects are design only, handed off to your developer or team. Others I design and build end to end. Either way, the design is made with how it will actually be built in mind.",
+  },
+  {
+    q: "What does \"design-first, with technical SEO built in\" mean?",
+    a: "The work starts with how your site looks, reads, and feels, because that is what earns trust. Underneath, the structure is set up so search engines can find and understand it: clean markup, fast pages, sensible URLs, metadata, and structured data. SEO shapes the foundation instead of getting bolted on after launch.",
+  },
+  {
+    q: "Do you work with clients outside of Austin?",
+    a: "Yes. I'm based in the Austin area and work with clients locally and remotely.",
+  },
+  {
+    q: "What happens after I send this?",
+    a: "I read everything you send, then follow up within two business days with any questions and a time to talk. After that conversation I put together a proposal with scope, timeline, and cost.",
+  },
+];
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Website design and development",
+    serviceType: "Web design",
+    description: pageDescription,
+    url: "https://ryansheridan.studio/start-a-project/",
+    provider: {
+      "@type": "Person",
+      name: "Ryan Sheridan",
+      url: "https://ryansheridan.studio",
+      jobTitle: "Principal Designer",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Austin",
+        addressRegion: "TX",
+        addressCountry: "US",
+      },
+    },
+    areaServed: [
+      { "@type": "City", name: "Austin" },
+      { "@type": "Country", name: "United States" },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://ryansheridan.studio/" },
+      { "@type": "ListItem", position: 2, name: "Contact", item: "https://ryansheridan.studio/contact" },
+      { "@type": "ListItem", position: 3, name: "Start a website project" },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map(({ q, a }) => ({
+      "@type": "Question",
+      name: q,
+      acceptedAnswer: { "@type": "Answer", text: a },
+    })),
+  },
+];
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  <Nav />
+  <main class="questions-page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="sep">/</span>
+      <a href="/contact">Contact</a>
+      <span class="sep">/</span>
+      <span class="current">Start a website project</span>
+    </nav>
+
+    <header class="questions-hero">
+      <p class="eyebrow">Website design &amp; development</p>
+      <h1>Let's plan your new website.</h1>
+      <p class="intro">
+        Tell me about your business and what you need the site to do. The more
+        I know up front, the more useful our first conversation will be. I take
+        a design-first approach, with technical SEO built into the foundation
+        rather than bolted on at the end.
+      </p>
+      <p class="aside">
+        Websites are my focus, but I also take on branding and marketing design
+        work. If that's what you're after, this form works for that too.
+      </p>
+    </header>
+
+    <form
+      id="questions-form"
+      class="questions-form"
+      action={FORMSPREE_ENDPOINT}
+      method="POST"
+    >
+      <input type="hidden" name="_subject" value="New website project inquiry" />
+
+      <section class="form-section" aria-labelledby="step-basics">
+        <h2 id="step-basics"><span class="step">1</span> The basics</h2>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="contact-name">Your name</label>
+            <input type="text" id="contact-name" name="Name" autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="reply-email">Email <span class="required-marker">*</span></label>
+            <input type="email" id="reply-email" name="_replyto" autocomplete="email" required aria-describedby="email-error" />
+            <p class="field-error" id="email-error"></p>
+          </div>
+        </div>
+
+        <fieldset class="field">
+          <legend>What do you need help with?</legend>
+          <div class="checkbox-group cols-2">
+            <label class="checkbox-label">
+              <input type="checkbox" name="Project type" value="New website" />
+              New website
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="Project type" value="Website redesign" />
+              Website redesign
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="Project type" value="Branding / identity" />
+              Branding / identity
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" name="Project type" value="Marketing / campaign design" />
+              Marketing / campaign design
+            </label>
+          </div>
+        </fieldset>
+      </section>
+
+      <section class="form-section" aria-labelledby="step-route">
+        <h2 id="step-route"><span class="step">2</span> How do you want to share the details?</h2>
+
+        <fieldset class="field route-picker">
+          <legend class="visually-hidden">Choose how to share project details</legend>
+          <label class="route-card">
+            <input type="radio" name="Route" value="Guided questions" />
+            <span class="route-title">Answer a few questions</span>
+            <span class="route-desc">About five minutes. Mostly checkboxes, skip anything you're unsure of.</span>
+          </label>
+          <label class="route-card">
+            <input type="radio" name="Route" value="Brain dump" />
+            <span class="route-title">Just tell me everything</span>
+            <span class="route-desc">One big box. Paste a brief, dictate, or ramble. No structure needed.</span>
+          </label>
+        </fieldset>
+      </section>
+
+      <fieldset id="route-dump" class="route-panel" hidden disabled>
+        <legend class="visually-hidden">Tell me everything</legend>
+        <section class="form-section">
+          <div class="field">
+            <label for="brain-dump">Tell me about the project <span class="required-marker">*</span></label>
+            <p class="field-note">
+              Paste in an existing brief, use your phone's dictation, or just
+              start typing. Helpful things to touch on: what your business
+              does, who it's for, what the site needs to do, sites you like the
+              look of, your timeline, and a rough budget.
+            </p>
+            <textarea id="brain-dump" name="Brain dump" rows="14" required></textarea>
+          </div>
+
+          <div class="field">
+            <label for="dump-current-site">Current website, if you have one</label>
+            <input type="text" id="dump-current-site" name="Current website" inputmode="url" placeholder="yourbusiness.com" />
+          </div>
+        </section>
+      </fieldset>
+
+      <fieldset id="route-guided" class="route-panel" hidden disabled>
+        <legend class="visually-hidden">Guided questions</legend>
+
+        <section class="form-section" aria-labelledby="step-business">
+          <h2 id="step-business"><span class="step">3</span> Your business</h2>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="business-name">Business name</label>
+              <input type="text" id="business-name" name="Business name" autocomplete="organization" />
+            </div>
+            <div class="field">
+              <label for="current-site">Current website, if any</label>
+              <input type="text" id="current-site" name="Current website" inputmode="url" placeholder="yourbusiness.com" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="business-description">What do you do, and who is it for?</label>
+            <textarea
+              id="business-description"
+              name="Business description"
+              rows="4"
+              placeholder="e.g. We're a family-owned landscaping company serving homeowners in south Austin."
+            ></textarea>
+          </div>
+        </section>
+
+        <section class="form-section" aria-labelledby="step-site">
+          <h2 id="step-site"><span class="step">4</span> The website</h2>
+
+          <fieldset class="field">
+            <legend>What should the site help you do?</legend>
+            <p class="field-note">Pick all that apply.</p>
+            <div class="checkbox-group cols-2">
+              <label class="checkbox-label">
+                <input type="checkbox" name="Site goals" value="Get inquiries / leads" />
+                Get inquiries / leads
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="Site goals" value="Book appointments" data-reveals="tools" />
+                Book appointments
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="Site goals" value="Sell products / take payments" data-reveals="tools" />
+                Sell or take payments
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="Site goals" value="Show off work / portfolio" />
+                Show off work / portfolio
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="Site goals" value="Build credibility" />
+                Build credibility
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="Site goals" value="Publish content / blog" />
+                Publish content / blog
+              </label>
+            </div>
+            <div class="field field-nested" id="tools-wrap" hidden>
+              <label for="tools">Any tools you already use for booking or payments?</label>
+              <input type="text" id="tools" name="Existing tools" placeholder="e.g. Calendly, Square, Stripe, Shopify" />
+            </div>
+          </fieldset>
+
+          <fieldset class="field">
+            <legend>Which pages do you think you'll need?</legend>
+            <div class="checkbox-group cols-2">
+              <label class="checkbox-label">
+                <input type="checkbox" name="Pages needed" value="Home" />
+                Home
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="Pages needed" value="About" />
+                About
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="Pages needed" value="Services" />
+                Services
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="Pages needed" value="Portfolio / gallery" />
+                Portfolio / gallery
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="Pages needed" value="Blog" />
+                Blog
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="Pages needed" value="Contact" />
+                Contact
+              </label>
+            </div>
+            <div class="field field-nested">
+              <label for="pages-other">Anything else?</label>
+              <input type="text" id="pages-other" name="Other pages" placeholder="e.g. Pricing, FAQ, Careers" />
+            </div>
+          </fieldset>
+        </section>
+
+        <section class="form-section" aria-labelledby="step-look">
+          <h2 id="step-look"><span class="step">5</span> Look &amp; feel</h2>
+
+          <fieldset class="field">
+            <legend>Where is your branding at? (logo, colors, fonts)</legend>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="Branding" value="Have it, ready to use" />
+                I have it and I'm happy with it
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Branding" value="Have some, could use a refresh" />
+                I have some, but it could use a refresh
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Branding" value="Starting from scratch" />
+                Starting from scratch, I'd like help with it
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="reference-sites">Sites you like the look of</label>
+            <p class="field-note">
+              One of the most useful things you can share. A couple of links,
+              even just for a color palette or layout you like, tells me more
+              than a description alone.
+            </p>
+            <textarea
+              id="reference-sites"
+              name="Reference sites"
+              rows="3"
+              placeholder="https://example.com, love how clean the typography is"
+            ></textarea>
+          </div>
+        </section>
+
+        <section class="form-section" aria-labelledby="step-logistics">
+          <h2 id="step-logistics"><span class="step">6</span> Logistics</h2>
+
+          <fieldset class="field">
+            <legend>When would you like it live?</legend>
+            <div class="radio-group cols-2">
+              <label class="radio-label">
+                <input type="radio" name="Timeline" value="As soon as possible" />
+                As soon as possible
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Timeline" value="1 to 2 months" />
+                1 to 2 months
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Timeline" value="3+ months" />
+                3+ months
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Timeline" value="Flexible" />
+                Flexible
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field">
+            <legend>Rough budget</legend>
+            <p class="field-note">Helps me suggest the right scope. No wrong answers.</p>
+            <div class="radio-group cols-2">
+              <label class="radio-label">
+                <input type="radio" name="Budget" value="Under $1k" />
+                Under $1k
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Budget" value="$1k to $3k" />
+                $1k to $3k
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Budget" value="$3k to $7k" />
+                $3k to $7k
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Budget" value="$7k to $12k" />
+                $7k to $12k
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Budget" value="$12k+" />
+                $12k+
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Budget" value="Not sure yet" />
+                Not sure yet
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field">
+            <legend>After launch, who handles updates?</legend>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="Ongoing updates" value="Ryan handles updates" />
+                I'd like you to handle them
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Ongoing updates" value="Wants to edit some content themselves" />
+                I'd like to edit some things myself
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Ongoing updates" value="Not sure yet" />
+                Not sure yet
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field">
+            <legend>Do you own a domain for this?</legend>
+            <div class="radio-group cols-3">
+              <label class="radio-label">
+                <input type="radio" name="Domain owned" value="Yes" />
+                Yes
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Domain owned" value="No" />
+                No
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="Domain owned" value="Not sure" />
+                Not sure
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="anything-else">Anything else?</label>
+            <p class="field-note">Rant, ramble, or paste. I'll follow up with any other questions.</p>
+            <textarea id="anything-else" name="Anything else" rows="5"></textarea>
+          </div>
+        </section>
+      </fieldset>
+
+      <div class="submit-wrap" hidden>
+        <button type="submit" class="submit-button">
+          Send it over <span class="arrow">&nearr;</span>
+        </button>
+        <p class="submit-status" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+
+    <div class="thank-you" hidden tabindex="-1">
+      <h2>Thanks, got it.</h2>
+      <p class="intro">I'll read through everything and follow up within two business days.</p>
+    </div>
+
+    <section class="faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">Common questions</h2>
+      {faqs.map(({ q, a }) => (
+        <details>
+          <summary>{q}</summary>
+          <p>{a}</p>
+        </details>
+      ))}
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  const form = document.getElementById("questions-form") as HTMLFormElement | null;
+  const status = document.querySelector(".submit-status");
+  const thankYou = document.querySelector<HTMLElement>(".thank-you");
+  const submitWrap = document.querySelector<HTMLElement>(".submit-wrap");
+
+  const emailField = document.getElementById("reply-email") as HTMLInputElement | null;
+  const emailError = document.getElementById("email-error");
+  function syncEmailError() {
+    if (!emailField || !emailError) return;
+    emailError.textContent =
+      emailField.value !== "" && !emailField.validity.valid ? "Please enter a valid email address." : "";
+  }
+  emailField?.addEventListener("blur", syncEmailError);
+  emailField?.addEventListener("input", () => {
+    if (emailError?.textContent) syncEmailError();
+  });
+
+  // Inactive route panels stay disabled so their fields never reach Formspree
+  // and their required fields never block submission.
+  const panels: Record<string, HTMLFieldSetElement | null> = {
+    "Guided questions": document.getElementById("route-guided") as HTMLFieldSetElement | null,
+    "Brain dump": document.getElementById("route-dump") as HTMLFieldSetElement | null,
+  };
+  document.querySelectorAll<HTMLInputElement>('input[name="Route"]').forEach((radio) => {
+    radio.addEventListener("change", () => {
+      for (const [route, panel] of Object.entries(panels)) {
+        const active = route === radio.value;
+        panel?.toggleAttribute("hidden", !active);
+        if (panel) panel.disabled = !active;
+      }
+      submitWrap?.removeAttribute("hidden");
+    });
+  });
+
+  const toolsWrap = document.getElementById("tools-wrap");
+  const toolTriggers = document.querySelectorAll<HTMLInputElement>('input[data-reveals="tools"]');
+  toolTriggers.forEach((box) => {
+    box.addEventListener("change", () => {
+      toolsWrap?.toggleAttribute("hidden", ![...toolTriggers].some((b) => b.checked));
+    });
+  });
+
+  form?.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input[type="text"], input[type="email"], textarea').forEach((field) => {
+    const syncFilled = () => field.classList.toggle("is-filled", field.value.trim().length > 0);
+    syncFilled();
+    field.addEventListener("input", syncFilled);
+  });
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const submitButton = form.querySelector<HTMLButtonElement>(".submit-button");
+    if (submitButton) submitButton.disabled = true;
+    if (status) status.textContent = "Sending…";
+
+    const data = new FormData(form);
+    const who = String(data.get("Business name") || data.get("Name") || data.get("_replyto") || "").trim();
+    if (who) data.set("_subject", `New website project inquiry: ${who}`);
+
+    const fail = (message = "Something went wrong. Please try again or email me directly.") => {
+      if (status) status.textContent = message;
+      if (submitButton) submitButton.disabled = false;
+    };
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+
+      if (response.ok) {
+        form.hidden = true;
+        thankYou?.removeAttribute("hidden");
+        thankYou?.focus();
+      } else {
+        const body = await response.json().catch(() => null);
+        const serverMessage = body?.errors?.map((e: { message: string }) => e.message).join(", ") ?? body?.error;
+        console.error("Formspree submission failed", response.status, body);
+        fail(serverMessage ? `Something went wrong: ${serverMessage}` : undefined);
+      }
+    } catch (err) {
+      console.error("Formspree submission error", err);
+      fail();
+    }
+  });
+</script>
+
+<style>
+  .questions-page {
+    padding: 80px var(--page-padding) 160px;
+  }
+
+  .breadcrumbs {
+    max-width: var(--content-width);
+    margin: 0 auto 48px;
+    font-size: 13px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .breadcrumbs a {
+    color: var(--color-text-muted);
+    transition: color 0.2s;
+  }
+
+  .breadcrumbs a:hover {
+    color: var(--color-text);
+  }
+
+  .breadcrumbs .sep {
+    color: var(--color-border);
+  }
+
+  .breadcrumbs .current {
+    color: var(--color-text);
+  }
+
+  .questions-hero,
+  .questions-form,
+  .thank-you,
+  .faq {
+    max-width: var(--content-width);
+    margin: 0 auto;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  h1 {
+    font-size: clamp(32px, 1.7rem + 1.2vw, 52px);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+
+  .intro {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--color-text-muted);
+    margin-bottom: 0;
+  }
+
+  .aside {
+    font-size: var(--text-sm);
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    margin-top: var(--space-4);
+    padding-left: var(--space-3);
+    border-left: 2px solid var(--color-border);
+  }
+
+  .questions-hero {
+    margin-bottom: var(--space-7);
+  }
+
+  .route-panel {
+    border: none;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+  }
+
+  .form-section {
+    margin-top: var(--space-7);
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .questions-form > .form-section:first-of-type {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .form-section h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-size: var(--text-lg);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-5);
+  }
+
+  .step {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 400;
+    color: var(--color-text-muted);
+  }
+
+  .field {
+    margin-bottom: var(--space-5);
+  }
+
+  .field:last-child {
+    margin-bottom: 0;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+
+  .field-row .field {
+    margin-bottom: 0;
+  }
+
+  .field-nested {
+    margin-top: var(--space-4);
+    margin-bottom: 0;
+  }
+
+  fieldset.field {
+    border: none;
+    padding: 0;
+  }
+
+  label,
+  legend {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text);
+    margin-bottom: var(--space-2);
+  }
+
+  .field-note {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-top: var(--space-1);
+    margin-bottom: var(--space-3);
+    line-height: 1.6;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea {
+    width: 100%;
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    color: var(--color-text);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    transition: border-color 0.2s;
+  }
+
+  ::placeholder {
+    color: #9a9aa0;
+  }
+
+  textarea {
+    resize: vertical;
+    line-height: 1.6;
+  }
+
+  input[type="text"]:focus-visible,
+  input[type="email"]:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
+    border-color: var(--color-text);
+  }
+
+  input.is-filled,
+  textarea.is-filled {
+    border-color: var(--color-text-muted);
+  }
+
+  input:user-invalid,
+  textarea:user-invalid {
+    border-color: var(--color-critical);
+  }
+
+  .required-marker {
+    color: var(--color-text-muted);
+  }
+
+  .field-error {
+    font-size: var(--text-xs);
+    color: var(--color-critical);
+    margin-top: var(--space-2);
+    margin-bottom: 0;
+    min-height: 1.4em;
+    line-height: 1.4;
+  }
+
+  .radio-group,
+  .checkbox-group {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .cols-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .radio-label,
+  .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: var(--text-base);
+    font-weight: 400;
+    color: var(--color-text);
+    margin-bottom: 0;
+    cursor: pointer;
+  }
+
+  input[type="radio"],
+  input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    margin-top: 3px;
+    accent-color: var(--color-text);
+  }
+
+  input[type="radio"]:focus-visible,
+  input[type="checkbox"]:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
+  }
+
+  .route-picker {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  .route-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin: 0;
+    padding: var(--space-4);
+    padding-left: calc(var(--space-4) + 24px);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+  }
+
+  .route-card:hover {
+    border-color: var(--color-text-muted);
+  }
+
+  .route-card:has(input:checked) {
+    border-color: var(--color-text);
+    background: var(--color-tag-bg);
+  }
+
+  .route-card input {
+    position: absolute;
+    left: var(--space-4);
+    top: calc(var(--space-4) + 2px);
+    margin: 0;
+  }
+
+  .route-title {
+    font-size: var(--text-base);
+    font-weight: 500;
+  }
+
+  .route-desc {
+    font-size: var(--text-sm);
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
+  .submit-wrap {
+    margin-top: var(--space-7);
+  }
+
+  .submit-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-bg);
+    background: var(--color-text);
+    border: none;
+    padding: 16px 28px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .submit-button:hover {
+    opacity: 0.85;
+  }
+
+  .submit-button:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 3px;
+  }
+
+  .submit-button:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  .submit-button .arrow {
+    font-size: 13px;
+  }
+
+  .submit-status {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--space-3);
+  }
+
+  .thank-you {
+    padding-top: var(--space-6);
+    outline: none;
+  }
+
+  .thank-you h2 {
+    font-size: clamp(28px, 1.3rem + 1vw, 40px);
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--space-3);
+  }
+
+  .faq {
+    margin-top: var(--space-8);
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .faq h2 {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-4);
+  }
+
+  .faq details {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .faq summary {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    font-size: var(--text-base);
+    font-weight: 400;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq summary::after {
+    content: "+";
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+  }
+
+  .faq details[open] summary::after {
+    content: "\2212";
+  }
+
+  .faq summary:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
+  }
+
+  .faq details p {
+    font-size: var(--text-sm);
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    padding-bottom: var(--space-3);
+  }
+
+  @media (max-width: 600px) {
+    .field-row,
+    .route-picker {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .cols-2,
+    .cols-3 {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
