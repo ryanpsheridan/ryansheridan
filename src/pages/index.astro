@@ -648,6 +648,55 @@ const projects = getHomepageProjects();
     border-color: rgba(255, 255, 255, 0.5);
   }
 
+  /* The left column arrives in reading order: headline, intro, location,
+     then the button. Pure CSS, so the text is never left hidden waiting on a
+     script. It holds its first frame while the intro scrim is up and plays
+     the moment the scrim hands off (straight away for returning visitors,
+     who skip the intro). */
+  .headline-block > .sticky-title,
+  .headline-block > .intro,
+  .headline-block > .tagline,
+  .headline-block > .cta-row {
+    animation: headline-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(0.12s + var(--stagger, 0) * 0.09s);
+  }
+
+  .headline-block > .intro {
+    --stagger: 1;
+  }
+
+  .headline-block > .tagline {
+    --stagger: 2;
+  }
+
+  .headline-block > .cta-row {
+    --stagger: 3;
+  }
+
+  :global(html.intro-open) .headline-block > * {
+    animation-play-state: paused;
+  }
+
+  @keyframes headline-rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .headline-block > .sticky-title,
+    .headline-block > .intro,
+    .headline-block > .tagline,
+    .headline-block > .cta-row {
+      animation: none;
+    }
+  }
+
   .entrance-hidden {
     opacity: 0;
     transform: translateY(10px);
