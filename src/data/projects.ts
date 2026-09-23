@@ -405,7 +405,7 @@ export const projects: Project[] = [
     title: "Case Study PDFs in Claude Design",
     description: "A Claude Design system that replaces hand-built InDesign case study PDFs, saving design and marketing time on every copy change and layout update.",
     ogImage: "/project-claude-design-pdf1.jpg",
-    thumbnail: "/claude-design-pdf-cover-grid-animated.svg",
+    thumbnail: "/claude-design-pdf-cover-featured-animated.svg",
     showOnHomepage: true,
     tags: ["Design System", "Automation"],
     tools: ["Claude Design", "Figma", "html.to.design"],
@@ -486,9 +486,9 @@ export const projects: Project[] = [
         type: "imageGrid",
         images: [
           {
-            src: "/claude-design-pdf-covers-animated.svg",
-            alt: "The Laser Clinics case study cover cycling through six pattern and tint pairings, in front of two of its interior pages",
-            caption: "One cover, six of the possible pairings",
+            src: "/project-claude-design-pdf-covers.webp",
+            alt: "Six case study cover variations, each pairing two different patterns and pastel tints above the same placeholder headline and stats",
+            caption: "Six of the cover variations: same structure, different pairings",
           },
         ],
       },
