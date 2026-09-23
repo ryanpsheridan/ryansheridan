@@ -30,9 +30,12 @@ const projects = getHomepageProjects();
                 semantics, and the drawing it adds is hidden from assistive
                 tech, since it describes the page rather than adding to it. */}
             <button type="button" class="blueprint-toggle" aria-pressed="false" data-blueprint-toggle>
-              <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.25">
-                <rect x="1.5" y="1.5" width="13" height="13" rx="1" />
-                <path d="M1.5 6h13M6 6v8.5" />
+              {/* An open eye that squints while the specs are up: looking
+                  closer, rather than the crossed-out eye that means hidden. */}
+              <svg class="blueprint-eye" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round">
+                <path class="eye-lid" vector-effect="non-scaling-stroke" d="M1.25 8C3.1 4.7 5.35 3.1 8 3.1s4.9 1.6 6.75 4.9" />
+                <path class="eye-lid" vector-effect="non-scaling-stroke" d="M1.25 8c1.85 3.3 4.1 4.9 6.75 4.9s4.9-1.6 6.75-4.9" />
+                <circle class="eye-pupil" cx="8" cy="8" r="2" />
               </svg>
               <span data-blueprint-label>See how I build</span>
             </button>
@@ -393,6 +396,28 @@ const projects = getHomepageProjects();
     color: #ffffff;
     background: var(--blueprint);
     border-color: var(--blueprint);
+  }
+
+  .blueprint-eye .eye-lid,
+  .blueprint-eye .eye-pupil {
+    transform-box: view-box;
+    transform-origin: 8px 8px;
+    transition: transform 0.28s cubic-bezier(0.3, 0.7, 0.2, 1);
+  }
+
+  .blueprint-toggle[aria-pressed="true"] .eye-lid {
+    transform: scaleY(0.46);
+  }
+
+  .blueprint-toggle[aria-pressed="true"] .eye-pupil {
+    transform: scale(0.8);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .blueprint-eye .eye-lid,
+    .blueprint-eye .eye-pupil {
+      transition: none;
+    }
   }
 
   .view-all-link:focus-visible,
