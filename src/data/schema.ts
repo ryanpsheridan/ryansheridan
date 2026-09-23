@@ -15,7 +15,7 @@ export const personSchema = {
   "@id": PERSON_ID,
   name: "Ryan Sheridan",
   url: `${SITE_URL}/`,
-  image: `${SITE_URL}/profile-photo.png`,
+  image: `${SITE_URL}/profile-photo.webp`,
   email: "mailto:ryansheridandesign@gmail.com",
   jobTitle: "Principal Designer, Design Systems",
   description:

@@ -14,7 +14,7 @@ export const GET: APIRoute = () => {
 
   const body = `# Ryan Sheridan
 
-> Ryan Sheridan is a Principal Designer, Design Systems at Commerce, the parent company of BigCommerce, Feedonomics, and Makeswift. He leads multi-brand design systems, marketing sites, and brand infrastructure, and is based near Austin, Texas.
+> Ryan Sheridan is a Principal Designer, Design Systems at Commerce, the parent company of BigCommerce, Feedonomics, and Makeswift. He leads multi-brand design systems, marketing sites, and brand infrastructure, and is based in Austin, Texas.
 
 He has 8+ years of experience across Commerce, BigCommerce, and TicketCity, plus freelance brand and website work in Webflow. His focus is the layer between design and engineering: design tokens, component libraries, governance, and AI-assisted design workflows built with Claude.
 

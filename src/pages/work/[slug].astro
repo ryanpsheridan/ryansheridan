@@ -75,10 +75,11 @@ const schema = [
                     {block.images.map((img) => {
                       const src = typeof img === "string" ? img : img.src;
                       const caption = typeof img === "string" ? undefined : img.caption;
+                      const alt = typeof img === "string" ? undefined : img.alt;
                       return (
                         <figure class="image-item">
                           {caption && <figcaption>{caption}</figcaption>}
-                          <Media src={src} alt="" class="lightbox-trigger" />
+                          <Media src={src} alt={alt ?? caption ?? ""} class="lightbox-trigger" />
                         </figure>
                       );
                     })}
@@ -101,9 +102,10 @@ const schema = [
                       {block.images.map((img) => {
                         const src = typeof img === "string" ? img : img.src;
                         const caption = typeof img === "string" ? undefined : img.caption;
+                        const alt = typeof img === "string" ? undefined : img.alt;
                         return (
                           <figure class="carousel-item">
-                            <Media src={src} alt={caption || ""} class="lightbox-trigger" />
+                            <Media src={src} alt={alt ?? caption ?? ""} class="lightbox-trigger" />
                             {caption && <figcaption>{caption}</figcaption>}
                           </figure>
                         );
@@ -144,10 +146,10 @@ const schema = [
                     </div>
                     <div class="compare-frame">
                       <div class="compare-pane" data-pane="before">
-                        <Media src={block.before.src} alt={block.before.label || "Before"} class="lightbox-trigger" />
+                        <Media src={block.before.src} alt={block.before.alt ?? block.before.label ?? "Before"} class="lightbox-trigger" />
                       </div>
                       <div class="compare-pane is-active" data-pane="after">
-                        <Media src={block.after.src} alt={block.after.label || "After"} class="lightbox-trigger" />
+                        <Media src={block.after.src} alt={block.after.alt ?? block.after.label ?? "After"} class="lightbox-trigger" />
                       </div>
                     </div>
                   </div>
@@ -812,6 +814,7 @@ const schema = [
   document.querySelectorAll<HTMLImageElement>(".lightbox-trigger").forEach((img) => {
     img.addEventListener("click", () => {
       lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
       lightbox.classList.add("open");
       document.body.style.overflow = "hidden";
     });

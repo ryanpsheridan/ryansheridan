@@ -6,6 +6,11 @@ export interface TextBlock {
 
 export interface ImageGridImage {
   src: string;
+  /**
+   * What the image shows, for screen readers and image search. Falls back to
+   * the caption; say what is in the frame rather than repeating the caption.
+   */
+  alt?: string;
   caption?: string;
 }
 
@@ -27,8 +32,8 @@ export interface CarouselBlock {
 
 export interface CompareBlock {
   type: "compare";
-  before: { src: string; label?: string };
-  after: { src: string; label?: string };
+  before: { src: string; alt?: string; label?: string };
+  after: { src: string; alt?: string; label?: string };
   liveUrl?: string;
 }
 
@@ -62,8 +67,9 @@ export interface Project {
   description: string;
   thumbnail: string;
   /**
-   * Link-preview image when the thumbnail is animated SVG, which social
-   * platforms and search can't render. A still, ideally 1.91:1 or 16:10.
+   * Link-preview image. A JPG or PNG still, ideally 1.91:1 or 16:10: page
+   * images are WebP and some thumbnails are animated SVG, and several social
+   * platforms render neither in a preview card.
    */
   ogImage?: string;
   showOnHomepage: boolean;
@@ -96,8 +102,8 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          "/multi-brand-mode-switch-animated.svg",
-          "/multi-brand-variables-animated.svg",
+          { src: "/multi-brand-mode-switch-animated.svg", alt: "Figma variables table beside a card layout, with a mode menu switching the design between Base, Commerce, BigCommerce, and Feedonomics" },
+          { src: "/multi-brand-variables-animated.svg", alt: "Figma variables panel listing color and typeface tokens with values for the Base, Commerce, BigCommerce, and Feedonomics modes" },
         ],
       },
       {
@@ -108,8 +114,8 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          "/project-multi-brand4.jpg",
-          "/project-multi-brand5.jpg",
+          { src: "/project-multi-brand4.webp", alt: "Component library sections, including hero, card, carousel, accordion, and form, next to a card grid with the brand mode set to Commerce" },
+          { src: "/project-multi-brand5.webp", alt: "Library updates page explaining how shared text styles and colors now follow the selected brand mode" },
         ],
       },
     ],
@@ -133,8 +139,8 @@ export const projects: Project[] = [
       },
       {
         type: "compare",
-        before: { src: "/project-feedonomics2.jpg", label: "Before" },
-        after: { src: "/feedonomics-homepage.jpg", label: "After" },
+        before: { src: "/project-feedonomics2.webp", alt: "The previous Feedonomics homepage, a long page in dark navy and bright blue", label: "Before" },
+        after: { src: "/feedonomics-homepage.webp", alt: "The redesigned Feedonomics homepage with the headline Go from invisible to everywhere", label: "After" },
         liveUrl: "https://feedonomics.com/",
       },
       {
@@ -147,21 +153,21 @@ export const projects: Project[] = [
         framed: true,
         sideBySide: true,
         images: [
-          { src: "/feedonomics-makeswift-tokens.jpg", caption: "Makeswift — Color Tokens" },
-          { src: "/feedonomics-makeswift-tokens-1.jpg", caption: "Makeswift — Type Scale" },
+          { src: "/feedonomics-makeswift-tokens.webp", alt: "Makeswift design panel listing the Feedonomics brand color tokens, from Navy to Mint", caption: "Makeswift — Color Tokens" },
+          { src: "/feedonomics-makeswift-tokens-1.webp", alt: "Makeswift text styles panel listing the Feedonomics display, heading, body, and quote sizes", caption: "Makeswift — Type Scale" },
         ],
       },
       {
         type: "imageGrid",
         framed: true,
         images: [
-          { src: "/Feedonomics-color-tokens.jpg", caption: "Full Color Token System" },
+          { src: "/Feedonomics-color-tokens.webp", alt: "The full Feedonomics color token system: brand, expanded, and neutral swatches", caption: "Full Color Token System" },
         ],
       },
       {
         type: "compare",
-        before: { src: "/project-feedonomics4.jpg", label: "Before" },
-        after: { src: "/project-feedonomics5.jpg", label: "After" },
+        before: { src: "/project-feedonomics4.webp", alt: "The previous Feedonomics advertising feed management page", label: "Before" },
+        after: { src: "/project-feedonomics5.webp", alt: "The redesigned Feedonomics advertising feed management page", label: "After" },
         liveUrl: "https://feedonomics.com/product/advertising-feed-management/",
       },
       {
@@ -222,8 +228,8 @@ export const projects: Project[] = [
       },
       {
         type: "compare",
-        before: { src: "/project-feedonomics9.jpg", label: "Before" },
-        after: { src: "/project-feedonomics10.jpg", label: "After" },
+        before: { src: "/project-feedonomics9.webp", alt: "The previous Feedonomics blog page with featured and recent posts", label: "Before" },
+        after: { src: "/project-feedonomics10.webp", alt: "The redesigned Feedonomics resources page with featured blogs, filters, and a grid of articles", label: "After" },
         liveUrl: "https://feedonomics.com/blog/",
       },
       {
@@ -256,7 +262,7 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: ["/rhow-logo-suite-animated.svg"],
+        images: [{ src: "/rhow-logo-suite-animated.svg", alt: "RHOW Coffee logo suite: the circular swan badge, a horizontal lockup, a wordmark, and the swan icon on its own" }],
       },
       {
         type: "text",
@@ -264,7 +270,7 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: ["/rhow-palette-animated.svg"],
+        images: [{ src: "/rhow-palette-animated.svg", alt: "RHOW Coffee color palette: Shadow Grey, Parchment, Steel Blue, Blue Slate, and Dark Walnut" }],
       },
       {
         type: "text",
@@ -285,15 +291,15 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: ["/project-rhow-coffee07.jpg"],
+        images: [{ src: "/project-rhow-coffee07.webp", alt: "RHOW Coffee storefront with the wordmark sign above the entrance and the swan badge on the windows" }],
       },
       {
         type: "imageGrid",
-        images: ["/project-rhow-coffee01.jpg"],
+        images: [{ src: "/project-rhow-coffee01.webp", alt: "Hands holding a RHOW Coffee tray with a latte, an iced coffee, a muffin, and a pastry bar" }],
       },
       {
         type: "imageGrid",
-        images: ["/project-rhow-coffee17.jpg"],
+        images: [{ src: "/project-rhow-coffee17.webp", alt: "The swan badge applied to the glass of the RHOW Coffee front door" }],
       },
       {
         type: "divider",
@@ -306,12 +312,12 @@ export const projects: Project[] = [
       {
         type: "carousel",
         images: [
-          "/project-rhow-coffee15.png",
-          "/project-rhow-coffee08.jpg",
-          "/project-rhow-coffee03.jpg",
-          "/project-rhow-coffee05.jpg",
-          "/project-rhow-coffee14.png",
-          "/project-rhow-coffee16.png",
+          { src: "/project-rhow-coffee15.webp", alt: "Milk being poured into an iced coffee in a glass can" },
+          { src: "/project-rhow-coffee08.webp", alt: "Barista pouring latte art into a black cup" },
+          { src: "/project-rhow-coffee03.webp", alt: "RHOW Coffee menu board listing coffee, tea and drinks, and food and pastries" },
+          { src: "/project-rhow-coffee05.webp", alt: "Wall sconce above a framed portrait painting in the shop" },
+          { src: "/project-rhow-coffee14.webp", alt: "Leather armchair and wooden table beside bookshelves under a warm wall sconce" },
+          { src: "/project-rhow-coffee16.webp", alt: "Shop interior with a gilded mirror over a dark fireplace, a pendant light, bookshelves, and plants" },
         ],
       },
     ],
@@ -388,8 +394,8 @@ export const projects: Project[] = [
         type: "imageGrid",
         framed: true,
         images: [
-          { src: "/project-figma-starter-folder.png", caption: "Feedonomics brand folder in the shared Figma team, every cover filled in with title, REQ number, and initials" },
-          { src: "/project-figma-starter-cover-example.png", caption: "Another finished cover, built for a BigCommerce ticket in the same run" },
+          { src: "/project-figma-starter-folder.webp", caption: "Feedonomics brand folder in the shared Figma team, every cover filled in with title, REQ number, and initials" },
+          { src: "/project-figma-starter-cover-example.webp", caption: "Another finished cover, built for a BigCommerce ticket in the same run" },
         ],
       },
     ],
@@ -398,7 +404,8 @@ export const projects: Project[] = [
     slug: "claude-design-consistency-first-design-second",
     title: "Claude Design: Consistency First",
     description: "What connecting a multi-brand Figma design system to Claude and Claude Design taught me about constraints, governance, and writing rules from failure.",
-    thumbnail: "/project-claude-design1.jpg",
+    ogImage: "/project-claude-design1.jpg",
+    thumbnail: "/project-claude-design1.webp",
     showOnHomepage: true,
     tags: ["Exploration", "Design System"],
     tools: ["Claude Design", "Figma"],
@@ -408,17 +415,17 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "The Premise",
-        body: `<p>Six months ago I built a <a href="/work/commerce-multi-brand-system">multi-brand Figma design system</a> to cover Commerce, <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a>, <a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a> and <a href="https://www.makeswift.com/" target="_blank" rel="noopener noreferrer">Makeswift</a>. One source of truth across four brands, with shared foundations and brand-specific surfaces. That alone solved most of what we needed it to solve.</p><p>Three months ago I connected that system to <strong>Claude</strong>. The same tokens, components and rules, now accessible to our design and development team through the chat interface. It opened up a different kind of speed. We could prototype website interfaces in Claude using our actual tokens, see real brand output in seconds, and pressure-test the system in ways Figma alone couldn't surface.</p><p>A few weeks ago I started exploring <strong>Claude Design</strong>, and it opened up a different question entirely. This wasn't an integration anymore, it was a different way to think about what a design system even is. Not a library you reference, but an environment that builds with you. And it opens the door to something we couldn't do before, giving marketing the ability to self-serve decks, one-pagers and thumbnails directly from the system.</p><blockquote><p>This wasn't an integration anymore, it was a different way to think about what a design system even is. Not a library you reference, but an environment that builds with you.</p></blockquote><p>The bottleneck I've been trying to solve is real. Four brands, one design team, and a steady drip of low-stakes asset requests that eat the time we need for higher-leverage work. Marketing wants independence. Design wants brand integrity. Both sides are right, and the gap between them is where this exploration lives.</p><p>The question I started with was simple. Could a design system live natively inside an AI environment without losing the consistency that makes it a system in the first place?</p><p>The answer turned out to be yes, mostly. But the more interesting answer is what the experiment taught me about design systems in general.</p><h3>The Architecture Decision</h3><p>The first real decision, going back to the original Figma system, was whether to build one system that covered all four brands or four separate systems with shared foundations. I tried the unified approach first because it felt like the cleaner answer. It wasn't.</p><p>When you mix brands into one system, everything starts to blend. Feedonomics surfaces end up with BigCommerce styling. Sister-brand logos show up where they shouldn't. The system treats every brand asset as fair game, which is exactly what a design system is supposed to prevent.</p><img alt="" src="/project-claude-design2.jpg"><p>Splitting them solved it. Each brand gets its own scoped system with its own tokens, components and rules. The foundations are shared but the surfaces are separate. That decision held up in Figma, and it held up again when I connected the system to Claude. If anything, AI made the principle sharper. AI doesn't forgive ambiguity. If two things can be confused, they will be.</p><blockquote><p>That decision held up in Figma, and it held up again when I connected the system to Claude.</p></blockquote><p>That's a useful reminder. Most design systems carry more shared structure than they should, because human designers can hold the brand context in their heads. AI can't. Building for AI made me more disciplined about scope than building for humans ever did.</p>`,
+        body: `<p>Six months ago I built a <a href="/work/commerce-multi-brand-system">multi-brand Figma design system</a> to cover Commerce, <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a>, <a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a> and <a href="https://www.makeswift.com/" target="_blank" rel="noopener noreferrer">Makeswift</a>. One source of truth across four brands, with shared foundations and brand-specific surfaces. That alone solved most of what we needed it to solve.</p><p>Three months ago I connected that system to <strong>Claude</strong>. The same tokens, components and rules, now accessible to our design and development team through the chat interface. It opened up a different kind of speed. We could prototype website interfaces in Claude using our actual tokens, see real brand output in seconds, and pressure-test the system in ways Figma alone couldn't surface.</p><p>A few weeks ago I started exploring <strong>Claude Design</strong>, and it opened up a different question entirely. This wasn't an integration anymore, it was a different way to think about what a design system even is. Not a library you reference, but an environment that builds with you. And it opens the door to something we couldn't do before, giving marketing the ability to self-serve decks, one-pagers and thumbnails directly from the system.</p><blockquote><p>This wasn't an integration anymore, it was a different way to think about what a design system even is. Not a library you reference, but an environment that builds with you.</p></blockquote><p>The bottleneck I've been trying to solve is real. Four brands, one design team, and a steady drip of low-stakes asset requests that eat the time we need for higher-leverage work. Marketing wants independence. Design wants brand integrity. Both sides are right, and the gap between them is where this exploration lives.</p><p>The question I started with was simple. Could a design system live natively inside an AI environment without losing the consistency that makes it a system in the first place?</p><p>The answer turned out to be yes, mostly. But the more interesting answer is what the experiment taught me about design systems in general.</p><h3>The Architecture Decision</h3><p>The first real decision, going back to the original Figma system, was whether to build one system that covered all four brands or four separate systems with shared foundations. I tried the unified approach first because it felt like the cleaner answer. It wasn't.</p><p>When you mix brands into one system, everything starts to blend. Feedonomics surfaces end up with BigCommerce styling. Sister-brand logos show up where they shouldn't. The system treats every brand asset as fair game, which is exactly what a design system is supposed to prevent.</p><img alt="Claude Design with the Feedonomics design system published and a generated marketing page showing customer stats and a testimonial" src="/project-claude-design2.webp" loading="lazy" style="--media-ratio: 1600 / 1000"><p>Splitting them solved it. Each brand gets its own scoped system with its own tokens, components and rules. The foundations are shared but the surfaces are separate. That decision held up in Figma, and it held up again when I connected the system to Claude. If anything, AI made the principle sharper. AI doesn't forgive ambiguity. If two things can be confused, they will be.</p><blockquote><p>That decision held up in Figma, and it held up again when I connected the system to Claude.</p></blockquote><p>That's a useful reminder. Most design systems carry more shared structure than they should, because human designers can hold the brand context in their heads. AI can't. Building for AI made me more disciplined about scope than building for humans ever did.</p>`,
       },
       {
         type: "text",
         heading: "Tiering the Release",
-        body: `<img alt="" src="/project-claude-design3.jpg"><p>Once Claude Design was live and in Beta, the next question was who got to use it for what. Not every asset carries the same brand risk. A blog thumbnail going slightly off-brand is recoverable. A keynote deck going off-brand in front of a customer is not.</p><p>I worked through the tiering with our creative director. She brought the lens of how the broader creative team actually moves through asset requests day to day, and I brought the systems thinking. Where the lines should sit, what the system could hold without supervision, what needed a designer in the loop. Good governance is rarely one person's call, and this part of the work benefited from that back and forth.</p><p>We landed on tiering by stakes.</p><img alt="" src="/project-claude-design4.jpg"><p>Slide decks are self-serve. Once the template is locked, PMs can run them on their own. Decks have a tight enough structure that the system can hold the brand without supervision.</p><img alt="" src="/project-claude-design5.jpg"><p>One-pagers and PDFs go through design. The system handles the layout heavy lifting, but a designer finishes the imagery and reviews before anything ships. <strong>The structure is repeatable, the polish isn't.</strong></p><img alt="" src="/project-claude-design6.jpg"><p>Blog thumbnails go through design too, but on a different model. Claude kickstarts the concepts, generating three directions in three color variations. A designer picks, refines and finishes. The system isn't replacing the designer here, it's removing the blank page.</p><p>Tiering by stakes is governance, but it's design governance. It's the same call you make when deciding what gets a token versus a component versus a one-off. The lesson generalized.</p>`,
+        body: `<img alt="Deck design rules: consistent layout, restyled barebones decks, image placeholders, and Aeonik type end to end" src="/project-claude-design3.webp" loading="lazy" style="--media-ratio: 1600 / 1000"><p>Once Claude Design was live and in Beta, the next question was who got to use it for what. Not every asset carries the same brand risk. A blog thumbnail going slightly off-brand is recoverable. A keynote deck going off-brand in front of a customer is not.</p><p>I worked through the tiering with our creative director. She brought the lens of how the broader creative team actually moves through asset requests day to day, and I brought the systems thinking. Where the lines should sit, what the system could hold without supervision, what needed a designer in the loop. Good governance is rarely one person's call, and this part of the work benefited from that back and forth.</p><p>We landed on tiering by stakes.</p><img alt="A generated Feedonomics copy guidelines deck titled A field guide to the Feedoverse" src="/project-claude-design4.webp" loading="lazy" style="--media-ratio: 1600 / 1000"><p>Slide decks are self-serve. Once the template is locked, PMs can run them on their own. Decks have a tight enough structure that the system can hold the brand without supervision.</p><img alt="Figma handoff in three steps: export as HTML, import with the HTML-to-Figma plugin, then edit in Figma" src="/project-claude-design5.webp" loading="lazy" style="--media-ratio: 1600 / 1000"><p>One-pagers and PDFs go through design. The system handles the layout heavy lifting, but a designer finishes the imagery and reviews before anything ships. <strong>The structure is repeatable, the polish isn't.</strong></p><img alt="A generated Feedonomics page imported into Figma as editable layers" src="/project-claude-design6.webp" loading="lazy" style="--media-ratio: 1600 / 1000"><p>Blog thumbnails go through design too, but on a different model. Claude kickstarts the concepts, generating three directions in three color variations. A designer picks, refines and finishes. The system isn't replacing the designer here, it's removing the blank page.</p><p>Tiering by stakes is governance, but it's design governance. It's the same call you make when deciding what gets a token versus a component versus a one-off. The lesson generalized.</p>`,
       },
       {
         type: "text",
         heading: "What I Learned",
-        body: `<p>Most of what I learned came from things going wrong.</p><p>The PDF kept inventing copy. I'd give it a brief and it would helpfully fill in the gaps with its own marketing language. The fix was a verbatim copy rule. Use only the words provided, nothing else. That single rule changed how I thought about prompts. Prompts aren't instructions, they're constraints. The job isn't to describe what you want, it's to close every door you don't.</p><img alt="" src="/project-claude-design7.jpg"><p>The PDF also kept truncating. A four-section brief would come back as three. The fix was a completeness rule plus an intake audit, where the system confirms what it received before generating anything. That mirrors how I'd brief a junior designer. Repeat the ask back, then start the work.</p><img alt="" src="/project-claude-design8.jpg"><p>Blog thumbnails kept returning a single option. I had to explicitly require three concepts in three color variations. Nine outputs minimum. That sounds rigid, but it forced the kind of breadth a good first-pass concept exploration needs anyway. The constraint made the output better, not worse.</p><p>Each of these fixes was small. Together they made the system go from interesting to usable. That's the part of design systems work that never makes it into a portfolio. The patient, unsexy job of writing rules in response to failure. It's most of the actual craft.</p><img alt="" src="/project-claude-design9.jpg"><blockquote><p>That's the part of design systems work that never makes it into a portfolio. The patient, unsexy job of writing rules in response to failure. It's most of the actual craft.</p></blockquote><p>Looking back across the Figma system, the Claude integration and Claude Design, the same principles kept showing up. <strong>Constraints make systems usable.</strong> Every fix I added narrowed what the system could do, and every one made it more useful. Open-ended systems feel powerful in theory and break in practice. Governance is a design problem, not an ops problem. Tiering by stakes is the same call you make when deciding what gets a token versus a component versus a one-off. And audience is the hardest part. The system has to serve designers, PMs, marketers and developers. That mixed audience is what makes any real design system hard to get right.</p><blockquote><p>The medium changed. The work didn't.</p></blockquote><p>The system is roughly seventy percent of the way there. Good enough to use for prototyping and exploration, not yet ready for full marketing self-serve. The gap is mostly governance, brand guidelines that aren't fully locked, and platform constraints around permissions and sharing. The next phase is finalizing the deck template, building out enablement materials so the team can actually run the system without me, and locking down governance for the long term. Three conversations, in that order.</p><p>What I'm taking from all of this is that the principles hold up in any medium. Scope tightly. Constrain deliberately. Tier by stakes. Write the rule when you find the failure. The Figma system taught me that. The Claude integration confirmed it. Claude Design is showing me how far it can go.</p><p><em>May 5th, 2026</em></p>`,
+        body: `<p>Most of what I learned came from things going wrong.</p><p>The PDF kept inventing copy. I'd give it a brief and it would helpfully fill in the gaps with its own marketing language. The fix was a verbatim copy rule. Use only the words provided, nothing else. That single rule changed how I thought about prompts. Prompts aren't instructions, they're constraints. The job isn't to describe what you want, it's to close every door you don't.</p><img alt="A generated Feedonomics page section with a customer quote, open in the Claude Design editor" src="/project-claude-design7.webp" loading="lazy" style="--media-ratio: 1434 / 710"><p>The PDF also kept truncating. A four-section brief would come back as three. The fix was a completeness rule plus an intake audit, where the system confirms what it received before generating anything. That mirrors how I'd brief a junior designer. Repeat the ask back, then start the work.</p><img alt="Claude Design producing blog thumbnail concepts in several color palettes" src="/project-claude-design8.webp" loading="lazy" style="--media-ratio: 1600 / 1000"><p>Blog thumbnails kept returning a single option. I had to explicitly require three concepts in three color variations. Nine outputs minimum. That sounds rigid, but it forced the kind of breadth a good first-pass concept exploration needs anyway. The constraint made the output better, not worse.</p><p>Each of these fixes was small. Together they made the system go from interesting to usable. That's the part of design systems work that never makes it into a portfolio. The patient, unsexy job of writing rules in response to failure. It's most of the actual craft.</p><img alt="Blog thumbnail output: product data tables in lavender, peach, and mint" src="/project-claude-design9.webp" loading="lazy" style="--media-ratio: 1600 / 1000"><blockquote><p>That's the part of design systems work that never makes it into a portfolio. The patient, unsexy job of writing rules in response to failure. It's most of the actual craft.</p></blockquote><p>Looking back across the Figma system, the Claude integration and Claude Design, the same principles kept showing up. <strong>Constraints make systems usable.</strong> Every fix I added narrowed what the system could do, and every one made it more useful. Open-ended systems feel powerful in theory and break in practice. Governance is a design problem, not an ops problem. Tiering by stakes is the same call you make when deciding what gets a token versus a component versus a one-off. And audience is the hardest part. The system has to serve designers, PMs, marketers and developers. That mixed audience is what makes any real design system hard to get right.</p><blockquote><p>The medium changed. The work didn't.</p></blockquote><p>The system is roughly seventy percent of the way there. Good enough to use for prototyping and exploration, not yet ready for full marketing self-serve. The gap is mostly governance, brand guidelines that aren't fully locked, and platform constraints around permissions and sharing. The next phase is finalizing the deck template, building out enablement materials so the team can actually run the system without me, and locking down governance for the long term. Three conversations, in that order.</p><p>What I'm taking from all of this is that the principles hold up in any medium. Scope tightly. Constrain deliberately. Tier by stakes. Write the rule when you find the failure. The Figma system taught me that. The Claude integration confirmed it. Claude Design is showing me how far it can go.</p><p><em>May 5th, 2026</em></p>`,
       },
     ],
   },
@@ -445,7 +452,7 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: ["/flow-stays-logo-suite-animated.svg"],
+        images: [{ src: "/flow-stays-logo-suite-animated.svg", alt: "Flow Stays logo suite: the forest badge, a stacked wordmark with the cairn icon, and a horizontal wordmark" }],
       },
       {
         type: "text",
@@ -457,7 +464,7 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: ["/flow-stays-palette-animated.svg"],
+        images: [{ src: "/flow-stays-palette-animated.svg", alt: "Flow Stays color palette: four greens from Green 400 to Green 100, Apricot, and Salt White" }],
       },
     ],
   },
@@ -474,10 +481,15 @@ export const projects: Project[] = [
     clientUrl: "https://www.bigcommerce.com/",
     content: [
       {
+        type: "text",
+        heading: "Turning a Blank Wall Into a Mural",
+        body: `<p>A new <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> office came with a lot of empty white wall, and this was a chance to give one of them some personality. I illustrated a large-scale mural in Adobe Illustrator, built from bold geometric shapes, stripes, and half circles that come together around a stylized bird.</p><p>The composition sits on a grid of square tiles, so each section works as its own small piece and the whole thing could stretch to the full length of the wall. Deep navy and blue anchor the palette, with teal, aqua, and a warm orange keeping it lively without overwhelming the room.</p><p>A printed proof came first to check color and scale, and then the finished mural went up across the wall above the desks.</p>`,
+      },
+      {
         type: "imageGrid",
         images: [
-          "/project-new-office2.png",
-          "/project-new-office3.jpeg",
+          { src: "/project-new-office2.webp", alt: "Close-up of the geometric mural on the office wall, with a printed proof of the design on a table" },
+          { src: "/project-new-office3.webp", alt: "The finished mural spanning an office wall above rows of desks" },
         ],
       },
     ],
@@ -486,7 +498,8 @@ export const projects: Project[] = [
     slug: "bynum-golf",
     title: "Bynum Golf",
     description: "A Webflow website for golf coach Billy Bynum that helps new and returning students learn about his programs and book private or virtual lessons.",
-    thumbnail: "/project-bynum-golf1.jpg",
+    ogImage: "/project-bynum-golf1.jpg",
+    thumbnail: "/project-bynum-golf1.webp",
     showOnHomepage: false,
     tags: ["Web Design"],
     tools: ["Webflow"],
@@ -501,8 +514,8 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          "/project-bynum-golf2.webp",
-          "/project-bynum-golf3.webp",
+          { src: "/project-bynum-golf2.webp", alt: "Bynum Golf homepage with a golf course photo, the headline Golf lessons available by appointment, and an introduction from Billy" },
+          { src: "/project-bynum-golf3.webp", alt: "Bynum Golf lessons page listing in-person, virtual, Birdie, and Eagle programs" },
         ],
       },
     ],
@@ -511,7 +524,8 @@ export const projects: Project[] = [
     slug: "10-year-anniversary",
     title: "10 Year Anniversary",
     description: "A retro, streetwear-inspired graphic celebrating ten years of BigCommerce, taken from a type lockup all the way onto apparel.",
-    thumbnail: "/project-10-year1.jpg",
+    ogImage: "/project-10-year1.jpg",
+    thumbnail: "/project-10-year1.webp",
     showOnHomepage: false,
     tags: ["Branding", "Apparel"],
     tools: ["Adobe Illustrator"],
@@ -526,8 +540,8 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          "/project-10-year2.png",
-          "/project-10-year3.png",
+          { src: "/project-10-year2.webp", alt: "BigCommerce 10 year anniversary mark pairing the B logo with a retro 10" },
+          { src: "/project-10-year3.webp", alt: "Heather grey t-shirt printed with the 10 Year Anniversary, Est. 2009 graphic" },
         ],
       },
     ],
@@ -536,7 +550,8 @@ export const projects: Project[] = [
     slug: "five-star-vacation-home-rental",
     title: "Five Star Vacation Home Rental",
     description: "A Webflow website for Five Star Vacation Home Rentals, presenting high-end short-term rentals across Austin and the Texas Hill Country.",
-    thumbnail: "/project-five-star1.jpg",
+    ogImage: "/project-five-star1.jpg",
+    thumbnail: "/project-five-star1.webp",
     showOnHomepage: false,
     tags: ["Web Design"],
     tools: ["Webflow"],
@@ -551,8 +566,8 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          "/project-five-star2.jpg",
-          "/project-five-star3.jpg",
+          { src: "/project-five-star2.webp", alt: "Five Star properties page with tabs for Austin, Texas Hill Country, San Antonio, and Lake Austin above a grid of rental photos" },
+          { src: "/project-five-star3.webp", alt: "Five Star owner page explaining how the company maximizes returns for property owners" },
         ],
       },
     ],
@@ -561,7 +576,8 @@ export const projects: Project[] = [
     slug: "mc-salon-spa-studio",
     title: "MC Salon Spa & Studio",
     description: "A full rebuild of the MC Salon Spa & Studio website, moved from Squarespace to Webflow with a custom ecommerce store built in.",
-    thumbnail: "/project-mc-salon1.jpg",
+    ogImage: "/project-mc-salon1.jpg",
+    thumbnail: "/project-mc-salon1.webp",
     showOnHomepage: false,
     tags: ["Web Design"],
     tools: ["Webflow", "Shopify"],
@@ -575,8 +591,8 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          "/project-mc-salon2.png",
-          "/project-mc-salon3.png",
+          { src: "/project-mc-salon2.webp", alt: "MC Salon shop page listing R+Co hair products, with a product card for Atlantis Moisturizing B5 Shampoo" },
+          { src: "/project-mc-salon3.webp", alt: "MC Salon service menu with salon services, pricing, and a schedule an appointment button" },
         ],
       },
       {
@@ -587,8 +603,8 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          "/project-mc-salon4.png",
-          "/project-mc-salon5.png",
+          { src: "/project-mc-salon4.webp", alt: "MC Salon product page, cart drawer, and checkout with in-store pickup" },
+          { src: "/project-mc-salon5.webp", alt: "MC Salon homepage with a virtual tour, a specialized approach section, and the latest tutorial video" },
         ],
       },
     ],
@@ -597,7 +613,8 @@ export const projects: Project[] = [
     slug: "bc-for-b2b-campaign",
     title: "BC for B2B Campaign",
     description: "A BigCommerce campaign aimed at B2B buyers, built on custom isometric illustrations carried across ebooks, social assets, and ad creative.",
-    thumbnail: "/project-b2b-campaign1.jpg",
+    ogImage: "/project-b2b-campaign1.jpg",
+    thumbnail: "/project-b2b-campaign1.webp",
     showOnHomepage: false,
     tags: ["Illustration", "Branding"],
     tools: ["InDesign", "Adobe Illustrator"],
@@ -612,14 +629,14 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          "/project-b2b-campaign2.png",
-          "/project-b2b-campaign3.png",
+          { src: "/project-b2b-campaign2.webp", alt: "Ebook page for Section 1, Exploring Ecommerce Platforms, with an isometric illustration" },
+          { src: "/project-b2b-campaign3.webp", alt: "Ebook page for Section 3, Improve Your Buyers' Online Experience with Self-Service Catalog and Account Management" },
         ],
       },
       {
         type: "imageGrid",
         images: [
-          "/project-b2b-campaign4.png",
+          { src: "/project-b2b-campaign4.webp", alt: "Ebook page for Section 2, Scale Smarter with ERP Integration" },
         ],
       },
       {
@@ -630,14 +647,14 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          "/project-b2b-campaign5.webp",
-          "/project-b2b-campaign6.webp",
+          { src: "/project-b2b-campaign5.webp", alt: "Social quote card from Brady Berhman, CEO of PunchOut2Go, with an isometric illustration" },
+          { src: "/project-b2b-campaign6.webp", alt: "Social quote card from Alec Berkley, Channel Sales Executive at Silk Software, with an isometric illustration" },
         ],
       },
       {
         type: "imageGrid",
         images: [
-          "/project-b2b-campaign7.webp",
+          { src: "/project-b2b-campaign7.webp", alt: "Social quote card from Matt Osborn, Director of Marketing at Apruve, with an isometric illustration" },
         ],
       },
     ],
@@ -646,7 +663,8 @@ export const projects: Project[] = [
     slug: "a-quarter-in-design",
     title: "A Quarter in Design",
     description: "A quarterly report designed in InDesign that shows a design team's output: productivity data, process improvements, campaign highlights, and illustration.",
-    thumbnail: "/project-quarter-in-design1.jpg",
+    ogImage: "/project-quarter-in-design1.jpg",
+    thumbnail: "/project-quarter-in-design1.webp",
     showOnHomepage: false,
     tags: ["Visual Design"],
     tools: ["InDesign"],
@@ -661,15 +679,15 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          "/project-quarter-in-design2.webp",
-          "/project-quarter-in-design3.webp",
+          { src: "/project-quarter-in-design2.webp", alt: "Cover of the design team's quarterly report" },
+          { src: "/project-quarter-in-design3.webp", alt: "Report spread of isometric illustrations and visual collages" },
         ],
       },
       {
         type: "imageGrid",
         images: [
-          "/project-quarter-in-design4.webp",
-          "/project-quarter-in-design5.webp",
+          { src: "/project-quarter-in-design4.webp", alt: "Report spread with process improvements and productivity charts" },
+          { src: "/project-quarter-in-design5.webp", alt: "Report spread introducing the team and Big Design Labs" },
         ],
       },
     ],

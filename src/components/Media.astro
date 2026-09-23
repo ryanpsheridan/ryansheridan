@@ -60,6 +60,27 @@ function intrinsicRatio(publicPath: string): string | undefined {
       return undefined;
     }
 
+    if (/\.webp$/i.test(file)) {
+      const buf = fs.readFileSync(file).subarray(0, 30);
+      const chunk = buf.toString("ascii", 12, 16);
+
+      // Three encodings, three header layouts. VP8X (alpha or animation)
+      // stores width-1 and height-1 as 24-bit little-endian values.
+      if (chunk === "VP8X") {
+        return `${buf.readUIntLE(24, 3) + 1} / ${buf.readUIntLE(27, 3) + 1}`;
+      }
+      // Lossy: 14-bit dimensions after the keyframe start code.
+      if (chunk === "VP8 ") {
+        return `${buf.readUInt16LE(26) & 0x3fff} / ${buf.readUInt16LE(28) & 0x3fff}`;
+      }
+      // Lossless: 14-bit width-1 and height-1 packed after the signature byte.
+      if (chunk === "VP8L") {
+        const bits = buf.readUInt32LE(21);
+        return `${(bits & 0x3fff) + 1} / ${((bits >> 14) & 0x3fff) + 1}`;
+      }
+      return undefined;
+    }
+
     if (/\.svg$/i.test(file)) {
       const head = fs.readFileSync(file, "utf8").slice(0, 4000);
       const tag = head.match(/<svg[^>]*>/i)?.[0];
