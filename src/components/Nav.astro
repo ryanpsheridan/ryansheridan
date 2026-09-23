@@ -30,6 +30,9 @@
       LinkedIn <span class="arrow">&nearr;</span>
     </a>
   </div>
+  <a href="/start-a-project" class="menu-cta">
+    Start a website project <span class="arrow">&nearr;</span>
+  </a>
 </div>
 
 <style>
@@ -152,6 +155,49 @@
   .menu-link-external .arrow {
     font-size: 24px;
   }
+
+  .menu-cta {
+    position: absolute;
+    left: 50%;
+    bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    white-space: nowrap;
+    padding: 14px 28px;
+    border: 1px solid var(--color-text);
+    border-radius: 999px;
+    font-size: var(--text-base);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .menu-cta:hover {
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  .menu-cta:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 3px;
+  }
+
+  .menu-cta .arrow {
+    font-size: 13px;
+  }
+
+  @media (max-width: 768px) {
+    .menu-cta {
+      left: var(--page-padding);
+      right: var(--page-padding);
+      bottom: calc(var(--space-5) + env(safe-area-inset-bottom, 0px));
+      transform: none;
+    }
+  }
 </style>
 
 <script>
@@ -166,7 +212,7 @@
     document.body.style.overflow = isOpen ? "hidden" : "";
   });
 
-  overlay.querySelectorAll(".menu-link").forEach((link) => {
+  overlay.querySelectorAll(".menu-link, .menu-cta").forEach((link) => {
     link.addEventListener("click", () => {
       hamburger.classList.remove("active");
       overlay.classList.remove("open");
