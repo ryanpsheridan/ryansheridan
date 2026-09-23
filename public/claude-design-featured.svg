@@ -5,17 +5,17 @@
 .ph{animation:ph 12s steps(1,end) infinite}
 .send-on{animation:sendon 12s ease infinite}
 .send-btn{transform-origin:536px 945px;animation:press 12s ease infinite}
-.sheen{animation:sheen 12s cubic-bezier(.45,0,.25,1) infinite}
+.drift{transform-origin:1048px 447px;animation:drift 12s ease-in-out infinite}
 @keyframes type{0%{transform:translateX(0)}7.50%{transform:translateX(6.7px)}8.13%{transform:translateX(11.2px)}8.70%{transform:translateX(18.6px)}9.47%{transform:translateX(26.1px)}10.00%{transform:translateX(29.8px)}10.72%{transform:translateX(37.2px)}11.37%{transform:translateX(41.0px)}12.90%{transform:translateX(48.4px)}13.61%{transform:translateX(52.1px)}15.13%{transform:translateX(59.6px)}15.81%{transform:translateX(64.0px)}16.34%{transform:translateX(71.5px)}16.87%{transform:translateX(78.9px)}17.55%{transform:translateX(86.4px)}18.40%{transform:translateX(93.8px)}18.95%{transform:translateX(101.3px)}19.54%{transform:translateX(105.0px)}21.30%{transform:translateX(114.0px)}22.20%{transform:translateX(123.6px)}22.94%{transform:translateX(131.8px)}23.60%{transform:translateX(135.5px)}25.51%{transform:translateX(143.0px)}26.03%{transform:translateX(150.4px)}26.89%{transform:translateX(157.1px)}27.51%{transform:translateX(164.6px)}28.07%{transform:translateX(172.0px)}28.62%{transform:translateX(175.8px)}30.24%{transform:translateX(183.2px)}31.08%{transform:translateX(190.7px)}31.66%{transform:translateX(194.4px)}33.40%{transform:translateX(198.1px)}34.17%{transform:translateX(205.5px)}34.82%{transform:translateX(208.5px)}35.55%{transform:translateX(215.2px)}36.08%{transform:translateX(218.9px)}37.60%{transform:translateX(225.6px)}38.19%{transform:translateX(233.1px)}38.97%{transform:translateX(240.5px)}39.65%{transform:translateX(247.2px)}40.28%{transform:translateX(251.0px)}42.02%{transform:translateX(258.4px)}42.71%{transform:translateX(265.9px)}43.34%{transform:translateX(272.6px)}55.42%,100%{transform:translateX(0)}}
 @keyframes blink{0%{opacity:1}50%{opacity:0}100%{opacity:1}}
 @keyframes ph{0%{opacity:1}7.50%{opacity:0}55.42%,100%{opacity:1}}
 @keyframes sendon{0%,7.50%{opacity:0}9.58%,55.42%{opacity:1}57.92%,100%{opacity:0}}
 @keyframes press{0%,52.50%{transform:scale(1)}53.50%{transform:scale(.88)}55.42%,100%{transform:scale(1)}}
-@keyframes sheen{0%,56.25%{transform:translateX(-380px);opacity:0}58.75%{opacity:1}75.42%{transform:translateX(1000px);opacity:1}76.25%,100%{transform:translateX(1000px);opacity:0}}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}30%{transform:translate(16px,-10px) scale(1.025)}65%{transform:translate(-12px,12px) scale(1.015)}}
 @media (prefers-reduced-motion:reduce){
-.cover,.caret,.ph,.send-on,.send-btn,.sheen{animation:none}
+.cover,.caret,.ph,.send-on,.send-btn,.drift{animation:none}
 .cover{transform:translateX(272.6px)}
-.caret,.ph,.sheen{opacity:0}
+.caret,.ph{opacity:0}
 .send-on{opacity:1}
 }
 </style>
@@ -28,7 +28,6 @@
 <linearGradient id="panelfade" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0" stop-color="#FFFFFF"/><stop offset=".82" stop-color="#FFFFFF"/><stop offset=".9" stop-color="#FFFBFA"/><stop offset="1" stop-color="#FAF9F8"/>
 </linearGradient>
-<linearGradient id="sheen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/><stop offset=".5" stop-color="#FFFFFF" stop-opacity=".24"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>
 </defs>
 
 <rect width="1600" height="1000" fill="#F4F2EE"/>
@@ -110,7 +109,7 @@
 <!-- Generated Feedonomics Surface page -->
 <g clip-path="url(#card)">
 <rect x="640" y="-8" width="816" height="903" fill="#3A5DBA"/>
-<g class="mesh" filter="url(#soft)">
+<g class="drift"><g class="mesh" filter="url(#soft)">
 <rect x="521.0" y="-120.0" width="168.5" height="170.3" fill="#EBBFB6"/>
 <rect x="688.9" y="-120.0" width="48.5" height="170.3" fill="#E7BFBA"/>
 <rect x="736.8" y="-120.0" width="48.5" height="170.3" fill="#E4BFC1"/>
@@ -417,8 +416,7 @@
 <rect x="1311.4" y="844.3" width="48.5" height="170.3" fill="#183785"/>
 <rect x="1359.2" y="844.3" width="48.5" height="170.3" fill="#193582"/>
 <rect x="1407.1" y="844.3" width="168.5" height="170.3" fill="#183480"/>
-</g>
-<g class="sheen"><rect x="640" y="-300" width="260" height="1500" fill="url(#sheen)" transform="rotate(12 770 450)"/></g>
+</g></g>
 </g>
 
 <g class="copy" fill="#FFFFFF">
