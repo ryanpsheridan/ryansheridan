@@ -30,6 +30,9 @@
       LinkedIn <span class="arrow">&nearr;</span>
     </a>
   </div>
+  <a href="/start-a-project" class="menu-cta">
+    Start a website project <span class="arrow">&nearr;</span>
+  </a>
 </div>
 
 <style>
@@ -152,6 +155,45 @@
   .menu-link-external .arrow {
     font-size: 24px;
   }
+
+  .menu-cta {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .menu-cta {
+      position: absolute;
+      left: var(--page-padding);
+      right: var(--page-padding);
+      bottom: calc(var(--space-5) + env(safe-area-inset-bottom, 0px));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 28px;
+      border-radius: 999px;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--color-bg);
+      background: var(--color-text);
+      transition: opacity 0.2s;
+    }
+
+    .menu-cta:hover {
+      color: var(--color-bg);
+      opacity: 0.85;
+    }
+
+    .menu-cta:focus-visible {
+      outline: 2px solid var(--color-text);
+      outline-offset: 3px;
+    }
+
+    .menu-cta .arrow {
+      font-size: 13px;
+    }
+  }
 </style>
 
 <script>
@@ -166,7 +208,7 @@
     document.body.style.overflow = isOpen ? "hidden" : "";
   });
 
-  overlay.querySelectorAll(".menu-link").forEach((link) => {
+  overlay.querySelectorAll(".menu-link, .menu-cta").forEach((link) => {
     link.addEventListener("click", () => {
       hamburger.classList.remove("active");
       overlay.classList.remove("open");
