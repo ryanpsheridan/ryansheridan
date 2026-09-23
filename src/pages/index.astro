@@ -372,10 +372,9 @@ const projects = getHomepageProjects();
     color: var(--color-text-muted);
   }
 
-  /* Its own line, so it reads as an aside to the sentence above it. */
+  /* Runs on from the sentence before it, but wraps as one piece so the key
+     never lands alone at the start of a line. */
   .intro-hint {
-    display: block;
-    margin-top: var(--space-2);
     white-space: nowrap;
   }
 
