@@ -70,26 +70,8 @@ const schema = [
       </div>
 
       <div class="year-bar" data-year-bar aria-hidden="true">
-        <span class="year-bar-label">Year</span>
         <span class="year-bar-year"><Odometer value={firstYear} /></span>
         <span class="year-bar-count" data-year-count>{projectCount(firstYearCount)}</span>
-      </div>
-
-      {/* Wide screens: a timeline in the left gutter. The track is a small map
-          of the list with a tick where each year starts; it slides so the
-          point you've scrolled to sits at the middle of the screen, beside the
-          year. A tick crossing the middle is a new year's first project
-          crossing it too, so the year rolls as that project lines up with it. */}
-      <div class="year-rail" data-year-rail aria-hidden="true">
-        <div class="rail-window">
-          <div class="rail-track" data-rail-track>
-            <div class="rail-fill" data-rail-fill></div>
-          </div>
-        </div>
-        <div class="rail-readout">
-          <span class="rail-marker"></span>
-          <span class="rail-year"><Odometer value={firstYear} /></span>
-        </div>
       </div>
 
       <ul class="project-list">
@@ -299,9 +281,10 @@ const schema = [
     top: var(--nav-height);
     z-index: 10;
     display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-3) 0;
+    /* Year and count share a bottom line. */
+    align-items: flex-end;
+    /* Same above and below, so the bar is evenly padded once it sticks. */
+    padding: var(--space-2) 0;
     background: var(--color-bg);
     /* The divider between the nav and the counter. It only shows once the
        bar snaps under the nav; before that the bar sits in the page with
@@ -316,117 +299,23 @@ const schema = [
     box-shadow: 0 1px 0 var(--color-border);
   }
 
-  .year-bar-label,
   .year-bar-count {
+    margin-left: auto;
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     letter-spacing: 0.02em;
     text-transform: uppercase;
     color: var(--color-text-muted);
-  }
-
-  .year-bar-count {
-    margin-left: auto;
+    line-height: 1;
+    /* The odometer's digit window leaves a little more room under the year's
+       baseline than this line box leaves under the count's, so lift the count
+       by the difference to put both on one baseline. */
+    margin-bottom: 0.13em;
   }
 
   .year-bar-year {
-    font-size: var(--text-xl);
-  }
-
-  /* Gutter timeline, for screens wide enough to have a gutter to put it in.
-     Below that, the sticky bar above does the job. */
-  .year-rail {
-    display: none;
-  }
-
-  @media (min-width: 1440px) {
-    .year-bar {
-      display: none;
-    }
-
-    .year-rail {
-      --rail-height: 56vh;
-      display: block;
-      position: fixed;
-      top: calc(50% - var(--rail-height) / 2);
-      /* Out toward the screen edge, a fifth of the way into the gutter, so
-         the readout keeps clear air between itself and the rows. */
-      left: max(24px, calc((100vw - var(--max-width)) / 2 * 0.2));
-      height: var(--rail-height);
-      width: 1px;
-      z-index: 5;
-      opacity: 0;
-      /* A slow fade in, once scrolling starts. */
-      transition: opacity 1s ease;
-      pointer-events: none;
-    }
-
-    .year-rail.is-visible {
-      opacity: 1;
-    }
-  }
-
-  /* The track fades out toward both ends so it reads as a window onto a
-     longer timeline. */
-  .rail-window {
-    position: absolute;
-    inset: 0 -8px;
-    overflow: hidden;
-    mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
-  }
-
-  .rail-track {
-    position: absolute;
-    top: 50%;
-    left: 8px;
-    width: 1px;
-    height: var(--track-length, 0px);
-    background: var(--color-border);
-    transform: translateY(calc(var(--track-offset, 0px) * -1));
-  }
-
-  .rail-fill {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1px;
-    height: var(--track-offset, 0px);
-    background: var(--color-text);
-  }
-
-  .rail-track :global(.rail-tick) {
-    position: absolute;
-    left: 0;
-    width: 7px;
-    height: 1px;
-    background: var(--color-border);
-    transition: background-color 0.3s;
-  }
-
-  .rail-track :global(.rail-tick.is-passed) {
-    background: var(--color-text);
-  }
-
-  .rail-readout {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
     display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .rail-marker {
-    width: 7px;
-    height: 7px;
-    margin-left: -3px;
-    border-radius: 50%;
-    background: var(--color-text);
-  }
-
-  .rail-year {
-    font-size: var(--text-lg);
+    font-size: var(--text-md);
   }
 
   /* Same frame as the homepage cards: 16:10, cropped to fill. The thumbnail is
@@ -489,8 +378,6 @@ const schema = [
 
   @media (prefers-reduced-motion: reduce) {
     .year-bar,
-    .year-rail,
-    .rail-track :global(.rail-tick),
     .row-cta svg,
     .row-thumb :global(img),
     .row-thumb :global(video) {
@@ -532,12 +419,9 @@ const schema = [
   const cards = document.querySelectorAll<HTMLLIElement>(".project-row");
   const list = document.querySelector<HTMLElement>(".project-list");
   const bar = document.querySelector<HTMLElement>("[data-year-bar]");
-  const rail = document.querySelector<HTMLElement>("[data-year-rail]");
-  const track = document.querySelector<HTMLElement>("[data-rail-track]");
   const counters = document.querySelectorAll<HTMLElement>("[data-odometer]");
   const counts = document.querySelectorAll<HTMLElement>("[data-year-count]");
   const nav = document.querySelector<HTMLElement>("nav:not(.breadcrumbs)");
-  const wide = window.matchMedia("(min-width: 1440px)");
 
   // Stick flush under the nav. --nav-height is a round site-wide estimate,
   // so measure the real bar instead and follow it if it changes size.
@@ -548,67 +432,20 @@ const schema = [
   }
 
   let shownYear = "";
-  let ticks: { el: HTMLElement; at: number }[] = [];
 
   const visibleCards = () => [...cards].filter((card) => !card.classList.contains("hidden"));
 
-  // One tick per year, at the point in the list where that year's first
-  // project starts, as a fraction of the list. Rebuilt on filter and resize.
-  function buildTicks() {
-    if (!track || !list) return;
-    ticks.forEach((tick) => tick.el.remove());
-    ticks = [];
-    const listRect = list.getBoundingClientRect();
-    // No tick for the first year: the line itself starts there.
-    let lastYear = visibleCards()[0]?.dataset.year ?? "";
-    for (const card of visibleCards()) {
-      if (card.dataset.year === lastYear) continue;
-      lastYear = card.dataset.year ?? "";
-      const el = document.createElement("span");
-      el.className = "rail-tick";
-      track.append(el);
-      ticks.push({ el, at: (card.getBoundingClientRect().top - listRect.top) / listRect.height });
-    }
-  }
-
   // The current year belongs to the first row whose bottom is still below the
-  // reading line. With the gutter timeline that line is the middle of the
-  // screen, where the year sits; with the sticky bar it's a third of the way
-  // down the space under the bar, so a year never stays lit while its last
-  // row is mostly gone. Read on scroll through rAF, so it stays cheap.
+  // reading line, a third of the way down the space under the bar, so a year
+  // never stays lit while its last row is mostly gone. Read on scroll through
+  // rAF, so it stays cheap.
   function update() {
-    if (!list) return;
+    if (!list || !bar) return;
     const visible = visibleCards();
-    const listRect = list.getBoundingClientRect();
-    let line: number;
-
-    if (wide.matches && rail && track) {
-      line = window.innerHeight / 2;
-      const length = rail.clientHeight * 1.5;
-      // Extra line before the first year and after the last, so the dot and
-      // the year beside it always sit on the line, never past either end.
-      const lead = 48;
-      const progress = Math.min(1, Math.max(0, (line - listRect.top) / listRect.height));
-      rail.style.setProperty("--track-length", `${lead + length + lead}px`);
-      rail.style.setProperty("--track-offset", `${lead + progress * length}px`);
-      ticks.forEach((tick) => {
-        tick.el.style.top = `${lead + tick.at * length}px`;
-        tick.el.classList.toggle("is-passed", tick.at <= progress + 0.0005);
-      });
-      // Stays out of the way on landing and fades in once you start
-      // scrolling (or land mid-page), while the list is on screen.
-      const scrolled = window.scrollY > 40;
-      rail.classList.toggle(
-        "is-visible",
-        scrolled && visible.length > 0 && listRect.top < window.innerHeight * 0.9 && listRect.bottom > window.innerHeight * 0.2,
-      );
-    } else {
-      if (!bar) return;
-      const barRect = bar.getBoundingClientRect();
-      line = barRect.bottom + (window.innerHeight - barRect.bottom) / 3;
-      const navOffset = parseFloat(getComputedStyle(bar).top) || 0;
-      bar.classList.toggle("is-stuck", barRect.top <= navOffset + 0.5);
-    }
+    const barRect = bar.getBoundingClientRect();
+    const line = barRect.bottom + (window.innerHeight - barRect.bottom) / 3;
+    const navOffset = parseFloat(getComputedStyle(bar).top) || 0;
+    bar.classList.toggle("is-stuck", barRect.top <= navOffset + 0.5);
 
     // At the very bottom the last rows may never reach the line, so hand the
     // counter to the last project rather than leaving its year dimmed.
@@ -640,17 +477,11 @@ const schema = [
     });
   };
 
-  const rebuild = () => {
-    buildTicks();
-    update();
-  };
-
   window.addEventListener("scroll", requestUpdate, { passive: true });
-  window.addEventListener("resize", rebuild);
-  wide.addEventListener("change", rebuild);
+  window.addEventListener("resize", requestUpdate);
   // Thumbnails and fonts settle row heights after first paint.
-  if (list) new ResizeObserver(rebuild).observe(list);
-  rebuild();
+  if (list) new ResizeObserver(requestUpdate).observe(list);
+  update();
 
   filter.addEventListener("change", () => {
     const value = filter.value;
@@ -662,6 +493,6 @@ const schema = [
         card.classList.toggle("hidden", !tags.includes(value));
       }
     });
-    rebuild();
+    update();
   });
 </script>
