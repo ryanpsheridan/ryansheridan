@@ -29,18 +29,30 @@ const { value } = Astro.props;
     letter-spacing: -0.01em;
     font-variant-numeric: tabular-nums;
     line-height: 1.2;
+    /* One digit's height, and how far the strip moves per step. Rounded to a
+       whole pixel where the browser can, because a fractional step (21.6px at
+       18px) leaves each digit on a different sub-pixel offset, and the
+       browser snaps each one to the grid differently, so the digits of one
+       number sit at slightly different heights. */
+    --odometer-step: 1.2em;
+  }
+
+  @supports (height: round(1.2em, 1px)) {
+    .odometer {
+      --odometer-step: round(1.2em, 1px);
+    }
   }
 
   .odometer-digit {
     display: block;
-    height: 1.2em;
+    height: var(--odometer-step);
     overflow: hidden;
   }
 
   .odometer-strip {
     display: flex;
     flex-direction: column;
-    transform: translateY(calc(var(--d) * -10%));
+    transform: translateY(calc(var(--d) * var(--odometer-step) * -1));
     transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
@@ -50,7 +62,8 @@ const { value } = Astro.props;
 
   .odometer-strip span {
     display: block;
-    height: 1.2em;
+    height: var(--odometer-step);
+    line-height: var(--odometer-step);
   }
 
   @media (prefers-reduced-motion: reduce) {

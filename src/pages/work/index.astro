@@ -284,18 +284,15 @@ const schema = [
     /* Year and count share a bottom line. */
     align-items: flex-end;
     /* Same above and below, so the bar is evenly padded once it sticks. */
-    padding: var(--space-2) 0;
+    padding: 12px 0;
     background: var(--color-bg);
-    /* The divider between the nav and the counter. It only shows once the
-       bar snaps under the nav; before that the bar sits in the page with
-       nothing above it to divide from. */
-    border-top: 1px solid transparent;
+    /* Once stuck under the nav, a rule underneath separates it from the rows
+       scrolling past. No rule above: it sits straight against the nav. */
     box-shadow: 0 1px 0 transparent;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: box-shadow 0.2s;
   }
 
   .year-bar.is-stuck {
-    border-top-color: var(--color-border);
     box-shadow: 0 1px 0 var(--color-border);
   }
 
@@ -310,7 +307,7 @@ const schema = [
     /* The odometer's digit window leaves a little more room under the year's
        baseline than this line box leaves under the count's, so lift the count
        by the difference to put both on one baseline. */
-    margin-bottom: 0.13em;
+    margin-bottom: 0.17em;
   }
 
   .year-bar-year {
