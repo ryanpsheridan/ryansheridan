@@ -12,6 +12,12 @@ const sortedProjects = [...projects].sort((a, b) => b.year - a.year);
 
 const allTags = [...new Set(projects.flatMap((p) => p.tags))];
 
+// The counter renders with the newest year already dialed in, so it reads
+// correctly before the script runs (or if it never does).
+const firstYear = sortedProjects[0]?.year ?? new Date().getFullYear();
+const firstYearCount = sortedProjects.filter((p) => p.year === firstYear).length;
+const projectCount = (n: number) => `${n} ${n === 1 ? "project" : "projects"}`;
+
 const schema = [
   {
     "@type": "CollectionPage",
@@ -62,15 +68,29 @@ const schema = [
         </div>
       </div>
 
+      <div class="year-bar" data-year-bar aria-hidden="true">
+        <span class="year-bar-label">Year</span>
+        <span class="odometer" data-odometer>
+          {String(firstYear).split("").map((digit) => (
+            <span class="odometer-digit" style={`--d: ${digit}`}>
+              <span class="odometer-strip">
+                {Array.from({ length: 10 }, (_, n) => <span>{n}</span>)}
+              </span>
+            </span>
+          ))}
+        </span>
+        <span class="year-bar-count" data-year-count>{projectCount(firstYearCount)}</span>
+      </div>
+
       <ul class="project-list">
         {
           sortedProjects.map((project) => (
-            <li class="project-row" data-tags={project.tags.join(",")}>
+            <li class="project-row" data-tags={project.tags.join(",")} data-year={project.year}>
               <div class="row-heading">
                 <h2>
                   <a href={`/work/${project.slug}`} class="row-link">{project.title}</a>
                 </h2>
-                <p class="row-year"><time datetime={String(project.year)}>{project.year}</time></p>
+                <p class="visually-hidden"><time datetime={String(project.year)}>{project.year}</time></p>
                 <div class="badge-list">
                   {project.tags.map((tag) => <span class="badge">{tag}</span>)}
                 </div>
@@ -240,11 +260,82 @@ const schema = [
     outline-offset: 4px;
   }
 
-  .row-year {
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .row-heading h2 + .visually-hidden + .badge-list {
+    margin-top: var(--space-3);
+  }
+
+  /* Year counter. It sticks under the nav and rolls to the year of whichever
+     project is passing beneath it; the rows are sorted newest first, so it
+     counts down through the years as you scroll. Decorative: each row also
+     carries its year as visually hidden text. */
+  .year-bar {
+    position: sticky;
+    top: var(--nav-height);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    background: var(--color-bg);
+    box-shadow: 0 1px 0 transparent;
+    transition: box-shadow 0.2s;
+  }
+
+  .year-bar.is-stuck {
+    box-shadow: 0 1px 0 var(--color-border);
+  }
+
+  .year-bar-label,
+  .year-bar-count {
     font-family: var(--font-mono);
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
     color: var(--color-text-muted);
-    margin: 0 0 var(--space-3);
+  }
+
+  .year-bar-count {
+    margin-left: auto;
+  }
+
+  .odometer {
+    display: inline-flex;
+    font-size: var(--text-xl);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+  }
+
+  .odometer-digit {
+    display: block;
+    height: 1.2em;
+    overflow: hidden;
+  }
+
+  .odometer-strip {
+    display: flex;
+    flex-direction: column;
+    transform: translateY(calc(var(--d) * -10%));
+    transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* Right-hand digits settle last, like a mechanical counter. */
+  .odometer-digit:nth-child(3) .odometer-strip { transition-delay: 0.04s; }
+  .odometer-digit:nth-child(4) .odometer-strip { transition-delay: 0.08s; }
+
+  .odometer-strip span {
+    display: block;
+    height: 1.2em;
   }
 
   /* Same frame as the homepage cards: 4:3, cropped to fill. The thumbnail is
@@ -306,6 +397,8 @@ const schema = [
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .odometer-strip,
+    .year-bar,
     .row-cta svg,
     .row-thumb :global(img),
     .row-thumb :global(video) {
@@ -344,6 +437,49 @@ const schema = [
 <script>
   const filter = document.getElementById("type-filter") as HTMLSelectElement;
   const cards = document.querySelectorAll<HTMLLIElement>(".project-row");
+  const bar = document.querySelector<HTMLElement>("[data-year-bar]");
+  const digits = document.querySelectorAll<HTMLElement>("[data-odometer] .odometer-digit");
+  const count = document.querySelector<HTMLElement>("[data-year-count]");
+
+  let shownYear = "";
+
+  const visibleCards = () => [...cards].filter((card) => !card.classList.contains("hidden"));
+
+  // The current year belongs to the first row whose bottom is still below the
+  // bar. Read on scroll through rAF, so it stays cheap on long scrolls.
+  function updateYear() {
+    if (!bar) return;
+    const barRect = bar.getBoundingClientRect();
+    const line = barRect.bottom;
+    const navOffset = parseFloat(getComputedStyle(bar).top) || 0;
+    bar.classList.toggle("is-stuck", barRect.top <= navOffset + 0.5);
+
+    const visible = visibleCards();
+    const current = visible.find((card) => card.getBoundingClientRect().bottom > line) ?? visible.at(-1);
+    const year = current?.dataset.year;
+    if (!year) return;
+
+    const total = visible.filter((card) => card.dataset.year === year).length;
+    if (count) count.textContent = `${total} ${total === 1 ? "project" : "projects"}`;
+
+    if (year === shownYear) return;
+    shownYear = year;
+    year.split("").forEach((digit, i) => digits[i]?.style.setProperty("--d", digit));
+  }
+
+  let ticking = false;
+  const requestUpdate = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      updateYear();
+    });
+  };
+
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate);
+  updateYear();
 
   filter.addEventListener("change", () => {
     const value = filter.value;
@@ -355,5 +491,6 @@ const schema = [
         card.classList.toggle("hidden", !tags.includes(value));
       }
     });
+    updateYear();
   });
 </script>
