@@ -66,17 +66,17 @@ const { minDuration = 1688, maxDuration = 2025 } = Astro.props;
     overflow: hidden;
   }
 
-  /* The nav sits above the scrim on its own z-index, so the real wordmark can
-     carry the intro instead of a copy painted onto the scrim. It never fades
-     or moves, which means the hand-off costs it nothing. The nav actions are
-     the pieces held back, arriving a beat after the scrim clears so the nav
-     finishes assembling rather than snapping into place. */
+  /* The whole nav is held back while the count runs, wordmark included, so
+     the number is the only thing on screen. Everything arrives together a
+     beat after the scrim clears, alongside the headline block. */
+  html.intro-open .logo,
   html.intro-open .hamburger,
   html.intro-open .view-all-work {
     opacity: 0;
     pointer-events: none;
   }
 
+  .logo,
   .hamburger {
     transition: opacity 0.5s ease 0.35s;
   }
