@@ -58,28 +58,30 @@ const schema = [
         </div>
       </div>
 
-      <div class="project-grid">
+      <ul class="project-list">
         {
           projects.map((project) => (
-            <a
-              href={`/work/${project.slug}`}
-              class="project-card"
-              data-tags={project.tags.join(",")}
-            >
-              <div class="card-image">
-                {project.thumbnail && <Media
-                  src={project.thumbnail}
-                  alt={project.title}
-                />}
+            <li class="project-row" data-tags={project.tags.join(",")}>
+              <div class="row-heading">
+                <h2>
+                  <a href={`/work/${project.slug}`} class="row-link">{project.title}</a>
+                </h2>
+                <p class="row-label">{project.tags.join(" · ")}</p>
               </div>
-              <h2>{project.title}</h2>
-              <div class="badge-list tags">
-                {project.tags.map((tag) => <span class="badge">{tag}</span>)}
+              <div class="row-thumb">
+                {project.thumbnail && <Media src={project.thumbnail} alt="" />}
               </div>
-            </a>
+              <p class="row-description">{project.description}</p>
+              <span class="row-cta" aria-hidden="true">
+                View project
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 10h12M11 5l5 5-5 5" />
+                </svg>
+              </span>
+            </li>
           ))
         }
-      </div>
+      </ul>
     </div>
   </main>
   <Footer />
@@ -175,60 +177,165 @@ const schema = [
     pointer-events: none;
   }
 
-  .project-grid {
+  .project-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 80px;
+  }
+
+  /* One project per row, split by a hairline: name, thumbnail, summary, link. */
+  .project-row {
+    position: relative;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-7) var(--space-6);
-    padding-bottom: 80px;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2.2fr) minmax(0, 3fr) auto;
+    grid-template-areas: "heading thumb description cta";
+    gap: var(--space-5);
+    align-items: start;
+    padding: var(--space-6) 0;
+    border-top: 1px solid var(--color-border);
   }
 
-  .project-card {
-    display: block;
-    color: var(--color-text);
-  }
-
-  .project-card.hidden {
+  .project-row.hidden {
     display: none;
   }
 
-  .card-image {
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-    background: var(--color-tag-bg);
-    margin-bottom: var(--space-4);
+  .row-heading {
+    grid-area: heading;
   }
 
-  .card-image :global(img) {
+  .row-heading h2 {
+    font-size: var(--text-lg);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    margin: 0 0 var(--space-2);
+  }
+
+  .row-link {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  /* The title link covers the whole row, so the thumbnail and the CTA are
+     click targets too, without nesting everything inside one long link. */
+  .row-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .row-link:focus-visible {
+    outline: none;
+  }
+
+  .row-link:focus-visible::after {
+    outline: 2px solid var(--color-text);
+    outline-offset: 4px;
+  }
+
+  .row-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .row-thumb {
+    grid-area: thumb;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--color-tag-bg);
+  }
+
+  .row-thumb :global(img),
+  .row-thumb :global(video) {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    aspect-ratio: auto;
+    transition: transform 0.4s ease;
   }
 
-  .project-card h2 {
-    font-size: var(--text-lg);
-    font-weight: 300;
-    margin-bottom: var(--space-3);
-    letter-spacing: -0.01em;
-    transition: opacity 0.15s;
+  .row-description {
+    grid-area: description;
+    font-size: var(--text-md);
+    line-height: 1.55;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .row-cta {
+    grid-area: cta;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-md);
+    color: var(--color-text);
+    white-space: nowrap;
+  }
+
+  .row-cta svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease;
   }
 
   @media (hover: hover) {
-    .project-card:hover h2 {
-      opacity: 0.6;
+    .project-row:hover .row-cta svg {
+      transform: translateX(4px);
+    }
+
+    .project-row:hover .row-thumb :global(img),
+    .project-row:hover .row-thumb :global(video) {
+      transform: scale(1.02);
     }
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .row-cta svg,
+    .row-thumb :global(img),
+    .row-thumb :global(video) {
+      transition: none;
+    }
+  }
+
+  /* Tablet: the link drops under the summary so the three columns keep room. */
+  @media (max-width: 1024px) {
+    .project-row {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr);
+      grid-template-areas:
+        "heading thumb description"
+        "heading thumb cta";
+      grid-template-rows: auto 1fr;
+      row-gap: var(--space-4);
+    }
+  }
+
+  /* Phone: stack name, thumbnail, summary, link. */
   @media (max-width: 768px) {
-    .project-grid {
-      grid-template-columns: 1fr;
-      gap: var(--space-6);
+    .project-row {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        "heading"
+        "thumb"
+        "description"
+        "cta";
+      grid-template-rows: none;
+      gap: var(--space-3);
+      padding: var(--space-5) 0;
+    }
+
+    .row-description {
+      font-size: var(--text-base);
     }
   }
 </style>
 
 <script>
   const filter = document.getElementById("type-filter") as HTMLSelectElement;
-  const cards = document.querySelectorAll<HTMLAnchorElement>(".project-card");
+  const cards = document.querySelectorAll<HTMLLIElement>(".project-row");
 
   filter.addEventListener("change", () => {
     const value = filter.value;

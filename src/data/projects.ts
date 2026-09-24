@@ -119,6 +119,38 @@ export const projects: Project[] = [
         body: `<p>Rather than normalizing everything into one watered-down middle ground, the system reflects how each brand actually exists on its live sites. The foundation is a four-collection variable architecture covering primitive, brand, and theme tokens across all three brands and their mobile counterparts. The hardest part of getting there was making color and type tokens work seamlessly across all of them. Matching display, heading, body, quote, and eyebrow styles across brands so that a single text style pulls cleanly from tokens sounds straightforward, but getting that to feel right and stay maintainable took real work.</p><p>With the token system solid, sections came together in a way that kept the whole thing accessible to everyone who touches it. The goal was always finding the balance between being as easy as possible for non-designers and as powerful as possible for web designers. Drop a hero section, set the brand on the outer frame, and typography, spacing, and surface colors all update automatically with no token knowledge required. The final file includes 131 primitive variables, 115 brand variables across 6 modes, and a full library of sections and components spanning heroes, carousels, accordions, CTAs, feature layouts, and more.</p>`,
       },
       {
+        type: "text",
+        heading: "One Token Name, a Value per Brand",
+        body: `<p>The variables split into two collections. <strong>Primitives</strong> hold the raw values: every brand's color ramps, the fonts, and shared number scales for frame widths, containers, padding, spacing, and motion. <strong>Brand</strong> tokens give those values a job, and each one carries a column for Commerce (CM), BigCommerce (BC), and Feedonomics (FDX).</p><p>That's what lets one component serve every brand. <em>Display 1</em> is 101px for Commerce, 64 for BigCommerce, and 72 for Feedonomics. <em>Surface/Base</em> is Pearl, White, or Stone. <em>Hyperlink</em> is Iris, Blue 400, or Cobalt. Where the brands agree, like the spacing scale and motion timing, all three columns point at the same primitive, so a change lands everywhere at once.</p>`,
+      },
+      {
+        type: "carousel",
+        perView: 1,
+        ratio: "16 / 10",
+        contain: true,
+        images: [
+          { src: "/project-feedonomics-tokens-04.webp", alt: "Brand collection in the Multi-Brand Figma library with CM, BC, and FDX columns mapping text color and typeface tokens to each brand's primitives", caption: "01 · Text color and typeface, per brand" },
+          { src: "/project-feedonomics-tokens-05.webp", alt: "Brand collection font size tokens from Display 1 to Type XS with separate values for CM, BC, and FDX", caption: "02 · One type scale, three sets of sizes" },
+          { src: "/project-feedonomics-tokens-06.webp", alt: "Brand collection weight tokens and surface tokens, with Base, Secondary, Tertiary, and Inverse mapped to each brand's colors", caption: "03 · Weight and surface, per brand" },
+          { src: "/project-feedonomics-tokens-07.webp", alt: "Brand collection spacing tokens, viewport widths, and section padding, with every brand pointing at the shared number primitives", caption: "04 · Spacing and layout, shared across brands" },
+          { src: "/project-feedonomics-tokens-08.webp", alt: "Brand collection duration tokens from 0 to 300 milliseconds and border color tokens for CM, BC, and FDX", caption: "05 · Motion and borders" },
+          { src: "/project-feedonomics-tokens-03.webp", alt: "Primitive collection listing color groups for CMRC, BC, FDX, and MS, beside number variables for frame widths, containers, and padding", caption: "06 · Primitives: every brand's colors, one set of numbers" },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Set the Brand Once",
+        body: `<p>In practice, a designer sets the brand on the page and then only picks shared styles and tokens. On a Feedonomics page, the hero headline uses <em>Display 2</em> from the Multi-Brand text styles and resolves to 64/70.4. The hero section is filled with <em>Surface/Inverse</em>, which is Navy for Feedonomics. Neither one has a hex value or a brand-specific style attached.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          { src: "/project-feedonomics-tokens-applied-type.webp", alt: "Feedonomics product page in Figma with the hero headline selected and the Multi-Brand text styles menu showing Display 2 at 64/70.4", caption: "Type: Display 2 from the Multi-Brand library resolves to the Feedonomics size" },
+          { src: "/project-feedonomics-tokens-applied-surface.webp", alt: "The same Feedonomics page in Figma with the hero section selected and its fill set to the Surface/Inverse token from the Multi-Brand library", caption: "Surface: the hero is filled with Surface/Inverse, not a brand color" },
+        ],
+      },
+      {
         type: "imageGrid",
         images: [
           { src: "/project-multi-brand4.webp", alt: "Component library sections, including hero, card, carousel, accordion, and form, next to a card grid with the brand mode set to Commerce" },
