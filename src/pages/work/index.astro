@@ -86,17 +86,26 @@ const schema = [
             <div class="rail-fill" data-rail-fill></div>
           </div>
         </div>
+        <span class="rail-connector"></span>
+        <span class="rail-marker"></span>
         <div class="rail-readout">
-          <span class="rail-marker"></span>
           <span class="rail-year"><Odometer value={firstYear} /></span>
           <span class="rail-count" data-year-count>{projectCount(firstYearCount)}</span>
         </div>
       </div>
 
+      <div class="list-wrap">
+      {/* Wide screens: a bracket beside every project in the current year. The
+          timeline's connector runs from the year into it. */}
+      <div class="year-bracket" data-year-bracket aria-hidden="true"></div>
       <ul class="project-list">
         {
           sortedProjects.map((project) => (
             <li class="project-row" data-tags={project.tags.join(",")} data-year={project.year}>
+              {/* Shown on the first project of each year (the script decides,
+                  so it follows the filter), then hidden once the year it
+                  names is the one on the counter. */}
+              <span class="row-year-marker" aria-hidden="true">{project.year}</span>
               <div class="row-heading">
                 <h2>
                   <a href={`/work/${project.slug}`} class="row-link">{project.title}</a>
@@ -120,6 +129,7 @@ const schema = [
           ))
         }
       </ul>
+      </div>
     </div>
   </main>
   <Footer />
@@ -237,20 +247,40 @@ const schema = [
     display: none;
   }
 
-  /* Once the counter is running, rows outside its year step back, so it's
-     clear which year each project belongs to. Hovering one brings it back. */
-  .project-row {
-    transition: opacity 0.4s ease;
+  /* Year label on the divider above each year's first project. On narrow
+     screens it sits on the line itself; with the gutter timeline it sits out
+     in the gutter, in line with the year on the counter, and hides as it
+     reaches the middle so it reads as rolling into the counter. */
+  .row-year-marker {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateY(-50%);
+    padding-right: var(--space-2);
+    background: var(--color-bg);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.02em;
+    line-height: 1;
+    color: var(--color-text-muted);
+    transition: opacity 0.25s ease;
   }
 
-  .project-row.is-dimmed {
-    opacity: 0.3;
+  .project-row.is-year-start .row-year-marker {
+    display: block;
   }
 
-  @media (hover: hover) {
-    .project-row.is-dimmed:hover {
-      opacity: 1;
-    }
+  .row-year-marker.is-merged {
+    opacity: 0;
+  }
+
+  .list-wrap {
+    position: relative;
+  }
+
+  .year-bracket {
+    display: none;
   }
 
   .row-heading {
@@ -356,9 +386,9 @@ const schema = [
       display: block;
       position: fixed;
       top: calc(50% - var(--rail-height) / 2);
-      /* Centered in the gutter between the viewport edge and the content,
-         nudged left so the readout beside the line clears the content too. */
-      left: calc((100vw - var(--max-width)) / 4 - 28px);
+      /* 48px left of the content; the script measures the list and sets the
+         exact spot, since 100vw counts the scrollbar. */
+      left: calc((100vw - var(--max-width)) / 2 - 48px);
       height: var(--rail-height);
       width: 1px;
       z-index: 5;
@@ -368,6 +398,31 @@ const schema = [
     }
 
     .year-rail.is-visible {
+      opacity: 1;
+    }
+
+    .row-year-marker {
+      left: auto;
+      right: calc(100% + 48px + 12px);
+      padding-right: 0;
+      background: none;
+    }
+
+    .year-bracket {
+      display: block;
+      position: absolute;
+      left: -16px;
+      width: 5px;
+      top: var(--bracket-top, 0px);
+      height: var(--bracket-height, 0px);
+      border: 1px solid var(--color-text);
+      border-right: none;
+      opacity: 0;
+      pointer-events: none;
+      transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), height 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
+    }
+
+    .year-bracket.is-visible {
       opacity: 1;
     }
   }
@@ -402,7 +457,7 @@ const schema = [
 
   .rail-track :global(.rail-tick) {
     position: absolute;
-    left: 0;
+    left: -3px;
     width: 7px;
     height: 1px;
     background: var(--color-border);
@@ -413,34 +468,43 @@ const schema = [
     background: var(--color-text);
   }
 
-  .rail-readout {
+  .rail-marker {
+    position: absolute;
+    top: 50%;
+    left: -3px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-text);
+    transform: translateY(-50%);
+  }
+
+  /* From the dot on the timeline to the bracket beside the projects. */
+  .rail-connector {
     position: absolute;
     top: 50%;
     left: 0;
-    transform: translateY(-50%);
-    display: grid;
-    grid-template-columns: auto auto;
-    align-items: center;
-    column-gap: 12px;
-    row-gap: 2px;
-  }
-
-  .rail-marker {
-    grid-row: 1;
-    width: 7px;
-    height: 7px;
-    margin-left: -3px;
-    border-radius: 50%;
+    width: 32px;
+    height: 1px;
     background: var(--color-text);
   }
 
+  .rail-readout {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+
   .rail-year {
-    grid-row: 1;
     font-size: var(--text-lg);
   }
 
   .rail-count {
-    grid-column: 2;
     font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.02em;
@@ -508,7 +572,8 @@ const schema = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .project-row,
+    .row-year-marker,
+    .year-bracket,
     .year-bar,
     .year-rail,
     .rail-track :global(.rail-tick),
@@ -554,6 +619,7 @@ const schema = [
   const bar = document.querySelector<HTMLElement>("[data-year-bar]");
   const rail = document.querySelector<HTMLElement>("[data-year-rail]");
   const track = document.querySelector<HTMLElement>("[data-rail-track]");
+  const bracket = document.querySelector<HTMLElement>("[data-year-bracket]");
   const counters = document.querySelectorAll<HTMLElement>("[data-odometer]");
   const counts = document.querySelectorAll<HTMLElement>("[data-year-count]");
   const nav = document.querySelector<HTMLElement>("nav:not(.breadcrumbs)");
@@ -603,6 +669,7 @@ const schema = [
 
     if (wide.matches && rail && track) {
       line = window.innerHeight / 2;
+      rail.style.left = `${listRect.left - 48}px`;
       const length = rail.clientHeight * 1.5;
       const progress = Math.min(1, Math.max(0, (line - listRect.top) / listRect.height));
       rail.style.setProperty("--track-length", `${length}px`);
@@ -632,9 +699,31 @@ const schema = [
     const year = current?.dataset.year;
     if (!year) return;
 
-    visible.forEach((card) => card.classList.toggle("is-dimmed", card.dataset.year !== year));
+    const group = visible.filter((card) => card.dataset.year === year);
 
-    const total = visible.filter((card) => card.dataset.year === year).length;
+    // Year labels: on the first visible project of each year, hidden once
+    // they pass the reading line, where their year takes over the counter.
+    let lastYear = "";
+    cards.forEach((card) => {
+      const isStart = !card.classList.contains("hidden") && card.dataset.year !== lastYear;
+      if (!card.classList.contains("hidden")) lastYear = card.dataset.year ?? "";
+      card.classList.toggle("is-year-start", isStart);
+      const marker = card.querySelector(".row-year-marker");
+      marker?.classList.toggle("is-merged", card.getBoundingClientRect().top < line);
+    });
+
+    // The bracket spans the current year's projects, divider to divider,
+    // pulled in a little so neighbouring years' brackets never touch.
+    if (bracket && group.length) {
+      const first = group[0];
+      const last = group[group.length - 1];
+      const inset = 12;
+      bracket.style.setProperty("--bracket-top", `${first.offsetTop + inset}px`);
+      bracket.style.setProperty("--bracket-height", `${last.offsetTop + last.offsetHeight - first.offsetTop - inset * 2}px`);
+      bracket.classList.toggle("is-visible", !!rail?.classList.contains("is-visible"));
+    }
+
+    const total = group.length;
     counts.forEach((el) => (el.textContent = `${total} ${total === 1 ? "project" : "projects"}`));
 
     if (year === shownYear) return;
