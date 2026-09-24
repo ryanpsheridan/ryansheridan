@@ -3,10 +3,21 @@ import Layout from "../../layouts/Layout.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import Media from "../../components/Media.astro";
+import Odometer from "../../components/Odometer.astro";
 import { projects } from "../../data/projects";
 import { SITE_URL, WEBSITE_ID, breadcrumbSchema } from "../../data/schema";
 
+// Newest first. Array sort is stable, so projects from the same year keep
+// their order from projects.ts.
+const sortedProjects = [...projects].sort((a, b) => b.year - a.year);
+
 const allTags = [...new Set(projects.flatMap((p) => p.tags))];
+
+// The counter renders with the newest year already dialed in, so it reads
+// correctly before the script runs (or if it never does).
+const firstYear = sortedProjects[0]?.year ?? new Date().getFullYear();
+const firstYearCount = sortedProjects.filter((p) => p.year === firstYear).length;
+const projectCount = (n: number) => `${n} ${n === 1 ? "project" : "projects"}`;
 
 const schema = [
   {
@@ -15,7 +26,7 @@ const schema = [
     isPartOf: { "@id": WEBSITE_ID },
     mainEntity: {
       "@type": "ItemList",
-      itemListElement: projects.map((project, i) => ({
+      itemListElement: sortedProjects.map((project, i) => ({
         "@type": "ListItem",
         position: i + 1,
         url: `${SITE_URL}/work/${project.slug}`,
@@ -58,28 +69,56 @@ const schema = [
         </div>
       </div>
 
-      <div class="project-grid">
+      <div class="year-bar" data-year-bar aria-hidden="true">
+        <span class="year-bar-label">Year</span>
+        <span class="year-bar-year"><Odometer value={firstYear} /></span>
+        <span class="year-bar-count" data-year-count>{projectCount(firstYearCount)}</span>
+      </div>
+
+      {/* Wide screens: a timeline in the left gutter. The track is a small map
+          of the list with a tick where each year starts; it slides so the
+          point you've scrolled to sits at the middle of the screen, beside the
+          year. A tick crossing the middle is a new year's first project
+          crossing it too, so the year rolls as that project lines up with it. */}
+      <div class="year-rail" data-year-rail aria-hidden="true">
+        <div class="rail-window">
+          <div class="rail-track" data-rail-track>
+            <div class="rail-fill" data-rail-fill></div>
+          </div>
+        </div>
+        <div class="rail-readout">
+          <span class="rail-marker"></span>
+          <span class="rail-year"><Odometer value={firstYear} /></span>
+        </div>
+      </div>
+
+      <ul class="project-list">
         {
-          projects.map((project) => (
-            <a
-              href={`/work/${project.slug}`}
-              class="project-card"
-              data-tags={project.tags.join(",")}
-            >
-              <div class="card-image">
-                {project.thumbnail && <Media
-                  src={project.thumbnail}
-                  alt={project.title}
-                />}
+          sortedProjects.map((project) => (
+            <li class="project-row" data-tags={project.tags.join(",")} data-year={project.year}>
+              <div class="row-heading">
+                <h2>
+                  <a href={`/work/${project.slug}`} class="row-link">{project.title}</a>
+                </h2>
+                <p class="visually-hidden"><time datetime={String(project.year)}>{project.year}</time></p>
+                <div class="badge-list">
+                  {project.tags.map((tag) => <span class="badge">{tag}</span>)}
+                </div>
               </div>
-              <h2>{project.title}</h2>
-              <div class="badge-list tags">
-                {project.tags.map((tag) => <span class="badge">{tag}</span>)}
-              </div>
-            </a>
+              <a href={`/work/${project.slug}`} class="row-thumb" tabindex="-1" aria-hidden="true">
+                {project.thumbnail && <Media src={project.thumbnail} alt="" />}
+              </a>
+              <p class="row-description">{project.description}</p>
+              <span class="row-cta" aria-hidden="true">
+                View project
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 10h12M11 5l5 5-5 5" />
+                </svg>
+              </span>
+            </li>
           ))
         }
-      </div>
+      </ul>
     </div>
   </main>
   <Footer />
@@ -175,60 +214,432 @@ const schema = [
     pointer-events: none;
   }
 
-  .project-grid {
+  .project-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 80px;
+  }
+
+  /* One project per row, split by a hairline: name, thumbnail, summary, link. */
+  .project-row {
+    position: relative;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-7) var(--space-6);
-    padding-bottom: 80px;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2.2fr) minmax(0, 3fr) auto;
+    grid-template-areas: "heading thumb description cta";
+    gap: var(--space-5);
+    align-items: start;
+    padding: var(--space-6) 0;
+    border-top: 1px solid var(--color-border);
   }
 
-  .project-card {
-    display: block;
-    color: var(--color-text);
-  }
-
-  .project-card.hidden {
+  .project-row.hidden {
     display: none;
   }
 
-  .card-image {
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-    background: var(--color-tag-bg);
-    margin-bottom: var(--space-4);
+  .row-heading {
+    grid-area: heading;
   }
 
-  .card-image :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .project-card h2 {
+  .row-heading h2 {
     font-size: var(--text-lg);
-    font-weight: 300;
-    margin-bottom: var(--space-3);
+    font-weight: 400;
     letter-spacing: -0.01em;
-    transition: opacity 0.15s;
+    line-height: 1.3;
+    margin: 0 0 var(--space-1);
   }
 
-  @media (hover: hover) {
-    .project-card:hover h2 {
-      opacity: 0.6;
+  .row-link {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  /* The title link covers the whole row, so the thumbnail and the CTA are
+     click targets too, without nesting everything inside one long link. */
+  .row-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .row-link:focus-visible {
+    outline: none;
+  }
+
+  .row-link:focus-visible::after {
+    outline: 2px solid var(--color-text);
+    outline-offset: 4px;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .row-heading h2 + .visually-hidden + .badge-list {
+    margin-top: var(--space-3);
+  }
+
+  /* Year counter. It sticks under the nav and rolls to the year of whichever
+     project is passing beneath it; the rows are sorted newest first, so it
+     counts down through the years as you scroll. Decorative: each row also
+     carries its year as visually hidden text. */
+  .year-bar {
+    position: sticky;
+    top: var(--nav-height);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    background: var(--color-bg);
+    /* The divider between the nav and the counter. */
+    border-top: 1px solid var(--color-border);
+    box-shadow: 0 1px 0 transparent;
+    transition: box-shadow 0.2s;
+  }
+
+  .year-bar.is-stuck {
+    box-shadow: 0 1px 0 var(--color-border);
+  }
+
+  .year-bar-label,
+  .year-bar-count {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .year-bar-count {
+    margin-left: auto;
+  }
+
+  .year-bar-year {
+    font-size: var(--text-xl);
+  }
+
+  /* Gutter timeline, for screens wide enough to have a gutter to put it in.
+     Below that, the sticky bar above does the job. */
+  .year-rail {
+    display: none;
+  }
+
+  @media (min-width: 1440px) {
+    .year-bar {
+      display: none;
+    }
+
+    .year-rail {
+      --rail-height: 56vh;
+      display: block;
+      position: fixed;
+      top: calc(50% - var(--rail-height) / 2);
+      /* Out toward the screen edge, a fifth of the way into the gutter, so
+         the readout keeps clear air between itself and the rows. */
+      left: max(24px, calc((100vw - var(--max-width)) / 2 * 0.2));
+      height: var(--rail-height);
+      width: 1px;
+      z-index: 5;
+      opacity: 0;
+      /* A slow fade in, once scrolling starts. */
+      transition: opacity 1s ease;
+      pointer-events: none;
+    }
+
+    .year-rail.is-visible {
+      opacity: 1;
     }
   }
 
+  /* The track fades out toward both ends so it reads as a window onto a
+     longer timeline. */
+  .rail-window {
+    position: absolute;
+    inset: 0 -8px;
+    overflow: hidden;
+    mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
+  }
+
+  .rail-track {
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    width: 1px;
+    height: var(--track-length, 0px);
+    background: var(--color-border);
+    transform: translateY(calc(var(--track-offset, 0px) * -1));
+  }
+
+  .rail-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: var(--track-offset, 0px);
+    background: var(--color-text);
+  }
+
+  .rail-track :global(.rail-tick) {
+    position: absolute;
+    left: 0;
+    width: 7px;
+    height: 1px;
+    background: var(--color-border);
+    transition: background-color 0.3s;
+  }
+
+  .rail-track :global(.rail-tick.is-passed) {
+    background: var(--color-text);
+  }
+
+  .rail-readout {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .rail-marker {
+    width: 7px;
+    height: 7px;
+    margin-left: -3px;
+    border-radius: 50%;
+    background: var(--color-text);
+  }
+
+  .rail-year {
+    font-size: var(--text-lg);
+  }
+
+  /* Same frame as the homepage cards: 16:10, cropped to fill. The thumbnail is
+     its own link (hidden from assistive tech, since the title link already
+     names the project) so a click on the image always lands, even while the
+     hover zoom lifts it above the row-wide title link. */
+  .row-thumb {
+    grid-area: thumb;
+    display: block;
+    position: relative;
+    z-index: 1;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--color-tag-bg);
+  }
+
+  .row-thumb :global(img),
+  .row-thumb :global(video) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: auto;
+    transition: transform 0.4s ease;
+  }
+
+  .row-description {
+    grid-area: description;
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .row-cta {
+    grid-area: cta;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-md);
+    color: var(--color-text);
+    white-space: nowrap;
+  }
+
+  .row-cta svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease;
+  }
+
+  @media (hover: hover) {
+    .project-row:hover .row-cta svg {
+      transform: translateX(4px);
+    }
+
+    .project-row:hover .row-thumb :global(img),
+    .project-row:hover .row-thumb :global(video) {
+      transform: scale(1.02);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .year-bar,
+    .year-rail,
+    .rail-track :global(.rail-tick),
+    .row-cta svg,
+    .row-thumb :global(img),
+    .row-thumb :global(video) {
+      transition: none;
+    }
+  }
+
+  /* Tablet: the link drops under the summary so the three columns keep room. */
+  @media (max-width: 1024px) {
+    .project-row {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr);
+      grid-template-areas:
+        "heading thumb description"
+        "heading thumb cta";
+      grid-template-rows: auto 1fr;
+      row-gap: var(--space-4);
+    }
+  }
+
+  /* Phone: stack name, thumbnail, summary, link. */
   @media (max-width: 768px) {
-    .project-grid {
-      grid-template-columns: 1fr;
-      gap: var(--space-6);
+    .project-row {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        "heading"
+        "thumb"
+        "description"
+        "cta";
+      grid-template-rows: none;
+      gap: var(--space-3);
+      padding: var(--space-5) 0;
     }
   }
 </style>
 
 <script>
   const filter = document.getElementById("type-filter") as HTMLSelectElement;
-  const cards = document.querySelectorAll<HTMLAnchorElement>(".project-card");
+  const cards = document.querySelectorAll<HTMLLIElement>(".project-row");
+  const list = document.querySelector<HTMLElement>(".project-list");
+  const bar = document.querySelector<HTMLElement>("[data-year-bar]");
+  const rail = document.querySelector<HTMLElement>("[data-year-rail]");
+  const track = document.querySelector<HTMLElement>("[data-rail-track]");
+  const counters = document.querySelectorAll<HTMLElement>("[data-odometer]");
+  const counts = document.querySelectorAll<HTMLElement>("[data-year-count]");
+  const nav = document.querySelector<HTMLElement>("nav:not(.breadcrumbs)");
+  const wide = window.matchMedia("(min-width: 1440px)");
+
+  // Stick flush under the nav. --nav-height is a round site-wide estimate,
+  // so measure the real bar instead and follow it if it changes size.
+  if (bar && nav) {
+    const pin = () => bar.style.setProperty("top", `${nav.getBoundingClientRect().height}px`);
+    pin();
+    new ResizeObserver(pin).observe(nav);
+  }
+
+  let shownYear = "";
+  let ticks: { el: HTMLElement; at: number }[] = [];
+
+  const visibleCards = () => [...cards].filter((card) => !card.classList.contains("hidden"));
+
+  // One tick per year, at the point in the list where that year's first
+  // project starts, as a fraction of the list. Rebuilt on filter and resize.
+  function buildTicks() {
+    if (!track || !list) return;
+    ticks.forEach((tick) => tick.el.remove());
+    ticks = [];
+    const listRect = list.getBoundingClientRect();
+    // No tick for the first year: the line itself starts there.
+    let lastYear = visibleCards()[0]?.dataset.year ?? "";
+    for (const card of visibleCards()) {
+      if (card.dataset.year === lastYear) continue;
+      lastYear = card.dataset.year ?? "";
+      const el = document.createElement("span");
+      el.className = "rail-tick";
+      track.append(el);
+      ticks.push({ el, at: (card.getBoundingClientRect().top - listRect.top) / listRect.height });
+    }
+  }
+
+  // The current year belongs to the first row whose bottom is still below the
+  // reading line. With the gutter timeline that line is the middle of the
+  // screen, where the year sits; with the sticky bar it's a third of the way
+  // down the space under the bar, so a year never stays lit while its last
+  // row is mostly gone. Read on scroll through rAF, so it stays cheap.
+  function update() {
+    if (!list) return;
+    const visible = visibleCards();
+    const listRect = list.getBoundingClientRect();
+    let line: number;
+
+    if (wide.matches && rail && track) {
+      line = window.innerHeight / 2;
+      const length = rail.clientHeight * 1.5;
+      // Extra line before the first year and after the last, so the dot and
+      // the year beside it always sit on the line, never past either end.
+      const lead = 48;
+      const progress = Math.min(1, Math.max(0, (line - listRect.top) / listRect.height));
+      rail.style.setProperty("--track-length", `${lead + length + lead}px`);
+      rail.style.setProperty("--track-offset", `${lead + progress * length}px`);
+      ticks.forEach((tick) => {
+        tick.el.style.top = `${lead + tick.at * length}px`;
+        tick.el.classList.toggle("is-passed", tick.at <= progress + 0.0005);
+      });
+      // Stays out of the way on landing and fades in once you start
+      // scrolling (or land mid-page), while the list is on screen.
+      const scrolled = window.scrollY > 40;
+      rail.classList.toggle(
+        "is-visible",
+        scrolled && visible.length > 0 && listRect.top < window.innerHeight * 0.9 && listRect.bottom > window.innerHeight * 0.2,
+      );
+    } else {
+      if (!bar) return;
+      const barRect = bar.getBoundingClientRect();
+      line = barRect.bottom + (window.innerHeight - barRect.bottom) / 3;
+      const navOffset = parseFloat(getComputedStyle(bar).top) || 0;
+      bar.classList.toggle("is-stuck", barRect.top <= navOffset + 0.5);
+    }
+
+    // At the very bottom the last rows may never reach the line, so hand the
+    // counter to the last project rather than leaving its year dimmed.
+    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+    const current = atBottom
+      ? visible.at(-1)
+      : visible.find((card) => card.getBoundingClientRect().bottom > line) ?? visible.at(-1);
+    const year = current?.dataset.year;
+    if (!year) return;
+
+    const total = visible.filter((card) => card.dataset.year === year).length;
+    counts.forEach((el) => (el.textContent = `${total} ${total === 1 ? "project" : "projects"}`));
+
+    if (year === shownYear) return;
+    shownYear = year;
+    counters.forEach((counter) => {
+      const digits = counter.querySelectorAll<HTMLElement>(".odometer-digit");
+      year.split("").forEach((digit, i) => digits[i]?.style.setProperty("--d", digit));
+    });
+  }
+
+  let ticking = false;
+  const requestUpdate = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      update();
+    });
+  };
+
+  const rebuild = () => {
+    buildTicks();
+    update();
+  };
+
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", rebuild);
+  wide.addEventListener("change", rebuild);
+  // Thumbnails and fonts settle row heights after first paint.
+  if (list) new ResizeObserver(rebuild).observe(list);
+  rebuild();
 
   filter.addEventListener("change", () => {
     const value = filter.value;
@@ -240,5 +651,6 @@ const schema = [
         card.classList.toggle("hidden", !tags.includes(value));
       }
     });
+    rebuild();
   });
 </script>

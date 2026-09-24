@@ -84,29 +84,27 @@ const projects = getHomepageProjects();
 
   requestAnimationFrame(() => firstProject?.classList.add("visible"));
 
-  // Line the first project's image up with the headline block. Centering the
-  // whole row would count its caption too and leave the image sitting high,
-  // so measure both and shift the frame by the difference.
+  // Center the first project, image and caption together, on the headline
+  // block. Measure both and shift the frame by the difference.
   const firstFrame = document.querySelector<HTMLElement>(".first-project-frame");
-  const firstImage = firstFrame?.querySelector<HTMLElement>(".cell-image");
   const headline = document.querySelector<HTMLElement>(".headline-block");
   const splitView = window.matchMedia("(min-width: 769px)");
 
   function alignFirstProject() {
-    if (!firstFrame || !firstImage || !headline) return;
+    if (!firstFrame || !firstProject || !headline) return;
     if (!splitView.matches) {
       firstFrame.style.removeProperty("--align-shift");
       return;
     }
     const current = parseFloat(firstFrame.style.getPropertyValue("--align-shift")) || 0;
     const head = headline.getBoundingClientRect();
-    const image = firstImage.getBoundingClientRect();
+    const project = firstProject.getBoundingClientRect();
     // The headline is sticky, so its place on screen holds while scrolling;
-    // compare it with where the image sits when the page is at the top.
+    // compare it with where the project sits when the page is at the top.
     // Leave out the row's entrance slide, which may still be in flight.
-    const entrance = firstProject ? new DOMMatrixReadOnly(getComputedStyle(firstProject).transform).m42 : 0;
-    const imageCenterAtTop = image.top + window.scrollY - current - entrance + image.height / 2;
-    const shift = (head.top + head.bottom) / 2 - imageCenterAtTop;
+    const entrance = new DOMMatrixReadOnly(getComputedStyle(firstProject).transform).m42;
+    const projectCenterAtTop = project.top + window.scrollY - current - entrance + project.height / 2;
+    const shift = (head.top + head.bottom) / 2 - projectCenterAtTop;
     firstFrame.style.setProperty("--align-shift", `${shift.toFixed(1)}px`);
   }
 
@@ -771,8 +769,8 @@ const projects = getHomepageProjects();
       min-height: calc(100vh - var(--nav-height));
       display: flex;
       align-items: center;
-      /* --align-shift is measured in the script so the image, not the image
-         plus its caption, centers on the headline block. */
+      /* --align-shift is measured in the script so the project, image and
+         caption together, centers on the headline block. */
       transform: translateY(var(--align-shift, calc(var(--nav-height) / -2)));
     }
 
