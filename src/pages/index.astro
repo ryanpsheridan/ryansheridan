@@ -30,7 +30,7 @@ const projects = getHomepageProjects();
               to it. */}
           <p class="intro" data-spec="type" data-spec-name="Body">
             I build intuitive, scalable web experiences rooted in solid fundamentals.{" "}
-            <span class="intro-hint">Press <button type="button" class="kbd-toggle" aria-pressed="false" aria-label="Show the specs (shortcut I)" data-blueprint-toggle>I</button> to peek under the hood.</span>
+            <span class="intro-hint"><span class="hint-press">Press</span><span class="hint-tap">Tap</span> <button type="button" class="kbd-toggle" aria-pressed="false" aria-label="Show the specs (shortcut I)" data-blueprint-toggle>I</button> to peek under the hood.</span>
           </p>
           <p class="tagline" data-spec="type" data-spec-name="Meta">Based out of Austin, Texas</p>
           <div class="cta-row">
@@ -151,7 +151,7 @@ const projects = getHomepageProjects();
    */
   const page = document.querySelector<HTMLElement>("main[data-blueprint-scope]");
   const blueprintToggle = document.querySelector<HTMLButtonElement>("[data-blueprint-toggle]");
-    const columns = document.querySelector<HTMLElement>("[data-blueprint-columns]");
+  const columns = document.querySelector<HTMLElement>("[data-blueprint-columns]");
 
   if (page && blueprintToggle && columns) {
     const splitInner = page.querySelector<HTMLElement>(".split-inner")!;
@@ -277,8 +277,6 @@ const projects = getHomepageProjects();
       build();
     }
 
-    const desktop = window.matchMedia("(min-width: 769px)");
-
     blueprintToggle.addEventListener("click", () => setBlueprint(!page.classList.contains("is-blueprint")));
 
     document.querySelector("[data-blueprint-off]")?.addEventListener("click", () => setBlueprint(false));
@@ -292,16 +290,10 @@ const projects = getHomepageProjects();
     // typing or holding a modifier, so it never steals a browser shortcut.
     document.addEventListener("keydown", (event) => {
       if (event.key !== "i" && event.key !== "I") return;
-      if (event.metaKey || event.ctrlKey || event.altKey || event.repeat || !desktop.matches) return;
+      if (event.metaKey || event.ctrlKey || event.altKey || event.repeat) return;
       const target = event.target as HTMLElement | null;
       if (target?.closest("input, textarea, select, [contenteditable]")) return;
       setBlueprint(!page.classList.contains("is-blueprint"));
-    });
-
-    // Leaving the desktop layout with the specs up would strand them with
-    // no way to put them away.
-    window.matchMedia("(max-width: 768px)").addEventListener("change", (event) => {
-      if (event.matches && page.classList.contains("is-blueprint")) setBlueprint(false);
     });
 
     let queued = false;
@@ -591,7 +583,7 @@ const projects = getHomepageProjects();
   .blueprint-bar {
     position: fixed;
     left: 50%;
-    bottom: 24px;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
     z-index: 5;
     display: flex;
     align-items: center;
@@ -640,6 +632,27 @@ const projects = getHomepageProjects();
     font-size: 12px;
     opacity: 0.85;
     padding-right: 10px;
+  }
+
+  /* Touch screens tap the key rather than press it, and have no keys to
+     list in the bar. */
+  .hint-tap {
+    display: none;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .hint-press,
+    .blueprint-bar-keys {
+      display: none;
+    }
+
+    .hint-tap {
+      display: inline;
+    }
+
+    .blueprint-bar {
+      padding-right: 6px;
+    }
   }
 
   .blueprint-bar kbd {
@@ -771,12 +784,6 @@ const projects = getHomepageProjects();
   }
 
   @media (max-width: 768px) {
-    /* No keyboard to press and no room for the specs, so the hint and the
-       bar stay desktop only. */
-    .intro-hint,
-    .blueprint-bar {
-      display: none;
-    }
 
     .split-inner {
       flex-direction: column;
