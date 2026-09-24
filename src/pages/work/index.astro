@@ -563,7 +563,8 @@ const schema = [
     ticks.forEach((tick) => tick.el.remove());
     ticks = [];
     const listRect = list.getBoundingClientRect();
-    let lastYear = "";
+    // No tick for the first year: the line itself starts there.
+    let lastYear = visibleCards()[0]?.dataset.year ?? "";
     for (const card of visibleCards()) {
       if (card.dataset.year === lastYear) continue;
       lastYear = card.dataset.year ?? "";
@@ -588,11 +589,14 @@ const schema = [
     if (wide.matches && rail && track) {
       line = window.innerHeight / 2;
       const length = rail.clientHeight * 1.5;
+      // Extra line before the first year and after the last, so the dot and
+      // the year beside it always sit on the line, never past either end.
+      const lead = 48;
       const progress = Math.min(1, Math.max(0, (line - listRect.top) / listRect.height));
-      rail.style.setProperty("--track-length", `${length}px`);
-      rail.style.setProperty("--track-offset", `${progress * length}px`);
+      rail.style.setProperty("--track-length", `${lead + length + lead}px`);
+      rail.style.setProperty("--track-offset", `${lead + progress * length}px`);
       ticks.forEach((tick) => {
-        tick.el.style.top = `${tick.at * length}px`;
+        tick.el.style.top = `${lead + tick.at * length}px`;
         tick.el.classList.toggle("is-passed", tick.at <= progress + 0.0005);
       });
       // Stays out of the way on landing and fades in once you start
