@@ -405,7 +405,7 @@ export const projects: Project[] = [
     title: "Case Study PDFs in Claude Design",
     description: "A Claude Design system that replaces hand-built InDesign case study PDFs, saving design and marketing time on every copy change and layout update.",
     ogImage: "/project-claude-design-pdf1.jpg",
-    thumbnail: "/claude-design-pdf-cover-featured-animated.svg",
+    thumbnail: "/claude-design-pdf-figma-canvas-animated.svg",
     showOnHomepage: true,
     tags: ["Design System", "Automation"],
     tools: ["Claude Design", "Figma", "html.to.design"],
