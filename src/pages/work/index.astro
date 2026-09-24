@@ -96,7 +96,10 @@ const schema = [
         {
           sortedProjects.map((project) => (
             <li class="project-row" data-tags={project.tags.join(",")} data-year={project.year}>
-              <div class="row-heading">
+              <a href={`/work/${project.slug}`} class="row-thumb" tabindex="-1" aria-hidden="true">
+                {project.thumbnail && <Media src={project.thumbnail} alt="" />}
+              </a>
+              <div class="row-body">
                 <h2>
                   <a href={`/work/${project.slug}`} class="row-link">{project.title}</a>
                 </h2>
@@ -104,11 +107,8 @@ const schema = [
                 <div class="badge-list">
                   {project.tags.map((tag) => <span class="badge">{tag}</span>)}
                 </div>
+                <p class="row-description">{project.description}</p>
               </div>
-              <a href={`/work/${project.slug}`} class="row-thumb" tabindex="-1" aria-hidden="true">
-                {project.thumbnail && <Media src={project.thumbnail} alt="" />}
-              </a>
-              <p class="row-description">{project.description}</p>
               <span class="row-cta" aria-hidden="true">
                 View project
                 <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -220,15 +220,17 @@ const schema = [
     padding: 0 0 80px;
   }
 
-  /* One project per row, split by a hairline: name, thumbnail, summary, link. */
+  /* One project per row, split by a hairline: thumbnail on the left, then
+     the name, tags and summary as one column, then the link out on its own at
+     the far right. Generous gutters and padding keep each row breathing. */
   .project-row {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(0, 2.2fr) minmax(0, 3fr) auto;
-    grid-template-areas: "heading thumb description cta";
-    gap: var(--space-5);
+    grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) auto;
+    grid-template-areas: "thumb body cta";
+    column-gap: var(--space-7);
     align-items: start;
-    padding: var(--space-6) 0;
+    padding: var(--space-7) 0;
     border-top: 1px solid var(--color-border);
   }
 
@@ -236,11 +238,14 @@ const schema = [
     display: none;
   }
 
-  .row-heading {
-    grid-area: heading;
+  .row-body {
+    grid-area: body;
+    /* Keeps the summary to a comfortable measure on wide screens, leaving
+       open space between the text and the link. */
+    max-width: 52ch;
   }
 
-  .row-heading h2 {
+  .row-body h2 {
     font-size: var(--text-lg);
     font-weight: 400;
     letter-spacing: -0.01em;
@@ -279,7 +284,7 @@ const schema = [
     white-space: nowrap;
   }
 
-  .row-heading h2 + .visually-hidden + .badge-list {
+  .row-body h2 + .visually-hidden + .badge-list {
     margin-top: var(--space-3);
   }
 
@@ -443,11 +448,11 @@ const schema = [
   }
 
   .row-description {
-    grid-area: description;
+    margin-top: var(--space-4);
     font-size: var(--text-base);
     line-height: 1.6;
     color: var(--color-text-muted);
-    margin: 0;
+    margin-bottom: 0;
   }
 
   .row-cta {
@@ -488,29 +493,30 @@ const schema = [
     }
   }
 
-  /* Tablet: the link drops under the summary so the three columns keep room. */
+  /* Tablet: the link drops under the summary so the image and text keep room. */
   @media (max-width: 1024px) {
     .project-row {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       grid-template-areas:
-        "heading thumb description"
-        "heading thumb cta";
+        "thumb body"
+        "thumb cta";
       grid-template-rows: auto 1fr;
+      column-gap: var(--space-5);
       row-gap: var(--space-4);
+      padding: var(--space-6) 0;
     }
   }
 
-  /* Phone: stack name, thumbnail, summary, link. */
+  /* Phone: stack thumbnail, name and summary, link. */
   @media (max-width: 768px) {
     .project-row {
       grid-template-columns: minmax(0, 1fr);
       grid-template-areas:
-        "heading"
         "thumb"
-        "description"
+        "body"
         "cta";
       grid-template-rows: none;
-      gap: var(--space-3);
+      gap: var(--space-4);
       padding: var(--space-5) 0;
     }
   }
