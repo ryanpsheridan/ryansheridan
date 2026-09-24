@@ -89,7 +89,6 @@ const schema = [
         <div class="rail-readout">
           <span class="rail-marker"></span>
           <span class="rail-year"><Odometer value={firstYear} /></span>
-          <span class="rail-count" data-year-count>{projectCount(firstYearCount)}</span>
         </div>
       </div>
 
@@ -403,15 +402,12 @@ const schema = [
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    display: grid;
-    grid-template-columns: auto auto;
+    display: flex;
     align-items: center;
-    column-gap: 12px;
-    row-gap: 2px;
+    gap: 12px;
   }
 
   .rail-marker {
-    grid-row: 1;
     width: 7px;
     height: 7px;
     margin-left: -3px;
@@ -420,18 +416,7 @@ const schema = [
   }
 
   .rail-year {
-    grid-row: 1;
     font-size: var(--text-lg);
-  }
-
-  .rail-count {
-    grid-column: 2;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    color: var(--color-text-muted);
   }
 
   /* Same frame as the homepage cards: 16:10, cropped to fill. The thumbnail is
