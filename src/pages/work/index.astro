@@ -340,14 +340,15 @@ const schema = [
       display: block;
       position: fixed;
       top: calc(50% - var(--rail-height) / 2);
-      /* Centered in the gutter between the viewport edge and the content,
-         nudged left so the readout beside the line clears the content too. */
-      left: calc((100vw - var(--max-width)) / 4 - 28px);
+      /* Out toward the screen edge, a fifth of the way into the gutter, so
+         the readout keeps clear air between itself and the rows. */
+      left: max(24px, calc((100vw - var(--max-width)) / 2 * 0.2));
       height: var(--rail-height);
       width: 1px;
       z-index: 5;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      /* A slow fade in, once scrolling starts. */
+      transition: opacity 1s ease;
       pointer-events: none;
     }
 
