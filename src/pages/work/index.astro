@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import Media from "../../components/Media.astro";
+import Odometer from "../../components/Odometer.astro";
 import { projects } from "../../data/projects";
 import { SITE_URL, WEBSITE_ID, breadcrumbSchema } from "../../data/schema";
 
@@ -70,16 +71,26 @@ const schema = [
 
       <div class="year-bar" data-year-bar aria-hidden="true">
         <span class="year-bar-label">Year</span>
-        <span class="odometer" data-odometer>
-          {String(firstYear).split("").map((digit) => (
-            <span class="odometer-digit" style={`--d: ${digit}`}>
-              <span class="odometer-strip">
-                {Array.from({ length: 10 }, (_, n) => <span>{n}</span>)}
-              </span>
-            </span>
-          ))}
-        </span>
+        <span class="year-bar-year"><Odometer value={firstYear} /></span>
         <span class="year-bar-count" data-year-count>{projectCount(firstYearCount)}</span>
+      </div>
+
+      {/* Wide screens: a timeline in the left gutter. The track is a small map
+          of the list with a tick where each year starts; it slides so the
+          point you've scrolled to sits at the middle of the screen, beside the
+          year. A tick crossing the middle is a new year's first project
+          crossing it too, so the year rolls as that project lines up with it. */}
+      <div class="year-rail" data-year-rail aria-hidden="true">
+        <div class="rail-window">
+          <div class="rail-track" data-rail-track>
+            <div class="rail-fill" data-rail-fill></div>
+          </div>
+        </div>
+        <div class="rail-readout">
+          <span class="rail-marker"></span>
+          <span class="rail-year"><Odometer value={firstYear} /></span>
+          <span class="rail-count" data-year-count>{projectCount(firstYearCount)}</span>
+        </div>
       </div>
 
       <ul class="project-list">
@@ -325,35 +336,117 @@ const schema = [
     margin-left: auto;
   }
 
-  .odometer {
-    display: inline-flex;
+  .year-bar-year {
     font-size: var(--text-xl);
-    font-weight: 300;
-    letter-spacing: -0.01em;
-    font-variant-numeric: tabular-nums;
-    line-height: 1.2;
   }
 
-  .odometer-digit {
-    display: block;
-    height: 1.2em;
+  /* Gutter timeline, for screens wide enough to have a gutter to put it in.
+     Below that, the sticky bar above does the job. */
+  .year-rail {
+    display: none;
+  }
+
+  @media (min-width: 1440px) {
+    .year-bar {
+      display: none;
+    }
+
+    .year-rail {
+      --rail-height: 56vh;
+      display: block;
+      position: fixed;
+      top: calc(50% - var(--rail-height) / 2);
+      /* Centered in the gutter between the viewport edge and the content,
+         nudged left so the readout beside the line clears the content too. */
+      left: calc((100vw - var(--max-width)) / 4 - 28px);
+      height: var(--rail-height);
+      width: 1px;
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .year-rail.is-visible {
+      opacity: 1;
+    }
+  }
+
+  /* The track fades out toward both ends so it reads as a window onto a
+     longer timeline. */
+  .rail-window {
+    position: absolute;
+    inset: 0 -8px;
     overflow: hidden;
+    mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent);
   }
 
-  .odometer-strip {
-    display: flex;
-    flex-direction: column;
-    transform: translateY(calc(var(--d) * -10%));
-    transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  .rail-track {
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    width: 1px;
+    height: var(--track-length, 0px);
+    background: var(--color-border);
+    transform: translateY(calc(var(--track-offset, 0px) * -1));
   }
 
-  /* Right-hand digits settle last, like a mechanical counter. */
-  .odometer-digit:nth-child(3) .odometer-strip { transition-delay: 0.04s; }
-  .odometer-digit:nth-child(4) .odometer-strip { transition-delay: 0.08s; }
+  .rail-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: var(--track-offset, 0px);
+    background: var(--color-text);
+  }
 
-  .odometer-strip span {
-    display: block;
-    height: 1.2em;
+  .rail-track :global(.rail-tick) {
+    position: absolute;
+    left: 0;
+    width: 7px;
+    height: 1px;
+    background: var(--color-border);
+    transition: background-color 0.3s;
+  }
+
+  .rail-track :global(.rail-tick.is-passed) {
+    background: var(--color-text);
+  }
+
+  .rail-readout {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    column-gap: 12px;
+    row-gap: 2px;
+  }
+
+  .rail-marker {
+    grid-row: 1;
+    width: 7px;
+    height: 7px;
+    margin-left: -3px;
+    border-radius: 50%;
+    background: var(--color-text);
+  }
+
+  .rail-year {
+    grid-row: 1;
+    font-size: var(--text-lg);
+  }
+
+  .rail-count {
+    grid-column: 2;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-text-muted);
   }
 
   /* Same frame as the homepage cards: 16:10, cropped to fill. The thumbnail is
@@ -416,8 +509,9 @@ const schema = [
 
   @media (prefers-reduced-motion: reduce) {
     .project-row,
-    .odometer-strip,
     .year-bar,
+    .year-rail,
+    .rail-track :global(.rail-tick),
     .row-cta svg,
     .row-thumb :global(img),
     .row-thumb :global(video) {
@@ -456,10 +550,14 @@ const schema = [
 <script>
   const filter = document.getElementById("type-filter") as HTMLSelectElement;
   const cards = document.querySelectorAll<HTMLLIElement>(".project-row");
+  const list = document.querySelector<HTMLElement>(".project-list");
   const bar = document.querySelector<HTMLElement>("[data-year-bar]");
-  const digits = document.querySelectorAll<HTMLElement>("[data-odometer] .odometer-digit");
-  const count = document.querySelector<HTMLElement>("[data-year-count]");
+  const rail = document.querySelector<HTMLElement>("[data-year-rail]");
+  const track = document.querySelector<HTMLElement>("[data-rail-track]");
+  const counters = document.querySelectorAll<HTMLElement>("[data-odometer]");
+  const counts = document.querySelectorAll<HTMLElement>("[data-year-count]");
   const nav = document.querySelector<HTMLElement>("nav:not(.breadcrumbs)");
+  const wide = window.matchMedia("(min-width: 1440px)");
 
   // Stick flush under the nav. --nav-height is a round site-wide estimate,
   // so measure the real bar instead and follow it if it changes size.
@@ -470,23 +568,62 @@ const schema = [
   }
 
   let shownYear = "";
+  let ticks: { el: HTMLElement; at: number }[] = [];
 
   const visibleCards = () => [...cards].filter((card) => !card.classList.contains("hidden"));
 
-  // The current year belongs to the first row whose bottom is still below a
-  // reading line a third of the way down the space under the bar. Reading off
-  // the bar's own edge would keep a year lit while its last row is mostly gone
-  // and everything on screen is dimmed. Read on scroll through rAF, so it
-  // stays cheap on long scrolls.
-  function updateYear() {
-    if (!bar) return;
-    const barRect = bar.getBoundingClientRect();
-    const line = barRect.bottom + (window.innerHeight - barRect.bottom) / 3;
-    const navOffset = parseFloat(getComputedStyle(bar).top) || 0;
-    bar.classList.toggle("is-stuck", barRect.top <= navOffset + 0.5);
+  // One tick per year, at the point in the list where that year's first
+  // project starts, as a fraction of the list. Rebuilt on filter and resize.
+  function buildTicks() {
+    if (!track || !list) return;
+    ticks.forEach((tick) => tick.el.remove());
+    ticks = [];
+    const listRect = list.getBoundingClientRect();
+    let lastYear = "";
+    for (const card of visibleCards()) {
+      if (card.dataset.year === lastYear) continue;
+      lastYear = card.dataset.year ?? "";
+      const el = document.createElement("span");
+      el.className = "rail-tick";
+      track.append(el);
+      ticks.push({ el, at: (card.getBoundingClientRect().top - listRect.top) / listRect.height });
+    }
+  }
 
+  // The current year belongs to the first row whose bottom is still below the
+  // reading line. With the gutter timeline that line is the middle of the
+  // screen, where the year sits; with the sticky bar it's a third of the way
+  // down the space under the bar, so a year never stays lit while its last
+  // row is mostly gone. Read on scroll through rAF, so it stays cheap.
+  function update() {
+    if (!list) return;
     const visible = visibleCards();
-    // At the very bottom the last rows may never reach the bar, so hand the
+    const listRect = list.getBoundingClientRect();
+    let line: number;
+
+    if (wide.matches && rail && track) {
+      line = window.innerHeight / 2;
+      const length = rail.clientHeight * 1.5;
+      const progress = Math.min(1, Math.max(0, (line - listRect.top) / listRect.height));
+      rail.style.setProperty("--track-length", `${length}px`);
+      rail.style.setProperty("--track-offset", `${progress * length}px`);
+      ticks.forEach((tick) => {
+        tick.el.style.top = `${tick.at * length}px`;
+        tick.el.classList.toggle("is-passed", tick.at <= progress + 0.0005);
+      });
+      rail.classList.toggle(
+        "is-visible",
+        visible.length > 0 && listRect.top < window.innerHeight * 0.9 && listRect.bottom > window.innerHeight * 0.2,
+      );
+    } else {
+      if (!bar) return;
+      const barRect = bar.getBoundingClientRect();
+      line = barRect.bottom + (window.innerHeight - barRect.bottom) / 3;
+      const navOffset = parseFloat(getComputedStyle(bar).top) || 0;
+      bar.classList.toggle("is-stuck", barRect.top <= navOffset + 0.5);
+    }
+
+    // At the very bottom the last rows may never reach the line, so hand the
     // counter to the last project rather than leaving its year dimmed.
     const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
     const current = atBottom
@@ -498,11 +635,14 @@ const schema = [
     visible.forEach((card) => card.classList.toggle("is-dimmed", card.dataset.year !== year));
 
     const total = visible.filter((card) => card.dataset.year === year).length;
-    if (count) count.textContent = `${total} ${total === 1 ? "project" : "projects"}`;
+    counts.forEach((el) => (el.textContent = `${total} ${total === 1 ? "project" : "projects"}`));
 
     if (year === shownYear) return;
     shownYear = year;
-    year.split("").forEach((digit, i) => digits[i]?.style.setProperty("--d", digit));
+    counters.forEach((counter) => {
+      const digits = counter.querySelectorAll<HTMLElement>(".odometer-digit");
+      year.split("").forEach((digit, i) => digits[i]?.style.setProperty("--d", digit));
+    });
   }
 
   let ticking = false;
@@ -511,13 +651,21 @@ const schema = [
     ticking = true;
     requestAnimationFrame(() => {
       ticking = false;
-      updateYear();
+      update();
     });
   };
 
+  const rebuild = () => {
+    buildTicks();
+    update();
+  };
+
   window.addEventListener("scroll", requestUpdate, { passive: true });
-  window.addEventListener("resize", requestUpdate);
-  updateYear();
+  window.addEventListener("resize", rebuild);
+  wide.addEventListener("change", rebuild);
+  // Thumbnails and fonts settle row heights after first paint.
+  if (list) new ResizeObserver(rebuild).observe(list);
+  rebuild();
 
   filter.addEventListener("change", () => {
     const value = filter.value;
@@ -529,6 +677,6 @@ const schema = [
         card.classList.toggle("hidden", !tags.includes(value));
       }
     });
-    updateYear();
+    rebuild();
   });
 </script>

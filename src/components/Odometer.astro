@@ -1,0 +1,61 @@
+---
+/**
+ * A four-digit counter that rolls each digit to its new value, like a
+ * mechanical odometer. Script sets `--d` on each `.odometer-digit` to change
+ * the number; it renders with `value` already dialed in so it reads correctly
+ * before any script runs. Size it with font-size on the parent.
+ */
+interface Props {
+  value: number | string;
+}
+
+const { value } = Astro.props;
+---
+
+<span class="odometer" data-odometer>
+  {String(value).split("").map((digit) => (
+    <span class="odometer-digit" style={`--d: ${digit}`}>
+      <span class="odometer-strip">
+        {Array.from({ length: 10 }, (_, n) => <span>{n}</span>)}
+      </span>
+    </span>
+  ))}
+</span>
+
+<style>
+  .odometer {
+    display: inline-flex;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+  }
+
+  .odometer-digit {
+    display: block;
+    height: 1.2em;
+    overflow: hidden;
+  }
+
+  .odometer-strip {
+    display: flex;
+    flex-direction: column;
+    transform: translateY(calc(var(--d) * -10%));
+    transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* Right-hand digits settle last, like a mechanical counter. */
+  .odometer-digit:nth-child(3) .odometer-strip { transition-delay: 0.04s; }
+  .odometer-digit:nth-child(4) .odometer-strip { transition-delay: 0.08s; }
+
+  .odometer-strip span {
+    display: block;
+    height: 1.2em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .odometer-strip {
+      transition: none;
+    }
+  }
+</style>
