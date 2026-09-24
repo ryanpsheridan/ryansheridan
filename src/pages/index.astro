@@ -30,7 +30,7 @@ const projects = getHomepageProjects();
               to it. */}
           <p class="intro" data-spec="type" data-spec-name="Body">
             I build intuitive, scalable web experiences rooted in solid fundamentals.{" "}
-            <span class="intro-hint"><span class="hint-press">Press</span><span class="hint-tap">Tap</span> <button type="button" class="kbd-toggle" aria-pressed="false" aria-label="Show the specs (shortcut I)" data-blueprint-toggle>I</button> to peek under the hood.</span>
+            <span class="intro-hint"><span class="hint-key"><span class="hint-press">Press</span><span class="hint-tap">Tap</span> <button type="button" class="kbd-toggle" aria-pressed="false" aria-label="Show the specs (shortcut I)" data-blueprint-toggle>I</button></span> to peek under the&nbsp;hood.</span>
           </p>
           <p class="tagline" data-spec="type" data-spec-name="Meta">Based out of Austin, Texas</p>
           <div class="cta-row">
@@ -364,9 +364,9 @@ const projects = getHomepageProjects();
     color: var(--color-text-muted);
   }
 
-  /* Runs on from the sentence before it, but wraps as one piece so the key
-     never lands alone at the start of a line. */
-  .intro-hint {
+  /* Runs on from the sentence before it and wraps like any other text; only
+     the verb and its key hold together, so the key never starts a line. */
+  .hint-key {
     white-space: nowrap;
   }
 
