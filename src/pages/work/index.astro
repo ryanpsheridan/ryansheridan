@@ -3,7 +3,6 @@ import Layout from "../../layouts/Layout.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import Media from "../../components/Media.astro";
-import Odometer from "../../components/Odometer.astro";
 import { projects } from "../../data/projects";
 import { SITE_URL, WEBSITE_ID, breadcrumbSchema } from "../../data/schema";
 
@@ -13,10 +12,12 @@ const sortedProjects = [...projects].sort((a, b) => b.year - a.year);
 
 const allTags = [...new Set(projects.flatMap((p) => p.tags))];
 
-// The counter renders with the newest year already dialed in, so it reads
-// correctly before the script runs (or if it never does).
-const firstYear = sortedProjects[0]?.year ?? new Date().getFullYear();
-const firstYearCount = sortedProjects.filter((p) => p.year === firstYear).length;
+// One group per year, newest first, each with its own header.
+const years = [...new Set(sortedProjects.map((p) => p.year))];
+const yearGroups = years.map((year) => ({
+  year,
+  projects: sortedProjects.filter((p) => p.year === year),
+}));
 const projectCount = (n: number) => `${n} ${n === 1 ? "project" : "projects"}`;
 
 const schema = [
@@ -69,38 +70,49 @@ const schema = [
         </div>
       </div>
 
-      <div class="year-bar" data-year-bar aria-hidden="true">
-        <span class="year-bar-year"><Odometer value={firstYear} /></span>
-        <span class="year-bar-count" data-year-count>{projectCount(firstYearCount)}</span>
-      </div>
-
-      <ul class="project-list">
+      {/* Each year's header sits just above its first project's divider and
+          sticks under the nav while that year is on screen. The next year's
+          header comes up from below and pushes it out, because each one only
+          sticks within its own group. */}
+      <div class="year-groups">
         {
-          sortedProjects.map((project) => (
-            <li class="project-row" data-tags={project.tags.join(",")} data-year={project.year}>
-              <a href={`/work/${project.slug}`} class="row-thumb" tabindex="-1" aria-hidden="true">
-                {project.thumbnail && <Media src={project.thumbnail} alt="" />}
-              </a>
-              <div class="row-body">
-                <h2>
-                  <a href={`/work/${project.slug}`} class="row-link">{project.title}</a>
-                </h2>
-                <p class="visually-hidden"><time datetime={String(project.year)}>{project.year}</time></p>
-                <div class="badge-list">
-                  {project.tags.map((tag) => <span class="badge">{tag}</span>)}
-                </div>
-                <p class="row-description">{project.description}</p>
+          yearGroups.map((group) => (
+            <section class="year-group" data-year-group={group.year}>
+              <div class="year-bar" data-year-bar aria-hidden="true">
+                <span class="year-bar-year">{group.year}</span>
+                <span class="year-bar-count" data-year-count>{projectCount(group.projects.length)}</span>
               </div>
-              <span class="row-cta" aria-hidden="true">
-                View project
-                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 10h12M11 5l5 5-5 5" />
-                </svg>
-              </span>
-            </li>
+              <ul class="project-list">
+                {
+                  group.projects.map((project) => (
+                    <li class="project-row" data-tags={project.tags.join(",")} data-year={project.year}>
+                      <a href={`/work/${project.slug}`} class="row-thumb" tabindex="-1" aria-hidden="true">
+                        {project.thumbnail && <Media src={project.thumbnail} alt="" />}
+                      </a>
+                      <div class="row-body">
+                        <h2>
+                          <a href={`/work/${project.slug}`} class="row-link">{project.title}</a>
+                        </h2>
+                        <p class="visually-hidden"><time datetime={String(project.year)}>{project.year}</time></p>
+                        <div class="badge-list">
+                          {project.tags.map((tag) => <span class="badge">{tag}</span>)}
+                        </div>
+                        <p class="row-description">{project.description}</p>
+                      </div>
+                      <span class="row-cta" aria-hidden="true">
+                        View project
+                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M4 10h12M11 5l5 5-5 5" />
+                        </svg>
+                      </span>
+                    </li>
+                  ))
+                }
+              </ul>
+            </section>
           ))
         }
-      </ul>
+      </div>
     </div>
   </main>
   <Footer />
@@ -196,10 +208,24 @@ const schema = [
     pointer-events: none;
   }
 
+  .year-groups {
+    padding-bottom: 80px;
+  }
+
+  /* A little extra air where one year ends and the next begins, so the
+     change of year reads as a break and not just another row. */
+  .year-group + .year-group {
+    margin-top: var(--space-5);
+  }
+
+  .year-group.hidden {
+    display: none;
+  }
+
   .project-list {
     list-style: none;
     margin: 0;
-    padding: 0 0 80px;
+    padding: 0;
   }
 
   /* One project per row, split by a hairline: thumbnail on the left, then
@@ -272,17 +298,17 @@ const schema = [
     margin-top: var(--space-3);
   }
 
-  /* Year counter. It sticks under the nav and rolls to the year of whichever
-     project is passing beneath it; the rows are sorted newest first, so it
-     counts down through the years as you scroll. Decorative: each row also
+  /* Year headers. Each sticks under the nav only within its own group, so
+     as one year ends its header scrolls away and the next year's header,
+     already on its way up, takes its place. Decorative: each row also
      carries its year as visually hidden text. */
   .year-bar {
     position: sticky;
     top: var(--nav-height);
     z-index: 10;
     display: flex;
-    /* Year and count share a bottom line. */
-    align-items: flex-end;
+    /* Year and count share a baseline. */
+    align-items: baseline;
     /* Same above and below, so the bar is evenly padded once it sticks. */
     padding: 12px 0;
     background: var(--color-bg);
@@ -296,6 +322,14 @@ const schema = [
     box-shadow: 0 1px 0 var(--color-border);
   }
 
+  .year-bar-year {
+    font-size: var(--text-md);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+  }
+
   .year-bar-count {
     margin-left: auto;
     font-family: var(--font-mono);
@@ -304,15 +338,6 @@ const schema = [
     text-transform: uppercase;
     color: var(--color-text-muted);
     line-height: 1;
-    /* The odometer's digit window leaves a little more room under the year's
-       baseline than this line box leaves under the count's, so lift the count
-       by the difference to put both on one baseline. */
-    margin-bottom: 0.17em;
-  }
-
-  .year-bar-year {
-    display: flex;
-    font-size: var(--text-md);
   }
 
   /* Same frame as the homepage cards: 16:10, cropped to fill. The thumbnail is
@@ -414,81 +439,61 @@ const schema = [
 <script>
   const filter = document.getElementById("type-filter") as HTMLSelectElement;
   const cards = document.querySelectorAll<HTMLLIElement>(".project-row");
-  const list = document.querySelector<HTMLElement>(".project-list");
-  const bar = document.querySelector<HTMLElement>("[data-year-bar]");
-  const counters = document.querySelectorAll<HTMLElement>("[data-odometer]");
-  const counts = document.querySelectorAll<HTMLElement>("[data-year-count]");
+  const groups = document.querySelectorAll<HTMLElement>("[data-year-group]");
+  const bars = document.querySelectorAll<HTMLElement>("[data-year-bar]");
   const nav = document.querySelector<HTMLElement>("nav:not(.breadcrumbs)");
 
   // Stick flush under the nav. --nav-height is a round site-wide estimate,
   // so measure the real bar instead and follow it if it changes size.
-  if (bar && nav) {
-    const pin = () => bar.style.setProperty("top", `${nav.getBoundingClientRect().height}px`);
-    pin();
+  let navHeight = 0;
+  if (nav) {
+    const pin = () => {
+      navHeight = nav.getBoundingClientRect().height;
+      bars.forEach((bar) => bar.style.setProperty("top", `${navHeight}px`));
+      update();
+    };
     new ResizeObserver(pin).observe(nav);
   }
 
-  let shownYear = "";
-
-  const visibleCards = () => [...cards].filter((card) => !card.classList.contains("hidden"));
-
-  // The current year belongs to the first row whose bottom is still below the
-  // reading line, a third of the way down the space under the bar, so a year
-  // never stays lit while its last row is mostly gone. Read on scroll through
-  // rAF, so it stays cheap.
+  // A header is stuck once its group's top has scrolled up past the nav. It
+  // keeps its rule while the next year pushes it out, so the two trade places
+  // cleanly.
   function update() {
-    if (!list || !bar) return;
-    const visible = visibleCards();
-    const barRect = bar.getBoundingClientRect();
-    const line = barRect.bottom + (window.innerHeight - barRect.bottom) / 3;
-    const navOffset = parseFloat(getComputedStyle(bar).top) || 0;
-    bar.classList.toggle("is-stuck", barRect.top <= navOffset + 0.5);
-
-    // At the very bottom the last rows may never reach the line, so hand the
-    // counter to the last project rather than leaving its year dimmed.
-    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
-    const current = atBottom
-      ? visible.at(-1)
-      : visible.find((card) => card.getBoundingClientRect().bottom > line) ?? visible.at(-1);
-    const year = current?.dataset.year;
-    if (!year) return;
-
-    const total = visible.filter((card) => card.dataset.year === year).length;
-    counts.forEach((el) => (el.textContent = `${total} ${total === 1 ? "project" : "projects"}`));
-
-    if (year === shownYear) return;
-    shownYear = year;
-    counters.forEach((counter) => {
-      const digits = counter.querySelectorAll<HTMLElement>(".odometer-digit");
-      year.split("").forEach((digit, i) => digits[i]?.style.setProperty("--d", digit));
+    groups.forEach((group) => {
+      const bar = group.querySelector<HTMLElement>("[data-year-bar]");
+      if (!bar) return;
+      const groupTop = group.getBoundingClientRect().top;
+      bar.classList.toggle("is-stuck", groupTop < navHeight - 0.5);
     });
   }
 
   let ticking = false;
-  const requestUpdate = () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => {
-      ticking = false;
-      update();
-    });
-  };
-
-  window.addEventListener("scroll", requestUpdate, { passive: true });
-  window.addEventListener("resize", requestUpdate);
-  // Thumbnails and fonts settle row heights after first paint.
-  if (list) new ResizeObserver(requestUpdate).observe(list);
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        update();
+      });
+    },
+    { passive: true },
+  );
   update();
 
+  // Filter rows, then hide any year left empty and recount the rest.
   filter.addEventListener("change", () => {
     const value = filter.value;
     cards.forEach((card) => {
-      if (value === "all") {
-        card.classList.remove("hidden");
-      } else {
-        const tags = card.dataset.tags?.split(",") ?? [];
-        card.classList.toggle("hidden", !tags.includes(value));
-      }
+      const tags = card.dataset.tags?.split(",") ?? [];
+      card.classList.toggle("hidden", value !== "all" && !tags.includes(value));
+    });
+    groups.forEach((group) => {
+      const shown = group.querySelectorAll(".project-row:not(.hidden)").length;
+      group.classList.toggle("hidden", shown === 0);
+      const count = group.querySelector("[data-year-count]");
+      if (count) count.textContent = `${shown} ${shown === 1 ? "project" : "projects"}`;
     });
     update();
   });
