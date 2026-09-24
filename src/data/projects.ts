@@ -125,7 +125,7 @@ export const projects: Project[] = [
     title: "Feedonomics Rebrand & Design System",
     description: "A Feedonomics brand refresh that grew into a full rebrand, a new design system, and a move of the marketing site into Makeswift.",
     ogImage: "/project-feedonomics1.jpg",
-    thumbnail: "/feedonomics-featured-animated.svg",
+    thumbnail: "/feedonomics-data-journey-animated.svg",
     showOnHomepage: true,
     tags: ["Design System", "Web Design"],
     tools: ["Figma", "Makeswift", "Contentful"],
