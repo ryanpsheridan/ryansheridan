@@ -230,7 +230,9 @@ const schema = [
     grid-template-areas: "thumb body cta";
     column-gap: var(--space-7);
     align-items: start;
-    padding: var(--space-7) 0;
+    /* Halfway between the two largest steps: open, without the rows drifting
+       apart. */
+    padding: calc((var(--space-6) + var(--space-7)) / 2) 0;
     border-top: 1px solid var(--color-border);
   }
 
@@ -301,13 +303,16 @@ const schema = [
     gap: var(--space-3);
     padding: var(--space-3) 0;
     background: var(--color-bg);
-    /* The divider between the nav and the counter. */
-    border-top: 1px solid var(--color-border);
+    /* The divider between the nav and the counter. It only shows once the
+       bar snaps under the nav; before that the bar sits in the page with
+       nothing above it to divide from. */
+    border-top: 1px solid transparent;
     box-shadow: 0 1px 0 transparent;
-    transition: box-shadow 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
 
   .year-bar.is-stuck {
+    border-top-color: var(--color-border);
     box-shadow: 0 1px 0 var(--color-border);
   }
 
