@@ -90,11 +90,15 @@ const schema = [
               if (block.type === "carousel") {
                 const perView = block.perView ?? 3;
                 return (
-                  <div class="carousel" data-carousel data-per-view={perView}>
+                  <div
+                    class:list={["carousel", { "is-contained": block.contain }]}
+                    data-carousel
+                    data-per-view={perView}
+                  >
                     <div
                       class="carousel-track"
                       data-carousel-track
-                      style={`--per-view: ${perView}`}
+                      style={`--per-view: ${perView}${block.ratio ? `; --carousel-ratio: ${block.ratio}` : ""}`}
                       tabindex="0"
                       role="group"
                       aria-label="Photo carousel"
@@ -515,6 +519,14 @@ const schema = [
     border: 1px solid var(--color-border);
   }
 
+  .image-grid :global(video) {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: var(--media-ratio, auto);
+    border: 1px solid var(--color-border);
+  }
+
   .image-grid.is-framed {
     gap: var(--space-5);
   }
@@ -561,11 +573,16 @@ const schema = [
 
   .carousel-item :global(img) {
     width: 100%;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: var(--carousel-ratio, 3 / 4);
     object-fit: cover;
     display: block;
     border: 1px solid var(--color-border);
     cursor: zoom-in;
+  }
+
+  .carousel.is-contained .carousel-item :global(img) {
+    object-fit: contain;
+    background: #1e1e1e;
   }
 
   .carousel-item figcaption {

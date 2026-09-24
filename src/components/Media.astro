@@ -109,10 +109,65 @@ function intrinsicRatio(publicPath: string): string | undefined {
   return undefined;
 }
 
-const ratio = intrinsicRatio(src);
+/**
+ * Screen recordings are MP4s that play like an animated image: muted, looping
+ * forever, no controls. A WebP with the same basename is the poster, and it is
+ * also where the reserved box gets its ratio, since an MP4 header is not worth
+ * parsing here.
+ */
+const isVideo = /\.(mp4|webm)$/i.test(src);
+const poster = isVideo ? src.replace(/\.(mp4|webm)$/i, ".webp") : undefined;
+
+// Offer both encodings when both exist: WebM (VP9) for browsers built without
+// H.264, MP4 for everything else. Listed WebM first, since it is smaller.
+const videoSources = isVideo
+  ? [".webm", ".mp4"]
+      .map((ext) => src.replace(/\.(mp4|webm)$/i, ext))
+      .filter((candidate) => fs.existsSync(path.join(process.cwd(), "public", candidate)))
+  : [];
+
+const ratio = intrinsicRatio(poster ?? src);
 // Handed over as a custom property, not aspect-ratio itself, so a stylesheet
 // that wants a deliberate crop (the carousel's 3/4 frame) still wins.
 const sizing = ratio ? `--media-ratio: ${ratio}` : undefined;
 ---
 
-<img src={src} alt={alt} class={className} loading={loading} style={sizing} />
+{isVideo ? (
+  <video
+    poster={poster}
+    class="media-video"
+    style={sizing}
+    aria-label={alt || undefined}
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="metadata"
+    data-media-video
+  >
+    {(videoSources.length ? videoSources : [src]).map((source) => (
+      <source src={source} type={source.endsWith(".webm") ? "video/webm" : "video/mp4"} />
+    ))}
+  </video>
+) : (
+  <img src={src} alt={alt} class={className} loading={loading} style={sizing} />
+)}
+
+{isVideo && (
+  <script>
+    // Hold on the poster frame for anyone who asks for less motion.
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => {
+      document.querySelectorAll<HTMLVideoElement>("[data-media-video]").forEach((video) => {
+        if (reduce.matches) {
+          video.pause();
+          video.currentTime = 0;
+        } else {
+          video.play().catch(() => {});
+        }
+      });
+    };
+    sync();
+    reduce.addEventListener("change", sync);
+  </script>
+)}
