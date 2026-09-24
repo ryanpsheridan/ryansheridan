@@ -226,6 +226,22 @@ const schema = [
     display: none;
   }
 
+  /* Once the counter is running, rows outside its year step back, so it's
+     clear which year each project belongs to. Hovering one brings it back. */
+  .project-row {
+    transition: opacity 0.4s ease;
+  }
+
+  .project-row.is-dimmed {
+    opacity: 0.3;
+  }
+
+  @media (hover: hover) {
+    .project-row.is-dimmed:hover {
+      opacity: 1;
+    }
+  }
+
   .row-heading {
     grid-area: heading;
   }
@@ -286,6 +302,8 @@ const schema = [
     gap: var(--space-3);
     padding: var(--space-3) 0;
     background: var(--color-bg);
+    /* The divider between the nav and the counter. */
+    border-top: 1px solid var(--color-border);
     box-shadow: 0 1px 0 transparent;
     transition: box-shadow 0.2s;
   }
@@ -338,7 +356,7 @@ const schema = [
     height: 1.2em;
   }
 
-  /* Same frame as the homepage cards: 4:3, cropped to fill. The thumbnail is
+  /* Same frame as the homepage cards: 16:10, cropped to fill. The thumbnail is
      its own link (hidden from assistive tech, since the title link already
      names the project) so a click on the image always lands, even while the
      hover zoom lifts it above the row-wide title link. */
@@ -347,7 +365,7 @@ const schema = [
     display: block;
     position: relative;
     z-index: 1;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 10;
     overflow: hidden;
     background: var(--color-tag-bg);
   }
@@ -397,6 +415,7 @@ const schema = [
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .project-row,
     .odometer-strip,
     .year-bar,
     .row-cta svg,
@@ -440,24 +459,43 @@ const schema = [
   const bar = document.querySelector<HTMLElement>("[data-year-bar]");
   const digits = document.querySelectorAll<HTMLElement>("[data-odometer] .odometer-digit");
   const count = document.querySelector<HTMLElement>("[data-year-count]");
+  const nav = document.querySelector<HTMLElement>("nav:not(.breadcrumbs)");
+
+  // Stick flush under the nav. --nav-height is a round site-wide estimate,
+  // so measure the real bar instead and follow it if it changes size.
+  if (bar && nav) {
+    const pin = () => bar.style.setProperty("top", `${nav.getBoundingClientRect().height}px`);
+    pin();
+    new ResizeObserver(pin).observe(nav);
+  }
 
   let shownYear = "";
 
   const visibleCards = () => [...cards].filter((card) => !card.classList.contains("hidden"));
 
-  // The current year belongs to the first row whose bottom is still below the
-  // bar. Read on scroll through rAF, so it stays cheap on long scrolls.
+  // The current year belongs to the first row whose bottom is still below a
+  // reading line a third of the way down the space under the bar. Reading off
+  // the bar's own edge would keep a year lit while its last row is mostly gone
+  // and everything on screen is dimmed. Read on scroll through rAF, so it
+  // stays cheap on long scrolls.
   function updateYear() {
     if (!bar) return;
     const barRect = bar.getBoundingClientRect();
-    const line = barRect.bottom;
+    const line = barRect.bottom + (window.innerHeight - barRect.bottom) / 3;
     const navOffset = parseFloat(getComputedStyle(bar).top) || 0;
     bar.classList.toggle("is-stuck", barRect.top <= navOffset + 0.5);
 
     const visible = visibleCards();
-    const current = visible.find((card) => card.getBoundingClientRect().bottom > line) ?? visible.at(-1);
+    // At the very bottom the last rows may never reach the bar, so hand the
+    // counter to the last project rather than leaving its year dimmed.
+    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+    const current = atBottom
+      ? visible.at(-1)
+      : visible.find((card) => card.getBoundingClientRect().bottom > line) ?? visible.at(-1);
     const year = current?.dataset.year;
     if (!year) return;
+
+    visible.forEach((card) => card.classList.toggle("is-dimmed", card.dataset.year !== year));
 
     const total = visible.filter((card) => card.dataset.year === year).length;
     if (count) count.textContent = `${total} ${total === 1 ? "project" : "projects"}`;
