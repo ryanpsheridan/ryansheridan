@@ -71,6 +71,7 @@ export function projectSchema(project: Project) {
     headline: project.title,
     description: project.description,
     image: new URL(project.ogImage ?? project.thumbnail, SITE_URL).href,
+    dateCreated: String(project.year),
     genre: project.tags,
     keywords: [...project.tags, ...project.tools].join(", "),
     creator: { "@id": PERSON_ID },

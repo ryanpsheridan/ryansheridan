@@ -206,6 +206,10 @@ const schema = [
             )}
           </div>
           <div class="meta-group">
+            <span class="meta-label">Year</span>
+            <p class="meta-value"><time datetime={String(project.year)}>{project.year}</time></p>
+          </div>
+          <div class="meta-group">
             <span class="meta-label">Project type</span>
             <div class="badge-list">
               {project.tags.map((tag) => <span class="badge">{tag}</span>)}
