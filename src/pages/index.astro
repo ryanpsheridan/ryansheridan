@@ -23,22 +23,18 @@ const projects = getHomepageProjects();
             Designing <span class="accent">systems</span>,<br />
             <span class="accent">sites</span> and <span class="accent">brands</span>.
           </h1>
+          {/* The way into the blueprint: the page drawing its own specs over
+              itself. The key in the sentence is a real toggle too, for anyone
+              reading with a mouse; the drawing it adds is hidden from
+              assistive tech, since it describes the page rather than adding
+              to it. */}
+          <p class="intro" data-spec="type" data-spec-name="Body">
+            I build intuitive, scalable web experiences rooted in solid fundamentals.{" "}
+            <span class="intro-hint">Press <button type="button" class="kbd-toggle" aria-pressed="false" aria-label="Show the specs (shortcut I)" data-blueprint-toggle>I</button> to peek under the hood.</span>
+          </p>
           <p class="tagline" data-spec="type" data-spec-name="Meta">Based out of Austin, Texas</p>
           <div class="cta-row">
             <a href="/work" class="view-all-link">View all work</a>
-            {/* The page drawing its own specs over itself. Plain toggle
-                semantics, and the drawing it adds is hidden from assistive
-                tech, since it describes the page rather than adding to it. */}
-            <button type="button" class="blueprint-toggle" aria-pressed="false" data-blueprint-toggle>
-              {/* An open eye that squints while the specs are up: looking
-                  closer, rather than the crossed-out eye that means hidden. */}
-              <svg class="blueprint-eye" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round">
-                <path class="eye-lid" vector-effect="non-scaling-stroke" d="M1.25 8C3.1 4.7 5.35 3.1 8 3.1s4.9 1.6 6.75 4.9" />
-                <path class="eye-lid" vector-effect="non-scaling-stroke" d="M1.25 8c1.85 3.3 4.1 4.9 6.75 4.9s4.9-1.6 6.75-4.9" />
-                <circle class="eye-pupil" cx="8" cy="8" r="2" />
-              </svg>
-              <span data-blueprint-label>See how I build</span>
-            </button>
           </div>
           <div class="blueprint-tags" aria-hidden="true"></div>
         </div>
@@ -69,6 +65,14 @@ const projects = getHomepageProjects();
         work column, which scroll with it. */}
     <div class="blueprint-columns" aria-hidden="true" data-blueprint-columns></div>
     <div class="blueprint-tags" aria-hidden="true"></div>
+
+    {/* The toggle lives at the end of the work, so while the specs are up
+        this is the way out wherever you are on the page. */}
+    <div class="blueprint-bar" data-blueprint-bar>
+      <span class="blueprint-bar-label">Specs on</span>
+      <button type="button" class="blueprint-bar-hide" data-blueprint-off>Hide</button>
+      <span class="blueprint-bar-keys"><kbd>I</kbd> or <kbd>Esc</kbd></span>
+    </div>
   </main>
 
   <Footer />
@@ -147,10 +151,9 @@ const projects = getHomepageProjects();
    */
   const page = document.querySelector<HTMLElement>("main[data-blueprint-scope]");
   const blueprintToggle = document.querySelector<HTMLButtonElement>("[data-blueprint-toggle]");
-  const blueprintLabel = document.querySelector<HTMLElement>("[data-blueprint-label]");
-  const columns = document.querySelector<HTMLElement>("[data-blueprint-columns]");
+    const columns = document.querySelector<HTMLElement>("[data-blueprint-columns]");
 
-  if (page && blueprintToggle && blueprintLabel && columns) {
+  if (page && blueprintToggle && columns) {
     const splitInner = page.querySelector<HTMLElement>(".split-inner")!;
     const panels = [page.querySelector<HTMLElement>(".left-panel")!, page.querySelector<HTMLElement>(".right-panel")!];
 
@@ -270,15 +273,35 @@ const projects = getHomepageProjects();
     function setBlueprint(on: boolean) {
       page!.classList.toggle("is-blueprint", on);
       blueprintToggle!.setAttribute("aria-pressed", String(on));
-      blueprintLabel!.textContent = on ? "Hide the specs" : "See how I build";
+      blueprintToggle!.setAttribute("aria-label", `${on ? "Hide" : "Show"} the specs (shortcut I)`);
       build();
     }
 
+    const desktop = window.matchMedia("(min-width: 769px)");
+
     blueprintToggle.addEventListener("click", () => setBlueprint(!page.classList.contains("is-blueprint")));
+
+    document.querySelector("[data-blueprint-off]")?.addEventListener("click", () => setBlueprint(false));
 
     // Escape puts it away from anywhere, like any overlay, without moving focus.
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && page.classList.contains("is-blueprint")) setBlueprint(false);
+    });
+
+    // I toggles it in place, from anywhere on the page. Left alone while
+    // typing or holding a modifier, so it never steals a browser shortcut.
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "i" && event.key !== "I") return;
+      if (event.metaKey || event.ctrlKey || event.altKey || event.repeat || !desktop.matches) return;
+      const target = event.target as HTMLElement | null;
+      if (target?.closest("input, textarea, select, [contenteditable]")) return;
+      setBlueprint(!page.classList.contains("is-blueprint"));
+    });
+
+    // Leaving the desktop layout with the specs up would strand them with
+    // no way to put them away.
+    window.matchMedia("(max-width: 768px)").addEventListener("change", (event) => {
+      if (event.matches && page.classList.contains("is-blueprint")) setBlueprint(false);
     });
 
     let queued = false;
@@ -337,6 +360,64 @@ const projects = getHomepageProjects();
     color: var(--color-text);
   }
 
+  /* A line or two on what the work is, ending on the way into the
+     blueprint. Held to a reading measure so it never runs the width of the
+     headline. */
+  .intro {
+    max-width: 44ch;
+    margin-top: var(--space-4);
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  /* Runs on from the sentence before it, but wraps as one piece so the key
+     never lands alone at the start of a line. */
+  .intro-hint {
+    white-space: nowrap;
+  }
+
+  /* The key in the sentence, drawn as a key and working as one. */
+  .kbd-toggle {
+    display: inline-block;
+    min-width: 1.7em;
+    margin: 0 1px;
+    padding: 0 6px;
+    font-family: var(--font-mono);
+    font-size: 0.82em;
+    line-height: 1.55;
+    text-align: center;
+    vertical-align: 0.1em;
+    color: var(--color-text);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.1s;
+  }
+
+  .kbd-toggle:hover {
+    border-color: var(--color-text);
+  }
+
+  .kbd-toggle:active {
+    transform: translateY(1px);
+  }
+
+  .kbd-toggle[aria-pressed="true"] {
+    color: #ffffff;
+    background: var(--blueprint);
+    border-color: var(--blueprint);
+  }
+
+  /* Room above for the blueprint's Meta tag, which hangs off the top of
+     this line and would otherwise sit on the hint. */
+  .intro + .tagline {
+    margin-top: var(--space-5);
+  }
+
   .tagline {
     margin-top: var(--space-3);
     font-family: var(--font-mono);
@@ -344,8 +425,6 @@ const projects = getHomepageProjects();
     color: var(--color-text-muted);
   }
 
-  /* Two actions, one clearly first: the work is filled, the blueprint is an
-     outline beside it, so the extra never outranks the reason people came. */
   .cta-row {
     display: flex;
     flex-wrap: wrap;
@@ -354,8 +433,7 @@ const projects = getHomepageProjects();
     margin-top: var(--space-5);
   }
 
-  .view-all-link,
-  .blueprint-toggle {
+  .view-all-link {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -381,47 +459,8 @@ const projects = getHomepageProjects();
     border-color: #333333;
   }
 
-  .blueprint-toggle {
-    color: var(--color-text);
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    cursor: pointer;
-  }
-
-  .blueprint-toggle:hover {
-    border-color: var(--color-text);
-  }
-
-  .blueprint-toggle[aria-pressed="true"] {
-    color: #ffffff;
-    background: var(--blueprint);
-    border-color: var(--blueprint);
-  }
-
-  .blueprint-eye .eye-lid,
-  .blueprint-eye .eye-pupil {
-    transform-box: view-box;
-    transform-origin: 8px 8px;
-    transition: transform 0.28s cubic-bezier(0.3, 0.7, 0.2, 1);
-  }
-
-  .blueprint-toggle[aria-pressed="true"] .eye-lid {
-    transform: scaleY(0.72);
-  }
-
-  .blueprint-toggle[aria-pressed="true"] .eye-pupil {
-    transform: scale(0.9);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .blueprint-eye .eye-lid,
-    .blueprint-eye .eye-pupil {
-      transition: none;
-    }
-  }
-
   .view-all-link:focus-visible,
-  .blueprint-toggle:focus-visible {
+  .kbd-toggle:focus-visible {
     outline: 2px solid var(--color-text);
     outline-offset: 3px;
   }
@@ -532,6 +571,132 @@ const projects = getHomepageProjects();
     }
   }
 
+  kbd {
+    display: inline-block;
+    min-width: 1.7em;
+    padding: 1px 6px;
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--color-text);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+  }
+
+  /* While the specs are up: a small bar pinned to the bottom of the screen,
+     in the blueprint's own blue, so there is always a way out. */
+  .blueprint-bar {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 6px 6px 16px;
+    font-size: var(--text-sm);
+    color: #ffffff;
+    background: var(--blueprint);
+    border-radius: 999px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, 8px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
+  }
+
+  .split-layout.is-blueprint .blueprint-bar {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .blueprint-bar-label {
+    font-weight: 500;
+  }
+
+  .blueprint-bar-hide {
+    font: inherit;
+    font-weight: 500;
+    color: var(--blueprint);
+    background: #ffffff;
+    border: 0;
+    border-radius: 999px;
+    padding: 5px 14px;
+    cursor: pointer;
+  }
+
+  .blueprint-bar-hide:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+  }
+
+  .blueprint-bar-keys {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    opacity: 0.85;
+    padding-right: 10px;
+  }
+
+  .blueprint-bar kbd {
+    color: #ffffff;
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* The left column arrives in reading order: headline, intro, location,
+     then the button. Pure CSS, so the text is never left hidden waiting on a
+     script. It holds its first frame while the intro scrim is up and plays
+     the moment the scrim hands off (straight away for returning visitors,
+     who skip the intro). */
+  .headline-block > .sticky-title,
+  .headline-block > .intro,
+  .headline-block > .tagline,
+  .headline-block > .cta-row {
+    animation: headline-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(0.12s + var(--stagger, 0) * 0.09s);
+  }
+
+  .headline-block > .intro {
+    --stagger: 1;
+  }
+
+  .headline-block > .tagline {
+    --stagger: 2;
+  }
+
+  .headline-block > .cta-row {
+    --stagger: 3;
+  }
+
+  :global(html.intro-open) .headline-block > * {
+    animation-play-state: paused;
+  }
+
+  @keyframes headline-rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .headline-block > .sticky-title,
+    .headline-block > .intro,
+    .headline-block > .tagline,
+    .headline-block > .cta-row {
+      animation: none;
+    }
+  }
+
   .entrance-hidden {
     opacity: 0;
     transform: translateY(10px);
@@ -606,6 +771,13 @@ const projects = getHomepageProjects();
   }
 
   @media (max-width: 768px) {
+    /* No keyboard to press and no room for the specs, so the hint and the
+       bar stay desktop only. */
+    .intro-hint,
+    .blueprint-bar {
+      display: none;
+    }
+
     .split-inner {
       flex-direction: column;
     }
