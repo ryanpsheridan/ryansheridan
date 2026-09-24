@@ -850,16 +850,13 @@ export const projects: Project[] = [
         body: `<p>This was a campaign built to get in front of B2B buyers and decision makers and show them what <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> could do for their business. At the core of the work was a set of custom isometric illustrations that ran throughout the campaign, giving each piece a consistent visual language across ebook layouts, social assets, and ad creative.</p>`,
       },
       {
-        type: "imageGrid",
+        type: "carousel",
+        perView: 2,
+        ratio: "10 / 13",
         images: [
-          { src: "/project-b2b-campaign2.webp", alt: "Ebook page for Section 1, Exploring Ecommerce Platforms, with an isometric illustration" },
-          { src: "/project-b2b-campaign3.webp", alt: "Ebook page for Section 3, Improve Your Buyers' Online Experience with Self-Service Catalog and Account Management" },
-        ],
-      },
-      {
-        type: "imageGrid",
-        images: [
-          { src: "/project-b2b-campaign4.webp", alt: "Ebook page for Section 2, Scale Smarter with ERP Integration" },
+          { src: "/project-b2b-campaign2.webp", alt: "Ebook page for Section 1, Exploring Ecommerce Platforms, with an isometric illustration", caption: "01 · Exploring ecommerce platforms" },
+          { src: "/project-b2b-campaign4.webp", alt: "Ebook page for Section 2, Scale Smarter with ERP Integration", caption: "02 · ERP integration" },
+          { src: "/project-b2b-campaign3.webp", alt: "Ebook page for Section 3, Improve Your Buyers' Online Experience with Self-Service Catalog and Account Management", caption: "03 · Self-service buyer experience" },
         ],
       },
       {
@@ -868,16 +865,13 @@ export const projects: Project[] = [
         body: `<p>The isometric illustrations weren't just built for the ebooks. They carried directly into the social campaign, paired with quotes from industry voices to keep the content feeling credible and grounded. The goal was for someone to see an asset in their feed and immediately recognize it as part of the same campaign family.</p>`,
       },
       {
-        type: "imageGrid",
+        type: "carousel",
+        perView: 2,
+        ratio: "1 / 1",
         images: [
-          { src: "/project-b2b-campaign5.webp", alt: "Social quote card from Brady Berhman, CEO of PunchOut2Go, with an isometric illustration" },
-          { src: "/project-b2b-campaign6.webp", alt: "Social quote card from Alec Berkley, Channel Sales Executive at Silk Software, with an isometric illustration" },
-        ],
-      },
-      {
-        type: "imageGrid",
-        images: [
-          { src: "/project-b2b-campaign7.webp", alt: "Social quote card from Matt Osborn, Director of Marketing at Apruve, with an isometric illustration" },
+          { src: "/project-b2b-campaign5.webp", alt: "Social quote card from Brady Berhman, CEO of PunchOut2Go, with an isometric illustration", caption: "Brady Berhman · PunchOut2Go" },
+          { src: "/project-b2b-campaign6.webp", alt: "Social quote card from Alec Berkley, Channel Sales Executive at Silk Software, with an isometric illustration", caption: "Alec Berkley · Silk Software" },
+          { src: "/project-b2b-campaign7.webp", alt: "Social quote card from Matt Osborn, Director of Marketing at Apruve, with an isometric illustration", caption: "Matt Osborn · Apruve" },
         ],
       },
     ],
