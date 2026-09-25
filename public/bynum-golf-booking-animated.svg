@@ -76,13 +76,11 @@ text{font-family:'Red Hat Display',Inter, -apple-system, 'Segoe UI', Helvetica, 
 <text x="1102" y="1198" font-size="12.5" fill="#3B3F5C">Referred by</text>
 <rect x="1088" y="1232" width="314" height="44" rx="4" fill="#0F1660"/><rect class="a press" x="1088" y="1232" width="314" height="44" rx="4" fill="#fff" opacity="0"/><text x="1245" y="1259" font-size="13.5" font-weight="700" fill="#fff" text-anchor="middle">Submit</text><circle class="a o rip" cx="1275" cy="1254" r="30" fill="#fff" opacity="0"/>
 </g>
-<g class="a ok" opacity="0"><rect x="1084" y="800" width="322" height="384" rx="14" fill="#fff" filter="url(#cs)"/>
+<g class="a ok" opacity="0"><rect x="1084" y="800" width="322" height="306" rx="14" fill="#fff" filter="url(#cs)"/>
 <g class="a o pop"><circle cx="1245" cy="878" r="38" fill="#0F1660"/><path class="a chk" d="M1229 878l11 11 22-22" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="50"/></g>
 <text x="1245" y="952" font-size="24" font-weight="700" fill="#0F1660" text-anchor="middle">You're all set, Alex!</text>
 <text x="1245" y="980" font-size="13.5" fill="#5B6180" text-anchor="middle">Billy will reach out to set up</text><text x="1245" y="998" font-size="13.5" fill="#5B6180" text-anchor="middle">your first lesson.</text>
-<rect x="1108" y="1024" width="274" height="72" rx="8" fill="#F6F7FB"/><text x="1126" y="1054" font-size="16" font-weight="600" fill="#0F1660">Birdie Program</text><text x="1126" y="1078" font-size="11.5" font-weight="700" letter-spacing="1" fill="#E0775E">$199 PER MONTH</text>
-<path d="M1346 1060a10 10 0 1 0 0.01 0" fill="none"/><circle cx="1354" cy="1060" r="11" fill="#E4F4EA"/><path d="M1349 1060l3.5 3.5 7-7" fill="none" stroke="#1F8A4C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-<rect x="1108" y="1114" width="274" height="44" rx="4" fill="#fff" stroke="#0F1660" stroke-width="1.5"/><text x="1245" y="1141" font-size="13" font-weight="700" letter-spacing="1.2" fill="#0F1660" text-anchor="middle">TEXT OR CALL BILLY</text></g>
+<rect x="1108" y="1030" width="274" height="44" rx="4" fill="#fff" stroke="#0F1660" stroke-width="1.5"/><text x="1245" y="1057" font-size="13" font-weight="700" letter-spacing="1.2" fill="#0F1660" text-anchor="middle">TEXT OR CALL BILLY</text></g>
 </g></g>
 <rect x="1064" y="84" width="362" height="92" fill="#fff"/><text x="1100" y="116" font-size="15" font-weight="600" fill="#111">9:41</text><rect x="1185" y="96" width="120" height="32" rx="16" fill="#0B0C14"/>
 <g fill="#111"><rect x="1346" y="106" width="3" height="8" rx="1"/><rect x="1351" y="104" width="3" height="10" rx="1"/><rect x="1356" y="102" width="3" height="12" rx="1"/><rect x="1376" y="103" width="22" height="11" rx="3" fill="none" stroke="#111"/><rect x="1378" y="105" width="16" height="7" rx="1.5"/></g>

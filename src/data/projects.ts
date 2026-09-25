@@ -819,7 +819,7 @@ export const projects: Project[] = [
     year: 2021,
     description: "A Webflow website for Five Star Vacation Home Rentals, presenting high-end short-term rentals across Austin and the Texas Hill Country.",
     ogImage: "/project-five-star1.jpg",
-    thumbnail: "/five-star-featured-animated.svg",
+    thumbnail: "/five-star-cms-animated.svg",
     showOnHomepage: false,
     tags: ["Web Design"],
     tools: ["Webflow"],
@@ -856,10 +856,6 @@ export const projects: Project[] = [
         heading: "Built for Their Team to Run",
         body: `<p>The site also had to be something the owner and his team could keep up on their own. I built it in Webflow and trained their staff on the Webflow CMS, so they can publish blog posts, update photos, and make everyday edits without waiting on me. They've been running the site on their own for a couple of years now and reach out when they need something more technical.</p>`,
       },
-      {
-        type: "imageGrid",
-        images: [{ src: "/five-star-cms-animated.svg", alt: "The Webflow CMS: a new blog post gets a name, summary, and main image, then is published to the Blog Posts collection" }],
-      },
     ],
   },
   {
@@ -868,7 +864,7 @@ export const projects: Project[] = [
     year: 2021,
     description: "A full rebuild of the MC Salon Spa & Studio website, moved from Wix to Webflow with an online store that later ran headless on Shopify.",
     ogImage: "/project-mc-salon1.jpg",
-    thumbnail: "/project-mc-salon-featured.webp",
+    thumbnail: "/mc-salon-featured-animated.svg",
     showOnHomepage: false,
     tags: ["Web Design"],
     tools: ["Webflow", "Shopify"],
