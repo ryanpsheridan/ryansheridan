@@ -765,7 +765,7 @@ export const projects: Project[] = [
     year: 2022,
     description: "A Webflow website for golf coach Billy Bynum that helps new and returning students learn about his programs and book private or virtual lessons.",
     ogImage: "/project-bynum-golf1.jpg",
-    thumbnail: "/project-bynum-golf1.webp",
+    thumbnail: "/bynum-golf-booking-animated.svg",
     showOnHomepage: false,
     tags: ["Web Design"],
     tools: ["Webflow"],
@@ -776,6 +776,10 @@ export const projects: Project[] = [
         type: "text",
         heading: "A Simple Site for a 25-Year Pro",
         body: `<p>Billy Bynum has been teaching golf for over 25 years, but he didn't have a website. He wanted something simple: a place where people could learn what kind of instructor he is, see his lesson options, and book a lesson without having to track him down first.</p><p>The site is built in Webflow and covers private in-person lessons at <a href="https://maps.app.goo.gl/TmDcYyowKFp2FwUt9?g_st=ic" target="_blank" rel="noopener noreferrer">Morris Williams Golf Course</a> (great track if you're in the Austin area), virtual lessons, and monthly membership programs. Students can call Billy directly or fill out a form on the site to schedule a lesson. He also wanted a photo of him and his daughter on there, so the site feels personal instead of reading like a generic lesson listing.</p><p>I still make updates to the site from time to time, and yes, the payment is in golf lessons.</p><p>Book today: <a href="https://www.bynumgolf.com" target="_blank" rel="noopener noreferrer">www.bynumgolf.com</a></p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [{ src: "/bynum-golf-booking-animated.svg", alt: "Billy and his daughter next to a phone showing the Bynum Golf lessons page, where a student taps Schedule a Lesson, fills out the form, and sends the request" }],
       },
       {
         type: "imageGrid",
@@ -819,7 +823,7 @@ export const projects: Project[] = [
     year: 2021,
     description: "A Webflow website for Five Star Vacation Home Rentals, presenting high-end short-term rentals across Austin and the Texas Hill Country.",
     ogImage: "/project-five-star1.jpg",
-    thumbnail: "/project-five-star1.webp",
+    thumbnail: "/five-star-booking-handoff-animated.svg",
     showOnHomepage: false,
     tags: ["Web Design"],
     tools: ["Webflow"],
@@ -833,6 +837,10 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
+        images: [{ src: "/five-star-booking-handoff-animated.svg", alt: "A Five Star property page with Book on Airbnb and Book on Vrbo buttons, each handing the guest off to that platform to reserve" }],
+      },
+      {
+        type: "imageGrid",
         images: [
           { src: "/project-five-star2.webp", alt: "Five Star properties page with tabs for Austin, Texas Hill Country, San Antonio, and Lake Austin above a grid of rental photos" },
           { src: "/project-five-star3.webp", alt: "Five Star owner page explaining how the company maximizes returns for property owners" },
@@ -842,6 +850,10 @@ export const projects: Project[] = [
         type: "text",
         heading: "Built for Their Team to Run",
         body: `<p>The site also had to be something the owner and his team could keep up on their own. I built it in Webflow and trained their staff on the Webflow CMS, so they can publish blog posts, update photos, and make everyday edits without waiting on me. They've been running the site on their own for a couple of years now and reach out when they need something more technical.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [{ src: "/five-star-cms-animated.svg", alt: "Illustration of the CMS editor: a new blog post gets a title, summary, and photo, then is published to the blog list" }],
       },
     ],
   },
@@ -873,6 +885,10 @@ export const projects: Project[] = [
         type: "text",
         heading: "When the Payment Processor Pulls the Plug",
         body: `<p>A couple weeks after launch, Stripe flagged the store for carrying CBD products and terminated the account. With so much work already built into the ecommerce pages, scrapping it wasn't an option. So I went headless, with Webflow on the front end and Shopify on the back end.</p><p>This part was technical and tedious. Every product was uploaded to Shopify, and each product item in the Webflow CMS got its own Shopify buy button embed with a unique code for that product. That way the site wasn't just showing one big embedded Shopify iframe. Each CMS item output its own product dynamically, so the storefront still looked and worked like the rest of the site while checkout ran through Shopify.</p><p>The best part was that the client never had to touch the ecommerce pages. They could manage the whole store in Shopify and the Shopify app, and the site kept up on its own.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [{ src: "/mc-salon-headless-animated.svg", alt: "Diagram of the headless setup: products live in Shopify, each gets a Buy Button code with a unique ID, the code is saved on the matching Webflow CMS item, and each product page renders its own product while checkout runs through Shopify" }],
       },
       {
         type: "imageGrid",
