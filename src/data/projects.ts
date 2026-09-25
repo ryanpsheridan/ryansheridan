@@ -775,7 +775,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "A Simple Site for a 25-Year Pro",
-        body: `<p>Billy Bynum has been teaching golf for over 25 years and needed a clean, no-fuss site that made it easy for new and returning students to learn about his programs and book a lesson. Built in Webflow, the site covers everything from private in-person lessons at Morris Williams Golf Course to virtual lessons and monthly membership programs. It gets out of the way and lets Billy do what he does best. I still make updates to the site from time to time, and yes, the payment is in golf lessons.</p><p>Book today: <a href="https://www.bynumgolf.com" target="_blank" rel="noopener noreferrer">www.bynumgolf.com</a></p>`,
+        body: `<p>Billy Bynum has been teaching golf for over 25 years, but he didn't have a website. He wanted something simple: a place where people could learn what kind of instructor he is, see his lesson options, and book a lesson without having to track him down first.</p><p>The site is built in Webflow and covers private in-person lessons at Morris Williams Golf Course, virtual lessons, and monthly membership programs. Students can call Billy directly or fill out a form on the site to schedule a lesson. He also wanted a photo of him and his daughter on there, so the site feels personal instead of reading like a generic lesson listing.</p><p>I still make updates to the site from time to time, and yes, the payment is in golf lessons.</p><p>Book today: <a href="https://www.bynumgolf.com" target="_blank" rel="noopener noreferrer">www.bynumgolf.com</a></p>`,
       },
       {
         type: "imageGrid",
@@ -829,7 +829,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "A Luxury Rental Business That Needed to Look the Part",
-        body: `<p>Five Star Vacation Home Rentals manages a portfolio of high-end short-term rental properties across Austin and the Texas Hill Country. The site was built in Webflow to give both property owners and potential guests a clean, upscale experience that matched the quality of the homes themselves. Properties are organized by region, the brand leans into black and gold, and the whole thing is built to convert.</p><p><a href="https://www.fivestarvhr.com/" target="_blank" rel="noopener noreferrer">www.fivestarvhr.com</a></p>`,
+        body: `<p>Five Star Vacation Home Rentals manages high-end short-term rentals across Austin and the Texas Hill Country, but they didn't have a website. They needed one place to show every property they manage so guests could browse the full lineup.</p><p>The site doesn't handle booking itself. Each property links out to its listing on Airbnb or Vrbo, and the reservation happens there. That kept the site focused on one job: showing off the homes. They came with a big library of professional photography, which is always a great thing to have when designing. Properties are organized by region, the brand leans into black and gold, and there's a separate page for owners who want Five Star to manage their home.</p><p><a href="https://www.fivestarvhr.com/" target="_blank" rel="noopener noreferrer">www.fivestarvhr.com</a></p>`,
       },
       {
         type: "imageGrid",
@@ -837,6 +837,11 @@ export const projects: Project[] = [
           { src: "/project-five-star2.webp", alt: "Five Star properties page with tabs for Austin, Texas Hill Country, San Antonio, and Lake Austin above a grid of rental photos" },
           { src: "/project-five-star3.webp", alt: "Five Star owner page explaining how the company maximizes returns for property owners" },
         ],
+      },
+      {
+        type: "text",
+        heading: "Built for Their Team to Run",
+        body: `<p>The site also had to be something the owner and his team could keep up on their own. I built it in Webflow and trained their staff on the Webflow CMS, so they can publish blog posts, update photos, and make everyday edits without waiting on me.</p>`,
       },
     ],
   },
