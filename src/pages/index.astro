@@ -27,9 +27,9 @@ const projects = getHomepageProjects();
           <div class="cta-row">
             <a href="/work" class="view-all-link">View all work</a>
             {/* The way into the blueprint, the page drawing its own specs over
-                itself. An easter egg: it stays out of sight until the last
-                project scrolls into view (or someone presses I), then it
-                stays. The drawing it adds is hidden from assistive tech,
+                itself. An easter egg on desktop: it stays out of sight until
+                the last project scrolls into view (or someone presses I),
+                then it stays. On a phone it shows from the start. The drawing it adds is hidden from assistive tech,
                 since it describes the page rather than adding to it. */}
             <button type="button" class="hood-toggle" aria-pressed="false" aria-keyshortcuts="i" data-blueprint-toggle>
               Peek under the hood <kbd class="hood-key" aria-hidden="true">I</kbd>
@@ -835,6 +835,15 @@ const projects = getHomepageProjects();
 
     .project-row {
       padding: var(--space-5) 0;
+    }
+
+    /* On a phone the headline doesn't follow the work down the page, so
+       the button would appear somewhere no one is looking. Show it from
+       the start. */
+    .hood-toggle {
+      visibility: visible;
+      opacity: 1;
+      transform: none;
     }
 
     /* Skip the entrance on mobile; the first project is simply there. */
