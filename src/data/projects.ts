@@ -775,7 +775,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "A Simple Site for a 25-Year Pro",
-        body: `<p>Billy Bynum has been teaching golf for over 25 years, but he didn't have a website. He wanted something simple: a place where people could learn what kind of instructor he is, see his lesson options, and book a lesson without having to track him down first.</p><p>The site is built in Webflow and covers private in-person lessons at Morris Williams Golf Course, virtual lessons, and monthly membership programs. Students can call Billy directly or fill out a form on the site to schedule a lesson. He also wanted a photo of him and his daughter on there, so the site feels personal instead of reading like a generic lesson listing.</p><p>I still make updates to the site from time to time, and yes, the payment is in golf lessons.</p><p>Book today: <a href="https://www.bynumgolf.com" target="_blank" rel="noopener noreferrer">www.bynumgolf.com</a></p>`,
+        body: `<p>Billy Bynum has been teaching golf for over 25 years, but he didn't have a website. He wanted something simple: a place where people could learn what kind of instructor he is, see his lesson options, and book a lesson without having to track him down first.</p><p>The site is built in Webflow and covers private in-person lessons at <a href="https://maps.app.goo.gl/TmDcYyowKFp2FwUt9?g_st=ic" target="_blank" rel="noopener noreferrer">Morris Williams Golf Course</a> (great track if you're in the Austin area), virtual lessons, and monthly membership programs. Students can call Billy directly or fill out a form on the site to schedule a lesson. He also wanted a photo of him and his daughter on there, so the site feels personal instead of reading like a generic lesson listing.</p><p>I still make updates to the site from time to time, and yes, the payment is in golf lessons.</p><p>Book today: <a href="https://www.bynumgolf.com" target="_blank" rel="noopener noreferrer">www.bynumgolf.com</a></p>`,
       },
       {
         type: "imageGrid",
@@ -841,7 +841,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Built for Their Team to Run",
-        body: `<p>The site also had to be something the owner and his team could keep up on their own. I built it in Webflow and trained their staff on the Webflow CMS, so they can publish blog posts, update photos, and make everyday edits without waiting on me.</p>`,
+        body: `<p>The site also had to be something the owner and his team could keep up on their own. I built it in Webflow and trained their staff on the Webflow CMS, so they can publish blog posts, update photos, and make everyday edits without waiting on me. They've been running the site on their own for a couple of years now and reach out when they need something more technical.</p>`,
       },
     ],
   },
@@ -849,7 +849,7 @@ export const projects: Project[] = [
     slug: "mc-salon-spa-studio",
     title: "MC Salon Spa & Studio",
     year: 2021,
-    description: "A full rebuild of the MC Salon Spa & Studio website, moved from Squarespace to Webflow with a custom ecommerce store built in.",
+    description: "A full rebuild of the MC Salon Spa & Studio website, moved from Wix to Webflow with an online store that later ran headless on Shopify.",
     ogImage: "/project-mc-salon1.jpg",
     thumbnail: "/project-mc-salon1.webp",
     showOnHomepage: false,
@@ -860,7 +860,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "A Full Site Overhaul, Built to Grow",
-        body: `<p>MC Salon Spa & Studio wanted to move off Squarespace and onto something more flexible and scalable, with a proper ecommerce setup built in. The project started as a page by page rebuild in Webflow, but quickly grew into a full overhaul covering the entire site along with a custom ecommerce store built on the Webflow CMS. After months of designing and developing, the site launched in January 2021.</p>`,
+        body: `<p>MC Salon Spa & Studio started out on Wix with a simple three-page site: a homepage, a shop page with a handful of products, and a contact page. It was hard for them to update, and once COVID hit they needed a lot more from it. They wanted to sell and ship hair products to their clients and offer curbside pickup, so the online shop had to become a real part of the business.</p><p>This was my first big technical project built around an in-depth CMS. I started with the homepage, filling it out with what the salon is about, where to book, a look at their stylists, and contact info at the bottom. From there I built out the service pages, covering everything on their menu: haircuts, color, extensions, hair treatments, styling, and men's grooming, plus their spa and lash services. Then came the bulk of the work, a custom ecommerce store built on the Webflow CMS. After months of designing and developing, the site launched in January 2021.</p>`,
       },
       {
         type: "imageGrid",
@@ -872,7 +872,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "When the Payment Processor Pulls the Plug",
-        body: `<p>A couple weeks after launch, Stripe flagged the store for carrying CBD products and terminated the account. With a lot of work already built into the ecommerce pages, scrapping everything wasn't an option. Instead, the solution was to go headless. All products were uploaded to Shopify, product information was pulled into the Webflow CMS, and a Shopify buy button was embedded across all product pages. The storefront stayed in Webflow, the checkout ran through Shopify, and the site kept moving without missing a beat.</p>`,
+        body: `<p>A couple weeks after launch, Stripe flagged the store for carrying CBD products and terminated the account. With so much work already built into the ecommerce pages, scrapping it wasn't an option. So I went headless, with Webflow on the front end and Shopify on the back end.</p><p>This part was technical and tedious. Every product was uploaded to Shopify, and each product item in the Webflow CMS got its own Shopify buy button embed with a unique code for that product. That way the site wasn't just showing one big embedded Shopify iframe. Each CMS item output its own product dynamically, so the storefront still looked and worked like the rest of the site while checkout ran through Shopify.</p><p>The best part was that the client never had to touch the ecommerce pages. They could manage the whole store in Shopify and the Shopify app, and the site kept up on its own.</p>`,
       },
       {
         type: "imageGrid",
@@ -880,6 +880,11 @@ export const projects: Project[] = [
           { src: "/project-mc-salon4.webp", alt: "MC Salon product page, cart drawer, and checkout with in-store pickup" },
           { src: "/project-mc-salon5.webp", alt: "MC Salon homepage with a virtual tour, a specialized approach section, and the latest tutorial video" },
         ],
+      },
+      {
+        type: "text",
+        heading: "Where It Ended Up",
+        body: `<p>The owners sold the business in 2024, and the site is now run by someone else on a different platform. This version doesn't exist anymore, but it was my first big CMS build and taught me a lot.</p>`,
       },
     ],
   },
