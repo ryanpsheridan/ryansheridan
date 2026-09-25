@@ -819,7 +819,7 @@ export const projects: Project[] = [
     year: 2021,
     description: "A Webflow website for Five Star Vacation Home Rentals, presenting high-end short-term rentals across Austin and the Texas Hill Country.",
     ogImage: "/project-five-star1.jpg",
-    thumbnail: "/five-star-featured.svg",
+    thumbnail: "/five-star-featured-animated.svg",
     showOnHomepage: false,
     tags: ["Web Design"],
     tools: ["Webflow"],
@@ -829,18 +829,27 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "A Luxury Rental Business That Needed to Look the Part",
-        body: `<p>Five Star Vacation Home Rentals manages high-end short-term rentals across Austin and the Texas Hill Country, but they didn't have a website. They needed one place to show every property they manage so guests could browse the full lineup.</p><p>The site doesn't handle booking itself. Each property links out to its listing on Airbnb or Vrbo, and the reservation happens there. That kept the site focused on one job: showing off the homes. They came with a big library of professional photography, which is always a great thing to have when designing. Properties are organized by region, the brand leans into black and gold, and there's a separate page for owners who want Five Star to manage their home.</p><p><a href="https://www.fivestarvhr.com/" target="_blank" rel="noopener noreferrer">www.fivestarvhr.com</a></p>`,
+        body: `<p>Five Star Vacation Home Rentals manages high-end short-term rentals across Austin and the Texas Hill Country, but they didn't have a website. They needed one place to show every property they manage so guests could browse the full lineup.</p><p>They came with a big library of professional photography, which is always a great thing to have when designing. Properties are organized by region, and the brand leans into black and gold.</p>`,
       },
       {
         type: "imageGrid",
-        images: [{ src: "/five-star-booking-handoff-animated.svg", alt: "A Five Star property page with Book on Airbnb and Book on Vrbo buttons, each opening that platform's listing to reserve", caption: "Each property links out to Airbnb or Vrbo, where the booking happens" }],
+        images: [{ src: "/project-five-star2.webp", alt: "Five Star properties page with tabs for Austin, Texas Hill Country, San Antonio, and Lake Austin above a grid of rental photos" }],
+      },
+      {
+        type: "text",
+        body: `<p>The site doesn't handle booking itself. Each property links out to its listing on Airbnb or Vrbo, and the reservation happens there. That kept the site focused on one job: showing off the homes.</p>`,
       },
       {
         type: "imageGrid",
-        images: [
-          { src: "/project-five-star2.webp", alt: "Five Star properties page with tabs for Austin, Texas Hill Country, San Antonio, and Lake Austin above a grid of rental photos" },
-          { src: "/project-five-star3.webp", alt: "Five Star owner page explaining how the company maximizes returns for property owners" },
-        ],
+        images: [{ src: "/five-star-booking-handoff-animated.svg", alt: "A Five Star property page with Book on Airbnb and Book on Vrbo buttons, each opening that platform's listing to reserve" }],
+      },
+      {
+        type: "text",
+        body: `<p>There's also a separate page for owners who want Five Star to manage their home.</p><p><a href="https://www.fivestarvhr.com/" target="_blank" rel="noopener noreferrer">www.fivestarvhr.com</a></p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [{ src: "/project-five-star3.webp", alt: "Five Star owner page explaining how the company maximizes returns for property owners" }],
       },
       {
         type: "text",
@@ -849,7 +858,7 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: [{ src: "/five-star-cms-animated.svg", alt: "Illustration of the CMS editor: a new blog post gets a title, summary, and photo, then is published to the blog list", caption: "Their team adds blog posts and photos on their own in the Webflow CMS" }],
+        images: [{ src: "/five-star-cms-animated.svg", alt: "The Webflow CMS: a new blog post gets a name, summary, and main image, then is published to the Blog Posts collection" }],
       },
     ],
   },
@@ -859,7 +868,7 @@ export const projects: Project[] = [
     year: 2021,
     description: "A full rebuild of the MC Salon Spa & Studio website, moved from Wix to Webflow with an online store that later ran headless on Shopify.",
     ogImage: "/project-mc-salon1.jpg",
-    thumbnail: "/mc-salon-featured-animated.svg",
+    thumbnail: "/project-mc-salon-featured.webp",
     showOnHomepage: false,
     tags: ["Web Design"],
     tools: ["Webflow", "Shopify"],
@@ -871,26 +880,27 @@ export const projects: Project[] = [
         body: `<p>MC Salon Spa & Studio started out on Wix with a simple three-page site: a homepage, a shop page with a handful of products, and a contact page. It was hard for them to update, and once COVID hit they needed a lot more from it. They wanted to sell and ship hair products to their clients and offer curbside pickup, so the online shop had to become a real part of the business.</p><p>This was my first big technical project built around an in-depth CMS. I started with the homepage, filling it out with what the salon is about, where to book, a look at their stylists, and contact info at the bottom. From there I built out the service pages, covering everything on their menu: haircuts, color, extensions, hair treatments, styling, and men's grooming, plus their spa and lash services. Then came the bulk of the work, a custom ecommerce store built on the Webflow CMS. After months of designing and developing, the site launched in January 2021.</p>`,
       },
       {
-        type: "imageGrid",
+        type: "carousel",
+        perView: 2,
+        ratio: "1 / 1",
         images: [
-          { src: "/project-mc-salon2.webp", alt: "MC Salon shop page listing R+Co hair products, with a product card for Atlantis Moisturizing B5 Shampoo" },
-          { src: "/project-mc-salon3.webp", alt: "MC Salon service menu with salon services, pricing, and a schedule an appointment button" },
+          { src: "/project-mc-salon5.webp", alt: "MC Salon homepage with a virtual tour, a specialized approach section, and the latest tutorial video", caption: "Homepage" },
+          { src: "/project-mc-salon3.webp", alt: "MC Salon service menu with salon services, pricing, and a schedule an appointment button", caption: "Service menu" },
+          { src: "/project-mc-salon2.webp", alt: "MC Salon shop page listing R+Co hair products, with a product card for Atlantis Moisturizing B5 Shampoo", caption: "Shop" },
         ],
       },
       {
         type: "text",
         heading: "When the Payment Processor Pulls the Plug",
-        body: `<p>A couple weeks after launch, Stripe flagged the store for carrying CBD products and terminated the account. With so much work already built into the ecommerce pages, scrapping it wasn't an option. So I went headless, with Webflow on the front end and Shopify on the back end.</p><p>This part was technical and tedious. Every product was uploaded to Shopify, and each product item in the Webflow CMS got its own Shopify buy button embed with a unique code for that product. That way the site wasn't just showing one big embedded Shopify iframe. Each CMS item output its own product dynamically, so the storefront still looked and worked like the rest of the site while checkout ran through Shopify.</p><p>The best part was that the client never had to touch the ecommerce pages. They could manage the whole store in Shopify and the Shopify app, and the site kept up on its own.</p>`,
+        body: `<p>A couple weeks after launch, Stripe flagged the store for carrying CBD products and terminated the account. With so much work already built into the ecommerce pages, scrapping it wasn't an option. So I went headless, with Webflow on the front end and Shopify on the back end.</p>`,
       },
       {
         type: "imageGrid",
         images: [{ src: "/mc-salon-headless-animated.svg", alt: "Diagram of the headless setup: products live in Shopify, each gets a Buy Button code with a unique ID, the code is saved on the matching Webflow CMS item, and each product page renders its own product while checkout runs through Shopify", caption: "Headless setup: Webflow on the front end, Shopify on the back end, with checkout and orders running through Shopify" }],
       },
       {
-        type: "imageGrid",
-        images: [
-          { src: "/project-mc-salon5.webp", alt: "MC Salon homepage with a virtual tour, a specialized approach section, and the latest tutorial video" },
-        ],
+        type: "text",
+        body: `<p>This part was technical and tedious. Every product was uploaded to Shopify, and each product item in the Webflow CMS got its own Shopify buy button embed with a unique code for that product. That way the site wasn't just showing one big embedded Shopify iframe. Each CMS item output its own product dynamically, so the storefront still looked and worked like the rest of the site while checkout ran through Shopify.</p><p>The best part was that the client never had to touch the ecommerce pages. They could manage the whole store in Shopify and the Shopify app, and the site kept up on its own.</p>`,
       },
       {
         type: "text",
