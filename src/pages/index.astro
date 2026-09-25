@@ -23,18 +23,17 @@ const projects = getHomepageProjects();
             Designing <span class="accent">systems</span>,<br />
             <span class="accent">sites</span> and <span class="accent">brands</span>.
           </h1>
-          {/* The way into the blueprint: the page drawing its own specs over
-              itself. The key in the sentence is a real toggle too, for anyone
-              reading with a mouse; the drawing it adds is hidden from
-              assistive tech, since it describes the page rather than adding
-              to it. */}
-          <p class="intro" data-spec="type" data-spec-name="Body">
-            I build intuitive, scalable web experiences rooted in solid fundamentals.{" "}
-            <span class="intro-hint"><span class="hint-key"><span class="hint-press">Press</span><span class="hint-tap">Tap</span> <button type="button" class="kbd-toggle" aria-pressed="false" aria-label="Show the specs (shortcut I)" data-blueprint-toggle>I</button></span> to peek under the&nbsp;hood.</span>
-          </p>
           <p class="tagline" data-spec="type" data-spec-name="Meta">Based out of Austin, Texas</p>
           <div class="cta-row">
             <a href="/work" class="view-all-link">View all work</a>
+            {/* The way into the blueprint, the page drawing its own specs over
+                itself. An easter egg: it stays out of sight until the last
+                project scrolls into view (or someone presses I), then it
+                stays. The drawing it adds is hidden from assistive tech,
+                since it describes the page rather than adding to it. */}
+            <button type="button" class="hood-toggle" aria-pressed="false" aria-keyshortcuts="i" data-blueprint-toggle>
+              Peek under the hood <kbd class="hood-key" aria-hidden="true">I</kbd>
+            </button>
           </div>
           <div class="blueprint-tags" aria-hidden="true"></div>
         </div>
@@ -273,8 +272,29 @@ const projects = getHomepageProjects();
     function setBlueprint(on: boolean) {
       page!.classList.toggle("is-blueprint", on);
       blueprintToggle!.setAttribute("aria-pressed", String(on));
-      blueprintToggle!.setAttribute("aria-label", `${on ? "Hide" : "Show"} the specs (shortcut I)`);
+      if (on) reveal();
       build();
+    }
+
+    // The button stays hidden until the last project comes into view, then
+    // stays put for the rest of the visit.
+    function reveal() {
+      blueprintToggle!.classList.add("is-revealed");
+    }
+    const lastProject = rows[rows.length - 1];
+    if (lastProject && "IntersectionObserver" in window) {
+      const watch = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            reveal();
+            watch.disconnect();
+          }
+        },
+        { threshold: 0.35 }
+      );
+      watch.observe(lastProject);
+    } else {
+      reveal();
     }
 
     blueprintToggle.addEventListener("click", () => setBlueprint(!page.classList.contains("is-blueprint")));
@@ -352,63 +372,73 @@ const projects = getHomepageProjects();
     color: var(--color-text);
   }
 
-  /* A line or two on what the work is, ending on the way into the
-     blueprint. Held to a reading measure so it never runs the width of the
-     headline. */
-  .intro {
-    max-width: 44ch;
-    margin-top: var(--space-4);
-    font-size: 17px;
-    font-weight: 300;
+  /* The way into the blueprint, a quiet secondary to View all work. Held
+     out of sight (and out of the tab order) until the last project scrolls
+     into view. */
+  .hood-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: inherit;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: -0.01em;
     line-height: 1.6;
-    color: var(--color-text-muted);
+    color: var(--color-text);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 11px 16px 11px 22px;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s linear 0.5s, border-color 0.2s, background 0.2s, color 0.2s;
   }
 
-  /* Runs on from the sentence before it and wraps like any other text; only
-     the verb and its key hold together, so the key never starts a line. */
-  .hint-key {
-    white-space: nowrap;
+  .hood-toggle.is-revealed {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s, border-color 0.2s, background 0.2s, color 0.2s;
   }
 
-  /* The key in the sentence, drawn as a key and working as one. */
-  .kbd-toggle {
-    display: inline-block;
+  .hood-toggle:hover {
+    border-color: var(--color-text);
+  }
+
+  /* The shortcut, drawn as a key. */
+  .hood-key {
     min-width: 1.7em;
-    margin: 0 1px;
     padding: 0 6px;
     font-family: var(--font-mono);
     font-size: 0.82em;
     line-height: 1.55;
     text-align: center;
-    vertical-align: 0.1em;
     color: var(--color-text);
     background: var(--color-bg);
     border: 1px solid var(--color-border);
     border-radius: 5px;
-    box-shadow: none;
-    appearance: none;
-    -webkit-appearance: none;
-    cursor: pointer;
-    transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.1s;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
   }
 
-  .kbd-toggle:hover {
-    border-color: var(--color-text);
-  }
-
-  .kbd-toggle:active {
-    transform: translateY(1px);
-  }
-
-  .kbd-toggle[aria-pressed="true"] {
+  .hood-toggle[aria-pressed="true"] {
     color: #ffffff;
     background: var(--blueprint);
     border-color: var(--blueprint);
   }
 
+  .hood-toggle[aria-pressed="true"] .hood-key {
+    color: #ffffff;
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
   /* Room above for the blueprint's Meta tag, which hangs off the top of
-     this line and would otherwise sit on the hint. */
-  .intro + .tagline {
+     this line and would otherwise sit on the headline. */
+  .sticky-title + .tagline {
     margin-top: var(--space-5);
   }
 
@@ -454,7 +484,7 @@ const projects = getHomepageProjects();
   }
 
   .view-all-link:focus-visible,
-  .kbd-toggle:focus-visible {
+  .hood-toggle:focus-visible {
     outline: 2px solid var(--color-text);
     outline-offset: 3px;
   }
@@ -636,20 +666,15 @@ const projects = getHomepageProjects();
     padding-right: 10px;
   }
 
-  /* Touch screens tap the key rather than press it, and have no keys to
-     list in the bar. */
-  .hint-tap {
-    display: none;
-  }
-
+  /* Touch screens have no keys to show on the button or list in the bar. */
   @media (hover: none) and (pointer: coarse) {
-    .hint-press,
+    .hood-key,
     .blueprint-bar-keys {
       display: none;
     }
 
-    .hint-tap {
-      display: inline;
+    .hood-toggle {
+      padding-right: 22px;
     }
 
     .blueprint-bar {
@@ -663,29 +688,24 @@ const projects = getHomepageProjects();
     border-color: rgba(255, 255, 255, 0.5);
   }
 
-  /* The left column arrives in reading order: headline, intro, location,
+  /* The left column arrives in reading order: headline, location,
      then the button. Pure CSS, so the text is never left hidden waiting on a
      script. It holds its first frame while the intro scrim is up and plays
      the moment the scrim hands off (straight away for returning visitors,
      who skip the intro). */
   .headline-block > .sticky-title,
-  .headline-block > .intro,
   .headline-block > .tagline,
   .headline-block > .cta-row {
     animation: headline-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
     animation-delay: calc(0.12s + var(--stagger, 0) * 0.09s);
   }
 
-  .headline-block > .intro {
+  .headline-block > .tagline {
     --stagger: 1;
   }
 
-  .headline-block > .tagline {
-    --stagger: 2;
-  }
-
   .headline-block > .cta-row {
-    --stagger: 3;
+    --stagger: 2;
   }
 
   :global(html.intro-open) .headline-block > * {
@@ -705,10 +725,15 @@ const projects = getHomepageProjects();
 
   @media (prefers-reduced-motion: reduce) {
     .headline-block > .sticky-title,
-    .headline-block > .intro,
     .headline-block > .tagline,
     .headline-block > .cta-row {
       animation: none;
+    }
+
+    .hood-toggle,
+    .hood-toggle.is-revealed {
+      transform: none;
+      transition: none;
     }
   }
 
