@@ -779,10 +779,6 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: [{ src: "/bynum-golf-booking-animated.svg", alt: "Billy and his daughter next to a phone showing the Bynum Golf lessons page, where a student taps Schedule a Lesson, fills out the form, and sends the request" }],
-      },
-      {
-        type: "imageGrid",
         images: [
           { src: "/project-bynum-golf2.webp", alt: "Bynum Golf homepage with a golf course photo, the headline Golf lessons available by appointment, and an introduction from Billy" },
           { src: "/project-bynum-golf3.webp", alt: "Bynum Golf lessons page listing in-person, virtual, Birdie, and Eagle programs" },
@@ -823,7 +819,7 @@ export const projects: Project[] = [
     year: 2021,
     description: "A Webflow website for Five Star Vacation Home Rentals, presenting high-end short-term rentals across Austin and the Texas Hill Country.",
     ogImage: "/project-five-star1.jpg",
-    thumbnail: "/five-star-booking-handoff-animated.svg",
+    thumbnail: "/five-star-featured.svg",
     showOnHomepage: false,
     tags: ["Web Design"],
     tools: ["Webflow"],
@@ -837,7 +833,7 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: [{ src: "/five-star-booking-handoff-animated.svg", alt: "A Five Star property page with Book on Airbnb and Book on Vrbo buttons, each handing the guest off to that platform to reserve" }],
+        images: [{ src: "/five-star-booking-handoff-animated.svg", alt: "A Five Star property page with Book on Airbnb and Book on Vrbo buttons, each opening that platform's listing to reserve", caption: "Each property links out to Airbnb or Vrbo, where the booking happens" }],
       },
       {
         type: "imageGrid",
@@ -853,7 +849,7 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: [{ src: "/five-star-cms-animated.svg", alt: "Illustration of the CMS editor: a new blog post gets a title, summary, and photo, then is published to the blog list" }],
+        images: [{ src: "/five-star-cms-animated.svg", alt: "Illustration of the CMS editor: a new blog post gets a title, summary, and photo, then is published to the blog list", caption: "Their team adds blog posts and photos on their own in the Webflow CMS" }],
       },
     ],
   },
@@ -863,7 +859,7 @@ export const projects: Project[] = [
     year: 2021,
     description: "A full rebuild of the MC Salon Spa & Studio website, moved from Wix to Webflow with an online store that later ran headless on Shopify.",
     ogImage: "/project-mc-salon1.jpg",
-    thumbnail: "/project-mc-salon1.webp",
+    thumbnail: "/mc-salon-featured-animated.svg",
     showOnHomepage: false,
     tags: ["Web Design"],
     tools: ["Webflow", "Shopify"],
@@ -888,12 +884,11 @@ export const projects: Project[] = [
       },
       {
         type: "imageGrid",
-        images: [{ src: "/mc-salon-headless-animated.svg", alt: "Diagram of the headless setup: products live in Shopify, each gets a Buy Button code with a unique ID, the code is saved on the matching Webflow CMS item, and each product page renders its own product while checkout runs through Shopify" }],
+        images: [{ src: "/mc-salon-headless-animated.svg", alt: "Diagram of the headless setup: products live in Shopify, each gets a Buy Button code with a unique ID, the code is saved on the matching Webflow CMS item, and each product page renders its own product while checkout runs through Shopify", caption: "Headless setup: Webflow on the front end, Shopify on the back end, with checkout and orders running through Shopify" }],
       },
       {
         type: "imageGrid",
         images: [
-          { src: "/project-mc-salon4.webp", alt: "MC Salon product page, cart drawer, and checkout with in-store pickup" },
           { src: "/project-mc-salon5.webp", alt: "MC Salon homepage with a virtual tour, a specialized approach section, and the latest tutorial video" },
         ],
       },
