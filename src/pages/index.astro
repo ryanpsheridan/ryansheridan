@@ -31,7 +31,6 @@ const projects = getHomepageProjects();
           <p class="intro" data-spec="type" data-spec-name="Body">
             <span class="intro-hint"><button type="button" class="kbd-toggle" aria-pressed="false" aria-label="Show the specs (shortcut Cmd + I)" aria-keyshortcuts="Meta+I Control+I" data-blueprint-toggle><span data-shortcut-mod>Cmd</span> + I</button> to peek under the&nbsp;hood.</span>
           </p>
-          <p class="tagline" data-spec="type" data-spec-name="Meta">Based out of Austin, Texas</p>
           <div class="cta-row">
             <a href="/work" class="view-all-link">View all work</a>
           </div>
@@ -508,15 +507,15 @@ const projects = getHomepageProjects();
   .kbd-toggle {
     display: inline-block;
     margin: 0 1px 0 0;
-    padding: 1px 8px;
+    padding: 0 5px;
     font-family: var(--font-mono);
-    font-size: 0.88em;
-    line-height: 1.55;
+    font-size: 0.85em;
+    line-height: 1.5;
     white-space: nowrap;
     color: var(--color-text);
-    background: var(--color-tag-bg);
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
+    background: color-mix(in srgb, var(--color-text) 6%, transparent);
+    border: 1px solid transparent;
+    border-radius: 4px;
     box-shadow: none;
     appearance: none;
     -webkit-appearance: none;
@@ -525,7 +524,7 @@ const projects = getHomepageProjects();
   }
 
   .kbd-toggle:hover {
-    border-color: var(--color-text);
+    background: color-mix(in srgb, var(--color-text) 11%, transparent);
   }
 
   .kbd-toggle:active {
@@ -536,19 +535,6 @@ const projects = getHomepageProjects();
     color: #ffffff;
     background: var(--blueprint);
     border-color: var(--blueprint);
-  }
-
-  /* Room above for the blueprint's Meta tag, which hangs off the top of
-     this line and would otherwise sit on the hint. */
-  .intro + .tagline {
-    margin-top: var(--space-5);
-  }
-
-  .tagline {
-    margin-top: var(--space-3);
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
   }
 
   .cta-row {
@@ -842,14 +828,13 @@ const projects = getHomepageProjects();
     border-color: rgba(255, 255, 255, 0.5);
   }
 
-  /* The left column arrives in reading order: headline, intro, location,
-     then the button. Pure CSS, so the text is never left hidden waiting on a
+  /* The left column arrives in reading order: headline, intro, then the
+     button. Pure CSS, so the text is never left hidden waiting on a
      script. It holds its first frame while the intro scrim is up and plays
      the moment the scrim hands off (straight away for returning visitors,
      who skip the intro). */
   .headline-block > .sticky-title,
   .headline-block > .intro,
-  .headline-block > .tagline,
   .headline-block > .cta-row {
     animation: headline-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
     animation-delay: calc(0.12s + var(--stagger, 0) * 0.09s);
@@ -859,12 +844,8 @@ const projects = getHomepageProjects();
     --stagger: 1;
   }
 
-  .headline-block > .tagline {
-    --stagger: 2;
-  }
-
   .headline-block > .cta-row {
-    --stagger: 3;
+    --stagger: 2;
   }
 
   :global(html.intro-open) .headline-block > * {
@@ -885,8 +866,7 @@ const projects = getHomepageProjects();
   @media (prefers-reduced-motion: reduce) {
     .headline-block > .sticky-title,
     .headline-block > .intro,
-    .headline-block > .tagline,
-    .headline-block > .cta-row {
+      .headline-block > .cta-row {
       animation: none;
     }
   }
