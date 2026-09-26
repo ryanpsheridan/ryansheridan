@@ -290,7 +290,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "My Recommendation",
-        body: `<p>Treat case study PDFs as an 80/20 job. Claude Design is very good at structure: layout, type, pagination, and staying on brand across seven pages. Designers are still the right people for the last 20%, choosing imagery and catching the small spacing issues an import can introduce. That matches how we tiered Claude Design in the <a href="/work/claude-design-consistency-first-design-second">first exploration</a>: PDFs go through design, and the system does the heavy lifting first.</p><p>In practice, that means three things. Keep the rules in the template, not in the prompt. Refine in Claude Design before exporting, while changes are cheap. And make standalone HTML with html.to.design the default route into Figma, so every file arrives with its fonts and images intact.</p>`,
+        body: `<p>Treat case study PDFs as an 80/20 job. Claude Design is very good at structure: layout, type, pagination, and staying on brand across seven pages. Designers are still the right people for the last 20%, choosing imagery and catching the small spacing issues an import can introduce. That matches how we tiered our <a href="/work/brand-systems-claude-design">brand systems in Claude Design</a>: PDFs go through design, and the system does the heavy lifting first.</p><p>In practice, that means three things. Keep the rules in the template, not in the prompt. Refine in Claude Design before exporting, while changes are cheap. And make standalone HTML with html.to.design the default route into Figma, so every file arrives with its fonts and images intact.</p>`,
       },
     ],
   },
@@ -663,32 +663,130 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "claude-design-consistency-first-design-second",
-    title: "Claude Design: Consistency First",
+    slug: "brand-systems-claude-design",
+    title: "Brand Systems in Claude Design",
     year: 2026,
-    description: "What connecting a multi-brand Figma design system to Claude and Claude Design taught me about constraints, governance, and writing rules from failure.",
+    description: "Three Claude Design systems for Commerce, BigCommerce, and Feedonomics that let anyone at the company build on-brand decks without waiting on design.",
     ogImage: "/project-claude-design1.jpg",
     thumbnail: "/claude-design-featured.svg",
     showOnHomepage: false,
-    tags: ["Exploration", "Design System"],
-    tools: ["Claude Design", "Figma"],
+    tags: ["Design System", "Automation"],
+    tools: ["Claude Design", "Claude", "Figma"],
     client: "Commerce",
     clientUrl: "https://www.commerce.com/",
     content: [
       {
         type: "text",
-        heading: "The Premise",
-        body: `<p>Six months ago I built a <a href="/work/commerce-multi-brand-system">multi-brand Figma design system</a> to cover Commerce, <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a>, <a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a> and <a href="https://www.makeswift.com/" target="_blank" rel="noopener noreferrer">Makeswift</a>. One source of truth across four brands, with shared foundations and brand-specific surfaces. That alone solved most of what we needed it to solve.</p><p>Three months ago I connected that system to <strong>Claude</strong>. The same tokens, components and rules, now accessible to our design and development team through the chat interface. It opened up a different kind of speed. We could prototype website interfaces in Claude using our actual tokens, see real brand output in seconds, and pressure-test the system in ways Figma alone couldn't surface.</p><p>A few weeks ago I started exploring <strong>Claude Design</strong>, and it opened up a different question entirely. This wasn't an integration anymore, it was a different way to think about what a design system even is. Not a library you reference, but an environment that builds with you. And it opens the door to something we couldn't do before, giving marketing the ability to self-serve decks, one-pagers and thumbnails directly from the system.</p><blockquote><p>This wasn't an integration anymore, it was a different way to think about what a design system even is. Not a library you reference, but an environment that builds with you.</p></blockquote><p>The bottleneck I've been trying to solve is real. Four brands, one design team, and a steady drip of low-stakes asset requests that eat the time we need for higher-leverage work. Marketing wants independence. Design wants brand integrity. Both sides are right, and the gap between them is where this exploration lives.</p><p>The question I started with was simple. Could a design system live natively inside an AI environment without losing the consistency that makes it a system in the first place?</p><p>The answer turned out to be yes, mostly. But the more interesting answer is what the experiment taught me about design systems in general.</p><h3>The Architecture Decision</h3><p>The first real decision, going back to the original Figma system, was whether to build one system that covered all four brands or four separate systems with shared foundations. I tried the unified approach first because it felt like the cleaner answer. It wasn't.</p><p>When you mix brands into one system, everything starts to blend. Feedonomics surfaces end up with BigCommerce styling. Sister-brand logos show up where they shouldn't. The system treats every brand asset as fair game, which is exactly what a design system is supposed to prevent.</p><img alt="Claude Design with the Feedonomics design system published and a generated marketing page showing customer stats and a testimonial" src="/project-claude-design2.webp" loading="lazy" style="--media-ratio: 1600 / 1000"><p>Splitting them solved it. Each brand gets its own scoped system with its own tokens, components and rules. The foundations are shared but the surfaces are separate. That decision held up in Figma, and it held up again when I connected the system to Claude. If anything, AI made the principle sharper. AI doesn't forgive ambiguity. If two things can be confused, they will be.</p><blockquote><p>That decision held up in Figma, and it held up again when I connected the system to Claude.</p></blockquote><p>That's a useful reminder. Most design systems carry more shared structure than they should, because human designers can hold the brand context in their heads. AI can't. Building for AI made me more disciplined about scope than building for humans ever did.</p>`,
+        heading: "The Opportunity",
+        body: `<p>Commerce is the parent company behind <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> and <a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a>. Three brands, each with its own colors, type, and voice, and one design team supporting all of them.</p><p>A lot of what reaches that team isn't design work. It's a sales deck that needs to look right, a team update for leadership, a partner overview due tomorrow. Most of the time people build these themselves in Google Slides, and every deck passes through a lot of hands. By the time it reaches the brand team, the fonts have drifted, the colors are close but not quite right, and a logo is stretched. Reviewing all of that takes time the brand team doesn't have.</p><p>When <strong>Claude Design</strong> came out, I wanted to learn it properly, not just try it. A design system in Claude Design isn't a library you reference. It's an environment that builds with you, and anyone at the company can open it. That made it a real chance to give people a way to make on-brand work without a designer in the room.</p><p>Here is what this covers:</p><ul><li>Who it's for and what it had to do</li><li>How I learned the tool and built the systems</li><li>Three brands, three systems</li><li>Decks, the biggest time saver</li><li>Rolling it out</li><li>What I recommend</li></ul>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          {
+            src: "/project-brand-systems-list.webp",
+            alt: "Claude Design's design systems list filtered to Marketing, showing the BigCommerce, Feedonomics, and Commerce systems, all published, with Commerce marked as the org default",
+            caption: "The three marketing systems in Claude Design. Commerce is the org default because it's the parent brand",
+          },
+        ],
       },
       {
         type: "text",
-        heading: "Tiering the Release",
-        body: `<img alt="Deck design rules: consistent layout, restyled barebones decks, image placeholders, and Aeonik type end to end" src="/project-claude-design3.webp" loading="lazy" style="--media-ratio: 1600 / 1000"><p>Once Claude Design was live and in Beta, the next question was who got to use it for what. Not every asset carries the same brand risk. A blog thumbnail going slightly off-brand is recoverable. A keynote deck going off-brand in front of a customer is not.</p><p>I worked through the tiering with our creative director. She brought the lens of how the broader creative team actually moves through asset requests day to day, and I brought the systems thinking. Where the lines should sit, what the system could hold without supervision, what needed a designer in the loop. Good governance is rarely one person's call, and this part of the work benefited from that back and forth.</p><p>We landed on tiering by stakes.</p><img alt="A generated Feedonomics copy guidelines deck titled A field guide to the Feedoverse" src="/project-claude-design4.webp" loading="lazy" style="--media-ratio: 1600 / 1000"><p>Slide decks are self-serve. Once the template is locked, PMs can run them on their own. Decks have a tight enough structure that the system can hold the brand without supervision.</p><img alt="Figma handoff in three steps: export as HTML, import with the HTML-to-Figma plugin, then edit in Figma" src="/project-claude-design5.webp" loading="lazy" style="--media-ratio: 1600 / 1000"><p>One-pagers and PDFs go through design. The system handles the layout heavy lifting, but a designer finishes the imagery and reviews before anything ships. <strong>The structure is repeatable, the polish isn't.</strong></p><img alt="A generated Feedonomics page imported into Figma as editable layers" src="/project-claude-design6.webp" loading="lazy" style="--media-ratio: 1600 / 1000"><p>Blog thumbnails go through design too, but on a different model. Claude kickstarts the concepts, generating three directions in three color variations. A designer picks, refines and finishes. The system isn't replacing the designer here, it's removing the blank page.</p><p>Tiering by stakes is governance, but it's design governance. It's the same call you make when deciding what gets a token versus a component versus a one-off. The lesson generalized.</p>`,
+        heading: "Who It's For",
+        body: `<p>This wasn't built for designers first. It was built for everyone else at the company: sales, marketing, product, content writers, and leadership, all the way up to our CEO. The goal was to take weight off the brand team, not to add another tool for designers.</p><p>That changed how I built it. A designer knows what a token is and why a logo needs clear space. Most people opening this don't, and shouldn't have to. So every brand rule had to live inside the system, where it applies on its own, rather than in a guideline doc someone has to find and read first.</p>`,
       },
       {
         type: "text",
-        heading: "What I Learned",
-        body: `<p>Most of what I learned came from things going wrong.</p><p>The PDF kept inventing copy. I'd give it a brief and it would helpfully fill in the gaps with its own marketing language. The fix was a verbatim copy rule. Use only the words provided, nothing else. That single rule changed how I thought about prompts. Prompts aren't instructions, they're constraints. The job isn't to describe what you want, it's to close every door you don't.</p><img alt="A generated Feedonomics page section with a customer quote, open in the Claude Design editor" src="/project-claude-design7.webp" loading="lazy" style="--media-ratio: 1434 / 710"><p>The PDF also kept truncating. A four-section brief would come back as three. The fix was a completeness rule plus an intake audit, where the system confirms what it received before generating anything. That mirrors how I'd brief a junior designer. Repeat the ask back, then start the work.</p><img alt="Claude Design producing blog thumbnail concepts in several color palettes" src="/project-claude-design8.webp" loading="lazy" style="--media-ratio: 1600 / 1000"><p>Blog thumbnails kept returning a single option. I had to explicitly require three concepts in three color variations. Nine outputs minimum. That sounds rigid, but it forced the kind of breadth a good first-pass concept exploration needs anyway. The constraint made the output better, not worse.</p><p>Each of these fixes was small. Together they made the system go from interesting to usable. That's the part of design systems work that never makes it into a portfolio. The patient, unsexy job of writing rules in response to failure. It's most of the actual craft.</p><img alt="Blog thumbnail output: product data tables in lavender, peach, and mint" src="/project-claude-design9.webp" loading="lazy" style="--media-ratio: 1600 / 1000"><blockquote><p>That's the part of design systems work that never makes it into a portfolio. The patient, unsexy job of writing rules in response to failure. It's most of the actual craft.</p></blockquote><p>Looking back across the Figma system, the Claude integration and Claude Design, the same principles kept showing up. <strong>Constraints make systems usable.</strong> Every fix I added narrowed what the system could do, and every one made it more useful. Open-ended systems feel powerful in theory and break in practice. Governance is a design problem, not an ops problem. Tiering by stakes is the same call you make when deciding what gets a token versus a component versus a one-off. And audience is the hardest part. The system has to serve designers, PMs, marketers and developers. That mixed audience is what makes any real design system hard to get right.</p><blockquote><p>The medium changed. The work didn't.</p></blockquote><p>The system is roughly seventy percent of the way there. Good enough to use for prototyping and exploration, not yet ready for full marketing self-serve. The gap is mostly governance, brand guidelines that aren't fully locked, and platform constraints around permissions and sharing. The next phase is finalizing the deck template, building out enablement materials so the team can actually run the system without me, and locking down governance for the long term. Three conversations, in that order.</p><p>What I'm taking from all of this is that the principles hold up in any medium. Scope tightly. Constrain deliberately. Tier by stakes. Write the rule when you find the failure. The Figma system taught me that. The Claude integration confirmed it. Claude Design is showing me how far it can go.</p><p><em>May 5th, 2026</em></p>`,
+        heading: "The Goals",
+        body: `<p>Before building anything, I wrote down what the systems had to do:</p><ul><li><strong>On brand without a designer.</strong> Someone who has never opened a brand guide should still get colors, type, logos, and voice right.</li><li><strong>One system per brand.</strong> Commerce, BigCommerce, and Feedonomics each get their own system, and none of them borrow from the others.</li><li><strong>Rules live in the system, not the prompt.</strong> If a rule only exists in a prompt, it depends on someone typing it. If it lives in the system, everyone gets it for free.</li><li><strong>Get people 90% of the way there.</strong> The system handles layout, type, and brand. People add their own images and final details.</li></ul>`,
+      },
+      {
+        type: "text",
+        heading: "Learning the Tool",
+        body: `<p>Every system started the same way, from three documents: the brand guidelines, a token spec exported from our <a href="/work/commerce-multi-brand-system">multi-brand Figma system</a>, and an output spec listing what the system should produce and at what size. From those, Claude Design built the tokens, type, logos, voice rules, a marketing UI kit, and a slide system for each brand. Because every system started from the same three inputs, the process is repeatable for any brand we add later.</p><p>Getting from a first draft to something people could trust took a lot of iteration, and two habits made that faster.</p><p><strong>I talked to it like a designer.</strong> Most of my requests were dictated in plain language, the same way I'd give feedback in a design review. "This illustration feels basic, here's a spacing and grid style I like, make it a light version in our colors." "Cards across the deck feel too bubbly, tighten them up." When a slide went too far, I asked for simpler options, and got a detailed, a medium, and a simple version to choose from.</p><p><strong>I used Claude as a second opinion.</strong> For bigger fixes, I'd let Claude Design investigate and propose a plan, then paste that into a separate Claude chat to pressure-test it. Claude would help me make the calls and write back a precise answer, and I'd paste that into Claude Design. Going back and forth between the two caught bugs faster than either one alone, and made sure every fix landed at the system level instead of on one slide.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [
+          {
+            src: "/project-claude-design2.webp",
+            alt: "Claude Design with the Feedonomics design system published and a generated marketing page showing customer stats and a testimonial",
+            caption: "The Feedonomics system, published and building a marketing page",
+          },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Three Brands, Three Systems",
+        body: `<p>My first instinct was one system for every brand. It didn't work. When brands share a system, everything starts to blend: Feedonomics pages pick up BigCommerce styling, and sister-brand logos show up where they shouldn't. People can hold brand context in their heads. AI can't, and if two things can be confused, they will be.</p><p>So each brand got its own system, and each one forbids the others' tokens, type, and visuals. The same principle runs through our Figma library: shared foundations, separate brands.</p>`,
+      },
+      {
+        type: "componentTable",
+        groups: [
+          {
+            category: "Commerce",
+            items: ["\"We mean business.\"", "Pearl and Indigo surfaces, Iris accents", "One highlighter per slide", "Executive, portfolio-level voice", "The org default for new projects"],
+          },
+          {
+            category: "BigCommerce",
+            items: ["\"Outgrow the ordinary.\"", "White surfaces, BC Blue for every CTA", "Second person, sentence case, no exclamation points", "Confident, outcome-first voice"],
+          },
+          {
+            category: "Feedonomics",
+            items: ["\"Go from invisible to everywhere.\"", "Stone and Navy, Peach as a small accent", "Clever, unapologetic voice, \"Powered by nerds\"", "Blog thumbnail and PDF templates"],
+          },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Decks, the Biggest Time Saver",
+        body: `<p>Of everything the systems can make, decks save the most time. They're also the thing people outside design build most often, and the thing that drifts off brand fastest.</p><p>Each system has its own slide set at 1920×1080: covers, section dividers, content, stats, big quotes, card grids, tables, and closing slides. Someone picks a brand, describes what they need in plain language, and gets a deck that is already on brand. It isn't perfect. But it gets them about 90% of the way there, and they finish it by adding their own images and a few details. For the brand team, that means decks show up already using the right type, color, and logos.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [
+          {
+            src: "/project-claude-design3.webp",
+            alt: "Deck design rules: consistent layout, restyled barebones decks, image placeholders, and Aeonik type end to end",
+            caption: "The rules every deck is built on",
+          },
+          {
+            src: "/project-claude-design4.webp",
+            alt: "A generated Feedonomics copy guidelines deck titled A field guide to the Feedoverse",
+            caption: "A Feedonomics deck built from the system",
+          },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Rules Written From Real Decks",
+        body: `<p>Most of the rules in the deck systems exist because a deck went wrong. A logo got a vertical line and a tagline next to it. A row of cards got a different accent color on each one. Three stats came back in three different colors. Each time, the fix went into the system, not into one deck, so it never happened again.</p><p>The Commerce system goes one step further. It runs a check on every deck and flags anything that breaks a brand rule: an accent color used as a background, a logo without enough clear space, more than one highlighted phrase on a slide. Problems get caught before anyone on the brand team has to review them.</p><p>That's the part of design systems work that rarely makes it into a portfolio: the patient job of writing rules in response to failure. It's most of the actual craft.</p>`,
+      },
+      {
+        type: "text",
+        heading: "Who Uses It for What",
+        body: `<p>Not every asset carries the same risk. A blog thumbnail that's slightly off can be fixed. A deck that's off brand in front of a customer can't. I worked through where the lines should sit with our creative director, who brought the view of how requests actually move through the creative team day to day. We decided based on stakes:</p><ul><li><strong>Decks are self-serve.</strong> The slide system has tight enough structure to hold the brand on its own.</li><li><strong>One-pagers and PDFs go through design.</strong> The system handles the layout, and a designer finishes and reviews it. I wrote about that in the <a href="/work/claude-design-case-study-pdfs">case study PDF system</a>.</li><li><strong>Blog thumbnails start in Claude Design.</strong> It generates three concepts in three color variations, and a designer picks one and finishes it. The system doesn't replace the designer here. It removes the blank page.</li></ul>`,
+      },
+      {
+        type: "imageGrid",
+        images: [
+          {
+            src: "/project-claude-design9.webp",
+            alt: "Blog thumbnail output: product data tables in lavender, peach, and mint",
+            caption: "Feedonomics blog thumbnail concepts in three color variations",
+          },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Rolling It Out",
+        body: `<p>A system only helps if people know it exists and trust it. I recorded a five-minute Loom that walks through what the systems are, how to start a deck, and how they fit into the way people already work. Because most of the people it's for aren't designers, the video skips tokens and components and focuses on the steps: pick your brand, describe what you need, add your images, share.</p><p>Commerce is set as the org default, so anyone who starts a new project in Claude Design lands on the parent brand unless they choose BigCommerce or Feedonomics.</p>`,
+      },
+      {
+        type: "text",
+        heading: "What I Recommend",
+        body: `<p>If you're building a design system in Claude Design, build it around the people who aren't designers. Start from real specs, not screenshots, so every system is built the same way. Give each brand its own system, because AI doesn't handle ambiguity well. Put every rule in the system instead of the prompt. And aim for 90%, not 100%. Letting people finish the last 10% themselves is what makes them want to use it.</p><p>The medium is new, but the job isn't. Scope tightly, write the rule when you find the failure, and make the right thing the easy thing.</p>`,
       },
     ],
   },
