@@ -23,7 +23,17 @@ const projects = getHomepageProjects();
             Designing <span class="accent">systems</span>,<br />
             <span class="accent">sites</span> and <span class="accent">brands</span>.
           </h1>
-          <p class="tagline" data-spec="type" data-spec-name="Meta">Based out of Austin, Texas</p>
+          <p class="intro" data-spec="type" data-spec-name="Body">
+            I build intuitive, scalable web experiences rooted in solid fundamentals. Based out of Austin, Texas.
+          </p>
+          {/* The way into the blueprint: the page drawing its own specs over
+              itself. The key in the line is a real toggle too, for anyone
+              reading with a mouse; the drawing it adds is hidden from
+              assistive tech, since it describes the page rather than adding
+              to it. */}
+          <p class="tagline" data-spec="type" data-spec-name="Meta">
+            <span class="hint-key"><span class="hint-press">Press</span><span class="hint-tap">Tap</span> <button type="button" class="kbd-toggle" aria-pressed="false" aria-label="Show the specs (shortcut I)" data-blueprint-toggle>I</button></span> to peek under the&nbsp;hood.
+          </p>
           <div class="cta-row">
             <a href="/work" class="view-all-link">View all work</a>
           </div>
@@ -57,20 +67,12 @@ const projects = getHomepageProjects();
     <div class="blueprint-columns" aria-hidden="true" data-blueprint-columns></div>
     <div class="blueprint-tags" aria-hidden="true"></div>
 
-    {/* The way into the blueprint, the page drawing its own specs over
-        itself, and the way back out. An easter egg: a quiet white pill that
-        floats in once the work has been scrolled through (or I is pressed),
-        and flips to the blueprint's blue while the specs are up. */}
+    {/* The toggle lives at the end of the work, so while the specs are up
+        this is the way out wherever you are on the page. */}
     <div class="blueprint-bar" data-blueprint-bar>
-      <button type="button" class="bar-peek" aria-pressed="false" aria-keyshortcuts="i" data-blueprint-toggle>
-        <span class="bar-press">Press <kbd>I</kbd> to peek under the hood</span>
-        <span class="bar-tap">Tap to peek under the hood</span>
-      </button>
-      <div class="bar-on">
-        <span class="blueprint-bar-label">Specs on</span>
-        <button type="button" class="blueprint-bar-hide" data-blueprint-off>Hide</button>
-        <span class="blueprint-bar-keys"><kbd>I</kbd> or <kbd>Esc</kbd></span>
-      </div>
+      <span class="blueprint-bar-label">Specs on</span>
+      <button type="button" class="blueprint-bar-hide" data-blueprint-off>Hide</button>
+      <span class="blueprint-bar-keys"><kbd>I</kbd> or <kbd>Esc</kbd></span>
     </div>
   </main>
 
@@ -165,9 +167,8 @@ const projects = getHomepageProjects();
 
     const px = (value: number) => Math.round(value);
 
-    // The pill hangs off the body so it floats above the footer too.
+    // The floating bar hangs off the body too, so it rides above the footer.
     const bar = document.querySelector<HTMLElement>("[data-blueprint-bar]");
-    const hideButton = document.querySelector<HTMLButtonElement>("[data-blueprint-off]");
     if (bar) document.body.append(bar);
 
     // The rest of the canvas: the page gutters, the nav, and the footer. They
@@ -372,7 +373,7 @@ const projects = getHomepageProjects();
           const fi = at(fInner);
           const ft = at(fTop);
           const fb = at(fBottom);
-          const lx = fi.left + fi.width * 0.5;
+          const lx = fi.left + fi.width * 0.36;
           const main = at(page!);
           if (f.top - main.bottom > 1) vertical(docLayer, lx, main.bottom, f.top - main.bottom);
           // Measured inside the top border, so it reads as the padding.
@@ -400,40 +401,13 @@ const projects = getHomepageProjects();
       page!.classList.toggle("is-blueprint", on);
       document.documentElement.classList.toggle("blueprint-on", on);
       blueprintToggle!.setAttribute("aria-pressed", String(on));
-      if (on) reveal();
-      // Keep focus on whichever half of the pill is showing.
-      const active = document.activeElement;
-      if (on && active === blueprintToggle) hideButton?.focus();
-      if (!on && active === hideButton) blueprintToggle!.focus();
+      blueprintToggle!.setAttribute("aria-label", `${on ? "Hide" : "Show"} the specs (shortcut I)`);
       build();
-    }
-
-    // The pill stays out of sight until the work has been scrolled through,
-    // then stays for the rest of the visit: the last project on a desktop,
-    // where the headline rides along beside the work, and the second on a
-    // phone, where it doesn't.
-    function reveal() {
-      bar?.classList.add("is-revealed");
-    }
-    const lastProject = matchMedia("(max-width: 768px)").matches ? (rows[1] ?? rows[0]) : rows[rows.length - 1];
-    if (lastProject && "IntersectionObserver" in window) {
-      const watch = new IntersectionObserver(
-        (entries) => {
-          if (entries.some((entry) => entry.isIntersecting)) {
-            reveal();
-            watch.disconnect();
-          }
-        },
-        { threshold: 0.35 }
-      );
-      watch.observe(lastProject);
-    } else {
-      reveal();
     }
 
     blueprintToggle.addEventListener("click", () => setBlueprint(!page.classList.contains("is-blueprint")));
 
-    hideButton?.addEventListener("click", () => setBlueprint(false));
+    document.querySelector("[data-blueprint-off]")?.addEventListener("click", () => setBlueprint(false));
 
     // Escape puts it away from anywhere, like any overlay, without moving focus.
     document.addEventListener("keydown", (event) => {
@@ -507,9 +481,63 @@ const projects = getHomepageProjects();
     color: var(--color-text);
   }
 
+  /* A line or two on what the work is and where it's made. Held to a
+     reading measure so it never runs the width of the
+     headline. */
+  .intro {
+    max-width: 44ch;
+    margin-top: var(--space-4);
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  /* The way into the blueprint, on its own line in the Meta style. Only the
+     verb and its key hold together, so the key never starts a line. */
+  .hint-key {
+    white-space: nowrap;
+  }
+
+  /* The key in the sentence, drawn as a key and working as one. */
+  .kbd-toggle {
+    display: inline-block;
+    min-width: 1.7em;
+    margin: 0 1px;
+    padding: 0 6px;
+    font-family: var(--font-mono);
+    font-size: 0.82em;
+    line-height: 1.55;
+    text-align: center;
+    vertical-align: 0.1em;
+    color: var(--color-text);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    box-shadow: none;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.1s;
+  }
+
+  .kbd-toggle:hover {
+    border-color: var(--color-text);
+  }
+
+  .kbd-toggle:active {
+    transform: translateY(1px);
+  }
+
+  .kbd-toggle[aria-pressed="true"] {
+    color: #ffffff;
+    background: var(--blueprint);
+    border-color: var(--blueprint);
+  }
+
   /* Room above for the blueprint's Meta tag, which hangs off the top of
-     this line and would otherwise sit on the headline. */
-  .sticky-title + .tagline {
+     this line and would otherwise sit on the body copy. */
+  .intro + .tagline {
     margin-top: var(--space-5);
   }
 
@@ -554,7 +582,8 @@ const projects = getHomepageProjects();
     border-color: #333333;
   }
 
-  .view-all-link:focus-visible {
+  .view-all-link:focus-visible,
+  .kbd-toggle:focus-visible {
     outline: 2px solid var(--color-text);
     outline-offset: 3px;
   }
@@ -736,95 +765,33 @@ const projects = getHomepageProjects();
     border-radius: 5px;
   }
 
-  /* The pill pinned to the bottom of the screen. At rest it's a quiet
-     white invitation in the site's own surface; while the specs are up it
-     flips to the blueprint's blue and becomes the way out. Both states sit
-     in the same grid cell, so the pill keeps its size as it flips. */
+  /* While the specs are up: a small bar pinned to the bottom of the screen,
+     in the blueprint's own blue, so there is always a way out. */
   .blueprint-bar {
     position: fixed;
     left: 50%;
     bottom: calc(24px + env(safe-area-inset-bottom, 0px));
     z-index: 220;
-    display: grid;
-    width: max-content;
-    max-width: calc(100vw - 2 * var(--page-padding));
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 6px 6px 16px;
     font-size: var(--text-sm);
-    color: var(--color-text);
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
+    color: #ffffff;
+    background: var(--blueprint);
     border-radius: 999px;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
     opacity: 0;
     visibility: hidden;
     transform: translate(-50%, 8px);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s, background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
   }
 
-  .blueprint-bar.is-revealed,
   :global(html.blueprint-on) .blueprint-bar {
     opacity: 1;
     visibility: visible;
     transform: translate(-50%, 0);
-    transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-  }
-
-  :global(html.blueprint-on) .blueprint-bar {
-    color: #ffffff;
-    background: var(--color-link);
-    border-color: var(--color-link);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
-  }
-
-  .bar-peek,
-  .bar-on {
-    grid-area: 1 / 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.2s ease, visibility 0s;
-  }
-
-  .bar-peek {
-    gap: 6px;
-    padding: 10px 20px;
-    font: inherit;
-    font-weight: 500;
-    color: inherit;
-    background: none;
-    border: 0;
-    border-radius: 999px;
-    cursor: pointer;
-  }
-
-  .bar-peek:focus-visible {
-    outline: 2px solid var(--color-text);
-    outline-offset: 3px;
-  }
-
-  .blueprint-bar.is-revealed:hover {
-    border-color: var(--color-text);
-  }
-
-  :global(html.blueprint-on) .blueprint-bar:hover {
-    border-color: var(--color-link);
-  }
-
-  .bar-on {
-    gap: 12px;
-    padding: 6px 6px 6px 16px;
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  :global(html.blueprint-on) .bar-peek {
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  :global(html.blueprint-on) .bar-on {
-    opacity: 1;
-    visibility: visible;
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
   .blueprint-bar-label {
@@ -834,7 +801,7 @@ const projects = getHomepageProjects();
   .blueprint-bar-hide {
     font: inherit;
     font-weight: 500;
-    color: var(--color-link);
+    color: var(--blueprint);
     background: #ffffff;
     border: 0;
     border-radius: 999px;
@@ -854,50 +821,56 @@ const projects = getHomepageProjects();
     padding-right: 10px;
   }
 
-  .bar-on kbd {
+  /* Touch screens tap the key rather than press it, and have no keys to
+     list in the bar. */
+  .hint-tap {
+    display: none;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .hint-press,
+    .blueprint-bar-keys {
+      display: none;
+    }
+
+    .hint-tap {
+      display: inline;
+    }
+
+    .blueprint-bar {
+      padding-right: 6px;
+    }
+  }
+
+  .blueprint-bar kbd {
     color: #ffffff;
     background: transparent;
     border-color: rgba(255, 255, 255, 0.5);
   }
 
-  /* Touch screens tap rather than press, and have no keys to list. */
-  .bar-tap {
-    display: none;
-  }
-
-  @media (hover: none) and (pointer: coarse) {
-    .bar-press,
-    .blueprint-bar-keys {
-      display: none;
-    }
-
-    .bar-tap {
-      display: inline;
-    }
-
-    .bar-on {
-      padding-right: 6px;
-    }
-  }
-
-  /* The left column arrives in reading order: headline, location,
+  /* The left column arrives in reading order: headline, intro, location,
      then the button. Pure CSS, so the text is never left hidden waiting on a
      script. It holds its first frame while the intro scrim is up and plays
      the moment the scrim hands off (straight away for returning visitors,
      who skip the intro). */
   .headline-block > .sticky-title,
+  .headline-block > .intro,
   .headline-block > .tagline,
   .headline-block > .cta-row {
     animation: headline-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
     animation-delay: calc(0.12s + var(--stagger, 0) * 0.09s);
   }
 
-  .headline-block > .tagline {
+  .headline-block > .intro {
     --stagger: 1;
   }
 
-  .headline-block > .cta-row {
+  .headline-block > .tagline {
     --stagger: 2;
+  }
+
+  .headline-block > .cta-row {
+    --stagger: 3;
   }
 
   :global(html.intro-open) .headline-block > * {
@@ -917,13 +890,10 @@ const projects = getHomepageProjects();
 
   @media (prefers-reduced-motion: reduce) {
     .headline-block > .sticky-title,
+    .headline-block > .intro,
     .headline-block > .tagline,
     .headline-block > .cta-row {
       animation: none;
-    }
-
-    .blueprint-bar {
-      transform: translate(-50%, 0) !important;
     }
   }
 
