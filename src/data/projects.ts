@@ -670,7 +670,7 @@ export const projects: Project[] = [
     ogImage: "/project-claude-design1.jpg",
     thumbnail: "/claude-design-featured.svg",
     showOnHomepage: false,
-    tags: ["Design System", "Automation"],
+    tags: ["Design System", "Enablement"],
     tools: ["Claude Design", "Claude", "Figma"],
     client: "Commerce",
     clientUrl: "https://www.commerce.com/",
@@ -678,7 +678,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "The Opportunity",
-        body: `<p>Commerce is the parent company behind <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> and <a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a>. Three brands, each with its own colors, type, and voice, and one design team supporting all of them.</p><p>A lot of what reaches that team isn't design work. It's a sales deck that needs to look right, a team update for leadership, a partner overview due tomorrow. Most of the time people build these themselves in Google Slides, and every deck passes through a lot of hands. By the time it reaches the brand team, the fonts have drifted, the colors are close but not quite right, and a logo is stretched. Reviewing all of that takes time the brand team doesn't have.</p><p>When <strong>Claude Design</strong> came out, I wanted to learn it properly, not just try it. A design system in Claude Design isn't a library you reference. It's an environment that builds with you, and anyone at the company can open it. That made it a real chance to give people a way to make on-brand work without a designer in the room.</p><p>Here is what this covers:</p><ul><li>Who it's for and what it had to do</li><li>How I learned the tool and built the systems</li><li>Three brands, three systems</li><li>Decks, the biggest time saver</li><li>Rolling it out</li><li>What I recommend</li></ul>`,
+        body: `<p>Commerce is the parent company behind <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> and <a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a>. Three brands, each with its own colors, type, and voice, and one design team supporting all of them.</p><p>A lot of what reaches that team isn't design work. It's a sales deck that needs to look right, a team update for leadership, a partner overview due tomorrow. Most of the time people build these themselves in Google Slides, and every deck passes through a lot of hands. By the time it reaches the brand team, the fonts have drifted, the colors are close but not quite right, and a logo is stretched. Reviewing all of that takes time the brand team doesn't have.</p><p>When <strong>Claude Design</strong> came out, I wanted to learn it properly, not just try it. A design system in Claude Design isn't a library you reference. It's an environment that builds with you, and anyone at the company can open it. That made it a real chance to give people a way to make on-brand work without a designer in the room.</p><p>Here is what this covers:</p><ul><li>Who it's for and what it had to do</li><li>How I learned the tool and built the systems</li><li>Three brands, three systems</li><li>Decks, the biggest time saver</li><li>From a brief to a finished deck</li><li>Rolling it out</li><li>What I recommend</li></ul>`,
       },
       {
         type: "imageGrid",
@@ -734,27 +734,69 @@ export const projects: Project[] = [
           },
           {
             category: "Feedonomics",
-            items: ["\"Go from invisible to everywhere.\"", "Stone and Navy, Peach as a small accent", "Clever, unapologetic voice, \"Powered by nerds\"", "Blog thumbnail and PDF templates"],
+            items: ["\"Go from invisible to everywhere.\"", "Stone and Navy, Peach as a small accent", "Clever, unapologetic voice, \"Powered by nerds\"", "One-pager and PDF templates"],
           },
         ],
       },
       {
         type: "text",
         heading: "Decks, the Biggest Time Saver",
-        body: `<p>Of everything the systems can make, decks save the most time. They're also the thing people outside design build most often, and the thing that drifts off brand fastest.</p><p>Each system has its own slide set at 1920×1080: covers, section dividers, content, stats, big quotes, card grids, tables, and closing slides. Someone picks a brand, describes what they need in plain language, and gets a deck that is already on brand. It isn't perfect. But it gets them about 90% of the way there, and they finish it by adding their own images and a few details. For the brand team, that means decks show up already using the right type, color, and logos.</p>`,
+        body: `<p>Of everything the systems can make, decks save the most time. They're also the thing people outside design build most often, and the thing that drifts off brand fastest.</p><p>Each system has its own slide set at 1920×1080: covers, section dividers, content, stats, big quotes, card grids, tables, and closing slides. Someone picks a brand, describes what they need in plain language, and gets a deck that is already on brand. Below is the Commerce template deck and a few of the extra layouts it can pull from. It isn't perfect. But it gets them about 90% of the way there, and they finish it by adding their own images and a few details. For the brand team, that means decks show up already using the right type, color, and logos.</p>`,
+      },
+      {
+        type: "carousel",
+        perView: 1,
+        ratio: "16 / 9",
+        contain: true,
+        images: [
+          { src: "/project-brand-systems-template-01.webp", alt: "Commerce deck cover on Pearl with the headline We're powering what's next and the Commerce logo", caption: "01 · Cover" },
+          { src: "/project-brand-systems-template-02.webp", alt: "Commerce family slide with three white cards for BigCommerce, Feedonomics, and Makeswift", caption: "02 · The family" },
+          { src: "/project-brand-systems-template-03.webp", alt: "BigCommerce slide on dark Indigo with a headline, two stats, and the BigCommerce logo in a white tile", caption: "03 · Sub-brand, dark" },
+          { src: "/project-brand-systems-template-04.webp", alt: "Makeswift slide on Iris with a headline, feature tags, and the Makeswift logo in a white tile", caption: "04 · Sub-brand, Iris" },
+          { src: "/project-brand-systems-template-05.webp", alt: "Four numbered purpose cards in Iris, Indigo, Lilac, and a pale lime highlight", caption: "05 · Numbered grid" },
+          { src: "/project-brand-systems-template-06.webp", alt: "Layered ecosystem diagram with reach, storefront, data feed, visual experience, and a Commerce core foundation", caption: "06 · Ecosystem diagram" },
+          { src: "/project-brand-systems-template-07.webp", alt: "Hero stat layout with a large 60K+ figure beside a short headline and supporting copy", caption: "07 · Hero stat" },
+          { src: "/project-brand-systems-template-08.webp", alt: "Timeline layout marking milestones from 2009 to 2026", caption: "08 · Timeline" },
+          { src: "/project-brand-systems-template-09.webp", alt: "Roadmap layout with four workstreams across four quarters in Iris, Indigo, and Lilac blocks", caption: "09 · Roadmap" },
+          { src: "/project-brand-systems-template-10.webp", alt: "Comparison matrix showing which capabilities BigCommerce, Feedonomics, and Makeswift cover", caption: "10 · Comparison table" },
+          { src: "/project-brand-systems-template-11.webp", alt: "Dark Indigo quarter plan with four columns of commitments", caption: "11 · Quarter plan, dark" },
+          { src: "/project-brand-systems-template-12.webp", alt: "Closing slide on Indigo with the line We mean business and contact links", caption: "12 · Closing" },
+        ],
+      },
+      {
+        type: "text",
+        heading: "From a Brief to a Finished Deck",
+        body: `<p>To show what that looks like, I wrote a short brief the way a coworker would: plain notes, no design direction, just the copy for each slide and a line saying "keep it simple, most people watching aren't designers." I dropped it into the Commerce system and asked for a deck.</p><p>This is what came back. I named a few layouts, like stats and a big quote, and the system handled the rest. The content is nothing like the template deck above, but every slide follows the same rules:</p><ul><li><strong>Logo placement.</strong> The Commerce logo sits in the same bottom-left spot on every content slide, with the same clear space.</li><li><strong>Page numbers.</strong> Always bottom right, same size, same color, and left off the cover.</li><li><strong>Legal line.</strong> "© Commerce. All rights reserved. Confidential." runs up the right edge of every slide.</li><li><strong>Type and spacing.</strong> Headlines, body copy, and cards share one type scale and the same margins from slide to slide.</li><li><strong>Color.</strong> Surfaces stay in the Commerce palette, and a row of stats shares one color.</li></ul><p>That's the part that takes the load off the brand team. Anyone can write the notes. The system makes sure the result looks like Commerce.</p>`,
       },
       {
         type: "imageGrid",
+        sideBySide: true,
+        images: [
+          { src: "/project-brand-systems-output-01.webp", alt: "Cover slide reading Make it on brand, without the wait, with presenter and date" },
+          { src: "/project-brand-systems-output-02.webp", alt: "Why we built this slide with the headline on the left and the problem statement on the right" },
+          { src: "/project-brand-systems-output-03.webp", alt: "Stats slide with three cards: 3 brand systems, 90% of the way there, and 5 minutes to learn" },
+          { src: "/project-brand-systems-output-04.webp", alt: "Three numbered step cards: pick your brand, describe what you need, finish it" },
+          { src: "/project-brand-systems-output-05.webp", alt: "Three brands, ready to go, with a color swatch card for Commerce, BigCommerce, and Feedonomics" },
+          { src: "/project-brand-systems-output-06.webp", alt: "Section divider on Indigo reading What it takes care of" },
+          { src: "/project-brand-systems-output-07.webp", alt: "What's in every system: six cards for colors, type, logos, layouts, icons, and voice" },
+          { src: "/project-brand-systems-output-08.webp", alt: "Two columns comparing what the system handles in an Iris card with what you handle in a white card" },
+          { src: "/project-brand-systems-output-09.webp", alt: "Big quote slide reading Every rule lives in the system, so you don't have to remember it" },
+          { src: "/project-brand-systems-output-10.webp", alt: "Closing slide on Indigo reading Questions? with a pointer to the walkthrough video" },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Templates for Repeat Work",
+        body: `<p>Some requests come in over and over with the same structure. For those, I build templates inside the system, so the layout rules are locked in and only the content changes. The BigCommerce system has a one-pager and whitepaper template and a case study one-pager. The case study template grew into its own project: <a href="/work/claude-design-case-study-pdfs">a case study PDF system</a> that replaced hand-built InDesign files.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
         images: [
           {
-            src: "/project-claude-design3.webp",
-            alt: "Deck design rules: consistent layout, restyled barebones decks, image placeholders, and Aeonik type end to end",
-            caption: "The rules every deck is built on",
-          },
-          {
-            src: "/project-claude-design4.webp",
-            alt: "A generated Feedonomics copy guidelines deck titled A field guide to the Feedoverse",
-            caption: "A Feedonomics deck built from the system",
+            src: "/project-brand-systems-templates.webp",
+            alt: "Claude Design's templates list showing a BigCommerce Case Study One-Pager and a BigCommerce One-Pager / Whitepaper, both built on the Marketing BigCommerce design system",
+            caption: "Templates built on the BigCommerce system",
           },
         ],
       },
@@ -766,17 +808,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Who Uses It for What",
-        body: `<p>Not every asset carries the same risk. A blog thumbnail that's slightly off can be fixed. A deck that's off brand in front of a customer can't. I worked through where the lines should sit with our creative director, who brought the view of how requests actually move through the creative team day to day. We decided based on stakes:</p><ul><li><strong>Decks are self-serve.</strong> The slide system has tight enough structure to hold the brand on its own.</li><li><strong>One-pagers and PDFs go through design.</strong> The system handles the layout, and a designer finishes and reviews it. I wrote about that in the <a href="/work/claude-design-case-study-pdfs">case study PDF system</a>.</li><li><strong>Blog thumbnails start in Claude Design.</strong> It generates three concepts in three color variations, and a designer picks one and finishes it. The system doesn't replace the designer here. It removes the blank page.</li></ul>`,
-      },
-      {
-        type: "imageGrid",
-        images: [
-          {
-            src: "/project-claude-design9.webp",
-            alt: "Blog thumbnail output: product data tables in lavender, peach, and mint",
-            caption: "Feedonomics blog thumbnail concepts in three color variations",
-          },
-        ],
+        body: `<p>Not every asset carries the same risk. A rough wireframe that's slightly off costs nothing. A deck that's off brand in front of a customer can't. I worked through where the lines should sit with our creative director, who brought the view of how requests actually move through the creative team day to day. We decided based on stakes:</p><ul><li><strong>Decks are self-serve.</strong> The slide system has tight enough structure to hold the brand on its own.</li><li><strong>One-pagers and PDFs go through design.</strong> The system handles the layout, and a designer finishes and reviews it. I wrote about that in the <a href="/work/claude-design-case-study-pdfs">case study PDF system</a>.</li><li><strong>Landing page wireframes start in Claude Design.</strong> It's quick at turning a brief into a page built from the brand's real sections, so the web team starts from a structure instead of a blank page.</li></ul>`,
       },
       {
         type: "text",
