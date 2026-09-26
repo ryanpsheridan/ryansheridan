@@ -17,6 +17,9 @@ export default defineConfig({
     // /proposals branch existed, so the old link keeps working.
     '/ohio-golf-club': '/proposals/ohio-golf-club',
     '/project-questionnaire': '/start-a-project',
+    // Renamed from the first Claude Design write-up when it was rewritten
+    // around the three brand systems.
+    '/work/claude-design-consistency-first-design-second': '/work/brand-systems-claude-design',
   },
   integrations: [
     sitemap({

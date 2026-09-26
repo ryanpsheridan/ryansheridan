@@ -3,6 +3,7 @@
   "trailingSlash": false,
   "redirects": [
     { "source": "/ohio-golf-club", "destination": "/proposals/ohio-golf-club", "permanent": true },
-    { "source": "/project-questionnaire", "destination": "/start-a-project", "permanent": true }
+    { "source": "/project-questionnaire", "destination": "/start-a-project", "permanent": true },
+    { "source": "/work/claude-design-consistency-first-design-second", "destination": "/work/brand-systems-claude-design", "permanent": true }
   ]
 }
