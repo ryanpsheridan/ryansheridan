@@ -26,19 +26,6 @@ const projects = getHomepageProjects();
           <p class="tagline" data-spec="type" data-spec-name="Meta">Based out of Austin, Texas</p>
           <div class="cta-row">
             <a href="/work" class="view-all-link">View all work</a>
-            {/* The way into the blueprint, the page drawing its own specs over
-                itself. An easter egg on desktop: it stays out of sight until
-                the last project scrolls into view (or someone presses I),
-                then it stays. On a phone it shows from the start. The drawing it adds is hidden from assistive tech,
-                since it describes the page rather than adding to it. */}
-            <button type="button" class="hood-toggle" aria-pressed="false" aria-keyshortcuts="i" data-blueprint-toggle>
-              <svg class="hood-eye" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
-                <path class="eye-lid" d="M2 10Q10 0 18 10" />
-                <path class="eye-lid" d="M2 10Q10 20 18 10" />
-                <circle class="eye-pupil" cx="10" cy="10" r="2.8" />
-              </svg>
-              Peek under the hood <kbd class="hood-key" aria-hidden="true">I</kbd>
-            </button>
           </div>
           <div class="blueprint-tags" aria-hidden="true"></div>
         </div>
@@ -70,12 +57,20 @@ const projects = getHomepageProjects();
     <div class="blueprint-columns" aria-hidden="true" data-blueprint-columns></div>
     <div class="blueprint-tags" aria-hidden="true"></div>
 
-    {/* The toggle lives at the end of the work, so while the specs are up
-        this is the way out wherever you are on the page. */}
+    {/* The way into the blueprint, the page drawing its own specs over
+        itself, and the way back out. An easter egg: a quiet white pill that
+        floats in once the work has been scrolled through (or I is pressed),
+        and flips to the blueprint's blue while the specs are up. */}
     <div class="blueprint-bar" data-blueprint-bar>
-      <span class="blueprint-bar-label">Specs on</span>
-      <button type="button" class="blueprint-bar-hide" data-blueprint-off>Hide</button>
-      <span class="blueprint-bar-keys"><kbd>I</kbd> or <kbd>Esc</kbd></span>
+      <button type="button" class="bar-peek" aria-pressed="false" aria-keyshortcuts="i" data-blueprint-toggle>
+        <span class="bar-press">Press <kbd>I</kbd> to peek under the hood</span>
+        <span class="bar-tap">Tap to peek under the hood</span>
+      </button>
+      <div class="bar-on">
+        <span class="blueprint-bar-label">Specs on</span>
+        <button type="button" class="blueprint-bar-hide" data-blueprint-off>Hide</button>
+        <span class="blueprint-bar-keys"><kbd>I</kbd> or <kbd>Esc</kbd></span>
+      </div>
     </div>
   </main>
 
@@ -169,6 +164,11 @@ const projects = getHomepageProjects();
     }
 
     const px = (value: number) => Math.round(value);
+
+    // The pill hangs off the body so it floats above the footer too.
+    const bar = document.querySelector<HTMLElement>("[data-blueprint-bar]");
+    const hideButton = document.querySelector<HTMLButtonElement>("[data-blueprint-off]");
+    if (bar) document.body.append(bar);
 
     // The rest of the canvas: the page gutters, the nav, and the footer. They
     // live outside main, so their layers hang off the body, above the sticky
@@ -401,15 +401,21 @@ const projects = getHomepageProjects();
       document.documentElement.classList.toggle("blueprint-on", on);
       blueprintToggle!.setAttribute("aria-pressed", String(on));
       if (on) reveal();
+      // Keep focus on whichever half of the pill is showing.
+      const active = document.activeElement;
+      if (on && active === blueprintToggle) hideButton?.focus();
+      if (!on && active === hideButton) blueprintToggle!.focus();
       build();
     }
 
-    // The button stays hidden until the last project comes into view, then
-    // stays put for the rest of the visit.
+    // The pill stays out of sight until the work has been scrolled through,
+    // then stays for the rest of the visit: the last project on a desktop,
+    // where the headline rides along beside the work, and the second on a
+    // phone, where it doesn't.
     function reveal() {
-      blueprintToggle!.classList.add("is-revealed");
+      bar?.classList.add("is-revealed");
     }
-    const lastProject = rows[rows.length - 1];
+    const lastProject = matchMedia("(max-width: 768px)").matches ? (rows[1] ?? rows[0]) : rows[rows.length - 1];
     if (lastProject && "IntersectionObserver" in window) {
       const watch = new IntersectionObserver(
         (entries) => {
@@ -427,7 +433,7 @@ const projects = getHomepageProjects();
 
     blueprintToggle.addEventListener("click", () => setBlueprint(!page.classList.contains("is-blueprint")));
 
-    document.querySelector("[data-blueprint-off]")?.addEventListener("click", () => setBlueprint(false));
+    hideButton?.addEventListener("click", () => setBlueprint(false));
 
     // Escape puts it away from anywhere, like any overlay, without moving focus.
     document.addEventListener("keydown", (event) => {
@@ -501,102 +507,6 @@ const projects = getHomepageProjects();
     color: var(--color-text);
   }
 
-  /* The way into the blueprint, a quiet secondary to View all work. Held
-     out of sight (and out of the tab order) until the last project scrolls
-     into view. */
-  .hood-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-family: inherit;
-    font-size: var(--text-sm);
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    line-height: 1.6;
-    color: var(--color-text);
-    background: transparent;
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    padding: 11px 16px 11px 22px;
-    appearance: none;
-    -webkit-appearance: none;
-    cursor: pointer;
-    visibility: hidden;
-    opacity: 0;
-    transform: translateX(-8px);
-    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s linear 0.5s, border-color 0.2s, background 0.2s, color 0.2s;
-  }
-
-  .hood-toggle.is-revealed {
-    visibility: visible;
-    opacity: 1;
-    transform: none;
-    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s, border-color 0.2s, background 0.2s, color 0.2s;
-  }
-
-  .hood-toggle:hover {
-    border-color: var(--color-text);
-  }
-
-  /* The eye: open while the specs are off, a slight squint while they're on,
-     like looking closely at something. Scaled about the line through the
-     corners of the eye so the lids close toward each other. */
-  .hood-eye {
-    margin-left: -4px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.6;
-    stroke-linecap: round;
-    overflow: visible;
-  }
-
-  .eye-lid,
-  .eye-pupil {
-    transform-box: view-box;
-    transform-origin: 10px 10px;
-    transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
-  }
-
-  .eye-pupil {
-    fill: currentColor;
-    stroke: none;
-  }
-
-  .hood-toggle[aria-pressed="true"] .eye-lid {
-    transform: scaleY(0.62);
-  }
-
-  .hood-toggle[aria-pressed="true"] .eye-pupil {
-    transform: scaleY(0.82);
-  }
-
-  /* The shortcut, drawn as a key. */
-  .hood-key {
-    min-width: 1.7em;
-    padding: 0 6px;
-    font-family: var(--font-mono);
-    font-size: 0.82em;
-    line-height: 1.55;
-    text-align: center;
-    color: var(--color-text);
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: 5px;
-    transition: border-color 0.2s, background 0.2s, color 0.2s;
-  }
-
-  .hood-toggle[aria-pressed="true"] {
-    color: #ffffff;
-    background: var(--blueprint);
-    border-color: var(--blueprint);
-  }
-
-  .hood-toggle[aria-pressed="true"] .hood-key {
-    color: #ffffff;
-    background: transparent;
-    border-color: rgba(255, 255, 255, 0.5);
-  }
-
   /* Room above for the blueprint's Meta tag, which hangs off the top of
      this line and would otherwise sit on the headline. */
   .sticky-title + .tagline {
@@ -644,8 +554,7 @@ const projects = getHomepageProjects();
     border-color: #333333;
   }
 
-  .view-all-link:focus-visible,
-  .hood-toggle:focus-visible {
+  .view-all-link:focus-visible {
     outline: 2px solid var(--color-text);
     outline-offset: 3px;
   }
@@ -827,33 +736,95 @@ const projects = getHomepageProjects();
     border-radius: 5px;
   }
 
-  /* While the specs are up: a small bar pinned to the bottom of the screen,
-     in the blueprint's own blue, so there is always a way out. */
+  /* The pill pinned to the bottom of the screen. At rest it's a quiet
+     white invitation in the site's own surface; while the specs are up it
+     flips to the blueprint's blue and becomes the way out. Both states sit
+     in the same grid cell, so the pill keeps its size as it flips. */
   .blueprint-bar {
     position: fixed;
     left: 50%;
     bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-    z-index: 5;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 6px 6px 6px 16px;
+    z-index: 220;
+    display: grid;
+    width: max-content;
+    max-width: calc(100vw - 2 * var(--page-padding));
+    white-space: nowrap;
     font-size: var(--text-sm);
-    color: #ffffff;
-    background: var(--blueprint);
+    color: var(--color-text);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
     border-radius: 999px;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
     opacity: 0;
     visibility: hidden;
     transform: translate(-50%, 8px);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s, background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
   }
 
-  .split-layout.is-blueprint .blueprint-bar {
+  .blueprint-bar.is-revealed,
+  :global(html.blueprint-on) .blueprint-bar {
     opacity: 1;
     visibility: visible;
     transform: translate(-50%, 0);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  }
+
+  :global(html.blueprint-on) .blueprint-bar {
+    color: #ffffff;
+    background: var(--color-link);
+    border-color: var(--color-link);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .bar-peek,
+  .bar-on {
+    grid-area: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease, visibility 0s;
+  }
+
+  .bar-peek {
+    gap: 6px;
+    padding: 10px 20px;
+    font: inherit;
+    font-weight: 500;
+    color: inherit;
+    background: none;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  .bar-peek:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 3px;
+  }
+
+  .blueprint-bar.is-revealed:hover {
+    border-color: var(--color-text);
+  }
+
+  :global(html.blueprint-on) .blueprint-bar:hover {
+    border-color: var(--color-link);
+  }
+
+  .bar-on {
+    gap: 12px;
+    padding: 6px 6px 6px 16px;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  :global(html.blueprint-on) .bar-peek {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  :global(html.blueprint-on) .bar-on {
+    opacity: 1;
+    visibility: visible;
   }
 
   .blueprint-bar-label {
@@ -863,7 +834,7 @@ const projects = getHomepageProjects();
   .blueprint-bar-hide {
     font: inherit;
     font-weight: 500;
-    color: var(--blueprint);
+    color: var(--color-link);
     background: #ffffff;
     border: 0;
     border-radius: 999px;
@@ -883,26 +854,30 @@ const projects = getHomepageProjects();
     padding-right: 10px;
   }
 
-  /* Touch screens have no keys to show on the button or list in the bar. */
+  .bar-on kbd {
+    color: #ffffff;
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* Touch screens tap rather than press, and have no keys to list. */
+  .bar-tap {
+    display: none;
+  }
+
   @media (hover: none) and (pointer: coarse) {
-    .hood-key,
+    .bar-press,
     .blueprint-bar-keys {
       display: none;
     }
 
-    .hood-toggle {
-      padding-right: 22px;
+    .bar-tap {
+      display: inline;
     }
 
-    .blueprint-bar {
+    .bar-on {
       padding-right: 6px;
     }
-  }
-
-  .blueprint-bar kbd {
-    color: #ffffff;
-    background: transparent;
-    border-color: rgba(255, 255, 255, 0.5);
   }
 
   /* The left column arrives in reading order: headline, location,
@@ -947,15 +922,8 @@ const projects = getHomepageProjects();
       animation: none;
     }
 
-    .hood-toggle,
-    .hood-toggle.is-revealed,
-    .eye-lid,
-    .eye-pupil {
-      transition: none;
-    }
-
-    .hood-toggle {
-      transform: none;
+    .blueprint-bar {
+      transform: translate(-50%, 0) !important;
     }
   }
 
@@ -1057,15 +1025,6 @@ const projects = getHomepageProjects();
 
     .project-row {
       padding: var(--space-5) 0;
-    }
-
-    /* On a phone the headline doesn't follow the work down the page, so
-       the button would appear somewhere no one is looking. Show it from
-       the start. */
-    .hood-toggle {
-      visibility: visible;
-      opacity: 1;
-      transform: none;
     }
 
     /* Skip the entrance on mobile; the first project is simply there. */
