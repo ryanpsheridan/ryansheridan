@@ -199,6 +199,11 @@ const jsonLd = noindex
   html {
     scroll-behavior: smooth;
     scrollbar-gutter: stable;
+    /* Hold type at its set sizes. Without this, iOS Safari enlarges some
+       blocks of text on its own when a phone turns sideways, which is how
+       the small mono lines ended up bigger than the body copy. */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
