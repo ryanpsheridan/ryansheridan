@@ -149,8 +149,8 @@ export const projects: Project[] = [
         type: "imageGrid",
         framed: true,
         images: [
-          { src: "/project-feedonomics-tokens-applied-type.webp", alt: "Feedonomics product page in Figma with the hero headline selected and the Multi-Brand text styles menu showing Display 2 at 64/70.4", caption: "Type: Display 2 from the Multi-Brand library resolves to the Feedonomics size" },
-          { src: "/project-feedonomics-tokens-applied-surface.webp", alt: "The same Feedonomics page in Figma with the hero section selected and its fill set to the Surface/Inverse token from the Multi-Brand library", caption: "Surface: the hero is filled with Surface/Inverse, not a brand color" },
+          { src: "/project-feedonomics-tokens-applied-type.webp", alt: "Feedonomics product page in Figma with the hero headline selected and the Multi-Brand text styles menu showing Display 2 at 64/70.4", caption: "Type: Display 2 from the Multi-Brand library resolves to the Feedonomics size." },
+          { src: "/project-feedonomics-tokens-applied-surface.webp", alt: "The same Feedonomics page in Figma with the hero section selected and its fill set to the Surface/Inverse token from the Multi-Brand library", caption: "Surface: the hero is filled with Surface/Inverse, not a brand color." },
         ],
       },
       {
@@ -187,7 +187,7 @@ export const projects: Project[] = [
           {
             src: "/project-claude-design-pdf-start-screen.webp",
             alt: "Claude Design start screen with the design system menu open, listing the Commerce, BigCommerce, and Feedonomics marketing systems",
-            caption: "Every PDF starts by picking the BigCommerce design system in Claude Design",
+            caption: "Every PDF starts by picking the BigCommerce design system in Claude Design.",
           },
         ],
       },
@@ -521,8 +521,8 @@ export const projects: Project[] = [
         type: "imageGrid",
         framed: true,
         images: [
-          { src: "/project-feedonomics-tokens-applied-type.webp", alt: "Feedonomics product page in Figma with the hero headline selected and the Multi-Brand text styles menu showing Display 2 at 64/70.4", caption: "Type: the hero headline uses Display 2, which resolves to the Feedonomics size" },
-          { src: "/project-feedonomics-tokens-applied-surface.webp", alt: "The same Feedonomics page in Figma with the hero section selected and its fill set to the Surface/Inverse token from the Multi-Brand library", caption: "Surface: the hero section is filled with Surface/Inverse, not a hex value" },
+          { src: "/project-feedonomics-tokens-applied-type.webp", alt: "Feedonomics product page in Figma with the hero headline selected and the Multi-Brand text styles menu showing Display 2 at 64/70.4", caption: "Type: the hero headline uses Display 2, which resolves to the Feedonomics size." },
+          { src: "/project-feedonomics-tokens-applied-surface.webp", alt: "The same Feedonomics page in Figma with the hero section selected and its fill set to the Surface/Inverse token from the Multi-Brand library", caption: "Surface: the hero section is filled with Surface/Inverse, not a hex value." },
         ],
       },
       {
@@ -687,7 +687,7 @@ export const projects: Project[] = [
           {
             src: "/project-brand-systems-list.webp",
             alt: "Claude Design's design systems list filtered to Marketing, showing the BigCommerce, Feedonomics, and Commerce systems, all published, with Commerce marked as the org default",
-            caption: "The three marketing systems in Claude Design. Commerce is the org default because it's the parent brand",
+            caption: "The three marketing systems in Claude Design. Commerce is the org default because it's the parent brand.",
           },
         ],
       },
