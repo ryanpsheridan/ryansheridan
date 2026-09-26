@@ -33,9 +33,9 @@ const projects = getHomepageProjects();
                 since it describes the page rather than adding to it. */}
             <button type="button" class="hood-toggle" aria-pressed="false" aria-keyshortcuts="i" data-blueprint-toggle>
               <svg class="hood-eye" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
-                <path class="eye-lid" d="M2 10Q10 2 18 10" />
-                <path class="eye-lid" d="M2 10Q10 18 18 10" />
-                <circle class="eye-pupil" cx="10" cy="10" r="2.6" />
+                <path class="eye-lid" d="M2 10Q10 0 18 10" />
+                <path class="eye-lid" d="M2 10Q10 20 18 10" />
+                <circle class="eye-pupil" cx="10" cy="10" r="2.8" />
               </svg>
               Peek under the hood <kbd class="hood-key" aria-hidden="true">I</kbd>
             </button>
@@ -563,11 +563,11 @@ const projects = getHomepageProjects();
   }
 
   .hood-toggle[aria-pressed="true"] .eye-lid {
-    transform: scaleY(0.45);
+    transform: scaleY(0.62);
   }
 
   .hood-toggle[aria-pressed="true"] .eye-pupil {
-    transform: scaleY(0.7);
+    transform: scaleY(0.82);
   }
 
   /* The shortcut, drawn as a key. */
