@@ -445,14 +445,16 @@ const schema = [
   }
 
   .body :global(a) {
-    color: var(--color-text);
+    color: var(--color-link);
     text-decoration: underline;
     text-underline-offset: 3px;
-    text-decoration-color: var(--color-border);
+    text-decoration-color: var(--color-link-subtle);
+    transition: color 0.2s, text-decoration-color 0.2s;
   }
 
   .body :global(a:hover) {
-    text-decoration-color: var(--color-text);
+    color: var(--color-link-hover);
+    text-decoration-color: var(--color-link-hover);
   }
 
   .body :global(strong) {
@@ -487,10 +489,12 @@ const schema = [
   }
 
   .body :global(h3) {
-    font-size: var(--text-md);
-    font-weight: 300;
+    font-size: var(--text-lg);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
     margin-top: var(--space-5);
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-2);
   }
 
   .body :global(img) {
