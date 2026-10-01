@@ -23,20 +23,13 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      // Anything that carries noindex stays out of the sitemap too, so the
-      // two never disagree about what belongs in search. /proposals covers
-      // the index and every client proposal under it. The field experiments
-      // are linked directly rather than found through search.
+      // Only the pages that are meant to show up in search are listed. Every
+      // other page carries noindex, so an allowlist keeps the sitemap and the
+      // robots tags from disagreeing as new pages get added.
       filter: (page) =>
-        ![
-          '/apartment',
-          '/golftrip',
-          '/proposals',
-          '/ohio-golf-club',
-          '/cursor-field',
-          '/maze-field',
-          '/homepage-1',
-        ].some((path) => page.includes(path)),
+        ['/', '/contact', '/start-a-project'].includes(
+          new URL(page).pathname.replace(/\/$/, '') || '/',
+        ),
     }),
   ]
 });
