@@ -29,7 +29,7 @@
 <clipPath id="b2"><rect x="700" y="834" width="900" height="506.2" rx="6"/></clipPath>
 </defs>
 
-<rect width="1600" height="1000" fill="#170245"/>
+<rect width="1600" height="1000" fill="#D8D6CF"/>
 
 <!-- Claude Design chat panel -->
 <g clip-path="url(#panel)">
