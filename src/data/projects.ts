@@ -368,90 +368,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "rhow-coffee",
-    title: "RHOW Coffee",
-    year: 2026,
-    description: "Brand identity for RHOW Coffee, a specialty coffee shop in Massillon, Ohio: a swan mark, logo suite, color palette, and illustration.",
-    ogImage: "/project-rhow-coffee02.jpg",
-    thumbnail: "/rhow-logo-spec-animated-dark.svg",
-    showOnHomepage: true,
-    tags: ["Branding", "Illustration"],
-    tools: ["Adobe Illustrator", "Figma"],
-    client: "RHOW Coffee",
-    clientUrl: "https://www.instagram.com/rhowcoffee",
-    content: [
-      {
-        type: "text",
-        heading: "Design Philosophy",
-        body: `<p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">Rhow Coffee</a> is a specialty coffee shop in Massillon, Ohio, owned by David Hurley. The name is shorthand for his own philosophy, Rise Humbly Over Worry, control what you can control and let the rest go. That mindset shaped what he wanted the shop to be: less a place to grab a cup and go, more a room built for staying awhile, whether that's a business meeting, a first date, or old friends catching up.</p><p>The identity needed to hold that same restraint. The brand is built around a custom-traced logotype and a swan mark, anchored by a palette of shadow grey, parchment, steel blue, blue slate, and dark walnut. David specifically asked for a swan, a nod to black swan latte art, and a mark that carries some personal meaning for him. Geometric and architectural, but warm enough to feel like a place worth lingering in.</p>`,
-      },
-      {
-        type: "text",
-        body: `<p>A single lockup was never going to cover everything. The identity had to hold up on a cup sleeve, a front window, and a sign read from across the lot, so the primary mark was drawn out into a small suite. The full badge keeps the circular RHOW COFFEE type when there is room for it. When there isn't, the swan steps out of the circle and sits beside the wordmark on its own. The same geometry sits underneath either version, and that is what keeps them reading as one brand instead of three loosely related ones.</p>`,
-      },
-      {
-        type: "imageGrid",
-        images: [{ src: "/rhow-logo-suite-animated.svg", alt: "RHOW Coffee logo suite: the circular swan badge, a horizontal lockup, a wordmark, and the swan icon on its own" }],
-      },
-      {
-        type: "text",
-        body: `<p>Color carries the rest of it. The near black and the warm off white do most of the everyday work, one holding the mark and the other giving it room to breathe. The blues came in as a cooler counterweight, enough contrast to keep the system from going flat without ever competing with the swan. Dark walnut is the only genuinely warm note in the set, and it stays rare on purpose, which is what makes it register when it does show up.</p>`,
-      },
-      {
-        type: "imageGrid",
-        images: [{ src: "/rhow-palette-animated.svg", alt: "RHOW Coffee color palette: Shadow Grey, Parchment, Steel Blue, Blue Slate, and Dark Walnut" }],
-      },
-      {
-        type: "text",
-        heading: "From the Door to the Cup",
-        body: `<p>The brand shows up everywhere in the shop, on signage, the front door, the menu display, and the retail shelving. That consistency was the goal from the start. Every piece of the identity was designed to hold up across physical touchpoints without losing the quiet, refined feel of the primary mark.</p><p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">You can follow RHOW Coffee Instagram here.</a></p>`,
-      },
-      {
-        type: "text",
-        body: `<p>Curious about David's path to owning RHOW? He shared the full story, from working the counter to buying the shop, in <a href="https://texascoffeeschool.com/buying-a-coffee-shop-meet-the-owner-of-rhow-coffee/" target="_blank" rel="noopener noreferrer">this interview with Texas Coffee School</a>.</p>`,
-      },
-      {
-        type: "divider",
-      },
-      {
-        type: "text",
-        heading: "A Look Around the Shop",
-        body: `<p>See the full brand book in motion in <a href="https://www.instagram.com/p/DTDZLLxkU5z/" target="_blank" rel="noopener noreferrer">this Instagram video</a>.</p>`,
-      },
-      {
-        type: "imageGrid",
-        images: [{ src: "/project-rhow-coffee07.webp", alt: "RHOW Coffee storefront with the wordmark sign above the entrance and the swan badge on the windows" }],
-      },
-      {
-        type: "imageGrid",
-        images: [{ src: "/project-rhow-coffee01.webp", alt: "Hands holding a RHOW Coffee tray with a latte, an iced coffee, a muffin, and a pastry bar" }],
-      },
-      {
-        type: "imageGrid",
-        images: [{ src: "/project-rhow-coffee17.webp", alt: "The swan badge applied to the glass of the RHOW Coffee front door" }],
-      },
-      {
-        type: "divider",
-      },
-      {
-        type: "text",
-        heading: "More Shots from the Shop",
-        body: "",
-      },
-      {
-        type: "carousel",
-        images: [
-          { src: "/project-rhow-coffee15.webp", alt: "Milk being poured into an iced coffee in a glass can" },
-          { src: "/project-rhow-coffee08.webp", alt: "Barista pouring latte art into a black cup" },
-          { src: "/project-rhow-coffee03.webp", alt: "RHOW Coffee menu board listing coffee, tea and drinks, and food and pastries" },
-          { src: "/project-rhow-coffee05.webp", alt: "Wall sconce above a framed portrait painting in the shop" },
-          { src: "/project-rhow-coffee14.webp", alt: "Leather armchair and wooden table beside bookshelves under a warm wall sconce" },
-          { src: "/project-rhow-coffee16.webp", alt: "Shop interior with a gilded mirror over a dark fireplace, a pendant light, bookshelves, and plants" },
-        ],
-      },
-    ],
-  },
-  {
     slug: "brand-systems-claude-design",
     title: "Brand Systems in Claude Design",
     year: 2026,
@@ -608,80 +524,85 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "figma-project-starter",
-    title: "Figma Project Starter",
+    slug: "rhow-coffee",
+    title: "RHOW Coffee",
     year: 2026,
-    description: "A Claude skill that turns an Asana ticket into a ready-to-design Figma file: template, cover, brand mode, and folder, set up in one step.",
-    ogImage: "/figma-thumbnail-cover.png",
-    thumbnail: "/skill-slash-command-animated-dark.svg",
+    description: "Brand identity for RHOW Coffee, a specialty coffee shop in Massillon, Ohio: a swan mark, logo suite, color palette, and illustration.",
+    ogImage: "/project-rhow-coffee02.jpg",
+    thumbnail: "/rhow-logo-spec-animated-dark.svg",
     showOnHomepage: true,
-    tags: ["Claude Skill", "Automation", "Design System"],
-    tools: ["Claude", "Figma", "Asana"],
-    client: "Commerce (Internal)",
-    clientUrl: "https://www.commerce.com/",
+    tags: ["Branding", "Illustration"],
+    tools: ["Adobe Illustrator", "Figma"],
+    client: "RHOW Coffee",
+    clientUrl: "https://www.instagram.com/rhowcoffee",
     content: [
       {
         type: "text",
-        heading: "The Problem With Starting a File",
-        body: `<p>Every new ticket meant the same setup before any real design work could start:</p><ul><li>Duplicating the file starter template</li><li>Naming the file and typing the title onto the cover</li><li>Typing your initials onto the cover</li><li>Pasting the Asana link into the ticket widget</li><li>Moving the file into the right brand folder afterward</li><li>Coworkers not being able to find your file</li></ul><p>None of it was hard, but it was repetitive, easy to get slightly wrong, and it happened dozens of times a month across a team working in four brand folders at once. On top of that, every designer's file was structured a little differently, so there was no shared sense of where anything lived from file to file.</p><p>I built a Claude skill to remove that setup entirely and bring some consistency to it. Give it an Asana ticket, and it builds a fully structured Figma file: correct brand mode, the right folder, the cover filled in, ready to design in.</p>`,
+        heading: "Design Philosophy",
+        body: `<p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">Rhow Coffee</a> is a specialty coffee shop in Massillon, Ohio, owned by David Hurley. The name is shorthand for his own philosophy, Rise Humbly Over Worry, control what you can control and let the rest go. That mindset shaped what he wanted the shop to be: less a place to grab a cup and go, more a room built for staying awhile, whether that's a business meeting, a first date, or old friends catching up.</p><p>The identity needed to hold that same restraint. The brand is built around a custom-traced logotype and a swan mark, anchored by a palette of shadow grey, parchment, steel blue, blue slate, and dark walnut. David specifically asked for a swan, a nod to black swan latte art, and a mark that carries some personal meaning for him. Geometric and architectural, but warm enough to feel like a place worth lingering in.</p>`,
       },
       {
         type: "text",
-        heading: "How It Works",
-        body: `<p>The skill runs on a simple structure: a four-page starter template (Working, a divider, Cover, Archive), Working first so the file opens straight into active work.</p>`,
-      },
-      {
-        type: "text",
-        body: `<p>Connect Figma and Asana once in Claude, then start a new chat and either type /figma-project-starter, drop in an Asana link, or just ask in plain language, something like "here's my ticket, can you set up a Figma file for this."</p>`,
+        body: `<p>A single lockup was never going to cover everything. The identity had to hold up on a cup sleeve, a front window, and a sign read from across the lot, so the primary mark was drawn out into a small suite. The full badge keeps the circular RHOW COFFEE type when there is room for it. When there isn't, the swan steps out of the circle and sits beside the wordmark on its own. The same geometry sits underneath either version, and that is what keeps them reading as one brand instead of three loosely related ones.</p>`,
       },
       {
         type: "imageGrid",
-        framed: true,
-        images: [
-          { src: "/project-figma-starter-start.gif", caption: "Starting a run with a bare Asana ticket link" },
-        ],
+        images: [{ src: "/rhow-logo-suite-animated.svg", alt: "RHOW Coffee logo suite: the circular swan badge, a horizontal lockup, a wordmark, and the swan icon on its own" }],
       },
       {
         type: "text",
-        body: `<p>From there it reads the ticket, works out which brand it belongs to, duplicates the template, fills in the cover with the ticket title, REQ number (hyperlinked back to Asana), and your initials, sets the correct brand mode at the page level, and files the result in the right brand folder. One manual step is left: Figma doesn't allow setting a thumbnail programmatically, so you right-click the cover frame and choose "Set as thumbnail" yourself.</p>`,
+        body: `<p>Color carries the rest of it. The near black and the warm off white do most of the everyday work, one holding the mark and the other giving it room to breathe. The blues came in as a cooler counterweight, enough contrast to keep the system from going flat without ever competing with the swan. Dark walnut is the only genuinely warm note in the set, and it stays rare on purpose, which is what makes it register when it does show up.</p>`,
       },
       {
         type: "imageGrid",
-        framed: true,
-        images: [
-          {
-            src: "/project-figma-starter-hero.gif",
-            caption: "Claude finishing a run of /figma-project-starter, with the reasoning trail and finished file link",
-          },
-        ],
+        images: [{ src: "/rhow-palette-animated.svg", alt: "RHOW Coffee color palette: Shadow Grey, Parchment, Steel Blue, Blue Slate, and Dark Walnut" }],
       },
       {
         type: "text",
-        body: `<p>What I like most about how it runs is that it doesn't just hand you a file. It shows its work. When the brand isn't obvious from the ticket alone, it says so and shows the judgment call it made rather than guessing silently, so nothing ships on-brand by accident.</p>`,
+        heading: "From the Door to the Cup",
+        body: `<p>The brand shows up everywhere in the shop, on signage, the front door, the menu display, and the retail shelving. That consistency was the goal from the start. Every piece of the identity was designed to hold up across physical touchpoints without losing the quiet, refined feel of the primary mark.</p><p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">You can follow RHOW Coffee Instagram here.</a></p>`,
+      },
+      {
+        type: "text",
+        body: `<p>Curious about David's path to owning RHOW? He shared the full story, from working the counter to buying the shop, in <a href="https://texascoffeeschool.com/buying-a-coffee-shop-meet-the-owner-of-rhow-coffee/" target="_blank" rel="noopener noreferrer">this interview with Texas Coffee School</a>.</p>`,
+      },
+      {
+        type: "divider",
+      },
+      {
+        type: "text",
+        heading: "A Look Around the Shop",
+        body: `<p>See the full brand book in motion in <a href="https://www.instagram.com/p/DTDZLLxkU5z/" target="_blank" rel="noopener noreferrer">this Instagram video</a>.</p>`,
       },
       {
         type: "imageGrid",
-        framed: true,
-        images: [
-          { src: "/project-figma-starter-brand-modes.gif", caption: "Switching through brand variable modes on the cover page" },
-        ],
-      },
-      {
-        type: "text",
-        heading: "Rolling It Out",
-        body: `<p>I shipped this as a real tool, not a demo. I wrote the setup instructions, walked the team through the new process in Slack, recorded two short before/after clips showing the manual way next to the new one, and asked people to test it and flag anything broken. It's since become part of how the marketing design team actually starts projects, running across the Feedonomics, BigCommerce, Commerce, and Makeswift brand folders inside our shared Figma team.</p>`,
-      },
-      {
-        type: "text",
-        heading: "Where It Landed",
-        body: `<p>This was built because five minutes of file setup and repeated constantly across a team, adds up to a lot of lost time and a lot of small inconsistencies. The measure of whether it worked isn't the AI part, it's whether a designer can open a ticket and get straight to designing without thinking about the file at all. That's what it does now.</p>`,
+        images: [{ src: "/project-rhow-coffee07.webp", alt: "RHOW Coffee storefront with the wordmark sign above the entrance and the swan badge on the windows" }],
       },
       {
         type: "imageGrid",
-        framed: true,
+        images: [{ src: "/project-rhow-coffee01.webp", alt: "Hands holding a RHOW Coffee tray with a latte, an iced coffee, a muffin, and a pastry bar" }],
+      },
+      {
+        type: "imageGrid",
+        images: [{ src: "/project-rhow-coffee17.webp", alt: "The swan badge applied to the glass of the RHOW Coffee front door" }],
+      },
+      {
+        type: "divider",
+      },
+      {
+        type: "text",
+        heading: "More Shots from the Shop",
+        body: "",
+      },
+      {
+        type: "carousel",
         images: [
-          { src: "/project-figma-starter-folder.webp", caption: "Feedonomics brand folder in the shared Figma team, every cover filled in with title, REQ number, and initials" },
-          { src: "/project-figma-starter-cover-example.webp", caption: "Another finished cover, built for a BigCommerce ticket in the same run" },
+          { src: "/project-rhow-coffee15.webp", alt: "Milk being poured into an iced coffee in a glass can" },
+          { src: "/project-rhow-coffee08.webp", alt: "Barista pouring latte art into a black cup" },
+          { src: "/project-rhow-coffee03.webp", alt: "RHOW Coffee menu board listing coffee, tea and drinks, and food and pastries" },
+          { src: "/project-rhow-coffee05.webp", alt: "Wall sconce above a framed portrait painting in the shop" },
+          { src: "/project-rhow-coffee14.webp", alt: "Leather armchair and wooden table beside bookshelves under a warm wall sconce" },
+          { src: "/project-rhow-coffee16.webp", alt: "Shop interior with a gilded mirror over a dark fireplace, a pendant light, bookshelves, and plants" },
         ],
       },
     ],
@@ -815,6 +736,85 @@ export const projects: Project[] = [
         type: "text",
         heading: "My Recommendation",
         body: `<p>Treat case study PDFs as an 80/20 job. Claude Design is very good at structure: layout, type, pagination, and staying on brand across seven pages. Designers are still the right people for the last 20%, choosing imagery and catching the small spacing issues an import can introduce. That matches how we tiered our <a href="/work/brand-systems-claude-design">brand systems in Claude Design</a>: PDFs go through design, and the system does the heavy lifting first.</p><p>In practice, that means three things. Keep the rules in the template, not in the prompt. Refine in Claude Design before exporting, while changes are cheap. And make standalone HTML with html.to.design the default route into Figma, so every file arrives with its fonts and images intact.</p>`,
+      },
+    ],
+  },
+  {
+    slug: "figma-project-starter",
+    title: "Figma Project Starter",
+    year: 2026,
+    description: "A Claude skill that turns an Asana ticket into a ready-to-design Figma file: template, cover, brand mode, and folder, set up in one step.",
+    ogImage: "/figma-thumbnail-cover.png",
+    thumbnail: "/skill-slash-command-animated-dark.svg",
+    showOnHomepage: true,
+    tags: ["Claude Skill", "Automation", "Design System"],
+    tools: ["Claude", "Figma", "Asana"],
+    client: "Commerce (Internal)",
+    clientUrl: "https://www.commerce.com/",
+    content: [
+      {
+        type: "text",
+        heading: "The Problem With Starting a File",
+        body: `<p>Every new ticket meant the same setup before any real design work could start:</p><ul><li>Duplicating the file starter template</li><li>Naming the file and typing the title onto the cover</li><li>Typing your initials onto the cover</li><li>Pasting the Asana link into the ticket widget</li><li>Moving the file into the right brand folder afterward</li><li>Coworkers not being able to find your file</li></ul><p>None of it was hard, but it was repetitive, easy to get slightly wrong, and it happened dozens of times a month across a team working in four brand folders at once. On top of that, every designer's file was structured a little differently, so there was no shared sense of where anything lived from file to file.</p><p>I built a Claude skill to remove that setup entirely and bring some consistency to it. Give it an Asana ticket, and it builds a fully structured Figma file: correct brand mode, the right folder, the cover filled in, ready to design in.</p>`,
+      },
+      {
+        type: "text",
+        heading: "How It Works",
+        body: `<p>The skill runs on a simple structure: a four-page starter template (Working, a divider, Cover, Archive), Working first so the file opens straight into active work.</p>`,
+      },
+      {
+        type: "text",
+        body: `<p>Connect Figma and Asana once in Claude, then start a new chat and either type /figma-project-starter, drop in an Asana link, or just ask in plain language, something like "here's my ticket, can you set up a Figma file for this."</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          { src: "/project-figma-starter-start.gif", caption: "Starting a run with a bare Asana ticket link" },
+        ],
+      },
+      {
+        type: "text",
+        body: `<p>From there it reads the ticket, works out which brand it belongs to, duplicates the template, fills in the cover with the ticket title, REQ number (hyperlinked back to Asana), and your initials, sets the correct brand mode at the page level, and files the result in the right brand folder. One manual step is left: Figma doesn't allow setting a thumbnail programmatically, so you right-click the cover frame and choose "Set as thumbnail" yourself.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          {
+            src: "/project-figma-starter-hero.gif",
+            caption: "Claude finishing a run of /figma-project-starter, with the reasoning trail and finished file link",
+          },
+        ],
+      },
+      {
+        type: "text",
+        body: `<p>What I like most about how it runs is that it doesn't just hand you a file. It shows its work. When the brand isn't obvious from the ticket alone, it says so and shows the judgment call it made rather than guessing silently, so nothing ships on-brand by accident.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          { src: "/project-figma-starter-brand-modes.gif", caption: "Switching through brand variable modes on the cover page" },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Rolling It Out",
+        body: `<p>I shipped this as a real tool, not a demo. I wrote the setup instructions, walked the team through the new process in Slack, recorded two short before/after clips showing the manual way next to the new one, and asked people to test it and flag anything broken. It's since become part of how the marketing design team actually starts projects, running across the Feedonomics, BigCommerce, Commerce, and Makeswift brand folders inside our shared Figma team.</p>`,
+      },
+      {
+        type: "text",
+        heading: "Where It Landed",
+        body: `<p>This was built because five minutes of file setup and repeated constantly across a team, adds up to a lot of lost time and a lot of small inconsistencies. The measure of whether it worked isn't the AI part, it's whether a designer can open a ticket and get straight to designing without thinking about the file at all. That's what it does now.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          { src: "/project-figma-starter-folder.webp", caption: "Feedonomics brand folder in the shared Figma team, every cover filled in with title, REQ number, and initials" },
+          { src: "/project-figma-starter-cover-example.webp", caption: "Another finished cover, built for a BigCommerce ticket in the same run" },
+        ],
       },
     ],
   },
