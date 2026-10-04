@@ -1,0 +1,109 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import PropsTable from "../../../components/ds/PropsTable.astro";
+---
+
+<DsLayout
+  section="Components"
+  title="Checkbox and radio"
+  lead="Checkboxes when someone can pick any number. Radios when they pick exactly one. Native controls, tinted to the text color."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">When to use which</h2>
+    <ul class="ds-list">
+      <li><strong>Checkboxes</strong>: "Pick all that apply." Zero is a valid answer.</li>
+      <li><strong>Radios</strong>: one answer. Once picked, one is always picked.</li>
+      <li>For a choice that changes what comes next in a form, use a <a href="/ds/components/choice-card">choice card</a>.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="examples">
+    <h2 id="examples">Examples</h2>
+    <Example
+      title="Checkbox group, two columns"
+      layout="fill"
+      lang="html"
+      code={`<fieldset class="field">
+  <legend class="field-label">What do you need help with?</legend>
+  <p class="field-note">Pick all that apply.</p>
+  <div class="choice-group cols-2">
+    <label class="choice">
+      <input type="checkbox" name="Project type" value="New website" />
+      New website
+    </label>
+    <label class="choice">
+      <input type="checkbox" name="Project type" value="Website redesign" />
+      Website redesign
+    </label>
+  </div>
+</fieldset>`}
+    >
+      <fieldset class="field">
+        <legend class="field-label">What do you need help with?</legend>
+        <p class="field-note">Pick all that apply.</p>
+        <div class="choice-group cols-2">
+          <label class="choice"><input type="checkbox" name="ex-type" checked /> New website</label>
+          <label class="choice"><input type="checkbox" name="ex-type" /> Website redesign</label>
+          <label class="choice"><input type="checkbox" name="ex-type" /> Branding / identity</label>
+          <label class="choice"><input type="checkbox" name="ex-type" /> Marketing / campaign design</label>
+        </div>
+      </fieldset>
+    </Example>
+    <Example
+      title="Radio group, one column"
+      description="Use one column when options are full sentences."
+      layout="fill"
+      lang="html"
+      code={`<fieldset class="field">
+  <legend class="field-label">After launch, who handles updates?</legend>
+  <div class="choice-group">
+    <label class="choice"><input type="radio" name="Updates" value="Ryan" /> I'd like you to handle them</label>
+    <label class="choice"><input type="radio" name="Updates" value="Self" /> I'd like to edit some things myself</label>
+    <label class="choice"><input type="radio" name="Updates" value="Unsure" /> Not sure yet</label>
+  </div>
+</fieldset>`}
+    >
+      <fieldset class="field">
+        <legend class="field-label">After launch, who handles updates?</legend>
+        <div class="choice-group">
+          <label class="choice"><input type="radio" name="ex-updates" /> I'd like you to handle them</label>
+          <label class="choice"><input type="radio" name="ex-updates" checked /> I'd like to edit some things myself</label>
+          <label class="choice"><input type="radio" name="ex-updates" /> Not sure yet</label>
+        </div>
+      </fieldset>
+    </Example>
+  </section>
+
+  <section aria-labelledby="api">
+    <h2 id="api">Classes</h2>
+    <PropsTable
+      kind="Class"
+      rows={[
+        { name: "fieldset.field", description: "Groups the options. Borderless." },
+        { name: "legend.field-label", description: "The question, styled like a label." },
+        { name: ".choice-group", description: "Grid of options, 16px apart." },
+        { name: ".cols-2 / .cols-3", description: "Two or three columns. One column under 480px." },
+        { name: ".choice", description: "On the <code>&lt;label&gt;</code> wrapping each input. The whole label is clickable." },
+      ]}
+    />
+  </section>
+
+  <section aria-labelledby="a11y">
+    <h2 id="a11y">Accessibility</h2>
+    <ul class="ds-list">
+      <li>Wrap the group in a <code>&lt;fieldset&gt;</code> with a <code>&lt;legend&gt;</code>, so the question is read with every option.</li>
+      <li>Wrap each input in its label. The whole row becomes the target, not just the 16px box.</li>
+      <li>Native inputs with <code>accent-color</code>: they keep every browser's built-in keyboard and screen reader behavior.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="content">
+    <h2 id="content">Content</h2>
+    <ul class="ds-list">
+      <li>Ask the question in the legend. Keep options parallel: all nouns, or all sentences.</li>
+      <li>Offer a way out when people might not know: "Not sure yet."</li>
+      <li>Order options logically: by size, by time, or most common first.</li>
+    </ul>
+  </section>
+</DsLayout>

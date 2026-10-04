@@ -1,0 +1,229 @@
+---
+import DsLayout from "../../layouts/DsLayout.astro";
+import TokenTable from "../../components/ds/TokenTable.astro";
+import CodeBlock from "../../components/ds/CodeBlock.astro";
+import { motionTokens } from "../../data/tokens";
+
+const durations = motionTokens.find((g) => g.id === "duration")!;
+const easings = motionTokens.find((g) => g.id === "easing")!;
+
+const curves = [
+  { name: "ease-standard", points: [0.25, 0.1, 0.25, 1], use: "State changes" },
+  { name: "ease-emphasized", points: [0.2, 0.7, 0.2, 1], use: "Movement" },
+];
+const path = ([x1, y1, x2, y2]: number[]) =>
+  `M0,100 C${x1 * 100},${100 - y1 * 100} ${x2 * 100},${100 - y2 * 100} 100,0`;
+---
+
+<DsLayout
+  section="Foundations"
+  title="Motion"
+  lead="Motion confirms that something happened and shows where it went. It never makes anyone wait, and it gets out of the way for anyone who asks for less."
+>
+  <section aria-labelledby="principles">
+    <h2 id="principles">Principles</h2>
+    <ul class="ds-list">
+      <li><strong>Fast for feedback.</strong> Hovers and color changes take 200ms. Anything answering a click finishes within 300ms.</li>
+      <li><strong>Slower for arrivals.</strong> Content rising into place on load can take 800ms, because nobody is waiting on it.</li>
+      <li><strong>Move less than you think.</strong> Entrances travel 8 to 16px. Hover zooms scale 2 to 3 percent.</li>
+      <li><strong>Loop forever, or not at all.</strong> Animated SVGs in <code>public/</code> loop infinitely, checked by <code>npm run check:animations</code>.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="playground">
+    <h2 id="playground">See it</h2>
+    <p class="ds-text">Press play to send each dot across at its duration. With reduced motion on, they jump instead.</p>
+    <div class="playground" data-playground>
+      {durations.tokens.map((t) => (
+        <div class="lane">
+          <span class="lane-label mono">--{t.name}</span>
+          <span class="track"><span class="dot" style={`transition-duration: var(--${t.name})`} /></span>
+        </div>
+      ))}
+      <button type="button" class="btn btn-secondary btn-sm" data-play aria-pressed="false">Play</button>
+    </div>
+    <TokenTable group={durations} preview="duration" />
+  </section>
+
+  <section aria-labelledby="easing">
+    <h2 id="easing">Easing</h2>
+    <div class="curves">
+      {curves.map((c) => (
+        <figure class="curve">
+          <svg viewBox="-4 -4 108 108" aria-hidden="true">
+            <path d="M0,100 L100,0" class="diag" />
+            <path d={path(c.points)} class="line" />
+          </svg>
+          <figcaption><span class="mono">--{c.name}</span><span class="muted">{c.use}</span></figcaption>
+        </figure>
+      ))}
+    </div>
+    <TokenTable group={easings} />
+    <CodeBlock
+      lang="css"
+      label="A hover, and an entrance"
+      code={`.link {
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.reveal {
+  animation: rise var(--duration-slower) var(--ease-emphasized) both;
+}`}
+    />
+  </section>
+
+  <section aria-labelledby="reduced">
+    <h2 id="reduced">Reduced motion</h2>
+    <p class="ds-text">
+      When someone sets "Reduce motion" on their device, anything that moves across the screen stops moving:
+      entrances, zooms, rolling counters, smooth scrolling, and animated media. Fades and color changes can stay,
+      because they don't trigger vestibular symptoms. Every animated SVG carries its own guard and holds a
+      readable frame.
+    </p>
+    <CodeBlock
+      lang="css"
+      code={`@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation: none;
+  }
+}`}
+    />
+    <p class="ds-text">
+      Scripted motion checks the same preference. The site's smooth scrolling (Lenis) doesn't start at all for
+      these readers, and looping videos hold on their poster frame.
+    </p>
+    <CodeBlock
+      lang="ts"
+      code={`if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  startSmoothScroll();
+}`}
+    />
+  </section>
+</DsLayout>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-playground]").forEach((ground) => {
+    const button = ground.querySelector<HTMLButtonElement>("[data-play]")!;
+    button.addEventListener("click", () => {
+      const on = !ground.classList.contains("is-playing");
+      ground.classList.toggle("is-playing", on);
+      button.setAttribute("aria-pressed", String(on));
+      button.textContent = on ? "Reset" : "Play";
+    });
+  });
+</script>
+
+<style>
+  .playground {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    margin: var(--space-4) 0 var(--space-5);
+    padding: var(--space-4);
+    border: var(--border-width) solid var(--color-border);
+  }
+
+  .lane {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+  }
+
+  .lane-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .track {
+    position: relative;
+    display: block;
+    height: 16px;
+    border-bottom: var(--border-width) dashed var(--color-border);
+  }
+
+  .dot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: var(--radius-full);
+    background: var(--color-text);
+    transition-property: left;
+    transition-timing-function: var(--ease-emphasized);
+  }
+
+  .is-playing .dot {
+    left: calc(100% - 16px);
+  }
+
+  .playground .btn {
+    margin-top: var(--space-2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dot {
+      transition: none !important;
+    }
+  }
+
+  .curves {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin: var(--space-4) 0 var(--space-5);
+  }
+
+  .curve {
+    margin: 0;
+    width: 200px;
+  }
+
+  .curve svg {
+    width: 100%;
+    height: auto;
+    padding: var(--space-3);
+    border: var(--border-width) solid var(--color-border);
+    overflow: visible;
+  }
+
+  .diag {
+    fill: none;
+    stroke: var(--color-border);
+    stroke-dasharray: 3 3;
+  }
+
+  .line {
+    fill: none;
+    stroke: var(--color-text);
+    stroke-width: 2;
+  }
+
+  .curve figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin-top: var(--space-2);
+    font-size: var(--text-sm);
+  }
+
+  .mono {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+  }
+
+  .muted {
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 640px) {
+    .lane {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-1);
+    }
+  }
+</style>

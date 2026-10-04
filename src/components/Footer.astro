@@ -15,7 +15,7 @@ const year = new Date().getFullYear();
           target="_blank"
           rel="noopener noreferrer"
         >
-          LinkedIn <span class="arrow">&nearr;</span>
+          LinkedIn <span class="arrow" aria-hidden="true">&nearr;</span><span class="visually-hidden">(opens in a new tab)</span>
         </a>
       </nav>
     </div>
@@ -27,15 +27,15 @@ const year = new Date().getFullYear();
 
 <style>
   footer {
-    border-top: 1px solid var(--color-border);
-    padding: 64px var(--page-padding) 48px;
+    border-top: var(--border-width) solid var(--color-border);
+    padding: var(--space-7) var(--page-padding) var(--space-6);
     margin-top: 120px;
     /* Opaque and lifted, matching the nav. A fixed element at z-index 0 paints
        over static content, so without this the CursorField would sit on top of
        the footer, and without the background its rings would still show
        through the footer's own area. */
     position: relative;
-    z-index: 2;
+    z-index: var(--z-raised);
     background: var(--color-bg);
   }
 
@@ -48,27 +48,27 @@ const year = new Date().getFullYear();
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 64px;
+    margin-bottom: var(--space-7);
   }
 
   .footer-logo {
     font-family: var(--font-mono);
-    font-size: 14.4px;
-    font-weight: 400;
-    letter-spacing: -0.01em;
+    font-size: var(--text-body);
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--tracking-snug);
     color: var(--color-text);
   }
 
   .footer-nav {
     display: flex;
-    gap: 32px;
+    gap: var(--space-5);
   }
 
   .footer-nav a {
     font-family: var(--font-mono);
-    font-size: 13px;
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
-    transition: color 0.2s;
+    transition: color var(--duration-fast) var(--ease-standard);
   }
 
   .footer-nav a:hover {
@@ -76,7 +76,7 @@ const year = new Date().getFullYear();
   }
 
   .arrow {
-    font-size: 12px;
+    font-size: var(--text-xs);
   }
 
   .footer-bottom {
@@ -87,25 +87,25 @@ const year = new Date().getFullYear();
 
   .footer-copyright {
     font-family: var(--font-mono);
-    font-size: 13px;
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
   }
 
   @media (max-width: 640px) {
     footer {
       margin-top: 80px;
-      padding: 48px var(--page-padding) 40px;
+      padding: var(--space-6) var(--page-padding) var(--space-5);
     }
 
     .footer-top {
       flex-direction: column;
       align-items: flex-start;
-      gap: 24px;
-      margin-bottom: 40px;
+      gap: var(--space-4);
+      margin-bottom: var(--space-5);
     }
 
     .footer-nav {
-      gap: 24px;
+      gap: var(--space-4);
     }
   }
 </style>

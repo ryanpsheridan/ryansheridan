@@ -1,0 +1,102 @@
+---
+/**
+ * A live example of a component, with the code that makes it underneath.
+ * What renders in the preview is the real component, styled by the real
+ * tokens, so the docs can't drift from the site without it showing.
+ */
+import CodeBlock from "./CodeBlock.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  code?: string;
+  lang?: "astro" | "html" | "css" | "ts";
+  /** Lay the preview out in a row, a column, or let it fill the width. */
+  layout?: "row" | "stack" | "fill";
+  /** A darker canvas behind the preview, for things shown on media. */
+  tone?: "plain" | "surface";
+}
+
+const { title, description, code, lang = "astro", layout = "row", tone = "plain" } = Astro.props;
+---
+
+<figure class="ds-example">
+  {(title || description) && (
+    <figcaption>
+      {title && <span class="ds-example-title">{title}</span>}
+      {description && <span class="ds-example-desc">{description}</span>}
+    </figcaption>
+  )}
+  <div class:list={["ds-preview", `is-${layout}`, `is-${tone}`]}>
+    <slot />
+  </div>
+  {code && <CodeBlock code={code} lang={lang} />}
+</figure>
+
+<style>
+  .ds-example {
+    margin: 0;
+  }
+
+  figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin-bottom: var(--space-3);
+    max-width: var(--content-width);
+  }
+
+  .ds-example-title {
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+  }
+
+  .ds-example-desc {
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--color-text-muted);
+  }
+
+  .ds-preview {
+    padding: var(--space-6) var(--space-5);
+    border: var(--border-width) solid var(--color-border);
+    border-bottom: none;
+    background-color: var(--color-bg);
+    /* A faint 8px dot grid, so spacing in the preview can be read off it. */
+    background-image: radial-gradient(circle, color-mix(in srgb, var(--color-text) 10%, transparent) 1px, transparent 1px);
+    background-size: 8px 8px;
+    background-position: -4px -4px;
+  }
+
+  .ds-preview.is-surface {
+    background-color: var(--color-surface);
+  }
+
+  .ds-example:not(:has(.ds-code)) .ds-preview {
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .is-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .is-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .is-fill > :global(*) {
+    width: 100%;
+  }
+
+  @media (max-width: 640px) {
+    .ds-preview {
+      padding: var(--space-5) var(--space-3);
+    }
+  }
+</style>

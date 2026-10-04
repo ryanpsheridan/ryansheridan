@@ -25,7 +25,7 @@ import MazeField from "../components/MazeField.astro";
     exitLabel="EXIT"
     fixed
   />
-  <main class="not-found">
+  <main id="main" class="not-found">
     <div class="nf-inner">
       <p class="nf-code">404 / dead end</p>
       <h1>You've taken a wrong turn.</h1>
@@ -41,8 +41,8 @@ import MazeField from "../components/MazeField.astro";
         visibility, never display, or the ring would have nothing to sit on.
       -->
       <div class="nf-links" data-links>
-        <a href="/work" class="nf-button">View all work</a>
-        <a href="/" class="nf-plain">Back home <span class="arrow">&nearr;</span></a>
+        <a href="/work" class="nf-button btn btn-primary">View all work</a>
+        <a href="/" class="nf-plain link-quiet">Back home <span class="arrow" aria-hidden="true">&rarr;</span></a>
       </div>
     </div>
   </main>
@@ -110,16 +110,16 @@ import MazeField from "../components/MazeField.astro";
   }
 
   h1 {
-    font-size: clamp(32px, 1.7rem + 1.2vw, 52px);
-    font-weight: 300;
-    letter-spacing: -0.03em;
-    line-height: 1.15;
+    font-size: var(--text-headline);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
     margin-bottom: var(--space-4);
   }
 
   .nf-body {
     font-size: var(--text-base);
-    line-height: 1.8;
+    line-height: var(--leading-relaxed);
     color: var(--color-text-muted);
     margin-bottom: var(--space-6);
   }
@@ -159,34 +159,9 @@ import MazeField from "../components/MazeField.astro";
     }
   }
 
-  .nf-button {
-    display: inline-flex;
-    align-items: center;
-    font-size: var(--text-sm);
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    color: var(--color-bg);
-    background: var(--color-text);
-    border: 1px solid var(--color-text);
-    border-radius: 999px;
-    padding: 12px 22px;
-    transition: background 0.2s, border-color 0.2s;
-  }
-
-  .nf-button:hover {
-    background: #333333;
-    border-color: #333333;
-  }
-
   .nf-plain {
     font-family: var(--font-mono);
     font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    transition: color 0.2s;
-  }
-
-  .nf-plain:hover {
-    color: var(--color-text);
   }
 
   .arrow {

@@ -1,0 +1,141 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import PropsTable from "../../../components/ds/PropsTable.astro";
+import DoDont from "../../../components/ds/DoDont.astro";
+---
+
+<DsLayout
+  section="Components"
+  title="Text field"
+  lead="A labeled box for a short answer, or a taller one for a long one. Every field comes with its label, and with a note or an error when it needs one."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">When to use it</h2>
+    <ul class="ds-list">
+      <li><strong>Input</strong> for one line: a name, an email, a URL.</li>
+      <li><strong>Textarea</strong> for anything that might run to a sentence or more. Size it with <code>rows</code> to hint at how much you hope for.</li>
+      <li>If there are fewer than about seven fixed answers, use <a href="/ds/components/checkbox-radio">radios</a> or a <a href="/ds/components/select">select</a> instead.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="anatomy">
+    <h2 id="anatomy">Anatomy</h2>
+    <ol class="ds-list">
+      <li><strong>Label</strong> (<code>.field-label</code>). 13px medium, 8px above the field.</li>
+      <li><strong>Note</strong> (<code>.field-note</code>, optional). Why you're asking, or what a good answer looks like.</li>
+      <li><strong>Field</strong> (<code>.input</code>). 48px tall, 8px radius, strong outline.</li>
+      <li><strong>Error</strong> (<code>.field-error</code>, optional). Reserves its line so the page doesn't jump when it appears.</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="examples">
+    <h2 id="examples">Examples</h2>
+    <Example
+      title="Input"
+      layout="fill"
+      lang="html"
+      code={`<div class="field">
+  <label class="field-label" for="business-name">Business name</label>
+  <input type="text" class="input" id="business-name" name="Business name" autocomplete="organization" />
+</div>`}
+    >
+      <div class="field"><label class="field-label" for="ex-business">Business name</label><input type="text" class="input" id="ex-business" autocomplete="organization" /></div>
+    </Example>
+
+    <Example
+      title="With a note and a placeholder"
+      description="The note explains; the placeholder only shows format."
+      layout="fill"
+      lang="html"
+      code={`<div class="field">
+  <label class="field-label" for="current-site">Current website, if any</label>
+  <p class="field-note" id="current-site-note">Paste the address, with or without https.</p>
+  <input type="text" class="input" id="current-site" inputmode="url"
+    placeholder="yourbusiness.com" aria-describedby="current-site-note" />
+</div>`}
+    >
+      <div class="field"><label class="field-label" for="ex-site">Current website, if any</label><p class="field-note" id="ex-site-note">Paste the address, with or without https.</p><input type="text" class="input" id="ex-site" inputmode="url" placeholder="yourbusiness.com" aria-describedby="ex-site-note" /></div>
+    </Example>
+
+    <Example
+      title="Required, with an error"
+      description="Errors show after someone leaves the field, not while they're typing."
+      layout="fill"
+      lang="html"
+      code={`<div class="field">
+  <label class="field-label" for="email">Email <span class="required-marker">*</span></label>
+  <input type="email" class="input" id="email" name="_replyto" autocomplete="email"
+    required aria-invalid="true" aria-describedby="email-error" />
+  <p class="field-error" id="email-error">Enter an email address, like name@example.com.</p>
+</div>`}
+    >
+      <div class="field"><label class="field-label" for="ex-email">Email <span class="required-marker">*</span></label><input type="email" class="input" id="ex-email" autocomplete="email" value="ryan@" required aria-invalid="true" aria-describedby="ex-email-error" /><p class="field-error" id="ex-email-error">Enter an email address, like name@example.com.</p></div>
+    </Example>
+
+    <Example
+      title="Textarea"
+      layout="fill"
+      lang="html"
+      code={`<div class="field">
+  <label class="field-label" for="brain-dump">Tell me about the project</label>
+  <textarea class="input" id="brain-dump" name="Brain dump" rows="5"></textarea>
+</div>`}
+    >
+      <div class="field"><label class="field-label" for="ex-dump">Tell me about the project</label><textarea class="input" id="ex-dump" rows="5"></textarea></div>
+    </Example>
+
+    <Example
+      title="Side by side"
+      description="Two short fields share a row on wide screens and stack under 640px."
+      layout="fill"
+      lang="html"
+      code={`<div class="field-row">
+  <div class="field">…</div>
+  <div class="field">…</div>
+</div>`}
+    >
+      <div class="field-row" style="margin: 0"><div class="field"><label class="field-label" for="ex-n">Your name</label><input type="text" class="input" id="ex-n" /></div><div class="field"><label class="field-label" for="ex-e">Email</label><input type="email" class="input" id="ex-e" /></div></div>
+    </Example>
+  </section>
+
+  <section aria-labelledby="api">
+    <h2 id="api">Classes</h2>
+    <PropsTable
+      kind="Class"
+      rows={[
+        { name: ".field", description: "Wraps one label and control. 32px below it; none after the last." },
+        { name: ".field-row", description: "Two fields side by side, 24px apart. One column under 640px." },
+        { name: ".field-label", description: "On <code>&lt;label&gt;</code> or <code>&lt;legend&gt;</code>." },
+        { name: ".field-note", description: "Helper text between label and field." },
+        { name: ".input", description: "On <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code>, or <code>&lt;select&gt;</code>." },
+        { name: ".field-error", description: "Error text in the critical color. Keep it in the page, empty, until there's an error." },
+        { name: ".required-marker", description: "The asterisk after a required label." },
+      ]}
+    />
+  </section>
+
+  <section aria-labelledby="a11y">
+    <h2 id="a11y">Accessibility</h2>
+    <ul class="ds-list">
+      <li>Every field has a visible <code>&lt;label for&gt;</code>. A placeholder is never the label.</li>
+      <li>The outline is <code>--color-border-strong</code>, 3.4:1 against white, so the field is findable (WCAG 1.4.11).</li>
+      <li>Tie notes and errors to the field with <code>aria-describedby</code>, and set <code>aria-invalid="true"</code> when it's wrong.</li>
+      <li>Use the right <code>type</code>, <code>inputmode</code>, and <code>autocomplete</code>, so phones show the right keyboard and browsers can fill it in.</li>
+      <li>Text is 16px, which also stops iOS from zooming in on focus.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="content">
+    <h2 id="content">Content</h2>
+    <ul class="ds-list">
+      <li>Labels are short and plain: "Business name," or a question: "What do you do, and who is it for?"</li>
+      <li>Placeholders show format only, starting "e.g." when it helps: "e.g. Calendly, Square, Stripe."</li>
+      <li>Errors name the fix: "Enter an email address, like name@example.com."</li>
+    </ul>
+    <DoDont doText="Put instructions in the label or a note, where they stay." dontText="Put instructions in the placeholder, where they vanish.">
+      <div slot="do" style="width: 100%"><label class="field-label" for="dd1">Website</label><input class="input" id="dd1" placeholder="yourbusiness.com" /></div>
+      <div slot="dont" style="width: 100%"><input class="input" aria-label="Website" placeholder="Enter your website address here" /></div>
+    </DoDont>
+  </section>
+</DsLayout>

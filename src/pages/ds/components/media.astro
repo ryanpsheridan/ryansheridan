@@ -1,0 +1,60 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import PropsTable from "../../../components/ds/PropsTable.astro";
+import Media from "../../../components/Media.astro";
+---
+
+<DsLayout
+  section="Components"
+  title="Media"
+  lead="One component for every image, animated SVG, GIF, and screen recording. It measures the file at build time so nothing shifts the page when it loads."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">When to use it</h2>
+    <ul class="ds-list">
+      <li>Every image and video on the site that comes from <code>public/</code>. Don't use a bare <code>&lt;img&gt;</code>.</li>
+      <li>Pass an <code>.mp4</code> and it becomes a muted, looping video, with a WebM version and a WebP poster picked up by file name.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="examples">
+    <h2 id="examples">Examples</h2>
+    <Example
+      title="Image"
+      layout="fill"
+      code={`<Media src="/profile-photo.webp" alt="Ryan Sheridan" />`}
+    >
+      <div style="max-width: 200px"><Media src="/profile-photo.webp" alt="Ryan Sheridan" /></div>
+    </Example>
+    <Example
+      title="Animated SVG"
+      description="Loops forever and holds still for reduced motion."
+      layout="fill"
+      code={`<Media src="/flow-stays-logo-spec-animated.svg" alt="Flow Stays logo construction" />`}
+    >
+      <div style="max-width: 400px"><Media src="/flow-stays-logo-spec-animated.svg" alt="Flow Stays logo construction" /></div>
+    </Example>
+  </section>
+
+  <section aria-labelledby="api">
+    <h2 id="api">Props</h2>
+    <PropsTable
+      rows={[
+        { name: "src", type: "string", description: "Path in <code>public/</code>. PNG, JPG, WebP, SVG, GIF, MP4, or WebM." },
+        { name: "alt", type: "string", default: '""', description: "What's in the frame. Empty for decoration or when a nearby link already names it." },
+        { name: "loading", type: '"lazy" | "eager"', default: '"lazy"', description: "Use eager for the first image on a page." },
+        { name: "class", type: "string", description: "Added to the image." },
+      ]}
+    />
+  </section>
+
+  <section aria-labelledby="a11y">
+    <h2 id="a11y">Accessibility</h2>
+    <ul class="ds-list">
+      <li>Videos pause on their poster frame under reduced motion. Animated SVGs carry their own reduced-motion guard (<code>npm run check:animations</code> enforces it).</li>
+      <li>A reserved aspect ratio means no layout shift, which matters most to people using magnification.</li>
+      <li>Alt text describes; see <a href="/ds/content#ui">Content</a>.</li>
+    </ul>
+  </section>
+</DsLayout>

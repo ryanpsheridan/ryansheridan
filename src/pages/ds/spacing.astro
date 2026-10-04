@@ -1,0 +1,299 @@
+---
+import DsLayout from "../../layouts/DsLayout.astro";
+import TokenTable from "../../components/ds/TokenTable.astro";
+import CodeBlock from "../../components/ds/CodeBlock.astro";
+import DoDont from "../../components/ds/DoDont.astro";
+import { spacingTokens, breakpoints } from "../../data/tokens";
+
+const scale = spacingTokens.find((g) => g.id === "space")!;
+const layout = spacingTokens.find((g) => g.id === "layout")!;
+
+const recipes = [
+  { context: "Label to its field", token: "space-2", px: 8 },
+  { context: "Choice to choice in a group", token: "space-3", px: 16 },
+  { context: "Paragraph to paragraph", token: "space-3", px: 16 },
+  { context: "Headline to intro", token: "space-4", px: 24 },
+  { context: "Image to its title in a card", token: "space-4", px: 24 },
+  { context: "Field to field in a form", token: "space-5", px: 32 },
+  { context: "Breadcrumbs to title", token: "space-5", px: 32 },
+  { context: "Block to block in a case study", token: "space-6", px: 48 },
+  { context: "Section to section", token: "space-7", px: 64 },
+  { context: "Project to project on the homepage", token: "space-8", px: 96 },
+];
+---
+
+<DsLayout
+  section="Foundations"
+  title="Spacing and layout"
+  lead="Every space on the site is a multiple of 8. One scale, used everywhere, is what makes unrelated pages feel like one site."
+>
+  <section aria-labelledby="grid">
+    <h2 id="grid">The 8px grid</h2>
+    <p class="ds-text">
+      Margins, padding, gaps, control heights, and container widths are all multiples of 8. Eight divides
+      cleanly at every common screen density and gives enough steps to be useful without so many that
+      choosing one becomes a guess.
+    </p>
+    <ul class="ds-list">
+      <li><strong>Between things, use the scale.</strong> Any space separating two elements is a <code>--space-*</code> token.</li>
+      <li><strong>Inside a component, 4px steps are allowed.</strong> An icon gap, a badge's side padding, a tight title-to-subtitle pair. <code>--space-1</code> (4px) is the half-step.</li>
+      <li><strong>Control heights are on the grid too.</strong> Small 40, default 48, large 56. Padding is set so the height comes out exact, not left to the font.</li>
+      <li><strong>Text sits on its line height.</strong> Type sizes don't need to be multiples of 8; the boxes around them do.</li>
+    </ul>
+    <figure class="grid-demo" aria-hidden="true">
+      <div class="grid-card">
+        <span class="overline">Project type</span>
+        <span class="grid-title">RHOW Coffee</span>
+        <div class="badge-list"><span class="badge">Branding</span><span class="badge">Illustration</span></div>
+      </div>
+    </figure>
+    <p class="ds-text caption">A card on the 8px grid. Padding 24, overline to title 8, title to badges 16.</p>
+  </section>
+
+  <section aria-labelledby="scale">
+    <h2 id="scale">Spacing scale</h2>
+    <TokenTable group={scale} preview="space" />
+  </section>
+
+  <section aria-labelledby="recipes">
+    <h2 id="recipes">Spacing recipes</h2>
+    <p class="ds-text">
+      The scale tells you which values exist; these tell you which one to reach for. When two things are more
+      related, they sit closer.
+    </p>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <thead><tr><th scope="col">Between</th><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Visual</th></tr></thead>
+        <tbody>
+          {recipes.map((r) => (
+            <tr>
+              <td>{r.context}</td>
+              <td class="mono">--{r.token}</td>
+              <td class="mono muted">{r.px}px</td>
+              <td><span class="recipe-bar" style={`width: ${r.px}px`} /></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="layout">
+    <h2 id="layout">Layout</h2>
+    <p class="ds-text">
+      A page is a centered column no wider than <code>--max-width</code>, with <code>--page-padding</code>
+      on both sides. Long copy and forms narrow to <code>--content-width</code>.
+    </p>
+    <figure class="frame" aria-hidden="true">
+      <div class="frame-nav">nav · 64</div>
+      <div class="frame-body">
+        <span class="frame-pad">page-padding</span>
+        <div class="frame-max">
+          <span class="frame-label">max-width 1136</span>
+          <div class="frame-content"><span class="frame-label">content-width 656</span></div>
+        </div>
+        <span class="frame-pad">page-padding</span>
+      </div>
+    </figure>
+    <TokenTable group={layout} />
+    <CodeBlock
+      lang="css"
+      label="A standard page frame"
+      code={`.page {
+  padding: var(--page-top) var(--page-padding) var(--page-bottom);
+}
+
+.page-inner {
+  max-width: var(--max-width);   /* or --content-width for reading */
+  margin-inline: auto;
+}`}
+    />
+  </section>
+
+  <section aria-labelledby="breakpoints">
+    <h2 id="breakpoints">Breakpoints</h2>
+    <p class="ds-text">
+      Four widths, written as <code>max-width</code> queries. Custom properties can't be read inside a media
+      query, so use these exact numbers rather than inventing one for a single component.
+    </p>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <thead><tr><th scope="col">Name</th><th scope="col">Query</th><th scope="col">What changes</th></tr></thead>
+        <tbody>
+          {breakpoints.map((b) => (
+            <tr>
+              <td class="mono">{b.name}</td>
+              <td class="mono muted">@media (max-width: {b.maxWidth}px)</td>
+              <td>{b.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="dos">
+    <h2 id="dos">Do's and don'ts</h2>
+    <DoDont
+      doText="Use the scale, even when 20 looks right. Try 16 and 24 and pick one."
+      dontText="Reach for 10, 12, 18, or 20 between elements. Off-grid values add up across a page."
+    >
+      <code slot="do">gap: var(--space-3);</code>
+      <code slot="dont">gap: 18px;</code>
+    </DoDont>
+    <div class="spacer"></div>
+    <DoDont
+      doText="Group related things tighter than unrelated ones."
+      dontText="Space everything evenly. Equal gaps hide the structure."
+    >
+      <div slot="do" class="group-demo">
+        <span class="field-label" style="margin: 0">Email</span>
+        <span class="mini-input" style="margin-top: 8px"></span>
+        <span class="field-label" style="margin: 32px 0 0">Name</span>
+        <span class="mini-input" style="margin-top: 8px"></span>
+      </div>
+      <div slot="dont" class="group-demo">
+        <span class="field-label" style="margin: 0">Email</span>
+        <span class="mini-input" style="margin-top: 16px"></span>
+        <span class="field-label" style="margin: 16px 0 0">Name</span>
+        <span class="mini-input" style="margin-top: 16px"></span>
+      </div>
+    </DoDont>
+  </section>
+
+  <section aria-labelledby="cleanup">
+    <h2 id="cleanup">What moved onto the grid in 1.0</h2>
+    <p class="ds-text">The audit that came with this system found these off-grid values on core pages. Each one now uses a token.</p>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <thead><tr><th scope="col">Where</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+        <tbody>
+          <tr><td>Nav height</td><td class="mono muted">74 (18 + 32 + 18 + type)</td><td class="mono">64 (8 + 48 + 8)</td></tr>
+          <tr><td>Page gutter on phones</td><td class="mono muted">20</td><td class="mono">24</td></tr>
+          <tr><td>Max content width</td><td class="mono muted">1140</td><td class="mono">1136</td></tr>
+          <tr><td>Primary buttons</td><td class="mono muted">45, 47, and 59 tall</td><td class="mono">48 or 56</td></tr>
+          <tr><td>Text fields</td><td class="mono muted">~45 tall, 14px side padding</td><td class="mono">48 tall, 16px side padding</td></tr>
+          <tr><td>Carousel arrows</td><td class="mono muted">34 square</td><td class="mono">40 round</td></tr>
+          <tr><td>Breadcrumbs to title</td><td class="mono muted">48 on some pages, 32 on others</td><td class="mono">32 everywhere</td></tr>
+          <tr><td>Headline to intro</td><td class="mono muted">20</td><td class="mono">24</td></tr>
+          <tr><td>Gaps in menus, CTA rows, lists</td><td class="mono muted">10, 12, 28</td><td class="mono">8, 16, 32</td></tr>
+          <tr><td>/work row padding</td><td class="mono muted">56 (halfway between steps)</td><td class="mono">64</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</DsLayout>
+
+<style>
+  .grid-demo {
+    margin: var(--space-4) 0 0;
+    padding: var(--space-5);
+    background-color: var(--color-bg);
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, var(--color-link) 14%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--color-link) 14%, transparent) 1px, transparent 1px);
+    background-size: 8px 8px;
+    border: var(--border-width) solid var(--color-border);
+  }
+
+  .grid-card {
+    display: flex;
+    flex-direction: column;
+    max-width: 320px;
+    padding: var(--space-4);
+    background: color-mix(in srgb, var(--color-bg) 85%, transparent);
+    border: var(--border-width) solid var(--color-text);
+  }
+
+  .grid-title {
+    margin: var(--space-2) 0 var(--space-3);
+    font-size: var(--text-lg);
+    line-height: 24px;
+  }
+
+  .caption {
+    margin-top: var(--space-2);
+    font-size: var(--text-sm) !important;
+    color: var(--color-text-muted) !important;
+  }
+
+  .recipe-bar {
+    display: block;
+    height: 8px;
+    background: var(--color-link);
+    opacity: 0.8;
+  }
+
+  .frame {
+    margin: var(--space-4) 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    border: var(--border-width) solid var(--color-border-strong);
+  }
+
+  .frame-nav {
+    padding: var(--space-2) var(--space-3);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .frame-body {
+    display: flex;
+    min-height: 160px;
+  }
+
+  .frame-pad {
+    width: 40px;
+    writing-mode: vertical-rl;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: repeating-linear-gradient(135deg, var(--color-border) 0 1px, transparent 1px 8px);
+  }
+
+  .frame-max {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2);
+    background: color-mix(in srgb, var(--color-link) 5%, transparent);
+  }
+
+  .frame-content {
+    flex: 1;
+    width: 58%;
+    padding: var(--space-2);
+    background: color-mix(in srgb, var(--color-link) 10%, transparent);
+    border-inline: var(--border-width) dashed var(--color-link);
+  }
+
+  .frame-label {
+    display: block;
+    text-align: center;
+  }
+
+  .group-demo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .mini-input {
+    display: block;
+    height: 32px;
+    border: var(--border-width) solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+  }
+
+  .spacer {
+    height: var(--space-5);
+  }
+
+  :global(.ds-dodont) code {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+</style>

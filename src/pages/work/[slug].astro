@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import Media from "../../components/Media.astro";
+import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
 import { projects } from "../../data/projects";
 import type { GetStaticPaths } from "astro";
 import { breadcrumbSchema, projectSchema } from "../../data/schema";
@@ -35,14 +36,11 @@ const schema = [
   noindex
 >
   <Nav />
-  <main class="project-page">
-    <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="/">Home</a>
-      <span class="sep">/</span>
-      <a href="/work">Work</a>
-      <span class="sep">/</span>
-      <span class="current">{project.title}</span>
-    </nav>
+  <main id="main" class="project-page">
+    <Breadcrumbs
+      class="page-crumbs"
+      items={[{ label: "Home", href: "/" }, { label: "Work", href: "/work" }, { label: project.title }]}
+    />
 
     <h1>{project.title}</h1>
 
@@ -61,7 +59,7 @@ const schema = [
                 return (
                   <section class="content-section">
                     {block.heading && <h2>{block.heading}</h2>}
-                    {block.body && <div class="body" set:html={block.body} />}
+                    {block.body && <div class="prose" set:html={block.body} />}
                   </section>
                 );
               }
@@ -119,12 +117,12 @@ const schema = [
                     <div class="carousel-controls">
                       <span class="carousel-count" data-carousel-count aria-live="polite" />
                       <div class="carousel-buttons">
-                        <button type="button" class="carousel-button" data-carousel-prev aria-label="Previous photos">
+                        <button type="button" class="icon-btn" data-carousel-prev aria-label="Previous photos">
                           <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true">
                             <path d="M13.5 8H2.5M7 3.5 2.5 8 7 12.5" />
                           </svg>
                         </button>
-                        <button type="button" class="carousel-button" data-carousel-next aria-label="Next photos">
+                        <button type="button" class="icon-btn" data-carousel-next aria-label="Next photos">
                           <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true">
                             <path d="M2.5 8h11M9 3.5 13.5 8 9 12.5" />
                           </svg>
@@ -139,17 +137,17 @@ const schema = [
                 return (
                   <div class="compare-block">
                     <div class="compare-controls">
-                      <div class="compare-tabs" role="tablist">
-                        <button type="button" class="compare-tab" data-tab="before">
+                      <div class="segmented" role="group" aria-label="Show version">
+                        <button type="button" class="compare-tab" data-tab="before" aria-pressed="false">
                           {block.before.label || "Before"}
                         </button>
-                        <button type="button" class="compare-tab is-active" data-tab="after">
+                        <button type="button" class="compare-tab" data-tab="after" aria-pressed="true">
                           {block.after.label || "After"}
                         </button>
                       </div>
                       {block.liveUrl && (
-                        <a href={block.liveUrl} target="_blank" rel="noopener noreferrer" class="compare-live-link">
-                          View live page &#8599;
+                        <a href={block.liveUrl} target="_blank" rel="noopener noreferrer" class="compare-live-link link-quiet">
+                          View live page <span aria-hidden="true">&#8599;</span><span class="visually-hidden">(opens in a new tab)</span>
                         </a>
                       )}
                     </div>
@@ -192,18 +190,18 @@ const schema = [
         </div>
 
         <div class="back-link-wrapper">
-          <a href="/work" class="back-link">&larr; All work</a>
+          <a href="/work" class="back-link link-quiet"><span aria-hidden="true">&larr;</span> All work</a>
         </div>
       </div>
 
       <aside class="project-sidebar">
         <div class="sidebar-inner">
           <div class="meta-group">
-            <span class="meta-label">Client / Company</span>
+            <span class="overline">Client / Company</span>
             {project.clientUrl ? (
               <p class="meta-value">
-                <a href={project.clientUrl} target="_blank" rel="noopener noreferrer" class="client-link">
-                  {project.client}<span class="client-link-arrow">&#8599;</span>
+                <a href={project.clientUrl} target="_blank" rel="noopener noreferrer" class="link-underline">
+                  {project.client}<span class="client-link-arrow" aria-hidden="true">&#8599;</span><span class="visually-hidden">(opens in a new tab)</span>
                 </a>
               </p>
             ) : (
@@ -211,17 +209,17 @@ const schema = [
             )}
           </div>
           <div class="meta-group">
-            <span class="meta-label">Year</span>
+            <span class="overline">Year</span>
             <p class="meta-value"><time datetime={String(project.year)}>{project.year}</time></p>
           </div>
           <div class="meta-group">
-            <span class="meta-label">Project type</span>
+            <span class="overline">Project type</span>
             <div class="badge-list">
               {project.tags.map((tag) => <span class="badge">{tag}</span>)}
             </div>
           </div>
           <div class="meta-group">
-            <span class="meta-label">Tools</span>
+            <span class="overline">Tools</span>
             <div class="badge-list">
               {project.tools.map((tool) => <span class="badge">{tool}</span>)}
             </div>
@@ -231,8 +229,8 @@ const schema = [
     </div>
   </main>
 
-  <div class="lightbox" id="lightbox" data-lenis-prevent>
-    <button class="lightbox-close" aria-label="Close">&times;</button>
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged image" inert data-lenis-prevent>
+    <button type="button" class="lightbox-close" aria-label="Close">&times;</button>
     <img class="lightbox-img" id="lightbox-img" src="" alt="" />
   </div>
 
@@ -243,16 +241,16 @@ const schema = [
   .lightbox {
     position: fixed;
     inset: 0;
-    z-index: 1000;
-    background: rgba(0, 0, 0, 0.9);
+    z-index: var(--z-modal);
+    background: var(--color-scrim);
     display: flex;
     align-items: flex-start;
     justify-content: center;
     overflow-y: auto;
-    padding: 64px 0;
+    padding: var(--space-7) 0;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.25s ease;
+    transition: opacity var(--duration-moderate) var(--ease-standard);
   }
 
   .lightbox.open {
@@ -261,7 +259,7 @@ const schema = [
   }
 
   .lightbox-img {
-    width: min(1100px, 92vw);
+    width: min(var(--max-width), 92vw);
     height: auto;
     cursor: zoom-out;
   }
@@ -272,16 +270,30 @@ const schema = [
     right: var(--space-4);
     background: none;
     border: none;
-    color: #fff;
-    font-size: 32px;
+    width: var(--control-md);
+    height: var(--control-md);
+    color: #ffffff;
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-light);
     cursor: pointer;
     line-height: 1;
     opacity: 0.7;
-    transition: opacity 0.2s;
+    transition: opacity var(--duration-fast) var(--ease-standard);
   }
 
-  .lightbox-close:hover {
+  .lightbox-close:hover,
+  .lightbox-close:focus-visible {
     opacity: 1;
+  }
+
+  .lightbox-close:focus-visible {
+    outline-color: #ffffff;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lightbox {
+      transition: none;
+    }
   }
 
   .lightbox-trigger {
@@ -291,42 +303,21 @@ const schema = [
 
 <style>
   .project-page {
-    padding: 80px var(--page-padding) 0;
+    padding: var(--page-top) var(--page-padding) 0;
   }
 
-  .breadcrumbs {
+  .page-crumbs {
     max-width: var(--max-width);
-    margin: 0 auto var(--space-5);
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-  }
-
-  .breadcrumbs a {
-    color: var(--color-text-muted);
-    transition: color 0.2s;
-  }
-
-  .breadcrumbs a:hover {
-    color: var(--color-text);
-  }
-
-  .breadcrumbs .sep {
-    color: var(--color-border);
-  }
-
-  .breadcrumbs .current {
-    color: var(--color-text);
+    margin-inline: auto;
   }
 
   h1 {
     max-width: var(--max-width);
     margin: 0 auto var(--space-6);
-    font-size: clamp(2rem, 1.5rem + 2vw, 4rem);
-    font-weight: 300;
-    letter-spacing: -0.03em;
+    font-size: var(--text-hero);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
   }
 
   .project-layout {
@@ -359,22 +350,14 @@ const schema = [
   .meta-group {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--space-2);
     padding-top: var(--space-4);
-    border-top: 1px solid var(--color-border);
+    border-top: var(--border-width) solid var(--color-border);
   }
 
   .meta-group:first-child {
     padding-top: 0;
     border-top: none;
-  }
-
-  .meta-label {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
   }
 
   .meta-value {
@@ -384,21 +367,10 @@ const schema = [
     color: var(--color-text);
   }
 
-  .client-link {
-    color: var(--color-text);
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: 1px;
-    transition: border-color 0.2s;
-  }
-
-  .client-link:hover {
-    border-color: var(--color-text);
-  }
-
   .client-link-arrow {
     font-size: var(--text-sm);
     color: var(--color-text-muted);
-    margin-left: 4px;
+    margin-left: var(--space-1);
   }
 
   .hero-image {
@@ -409,7 +381,7 @@ const schema = [
   .hero-image :global(img) {
     width: 100%;
     display: block;
-    border: 1px solid var(--color-border);
+    border: var(--border-width) solid var(--color-border);
   }
 
   .content-section {
@@ -421,91 +393,15 @@ const schema = [
     max-width: var(--content-width);
     margin: 0 0 var(--space-6);
     border: none;
-    border-top: 1px solid var(--color-border);
+    border-top: var(--border-width) solid var(--color-border);
   }
 
   h2 {
     font-size: var(--text-xl);
-    font-weight: 300;
-    letter-spacing: -0.01em;
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-snug);
+    line-height: var(--leading-snug);
     margin-bottom: var(--space-3);
-  }
-
-  .body {
-    font-size: var(--text-base);
-    line-height: 1.8;
-    color: var(--color-text);
-  }
-
-  .body :global(p) {
-    margin-bottom: var(--space-3);
-  }
-
-  .body :global(p:last-child) {
-    margin-bottom: 0;
-  }
-
-  .body :global(a) {
-    color: var(--color-link);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-color: var(--color-link-subtle);
-    transition: color 0.2s, text-decoration-color 0.2s;
-  }
-
-  .body :global(a:hover) {
-    color: var(--color-link-hover);
-    text-decoration-color: var(--color-link-hover);
-  }
-
-  .body :global(strong) {
-    font-weight: 500;
-  }
-
-  .body :global(blockquote) {
-    border-left: 2px solid var(--color-border);
-    padding-left: var(--space-4);
-    margin: var(--space-5) 0;
-    color: var(--color-text-muted);
-    font-style: italic;
-    font-size: var(--text-md);
-  }
-
-  .body :global(blockquote p) {
-    margin-bottom: 0;
-  }
-
-  .body :global(ul),
-  .body :global(ol) {
-    margin: 0 0 var(--space-3);
-    padding-left: var(--space-5);
-  }
-
-  .body :global(li) {
-    margin-bottom: var(--space-2);
-  }
-
-  .body :global(li:last-child) {
-    margin-bottom: 0;
-  }
-
-  .body :global(h3) {
-    font-size: var(--text-lg);
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    line-height: 1.3;
-    margin-top: var(--space-5);
-    margin-bottom: var(--space-2);
-  }
-
-  .body :global(img) {
-    width: 100%;
-    margin: var(--space-4) 0;
-    border: 1px solid var(--color-border);
-  }
-
-  .body :global(em) {
-    color: var(--color-text-muted);
   }
 
   .image-grid {
@@ -529,7 +425,7 @@ const schema = [
   .image-grid :global(img) {
     width: 100%;
     display: block;
-    border: 1px solid var(--color-border);
+    border: var(--border-width) solid var(--color-border);
   }
 
   .image-grid :global(video) {
@@ -537,7 +433,7 @@ const schema = [
     height: auto;
     display: block;
     aspect-ratio: var(--media-ratio, auto);
-    border: 1px solid var(--color-border);
+    border: var(--border-width) solid var(--color-border);
   }
 
   .image-grid.is-framed {
@@ -589,7 +485,7 @@ const schema = [
     aspect-ratio: var(--carousel-ratio, 3 / 4);
     object-fit: cover;
     display: block;
-    border: 1px solid var(--color-border);
+    border: var(--border-width) solid var(--color-border);
     cursor: zoom-in;
   }
 
@@ -624,37 +520,7 @@ const schema = [
     gap: var(--space-2);
   }
 
-  .carousel-button {
-    width: 34px;
-    height: 34px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    background: transparent;
-    border: 1px solid var(--color-border);
-    color: var(--color-text-muted);
-    cursor: pointer;
-    transition: color 0.2s, border-color 0.2s, opacity 0.2s;
-  }
-
-  /* An SVG rather than an arrow glyph: a glyph's ink sits on the font's
-     baseline, which leaves it a couple of pixels below center. */
-  .carousel-button svg {
-    display: block;
-  }
-
-  .carousel-button:hover:not(:disabled) {
-    color: var(--color-text);
-    border-color: var(--color-text);
-  }
-
-  .carousel-button:disabled {
-    opacity: 0.3;
-    cursor: default;
-  }
-
-  @media (max-width: 900px) {
+  @media (max-width: 1024px) {
     .carousel-track {
       grid-auto-columns: calc((100% - var(--space-3)) / 2);
     }
@@ -684,57 +550,17 @@ const schema = [
     margin-bottom: var(--space-3);
   }
 
-  .compare-tabs {
-    display: inline-flex;
-    gap: var(--space-2);
-    padding: 4px;
-    background: var(--color-surface, rgba(127, 127, 127, 0.08));
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-  }
-
   .compare-live-link {
     font-family: var(--font-mono);
     font-size: var(--text-xs);
-    color: var(--color-text-muted);
     white-space: nowrap;
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: 1px;
-    transition: color 0.2s, border-color 0.2s;
-  }
-
-  .compare-live-link:hover {
-    color: var(--color-text);
-    border-color: var(--color-text);
-  }
-
-  .compare-tab {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.02em;
-    color: var(--color-text-muted);
-    background: none;
-    border: none;
-    padding: 6px 16px;
-    border-radius: 999px;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-  }
-
-  .compare-tab:hover {
-    color: var(--color-text);
-  }
-
-  .compare-tab.is-active {
-    background: var(--color-text);
-    color: var(--color-bg, #fff);
   }
 
   .compare-frame {
     position: relative;
     max-height: 640px;
     overflow: hidden;
-    border: 1px solid var(--color-border);
+    border: var(--border-width) solid var(--color-border);
   }
 
   .compare-pane {
@@ -765,15 +591,15 @@ const schema = [
   .component-table-groups {
     display: flex;
     flex-direction: column;
-    border-top: 1px solid var(--color-border);
+    border-top: var(--border-width) solid var(--color-border);
   }
 
   .component-table-group {
     display: grid;
-    grid-template-columns: 220px 1fr;
+    grid-template-columns: 224px 1fr;
     gap: var(--space-5);
     padding: var(--space-5) 0;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: var(--border-width) solid var(--color-border);
   }
 
   .component-table-group h3 {
@@ -801,21 +627,15 @@ const schema = [
   .back-link-wrapper {
     margin-top: var(--space-6);
     padding: var(--space-5) 0;
-    border-top: 1px solid var(--color-border);
+    border-top: var(--border-width) solid var(--color-border);
   }
 
   .back-link {
     font-family: var(--font-mono);
     font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    transition: color 0.2s;
   }
 
-  .back-link:hover {
-    color: var(--color-text);
-  }
-
-  @media (max-width: 900px) {
+  @media (max-width: 1024px) {
     .project-layout {
       flex-direction: column;
       gap: var(--space-6);
@@ -845,18 +665,29 @@ const schema = [
   const lightbox = document.getElementById("lightbox")!;
   const lightboxImg = document.getElementById("lightbox-img") as HTMLImageElement;
 
+  const lightboxClose = lightbox.querySelector<HTMLButtonElement>(".lightbox-close")!;
+  let lightboxReturn: HTMLElement | null = null;
+
+  // A dialog: inert while closed, focus on its close button while open, and
+  // back where it came from when it closes.
   document.querySelectorAll<HTMLImageElement>(".lightbox-trigger").forEach((img) => {
     img.addEventListener("click", () => {
       lightboxImg.src = img.src;
       lightboxImg.alt = img.alt;
+      lightboxReturn = document.activeElement as HTMLElement | null;
+      lightbox.inert = false;
       lightbox.classList.add("open");
       document.body.style.overflow = "hidden";
+      lightboxClose.focus();
     });
   });
 
   function closeLightbox() {
+    if (!lightbox.classList.contains("open")) return;
     lightbox.classList.remove("open");
+    lightbox.inert = true;
     document.body.style.overflow = "";
+    lightboxReturn?.focus();
   }
 
   lightbox.addEventListener("click", closeLightbox);
@@ -904,7 +735,7 @@ const schema = [
     tabs.forEach((tab) => {
       tab.addEventListener("click", () => {
         const target = tab.dataset.tab;
-        tabs.forEach((t) => t.classList.toggle("is-active", t === tab));
+        tabs.forEach((t) => t.setAttribute("aria-pressed", String(t === tab)));
         panes.forEach((p) => p.classList.toggle("is-active", p.dataset.pane === target));
       });
     });

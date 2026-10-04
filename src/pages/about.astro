@@ -8,6 +8,7 @@ const schema = [
   { "@type": "ProfilePage", mainEntity: { "@id": PERSON_ID }, about: { "@id": PERSON_ID } },
   breadcrumbSchema([{ name: "About", path: "/about" }]),
 ];
+import Breadcrumbs from "../components/ui/Breadcrumbs.astro";
 ---
 
 <Layout
@@ -18,12 +19,8 @@ const schema = [
   noindex
 >
   <Nav />
-  <main class="about-page">
-    <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="/">Home</a>
-      <span class="sep">/</span>
-      <span class="current">About</span>
-    </nav>
+  <main id="main" class="about-page">
+    <Breadcrumbs class="page-crumbs" items={[{ label: "Home", href: "/" }, { label: "About" }]} />
 
     <div class="about-hero">
       <div class="about-intro">
@@ -54,27 +51,27 @@ const schema = [
       </div>
     </div>
 
-    <div class="divider"><hr /></div>
+    <hr class="divider" />
 
     <section class="experience">
       <h2>Experience</h2>
       <div class="timeline">
         <div class="timeline-item">
-          <span class="timeline-period">2025 — Present</span>
+          <span class="timeline-period">2025 – Present</span>
           <div class="timeline-detail">
             <span class="timeline-company">Commerce</span>
             <span class="timeline-roles">Principal Designer, Design Systems · Lead Web Designer</span>
           </div>
         </div>
         <div class="timeline-item">
-          <span class="timeline-period">2018 — 2025</span>
+          <span class="timeline-period">2018 – 2025</span>
           <div class="timeline-detail">
             <span class="timeline-company">BigCommerce</span>
             <span class="timeline-roles">Lead Web Designer · Senior Visual Designer · Visual Designer</span>
           </div>
         </div>
         <div class="timeline-item">
-          <span class="timeline-period">2016 — 2018</span>
+          <span class="timeline-period">2016 – 2018</span>
           <div class="timeline-detail">
             <span class="timeline-company">TicketCity</span>
             <span class="timeline-roles">UI Designer · Graphic Designer</span>
@@ -83,7 +80,7 @@ const schema = [
       </div>
     </section>
 
-    <div class="divider"><hr /></div>
+    <hr class="divider" />
 
     <section class="tools-section">
       <h2>Tools</h2>
@@ -130,32 +127,32 @@ const schema = [
       </div>
     </section>
 
-    <div class="divider"><hr /></div>
+    <hr class="divider" />
 
     <section class="certification-section">
       <h2>Certification</h2>
       <div class="certification-item">
-        <a href="https://www.udemy.com/certificate/UC-18d85801-2609-449f-b7ed-fefe40a5db46/" target="_blank" rel="noopener noreferrer" class="certification-name">User Experience (UX): The Ultimate Guide to Usability and UX</a>
+        <a href="https://www.udemy.com/certificate/UC-18d85801-2609-449f-b7ed-fefe40a5db46/" target="_blank" rel="noopener noreferrer" class="certification-name link-underline">User Experience (UX): The Ultimate Guide to Usability and UX</a>
         <span class="certification-meta">Udemy · David Travis · 2024</span>
         <p class="certification-desc">A 12-hour course covering usability testing, user research, information architecture, and interaction design principles.</p>
       </div>
     </section>
 
-    <div class="divider"><hr /></div>
+    <hr class="divider" />
 
     <section class="contact-section">
       <h2>Get in touch</h2>
       <div class="contact-links">
-        <a href="mailto:ryansheridandesign@gmail.com" class="contact-link">
+        <a href="mailto:ryansheridandesign@gmail.com" class="contact-link link-underline">
           ryansheridandesign@gmail.com
         </a>
         <a
           href="https://www.linkedin.com/in/ryansheridandesign/"
           target="_blank"
           rel="noopener noreferrer"
-          class="contact-link"
+          class="contact-link link-underline"
         >
-          LinkedIn <span class="arrow">&nearr;</span>
+          LinkedIn <span class="arrow" aria-hidden="true">&nearr;</span><span class="visually-hidden">(opens in a new tab)</span>
         </a>
       </div>
     </section>
@@ -165,269 +162,209 @@ const schema = [
 
 <style>
   .about-page {
-    padding: 80px var(--page-padding) 0;
+    padding: var(--page-top) var(--page-padding) 0;
   }
 
-  .breadcrumbs {
+  .page-crumbs,
+  .about-hero,
+  .divider,
+  .experience,
+  .tools-section,
+  .certification-section,
+  .contact-section {
     max-width: var(--max-width);
-    margin: 0 auto 48px;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .breadcrumbs a {
-    color: var(--color-text-muted);
-    transition: color 0.2s;
-  }
-
-  .breadcrumbs a:hover {
-    color: var(--color-text);
-  }
-
-  .breadcrumbs .sep {
-    color: var(--color-border);
-  }
-
-  .breadcrumbs .current {
-    color: var(--color-text);
+    margin-inline: auto;
   }
 
   .about-hero {
-    max-width: var(--max-width);
-    margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 380px;
+    grid-template-columns: 1fr 384px;
     gap: 80px;
     align-items: start;
   }
 
   h1 {
-    font-size: clamp(32px, 1.7rem + 1.2vw, 52px);
-    font-weight: 300;
-    letter-spacing: -0.03em;
-    margin-bottom: 8px;
+    font-size: var(--text-headline);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-2);
   }
 
   .role {
-    font-size: 15px;
+    font-size: var(--text-body);
     color: var(--color-text-muted);
-    margin-bottom: 40px;
+    margin-bottom: var(--space-5);
   }
 
   .bio {
-    font-size: 16px;
-    line-height: 1.8;
-    color: var(--color-text);
-    max-width: 540px;
-    margin-bottom: 20px;
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    max-width: 544px;
+    margin-bottom: var(--space-3);
   }
 
   .bio:last-of-type {
     margin-bottom: 0;
   }
 
+  .bio strong {
+    font-weight: var(--weight-medium);
+  }
+
   .about-photo {
     overflow: hidden;
-    border: 1px solid var(--color-border);
+    border: var(--border-width) solid var(--color-border);
   }
 
   .about-photo img {
     width: 100%;
-    display: block;
     aspect-ratio: 4 / 5;
     object-fit: cover;
   }
 
   .divider {
-    max-width: var(--max-width);
-    margin: 80px auto;
-  }
-
-  hr {
-    border: none;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .experience {
-    max-width: var(--max-width);
-    margin: 0 auto;
+    margin-block: 80px;
   }
 
   h2 {
-    font-size: 14px;
-    font-weight: 300;
-    letter-spacing: -0.01em;
+    font-size: var(--text-body);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-snug);
     color: var(--color-text-muted);
-    margin-bottom: 40px;
+    margin-bottom: var(--space-5);
   }
 
   .timeline {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: var(--space-5);
   }
 
   .timeline-item {
     display: grid;
     grid-template-columns: 160px 1fr;
-    gap: 40px;
+    gap: var(--space-5);
   }
 
   .timeline-period {
-    font-size: 14px;
+    font-size: var(--text-body);
     color: var(--color-text-muted);
-    padding-top: 2px;
   }
 
   .timeline-detail {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--space-1);
   }
 
   .timeline-company {
-    font-size: 17px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
+    font-size: var(--text-md);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-snug);
+    line-height: var(--leading-snug);
   }
 
   .timeline-roles {
-    font-size: 14px;
+    font-size: var(--text-body);
     color: var(--color-text-muted);
     line-height: 1.5;
-  }
-
-  .tools-section {
-    max-width: var(--max-width);
-    margin: 0 auto;
   }
 
   .tools-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 48px;
+    gap: var(--space-6);
   }
 
   .tool-group h3 {
-    font-size: 14px;
-    font-weight: 300;
-    letter-spacing: -0.01em;
-    margin-bottom: 16px;
+    font-size: var(--text-body);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-snug);
+    margin-bottom: var(--space-3);
   }
 
   .tool-group ul {
     list-style: none;
-    padding: 0;
-    margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--space-2);
   }
 
   .tool-group li {
-    font-size: 15px;
+    font-size: var(--text-body);
   }
 
   .tool-group a {
     color: var(--color-text-muted);
-    transition: color 0.2s;
+    transition: color var(--duration-fast) var(--ease-standard);
   }
 
   .tool-group a:hover {
     color: var(--color-text);
   }
 
-  .certification-section {
-    max-width: var(--max-width);
-    margin: 0 auto;
-  }
-
   .certification-item {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--space-1);
   }
 
   .certification-name {
-    font-size: 17px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    color: var(--color-text);
-    text-decoration: underline;
-    text-decoration-color: var(--color-border);
-    text-underline-offset: 3px;
-    transition: color 0.2s, text-decoration-color 0.2s;
-  }
-
-  .certification-name:hover {
-    color: var(--color-text-muted);
-    text-decoration-color: var(--color-text-muted);
+    font-size: var(--text-md);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-snug);
+    line-height: var(--leading-snug);
   }
 
   .certification-desc {
-    font-size: 15px;
+    font-size: var(--text-body);
     color: var(--color-text-muted);
-    line-height: 1.6;
-    max-width: 540px;
-    margin-top: 8px;
+    max-width: 544px;
+    margin-top: var(--space-2);
   }
 
   .certification-meta {
-    font-size: 14px;
+    font-size: var(--text-body);
     color: var(--color-text-muted);
-  }
-
-  .contact-section {
-    max-width: var(--max-width);
-    margin: 0 auto;
   }
 
   .contact-links {
     display: flex;
-    gap: 40px;
+    gap: var(--space-5);
   }
 
   .contact-link {
-    font-size: 16px;
-    color: var(--color-text);
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: 2px;
-    transition: border-color 0.2s;
-  }
-
-  .contact-link:hover {
-    border-color: var(--color-text);
+    font-size: var(--text-base);
   }
 
   .arrow {
-    font-size: 13px;
+    font-size: var(--text-sm);
   }
 
   @media (max-width: 768px) {
     .about-hero {
       grid-template-columns: 1fr;
-      gap: 48px;
+      gap: var(--space-6);
     }
 
     .timeline-item {
       grid-template-columns: 1fr;
-      gap: 4px;
+      gap: var(--space-1);
     }
 
     .tools-grid {
       grid-template-columns: repeat(2, 1fr);
-      gap: 40px;
+      gap: var(--space-5);
     }
 
     .contact-links {
       flex-direction: column;
-      gap: 16px;
+      gap: var(--space-3);
     }
 
     .divider {
-      margin: 56px auto;
+      margin-block: 56px;
     }
   }
 </style>

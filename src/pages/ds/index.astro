@@ -1,0 +1,200 @@
+---
+import DsLayout from "../../layouts/DsLayout.astro";
+import CodeBlock from "../../components/ds/CodeBlock.astro";
+import { foundations, guidelines, components, patterns } from "../../data/ds";
+import { allTokenGroups } from "../../data/tokens";
+
+const tokenCount = allTokenGroups.flatMap((g) => g.tokens).filter((t) => !t.deprecated).length;
+---
+
+<DsLayout
+  title="Design system"
+  lead="The tokens, components, and rules behind ryansheridan.studio. Everything on this page is the real thing: the previews are the site's own components, drawn with the site's own tokens."
+>
+  <section aria-labelledby="at-a-glance">
+    <h2 id="at-a-glance" class="visually-hidden">At a glance</h2>
+    <dl class="stats">
+      <div><dt class="overline">Tokens</dt><dd>{tokenCount}</dd></div>
+      <div><dt class="overline">Components</dt><dd>{components.length}</dd></div>
+      <div><dt class="overline">Patterns</dt><dd>{patterns.length}</dd></div>
+      <div><dt class="overline">Grid</dt><dd>8px</dd></div>
+      <div><dt class="overline">WCAG 2.2</dt><dd>AA</dd></div>
+    </dl>
+  </section>
+
+  <section aria-labelledby="principles">
+    <h2 id="principles">Principles</h2>
+    <p class="ds-text">Four ideas decide most questions before they come up.</p>
+    <div class="ds-grid principles">
+      <div class="ds-card">
+        <span class="overline">01</span>
+        <span class="ds-card-title">Quiet by default</span>
+        <span class="ds-card-body">Black on white, light type, hairlines. The work is the color on the page; the interface stays out of its way.</span>
+      </div>
+      <div class="ds-card">
+        <span class="overline">02</span>
+        <span class="ds-card-title">One source of truth</span>
+        <span class="ds-card-body">Every value comes from a token, and every token lives in one file. If a number isn't a token, it's a question.</span>
+      </div>
+      <div class="ds-card">
+        <span class="overline">03</span>
+        <span class="ds-card-title">On the grid</span>
+        <span class="ds-card-body">Space comes in steps of 8. Things line up because they share a scale, not because someone nudged them.</span>
+      </div>
+      <div class="ds-card">
+        <span class="overline">04</span>
+        <span class="ds-card-title">Everyone gets in</span>
+        <span class="ds-card-body">Keyboard, screen reader, low vision, less motion. Access is part of the spec, never a pass at the end.</span>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="start-here">
+    <h2 id="start-here">Start here</h2>
+    <p class="ds-text">Three ways in, depending on what you're doing today.</p>
+    <div class="ds-grid">
+      <div class="ds-card">
+        <span class="overline">Designers</span>
+        <span class="ds-card-title">Match the build</span>
+        <span class="ds-card-body">Pull values from <a href="/ds/color">Color</a>, <a href="/ds/typography">Typography</a>, and <a href="/ds/spacing">Spacing</a>, then check each component's states and do's and don'ts before you mock up something new. The token names here are the names to use in Figma.</span>
+      </div>
+      <div class="ds-card">
+        <span class="overline">Developers</span>
+        <span class="ds-card-title">Copy, paste, ship</span>
+        <span class="ds-card-body">Every example has the code that renders it, ready to copy. Click any token name to copy its <code>var()</code>. Use the components in <code>src/components/ui</code> before writing new CSS.</span>
+      </div>
+      <div class="ds-card">
+        <span class="overline">Writers</span>
+        <span class="ds-card-title">Sound like the site</span>
+        <span class="ds-card-body">Read <a href="/ds/content">Content</a> for voice and mechanics, then the content notes on each component: how long a button label runs, how to phrase an error, what goes in alt text.</span>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="contents">
+    <h2 id="contents">What's inside</h2>
+    <h3>Foundations</h3>
+    <div class="ds-grid">
+      {foundations.map((p) => (
+        <a href={`/ds/${p.slug}`} class="ds-card">
+          <span class="ds-card-title">{p.title}</span>
+          <span class="ds-card-body">{p.summary}</span>
+        </a>
+      ))}
+    </div>
+    <h3>Guidelines</h3>
+    <div class="ds-grid">
+      {guidelines.map((p) => (
+        <a href={`/ds/${p.slug}`} class="ds-card">
+          <span class="ds-card-title">{p.title}</span>
+          <span class="ds-card-body">{p.summary}</span>
+        </a>
+      ))}
+    </div>
+    <h3>Components and patterns</h3>
+    <p class="ds-text">
+      {components.length} components and {patterns.length} patterns. <a href="/ds/components">Browse them all</a>.
+    </p>
+  </section>
+
+  <section aria-labelledby="how-it-works">
+    <h2 id="how-it-works">How it's built</h2>
+    <p class="ds-text">
+      Tokens are defined once, in TypeScript, with a description for each. The layout writes them into
+      <code>:root</code> as custom properties on every page, and these docs render their tables from the
+      same file. Change a value there and the site and its documentation move together.
+    </p>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <thead>
+          <tr><th scope="col">File</th><th scope="col">What it holds</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="mono">src/data/tokens.ts</td><td>Every token, its value, and what it's for. The source of truth.</td></tr>
+          <tr><td class="mono">src/styles/global.css</td><td>Reset, base elements, and the CSS-only components (button, badge, field, prose, and the rest).</td></tr>
+          <tr><td class="mono">src/components/ui/</td><td>Astro components for anything with markup rules: Button, Breadcrumbs, Select, Accordion.</td></tr>
+          <tr><td class="mono">src/layouts/Layout.astro</td><td>Writes the tokens into <code>:root</code>, loads the fonts, adds the skip link.</td></tr>
+          <tr><td class="mono">src/data/ds.ts</td><td>The map of these docs.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="contributing">
+    <h2 id="contributing">Adding to the system</h2>
+    <h3>A new token</h3>
+    <ol class="ds-list">
+      <li>Check the existing scale first. Most new values are an old token in disguise.</li>
+      <li>Add it to the right group in <code>src/data/tokens.ts</code> with a one-line description of when to use it.</li>
+      <li>Use it as <code>var(--name)</code>. It shows up on the matching foundations page on its own.</li>
+    </ol>
+    <CodeBlock
+      lang="ts"
+      label="src/data/tokens.ts"
+      code={`{ name: "space-9", value: "128px", description: "Between the hero and the first section on long landing pages." },`}
+    />
+    <h3>A new component</h3>
+    <ol class="ds-list">
+      <li>Make sure two pages need it. One-off styling stays scoped to its page.</li>
+      <li>CSS-only? Add it to <code>src/styles/global.css</code>. Needs markup rules? Make an Astro component in <code>src/components/ui</code>.</li>
+      <li>Build it from tokens only, give it a visible focus state, and check it at 390px wide.</li>
+      <li>Document it: add it to <code>src/data/ds.ts</code> and give it a page under <code>src/pages/ds/components</code> with a use case, live examples, code, accessibility notes, and content guidance.</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="changelog">
+    <h2 id="changelog">Changelog</h2>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <tbody>
+          <tr>
+            <td class="mono">1.0</td>
+            <td class="mono muted">Oct 2026</td>
+            <td>
+              First release. Tokens moved into one file. Breadcrumbs, buttons, form fields, and the accordion
+              consolidated from per-page copies into shared components. Spacing moved onto the 8px grid. Field
+              outlines darkened to meet WCAG non-text contrast; skip link, menu keyboard support, and reduced-motion
+              scrolling added.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</DsLayout>
+
+<style>
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    border-top: var(--border-width) solid var(--color-text);
+  }
+
+  .stats div {
+    padding: var(--space-3) var(--space-3) 0 0;
+  }
+
+  .stats dd {
+    margin-top: var(--space-1);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .principles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 640px) {
+    .principles {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: var(--space-3);
+    }
+  }
+</style>

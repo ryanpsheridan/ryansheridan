@@ -1,0 +1,79 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import PropsTable from "../../../components/ds/PropsTable.astro";
+import Breadcrumbs from "../../../components/ui/Breadcrumbs.astro";
+---
+
+<DsLayout
+  section="Components"
+  title="Breadcrumbs"
+  lead="A trail from Home to the current page. It tells you where you are and gives you a one-click way back up."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">When to use it</h2>
+    <ul class="ds-list">
+      <li>At the top of every page below the homepage, above the title.</li>
+      <li>Not on the homepage, and not as the only navigation. It complements the menu.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="examples">
+    <h2 id="examples">Examples</h2>
+    <Example
+      title="Two levels"
+      code={`<Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "About" }]} />`}
+    >
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "About" }]} />
+    </Example>
+    <Example
+      title="Three levels, from data"
+      code={`<Breadcrumbs
+  items={[
+    { label: "Home", href: "/" },
+    { label: "Work", href: "/work" },
+    { label: project.title },
+  ]}
+/>`}
+    >
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Work", href: "/work" }, { label: "RHOW Coffee" }]} />
+    </Example>
+    <Example
+      title="Plain HTML"
+      lang="html"
+      code={`<nav aria-label="Breadcrumb">
+  <ol class="breadcrumbs">
+    <li><a href="/">Home</a></li>
+    <li><span aria-current="page">Contact</span></li>
+  </ol>
+</nav>`}
+    >
+      <nav aria-label="Breadcrumb example"><ol class="breadcrumbs" style="margin: 0"><li><a href="/">Home</a></li><li><span aria-current="page">Contact</span></li></ol></nav>
+    </Example>
+  </section>
+
+  <section aria-labelledby="api">
+    <h2 id="api">Props</h2>
+    <PropsTable
+      rows={[
+        { name: "items", type: "{ label: string; href?: string }[]", description: "From Home to the current page. The last item is the current page and is never a link." },
+        { name: "class", type: "string", description: "Lands on the <code>&lt;nav&gt;</code>. Use it to set the width to match the page column." },
+      ]}
+    />
+    <p class="ds-text">It brings its own 32px bottom margin, the standard space between breadcrumbs and a title.</p>
+  </section>
+
+  <section aria-labelledby="a11y">
+    <h2 id="a11y">Accessibility</h2>
+    <ul class="ds-list">
+      <li>A <code>&lt;nav aria-label="Breadcrumb"&gt;</code> landmark around an ordered list, so it's announced as "Breadcrumb navigation, list, 3 items."</li>
+      <li>The current page carries <code>aria-current="page"</code>.</li>
+      <li>The slashes are drawn by CSS, so screen readers don't read "slash" between each item.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="content">
+    <h2 id="content">Content</h2>
+    <p class="ds-text">Use each page's short name, the same one the menu uses. The last item can be the full page title.</p>
+  </section>
+</DsLayout>

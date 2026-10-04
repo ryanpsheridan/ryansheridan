@@ -1,0 +1,24 @@
+---
+/**
+ * A native <select> in the field style, with a chevron drawn over it. Pass
+ * <option>s as children. Documented at /ds/components/select.
+ */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"select">;
+
+// Classes and scoping land on the wrapper, which is what a page lays out;
+// everything else (id, name, value) belongs to the <select> itself.
+const { class: className, ...rest } = Astro.props;
+const scope = Object.fromEntries(Object.entries(rest).filter(([key]) => key.startsWith("data-astro-cid")));
+const attrs = Object.fromEntries(Object.entries(rest).filter(([key]) => !key.startsWith("data-astro-cid")));
+---
+
+<div class:list={["select", className]} {...scope}>
+  <select class="input" {...attrs}>
+    <slot />
+  </select>
+  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+    <path d="M4 6l4 4 4-4" />
+  </svg>
+</div>

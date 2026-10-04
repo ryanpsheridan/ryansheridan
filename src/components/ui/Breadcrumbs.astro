@@ -1,0 +1,25 @@
+---
+/**
+ * Where this page sits in the site. The last item is the current page and is
+ * not a link. Documented at /ds/components/breadcrumbs.
+ */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"nav"> & {
+  items: { label: string; href?: string }[];
+};
+
+const { items, ...rest } = Astro.props;
+---
+
+<nav aria-label="Breadcrumb" {...rest}>
+  <ol class="breadcrumbs">
+    {items.map((item, i) =>
+      i === items.length - 1 || !item.href ? (
+        <li><span aria-current={i === items.length - 1 ? "page" : undefined}>{item.label}</span></li>
+      ) : (
+        <li><a href={item.href}>{item.label}</a></li>
+      ),
+    )}
+  </ol>
+</nav>

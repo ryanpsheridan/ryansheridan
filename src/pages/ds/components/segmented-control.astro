@@ -1,0 +1,77 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import PropsTable from "../../../components/ds/PropsTable.astro";
+---
+
+<DsLayout
+  section="Components"
+  title="Segmented control"
+  lead="Two or three pill buttons in a track, for switching between versions of the same thing in place."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">When to use it</h2>
+    <ul class="ds-list">
+      <li>Before and after on a redesign case study.</li>
+      <li>Two or three options, each a word or two. More than that, use a <a href="/ds/components/select">select</a>.</li>
+      <li>Not for navigating between pages.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="examples">
+    <h2 id="examples">Example</h2>
+    <Example
+      lang="html"
+      code={`<div class="segmented" role="group" aria-label="Show version">
+  <button type="button" aria-pressed="false">Before</button>
+  <button type="button" aria-pressed="true">After</button>
+</div>
+
+<script>
+  const group = document.querySelector(".segmented");
+  group.querySelectorAll("button").forEach((button) => {
+    button.addEventListener("click", () => {
+      group.querySelectorAll("button").forEach((b) =>
+        b.setAttribute("aria-pressed", String(b === button))
+      );
+    });
+  });
+</script>`}
+    >
+      <div class="segmented" role="group" aria-label="Show version" data-segmented>
+        <button type="button" aria-pressed="false">Before</button>
+        <button type="button" aria-pressed="true">After</button>
+      </div>
+    </Example>
+  </section>
+
+  <section aria-labelledby="api">
+    <h2 id="api">Classes and attributes</h2>
+    <PropsTable
+      kind="Attribute"
+      rows={[
+        { name: "class=\"segmented\"", description: "The track: surface fill, hairline, 4px inset, full radius." },
+        { name: "role=\"group\" + aria-label", description: "Names the set of options." },
+        { name: "aria-pressed", description: "On each button. <code>true</code> fills it with the text color. The style follows the attribute, so state and appearance can't disagree." },
+      ]}
+    />
+  </section>
+
+  <section aria-labelledby="a11y">
+    <h2 id="a11y">Accessibility and content</h2>
+    <ul class="ds-list">
+      <li>Toggle buttons with <code>aria-pressed</code>, announced as "After, toggle button, pressed." Simpler and more reliable than a tab pattern for two views.</li>
+      <li>The selected segment is 18.9:1 white on black, readable without the fill.</li>
+      <li>Labels are one or two words, the names of the versions: "Before," "After."</li>
+    </ul>
+  </section>
+</DsLayout>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-segmented]").forEach((group) => {
+    const buttons = group.querySelectorAll("button");
+    buttons.forEach((button) =>
+      button.addEventListener("click", () => buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === button)))),
+    );
+  });
+</script>

@@ -1,0 +1,122 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import CodeBlock from "../../../components/ds/CodeBlock.astro";
+import Media from "../../../components/Media.astro";
+import { getHomepageProjects } from "../../../data/projects";
+
+const sample = getHomepageProjects()[0];
+---
+
+<DsLayout
+  section="Patterns"
+  title="Project card"
+  lead="How a project appears before you open it. Two layouts, both built from the same project data: a stacked card on the homepage and a row on /work."
+>
+  <section aria-labelledby="preview">
+    <h2 id="preview">Homepage card</h2>
+    <p class="ds-text">A 16:10 frame, the title, and the project's type badges. The whole card is one link.</p>
+    <div class="card-demo">
+      <a href={`/work/${sample.slug}`} class="card">
+        <div class="card-image">{sample.thumbnail && <Media src={sample.thumbnail} alt={sample.title} />}</div>
+        <p class="card-title">{sample.title}</p>
+        <div class="badge-list">{sample.tags.map((t) => <span class="badge">{t}</span>)}</div>
+      </a>
+    </div>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Spec</th></tr></thead>
+        <tbody>
+          <tr><td>Frame</td><td>16:10, cropped to fill, <code>--color-surface</code> behind it while it loads. Scales to 103% on hover over <code>--duration-slow</code>; still under reduced motion.</td></tr>
+          <tr><td>Title</td><td><code>--text-lg</code>, light, 24px below the frame.</td></tr>
+          <tr><td>Badges</td><td>Project tags, 16px below the title.</td></tr>
+          <tr><td>Rhythm</td><td>96px between cards on desktop, 32 on phones.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="row">
+    <h2 id="row">/work row</h2>
+    <p class="ds-text">
+      Thumbnail, then title, badges, and summary, then "View project" at the far right. 64px padding, a hairline
+      between rows. The title link stretches over the whole row, so everything is clickable without nesting
+      links, and the thumbnail is hidden from screen readers since the title already names the project.
+    </p>
+  </section>
+
+  <section aria-labelledby="data">
+    <h2 id="data">Adding a project</h2>
+    <p class="ds-text">Both layouts come from one entry in <code>src/data/projects.ts</code>. Writers and designers can add a project without touching a template.</p>
+    <CodeBlock
+      lang="ts"
+      label="src/data/projects.ts"
+      code={`{
+  slug: "rhow-coffee",
+  title: "RHOW Coffee",
+  year: 2026,
+  // About 150 characters. Doubles as the meta description.
+  description: "Brand identity for RHOW Coffee, a specialty coffee shop in Massillon, Ohio: a swan mark, logo suite, color palette, and illustration.",
+  ogImage: "/project-rhow-coffee02.jpg",      // JPG or PNG for link previews
+  thumbnail: "/rhow-logo-spec-animated-dark.svg",
+  showOnHomepage: true,
+  tags: ["Branding", "Illustration"],         // 2 or 3
+  tools: ["Adobe Illustrator", "Figma"],
+  client: "RHOW Coffee",
+  clientUrl: "https://www.instagram.com/rhowcoffee",
+  content: [ /* see Case study blocks */ ],
+}`}
+    />
+  </section>
+
+  <section aria-labelledby="content">
+    <h2 id="content">Content</h2>
+    <ul class="ds-list">
+      <li><strong>Title</strong>: the project's name, not a sentence. Title case, since it's a name.</li>
+      <li><strong>Description</strong>: one sentence, about 150 characters, saying what changed. It's the meta description too.</li>
+      <li><strong>Thumbnail</strong>: the single frame that explains the project. Animated SVGs loop and need a reduced-motion guard.</li>
+    </ul>
+  </section>
+</DsLayout>
+
+<style>
+  .card-demo {
+    max-width: 480px;
+    margin: var(--space-4) 0 var(--space-5);
+  }
+
+  .card {
+    display: block;
+    color: var(--color-text);
+  }
+
+  .card:hover {
+    color: var(--color-text);
+  }
+
+  .card-image {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--color-surface);
+    margin-bottom: var(--space-4);
+  }
+
+  .card-image :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-standard);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .card:hover .card-image :global(img) {
+      transform: scale(1.03);
+    }
+  }
+
+  .card-title {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-snug);
+    margin-bottom: var(--space-3);
+  }
+</style>

@@ -1,0 +1,23 @@
+---
+/**
+ * Questions that open in place, built on <details> so it works without
+ * script and every browser announces it as expandable. Answers are plain
+ * text or simple HTML. Documented at /ds/components/accordion.
+ */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"div"> & {
+  items: { q: string; a: string }[];
+};
+
+const { items, class: className, ...rest } = Astro.props;
+---
+
+<div class:list={["accordion", className]} {...rest}>
+  {items.map(({ q, a }) => (
+    <details>
+      <summary>{q}</summary>
+      <p set:html={a} />
+    </details>
+  ))}
+</div>

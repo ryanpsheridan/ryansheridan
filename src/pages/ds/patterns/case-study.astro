@@ -1,0 +1,59 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import CodeBlock from "../../../components/ds/CodeBlock.astro";
+
+const blocks = [
+  { type: "text", use: "A heading and HTML body. Rendered inside .prose.", code: `{ type: "text", heading: "Built around how people work", body: "<p>…</p>" }` },
+  { type: "imageGrid", use: "One or more images, full width. framed adds space for UI screenshots; sideBySide makes two columns.", code: `{ type: "imageGrid", framed: true, images: [{ src: "/shot.webp", alt: "…", caption: "01 · Tokens" }] }` },
+  { type: "carousel", use: "A row of images you page through. perView sets how many show at once; contain letterboxes screenshots.", code: `{ type: "carousel", perView: 1, ratio: "16 / 10", contain: true, images: [/* … */] }` },
+  { type: "compare", use: "Before and after, switched with a segmented control. Add liveUrl to link the shipped page.", code: `{ type: "compare", before: { src: "/old.webp", alt: "…" }, after: { src: "/new.webp", alt: "…" }, liveUrl: "https://…" }` },
+  { type: "componentTable", use: "Groups of badges, for listing what a system contains.", code: `{ type: "componentTable", intro: "…", groups: [{ category: "Inputs", items: ["Button", "Field"] }] }` },
+  { type: "divider", use: "A hairline for a change of chapter.", code: `{ type: "divider" }` },
+];
+---
+
+<DsLayout
+  section="Patterns"
+  title="Case study blocks"
+  lead="A case study is a list of blocks in the project's data. The template handles layout, spacing, and the sidebar; the writer handles the story."
+>
+  <section aria-labelledby="layout">
+    <h2 id="layout">Page layout</h2>
+    <ul class="ds-list">
+      <li>Breadcrumbs, then the title in <code>--text-hero</code>, 48px above the content.</li>
+      <li>A three-to-one split: the story on the left, a sticky sidebar on the right with client, year, type, and tools. Under 1024px the sidebar moves above the story.</li>
+      <li>Blocks sit 48px apart. Text blocks hold to <code>--content-width</code>; media runs the full column.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="blocks">
+    <h2 id="blocks">Blocks</h2>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <thead><tr><th scope="col">Type</th><th scope="col">Use for</th></tr></thead>
+        <tbody>
+          {blocks.map((b) => <tr><td class="mono">{b.type}</td><td>{b.use}</td></tr>)}
+        </tbody>
+      </table>
+    </div>
+    {blocks.map((b) => (
+      <>
+        <h3>{b.type}</h3>
+        <CodeBlock lang="ts" code={b.code} />
+      </>
+    ))}
+  </section>
+
+  <section aria-labelledby="writing">
+    <h2 id="writing">Writing a case study</h2>
+    <ol class="ds-list">
+      <li><strong>Open with the problem</strong>, in the first text block: who it was for, and what wasn't working.</li>
+      <li><strong>Show the work early.</strong> An image or carousel by the second block.</li>
+      <li><strong>Credit people by name</strong>, and link them. Say what you owned.</li>
+      <li><strong>Name the hard part</strong> and how it was solved. That's what a reader remembers.</li>
+      <li><strong>End on the outcome</strong>: what shipped, what changed, with a number if there is one.</li>
+      <li>Headings are short statements, not labels: "One token name, a value per brand," not "Tokens."</li>
+      <li>Captions are numbered for carousels: "01 · Text color and typeface, per brand."</li>
+    </ol>
+  </section>
+</DsLayout>

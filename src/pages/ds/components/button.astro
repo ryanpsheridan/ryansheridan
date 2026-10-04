@@ -1,0 +1,125 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import PropsTable from "../../../components/ds/PropsTable.astro";
+import DoDont from "../../../components/ds/DoDont.astro";
+import Button from "../../../components/ui/Button.astro";
+---
+
+<DsLayout
+  section="Components"
+  title="Button"
+  lead="A pill that does the main thing on a page, or a quieter one next to it. Black when it matters most, outlined when it doesn't."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">When to use it</h2>
+    <ul class="ds-list">
+      <li><strong>Primary</strong> for the one action you most want taken on a page: "View all work," "Email me," "Send it over." One per view.</li>
+      <li><strong>Secondary</strong> for a useful action that isn't the point of the page: "Download PDF."</li>
+      <li><strong>Not for navigation inside copy.</strong> If it reads as part of a sentence, it's a <a href="/ds/components/link">link</a>.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="examples">
+    <h2 id="examples">Examples</h2>
+    <Example
+      title="Variants"
+      description="Primary is filled with text color. Secondary is outlined in the strong border."
+      code={`<Button href="/work">View all work</Button>
+<Button variant="secondary">Download PDF</Button>`}
+    >
+      <Button href="#examples">View all work</Button>
+      <Button variant="secondary">Download PDF</Button>
+    </Example>
+
+    <Example
+      title="Sizes"
+      description="40, 48, and 56px tall. Default (md) for most actions. Large for the one action a page exists for, like sending the project form."
+      code={`<Button size="sm">Small</Button>
+<Button>Default</Button>
+<Button size="lg">Large</Button>`}
+    >
+      <Button size="sm">Small</Button>
+      <Button>Default</Button>
+      <Button size="lg">Large</Button>
+    </Example>
+
+    <Example
+      title="With an arrow"
+      description="Add an arrow when the button takes you somewhere. External links open a new tab and say so to screen readers."
+      code={`<Button href="/start-a-project" arrow="right">Start a project</Button>
+<Button href="https://www.linkedin.com/in/ryansheridandesign/" variant="secondary" arrow="external">
+  LinkedIn
+</Button>`}
+    >
+      <Button href="#examples" arrow="right">Start a project</Button>
+      <Button href="https://www.linkedin.com/in/ryansheridandesign/" variant="secondary" arrow="external">LinkedIn</Button>
+    </Example>
+
+    <Example
+      title="Disabled"
+      description="While a form is sending. Pair it with a status message saying why."
+      code={`<Button size="lg" type="submit" disabled>Send it over</Button>`}
+    >
+      <Button size="lg" type="submit" disabled>Send it over</Button>
+    </Example>
+
+    <Example
+      title="Without Astro"
+      description="The component is a thin wrapper over classes. Use them directly in plain HTML or a raw page."
+      lang="html"
+      code={`<a href="/work" class="btn btn-primary">View all work</a>
+<button type="button" class="btn btn-secondary btn-sm">Download PDF</button>`}
+    >
+      <a href="#examples" class="btn btn-primary">View all work</a>
+      <button type="button" class="btn btn-secondary btn-sm">Download PDF</button>
+    </Example>
+  </section>
+
+  <section aria-labelledby="api">
+    <h2 id="api">Props</h2>
+    <p class="ds-text"><code>src/components/ui/Button.astro</code>. Any other attribute (<code>id</code>, <code>disabled</code>, <code>data-*</code>, <code>aria-*</code>) passes through.</p>
+    <PropsTable
+      rows={[
+        { name: "variant", type: '"primary" | "secondary"', default: '"primary"', description: "Filled or outlined." },
+        { name: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "40, 48, or 56px tall." },
+        { name: "href", type: "string", description: "Renders an <code>&lt;a&gt;</code>. Without it, a <code>&lt;button&gt;</code>." },
+        { name: "arrow", type: '"right" | "external"', description: "Trailing arrow. <code>external</code> also opens a new tab and announces it." },
+        { name: "type", type: '"button" | "submit" | "reset"', default: '"button"', description: "For <code>&lt;button&gt;</code> only. Defaults to button so it never submits a form by accident." },
+      ]}
+    />
+    <h3>Classes</h3>
+    <PropsTable
+      kind="Class"
+      rows={[
+        { name: ".btn", description: "Base: shape, type, height, transitions. Always pair with a variant." },
+        { name: ".btn-primary", description: "Filled. Hover darkens to <code>--color-inverse-hover</code>." },
+        { name: ".btn-secondary", description: "Outlined. Hover firms the outline to text color." },
+        { name: ".btn-sm / .btn-lg", description: "Size modifiers." },
+      ]}
+    />
+  </section>
+
+  <section aria-labelledby="a11y">
+    <h2 id="a11y">Accessibility</h2>
+    <ul class="ds-list">
+      <li>A button that goes somewhere is an <code>&lt;a&gt;</code>; one that does something is a <code>&lt;button&gt;</code>. The component picks for you based on <code>href</code>.</li>
+      <li>Every size clears the 24px minimum target (WCAG 2.5.8). Default and large clear 44px.</li>
+      <li>White on black is 18.9:1; on the hover color, 12.6:1. The secondary outline is 3.4:1.</li>
+      <li>Arrows are hidden from screen readers. The label must make sense without them.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="content">
+    <h2 id="content">Content</h2>
+    <ul class="ds-list">
+      <li>Start with a verb. One to four words. Sentence case.</li>
+      <li>Say what happens: "Send it over," not "Submit."</li>
+      <li>No punctuation at the end.</li>
+    </ul>
+    <DoDont doText="One primary action, with a secondary beside it." dontText="Two primary buttons competing for the same moment.">
+      <Fragment slot="do"><span class="btn btn-primary">Email me</span><span class="btn btn-secondary">Start a project</span></Fragment>
+      <Fragment slot="dont"><span class="btn btn-primary">Email me</span><span class="btn btn-primary">Start a project</span></Fragment>
+    </DoDont>
+  </section>
+</DsLayout>

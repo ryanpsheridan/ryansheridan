@@ -1,0 +1,84 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import PropsTable from "../../../components/ds/PropsTable.astro";
+import Accordion from "../../../components/ui/Accordion.astro";
+
+const faqs = [
+  { q: "Do you design, build, or both?", a: "Both. Some projects are design only, handed off to your developer or team. Others I design and build end to end." },
+  { q: "Do you work with clients outside of Austin?", a: "Yes. I'm based in the Austin area and work with clients locally and remotely." },
+];
+---
+
+<DsLayout
+  section="Components"
+  title="Accordion"
+  lead="A list of questions that open in place. Built on the browser's own details element, so it works with no script at all."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">When to use it</h2>
+    <ul class="ds-list">
+      <li>FAQs, where most people want one or two answers and nobody wants all of them.</li>
+      <li>Not for content everyone needs. Hiding it behind a click means fewer people read it, and search engines weigh it less.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="examples">
+    <h2 id="examples">Examples</h2>
+    <Example
+      layout="fill"
+      code={`---
+const faqs = [
+  { q: "Do you design, build, or both?", a: "Both. Some projects are design only…" },
+  { q: "Do you work with clients outside of Austin?", a: "Yes. I'm based in the Austin area…" },
+];
+---
+
+<Accordion items={faqs} />`}
+    >
+      <Accordion items={faqs} />
+    </Example>
+    <Example
+      title="Plain HTML"
+      layout="fill"
+      lang="html"
+      code={`<div class="accordion">
+  <details>
+    <summary>What happens after I send this?</summary>
+    <p>I read everything you send, then follow up within two business days.</p>
+  </details>
+</div>`}
+    >
+      <div class="accordion"><details><summary>What happens after I send this?</summary><p>I read everything you send, then follow up within two business days.</p></details></div>
+    </Example>
+  </section>
+
+  <section aria-labelledby="api">
+    <h2 id="api">Props</h2>
+    <PropsTable
+      rows={[
+        { name: "items", type: "{ q: string; a: string }[]", description: "Questions and answers. Answers may hold simple HTML, like a link." },
+        { name: "class", type: "string", description: "Added to the wrapper." },
+      ]}
+    />
+  </section>
+
+  <section aria-labelledby="a11y">
+    <h2 id="a11y">Accessibility</h2>
+    <ul class="ds-list">
+      <li><code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code> are announced as expandable and open with Enter or Space, no ARIA needed.</li>
+      <li>The plus and minus are drawn in CSS and aren't read aloud; the expanded state is.</li>
+      <li>Browser find-in-page opens a closed answer when it finds a match.</li>
+      <li>If the questions are an FAQ, mirror them in <code>FAQPage</code> structured data, as /start-a-project does.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="content">
+    <h2 id="content">Content</h2>
+    <ul class="ds-list">
+      <li>Write questions the way a visitor would ask them, in the first person: "What happens after I send this?"</li>
+      <li>Answer in the first sentence, then explain. "Both." "Yes."</li>
+      <li>Five to eight questions. More than that is a page, not an accordion.</li>
+    </ul>
+  </section>
+</DsLayout>

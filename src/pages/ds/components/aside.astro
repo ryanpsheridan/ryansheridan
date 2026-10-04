@@ -1,0 +1,47 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import PropsTable from "../../../components/ds/PropsTable.astro";
+---
+
+<DsLayout
+  section="Components"
+  title="Aside"
+  lead="A short note set off from the copy around it by a rule on its left. For the thing you'd say with a slight turn of the head."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">When to use it</h2>
+    <ul class="ds-list">
+      <li>A caveat or an extra option that matters to some readers: "Websites are my focus, but I also take on branding work."</li>
+      <li>Not for warnings or errors. Those use the <a href="/ds/color#status">status colors</a>.</li>
+      <li>Not for quotes. Quotes inside case study copy use <code>&lt;blockquote&gt;</code> in <a href="/ds/components/prose">prose</a>.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="examples">
+    <h2 id="examples">Example</h2>
+    <Example
+      layout="fill"
+      lang="html"
+      code={`<p class="aside">
+  Websites are my focus, but I also take on branding and marketing design
+  work. If that's what you're after, this form works for that too.
+</p>`}
+    >
+      <p class="aside" style="max-width: var(--content-width)">Websites are my focus, but I also take on branding and marketing design work. If that's what you're after, this form works for that too.</p>
+    </Example>
+  </section>
+
+  <section aria-labelledby="api">
+    <h2 id="api">Classes</h2>
+    <PropsTable kind="Class" rows={[{ name: ".aside", description: "13px muted text, 16px left padding, 2px rule in <code>--color-border</code>. No margin; space it from what comes before." }]} />
+  </section>
+
+  <section aria-labelledby="content">
+    <h2 id="content">Accessibility and content</h2>
+    <ul class="ds-list">
+      <li>It's a paragraph, so it's read in order with everything else. Keep it relevant where it sits.</li>
+      <li>One or two sentences. If it needs more, it belongs in the main copy.</li>
+    </ul>
+  </section>
+</DsLayout>

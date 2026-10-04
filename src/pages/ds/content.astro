@@ -1,0 +1,135 @@
+---
+import DsLayout from "../../layouts/DsLayout.astro";
+import DoDont from "../../components/ds/DoDont.astro";
+---
+
+<DsLayout
+  section="Guidelines"
+  title="Content"
+  lead="How the site sounds, and the small rules that keep every page sounding like the same person wrote it."
+>
+  <section aria-labelledby="voice">
+    <h2 id="voice">Voice</h2>
+    <p class="ds-text">One designer talking to one person. The voice holds steady; the tone shifts with the page.</p>
+    <div class="ds-grid">
+      <div class="ds-card">
+        <span class="ds-card-title">Plain</span>
+        <span class="ds-card-body">Say it the way you'd say it across a table. "I design and build websites," not "I deliver end-to-end digital solutions."</span>
+      </div>
+      <div class="ds-card">
+        <span class="ds-card-title">Specific</span>
+        <span class="ds-card-body">Numbers, names, and outcomes over adjectives. "131 primitive variables" beats "a robust token library."</span>
+      </div>
+      <div class="ds-card">
+        <span class="ds-card-title">First person</span>
+        <span class="ds-card-body">"I" for Ryan, "you" for the reader. "We" only when a team really did the work, and then name the team.</span>
+      </div>
+      <div class="ds-card">
+        <span class="ds-card-title">Confident, not loud</span>
+        <span class="ds-card-body">State what happened. Skip "incredibly," "cutting-edge," and exclamation points. Let the work make the claim.</span>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="tone">
+    <h2 id="tone">Tone by context</h2>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <thead><tr><th scope="col">Where</th><th scope="col">Tone</th><th scope="col">Example</th></tr></thead>
+        <tbody>
+          <tr><td>Homepage, About</td><td>Direct, a little dry</td><td class="muted">"Designing systems, sites and brands."</td></tr>
+          <tr><td>Case studies</td><td>Specific, credits others, shows the hard part</td><td class="muted">"Four of us did this work."</td></tr>
+          <tr><td>Forms</td><td>Warm, low pressure, explains why</td><td class="muted">"Helps me suggest the right scope. No wrong answers."</td></tr>
+          <tr><td>Errors</td><td>Calm, says what to do next</td><td class="muted">"Something went wrong. Please try again or email me directly."</td></tr>
+          <tr><td>404, Easter eggs</td><td>Playful is fine here</td><td class="muted">"Cmd + I to peek under the hood."</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="mechanics">
+    <h2 id="mechanics">Mechanics</h2>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <thead><tr><th scope="col">Topic</th><th scope="col">Rule</th><th scope="col">Example</th></tr></thead>
+        <tbody>
+          <tr><td>Capitalization</td><td>Sentence case for everything: headings, buttons, labels, page titles. Proper nouns keep their caps.</td><td class="mono">Start a website project</td></tr>
+          <tr><td>Dashes</td><td>No em dashes. Use a comma, a colon, a period, or parentheses instead. Use an en dash for ranges.</td><td class="mono">Apr 2025 – Present</td></tr>
+          <tr><td>Numbers</td><td>Numerals for all numbers, including one through nine, because readers scan for them.</td><td class="mono">3 brands, 6 modes</td></tr>
+          <tr><td>Money</td><td>Round, with "k" for thousands, and "to" for ranges in prose.</td><td class="mono">$3k to $7k</td></tr>
+          <tr><td>Dates</td><td>Month abbreviated, no day unless it matters.</td><td class="mono">Oct 2026</td></tr>
+          <tr><td>Lists</td><td>Serial comma. No period on fragments; a period on full sentences.</td><td class="mono">tokens, components, and docs</td></tr>
+          <tr><td>Contractions</td><td>Use them. They're how people talk.</td><td class="mono">I'll, you're, don't</td></tr>
+          <tr><td>Arrows</td><td>→ moves you forward on this site. ↗ leaves it or opens a new tab. ← goes back. Arrows are decoration; the words carry the meaning.</td><td class="mono">LinkedIn ↗</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="ui">
+    <h2 id="ui">Writing for the interface</h2>
+    <h3>Buttons</h3>
+    <p class="ds-text">Start with a verb, keep it to one to four words, and say what happens next. The label should still make sense read on its own.</p>
+    <DoDont doText="Say what the button does." dontText="Use a label that only makes sense with the sentence around it.">
+      <span slot="do" class="btn btn-primary">Send it over</span>
+      <span slot="dont" class="btn btn-primary">Submit</span>
+    </DoDont>
+    <h3>Links</h3>
+    <p class="ds-text">Link the words that name the destination. "Read the RHOW Coffee case study," not "click here."</p>
+    <h3>Labels and hints</h3>
+    <p class="ds-text">
+      Labels are short nouns or questions. Hints go between the label and the field, and explain why you're
+      asking or what a good answer looks like. Placeholders are for format examples only, never for
+      instructions, since they disappear as soon as someone types.
+    </p>
+    <h3>Errors</h3>
+    <p class="ds-text">Say what's wrong and how to fix it, in one sentence, without blame.</p>
+    <DoDont doText="Name the fix." dontText="Name the failure.">
+      <p slot="do" class="err">Enter an email address, like name@example.com.</p>
+      <p slot="dont" class="err">Invalid input.</p>
+    </DoDont>
+    <h3>Alt text</h3>
+    <p class="ds-text">
+      Describe what's in the frame, not what it means. Lead with the subject, include any text that matters,
+      and skip "image of." If the caption already says it, the alt text should add what the eye sees.
+    </p>
+    <DoDont
+      doText="Brand collection font size tokens from Display 1 to Type XS with separate values for CM, BC, and FDX."
+      dontText="Screenshot of tokens."
+    />
+  </section>
+
+  <section aria-labelledby="words">
+    <h2 id="words">Word list</h2>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <thead><tr><th scope="col">Use</th><th scope="col">Not</th></tr></thead>
+        <tbody>
+          <tr><td>website</td><td class="muted">web site, site (in headings)</td></tr>
+          <tr><td>email</td><td class="muted">e-mail</td></tr>
+          <tr><td>design system</td><td class="muted">Design System (mid-sentence)</td></tr>
+          <tr><td>case study</td><td class="muted">case-study</td></tr>
+          <tr><td>Figma, Webflow, Makeswift, Claude</td><td class="muted">figma, WebFlow</td></tr>
+          <tr><td>sign up (verb), sign-up (noun)</td><td class="muted">signup</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="audit">
+    <h2 id="audit">Open content issues</h2>
+    <p class="ds-text">Found while writing this page. Titles are left for a deliberate pass, since they show in search results.</p>
+    <ul class="ds-list">
+      <li>Page titles mix two separators: "About — Ryan Sheridan" and "Resume | Ryan Sheridan." Pick one; the pipe avoids the em dash.</li>
+      <li>Fixed in 1.0: the About timeline wrote date ranges with an em dash; it now uses an en dash, like the Resume.</li>
+      <li>Fixed in 1.0: the filter on /work said "Project Types" in title case; it now says "Project types."</li>
+    </ul>
+  </section>
+</DsLayout>
+
+<style>
+  .err {
+    font-size: var(--text-sm);
+    color: var(--color-critical);
+  }
+</style>

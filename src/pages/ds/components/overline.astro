@@ -1,0 +1,63 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import PropsTable from "../../../components/ds/PropsTable.astro";
+---
+
+<DsLayout
+  section="Components"
+  title="Overline"
+  lead="A small uppercase mono label that names what sits under it: a section, a field of metadata, a page's category."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">When to use it</h2>
+    <ul class="ds-list">
+      <li>Above a page title, to set context: "Website design &amp; development."</li>
+      <li>As the label in a key and value pair: "Client / Company" over "Commerce."</li>
+      <li>Over a filter: "Project types."</li>
+      <li>Not as a heading on its own. It labels; it doesn't structure the page.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="examples">
+    <h2 id="examples">Examples</h2>
+    <Example
+      title="Above a title"
+      layout="stack"
+      lang="html"
+      code={`<p class="overline">Website design &amp; development</p>
+<h1>Let's plan your new website.</h1>`}
+    >
+      <p class="overline">Website design &amp; development</p>
+      <p style="font-size: var(--text-title); font-weight: 300; letter-spacing: var(--tracking-tight); line-height: var(--leading-tight); margin-top: 8px">Let's plan your new website.</p>
+    </Example>
+    <Example
+      title="Over metadata"
+      layout="stack"
+      lang="html"
+      code={`<div class="meta-group">
+  <span class="overline">Year</span>
+  <p><time datetime="2026">2026</time></p>
+</div>`}
+    >
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <span class="overline">Year</span>
+        <p style="font-family: var(--font-mono); font-size: var(--text-base)"><time datetime="2026">2026</time></p>
+      </div>
+    </Example>
+  </section>
+
+  <section aria-labelledby="api">
+    <h2 id="api">Classes</h2>
+    <PropsTable kind="Class" rows={[{ name: ".overline", description: "12px mono, uppercase via <code>text-transform</code>, 0.04em tracking, muted. Block-level; space it with margin from the parent." }]} />
+  </section>
+
+  <section aria-labelledby="a11y">
+    <h2 id="a11y">Accessibility and content</h2>
+    <ul class="ds-list">
+      <li>Write it in sentence case in the markup. CSS makes it uppercase, so screen readers still read words rather than spelling out letters.</li>
+      <li>One to four words. No period.</li>
+      <li>When it labels a form control, make it the actual <code>&lt;label&gt;</code>.</li>
+    </ul>
+  </section>
+</DsLayout>

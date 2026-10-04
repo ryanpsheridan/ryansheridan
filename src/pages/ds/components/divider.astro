@@ -1,0 +1,41 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import PropsTable from "../../../components/ds/PropsTable.astro";
+---
+
+<DsLayout
+  section="Components"
+  title="Divider"
+  lead="A 1px hairline that marks the end of one section and the start of another."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">When to use it</h2>
+    <ul class="ds-list">
+      <li>Between sections of a long page, like About and the Resume, or between steps of a form.</li>
+      <li>Not between every block. Space separates most things; a rule is for a real change of subject.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="examples">
+    <h2 id="examples">Example</h2>
+    <Example
+      layout="fill"
+      lang="html"
+      code={`<hr class="divider" />`}
+    >
+      <hr class="divider" />
+    </Example>
+    <p class="ds-text">The divider brings no margin. Space it from the page with a token that matches the gap you're closing, usually <code>--space-5</code> to <code>--space-7</code>.</p>
+  </section>
+
+  <section aria-labelledby="api">
+    <h2 id="api">Classes</h2>
+    <PropsTable kind="Class" rows={[{ name: "hr.divider", description: "Removes the browser's default rule and draws a 1px top border in <code>--color-border</code>." }]} />
+  </section>
+
+  <section aria-labelledby="a11y">
+    <h2 id="a11y">Accessibility</h2>
+    <p class="ds-text">An <code>&lt;hr&gt;</code> is announced as a separator, which is what it's for. If the line is purely visual, draw it with a border on the section instead.</p>
+  </section>
+</DsLayout>

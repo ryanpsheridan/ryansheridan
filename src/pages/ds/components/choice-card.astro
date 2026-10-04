@@ -1,0 +1,90 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import PropsTable from "../../../components/ds/PropsTable.astro";
+---
+
+<DsLayout
+  section="Components"
+  title="Choice card"
+  lead="A radio with room to explain itself. For a choice that changes the path ahead, where each option needs a sentence of context."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">When to use it</h2>
+    <ul class="ds-list">
+      <li>Two or three options that lead to different next steps, like choosing between guided questions and one big text box on the project form.</li>
+      <li>Not for ordinary lists of answers. A wall of cards is slower to scan than radios.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="examples">
+    <h2 id="examples">Example</h2>
+    <Example
+      layout="fill"
+      lang="html"
+      code={`<fieldset class="field route-picker">
+  <legend class="visually-hidden">Choose how to share project details</legend>
+  <label class="choice-card">
+    <input type="radio" name="Route" value="Guided questions" />
+    <span class="choice-card-title">Answer a few questions</span>
+    <span class="choice-card-desc">About five minutes. Mostly checkboxes.</span>
+  </label>
+  <label class="choice-card">
+    <input type="radio" name="Route" value="Brain dump" />
+    <span class="choice-card-title">Just tell me everything</span>
+    <span class="choice-card-desc">One big box. Paste a brief, dictate, or ramble.</span>
+  </label>
+</fieldset>`}
+    >
+      <fieldset class="field cards">
+        <legend class="visually-hidden">Choose how to share project details</legend>
+        <label class="choice-card">
+          <input type="radio" name="ex-route" checked />
+          <span class="choice-card-title">Answer a few questions</span>
+          <span class="choice-card-desc">About five minutes. Mostly checkboxes, skip anything you're unsure of.</span>
+        </label>
+        <label class="choice-card">
+          <input type="radio" name="ex-route" />
+          <span class="choice-card-title">Just tell me everything</span>
+          <span class="choice-card-desc">One big box. Paste a brief, dictate, or ramble. No structure needed.</span>
+        </label>
+      </fieldset>
+    </Example>
+  </section>
+
+  <section aria-labelledby="api">
+    <h2 id="api">Classes</h2>
+    <PropsTable
+      kind="Class"
+      rows={[
+        { name: ".choice-card", description: "On the label. 24px padding, 12px radius. Fills with the surface color and firms its outline when its input is checked." },
+        { name: ".choice-card-title", description: "16px medium." },
+        { name: ".choice-card-desc", description: "13px, muted." },
+      ]}
+    />
+    <p class="ds-text">Lay cards out with your own grid; the project form uses two columns, 16px apart, stacking under 640px.</p>
+  </section>
+
+  <section aria-labelledby="a11y">
+    <h2 id="a11y">Accessibility and content</h2>
+    <ul class="ds-list">
+      <li>It's a real radio inside a label, so it's announced as "Answer a few questions, radio button, 1 of 2."</li>
+      <li>The selected state is shown by the radio dot and the outline, not only the fill.</li>
+      <li>Title: what you'll do, in a few words. Description: what it costs you, like time, in one sentence.</li>
+    </ul>
+  </section>
+</DsLayout>
+
+<style>
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  @media (max-width: 640px) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

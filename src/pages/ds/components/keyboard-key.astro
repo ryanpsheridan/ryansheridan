@@ -1,0 +1,41 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import PropsTable from "../../../components/ds/PropsTable.astro";
+---
+
+<DsLayout
+  section="Components"
+  title="Keyboard key"
+  lead="A key or shortcut, drawn like a keycap so it reads as something to press."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">When to use it</h2>
+    <p class="ds-text">Whenever copy names a key: the homepage's <kbd class="kbd">Cmd</kbd> + <kbd class="kbd">I</kbd> to show the specs, or <kbd class="kbd">Esc</kbd> to close something.</p>
+  </section>
+
+  <section aria-labelledby="examples">
+    <h2 id="examples">Example</h2>
+    <Example
+      lang="html"
+      code={`<kbd class="kbd">Cmd</kbd> + <kbd class="kbd">I</kbd> to peek under the hood.`}
+    >
+      <p style="font-size: var(--text-md); color: var(--color-text-muted)"><kbd class="kbd">Cmd</kbd> + <kbd class="kbd">I</kbd> to peek under the hood.</p>
+    </Example>
+  </section>
+
+  <section aria-labelledby="api">
+    <h2 id="api">Classes</h2>
+    <PropsTable kind="Class" rows={[{ name: "kbd.kbd", description: "Mono at 0.85em of its surroundings, strong outline, a heavier bottom edge, 4px radius. Sizes itself to the text it sits in." }]} />
+  </section>
+
+  <section aria-labelledby="a11y">
+    <h2 id="a11y">Accessibility and content</h2>
+    <ul class="ds-list">
+      <li>Use the <code>&lt;kbd&gt;</code> element, which assistive tech recognizes as keyboard input.</li>
+      <li>Name the key the way it's printed: Cmd, Ctrl, Esc, Shift. Show Cmd on a Mac and Ctrl elsewhere; the homepage swaps it with script.</li>
+      <li>Write a shortcut as keys joined by " + ".</li>
+      <li>If the shortcut is also a button, give the button an <code>aria-keyshortcuts</code> attribute.</li>
+    </ul>
+  </section>
+</DsLayout>

@@ -1,0 +1,79 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import PropsTable from "../../../components/ds/PropsTable.astro";
+import Select from "../../../components/ui/Select.astro";
+---
+
+<DsLayout
+  section="Components"
+  title="Select"
+  lead="A native dropdown, drawn in the field style with its own chevron. The browser handles the list, so it works the way each device expects."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">When to use it</h2>
+    <ul class="ds-list">
+      <li>Filtering a list by one value, like project type on /work.</li>
+      <li>Choosing one of many options (seven or more) in a form.</li>
+      <li>Fewer than seven, and they fit? Show them all as <a href="/ds/components/checkbox-radio">radios</a>. Seeing every option is faster than opening a menu.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="examples">
+    <h2 id="examples">Examples</h2>
+    <Example
+      title="Filter"
+      layout="fill"
+      code={`<label class="overline" for="type-filter">Project types</label>
+<Select id="type-filter">
+  <option value="all">All</option>
+  <option>Design System</option>
+  <option>Branding</option>
+</Select>`}
+    >
+      <div style="max-width: 360px">
+        <label class="overline" for="ex-filter" style="margin-bottom: 8px">Project types</label>
+        <Select id="ex-filter"><option value="all">All</option><option>Design System</option><option>Branding</option><option>Web Design</option></Select>
+      </div>
+    </Example>
+    <Example
+      title="Plain HTML"
+      layout="fill"
+      lang="html"
+      code={`<div class="select">
+  <select class="input" id="budget" name="Budget">
+    <option>Not sure yet</option>
+    <option>$3k to $7k</option>
+  </select>
+  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+    <path d="M4 6l4 4 4-4" />
+  </svg>
+</div>`}
+    >
+      <div style="max-width: 360px">
+        <label class="field-label" for="ex-budget">Rough budget</label>
+        <Select id="ex-budget"><option>Not sure yet</option><option>$3k to $7k</option></Select>
+      </div>
+    </Example>
+  </section>
+
+  <section aria-labelledby="api">
+    <h2 id="api">Props</h2>
+    <PropsTable
+      rows={[
+        { name: "children", type: "<option>", description: "The options." },
+        { name: "class", type: "string", description: "Lands on the wrapper, which is what the page lays out." },
+        { name: "…rest", type: "select attributes", description: "<code>id</code>, <code>name</code>, <code>required</code>, and the rest go on the <code>&lt;select&gt;</code>." },
+      ]}
+    />
+  </section>
+
+  <section aria-labelledby="a11y">
+    <h2 id="a11y">Accessibility and content</h2>
+    <ul class="ds-list">
+      <li>Always paired with a <code>&lt;label for&gt;</code>. The chevron is decoration and hidden from screen readers.</li>
+      <li>Native select means native keyboard, screen reader, and touch behavior for free. Don't rebuild it in script.</li>
+      <li>Put the default or "All" option first. Order the rest in the order people will look for them.</li>
+    </ul>
+  </section>
+</DsLayout>

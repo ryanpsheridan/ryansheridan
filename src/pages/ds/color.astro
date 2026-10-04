@@ -1,0 +1,245 @@
+---
+import DsLayout from "../../layouts/DsLayout.astro";
+import TokenTable from "../../components/ds/TokenTable.astro";
+import DoDont from "../../components/ds/DoDont.astro";
+import CodeBlock from "../../components/ds/CodeBlock.astro";
+import { colorTokens, allTokenGroups } from "../../data/tokens";
+import { contrast } from "../../data/ds";
+
+const value = (name: string) => allTokenGroups.flatMap((g) => g.tokens).find((t) => t.name === name)!.value;
+
+// Every pairing the site actually uses, scored against WCAG 2.2.
+const pairings = [
+  { fg: "color-text", bg: "color-bg", use: "Body copy and headlines", kind: "text" },
+  { fg: "color-text-muted", bg: "color-bg", use: "Secondary copy, metadata", kind: "text" },
+  { fg: "color-text-muted", bg: "color-surface", use: "Muted text on a surface", kind: "text" },
+  { fg: "color-placeholder", bg: "color-bg", use: "Placeholder text", kind: "text" },
+  { fg: "color-bg", bg: "color-text", use: "Primary button label", kind: "text" },
+  { fg: "color-bg", bg: "color-inverse-hover", use: "Primary button, hovered", kind: "text" },
+  { fg: "color-link", bg: "color-bg", use: "Inline link", kind: "text" },
+  { fg: "color-link-hover", bg: "color-bg", use: "Inline link, hovered", kind: "text" },
+  { fg: "color-critical", bg: "color-bg", use: "Field error message", kind: "text" },
+  { fg: "color-positive", bg: "color-positive-bg", use: "Success message on its tint", kind: "text" },
+  { fg: "color-caution", bg: "color-caution-bg", use: "Warning message on its tint", kind: "text" },
+  { fg: "color-critical", bg: "color-critical-bg", use: "Error message on its tint", kind: "text" },
+  { fg: "color-border-strong", bg: "color-bg", use: "Field and control outlines", kind: "ui" },
+  { fg: "color-focus", bg: "color-bg", use: "Focus ring", kind: "ui" },
+  { fg: "color-border", bg: "color-bg", use: "Dividers and card edges (decorative)", kind: "decorative" },
+].map((p) => {
+  const ratio = contrast(value(p.fg), value(p.bg));
+  const need = p.kind === "text" ? 4.5 : p.kind === "ui" ? 3 : 0;
+  return { ...p, ratio, pass: ratio >= need, need };
+});
+
+const preview = { "color-neutral": "color", "color-link": "color", "color-status": "color", "color-deprecated": "color" } as const;
+---
+
+<DsLayout
+  section="Foundations"
+  title="Color"
+  lead="Black on white, with blue for links and three status colors for feedback. The work brings the color; the interface stays neutral."
+>
+  <section aria-labelledby="principles">
+    <h2 id="principles">How color is used</h2>
+    <ul class="ds-list">
+      <li><strong>Neutral first.</strong> Nearly every pixel of chrome is <code>--color-text</code>, <code>--color-text-muted</code>, or a border. Project imagery carries the color.</li>
+      <li><strong>Blue means link.</strong> <code>--color-link</code> appears only on links in running text and in the homepage blueprint. Don't use it for decoration, headings, or buttons.</li>
+      <li><strong>Status needs words.</strong> Green, amber, and red always come with a message or an icon that says the same thing. About 1 in 12 men can't reliably tell red from green.</li>
+      <li><strong>Hairlines divide, strong lines invite.</strong> <code>--color-border</code> is for decoration. Anything you can type into or press gets <code>--color-border-strong</code>, which is dark enough to find.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="tokens">
+    <h2 id="tokens">Tokens</h2>
+    <p class="ds-text">The number on each swatch is its contrast against white. Click a token to copy it.</p>
+    {colorTokens.map((group) => (
+      <TokenTable group={group} preview={preview[group.id as keyof typeof preview] ?? "color"} />
+    ))}
+  </section>
+
+  <section aria-labelledby="pairings">
+    <h2 id="pairings">Approved pairings</h2>
+    <p class="ds-text">
+      Text needs 4.5:1 against what it sits on (WCAG 1.4.3). Outlines that identify a control, and focus
+      rings, need 3:1 (WCAG 1.4.11). These are calculated from the token values at build time, so the table
+      can't go stale.
+    </p>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th scope="col">Sample</th>
+            <th scope="col">Foreground / background</th>
+            <th scope="col">Used for</th>
+            <th scope="col">Ratio</th>
+            <th scope="col">Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          {pairings.map((p) => (
+            <tr>
+              <td>
+                {p.kind === "text" ? (
+                  <span class="pair" style={`color: var(--${p.fg}); background: var(--${p.bg})`}>Aa</span>
+                ) : (
+                  <span class="pair" style={`background: var(--${p.bg}); box-shadow: inset 0 0 0 2px var(--${p.fg})`} />
+                )}
+              </td>
+              <td class="mono">--{p.fg}<br /><span class="muted">--{p.bg}</span></td>
+              <td>{p.use}</td>
+              <td class="mono">{p.ratio.toFixed(2)}:1</td>
+              <td class="mono">
+                {p.kind === "decorative" ? (
+                  <span class="muted">Exempt</span>
+                ) : p.pass ? (
+                  <span class="pass">Pass {p.kind === "ui" ? "3:1" : "AA"}</span>
+                ) : (
+                  <span class="fail">Fail</span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="status">
+    <h2 id="status">Status colors in use</h2>
+    <p class="ds-text">Each status is a set of three: text, fill, and border. Use them together, and always lead with words.</p>
+    <div class="status-row">
+      <p class="status is-positive"><strong>Sent.</strong> I'll reply within two business days.</p>
+      <p class="status is-caution"><strong>Heads up.</strong> Files over 10MB may take a minute.</p>
+      <p class="status is-critical"><strong>That didn't send.</strong> Try again, or email me directly.</p>
+      <p class="status is-accent"><strong>Tip.</strong> A link to a site you like says more than a description.</p>
+    </div>
+    <CodeBlock
+      lang="css"
+      code={`.notice-critical {
+  color: var(--color-critical);
+  background: var(--color-critical-bg);
+  border: var(--border-width) solid var(--color-critical-border);
+}`}
+    />
+  </section>
+
+  <section aria-labelledby="dos">
+    <h2 id="dos">Do's and don'ts</h2>
+    <DoDont
+      doText="Use the link blue for links in a sentence, with an underline."
+      dontText="Use the link blue to make a heading or a button stand out."
+    >
+      <p slot="do" class="dd-text">Read the <a href="#dos" class="inline-demo">case study</a> for the full story.</p>
+      <p slot="dont" class="dd-text"><span style="color: var(--color-link); font-size: var(--text-lg)">Our services</span></p>
+    </DoDont>
+    <div class="spacer"></div>
+    <DoDont
+      doText="Pair a status color with a word that says the same thing."
+      dontText="Rely on red alone to say something is wrong."
+    >
+      <p slot="do" class="dd-text" style="color: var(--color-critical)">Enter an email address, like name@example.com.</p>
+      <span slot="dont" class="dd-box" style="border-color: var(--color-critical)"></span>
+    </DoDont>
+    <div class="spacer"></div>
+    <DoDont
+      doText="Use <code>--color-text-muted</code> for secondary text. It passes for long passages."
+      dontText="Lighten text with opacity or a lighter grey. It drops under 4.5:1 fast."
+    >
+      <p slot="do" class="dd-text" style="color: var(--color-text-muted)">Principal Designer, Design Systems</p>
+      <p slot="dont" class="dd-text" style="color: #b4b4b8">Principal Designer, Design Systems</p>
+    </DoDont>
+  </section>
+</DsLayout>
+
+<style>
+  .pair {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 32px;
+    font-size: var(--text-base);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+
+  .pass {
+    color: var(--color-positive);
+  }
+
+  .fail {
+    color: var(--color-critical);
+  }
+
+  .status-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    margin: var(--space-4) 0;
+  }
+
+  .status {
+    padding: var(--space-3);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    border: var(--border-width) solid;
+    border-radius: var(--radius-md);
+  }
+
+  .status strong {
+    font-weight: var(--weight-medium);
+  }
+
+  .is-positive {
+    color: var(--color-positive);
+    background: var(--color-positive-bg);
+    border-color: var(--color-positive-border);
+  }
+
+  .is-caution {
+    color: var(--color-caution);
+    background: var(--color-caution-bg);
+    border-color: var(--color-caution-border);
+  }
+
+  .is-critical {
+    color: var(--color-critical);
+    background: var(--color-critical-bg);
+    border-color: var(--color-critical-border);
+  }
+
+  .is-accent {
+    color: var(--color-text);
+    background: var(--color-accent-bg);
+    border-color: var(--color-accent-border);
+  }
+
+  .dd-text {
+    font-size: var(--text-sm);
+  }
+
+  .inline-demo {
+    text-decoration: underline;
+    text-decoration-color: var(--color-link-subtle);
+    text-underline-offset: 3px;
+  }
+
+  .dd-box {
+    display: block;
+    width: 100%;
+    height: var(--control-md);
+    border: var(--border-width) solid;
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+  }
+
+  .spacer {
+    height: var(--space-5);
+  }
+
+  @media (max-width: 640px) {
+    .status-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,35 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import { components, patterns } from "../../../data/ds";
+---
+
+<DsLayout
+  section="Components"
+  title="Components"
+  lead="The building blocks every page is made from. Each one has a use case, live examples, copyable code, and notes on accessibility and content."
+>
+  <section aria-labelledby="all">
+    <h2 id="all">Components</h2>
+    <div class="ds-grid">
+      {components.map((c) => (
+        <a href={`/ds/components/${c.slug}`} class="ds-card">
+          <span class="ds-card-title">{c.title}</span>
+          <span class="ds-card-body">{c.summary}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section aria-labelledby="patterns">
+    <h2 id="patterns">Patterns</h2>
+    <p class="ds-text">Larger arrangements of components that repeat across the site.</p>
+    <div class="ds-grid">
+      {patterns.map((c) => (
+        <a href={`/ds/patterns/${c.slug}`} class="ds-card">
+          <span class="ds-card-title">{c.title}</span>
+          <span class="ds-card-body">{c.summary}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</DsLayout>

@@ -1,0 +1,111 @@
+---
+import DsLayout from "../../layouts/DsLayout.astro";
+import TokenTable from "../../components/ds/TokenTable.astro";
+import DoDont from "../../components/ds/DoDont.astro";
+import { shapeTokens } from "../../data/tokens";
+
+const group = (id: string) => shapeTokens.find((g) => g.id === id)!;
+---
+
+<DsLayout
+  section="Foundations"
+  title="Shape and elevation"
+  lead="Square frames for the work, round shapes for what you can press, and almost no depth."
+>
+  <section aria-labelledby="radius">
+    <h2 id="radius">Radius</h2>
+    <p class="ds-text">Shape tells you what something is before you read it.</p>
+    <div class="shapes" aria-hidden="true">
+      <div class="shape-item"><span class="shape-img"></span><span class="overline">Media · 0</span></div>
+      <div class="shape-item"><span class="badge">Branding</span><span class="overline">Tags · 4</span></div>
+      <div class="shape-item"><span class="mini-field"></span><span class="overline">Fields · 8</span></div>
+      <div class="shape-item"><span class="mini-card"></span><span class="overline">Choice cards · 12</span></div>
+      <div class="shape-item"><span class="btn btn-primary btn-sm">Button</span><span class="overline">Actions · full</span></div>
+    </div>
+    <TokenTable group={group("radius")} preview="radius" />
+  </section>
+
+  <section aria-labelledby="border">
+    <h2 id="border">Borders</h2>
+    <p class="ds-text">
+      One weight, 1px, in two colors: <code>--color-border</code> for dividing content and
+      <code>--color-border-strong</code> for the edge of a control. The 2px stroke is reserved for focus rings
+      and the rule beside an aside or quote.
+    </p>
+    <TokenTable group={group("border")} />
+  </section>
+
+  <section aria-labelledby="elevation">
+    <h2 id="elevation">Elevation</h2>
+    <p class="ds-text">
+      The site is flat. Cards are outlined, not lifted. A shadow means "this floats over the page and will go
+      away," which is true of exactly one thing today: the blueprint bar on the homepage, and the copy toast
+      on these pages.
+    </p>
+    <TokenTable group={group("elevation")} preview="shadow" />
+  </section>
+
+  <section aria-labelledby="layers">
+    <h2 id="layers">Layers</h2>
+    <p class="ds-text">Use a named layer instead of a number. If nothing fits, add a token rather than a one-off z-index.</p>
+    <TokenTable group={group("z-index")} />
+  </section>
+
+  <section aria-labelledby="dos">
+    <h2 id="dos">Do's and don'ts</h2>
+    <DoDont
+      doText="Outline a card with a hairline and let the content carry it."
+      dontText="Drop a shadow on a card to make it feel clickable."
+    >
+      <span slot="do" class="dd-card"></span>
+      <span slot="dont" class="dd-card" style="border-color: transparent; box-shadow: 0 8px 24px rgba(0,0,0,.16)"></span>
+    </DoDont>
+  </section>
+</DsLayout>
+
+<style>
+  .shapes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    margin: var(--space-4) 0 var(--space-5);
+    padding: var(--space-5);
+    border: var(--border-width) solid var(--color-border);
+  }
+
+  .shape-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .shape-img {
+    width: 64px;
+    height: 40px;
+    background: var(--color-text);
+  }
+
+  .mini-field {
+    width: 96px;
+    height: 40px;
+    border: var(--border-width) solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+  }
+
+  .mini-card {
+    width: 96px;
+    height: 40px;
+    border: var(--border-width) solid var(--color-text);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+
+  .dd-card {
+    display: block;
+    width: 100%;
+    height: 80px;
+    background: var(--color-bg);
+    border: var(--border-width) solid var(--color-border);
+  }
+</style>

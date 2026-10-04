@@ -1,0 +1,73 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import CodeBlock from "../../../components/ds/CodeBlock.astro";
+---
+
+<DsLayout
+  section="Patterns"
+  title="Nav and footer"
+  lead="The frame around every page: a sticky nav with a full-screen menu, and a footer that repeats the main routes."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">Usage</h2>
+    <p class="ds-text">Every page on the main site uses both. Raw pages (the golf trip, the apartment) and field experiments may opt out.</p>
+    <CodeBlock
+      code={`---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout title="Page | Ryan Sheridan">
+  <Nav />
+  <main id="main">…</main>
+  <Footer />
+</Layout>`}
+    />
+    <p class="ds-text">Give the page's <code>&lt;main&gt;</code> <code>id="main"</code>. The skip link in the layout points at it.</p>
+  </section>
+
+  <section aria-labelledby="nav">
+    <h2 id="nav">Nav</h2>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Spec</th></tr></thead>
+        <tbody>
+          <tr><td>Bar</td><td>Sticky, <code>--nav-height</code> (64px): 8px padding around a 48px menu button. White, on <code>--z-nav</code>.</td></tr>
+          <tr><td>Logo</td><td>"ryan sheridan design," lowercase mono, <code>--text-body</code>. Links home.</td></tr>
+          <tr><td>Menu button</td><td>48px target, two 20px bars that cross into an X when open. Labeled "Menu," then "Close menu."</td></tr>
+          <tr><td>Menu</td><td>Full screen, centered links at <code>--text-2xl</code>, 16px apart. Fades over <code>--duration-moderate</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Behavior</h3>
+    <ul class="ds-list">
+      <li>Closed, the menu is <code>inert</code>: its links are out of the tab order and hidden from screen readers.</li>
+      <li>Escape closes it and returns focus to the menu button. So does choosing a link.</li>
+      <li>The page behind it stops scrolling while it's open.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="footer">
+    <h2 id="footer">Footer</h2>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Spec</th></tr></thead>
+        <tbody>
+          <tr><td>Frame</td><td>Hairline on top. 64px padding above, 48 below, 120 from the page above it (80 on phones).</td></tr>
+          <tr><td>Top row</td><td>Logo left, links right in 13px mono, 32px apart. Stacks under 640px.</td></tr>
+          <tr><td>Bottom row</td><td>Copyright in 13px mono, muted. The year updates at build.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="content">
+    <h2 id="content">Content</h2>
+    <ul class="ds-list">
+      <li>Menu items are one word, the page's short name: Home, Work, About, Contact.</li>
+      <li>External links end in ↗ and announce that they open a new tab.</li>
+      <li>Keep the menu and footer lists in the same order.</li>
+    </ul>
+  </section>
+</DsLayout>

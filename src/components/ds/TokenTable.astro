@@ -1,0 +1,174 @@
+---
+/**
+ * One group of tokens from src/data/tokens.ts, rendered with a preview of
+ * each value. Click a token name to copy var(--name).
+ */
+import type { TokenGroup } from "../../data/tokens";
+import { contrast } from "../../data/ds";
+
+interface Props {
+  group: TokenGroup;
+  preview?: "color" | "size" | "space" | "radius" | "font" | "weight" | "leading" | "tracking" | "shadow" | "duration" | "none";
+}
+
+const { group, preview = "none" } = Astro.props;
+const isHex = (v: string) => /^#[0-9a-f]{6}$/i.test(v);
+---
+
+<section class="ds-tokens" id={group.id} aria-labelledby={`${group.id}-title`}>
+  <h3 id={`${group.id}-title`}>{group.title}</h3>
+  <p class="ds-text">{group.description}</p>
+  <div class="ds-table-wrap">
+    <table class="ds-table">
+      <thead>
+        <tr>
+          <th scope="col">Token</th>
+          {preview !== "none" && <th scope="col">Preview</th>}
+          <th scope="col">Value</th>
+          <th scope="col">Use</th>
+        </tr>
+      </thead>
+      <tbody>
+        {group.tokens.map((t) => (
+          <tr class:list={{ "is-deprecated": t.deprecated }}>
+            <td class="mono">
+              <button type="button" class="token-name" data-copy={`var(--${t.name})`} data-copy-label={`var(--${t.name}) copied`} title="Copy var()">
+                --{t.name}
+              </button>
+            </td>
+            {preview !== "none" && (
+              <td class="preview-cell">
+                {preview === "color" && (
+                  <span class="swatch" style={`background: var(--${t.name})`}>
+                    {isHex(t.value) && <span class="ratio">{contrast(t.value, "#ffffff").toFixed(1)}</span>}
+                  </span>
+                )}
+                {preview === "size" && <span class="sample" style={`font-size: var(--${t.name})`}>Ag</span>}
+                {preview === "font" && <span class="sample" style={`font-family: var(--${t.name}); font-size: 20px`}>Systems, sites and brands</span>}
+                {preview === "weight" && <span class="sample" style={`font-weight: var(--${t.name}); font-size: 20px`}>Designing systems</span>}
+                {preview === "leading" && <span class="sample leading" style={`line-height: var(--${t.name})`}>Two lines of text<br />show the gap</span>}
+                {preview === "tracking" && <span class="sample" style={`letter-spacing: var(--${t.name}); font-size: 20px`}>Letter spacing</span>}
+                {preview === "space" && <span class="bar" style={`width: var(--${t.name})`} />}
+                {preview === "radius" && <span class="box" style={`border-radius: var(--${t.name})`} />}
+                {preview === "shadow" && <span class="box is-raised" style={`box-shadow: var(--${t.name})`} />}
+                {preview === "duration" && <span class="sample mono-sample">{t.value}</span>}
+              </td>
+            )}
+            <td class="mono muted value">{t.value}</td>
+            <td>
+              {t.description}
+              {t.deprecated && <span class="deprecated"> Use <code>--{t.deprecated}</code>.</span>}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<style>
+  .ds-tokens + :global(.ds-tokens) {
+    margin-top: var(--space-6);
+  }
+
+  .ds-tokens .ds-table-wrap {
+    margin-top: var(--space-4);
+  }
+
+  .token-name {
+    font: inherit;
+    color: var(--color-text);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: copy;
+    text-align: left;
+    border-bottom: var(--border-width) dashed var(--color-border-strong);
+  }
+
+  .token-name:hover {
+    border-bottom-style: solid;
+    border-bottom-color: var(--color-text);
+  }
+
+  .preview-cell {
+    width: 1%;
+    white-space: nowrap;
+  }
+
+  .value {
+    white-space: normal !important;
+    word-break: break-word;
+    max-width: 220px;
+  }
+
+  .swatch {
+    position: relative;
+    display: block;
+    width: 64px;
+    height: 40px;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+
+  .ratio {
+    position: absolute;
+    right: 4px;
+    bottom: 2px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--color-text);
+    background: var(--color-bg);
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+
+  .sample {
+    display: inline-block;
+    line-height: 1.2;
+    font-weight: var(--weight-light);
+  }
+
+  .sample.leading {
+    font-size: var(--text-sm);
+    background: var(--color-accent-bg);
+  }
+
+  .mono-sample {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+  }
+
+  .bar {
+    display: block;
+    height: 16px;
+    background: var(--color-link);
+    opacity: 0.8;
+  }
+
+  .box {
+    display: block;
+    width: 48px;
+    height: 40px;
+    border: var(--border-width) solid var(--color-text);
+    background: var(--color-surface);
+  }
+
+  .box.is-raised {
+    border-color: var(--color-border);
+    background: var(--color-bg);
+  }
+
+  .is-deprecated td {
+    color: var(--color-text-muted);
+  }
+
+  .is-deprecated .token-name {
+    text-decoration: line-through;
+    color: var(--color-text-muted);
+  }
+
+  .deprecated {
+    color: var(--color-caution);
+  }
+</style>

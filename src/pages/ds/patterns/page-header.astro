@@ -1,0 +1,111 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import Breadcrumbs from "../../../components/ui/Breadcrumbs.astro";
+---
+
+<DsLayout
+  section="Patterns"
+  title="Page header"
+  lead="How every page below the homepage begins: breadcrumbs, an optional overline, a title, and a sentence or two that says what the page is for."
+>
+  <section aria-labelledby="example">
+    <h2 id="example">Example</h2>
+    <Example
+      layout="fill"
+      code={`<main id="main" class="page">
+  <Breadcrumbs class="page-crumbs" items={[{ label: "Home", href: "/" }, { label: "Contact" }]} />
+  <p class="overline">Website design &amp; development</p>
+  <h1>Let's work together.</h1>
+  <p class="intro">Have a project in mind? The fastest way to reach me is email.</p>
+</main>
+
+<style>
+  .page {
+    padding: var(--page-top) var(--page-padding) var(--page-bottom);
+  }
+  .page-crumbs, .page > * {
+    max-width: var(--content-width);
+    margin-inline: auto;
+  }
+  .overline {
+    margin-bottom: var(--space-3);
+  }
+  h1 {
+    font-size: var(--text-headline);
+    font-weight: var(--weight-light);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-4);
+  }
+  .intro {
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+  }
+</style>`}
+    >
+      <div class="demo">
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Contact" }]} />
+        <p class="overline">Website design &amp; development</p>
+        <p class="demo-title">Let's work together.</p>
+        <p class="demo-intro">Have a project in mind? The fastest way to reach me is email.</p>
+      </div>
+    </Example>
+  </section>
+
+  <section aria-labelledby="spec">
+    <h2 id="spec">Spacing</h2>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <thead><tr><th scope="col">Between</th><th scope="col">Space</th></tr></thead>
+        <tbody>
+          <tr><td>Nav and breadcrumbs</td><td class="mono">--page-top · 80</td></tr>
+          <tr><td>Breadcrumbs and overline or title</td><td class="mono">--space-5 · 32</td></tr>
+          <tr><td>Overline and title</td><td class="mono">--space-3 · 16</td></tr>
+          <tr><td>Title and intro</td><td class="mono">--space-4 · 24</td></tr>
+          <tr><td>Header and first section</td><td class="mono">--space-7 · 64</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="title-size">
+    <h2 id="title-size">Which title size</h2>
+    <ul class="ds-list">
+      <li><code>--text-hero</code> for case studies, where the title is the headline of a story.</li>
+      <li><code>--text-headline</code> for content pages: About, Contact, Start a project, 404.</li>
+      <li><code>--text-title</code> for index and utility pages: Work, Resume.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="content">
+    <h2 id="content">Content</h2>
+    <ul class="ds-list">
+      <li>The title says what the page offers, in sentence case, often as a full sentence with a period: "Let's plan your new website."</li>
+      <li>The intro answers "why am I here" in two to four sentences.</li>
+      <li>One <code>&lt;h1&gt;</code> per page, and it's this one.</li>
+    </ul>
+  </section>
+</DsLayout>
+
+<style>
+  .demo .overline {
+    margin-bottom: var(--space-3);
+  }
+
+  .demo-title {
+    font-size: var(--text-headline);
+    font-weight: var(--weight-light);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    margin-bottom: var(--space-4);
+  }
+
+  .demo-intro {
+    max-width: 480px;
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
+  }
+</style>

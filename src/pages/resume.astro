@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import { breadcrumbSchema } from "../data/schema";
+import Breadcrumbs from "../components/ui/Breadcrumbs.astro";
 ---
 
 <Layout
@@ -12,15 +13,11 @@ import { breadcrumbSchema } from "../data/schema";
   noindex
 >
   <Nav />
-  <main class="resume-page">
-    <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="/">Home</a>
-      <span class="sep">/</span>
-      <span class="current">Resume</span>
-    </nav>
+  <main id="main" class="resume-page">
+    <Breadcrumbs class="page-crumbs" items={[{ label: "Home", href: "/" }, { label: "Resume" }]} />
 
     <div class="resume-toolbar">
-      <button id="print-btn" type="button">Download PDF</button>
+      <button id="print-btn" type="button" class="btn btn-secondary btn-sm">Download PDF</button>
     </div>
 
     <div class="sheet">
@@ -37,7 +34,7 @@ import { breadcrumbSchema } from "../data/schema";
         </ul>
       </header>
 
-      <div class="divider"><hr /></div>
+      <hr class="divider" />
 
       <section class="summary">
         <p>
@@ -49,7 +46,7 @@ import { breadcrumbSchema } from "../data/schema";
         </p>
       </section>
 
-      <div class="divider"><hr /></div>
+      <hr class="divider" />
 
       <section class="experience">
         <h2>Experience</h2>
@@ -128,7 +125,7 @@ import { breadcrumbSchema } from "../data/schema";
         </div>
       </section>
 
-      <div class="divider"><hr /></div>
+      <hr class="divider" />
 
       <section class="skills-section">
         <h2>Skills</h2>
@@ -161,7 +158,7 @@ import { breadcrumbSchema } from "../data/schema";
         </div>
       </section>
 
-      <div class="divider"><hr /></div>
+      <hr class="divider" />
 
       <section class="education-section">
         <h2>Education</h2>
@@ -171,12 +168,12 @@ import { breadcrumbSchema } from "../data/schema";
         </div>
       </section>
 
-      <div class="divider"><hr /></div>
+      <hr class="divider" />
 
       <section class="certification-section">
         <h2>Certification</h2>
         <div class="certification-item">
-          <a href="https://www.udemy.com/certificate/UC-18d85801-2609-449f-b7ed-fefe40a5db46/" target="_blank" rel="noopener noreferrer" class="certification-name">User Experience (UX): The Ultimate Guide to Usability and UX</a>
+          <a href="https://www.udemy.com/certificate/UC-18d85801-2609-449f-b7ed-fefe40a5db46/" target="_blank" rel="noopener noreferrer" class="certification-name link-underline">User Experience (UX): The Ultimate Guide to Usability and UX</a>
           <span class="certification-meta">Udemy · 2024</span>
         </div>
       </section>
@@ -191,55 +188,19 @@ import { breadcrumbSchema } from "../data/schema";
 
 <style>
   .resume-page {
-    padding: 80px var(--page-padding) 0;
+    padding: var(--page-top) var(--page-padding) 0;
   }
 
-  .breadcrumbs {
+  .page-crumbs {
     max-width: var(--content-width);
-    margin: 0 auto 32px;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .breadcrumbs a {
-    color: var(--color-text-muted);
-    transition: color 0.2s;
-  }
-
-  .breadcrumbs a:hover {
-    color: var(--color-text);
-  }
-
-  .breadcrumbs .sep {
-    color: var(--color-border);
-  }
-
-  .breadcrumbs .current {
-    color: var(--color-text);
+    margin-inline: auto;
   }
 
   .resume-toolbar {
     max-width: var(--content-width);
-    margin: 0 auto 24px;
+    margin: 0 auto var(--space-4);
     display: flex;
     justify-content: flex-end;
-  }
-
-  #print-btn {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--color-text);
-    background: none;
-    border: 1px solid var(--color-border);
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: border-color 0.2s, color 0.2s;
-  }
-
-  #print-btn:hover {
-    border-color: var(--color-text);
   }
 
   .sheet {
@@ -251,19 +212,20 @@ import { breadcrumbSchema } from "../data/schema";
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    gap: 24px;
+    gap: var(--space-4);
     flex-wrap: wrap;
   }
 
   h1 {
-    font-size: clamp(28px, 1.5rem + 1vw, 40px);
-    font-weight: 300;
-    letter-spacing: -0.03em;
-    margin-bottom: 8px;
+    font-size: var(--text-title);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-2);
   }
 
   .role {
-    font-size: 15px;
+    font-size: var(--text-body);
     color: var(--color-text-muted);
   }
 
@@ -271,10 +233,10 @@ import { breadcrumbSchema } from "../data/schema";
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--space-1);
     text-align: right;
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: var(--text-xs);
     color: var(--color-text-muted);
   }
 
@@ -282,7 +244,9 @@ import { breadcrumbSchema } from "../data/schema";
     text-decoration: underline;
     text-decoration-color: var(--color-link-subtle);
     text-underline-offset: 3px;
-    transition: color 0.2s, text-decoration-color 0.2s;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      text-decoration-color var(--duration-fast) var(--ease-standard);
   }
 
   .contact-list a:hover {
@@ -291,26 +255,21 @@ import { breadcrumbSchema } from "../data/schema";
   }
 
   .divider {
-    margin: 40px 0;
-  }
-
-  hr {
-    border: none;
-    border-top: 1px solid var(--color-border);
+    margin: var(--space-5) 0;
   }
 
   h2 {
     font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 400;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-regular);
     letter-spacing: 0;
     color: var(--color-text-muted);
-    margin-bottom: 24px;
+    margin-bottom: var(--space-4);
   }
 
   .summary p {
-    font-size: 16px;
-    line-height: 1.8;
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
     color: var(--color-text);
   }
 
@@ -319,7 +278,7 @@ import { breadcrumbSchema } from "../data/schema";
   }
 
   .job {
-    margin-bottom: 28px;
+    margin-bottom: var(--space-5);
   }
 
   .job:last-child {
@@ -330,42 +289,42 @@ import { breadcrumbSchema } from "../data/schema";
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    gap: 16px;
+    gap: var(--space-3);
   }
 
   .job-title {
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-snug);
   }
 
   .job-period {
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: var(--text-xs);
     color: var(--color-text-muted);
     white-space: nowrap;
   }
 
   .job-company {
     display: block;
-    font-size: 14px;
+    font-size: var(--text-body);
     color: var(--color-text-muted);
     margin-top: 2px;
-    margin-bottom: 10px;
+    margin-bottom: var(--space-2);
   }
 
   .job-bullets {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: var(--space-2);
   }
 
   .job-bullets li {
-    font-size: 14px;
-    line-height: 1.6;
+    font-size: var(--text-body);
+    line-height: var(--leading-normal);
     color: var(--color-text);
-    padding-left: 16px;
+    padding-left: var(--space-3);
     position: relative;
   }
 
@@ -379,14 +338,14 @@ import { breadcrumbSchema } from "../data/schema";
   .skills-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    gap: var(--space-4);
   }
 
   .skill-group h3 {
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: -0.01em;
-    margin-bottom: 12px;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--tracking-snug);
+    margin-bottom: var(--space-2);
     color: var(--color-text);
   }
 
@@ -394,11 +353,11 @@ import { breadcrumbSchema } from "../data/schema";
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: var(--space-1);
   }
 
   .skill-group li {
-    font-size: 13px;
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
   }
 
@@ -406,33 +365,21 @@ import { breadcrumbSchema } from "../data/schema";
   .certification-item {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--space-1);
   }
 
   .education-name,
   .certification-name {
-    font-size: 16px;
-    font-weight: 500;
-    letter-spacing: -0.01em;
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-snug);
     color: var(--color-text);
-  }
-
-  .certification-name {
-    text-decoration: underline;
-    text-decoration-color: var(--color-border);
-    text-underline-offset: 3px;
-    transition: color 0.2s, text-decoration-color 0.2s;
-  }
-
-  .certification-name:hover {
-    color: var(--color-text-muted);
-    text-decoration-color: var(--color-text-muted);
   }
 
   .education-meta,
   .certification-meta {
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: var(--text-xs);
     color: var(--color-text-muted);
   }
 
@@ -454,7 +401,7 @@ import { breadcrumbSchema } from "../data/schema";
   @media print {
     :global(nav),
     :global(footer),
-    .breadcrumbs,
+    .page-crumbs,
     .resume-toolbar {
       display: none !important;
     }

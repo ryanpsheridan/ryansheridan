@@ -6,7 +6,7 @@
   <div class="nav-inner">
     <a href="/" class="logo">ryan sheridan design</a>
     <div class="nav-actions">
-      <button class="hamburger" aria-label="Menu" aria-expanded="false">
+      <button type="button" class="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="site-menu">
         <span></span>
         <span></span>
       </button>
@@ -14,7 +14,7 @@
   </div>
 </nav>
 
-<div class="menu-overlay" aria-hidden="true">
+<div class="menu-overlay" id="site-menu" inert>
   <div class="menu-content">
     <a href="/" class="menu-link">Home</a>
     <a href="/work" class="menu-link">Work</a>
@@ -35,8 +35,9 @@
   nav {
     position: sticky;
     top: 0;
-    z-index: 200;
-    padding: 18px var(--page-padding);
+    z-index: var(--z-nav);
+    /* 8 + the 48px menu button + 8 = --nav-height. */
+    padding: var(--space-2) var(--page-padding);
     background: var(--color-bg);
   }
 
@@ -51,9 +52,9 @@
   .logo {
     color: var(--color-text);
     font-family: var(--font-mono);
-    font-size: 14.4px;
-    font-weight: 400;
-    letter-spacing: -0.01em;
+    font-size: var(--text-body);
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--tracking-snug);
     position: relative;
     z-index: 300;
   }
@@ -61,14 +62,17 @@
   .nav-actions {
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: var(--space-5);
   }
 
   .hamburger {
     position: relative;
     z-index: 300;
-    width: 32px;
-    height: 32px;
+    /* 48px to meet the touch target guideline. The negative margin keeps
+       the bars lined up with the content edge, as the old 32px box did. */
+    width: var(--control-md);
+    height: var(--control-md);
+    margin-right: calc(var(--space-2) * -1);
     background: none;
     border: none;
     cursor: pointer;
@@ -85,7 +89,9 @@
     width: 20px;
     height: 1.5px;
     background: var(--color-text);
-    transition: transform 0.3s, opacity 0.3s;
+    transition:
+      transform var(--duration-moderate) var(--ease-standard),
+      opacity var(--duration-moderate) var(--ease-standard);
   }
 
   .hamburger.active span:first-child {
@@ -99,14 +105,14 @@
   .menu-overlay {
     position: fixed;
     inset: 0;
-    z-index: 150;
+    z-index: var(--z-overlay);
     background: var(--color-bg);
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease;
+    transition: opacity var(--duration-moderate) var(--ease-standard);
   }
 
   .menu-overlay.open {
@@ -118,15 +124,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: var(--space-3);
   }
 
   .menu-link {
-    font-size: 32px;
-    font-weight: 400;
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-regular);
     letter-spacing: -0.02em;
     color: var(--color-text);
-    transition: color 0.2s;
+    transition: color var(--duration-fast) var(--ease-standard);
   }
 
   .menu-link:hover {
@@ -134,29 +140,43 @@
   }
 
   .menu-link-external .arrow {
-    font-size: 24px;
+    font-size: var(--text-xl);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hamburger span,
+    .menu-overlay {
+      transition: none;
+    }
   }
 </style>
 
 <script>
-  const hamburger = document.querySelector(".hamburger")!;
-  const overlay = document.querySelector(".menu-overlay")!;
+  const hamburger = document.querySelector<HTMLButtonElement>(".hamburger")!;
+  const overlay = document.querySelector<HTMLElement>(".menu-overlay")!;
 
-  hamburger.addEventListener("click", () => {
-    const isOpen = hamburger.classList.toggle("active");
-    overlay.classList.toggle("open", isOpen);
-    hamburger.setAttribute("aria-expanded", String(isOpen));
-    overlay.setAttribute("aria-hidden", String(!isOpen));
-    document.body.style.overflow = isOpen ? "hidden" : "";
-  });
+  // Closed, the menu is inert: invisible links stay out of the tab order and
+  // away from screen readers. Open, it takes over the page, so Escape closes
+  // it and focus goes back to the button that opened it.
+  function setMenu(open: boolean) {
+    hamburger.classList.toggle("active", open);
+    overlay.classList.toggle("open", open);
+    overlay.inert = !open;
+    hamburger.setAttribute("aria-expanded", String(open));
+    hamburger.setAttribute("aria-label", open ? "Close menu" : "Menu");
+    document.body.style.overflow = open ? "hidden" : "";
+  }
+
+  hamburger.addEventListener("click", () => setMenu(!overlay.classList.contains("open")));
 
   overlay.querySelectorAll(".menu-link").forEach((link) => {
-    link.addEventListener("click", () => {
-      hamburger.classList.remove("active");
-      overlay.classList.remove("open");
-      hamburger.setAttribute("aria-expanded", "false");
-      overlay.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-    });
+    link.addEventListener("click", () => setMenu(false));
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && overlay.classList.contains("open")) {
+      setMenu(false);
+      hamburger.focus();
+    }
   });
 </script>

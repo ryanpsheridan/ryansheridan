@@ -1,0 +1,77 @@
+---
+/**
+ * A side-by-side "do this, not that". Each side takes a short rule and an
+ * optional live example in a named slot.
+ */
+interface Props {
+  doText: string;
+  dontText: string;
+}
+
+const { doText, dontText } = Astro.props;
+---
+
+<div class="ds-dodont">
+  <div class="side is-do">
+    {Astro.slots.has("do") && <div class="demo"><slot name="do" /></div>}
+    <p class="verdict"><span class="mark" aria-hidden="true">✓</span> <strong>Do.</strong> <span set:html={doText} /></p>
+  </div>
+  <div class="side is-dont">
+    {Astro.slots.has("dont") && <div class="demo"><slot name="dont" /></div>}
+    <p class="verdict"><span class="mark" aria-hidden="true">✕</span> <strong>Don't.</strong> <span set:html={dontText} /></p>
+  </div>
+</div>
+
+<style>
+  .ds-dodont {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  .side {
+    display: flex;
+    flex-direction: column;
+    border-top: var(--focus-width) solid var(--color-positive);
+  }
+
+  .is-dont {
+    border-top-color: var(--color-critical);
+  }
+
+  .demo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: 120px;
+    padding: var(--space-5) var(--space-4);
+    background: var(--color-surface);
+  }
+
+  .verdict {
+    padding-top: var(--space-3);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+  }
+
+  .verdict strong {
+    font-weight: var(--weight-medium);
+  }
+
+  .mark {
+    font-family: var(--font-mono);
+    color: var(--color-positive);
+  }
+
+  .is-dont .mark {
+    color: var(--color-critical);
+  }
+
+  @media (max-width: 640px) {
+    .ds-dodont {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+  }
+</style>

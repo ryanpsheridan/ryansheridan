@@ -1,0 +1,66 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import PropsTable from "../../../components/ds/PropsTable.astro";
+
+const prev = `<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true"><path d="M13.5 8H2.5M7 3.5 2.5 8 7 12.5" /></svg>`;
+const next = `<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5" /></svg>`;
+---
+
+<DsLayout
+  section="Components"
+  title="Icon button"
+  lead="A 40px round button with only an icon in it. For controls that repeat or sit beside content, where a word would crowd the layout."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">When to use it</h2>
+    <ul class="ds-list">
+      <li>Paging controls, like the arrows under a case study carousel.</li>
+      <li>Only when the icon is unmistakable: arrows, close, play. Anything less obvious gets a text <a href="/ds/components/button">button</a>.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="examples">
+    <h2 id="examples">Examples</h2>
+    <Example
+      title="Carousel controls"
+      description="Disabled at either end of the track."
+      lang="html"
+      code={`<button type="button" class="icon-btn" aria-label="Previous photos" disabled>
+  ${prev}
+</button>
+<button type="button" class="icon-btn" aria-label="Next photos">
+  ${next}
+</button>`}
+    >
+      <button type="button" class="icon-btn" aria-label="Previous photos" disabled set:html={prev} />
+      <button type="button" class="icon-btn" aria-label="Next photos" set:html={next} />
+    </Example>
+  </section>
+
+  <section aria-labelledby="api">
+    <h2 id="api">Classes and attributes</h2>
+    <PropsTable
+      kind="Attribute"
+      rows={[
+        { name: "class=\"icon-btn\"", description: "40px circle, strong outline, text-color icon." },
+        { name: "aria-label", description: "Required. The name a screen reader speaks, since there's no visible text." },
+        { name: "disabled", description: "Fades to 35% when the action isn't available." },
+      ]}
+    />
+  </section>
+
+  <section aria-labelledby="a11y">
+    <h2 id="a11y">Accessibility</h2>
+    <ul class="ds-list">
+      <li>Always give it an <code>aria-label</code>, and mark the SVG <code>aria-hidden="true"</code>.</li>
+      <li>Use an SVG, not an arrow character. A glyph sits on the font's baseline and lands a couple of pixels off center.</li>
+      <li>40px clears the WCAG 2.5.8 minimum with room to spare.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="content">
+    <h2 id="content">Content</h2>
+    <p class="ds-text">Labels name the action and the thing: "Next photos," "Close image." Not just "Next."</p>
+  </section>
+</DsLayout>

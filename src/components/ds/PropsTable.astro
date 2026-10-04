@@ -1,0 +1,35 @@
+---
+/** The props or classes a component takes, as a table. */
+interface Props {
+  rows: { name: string; type?: string; default?: string; description: string }[];
+  /** "Prop" for Astro components, "Class" for CSS-only components. */
+  kind?: "Prop" | "Class" | "Attribute";
+}
+
+const { rows, kind = "Prop" } = Astro.props;
+const showType = rows.some((r) => r.type);
+const showDefault = rows.some((r) => r.default);
+---
+
+<div class="ds-table-wrap">
+  <table class="ds-table">
+    <thead>
+      <tr>
+        <th scope="col">{kind}</th>
+        {showType && <th scope="col">Type</th>}
+        {showDefault && <th scope="col">Default</th>}
+        <th scope="col">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr>
+          <td class="mono">{row.name}</td>
+          {showType && <td class="mono muted">{row.type}</td>}
+          {showDefault && <td class="mono muted">{row.default ?? "–"}</td>}
+          <td set:html={row.description} />
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,74 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import PropsTable from "../../../components/ds/PropsTable.astro";
+import DoDont from "../../../components/ds/DoDont.astro";
+---
+
+<DsLayout
+  section="Components"
+  title="Badge"
+  lead="A small mono tag that labels a project with its type or the tools behind it. Read-only: badges describe, they don't do."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">When to use it</h2>
+    <ul class="ds-list">
+      <li>Project types under a card title, on the homepage and /work.</li>
+      <li>Project type and tools in a case study sidebar.</li>
+      <li>Not as a button or filter. If clicking it should do something, it's a different component.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="examples">
+    <h2 id="examples">Examples</h2>
+    <Example
+      title="Badge list"
+      description="Always in a .badge-list, which wraps and spaces them 8px apart."
+      lang="html"
+      code={`<div class="badge-list">
+  <span class="badge">Design System</span>
+  <span class="badge">Automation</span>
+</div>`}
+    >
+      <div class="badge-list"><span class="badge">Design System</span><span class="badge">Automation</span></div>
+    </Example>
+
+    <Example
+      title="From data"
+      lang="astro"
+      code={`<div class="badge-list">
+  {project.tags.map((tag) => <span class="badge">{tag}</span>)}
+</div>`}
+    >
+      <div class="badge-list"><span class="badge">Claude Skill</span><span class="badge">Automation</span><span class="badge">Design System</span></div>
+    </Example>
+  </section>
+
+  <section aria-labelledby="api">
+    <h2 id="api">Classes</h2>
+    <PropsTable
+      kind="Class"
+      rows={[
+        { name: ".badge-list", description: "Wrapping flex row, 8px gap." },
+        { name: ".badge", description: "24px tall, 12px mono, muted text, hairline border, 4px radius." },
+      ]}
+    />
+  </section>
+
+  <section aria-labelledby="a11y">
+    <h2 id="a11y">Accessibility</h2>
+    <p class="ds-text">Badges are plain text. Muted on white is 6.7:1. The border is decorative, so it doesn't need to meet 3:1.</p>
+  </section>
+
+  <section aria-labelledby="content">
+    <h2 id="content">Content</h2>
+    <ul class="ds-list">
+      <li>One to three words. Title case here, because these are names of disciplines and products.</li>
+      <li>Two or three per project. More than that and none of them stand out.</li>
+    </ul>
+    <DoDont doText="A few precise tags." dontText="Every keyword that applies.">
+      <div slot="do" class="badge-list"><span class="badge">Branding</span><span class="badge">Illustration</span></div>
+      <div slot="dont" class="badge-list"><span class="badge">Branding</span><span class="badge">Logo</span><span class="badge">Identity</span><span class="badge">Illustration</span><span class="badge">Coffee</span><span class="badge">Packaging</span></div>
+    </DoDont>
+  </section>
+</DsLayout>

@@ -1,0 +1,138 @@
+---
+import DsLayout from "../../layouts/DsLayout.astro";
+import CodeBlock from "../../components/ds/CodeBlock.astro";
+import Example from "../../components/ds/Example.astro";
+
+const criteria = [
+  { id: "1.1.1", name: "Non-text content", how: "Every meaningful image has alt text that says what's in the frame. Decorative art and repeated thumbnails use <code>alt=\"\"</code>.", where: "Media, Project card" },
+  { id: "1.3.1", name: "Info and relationships", how: "Real landmarks (<code>nav</code>, <code>main</code>, <code>footer</code>), one <code>h1</code> per page, headings in order, labels tied to fields, fieldsets around groups.", where: "Every page" },
+  { id: "1.4.1", name: "Use of color", how: "Links in copy are underlined; errors and statuses are written out, not just colored.", where: "Link, Text field" },
+  { id: "1.4.3", name: "Contrast (minimum)", how: "All text pairings are 4.5:1 or better, calculated from the tokens.", where: "<a href=\"/ds/color#pairings\">Color</a>" },
+  { id: "1.4.10", name: "Reflow", how: "Every layout works at 320px wide with no sideways scrolling; side-by-side layouts stack.", where: "Spacing and layout" },
+  { id: "1.4.11", name: "Non-text contrast", how: "Field outlines, checkboxes, and button edges use <code>--color-border-strong</code> at 3.4:1. Focus rings are 18.9:1.", where: "Text field, Button" },
+  { id: "1.4.12", name: "Text spacing", how: "Nothing clips when line height, letter spacing, or paragraph spacing are raised. Controls use min-height, not fixed height, where text can wrap.", where: "Every component" },
+  { id: "2.1.1", name: "Keyboard", how: "Everything works from a keyboard: the menu, carousels, the before and after toggle, accordions, copy buttons.", where: "Every component" },
+  { id: "2.3.3", name: "Animation from interactions", how: "Movement turns off under <code>prefers-reduced-motion</code>, including smooth scroll and looping video.", where: "<a href=\"/ds/motion#reduced\">Motion</a>" },
+  { id: "2.4.1", name: "Bypass blocks", how: "A skip link is the first thing on every page and jumps to <code>#main</code>.", where: "Layout" },
+  { id: "2.4.3", name: "Focus order", how: "The full-screen menu is <code>inert</code> while closed, so hidden links never take focus. The lightbox returns focus to where it came from.", where: "Nav, Case study" },
+  { id: "2.4.7", name: "Focus visible", how: "One 2px ring, offset 2px, on everything you can reach by keyboard. It only shows for keyboard focus.", where: "global.css" },
+  { id: "2.4.11", name: "Focus not obscured", how: "Anchored headings scroll clear of the sticky nav with <code>scroll-margin-top</code>.", where: "Docs, /work" },
+  { id: "2.5.8", name: "Target size (minimum)", how: "The smallest control is 40px. Default buttons, fields, and the menu button are 48px.", where: "Button, Icon button" },
+  { id: "3.3.1", name: "Error identification", how: "Errors appear in text under the field, tied to it with <code>aria-describedby</code>, and only after the field is left.", where: "Text field" },
+  { id: "3.3.2", name: "Labels or instructions", how: "Every field has a visible label. Required fields are marked, and hints sit between the label and the field.", where: "Text field" },
+  { id: "4.1.2", name: "Name, role, value", how: "Native elements first. Toggles expose <code>aria-pressed</code>, the menu button <code>aria-expanded</code>, the current page <code>aria-current</code>.", where: "Every component" },
+];
+---
+
+<DsLayout
+  section="Guidelines"
+  title="Accessibility"
+  lead="The bar is WCAG 2.2 level AA, on every page, for every component. This page is how the system meets it and how to check your own work against it."
+>
+  <section aria-labelledby="standard">
+    <h2 id="standard">The standard</h2>
+    <p class="ds-text">
+      WCAG 2.2 AA is the target. It's what most accessibility law points to, and it's a fair description of a
+      site that works for people who use a keyboard, a screen reader, magnification, or a phone in sunlight.
+      The components on this site are built to meet it out of the box, so using them correctly does most of
+      the work.
+    </p>
+  </section>
+
+  <section aria-labelledby="criteria">
+    <h2 id="criteria">How the system meets it</h2>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <thead><tr><th scope="col">WCAG</th><th scope="col">Criterion</th><th scope="col">How</th><th scope="col">Where</th></tr></thead>
+        <tbody>
+          {criteria.map((c) => (
+            <tr>
+              <td class="mono">{c.id}</td>
+              <td>{c.name}</td>
+              <td set:html={c.how} />
+              <td class="muted" set:html={c.where} />
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="focus">
+    <h2 id="focus">Focus</h2>
+    <p class="ds-text">
+      Tab through this example. The ring comes from one global rule, so every focusable element gets it
+      without asking. It uses <code>:focus-visible</code>, so it shows for keyboards and stays out of the way
+      for mouse clicks.
+    </p>
+    <Example
+      code={`:focus-visible {
+  outline: var(--focus-width) solid var(--color-focus);
+  outline-offset: var(--focus-offset);
+}`}
+      lang="css"
+    >
+      <button type="button" class="btn btn-primary">Primary</button>
+      <button type="button" class="btn btn-secondary">Secondary</button>
+      <a href="#focus" class="link-underline">A link</a>
+      <input class="input" style="max-width: 200px" aria-label="Example field" placeholder="A field" />
+    </Example>
+    <p class="ds-text">Don't remove the outline without putting something at least as visible in its place.</p>
+  </section>
+
+  <section aria-labelledby="sr">
+    <h2 id="sr">Screen readers</h2>
+    <ul class="ds-list">
+      <li><strong>Hide decoration, not content.</strong> Arrows, separators, and the homepage blueprint are <code>aria-hidden</code>. Content is never hidden this way.</li>
+      <li><strong>Say what a link does.</strong> Links that open a new tab carry hidden text saying so. The Button component adds it for you with <code>arrow="external"</code>.</li>
+      <li><strong>Use the visually-hidden class</strong> for text that should be read but not seen, like a legend whose question is already a heading.</li>
+      <li><strong>Announce changes.</strong> Status messages, like "Sending" on the project form or "Copied" on these pages, live in a <code>role="status"</code> region.</li>
+    </ul>
+    <CodeBlock
+      lang="html"
+      code={`<a href="https://www.linkedin.com/in/ryansheridandesign/" target="_blank" rel="noopener noreferrer">
+  LinkedIn <span aria-hidden="true">↗</span>
+  <span class="visually-hidden">(opens in a new tab)</span>
+</a>`}
+    />
+  </section>
+
+  <section aria-labelledby="checklist">
+    <h2 id="checklist">Before you ship</h2>
+    <p class="ds-text">Five minutes, every time a page or component changes.</p>
+    <ol class="ds-list">
+      <li><strong>Unplug the mouse.</strong> Tab from the top. Can you reach and use everything, in order, and always see where you are? Does Escape close what's open?</li>
+      <li><strong>Zoom to 200%</strong> and shrink the window to 320px. Nothing should overlap, clip, or scroll sideways.</li>
+      <li><strong>Turn on reduced motion</strong> (macOS: Accessibility, Display, Reduce motion). Nothing should slide, zoom, or roll.</li>
+      <li><strong>Listen to it.</strong> VoiceOver (Cmd + F5) or NVDA. Headings in order, every image described or skipped, every control named.</li>
+      <li><strong>Run an automated check</strong> like axe DevTools or Lighthouse. It catches a third of problems; the steps above catch the rest.</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="gaps">
+    <h2 id="gaps">Known gaps</h2>
+    <p class="ds-text">Honest about what isn't there yet.</p>
+    <div class="ds-table-wrap">
+      <table class="ds-table">
+        <thead><tr><th scope="col">Where</th><th scope="col">Gap</th><th scope="col">Plan</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Case study lightbox</td>
+            <td>Images open the lightbox on click only. Keyboard users still see every image inline, but can't enlarge one.</td>
+            <td>Wrap triggers in a button labeled "Enlarge image".</td>
+          </tr>
+          <tr>
+            <td>Case study prose</td>
+            <td>Links in project copy open new tabs without saying so.</td>
+            <td>Add the hidden "(opens in a new tab)" text in the project data, or drop <code>target="_blank"</code>.</td>
+          </tr>
+          <tr>
+            <td>Proposals and field experiments</td>
+            <td>Not yet moved onto the shared components, so they keep their own field and button styles.</td>
+            <td>Migrate when they're next edited.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</DsLayout>

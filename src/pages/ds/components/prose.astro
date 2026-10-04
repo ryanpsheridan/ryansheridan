@@ -1,0 +1,75 @@
+---
+import DsLayout from "../../../layouts/DsLayout.astro";
+import Example from "../../../components/ds/Example.astro";
+import PropsTable from "../../../components/ds/PropsTable.astro";
+---
+
+<DsLayout
+  section="Components"
+  title="Prose"
+  lead="One class that styles long-form copy without a class on every paragraph. Case study bodies come from data as HTML, and this is what makes them read well."
+>
+  <section aria-labelledby="usage">
+    <h2 id="usage">When to use it</h2>
+    <ul class="ds-list">
+      <li>Around any block of HTML written as content rather than built as layout: case study text blocks, a CMS field.</li>
+      <li>Keep it to <code>--content-width</code> so lines stay readable.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="examples">
+    <h2 id="examples">Example</h2>
+    <Example
+      layout="fill"
+      lang="html"
+      code={`<div class="prose">
+  <p>The variables split into two collections. <strong>Primitives</strong> hold the raw values.
+  <strong>Brand</strong> tokens give those values a job.</p>
+  <h3>One token name, a value per brand</h3>
+  <ul>
+    <li><em>Display 1</em> is 101px for Commerce, 64 for BigCommerce.</li>
+    <li><em>Hyperlink</em> is Iris, Blue 400, or Cobalt.</li>
+  </ul>
+  <blockquote><p>Go from invisible to everywhere.</p></blockquote>
+  <p>Read about the <a href="/work/feedonomics-rebrand-design-system">Feedonomics rebrand</a>.</p>
+</div>`}
+    >
+      <div class="prose" style="max-width: var(--content-width)">
+        <p>The variables split into two collections. <strong>Primitives</strong> hold the raw values. <strong>Brand</strong> tokens give those values a job.</p>
+        <h3>One token name, a value per brand</h3>
+        <ul>
+          <li><em>Display 1</em> is 101px for Commerce, 64 for BigCommerce.</li>
+          <li><em>Hyperlink</em> is Iris, Blue 400, or Cobalt.</li>
+        </ul>
+        <blockquote><p>Go from invisible to everywhere.</p></blockquote>
+        <p>Read about the <a href="/work/feedonomics-rebrand-design-system">Feedonomics rebrand</a>.</p>
+      </div>
+    </Example>
+  </section>
+
+  <section aria-labelledby="api">
+    <h2 id="api">What it styles</h2>
+    <PropsTable
+      kind="Class"
+      rows={[
+        { name: ".prose", description: "16px light at 1.8 line height." },
+        { name: "p, ul, ol", description: "16px apart." },
+        { name: "h3", description: "20px medium, 32px above and 8px below." },
+        { name: "a", description: "Inline link: blue, underlined." },
+        { name: "strong", description: "Weight 500. The only emphasis." },
+        { name: "em", description: "Muted color, upright. Used for names of things, like a token." },
+        { name: "blockquote", description: "18px italic, muted, with a 2px rule." },
+        { name: "img", description: "Full width with a hairline frame." },
+      ]}
+    />
+  </section>
+
+  <section aria-labelledby="content">
+    <h2 id="content">Accessibility and content</h2>
+    <ul class="ds-list">
+      <li>Use real elements: <code>&lt;h3&gt;</code> for a heading, <code>&lt;ul&gt;</code> for a list. The styles follow the structure, and so do screen readers.</li>
+      <li>Headings inside prose start at h3, since the block's own heading is an h2.</li>
+      <li>Short paragraphs: three or four sentences. Lead with the point.</li>
+    </ul>
+  </section>
+</DsLayout>
