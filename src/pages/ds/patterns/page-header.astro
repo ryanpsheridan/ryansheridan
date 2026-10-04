@@ -32,14 +32,14 @@ import Breadcrumbs from "../../../components/ui/Breadcrumbs.astro";
     margin-bottom: var(--space-3);
   }
   h1 {
-    font-size: var(--text-headline);
+    font-size: var(--text-h1);
     font-weight: var(--weight-light);
     line-height: var(--leading-tight);
     letter-spacing: var(--tracking-tight);
     margin-bottom: var(--space-4);
   }
   .intro {
-    font-size: var(--text-base);
+    font-size: var(--text-m);
     line-height: var(--leading-relaxed);
     color: var(--color-text-muted);
   }
@@ -73,9 +73,9 @@ import Breadcrumbs from "../../../components/ui/Breadcrumbs.astro";
   <section aria-labelledby="title-size">
     <h2 id="title-size">Which title size</h2>
     <ul class="ds-list">
-      <li><code>--text-hero</code> for case studies, where the title is the headline of a story.</li>
-      <li><code>--text-headline</code> for content pages: About, Contact, Start a project, 404.</li>
-      <li><code>--text-title</code> for index and utility pages: Work, Resume.</li>
+      <li><code>--text-display-1</code> for case studies, where the title is the headline of a story.</li>
+      <li><code>--text-h1</code> for content pages: About, Contact, Start a project, 404.</li>
+      <li><code>--text-h2</code> for index and utility pages: Work, Resume.</li>
     </ul>
   </section>
 
@@ -95,7 +95,7 @@ import Breadcrumbs from "../../../components/ui/Breadcrumbs.astro";
   }
 
   .demo-title {
-    font-size: var(--text-headline);
+    font-size: var(--text-h1);
     font-weight: var(--weight-light);
     line-height: var(--leading-tight);
     letter-spacing: var(--tracking-tight);
@@ -104,7 +104,7 @@ import Breadcrumbs from "../../../components/ui/Breadcrumbs.astro";
 
   .demo-intro {
     max-width: 480px;
-    font-size: var(--text-base);
+    font-size: var(--text-m);
     line-height: var(--leading-relaxed);
     color: var(--color-text-muted);
   }

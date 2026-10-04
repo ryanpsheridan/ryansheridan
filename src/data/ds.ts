@@ -11,7 +11,7 @@ export interface DsPage {
 
 export const foundations: DsPage[] = [
   { slug: "color", title: "Color", summary: "Neutrals, links, and status colors, with the contrast of every pairing." },
-  { slug: "typography", title: "Typography", summary: "Two families, a size scale, fluid headlines, and the roles they play." },
+  { slug: "typography", title: "Typography", summary: "Two families and a Major Third type scale, from Display 1 down to Type XS." },
   { slug: "spacing", title: "Spacing and layout", summary: "The 8px grid, containers, breakpoints, and spacing recipes." },
   { slug: "shape", title: "Shape and elevation", summary: "Radius, borders, shadow, and the named stacking layers." },
   { slug: "motion", title: "Motion", summary: "Durations, easing, and how motion steps aside for reduced-motion users." },
@@ -57,7 +57,7 @@ export const dsNav = [
   { title: "Patterns", base: "/ds/patterns", pages: patterns },
 ];
 
-export const DS_VERSION = "1.0";
+export const DS_VERSION = "1.1";
 
 /** WCAG relative-luminance contrast between two hex colors. */
 export function contrast(a: string, b: string): number {

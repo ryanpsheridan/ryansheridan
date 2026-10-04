@@ -42,7 +42,7 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   line-height: var(--leading-normal);
-  font-size: var(--text-body);
+  font-size: var(--text-m);
 }
 
 a {
@@ -108,7 +108,7 @@ img {
   left: var(--space-2);
   z-index: calc(var(--z-nav) + 1);
   padding: var(--space-2) var(--space-3);
-  font-size: var(--text-sm);
+  font-size: var(--text-s);
   font-weight: var(--weight-medium);
   color: var(--color-bg);
   background: var(--color-text);
@@ -131,7 +131,7 @@ img {
   height: var(--control-md);
   padding: 0 var(--space-4);
   font-family: var(--font-sans);
-  font-size: var(--text-sm);
+  font-size: var(--text-s);
   font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-snug);
   line-height: 1;
@@ -153,7 +153,7 @@ img {
 .btn-lg {
   height: var(--control-lg);
   padding: 0 var(--space-5);
-  font-size: var(--text-md);
+  font-size: var(--text-l);
 }
 
 .btn-primary,
@@ -321,7 +321,7 @@ img {
   gap: var(--space-2);
   margin-bottom: var(--space-5);
   font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-size: var(--text-s);
   list-style: none;
 }
 
@@ -361,7 +361,7 @@ img {
 /* A note set off from the copy around it by a rule on the left. */
 .aside {
   padding-left: var(--space-3);
-  font-size: var(--text-sm);
+  font-size: var(--text-s);
   line-height: 1.7;
   color: var(--color-text-muted);
   border-left: var(--focus-width) solid var(--color-border);
@@ -372,7 +372,7 @@ img {
 /* Long-form copy from a CMS or a data file: case study bodies. Styles the
    plain elements inside it, so the content needs no classes of its own. */
 .prose {
-  font-size: var(--text-base);
+  font-size: var(--text-m);
   line-height: var(--leading-relaxed);
   color: var(--color-text);
 }
@@ -411,7 +411,7 @@ img {
 }
 
 .prose h3 {
-  font-size: var(--text-lg);
+  font-size: var(--text-h5);
   font-weight: var(--weight-medium);
   letter-spacing: var(--tracking-snug);
   line-height: var(--leading-snug);
@@ -425,7 +425,7 @@ img {
   margin: var(--space-5) 0;
   color: var(--color-text-muted);
   font-style: italic;
-  font-size: var(--text-md);
+  font-size: var(--text-l);
 }
 
 .prose blockquote p {
@@ -477,7 +477,7 @@ img {
 
 .field-label {
   display: block;
-  font-size: var(--text-sm);
+  font-size: var(--text-s);
   font-weight: var(--weight-medium);
   color: var(--color-text);
   margin-bottom: var(--space-2);
@@ -508,7 +508,7 @@ img {
   min-height: var(--control-md);
   padding: 0 var(--space-3);
   font-family: var(--font-sans);
-  font-size: var(--text-base);
+  font-size: var(--text-m);
   font-weight: var(--weight-light);
   color: var(--color-text);
   background: var(--color-bg);
@@ -578,7 +578,7 @@ textarea.input {
   display: flex;
   align-items: flex-start;
   gap: var(--space-2);
-  font-size: var(--text-base);
+  font-size: var(--text-m);
   font-weight: var(--weight-regular);
   color: var(--color-text);
   cursor: pointer;
@@ -624,12 +624,12 @@ textarea.input {
 }
 
 .choice-card-title {
-  font-size: var(--text-base);
+  font-size: var(--text-m);
   font-weight: var(--weight-medium);
 }
 
 .choice-card-desc {
-  font-size: var(--text-sm);
+  font-size: var(--text-s);
   font-weight: var(--weight-regular);
   line-height: 1.5;
   color: var(--color-text-muted);
@@ -659,7 +659,7 @@ textarea.input {
   justify-content: space-between;
   gap: var(--space-3);
   padding: var(--space-3) 0;
-  font-size: var(--text-base);
+  font-size: var(--text-m);
   font-weight: var(--weight-regular);
   cursor: pointer;
   list-style: none;
@@ -681,7 +681,7 @@ textarea.input {
 
 .accordion details > :not(summary) {
   padding-bottom: var(--space-3);
-  font-size: var(--text-sm);
+  font-size: var(--text-s);
   line-height: 1.7;
   color: var(--color-text-muted);
 }

@@ -16,11 +16,11 @@ const group = (id: string) => shapeTokens.find((g) => g.id === id)!;
     <h2 id="radius">Radius</h2>
     <p class="ds-text">Shape tells you what something is before you read it.</p>
     <div class="shapes" aria-hidden="true">
-      <div class="shape-item"><span class="shape-img"></span><span class="overline">Media · 0</span></div>
-      <div class="shape-item"><span class="badge">Branding</span><span class="overline">Tags · 4</span></div>
-      <div class="shape-item"><span class="mini-field"></span><span class="overline">Fields · 8</span></div>
-      <div class="shape-item"><span class="mini-card"></span><span class="overline">Choice cards · 12</span></div>
-      <div class="shape-item"><span class="btn btn-primary btn-sm">Button</span><span class="overline">Actions · full</span></div>
+      <div class="shape-item"><span class="shape-stage"><span class="shape-img"></span></span><span class="overline">Media · 0</span></div>
+      <div class="shape-item"><span class="shape-stage"><span class="badge">Branding</span></span><span class="overline">Tags · 4</span></div>
+      <div class="shape-item"><span class="shape-stage"><span class="mini-field"></span></span><span class="overline">Fields · 8</span></div>
+      <div class="shape-item"><span class="shape-stage"><span class="mini-card"></span></span><span class="overline">Choice cards · 12</span></div>
+      <div class="shape-item"><span class="shape-stage"><span class="btn btn-primary btn-sm">Button</span></span><span class="overline">Actions · full</span></div>
     </div>
     <TokenTable group={group("radius")} preview="radius" />
   </section>
@@ -78,6 +78,14 @@ const group = (id: string) => shapeTokens.find((g) => g.id === id)!;
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-2);
+  }
+
+  /* Every sample sits on the same 40px stage, so the labels share a line
+     whatever the height of the thing above them. */
+  .shape-stage {
+    display: flex;
+    align-items: center;
+    height: 40px;
   }
 
   .shape-img {

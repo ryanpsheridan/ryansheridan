@@ -148,6 +148,14 @@ const tokenCount = allTokenGroups.flatMap((g) => g.tokens).filter((t) => !t.depr
       <table class="ds-table">
         <tbody>
           <tr>
+            <td class="mono">1.1</td>
+            <td class="mono muted">Oct 2026</td>
+            <td>
+              Type moves to the Major Third scale (1.250, 16px base): Display 1, Headings 1 to 5, and Type L, M, S,
+              and XS. Old size names stay as deprecated aliases. Linked and static cards are now visibly different.
+            </td>
+          </tr>
+          <tr>
             <td class="mono">1.0</td>
             <td class="mono muted">Oct 2026</td>
             <td>
@@ -167,7 +175,7 @@ const tokenCount = allTokenGroups.flatMap((g) => g.tokens).filter((t) => !t.depr
   .stats {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    border-top: var(--border-width) solid var(--color-text);
+    border-top: var(--border-width) solid var(--color-border);
   }
 
   .stats div {
@@ -176,17 +184,17 @@ const tokenCount = allTokenGroups.flatMap((g) => g.tokens).filter((t) => !t.depr
 
   .stats dd {
     margin-top: var(--space-1);
-    font-size: var(--text-xl);
+    font-size: var(--text-h4);
     font-weight: var(--weight-light);
     letter-spacing: var(--tracking-snug);
   }
 
-  .principles {
+  :global(.ds-content) .ds-grid.principles {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   @media (max-width: 640px) {
-    .principles {
+    :global(.ds-content) .ds-grid.principles {
       grid-template-columns: minmax(0, 1fr);
     }
   }

@@ -54,7 +54,10 @@ if (path !== "/ds") {
     </details>
 
     <aside class="ds-sidebar">
-      <nav aria-label="Design system">
+      {/* data-lenis-prevent hands wheel and touch scrolling inside the
+          sidebar back to the browser; otherwise the site's smooth scroll
+          takes it and the list never moves. */}
+      <nav aria-label="Design system" data-lenis-prevent>
         <a href="/ds" class="ds-wordmark">
           <span>ds</span>
           <span class="ds-version">v{DS_VERSION}</span>
@@ -124,7 +127,9 @@ if (path !== "/ds") {
     display: grid;
     grid-template-columns: 224px minmax(0, 1fr);
     gap: var(--space-7);
-    max-width: var(--max-width);
+    /* Same frame as the nav: the gutter sits outside --max-width, so the
+       sidebar lines up with the logo. */
+    max-width: calc(var(--max-width) + var(--page-padding) * 2);
     margin: 0 auto;
     padding: var(--space-6) var(--page-padding) 0;
   }
@@ -134,6 +139,7 @@ if (path !== "/ds") {
     top: calc(var(--nav-height) + var(--space-4));
     max-height: calc(100vh - var(--nav-height) - var(--space-6));
     overflow-y: auto;
+    overscroll-behavior: contain;
     padding-bottom: var(--space-5);
     scrollbar-width: thin;
   }
@@ -144,7 +150,7 @@ if (path !== "/ds") {
     gap: var(--space-2);
     margin-bottom: var(--space-5);
     font-family: var(--font-mono);
-    font-size: var(--text-lg);
+    font-size: var(--text-h5);
     color: var(--color-text);
   }
 
@@ -172,7 +178,7 @@ if (path !== "/ds") {
   .ds-nav-group a {
     display: block;
     padding: var(--space-1) 0 var(--space-1) var(--space-3);
-    font-size: var(--text-sm);
+    font-size: var(--text-s);
     color: var(--color-text-muted);
     border-left: var(--border-width) solid var(--color-border);
     transition:
@@ -210,7 +216,7 @@ if (path !== "/ds") {
   }
 
   .ds-header h1 {
-    font-size: var(--text-headline);
+    font-size: var(--text-h1);
     font-weight: var(--weight-light);
     letter-spacing: var(--tracking-tight);
     line-height: var(--leading-tight);
@@ -218,7 +224,7 @@ if (path !== "/ds") {
 
   .ds-lead {
     margin-top: var(--space-3);
-    font-size: var(--text-md);
+    font-size: var(--text-l);
     line-height: var(--leading-normal);
     color: var(--color-text-muted);
   }
@@ -278,7 +284,7 @@ if (path !== "/ds") {
       align-items: center;
       min-height: var(--control-md);
       padding: 0 var(--space-3);
-      font-size: var(--text-sm);
+      font-size: var(--text-s);
       font-weight: var(--weight-medium);
       cursor: pointer;
       list-style: none;
@@ -323,7 +329,7 @@ if (path !== "/ds") {
   }
 
   .ds-content :global(h2) {
-    font-size: var(--text-xl);
+    font-size: var(--text-h4);
     font-weight: var(--weight-light);
     letter-spacing: var(--tracking-snug);
     line-height: var(--leading-snug);
@@ -332,7 +338,7 @@ if (path !== "/ds") {
   }
 
   .ds-content :global(h3) {
-    font-size: var(--text-md);
+    font-size: var(--text-l);
     font-weight: var(--weight-medium);
     letter-spacing: var(--tracking-snug);
     line-height: var(--leading-snug);
@@ -346,7 +352,7 @@ if (path !== "/ds") {
 
   .ds-content :global(.ds-text) {
     max-width: var(--content-width);
-    font-size: var(--text-base);
+    font-size: var(--text-m);
     line-height: var(--leading-relaxed);
     color: var(--color-text);
   }
@@ -391,7 +397,7 @@ if (path !== "/ds") {
   .ds-content :global(.ds-list) {
     max-width: var(--content-width);
     padding-left: var(--space-4);
-    font-size: var(--text-base);
+    font-size: var(--text-m);
     line-height: var(--leading-relaxed);
   }
 
@@ -427,13 +433,13 @@ if (path !== "/ds") {
 
   .ds-content :global(.ds-table-wrap) {
     overflow-x: auto;
-    border-top: var(--border-width) solid var(--color-text);
+    border-top: var(--border-width) solid var(--color-border);
   }
 
   .ds-content :global(.ds-table) {
     width: 100%;
     border-collapse: collapse;
-    font-size: var(--text-sm);
+    font-size: var(--text-s);
     line-height: var(--leading-normal);
   }
 
@@ -479,14 +485,39 @@ if (path !== "/ds") {
     gap: var(--space-3);
   }
 
+  /* Two kinds of card, told apart at a glance. A static card is a grey
+     surface with no edge: something to read. A linked card is white with an
+     outline and an arrow, and answers the pointer: something to open. */
   .ds-content :global(.ds-card) {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
     padding: var(--space-4);
     color: var(--color-text);
-    border: var(--border-width) solid var(--color-border);
-    transition: border-color var(--duration-fast) var(--ease-standard);
+    background: var(--color-surface);
+  }
+
+  .ds-content :global(a.ds-card) {
+    padding-right: calc(var(--space-4) + var(--space-5));
+    background: var(--color-bg);
+    border: var(--border-width) solid var(--color-border-strong);
+    transition:
+      border-color var(--duration-fast) var(--ease-standard),
+      background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .ds-content :global(a.ds-card)::after {
+    content: "→";
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    font-size: var(--text-m);
+    line-height: var(--leading-normal);
+    color: var(--color-text-muted);
+    transition:
+      transform var(--duration-fast) var(--ease-emphasized),
+      color var(--duration-fast) var(--ease-standard);
   }
 
   .ds-content :global(a.ds-card:hover) {
@@ -494,13 +525,28 @@ if (path !== "/ds") {
     border-color: var(--color-text);
   }
 
+  .ds-content :global(a.ds-card:hover)::after {
+    color: var(--color-text);
+    transform: translateX(var(--space-1));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ds-content :global(a.ds-card)::after {
+      transition: none;
+    }
+
+    .ds-content :global(a.ds-card:hover)::after {
+      transform: none;
+    }
+  }
+
   .ds-content :global(.ds-card-title) {
-    font-size: var(--text-base);
+    font-size: var(--text-m);
     font-weight: var(--weight-medium);
   }
 
   .ds-content :global(.ds-card-body) {
-    font-size: var(--text-sm);
+    font-size: var(--text-s);
     line-height: var(--leading-normal);
     color: var(--color-text-muted);
   }

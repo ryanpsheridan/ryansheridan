@@ -7,20 +7,22 @@ import { typographyTokens } from "../../data/tokens";
 
 const group = (id: string) => typographyTokens.find((g) => g.id === id)!;
 
-// The roles type plays on the site, from loudest to quietest. Each one is a
-// recipe of tokens, so a new page can reach for a role instead of numbers.
+// The type scale, loudest to quietest, then the two mono label styles. Each
+// row is a recipe of tokens, so a new page reaches for a style by name
+// instead of picking numbers.
 const roles = [
-  { name: "Hero", sample: "Multi-brand Design System", size: "text-hero", weight: "weight-light", leading: "leading-tight", tracking: "tracking-tight", family: "font-sans", where: "Case study titles" },
-  { name: "Display", sample: "Designing systems, sites and brands.", size: "text-display", weight: "weight-light", leading: "leading-tight", tracking: "tracking-tight", family: "font-sans", where: "The homepage statement" },
-  { name: "Headline", sample: "Let's work together.", size: "text-headline", weight: "weight-light", leading: "leading-tight", tracking: "tracking-tight", family: "font-sans", where: "Page titles" },
-  { name: "Title", sample: "All work", size: "text-title", weight: "weight-light", leading: "leading-tight", tracking: "tracking-tight", family: "font-sans", where: "Index and utility page titles" },
-  { name: "Section", sample: "One token name, a value per brand", size: "text-xl", weight: "weight-light", leading: "leading-snug", tracking: "tracking-snug", family: "font-sans", where: "Headings inside a case study" },
-  { name: "Subsection", sample: "The basics", size: "text-lg", weight: "weight-medium", leading: "leading-snug", tracking: "tracking-snug", family: "font-sans", where: "Form steps, FAQ heading, prose h3" },
-  { name: "Lead", sample: "Tell me about your business and what you need the site to do.", size: "text-md", weight: "weight-light", leading: "leading-normal", tracking: "", family: "font-sans", where: "The sentence under a headline" },
-  { name: "Body", sample: "The work starts with how your site looks, reads, and feels, because that is what earns trust.", size: "text-base", weight: "weight-light", leading: "leading-relaxed", tracking: "", family: "font-sans", where: "Running copy" },
-  { name: "Label", sample: "Email", size: "text-sm", weight: "weight-medium", leading: "leading-normal", tracking: "", family: "font-sans", where: "Form labels, buttons" },
-  { name: "Overline", sample: "PROJECT TYPE", size: "text-xs", weight: "weight-regular", leading: "leading-normal", tracking: "tracking-wide", family: "font-mono", where: "Labels over metadata, eyebrows" },
-  { name: "Meta", sample: "Home / Work / RHOW Coffee", size: "text-sm", weight: "weight-regular", leading: "leading-normal", tracking: "", family: "font-mono", where: "Breadcrumbs, counts, back links" },
+  { name: "Display 1", sample: "Multi-brand Design System", size: "text-display-1", px: "32–61", weight: "weight-light", leading: "leading-tight", tracking: "tracking-tight", family: "font-sans", where: "Case study titles" },
+  { name: "Heading 1", sample: "Designing systems, sites and brands.", size: "text-h1", px: "32–49", weight: "weight-light", leading: "leading-tight", tracking: "tracking-tight", family: "font-sans", where: "Homepage statement, page titles" },
+  { name: "Heading 2", sample: "All work", size: "text-h2", px: "28–39", weight: "weight-light", leading: "leading-tight", tracking: "tracking-tight", family: "font-sans", where: "Index and utility page titles" },
+  { name: "Heading 3", sample: "Work", size: "text-h3", px: "31", weight: "weight-regular", leading: "leading-tight", tracking: "tracking-tight", family: "font-sans", where: "Menu overlay links" },
+  { name: "Heading 4", sample: "One token name, a value per brand", size: "text-h4", px: "25", weight: "weight-light", leading: "leading-snug", tracking: "tracking-snug", family: "font-sans", where: "Case study sections" },
+  { name: "Heading 5", sample: "The basics", size: "text-h5", px: "20", weight: "weight-medium", leading: "leading-snug", tracking: "tracking-snug", family: "font-sans", where: "Form steps, FAQ, prose headings" },
+  { name: "Type L", sample: "Tell me about your business and what you need the site to do.", size: "text-l", px: "18", weight: "weight-light", leading: "leading-normal", tracking: "", family: "font-sans", where: "Leads, large buttons" },
+  { name: "Type M", sample: "The work starts with how your site looks, reads, and feels, because that is what earns trust.", size: "text-m", px: "16", weight: "weight-light", leading: "leading-relaxed", tracking: "", family: "font-sans", where: "Running copy, fields" },
+  { name: "Type S", sample: "Principal Designer, Design Systems", size: "text-s", px: "14", weight: "weight-light", leading: "leading-normal", tracking: "", family: "font-sans", where: "Labels, buttons, secondary copy" },
+  { name: "Type XS", sample: "Paste the address, with or without https.", size: "text-xs", px: "12", weight: "weight-light", leading: "leading-normal", tracking: "", family: "font-sans", where: "Notes, captions" },
+  { name: "Overline", sample: "Project type", size: "text-xs", px: "12", weight: "weight-regular", leading: "leading-normal", tracking: "tracking-wide", family: "font-mono", where: "Labels over metadata, eyebrows" },
+  { name: "Meta", sample: "Home / Work / RHOW Coffee", size: "text-s", px: "14", weight: "weight-regular", leading: "leading-normal", tracking: "", family: "font-mono", where: "Breadcrumbs, counts, back links" },
 ];
 
 const roleCss = (r: (typeof roles)[number]) =>
@@ -40,20 +42,21 @@ const roleCss = (r: (typeof roles)[number]) =>
   title="Typography"
   lead="Geist, set light, for everything people read. IBM Plex Mono for everything the site says about itself."
 >
-  <section aria-labelledby="roles">
-    <h2 id="roles">Type roles</h2>
+  <section aria-labelledby="scale">
+    <h2 id="scale">Type scale</h2>
     <p class="ds-text">
-      Start from a role, not a size. Each role is a fixed recipe of tokens; resize the window and the fluid
-      ones scale with it.
+      Headings follow the <a href="https://typescale.com/?size=16&scale=1.250" target="_blank" rel="noopener noreferrer">Major Third scale<span class="visually-hidden"> (opens in a new tab)</span></a>:
+      each step is 1.25 times the last, from a 16px base. Body sizes sit beside it on an even 2px step. Pick a
+      style by name; resize the window and the fluid ones scale with it.
     </p>
     <div class="roles">
       {roles.map((r) => (
         <div class="role">
           <div class="role-meta">
             <span class="role-name">{r.name}</span>
+            <span class="role-tokens">--{r.size} · {r.px}px</span>
             <span class="role-tokens">
-              {r.size} · {r.weight.replace("weight-", "")} · {r.leading.replace("leading-", "")}
-              {r.family === "font-mono" ? " · mono" : ""}
+              {r.weight.replace("weight-", "")} · {r.leading.replace("leading-", "")}{r.family === "font-mono" ? " · mono" : ""}
             </span>
             <span class="role-where">{r.where}</span>
           </div>
@@ -61,11 +64,15 @@ const roleCss = (r: (typeof roles)[number]) =>
         </div>
       ))}
     </div>
+    <p class="ds-text">
+      Heading styles are visual sizes, not HTML levels. Every page has one <code>&lt;h1&gt;</code>, even when it's
+      set in Heading 2, like the title on /work.
+    </p>
     <CodeBlock
       lang="css"
-      label="A page title, built from the Headline role"
+      label="A page title in Heading 1"
       code={`h1 {
-  font-size: var(--text-headline);
+  font-size: var(--text-h1);
   font-weight: var(--weight-light);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
@@ -77,10 +84,11 @@ const roleCss = (r: (typeof roles)[number]) =>
     <h2 id="tokens">Tokens</h2>
     <TokenTable group={group("font-family")} preview="font" />
     <TokenTable group={group("font-weight")} preview="weight" />
-    <TokenTable group={group("font-size")} preview="size" />
-    <TokenTable group={group("font-size-fluid")} preview="size" />
+    <TokenTable group={group("font-size-heading")} preview="size" />
+    <TokenTable group={group("font-size-body")} preview="size" />
     <TokenTable group={group("line-height")} preview="leading" />
     <TokenTable group={group("letter-spacing")} preview="tracking" />
+    <TokenTable group={group("font-size-deprecated")} />
   </section>
 
   <section aria-labelledby="rules">
@@ -90,7 +98,7 @@ const roleCss = (r: (typeof roles)[number]) =>
       <li><strong>Mono is metadata.</strong> If it describes the content rather than being the content (a date, a count, a tag, a breadcrumb), it's in Plex Mono.</li>
       <li><strong>Sentence case everywhere.</strong> Headlines, buttons, and labels. Uppercase only in the Overline role, and only through <code>text-transform</code>, so screen readers read words, not letters.</li>
       <li><strong>Hold a measure.</strong> Long copy sits in <code>--content-width</code> (656px), about 75 characters a line.</li>
-      <li><strong>Sizes in px, scaling in clamp.</strong> Static sizes come from the scale; anything that should grow with the screen uses a fluid token. Both respect browser zoom.</li>
+      <li><strong>Sizes come from the scale.</strong> Display 1 and Headings 1 and 2 are fluid; everything else holds its size. All of them respect browser zoom.</li>
     </ul>
   </section>
 
@@ -117,7 +125,7 @@ const roleCss = (r: (typeof roles)[number]) =>
 <style>
   .roles {
     margin: var(--space-4) 0 var(--space-5);
-    border-top: var(--border-width) solid var(--color-text);
+    border-top: var(--border-width) solid var(--color-border);
   }
 
   .role {
@@ -136,7 +144,7 @@ const roleCss = (r: (typeof roles)[number]) =>
   }
 
   .role-name {
-    font-size: var(--text-sm);
+    font-size: var(--text-s);
     font-weight: var(--weight-medium);
   }
 
@@ -157,7 +165,7 @@ const roleCss = (r: (typeof roles)[number]) =>
   }
 
   .dd {
-    font-size: var(--text-base);
+    font-size: var(--text-m);
   }
 
   .spacer {
