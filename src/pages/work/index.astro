@@ -4,7 +4,6 @@ import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import Media from "../../components/Media.astro";
 import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
-import Select from "../../components/ui/Select.astro";
 import { projects } from "../../data/projects";
 import { SITE_URL, WEBSITE_ID, breadcrumbSchema } from "../../data/schema";
 
@@ -12,7 +11,6 @@ import { SITE_URL, WEBSITE_ID, breadcrumbSchema } from "../../data/schema";
 // their order from projects.ts.
 const sortedProjects = [...projects].sort((a, b) => b.year - a.year);
 
-const allTags = [...new Set(projects.flatMap((p) => p.tags))];
 
 // One group per year, newest first, each with its own header.
 const years = [...new Set(sortedProjects.map((p) => p.year))];
@@ -53,14 +51,6 @@ const schema = [
       <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Work" }]} />
       <h1>All work</h1>
 
-      <div class="filter-row">
-        <label class="overline filter-label" for="type-filter">Project types</label>
-        <Select id="type-filter">
-          <option value="all">All</option>
-          {allTags.map((tag) => <option value={tag}>{tag}</option>)}
-        </Select>
-      </div>
-
       {/* Each year's header sits just above its first project's divider and
           sticks under the nav while that year is on screen. The next year's
           header comes up from below and pushes it out, because each one only
@@ -71,12 +61,12 @@ const schema = [
             <section class="year-group" data-year-group={group.year}>
               <div class="year-bar" data-year-bar aria-hidden="true">
                 <span class="year-bar-year">{group.year}</span>
-                <span class="year-bar-count" data-year-count>{projectCount(group.projects.length)}</span>
+                <span class="year-bar-count">{projectCount(group.projects.length)}</span>
               </div>
               <ul class="project-list">
                 {
                   group.projects.map((project) => (
-                    <li class="project-row" data-tags={project.tags.join(",")} data-year={project.year}>
+                    <li class="project-row" data-year={project.year}>
                       <a href={`/work/${project.slug}`} class="row-thumb" tabindex="-1" aria-hidden="true">
                         {project.thumbnail && <Media src={project.thumbnail} alt="" />}
                       </a>
@@ -127,15 +117,6 @@ const schema = [
     margin-bottom: var(--space-5);
   }
 
-  .filter-row {
-    margin-bottom: var(--space-5);
-    max-width: 360px;
-  }
-
-  .filter-label {
-    margin-bottom: var(--space-2);
-  }
-
   .year-groups {
     padding-bottom: 80px;
   }
@@ -144,10 +125,6 @@ const schema = [
      change of year reads as a break and not just another row. */
   .year-group + .year-group {
     margin-top: var(--space-5);
-  }
-
-  .year-group.hidden {
-    display: none;
   }
 
   .project-list {
@@ -168,10 +145,6 @@ const schema = [
     align-items: start;
     padding: var(--space-7) 0;
     border-top: 1px solid var(--color-border);
-  }
-
-  .project-row.hidden {
-    display: none;
   }
 
   .row-body {
@@ -356,8 +329,6 @@ const schema = [
 </style>
 
 <script>
-  const filter = document.getElementById("type-filter") as HTMLSelectElement;
-  const cards = document.querySelectorAll<HTMLLIElement>(".project-row");
   const groups = document.querySelectorAll<HTMLElement>("[data-year-group]");
   const bars = document.querySelectorAll<HTMLElement>("[data-year-bar]");
   const nav = document.querySelector<HTMLElement>("nav:not([aria-label=\"Breadcrumb\"])");
@@ -401,19 +372,4 @@ const schema = [
   );
   update();
 
-  // Filter rows, then hide any year left empty and recount the rest.
-  filter.addEventListener("change", () => {
-    const value = filter.value;
-    cards.forEach((card) => {
-      const tags = card.dataset.tags?.split(",") ?? [];
-      card.classList.toggle("hidden", value !== "all" && !tags.includes(value));
-    });
-    groups.forEach((group) => {
-      const shown = group.querySelectorAll(".project-row:not(.hidden)").length;
-      group.classList.toggle("hidden", shown === 0);
-      const count = group.querySelector("[data-year-count]");
-      if (count) count.textContent = `${shown} ${shown === 1 ? "project" : "projects"}`;
-    });
-    update();
-  });
 </script>
