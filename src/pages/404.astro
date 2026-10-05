@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
-import MazeField from "../components/MazeField.astro";
+import CursorField from "../components/CursorField.astro";
 ---
 
 <Layout
@@ -11,20 +11,7 @@ import MazeField from "../components/MazeField.astro";
   noindex
 >
   <Nav />
-  <MazeField
-    cell={34}
-    color="#ebebeb"
-    activeColor="#d8d8d8"
-    ballRadius={5}
-    speed={7}
-    glow={170}
-    trail={48}
-    fade={0.8}
-    exit
-    exitOn="[data-links]"
-    exitLabel="EXIT"
-    fixed
-  />
+  <CursorField variant="compass" region="vignette" fixed />
   <main id="main" class="not-found">
     <div class="nf-inner">
       <p class="nf-code">404 / dead end</p>
@@ -34,13 +21,7 @@ import MazeField from "../components/MazeField.astro";
         have moved. The work is all still here, two doors down.
       </p>
 
-      <!--
-        Where the maze runs, these start hidden and the exit ring is drawn on
-        this row's own box, so solving the maze hands the pair back centered on
-        where the ring was. They keep their space either way: hidden by
-        visibility, never display, or the ring would have nothing to sit on.
-      -->
-      <div class="nf-links" data-links>
+      <div class="nf-links">
         <a href="/work" class="nf-button btn btn-primary">View all work</a>
         <a href="/" class="nf-plain link-quiet">Back home <span class="arrow" aria-hidden="true">&rarr;</span></a>
       </div>
@@ -48,40 +29,6 @@ import MazeField from "../components/MazeField.astro";
   </main>
   <Footer />
 </Layout>
-
-<script>
-  /**
-   * The buttons arrive when the maze is solved, once its walls have cleared.
-   *
-   * Tab brings them straight back: the maze needs a cursor, and someone
-   * driving the page from the keyboard can't play it, so the first Tab drops
-   * the game and hands over the links. Without that, this page would hide its
-   * own navigation from anyone not using a mouse.
-   */
-  function armLinks() {
-    const links = document.querySelector<HTMLElement>("[data-links]");
-    if (!links || links.dataset.armed === "true") return;
-    links.dataset.armed = "true";
-
-    const reveal = () => links.classList.add("is-shown");
-
-    document.addEventListener(
-      "mazefield:solved",
-      (event) => {
-        const detail = (event as CustomEvent).detail || {};
-        window.setTimeout(reveal, Math.max(Number(detail.settleIn) || 0, 0) * 0.62);
-      },
-      { once: true },
-    );
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Tab") reveal();
-    }, { once: true });
-  }
-
-  armLinks();
-  document.addEventListener("astro:page-load", armLinks);
-</script>
 
 <style>
   .not-found {
@@ -130,33 +77,6 @@ import MazeField from "../components/MazeField.astro";
     justify-content: center;
     gap: var(--space-4);
     flex-wrap: wrap;
-  }
-
-  /*
-    Only where the maze actually renders: a pointer that hovers, a viewport
-    wide enough, and no reduced-motion preference. Anywhere else there is no
-    game to solve, so the buttons are simply there. A browser that doesn't
-    understand the query fails it, which also leaves them visible.
-  */
-  @media (hover: hover) and (pointer: fine) and (min-width: 641px) and (prefers-reduced-motion: no-preference) {
-    .nf-links {
-      opacity: 0;
-      visibility: hidden;
-      /* Scaled from the center rather than nudged up: the ring sits on this
-         row's box, so anything that moves the box breaks the handoff. */
-      transform: scale(0.94);
-      transition:
-        opacity 0.6s ease,
-        transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-        visibility 0s linear 0.6s;
-    }
-
-    .nf-links.is-shown {
-      opacity: 1;
-      visibility: visible;
-      transform: none;
-      transition-delay: 0s;
-    }
   }
 
   .nf-plain {
