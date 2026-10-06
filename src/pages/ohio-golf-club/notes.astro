@@ -1,7 +1,7 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import Nav from "../../../components/Nav.astro";
-import Footer from "../../../components/Footer.astro";
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
 
 const sections = [
   { id: "summary", label: "Meeting summary" },
@@ -19,8 +19,8 @@ const sections = [
 
 <!--
   Private notes for a single proposal, not shared with the client. Same
-  noindex treatment as the proposal itself, and /proposals is already
-  filtered out of the sitemap in astro.config.mjs, so this subpath is too.
+  noindex treatment as the proposal itself, and the sitemap in
+  astro.config.mjs is an allowlist, so this subpath is left out too.
   No breadcrumbs here by design — this page is for Ryan's own viewing only,
   not part of the client-facing navigation.
 -->
@@ -36,7 +36,7 @@ const sections = [
 
     <header class="masthead">
       <p class="lede">
-        Notes from the 50-minute walkthrough with Brandon, where I shared the <a href="/proposals/ohio-golf-club">proposal</a> and we talked through the findings and packages together. For my own reference, not shared with him.
+        Notes from the 50-minute walkthrough with Brandon, where I shared the <a href="/ohio-golf-club">proposal</a> and we talked through the findings and packages together. For my own reference, not shared with him.
       </p>
       <p class="meta-line">Meeting length: ~50 min &middot; Attendee: Brandon Biggs</p>
     </header>
@@ -234,7 +234,7 @@ Ryan</pre>
           </div>
           <div class="meta-group">
             <span class="meta-label">Related</span>
-            <p class="meta-value"><a href="/proposals/ohio-golf-club">Proposal page</a></p>
+            <p class="meta-value"><a href="/ohio-golf-club">Proposal page</a></p>
           </div>
           <nav class="index meta-group" aria-label="Sections">
             <span class="meta-label">On this page</span>

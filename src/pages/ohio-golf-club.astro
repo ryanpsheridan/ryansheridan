@@ -1,7 +1,7 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import Nav from "../../components/Nav.astro";
-import Footer from "../../components/Footer.astro";
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
 
 // The index rail and the cover's tally both read from this, so a finding can't
 // be renumbered in one place and not the other.
@@ -140,9 +140,10 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
 ---
 
 <!--
-  A client proposal. Everything under /proposals is a private share rather than
-  portfolio work: it carries noindex and the whole branch is filtered out of the
-  sitemap in astro.config.mjs, so the two agree.
+  A client proposal. Proposals live at the site root (/ohio-golf-club) so a link
+  a client saved keeps working, and are listed on /proposals. Each is a private
+  share rather than portfolio work: it carries noindex and is left out of the
+  sitemap allowlist in astro.config.mjs, so the two agree.
 -->
 <Layout
   title="Ohio Golf Club — Ryan Sheridan"
@@ -277,11 +278,11 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
               <figure>
                 <div class="fig-head">
                   <p class="k">Asked for your hours, an AI assistant didn&rsquo;t read your site. It answered from a directory called GolfSimMap and said so.</p>
-                  <a class="fig-open" href="/proposals/ohio-golf-club/screenshot-1.jpg" target="_blank" rel="noopener">Full size &nearr;</a>
+                  <a class="fig-open" href="/ohio-golf-club/screenshot-1.jpg" target="_blank" rel="noopener">Full size &nearr;</a>
                 </div>
                 <div class="shot">
                   <img
-                    src="/proposals/ohio-golf-club/screenshot-1.jpg"
+                    src="/ohio-golf-club/screenshot-1.jpg"
                     alt="Screenshot of an AI assistant listing Ohio Golf Club's hours and citing GolfSimMap as the source."
                     width="1080"
                     height="311"
@@ -323,11 +324,11 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
                 <figure>
                   <div class="fig-head">
                     <p class="k">Asked one way, it listed every tier correctly, read from your own website.</p>
-                    <a class="fig-open" href="/proposals/ohio-golf-club/screenshot-2.jpg" target="_blank" rel="noopener">Full size &nearr;</a>
+                    <a class="fig-open" href="/ohio-golf-club/screenshot-2.jpg" target="_blank" rel="noopener">Full size &nearr;</a>
                   </div>
                   <div class="shot">
                     <img
-                      src="/proposals/ohio-golf-club/screenshot-2.jpg"
+                      src="/ohio-golf-club/screenshot-2.jpg"
                       alt="Screenshot of an AI assistant correctly listing all four Ohio Golf Club membership tiers and prices."
                       width="1080"
                       height="758"
@@ -338,11 +339,11 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
                 <figure>
                   <div class="fig-head">
                     <p class="k">Asked another way the same day, it said your pricing &ldquo;is not published clearly online&rdquo; and offered to go hunting.</p>
-                    <a class="fig-open" href="/proposals/ohio-golf-club/screenshot-3.jpg" target="_blank" rel="noopener">Full size &nearr;</a>
+                    <a class="fig-open" href="/ohio-golf-club/screenshot-3.jpg" target="_blank" rel="noopener">Full size &nearr;</a>
                   </div>
                   <div class="shot">
                     <img
-                      src="/proposals/ohio-golf-club/screenshot-3.jpg"
+                      src="/ohio-golf-club/screenshot-3.jpg"
                       alt="Screenshot of an AI assistant saying Ohio Golf Club's membership pricing is not published clearly online."
                       width="1080"
                       height="402"

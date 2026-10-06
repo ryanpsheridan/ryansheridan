@@ -11,8 +11,8 @@ export interface Proposal {
 }
 
 /**
- * Everything listed here lives under /proposals, which is noindex and kept out
- * of the sitemap. Newest first.
+ * Each proposal lives at the site root (/<slug>), is noindex, and is kept out
+ * of the sitemap. They are listed on /proposals. Newest first.
  */
 export const proposals: Proposal[] = [
   {

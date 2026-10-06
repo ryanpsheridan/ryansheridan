@@ -34,7 +34,7 @@ const sorted = [...proposals].sort((a, b) => b.date.localeCompare(a.date));
         {
           sorted.map((proposal) => (
             <li>
-              <a href={`/proposals/${proposal.slug}`} class="proposal-card">
+              <a href={`/${proposal.slug}`} class="proposal-card">
                 <div class="proposal-main">
                   <h2>{proposal.client}</h2>
                   <p class="proposal-kind">{proposal.kind}</p>
