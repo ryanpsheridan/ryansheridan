@@ -4,7 +4,9 @@ import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import { proposals, formatProposalDate } from "../../data/proposals";
 
-const sorted = [...proposals].sort((a, b) => b.date.localeCompare(a.date));
+const sorted = proposals
+  .filter((p) => !p.hidden)
+  .sort((a, b) => b.date.localeCompare(a.date));
 ---
 
 <!--

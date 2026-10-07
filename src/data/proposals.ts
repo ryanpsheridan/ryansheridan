@@ -8,6 +8,8 @@ export interface Proposal {
   /** ISO date the proposal was prepared, used for display and ordering. */
   date: string;
   status: "active" | "sent" | "closed";
+  /** Unpublished for now: kept out of the /proposals index. See hidden/README.md. */
+  hidden?: boolean;
 }
 
 /**
@@ -23,6 +25,7 @@ export const proposals: Proposal[] = [
       "Eight findings on how the club shows up in Google and AI assistants, with two fixed-fee options.",
     date: "2026-09-03",
     status: "active",
+    hidden: true,
   },
 ];
 
