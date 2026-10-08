@@ -13,6 +13,10 @@ export default defineConfig({
   // use. In production vercel.json answers the same paths first with a real
   // 308, which is the signal search engines treat as a move.
   redirects: {
+    // The Ohio Golf Club proposal was first shared as /proposals/ohio-golf-club
+    // before proposals moved to the site root, so that link keeps working.
+    '/proposals/ohio-golf-club': '/ohio-golf-club',
+    '/proposals/ohio-golf-club/notes': '/ohio-golf-club/notes',
     '/project-questionnaire': '/start-a-project',
     // Renamed from the first Claude Design write-up when it was rewritten
     // around the three brand systems.

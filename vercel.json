@@ -2,6 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "trailingSlash": false,
   "redirects": [
+    { "source": "/proposals/ohio-golf-club", "destination": "/ohio-golf-club", "permanent": true },
+    { "source": "/proposals/ohio-golf-club/:path*", "destination": "/ohio-golf-club/:path*", "permanent": true },
     { "source": "/project-questionnaire", "destination": "/start-a-project", "permanent": true },
     { "source": "/work/claude-design-consistency-first-design-second", "destination": "/work/brand-systems-claude-design", "permanent": true }
   ]
