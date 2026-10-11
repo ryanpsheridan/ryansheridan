@@ -211,16 +211,16 @@ export const projects: Project[] = [
         type: "process",
         rows: [
           {
-            label: "Before",
-            note: "Outside help",
+            label: "Outsourced",
+            note: "Freelancer or video producer",
             steps: [
               { label: "A freelancer or our video producer builds it" },
-              { label: "Files handed off to design", slow: true },
+              { label: "WebP or MP4 files handed off to design", slow: true },
               { label: "Uploaded to the site" },
             ],
           },
           {
-            label: "Then",
+            label: "In-house",
             note: "Built in Claude",
             steps: [
               { label: "A designer builds it in Claude" },
@@ -228,18 +228,36 @@ export const projects: Project[] = [
               { label: "Published to the site" },
             ],
           },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Asset or Component?",
+        body: `<p>Every new piece starts with one question. An asset, like an animation or an interactive graphic, looks and works the same wherever it appears. Assets are what this project makes self-serve. A component is something editors need to change, or reuse with different content, so it still goes to a developer. If editors never need to change it, it's an asset.</p>`,
+      },
+      {
+        type: "flow",
+        columns: [
           {
-            label: "Now",
-            note: "With Claude Embed",
+            title: "Asset",
+            note: "Fixed content, like an animation",
+            steps: [
+              { label: "Built in Claude", note: "Cleaned up by the skill" },
+              { label: "Pasted into Claude Embed", note: "On one page or several" },
+            ],
+            result: "No developer needed",
+          },
+          {
+            title: "Component",
+            note: "Editors change it or reuse it",
             accent: true,
             steps: [
-              { label: "A designer builds it with the skill" },
-              { label: "Pasted into Claude Embed" },
-              { label: "Live on the site" },
+              { label: "The skill writes a spec", note: "Instead of building it" },
+              { label: "A developer builds and registers it", note: "So editors can change it in Makeswift" },
             ],
+            result: "Goes to a developer",
           },
         ],
-        caption: "How an animation gets to the site. The dashed steps are where work waited.",
       },
       {
         type: "text",
@@ -288,8 +306,8 @@ export const projects: Project[] = [
       },
       {
         type: "split",
-        heading: "Editor Panel UX",
-        body: `<p>Editors, not developers, use this panel, so it's built around what they reach for.</p><ul><li><strong>One field up front.</strong> Everything else folds away.</li><li><strong>Groups named by task,</strong> like Loading &amp; mobile or Accessibility.</li><li><strong>A familiar order.</strong> Width first, matching our other components.</li><li><strong>Plain words.</strong> "Embed code," not "HTML," with tooltips that explain why.</li><li><strong>Safe defaults.</strong> Reduced motion and load-on-scroll are already on.</li></ul>`,
+        heading: "Editor Panel UI",
+        body: `<p>Editors, not developers, use this panel, so I designed the UX around what they reach for. Embed code sits up front, and everything else folds into groups named by task:</p><ul><li><strong>Placeholder image.</strong> The still that shows while the embed loads. Search engines read it, and "Load immediately" covers above-the-fold use.</li><li><strong>Size &amp; layout.</strong> Spacing and aspect ratio. The embed usually sets its own ratio, so editors can leave it alone.</li><li><strong>Loading &amp; mobile.</strong> Run only when visible, or skip on mobile.</li><li><strong>Appearance.</strong> Border, background color and corner radius, on our 4px scale.</li><li><strong>Accessibility.</strong> A label, or a "Decorative only" switch.</li><li><strong>Debugging.</strong> Show errors, off by default.</li></ul><p>The order matches our other components, the labels use plain words ("Embed code," not "HTML"), and safe defaults mean most editors never open a group.</p>`,
         image: {
           src: "/project-claude-embed-panel.webp",
           alt: "Makeswift properties panel for Claude Embed: an Embed code text area and a Width field, then collapsed groups for Placeholder image, Size and layout, Loading and mobile, Appearance, Accessibility and Debugging",
@@ -299,35 +317,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "How the Skill Works",
-        body: `<p>Designers use it two ways: start a chat and build a new animation with the skill from the beginning, or hand it an animation made without it and ask for a cleanup. Either way, it starts with one question.</p>`,
-      },
-      {
-        type: "flow",
-        question: "Will editors need to change it?",
-        columns: [
-          {
-            title: "No, it's an asset",
-            steps: [
-              { label: "Built in Claude", note: "Cleaned up by the skill" },
-              { label: "Pasted into Claude Embed", note: "On one page or several" },
-            ],
-            result: "No developer needed",
-          },
-          {
-            title: "Yes, it's a component",
-            accent: true,
-            steps: [
-              { label: "The skill writes a spec", note: "Instead of building it" },
-              { label: "A developer registers it", note: "So editors can change it in Makeswift" },
-            ],
-            result: "Developer builds it",
-          },
-        ],
-        caption: "The first question the skill asks",
-      },
-      {
-        type: "text",
-        body: `<p>For an asset, it fixes instead of suggesting. Off-brand colors snap to tokens, low-contrast text gets darker, and every change is listed. If a designer says "keep the green," it stays, marked as approved.</p>`,
+        body: `<p>Designers use it two ways: start a chat and build a new animation with the skill from the beginning, or hand it an animation made without it and ask for a cleanup. Either way, it first asks whether the piece is an asset or a component. If it's a component, it stops and writes a spec for the developers instead of building the wrong thing.</p><p>For an asset, it fixes instead of suggesting. Off-brand colors snap to tokens, low-contrast text gets darker, and every change is listed. If a designer says "keep the green," it stays, marked as approved.</p>`,
       },
       {
         type: "imageGrid",
@@ -351,7 +341,7 @@ export const projects: Project[] = [
           {
             src: "/project-claude-embed-before-after.webp",
             alt: "Two copies of the Shopping Agent animation side by side in the Makeswift builder, labeled Pre-skill and Post-skill, both showing a Knowledge Document upload in progress",
-            caption: "Before and after the skill. They should look nearly identical: the code changed, the design didn't.",
+            caption: "Before and after the skill. Nearly identical by design. The one visible change is darker gray text that now passes contrast.",
           },
         ],
       },
@@ -363,7 +353,40 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Where It Landed",
-        body: `<p>From Claude to a live page, without a ticket: paste the code, and the asset runs.</p>`,
+        body: `<p>From Claude to a live page, without a ticket: paste the code, and the asset runs. The skill is my way of scaling a developer's judgment. I turned one review into rules the tool applies on its own, then built the riskiest ones into the component so they can't happen at all. Review still happens, but once, for the system. The component is in code review now.</p>`,
+      },
+      {
+        type: "process",
+        rows: [
+          {
+            label: "Outsourced",
+            note: "Freelancer or video producer",
+            steps: [
+              { label: "A freelancer or our video producer builds it" },
+              { label: "WebP or MP4 files handed off to design", slow: true },
+              { label: "Uploaded to the site" },
+            ],
+          },
+          {
+            label: "In-house",
+            note: "Built in Claude",
+            steps: [
+              { label: "A designer builds it in Claude" },
+              { label: "Ticket and developer code review", slow: true },
+              { label: "Published to the site" },
+            ],
+          },
+          {
+            label: "Self-serve",
+            note: "With Claude Embed",
+            accent: true,
+            steps: [
+              { label: "A designer builds it with the skill" },
+              { label: "Pasted into Claude Embed" },
+              { label: "Live on the site" },
+            ],
+          },
+        ],
       },
       {
         type: "imageGrid",
@@ -371,14 +394,10 @@ export const projects: Project[] = [
         images: [
           {
             src: "/project-claude-embed-paste-animated.svg",
-            alt: "The Makeswift builder with an empty Claude Embed block selected. Code is pasted into the Embed code field, and the Shopping Agent animation appears in the block and plays.",
+            alt: "The Makeswift builder with an empty Claude Embed block selected. Code is pasted into the Embed code field, and the Shopping Agent animation appears in the block and plays from the start.",
             caption: "Pasting the cleaned-up code into Claude Embed in Makeswift",
           },
         ],
-      },
-      {
-        type: "text",
-        body: `<blockquote><p>The skill is my way of scaling a developer's judgment. I turned one review into rules the tool applies on its own, then built the riskiest ones into the component so they can't happen at all. Review still happens, but once, for the system.</p></blockquote><p>The component is in code review now.</p>`,
       },
     ],
   },
