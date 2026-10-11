@@ -200,7 +200,7 @@ export const projects: Project[] = [
     description: "A Makeswift component and Claude skill, built in our codebase with Claude Code, that let designers ship animation to live pages without a dev ticket.",
     ogImage: "/project-claude-embed-cover.png",
     thumbnail: "/project-claude-embed-thumbnail-animated.svg",
-    showOnHomepage: false,
+    showOnHomepage: true,
     tags: ["Component Design", "Claude Skill", "Automation"],
     tools: ["Claude Code", "Claude", "Makeswift", "GSAP"],
     client: "BigCommerce",
@@ -208,37 +208,7 @@ export const projects: Project[] = [
     content: [
       {
         type: "text",
-        body: `<p>We wanted more animation on our website, but making and publishing it depended on developers or outside help. Claude made animations easier to create, but getting them onto the site safely still meant a technical review every time.</p><p>I set out to close that gap: give designers more independence, while making sure every animation still meets our standards for brand, accessibility, and performance.</p>`,
-      },
-      {
-        type: "text",
-        heading: "It Started With a Marquee",
-        body: `<p>Our team designed a marquee of component pills in Figma for the <a href="https://www.bigcommerce.com/product/store-design/" target="_blank" rel="noopener noreferrer">Store Design page</a>, and I brought it to life with Claude Code as an embed. A navigation issue on the site around the same time had us double-checking every recent change, so it was a good moment to get a developer's eyes on the code.</p>`,
-      },
-      {
-        type: "imageGrid",
-        framed: true,
-        images: [
-          {
-            src: "/project-claude-embed-marquee.webp",
-            alt: "Two rows of black pills labeled with storefront components, such as Anchor Menu, Carousel, Gallery and Product Card, under the heading Your storefront toolkit, built in",
-            caption: "The marquee on the live Store Design page",
-          },
-        ],
-      },
-      {
-        type: "text",
-        body: `<p>The review turned up four things worth fixing: the embed's colors could leak into the rest of the site, it could run twice and stack its animations, it loaded its animation library from an outside site, and screen readers read it twice. The developer sent back a cleaned-up version, and the marquee shipped the next morning. That same day, I turned those four fixes into the first rules of a Claude skill, so the next designer wouldn't need the same review.</p>`,
-      },
-      {
-        type: "text",
-        heading: "Asset or Component?",
-        body: `<p>Before building anything for this project, I started with one question: is this an asset or a component? An asset, like an animation or an interactive graphic, is fixed content that looks and works the same wherever it appears. A component is something editors need to change or reuse, like a carousel that gets different slides on every page. Components get built and registered in the codebase, which I can now do too with Claude Code. Assets had no safe way onto the page, and that's the gap this project closes.</p>`,
-      },
-      {
-        type: "text",
-        heading: "The Real Bottleneck",
-        body: `<p>Building animation ourselves is still new for us. We used to hire a freelance animator or ask our video producer, which took even longer. Then we started building animations in Claude, and an idea could turn into a working asset in an afternoon.</p><p>Getting it onto the site became the slow part. Every embed still went through a ticket and a developer's code review. The review mattered, because Makeswift's default embed drops code straight into the live page, where it can change fonts, shift the layout, or break other scripts. The goal was to keep the review, but do it once for the system instead of for every embed.</p>`,
+        body: `<p>Designers on our team can build an animation with Claude in an afternoon. Getting it onto the site still meant a ticket and a wait for a developer to review the code, because Makeswift's default embed drops code straight into the live page, where it can change fonts, shift the layout, or break other scripts. Before Claude, we hired a freelance animator or asked our video producer, which took even longer.</p><p>I set out to remove that wait while keeping every animation on brand, accessible, and fast.</p>`,
       },
       {
         type: "process",
@@ -265,8 +235,42 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        heading: "What I Built",
-        body: `<p>I'm now building directly in our codebase with Claude Code, and this is one of the first components I've made that way. It's being built for all three of our brand sites. For the asset path, two pieces work together: the Claude Embed component runs pasted code inside a Shadow DOM, which isolates the animation so its styles and scripts can't interfere with the rest of the website, and the Embed Asset skill checks and fixes a designer's code before it goes in.</p>`,
+        body: `<ul><li><strong>Users and context.</strong> Designers who build animations in Claude, and editors who place them on pages in Makeswift.</li><li><strong>Process.</strong> I turned one developer's code review into rules, then into a component and a Claude skill.</li><li><strong>Collaboration.</strong> A developer, an SEO specialist, the web dev lead and a designer each reviewed the work and changed it.</li><li><strong>Technical.</strong> A Shadow DOM component I built in our codebase with Claude Code, for all three brand sites.</li></ul>`,
+      },
+      {
+        type: "text",
+        heading: "Designers and editors needed different things",
+        body: `<p>Designers needed a safe way to ship their own work, without a developer checking every embed. Editors needed a panel that felt like every other Makeswift component, with the one field they actually use up front.</p>`,
+      },
+      {
+        type: "text",
+        heading: "One code review became the first set of rules",
+        body: `<p>Our team designed a marquee of component pills in Figma for the <a href="https://www.bigcommerce.com/product/store-design/" target="_blank" rel="noopener noreferrer">Store Design page</a>, and I animated it with Claude Code as an embed, then asked a developer to review the code.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          {
+            src: "/project-claude-embed-marquee.webp",
+            alt: "Two rows of black pills labeled with storefront components, such as Anchor Menu, Carousel, Gallery and Product Card, under the heading Your storefront toolkit, built in",
+            caption: "The marquee on the live Store Design page",
+          },
+        ],
+      },
+      {
+        type: "text",
+        body: `<p>The review found four problems: the embed's colors could leak into the rest of the site, it could run twice and stack its animations, it loaded its animation library from an outside site, and screen readers read it twice. The developer sent back a fix, the marquee shipped the next morning, and that same day I turned the four fixes into the first rules of a Claude skill.</p>`,
+      },
+      {
+        type: "text",
+        heading: "Asset or component was the first question",
+        body: `<p>Before building anything, I asked whether each piece is an asset or a component. An asset, like an animation, is fixed content that looks and works the same wherever it appears. A component is something editors change or reuse, like a carousel with different slides on every page, and it gets built and registered in the codebase. Assets had no safe way onto the page, so that's the gap this project closes.</p>`,
+      },
+      {
+        type: "text",
+        heading: "A walled-off component and a skill protect the page and the brand",
+        body: `<p>I built this directly in our codebase with Claude Code, for all three of our brand sites. The Claude Embed component runs pasted code inside a Shadow DOM, which isolates the animation so its styles and scripts can't interfere with the rest of the website. The Embed Asset skill checks and fixes a designer's code before it goes in. Developers review the system once, so they no longer review every embed.</p>`,
       },
       {
         type: "pathway",
@@ -314,8 +318,8 @@ export const projects: Project[] = [
       },
       {
         type: "split",
-        heading: "Editor Panel UI",
-        body: `<p>Editors, not developers, use this panel, so I designed the UX around what they reach for. Embed code sits up front, and everything else folds into groups named by task:</p><ul><li><strong>Placeholder image.</strong> The still that shows while the embed loads. Search engines read it, and "Load immediately" covers above-the-fold use.</li><li><strong>Size &amp; layout.</strong> Spacing and aspect ratio. The embed usually sets its own ratio, so editors can leave it alone.</li><li><strong>Loading &amp; mobile.</strong> Run only when visible, or skip on mobile.</li><li><strong>Appearance.</strong> Border, background color and corner radius, on our 4px scale.</li><li><strong>Accessibility.</strong> A label, or a "Decorative only" switch.</li><li><strong>Debugging.</strong> Show errors, off by default.</li></ul>`,
+        heading: "The editor panel UI groups controls by task",
+        body: `<p>Editors place these embeds on pages, so I designed the panel around what they reach for. Embed code sits first, and every other setting folds into a group named for its task, which keeps rarely used settings out of the way:</p><ul><li><strong>Placeholder image:</strong> the still that shows first, which search engines read</li><li><strong>Size &amp; layout:</strong> spacing and aspect ratio</li><li><strong>Loading &amp; mobile:</strong> run when visible, or skip on mobile</li><li><strong>Appearance:</strong> border, background and corner radius</li><li><strong>Accessibility:</strong> a label, or a Decorative only switch</li><li><strong>Debugging:</strong> show errors</li></ul>`,
         image: {
           src: "/project-claude-embed-panel.webp",
           alt: "Makeswift properties panel for Claude Embed: an Embed code text area and a Width field, then collapsed groups for Placeholder image, Size and layout, Loading and mobile, Appearance, Accessibility and Debugging",
@@ -324,8 +328,8 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        heading: "How the Skill Works",
-        body: `<p>Designers use it two ways: start a chat and build a new animation with the skill from the beginning, or hand it an animation made without it and ask for a cleanup. Either way, it first asks whether the piece is an asset or a component. If it's a component, it stops and writes a spec for building it as a proper Makeswift component, instead of forcing it into an embed.</p><p>For an asset, it fixes instead of suggesting. Off-brand colors snap to tokens, low-contrast text gets darker, and every change is listed. If a designer says "keep the green," it stays, marked as approved.</p>`,
+        heading: "The skill fixes the code and lists every change",
+        body: `<p>Designers can build a new animation with the skill from the start, or hand it an existing one to clean up. It first checks whether the piece is an asset or a component, and for a component it writes a spec instead of forcing it into an embed.</p><p>For an asset, it snaps off-brand colors to tokens, darkens low-contrast text, and lists every change. If a designer says "keep the green," it stays, marked as approved.</p>`,
       },
       {
         type: "imageGrid",
@@ -340,7 +344,7 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        body: `<p>Then it checks its own work. On the Shopping Agent animation, the cleaned-up version matched the original frame for frame, apart from the intended color fixes.</p>`,
+        body: `<p>On the Shopping Agent animation, the cleaned-up version matched the original frame for frame, apart from the intended color fixes.</p>`,
       },
       {
         type: "imageGrid",
@@ -349,19 +353,19 @@ export const projects: Project[] = [
           {
             src: "/project-claude-embed-before-after.webp",
             alt: "Two copies of the Shopping Agent animation side by side in the Makeswift builder, labeled Pre-skill and Post-skill, both showing a Knowledge Document upload in progress",
-            caption: "Before and after the skill. Nearly identical by design. The one visible change is darker gray text that now passes contrast.",
+            caption: "Before and after the skill. The one visible change is darker gray text that now passes contrast.",
           },
         ],
       },
       {
         type: "text",
-        heading: "Testing It With the Team",
-        body: `<p>Before rollout, a developer, an SEO specialist, the web dev lead and a fellow designer all reviewed it. The SEO review added search rules and caught two contradictions, which I fixed. The designer ran his own concept through it. It flagged critical issues in his original, and he found three gaps in the skill itself, which I closed.</p>`,
+        heading: "Four colleagues reviewed the skill, and each review changed it",
+        body: `<ul><li><strong>Developer.</strong> Their review of the marquee code set the first four rules.</li><li><strong>SEO specialist.</strong> Added search rules, like no headings or content links inside an asset, caught a conflict with the accessibility rules, and moved the search checks higher.</li><li><strong>Web dev lead.</strong> Settled ownership, so this skill replaces our old embed skill.</li><li><strong>Designer.</strong> Ran their own concept through it and found three gaps: it refused assets that carry text, assumed the markup was the finished state, and clashed with mocks of our product's UI. I closed all three.</li></ul>`,
       },
       {
         type: "text",
-        heading: "Where It Landed",
-        body: `<p>From Claude to a live page, without a ticket: paste the code, and the asset runs. The skill is my way of scaling a developer's judgment. I turned one review into rules the tool applies on its own, then built the riskiest ones into the component so they can't happen at all. Review still happens, but once, for the system. The component is in use on our sites now.</p>`,
+        heading: "Animation now goes live without a ticket",
+        body: `<p>Designers paste the cleaned-up code, and the asset runs. I turned one developer's review into rules the skill applies on its own, then built the riskiest ones into the component so they can't happen at all. Review still happens once, for the system, and the component is in use on our sites now.</p>`,
       },
       {
         type: "process",
@@ -1048,7 +1052,7 @@ export const projects: Project[] = [
     description: "A Claude skill that turns an Asana ticket into a ready-to-design Figma file: template, cover, brand mode, and folder, set up in one step.",
     ogImage: "/figma-thumbnail-cover.png",
     thumbnail: "/skill-slash-command-animated-dark.svg",
-    showOnHomepage: true,
+    showOnHomepage: false,
     tags: ["Claude Skill", "Automation", "Design System"],
     tools: ["Claude", "Figma", "Asana"],
     client: "Commerce (Internal)",
