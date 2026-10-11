@@ -201,10 +201,10 @@ export const projects: Project[] = [
     ogImage: "/project-claude-embed-cover.png",
     thumbnail: "/project-claude-embed-thumbnail-animated.svg",
     showOnHomepage: false,
-    tags: ["Claude Code", "Claude Skill", "Automation"],
+    tags: ["Component Design", "Claude Skill", "Automation"],
     tools: ["Claude Code", "Claude", "Makeswift", "GSAP"],
-    client: "Commerce",
-    clientUrl: "https://www.commerce.com/",
+    client: "BigCommerce",
+    clientUrl: "https://www.bigcommerce.com/",
     content: [
       {
         type: "text",
