@@ -90,6 +90,8 @@ export interface ProcessStep {
   label: string;
   /** Marks the step where work waited, so the slow spot stands out. */
   slow?: boolean;
+  /** Marks the finished outcome in green. */
+  success?: boolean;
 }
 
 export interface ProcessRow {
@@ -103,6 +105,28 @@ export interface ProcessRow {
 export interface ProcessBlock {
   type: "process";
   rows: ProcessRow[];
+  caption?: string;
+}
+
+export interface PathwayOption {
+  title: string;
+  note?: string;
+}
+
+/**
+ * A two-way choice that resolves into a breakdown: the chosen option is
+ * selected, the other dims with a short note on where it goes instead, and
+ * a line drops into the columns underneath. Plays once as it scrolls into
+ * view; without script or with reduced motion it shows the settled state.
+ */
+export interface PathwayBlock {
+  type: "pathway";
+  question: string;
+  chosen: PathwayOption & { badge: string };
+  other: PathwayOption & { outcome: string };
+  /** Overline on the panel the chosen option opens into. */
+  panelLabel: string;
+  columns: FlowColumn[];
   caption?: string;
 }
 
@@ -143,7 +167,8 @@ export type ContentBlock =
   | FlowBlock
   | VersusBlock
   | SplitBlock
-  | ProcessBlock;
+  | ProcessBlock
+  | PathwayBlock;
 
 export interface Project {
   slug: string;
@@ -204,6 +229,11 @@ export const projects: Project[] = [
       },
       {
         type: "text",
+        heading: "Asset or Component?",
+        body: `<p>Before building anything for this project, I started with one question: is this an asset or a component? An asset, like an animation or an interactive graphic, is fixed content that looks and works the same wherever it appears. A component is something editors need to change or reuse, like a carousel that gets different slides on every page. Components already had a path: a developer builds them. Assets didn't, and that's the gap this project closes.</p>`,
+      },
+      {
+        type: "text",
         heading: "The Real Bottleneck",
         body: `<p>Building animation ourselves is still new for us. We used to hire a freelance animator or ask our video producer, which took even longer. Then we started building animations in Claude, and an idea could turn into a working asset in an afternoon.</p><p>Getting it onto the site became the slow part. Every embed still went through a ticket and a developer's code review. The review mattered, because Makeswift's default embed drops code straight into the live page, where it can change fonts, shift the layout, or break other scripts. The goal was to keep the review, but do it once for the system instead of for every embed.</p>`,
       },
@@ -232,40 +262,15 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        heading: "Asset or Component?",
-        body: `<p>Every new piece starts with one question. An asset, like an animation or an interactive graphic, looks and works the same wherever it appears. Assets are what this project makes self-serve. A component is something editors need to change, or reuse with different content, so it still goes to a developer. If editors never need to change it, it's an asset.</p>`,
-      },
-      {
-        type: "flow",
-        columns: [
-          {
-            title: "Asset",
-            note: "Fixed content, like an animation",
-            steps: [
-              { label: "Built in Claude", note: "Cleaned up by the skill" },
-              { label: "Pasted into Claude Embed", note: "On one page or several" },
-            ],
-            result: "No developer needed",
-          },
-          {
-            title: "Component",
-            note: "Editors change it or reuse it",
-            accent: true,
-            steps: [
-              { label: "The skill writes a spec", note: "Instead of building it" },
-              { label: "A developer builds and registers it", note: "So editors can change it in Makeswift" },
-            ],
-            result: "Goes to a developer",
-          },
-        ],
-      },
-      {
-        type: "text",
         heading: "What I Built",
-        body: `<p>I'm now building directly in our codebase with Claude Code, and this is one of the first components I've made that way. It's being built for all three of our brand sites. Two pieces work together:</p><ul><li><strong>The Claude Embed component</strong> runs pasted code in its own walled-off space, so it can't touch the rest of the page.</li><li><strong>The embed-asset skill</strong> checks and fixes a designer's code before it goes in.</li></ul>`,
+        body: `<p>I'm now building directly in our codebase with Claude Code, and this is one of the first components I've made that way. It's being built for all three of our brand sites. For the asset path, two pieces work together: the Claude Embed component runs pasted code in its own walled-off space, so it can't touch the rest of the page, and the Embed Asset skill checks and fixes a designer's code before it goes in.</p>`,
       },
       {
-        type: "flow",
+        type: "pathway",
+        question: "Asset or component?",
+        chosen: { title: "Asset", note: "Fixed content, like an animation", badge: "This project" },
+        other: { title: "Component", note: "Reusable and editable, like a carousel", outcome: "A developer builds it" },
+        panelLabel: "The asset path: what I built",
         columns: [
           {
             title: "Claude Embed component",
@@ -278,7 +283,7 @@ export const projects: Project[] = [
             result: "Protects the page",
           },
           {
-            title: "embed-asset skill",
+            title: "Embed Asset skill",
             note: "Runs on every asset",
             accent: true,
             steps: [
@@ -289,7 +294,7 @@ export const projects: Project[] = [
             result: "Protects the brand",
           },
         ],
-        caption: "How the component and the skill split the work",
+        caption: "Assets take the self-serve path. Components still go to a developer.",
       },
       {
         type: "versus",
@@ -307,7 +312,7 @@ export const projects: Project[] = [
       {
         type: "split",
         heading: "Editor Panel UI",
-        body: `<p>Editors, not developers, use this panel, so I designed the UX around what they reach for. Embed code sits up front, and everything else folds into groups named by task:</p><ul><li><strong>Placeholder image.</strong> The still that shows while the embed loads. Search engines read it, and "Load immediately" covers above-the-fold use.</li><li><strong>Size &amp; layout.</strong> Spacing and aspect ratio. The embed usually sets its own ratio, so editors can leave it alone.</li><li><strong>Loading &amp; mobile.</strong> Run only when visible, or skip on mobile.</li><li><strong>Appearance.</strong> Border, background color and corner radius, on our 4px scale.</li><li><strong>Accessibility.</strong> A label, or a "Decorative only" switch.</li><li><strong>Debugging.</strong> Show errors, off by default.</li></ul><p>The order matches our other components, the labels use plain words ("Embed code," not "HTML"), and safe defaults mean most editors never open a group.</p>`,
+        body: `<p>Editors, not developers, use this panel, so I designed the UX around what they reach for. Embed code sits up front, and everything else folds into groups named by task:</p><ul><li><strong>Placeholder image.</strong> The still that shows while the embed loads. Search engines read it, and "Load immediately" covers above-the-fold use.</li><li><strong>Size &amp; layout.</strong> Spacing and aspect ratio. The embed usually sets its own ratio, so editors can leave it alone.</li><li><strong>Loading &amp; mobile.</strong> Run only when visible, or skip on mobile.</li><li><strong>Appearance.</strong> Border, background color and corner radius, on our 4px scale.</li><li><strong>Accessibility.</strong> A label, or a "Decorative only" switch.</li><li><strong>Debugging.</strong> Show errors, off by default.</li></ul>`,
         image: {
           src: "/project-claude-embed-panel.webp",
           alt: "Makeswift properties panel for Claude Embed: an Embed code text area and a Width field, then collapsed groups for Placeholder image, Size and layout, Loading and mobile, Appearance, Accessibility and Debugging",
@@ -383,7 +388,7 @@ export const projects: Project[] = [
             steps: [
               { label: "A designer builds it with the skill" },
               { label: "Pasted into Claude Embed" },
-              { label: "Live on the site" },
+              { label: "Live on the site", success: true },
             ],
           },
         ],

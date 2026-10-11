@@ -210,6 +210,57 @@ const schema = [
                 );
               }
 
+              if (block.type === "pathway") {
+                return (
+                  <figure class="pathway" data-pathway>
+                    <div class="flow-node flow-question">{block.question}</div>
+                    <div class="flow-split" aria-hidden="true" />
+                    <div class="pathway-options">
+                      <div class="pathway-option is-chosen">
+                        <span class="pathway-badge">{block.chosen.badge}</span>
+                        <strong>{block.chosen.title}</strong>
+                        {block.chosen.note && <small>{block.chosen.note}</small>}
+                      </div>
+                      <div class="pathway-option is-other">
+                        <strong>{block.other.title}</strong>
+                        {block.other.note && <small>{block.other.note}</small>}
+                        <span class="pathway-outcome">{block.other.outcome}</span>
+                      </div>
+                    </div>
+                    <div class="pathway-link" aria-hidden="true" />
+                    <div class="pathway-panel">
+                      <p class="pathway-panel-label">{block.panelLabel}</p>
+                      <div class="flow-cols" style={`--flow-cols: ${block.columns.length}`}>
+                        {block.columns.map((col) => (
+                          <div class:list={["flow-col", "pathway-col", { "is-accent": col.accent }]}>
+                            <div class="flow-node flow-title">
+                              {col.title}
+                              {col.note && <small>{col.note}</small>}
+                            </div>
+                            <div class="flow-arrow" aria-hidden="true" />
+                            <ul class="flow-steps">
+                              {col.steps.map((step) => (
+                                <li class="flow-node flow-step">
+                                  {step.label}
+                                  {step.note && <small>{step.note}</small>}
+                                </li>
+                              ))}
+                            </ul>
+                            {col.result && (
+                              <>
+                                <div class="flow-arrow" aria-hidden="true" />
+                                <div class="flow-node flow-result">{col.result}</div>
+                              </>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    {block.caption && <figcaption>{block.caption}</figcaption>}
+                  </figure>
+                );
+              }
+
               if (block.type === "process") {
                 return (
                   <figure class="process">
@@ -221,7 +272,7 @@ const schema = [
                         </p>
                         <ol class="process-steps">
                           {row.steps.map((step) => (
-                            <li class:list={["process-step", { "is-slow": step.slow }]}>{step.label}</li>
+                            <li class:list={["process-step", { "is-slow": step.slow, "is-success": step.success }]}>{step.label}</li>
                           ))}
                         </ol>
                       </div>
@@ -892,6 +943,217 @@ const schema = [
     }
   }
 
+  .process-row .process-step.is-success {
+    background: var(--color-positive-bg);
+    border-color: var(--color-positive-border);
+    color: var(--color-positive);
+  }
+
+  /* ---------- Pathway: a choice that opens into a breakdown ---------- */
+
+  .pathway {
+    --flow-line: var(--color-border-strong);
+    --pathway-ease: var(--ease-standard);
+    margin: 0 0 var(--space-6);
+    max-width: 40rem;
+  }
+
+  .pathway-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--space-3);
+  }
+
+  .pathway-option {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-4) var(--space-3);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    text-align: center;
+    font-size: var(--text-s);
+    transition:
+      opacity var(--duration-moderate) var(--pathway-ease),
+      transform var(--duration-moderate) var(--pathway-ease),
+      background-color var(--duration-moderate) var(--pathway-ease),
+      border-color var(--duration-moderate) var(--pathway-ease),
+      box-shadow var(--duration-moderate) var(--pathway-ease);
+  }
+
+  .pathway-option strong {
+    font-weight: var(--weight-medium);
+  }
+
+  .pathway-option small {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .pathway-option.is-chosen {
+    background: var(--color-accent-bg);
+    border-color: var(--color-link);
+    box-shadow: 0 0 0 1px var(--color-link);
+  }
+
+  .pathway-badge {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0 var(--space-2);
+    border-radius: var(--radius-full);
+    background: var(--color-link);
+    color: #ffffff;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: 1.6;
+    white-space: nowrap;
+    transition: opacity var(--duration-moderate) var(--pathway-ease);
+  }
+
+  .pathway-option.is-other {
+    opacity: 0.6;
+  }
+
+  .pathway-outcome {
+    margin-top: var(--space-1);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .pathway-outcome::before {
+    content: "\2192\00a0";
+  }
+
+  /* The drop from the chosen option, centred under the left column. */
+  .pathway-link {
+    width: var(--border-width);
+    height: var(--space-6);
+    margin-left: calc(25% - var(--space-3) / 4);
+    background: var(--color-link);
+    transform-origin: top;
+    transition: transform var(--duration-moderate) var(--pathway-ease);
+  }
+
+  .pathway-panel {
+    padding: var(--space-4);
+    border: var(--border-width) solid var(--color-accent-border);
+    border-radius: var(--radius-lg);
+    transition:
+      opacity var(--duration-moderate) var(--pathway-ease),
+      transform var(--duration-moderate) var(--pathway-ease);
+  }
+
+  .pathway-panel-label {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-link);
+  }
+
+  .pathway-col {
+    transition:
+      opacity var(--duration-moderate) var(--pathway-ease),
+      transform var(--duration-moderate) var(--pathway-ease);
+  }
+
+  .pathway figcaption {
+    margin-top: var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  /* Armed by script before it scrolls into view: start unselected, then
+     play the choice and the reveal in sequence once it's on screen. */
+  .pathway.is-armed .pathway-option {
+    opacity: 0;
+    transform: translateY(var(--space-2));
+  }
+
+  .pathway.is-armed .pathway-option.is-chosen {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+    box-shadow: none;
+  }
+
+  .pathway.is-armed .pathway-badge {
+    opacity: 0;
+  }
+
+  .pathway.is-armed .pathway-link {
+    transform: scaleY(0);
+  }
+
+  .pathway.is-armed .pathway-panel,
+  .pathway.is-armed .pathway-col {
+    opacity: 0;
+    transform: translateY(var(--space-3));
+  }
+
+  .pathway.is-armed.is-revealed .pathway-option {
+    opacity: 1;
+    transform: none;
+  }
+
+  .pathway.is-armed.is-revealed .pathway-option.is-other {
+    opacity: 0.6;
+  }
+
+  .pathway.is-armed.is-revealed .pathway-option.is-chosen {
+    background: var(--color-accent-bg);
+    border-color: var(--color-link);
+    box-shadow: 0 0 0 1px var(--color-link);
+    transition-delay: 0s, 0s, 0.9s, 0.9s, 0.9s;
+  }
+
+  .pathway.is-armed.is-revealed .pathway-badge {
+    opacity: 1;
+    transition-delay: 1s;
+  }
+
+  .pathway.is-armed.is-revealed .pathway-link {
+    transform: none;
+    transition-delay: 1.4s;
+  }
+
+  .pathway.is-armed.is-revealed .pathway-panel {
+    opacity: 1;
+    transform: none;
+    transition-delay: 1.7s;
+  }
+
+  .pathway.is-armed.is-revealed .pathway-col {
+    opacity: 1;
+    transform: none;
+  }
+
+  .pathway.is-armed.is-revealed .pathway-col:nth-child(1) {
+    transition-delay: 2s;
+  }
+
+  .pathway.is-armed.is-revealed .pathway-col:nth-child(2) {
+    transition-delay: 2.25s;
+  }
+
+  @media (max-width: 640px) {
+    .pathway-panel {
+      padding: var(--space-3);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pathway *,
+    .pathway-link {
+      transition: none !important;
+    }
+  }
+
   /* ---------- Copy beside a narrow image ---------- */
 
   .split {
@@ -1151,4 +1413,27 @@ const schema = [
       });
     });
   });
+</script>
+
+<script>
+  // Plays each pathway diagram once as it comes into view. Without this
+  // script, or with reduced motion, the settled state shows from the start.
+  const pathways = document.querySelectorAll<HTMLElement>("[data-pathway]");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (pathways.length && !reduce && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add("is-revealed");
+          io.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.35 },
+    );
+    for (const el of pathways) {
+      el.classList.add("is-armed");
+      io.observe(el);
+    }
+  }
 </script>
