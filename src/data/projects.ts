@@ -208,7 +208,7 @@ export const projects: Project[] = [
     content: [
       {
         type: "text",
-        body: `<p>Designers on our team can build an animation with Claude in an afternoon, but getting it onto our website was slow. Each one needed a ticket and a developer's code review before it could go live. That review matters, because code added to a web page can change fonts, shift the layout, or break other parts of the site. Before Claude, we hired a freelance animator or asked our video producer, which took even longer. I wanted to remove the wait without losing that protection.</p>`,
+        body: `<p>Designers on our team can build an animation with Claude in an afternoon, but getting it onto our website was slow. To go live, each one needed either a ticket for a developer to review the code, or a request to build it as a new component, which is a lot of work for a one-off animation. That review matters, because code added to a web page can change fonts, shift the layout, or break other parts of the site. Before Claude, we hired a freelance animator or asked our video producer, which took even longer. I wanted to remove the wait without losing that protection.</p>`,
       },
       {
         type: "process",
