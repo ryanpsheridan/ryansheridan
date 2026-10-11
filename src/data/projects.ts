@@ -676,7 +676,7 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        heading: "What I Recommend",
+        heading: "Build the system in the order people need it",
         body: `<p>If you're doing a rebrand and a platform move at the same time, build the system in the order people will need it. Tokens first, so the brand has names before it has pages. Then documentation, so developers build from specs instead of screenshots. Then a review process with real sign-offs, so "done" means the same thing to design, publishing, and SEO.</p><p>The real test of a design system is whether someone who wasn't on the project can build a page next quarter without breaking anything. That's what we built this for.</p>`,
       },
     ],
@@ -697,7 +697,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "The Opportunity",
-        body: `<p>Commerce is the parent company behind <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> and <a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a>. Three brands, each with its own colors, type, and voice, and one design team supporting all of them.</p><p>A lot of what reaches that team isn't design work. It's a sales deck that needs to look right, a team update for leadership, a partner overview due tomorrow. Most of the time people build these themselves in Google Slides, and every deck passes through a lot of hands. By the time it reaches the brand team, the fonts have drifted, the colors are close but not quite right, and a logo is stretched. Reviewing all of that takes time the brand team doesn't have.</p><p>When <strong>Claude Design</strong> came out, I wanted to learn it properly, not just try it. A design system in Claude Design isn't a library you reference. It's an environment that builds with you, and anyone at the company can open it. That made it a real chance to give people a way to make on-brand work without a designer in the room.</p><p>Here is what this covers:</p><ul><li>Who it's for and what it had to do</li><li>How I learned the tool and built the systems</li><li>Three brands, three systems</li><li>Decks, the biggest time saver</li><li>From a brief to a finished deck</li><li>Rolling it out</li><li>What I recommend</li></ul>`,
+        body: `<p>Commerce is the parent company behind <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> and <a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a>: three brands, each with its own colors, type, and voice, and one design team supporting all of them.</p><p>A lot of what reaches that team is decks, built in Google Slides by people outside design. We had already given them a template deck with more than 100 slides, and from a brand standpoint it makes sense to ask people to stick to it. In reality, that's hard to do under deadline with no design background. Copy blew past the character counts, slides filled with text, and cleanup reached us very last minute, with fonts drifted and logos stretched. We had no way to manage how the template was used.</p><p>When <strong>Claude Design</strong> came out, I saw a way to meet them where they are: a system anyone at the company can open, so people can make on-brand work without a designer in the room.</p><p>Here is how the project breaks down:</p><ul><li><strong>Users and context.</strong> Everyone building decks, and the brand team absorbing last-minute cleanup.</li><li><strong>Process.</strong> Goals first, one system per brand, and a new rule after every deck that went wrong.</li><li><strong>Collaboration.</strong> The line between self-serve decks and designer-reviewed PDFs was drawn with our creative director.</li><li><strong>Technical.</strong> Each system builds from the same three inputs, and a preflight check enforces the rules.</li></ul>`,
       },
       {
         type: "imageGrid",
@@ -713,22 +713,17 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Who It's For",
-        body: `<p>This wasn't built for designers first. It was built for everyone else at the company: sales, marketing, product, content writers, and leadership, all the way up to our CEO. The goal was to take weight off the brand team, not to add another tool for designers.</p><p>That changed how I built it. A designer knows what a token is and why a logo needs clear space. Most people opening this don't, and shouldn't have to. So every brand rule had to live inside the system, where it applies on its own, rather than in a guideline doc someone has to find and read first.</p>`,
-      },
-      {
-        type: "text",
-        heading: "The Goals",
-        body: `<p>Before building anything, I wrote down what the systems had to do:</p><ul><li><strong>On brand without a designer.</strong> Someone who has never opened a brand guide should still get colors, type, logos, and voice right.</li><li><strong>One system per brand.</strong> Commerce, BigCommerce, and Feedonomics each get their own system, and none of them borrow from the others.</li><li><strong>Rules live in the system, not the prompt.</strong> If a rule only exists in a prompt, it depends on someone typing it. If it lives in the system, everyone gets it for free.</li><li><strong>Get people 90% of the way there.</strong> The system handles layout, type, and brand. People add their own images and final details.</li></ul>`,
+        body: `<p>This was built for everyone outside design: sales, marketing, product, content writers, and leadership, all the way up to our CEO. They had two kinds of need. Anyone building a deck wanted to get it done quickly without anything slowing them down. The brand team needed last-minute cleanup requests to stop and needed to trust that what went out under our brands was consistent. I learned what each group needed from the work itself: the requests landing in our queue, the decks that came back overloaded with copy, and the pressure last-minute cleanup put on the designers.</p><p>Most people opening this don't know what a token is or why a logo needs clear space, and shouldn't have to. So I set four goals before building anything:</p><ul><li><strong>On brand without a designer.</strong> Someone who has never opened a brand guide still gets colors, type, logos, and voice right.</li><li><strong>One system per brand.</strong> None of them borrow from the others.</li><li><strong>Rules live in the system, not the prompt.</strong> A rule in a prompt depends on someone typing it. A rule in the system applies to everyone.</li><li><strong>Get people 90% of the way there.</strong> The system handles layout, type, and brand, and people add their own images and final details.</li></ul>`,
       },
       {
         type: "text",
         heading: "Learning the Tool",
-        body: `<p>Every system started the same way, from three documents: the brand guidelines, a token spec exported from our <a href="/work/commerce-multi-brand-system">multi-brand Figma system</a>, and an output spec listing what the system should produce and at what size. From those, Claude Design built the tokens, type, logos, voice rules, a marketing UI kit, and a slide system for each brand. Because every system started from the same three inputs, the process is repeatable for any brand we add later.</p><p>Getting from a first draft to something people could trust took a lot of iteration, and two habits made that faster.</p><p><strong>I talked to it like a designer.</strong> Most of my requests were dictated in plain language, the same way I'd give feedback in a design review. "This illustration feels basic, here's a spacing and grid style I like, make it a light version in our colors." "Cards across the deck feel too bubbly, tighten them up." When a slide went too far, I asked for simpler options, and got a detailed, a medium, and a simple version to choose from.</p><p><strong>I used Claude as a second opinion.</strong> For bigger fixes, I'd let Claude Design investigate and propose a plan, then paste that into a separate Claude chat to pressure-test it. Claude would help me make the calls and write back a precise answer, and I'd paste that into Claude Design. Going back and forth between the two caught bugs faster than either one alone, and made sure every fix landed at the system level instead of on one slide.</p>`,
+        body: `<p>Every system started from the same three documents: the brand guidelines, a token spec exported from our <a href="/work/commerce-multi-brand-system">multi-brand Figma system</a>, and an output spec listing what the system should produce and at what size. From those, Claude Design built the tokens, type, logos, voice rules, a marketing UI kit, and a slide system for each brand, and the same process works for any brand we add later.</p><p>Getting from a first draft to something people could trust took a lot of iteration, and two habits made it faster. <strong>I talked to it like a designer</strong>, dictating feedback the way I would in a design review: "Cards across the deck feel too bubbly, tighten them up." <strong>I used a second Claude chat as a second opinion.</strong> I'd paste Claude Design's proposed fix into it to pressure-test it, then paste the answer back. That caught bugs faster than either one alone and kept every fix at the system level instead of on one slide.</p>`,
       },
       {
         type: "text",
         heading: "Three Brands, Three Systems",
-        body: `<p>My first instinct was one system for every brand. It didn't work. When brands share a system, everything starts to blend: Feedonomics pages pick up BigCommerce styling, and sister-brand logos show up where they shouldn't. People can hold brand context in their heads. AI can't, and if two things can be confused, they will be.</p><p>So each brand got its own system, and each one forbids the others' tokens, type, and visuals. The same principle runs through our Figma library: shared foundations, separate brands.</p>`,
+        body: `<p>My first instinct was one system for every brand, and it didn't work. When brands share a system, Feedonomics pages pick up BigCommerce styling and sister-brand logos show up where they shouldn't. People can hold brand context in their heads, and AI can't. So each brand got its own system, and each one forbids the others' tokens, type, and visuals, the same principle as our Figma library: shared foundations, separate brands.</p>`,
       },
       {
         type: "componentTable",
@@ -750,11 +745,11 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Decks, the Biggest Time Saver",
-        body: `<p>Of everything the systems can make, decks save the most time. They're also the thing people outside design build most often, and the thing that drifts off brand fastest.</p><p>Each system has its own slide set at 1920×1080: covers, section dividers, content, stats, big quotes, card grids, tables, and closing slides. Someone picks a brand, describes what they need in plain language, and gets a deck that is already on brand. It isn't perfect. But it gets them about 90% of the way there, and they finish it by adding their own images and a few details. For the brand team, that means decks show up already using the right type, color, and logos.</p>`,
+        body: `<p>Decks save the most time. They're the thing people outside design build most often, and the thing that drifts off brand fastest.</p><p>Each system has its own slide set at 1920×1080: covers, section dividers, content, stats, big quotes, card grids, tables, and closing slides. Someone picks a brand, describes what they need in plain language, and gets a deck that is already on brand, about 90% of the way there. They finish it with their own images and a few details.</p><p>The original template deck asked people to follow character counts, and most didn't. Instead of asking anyone to count characters, the system builds limits into the layouts. Headlines and quotes step down in size as they get longer, a feature-card slide holds two to four cards, only one phrase per slide can be highlighted, and nothing enters the footer zone. A preflight check flags text at risk of clipping.</p>`,
       },
       {
         type: "text",
-        body: `<h3>The template</h3><p>The Commerce template deck, plus a few of the extra layouts the system can pull from.</p>`,
+        body: `<h3>The Claude Design template</h3><p>The Commerce template deck built in Claude Design, plus a few of the extra layouts the system can pull from.</p>`,
       },
       {
         type: "carousel",
@@ -775,12 +770,12 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        heading: "From a Brief to a Finished Deck",
-        body: `<p>To show what that looks like, I wrote a short brief the way a coworker would: plain notes, no design direction, just the copy for each slide and a line saying "keep it simple, most people watching aren't designers." I dropped it into the Commerce system and asked for a deck.</p><p>This is what came back. I named a few layouts, like stats and a big quote, and the system handled the rest. The content is nothing like the template deck above, but every slide follows the same rules:</p><ul><li><strong>Logo placement.</strong> The Commerce logo sits in the same bottom-left spot on every content slide, with the same clear space.</li><li><strong>Page numbers.</strong> Always bottom right, same size, same color, and left off the cover.</li><li><strong>Legal line.</strong> "© Commerce. All rights reserved. Confidential." runs up the right edge of every slide.</li><li><strong>Type and spacing.</strong> Headlines, body copy, and cards share one type scale and the same margins from slide to slide.</li><li><strong>Color.</strong> Surfaces stay in the Commerce palette, and a row of stats shares one color.</li></ul><p>That's the part that takes the load off the brand team. Anyone can write the notes. The system makes sure the result looks like Commerce.</p>`,
+        heading: "From Sample Copy to a Finished Deck",
+        body: `<p>To test it, I wrote a sample copy doc the way a coworker would: plain notes with the copy for each slide, no design direction, and a line saying "keep it simple, most people watching aren't designers." I gave it to the Commerce system, named a few layouts like stats and a big quote, and the system handled the rest. The deck's content is just that sample copy, so it looks nothing like the template above, but every slide follows the same rules:</p><ul><li><strong>Chrome.</strong> On content slides the Commerce logo sits bottom left and the page number bottom right, and the legal line runs up the right edge of every slide.</li><li><strong>Type and spacing.</strong> Headlines, body copy, and cards share one type scale and the same margins from slide to slide.</li><li><strong>Color.</strong> Surfaces stay in the Commerce palette, and a row of stats shares one color.</li></ul><p>Anyone can write the notes. The system makes sure the result looks like Commerce.</p>`,
       },
       {
         type: "text",
-        body: `<h3>The output</h3><p>The deck the Commerce system built from that brief.</p>`,
+        body: `<h3>The output</h3><p>The deck the Commerce system built from that sample copy doc.</p>`,
       },
       {
         type: "carousel",
@@ -801,38 +796,27 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        heading: "Templates for Repeat Work",
-        body: `<p>Some requests come in over and over with the same structure. For those, I build templates inside the system, so the layout rules are locked in and only the content changes. The BigCommerce system has a one-pager and whitepaper template and a case study one-pager. The case study template grew into its own project: <a href="/work/claude-design-case-study-pdfs">a case study PDF system</a> that replaced hand-built InDesign files.</p>`,
-      },
-      {
-        type: "imageGrid",
-        framed: true,
-        images: [
-          {
-            src: "/project-brand-systems-templates.webp",
-            alt: "Claude Design's templates list showing a BigCommerce Case Study One-Pager and a BigCommerce One-Pager / Whitepaper, both built on the Marketing BigCommerce design system",
-            caption: "Templates built on the BigCommerce system",
-          },
-        ],
-      },
-      {
-        type: "text",
         heading: "Rules Written From Real Decks",
-        body: `<p>Most of the rules in the deck systems exist because a deck went wrong. A logo got a vertical line and a tagline next to it. A row of cards got a different accent color on each one. Three stats came back in three different colors. Each time, the fix went into the system, not into one deck, so it never happened again.</p><p>The Commerce system goes one step further. It runs a check on every deck and flags anything that breaks a brand rule: an accent color used as a background, a logo without enough clear space, more than one highlighted phrase on a slide. Problems get caught before anyone on the brand team has to review them.</p><p>That's the part of design systems work that rarely makes it into a portfolio: the patient job of writing rules in response to failure. It's most of the actual craft.</p>`,
+        body: `<p>Most of the rules in the deck systems exist because a deck went wrong. A logo got a vertical line and a tagline next to it. A row of cards got a different accent color on each one. Three stats came back in three different colors. Each time, the fix went into the system, not into one deck, so it never happened again.</p><p>The Commerce system goes one step further. It runs a check on every deck and flags anything that breaks a brand rule: an accent color taking over too much of a slide, more than one highlighted phrase, text below the size floor, a hand-built footer, a paraphrased legal line. Problems get caught before anyone on the brand team has to review them.</p><p>That's the part of design systems work that rarely makes it into a portfolio: the patient job of writing rules in response to failure. It's most of the actual craft.</p>`,
       },
       {
         type: "text",
         heading: "Who Uses It for What",
-        body: `<p>Not every asset carries the same risk. A rough wireframe that's slightly off costs nothing. A deck that's off brand in front of a customer can't. I worked through where the lines should sit with our creative director, who brought the view of how requests actually move through the creative team day to day. We decided based on stakes:</p><ul><li><strong>Decks are self-serve.</strong> The slide system has tight enough structure to hold the brand on its own.</li><li><strong>One-pagers and PDFs go through design.</strong> The system handles the layout, and a designer finishes and reviews it. I wrote about that in the <a href="/work/claude-design-case-study-pdfs">case study PDF system</a>.</li><li><strong>Landing page wireframes start in Claude Design.</strong> It's quick at turning a brief into a page built from the brand's real sections, so the web team starts from a structure instead of a blank page.</li></ul>`,
+        body: `<p>Not every asset carries the same risk. A rough wireframe that's slightly off costs nothing. A deck that's off brand in front of a customer can't. I worked through where the lines should sit with our creative director, who brought the view of how requests actually move through the creative team day to day, and we decided based on stakes:</p><ul><li><strong>Decks are self-serve.</strong> The slide system has tight enough structure to hold the brand on its own.</li><li><strong>One-pagers and PDFs go through design.</strong> The system handles the layout, and a designer finishes and reviews it. The case study template grew into its own project, <a href="/work/claude-design-case-study-pdfs">a case study PDF system</a> that replaced hand-built InDesign files.</li><li><strong>Landing page wireframes start in Claude Design.</strong> The web team starts from a structure instead of a blank page.</li></ul>`,
       },
       {
         type: "text",
         heading: "Rolling It Out",
-        body: `<p>A system only helps if people know it exists and trust it. I recorded a five-minute Loom that walks through what the systems are, how to start a deck, and how they fit into the way people already work. Because most of the people it's for aren't designers, the video skips tokens and components and focuses on the steps: pick your brand, describe what you need, add your images, share.</p><p>Commerce is set as the org default, so anyone who starts a new project in Claude Design lands on the parent brand unless they choose BigCommerce or Feedonomics.</p>`,
+        body: `<p>A system only helps if people know it exists and trust it. I recorded a five-minute Loom that walks through the steps and skips tokens and components, because most of the people it's for aren't designers: pick your brand, describe what you need, add your images, share. Commerce is set as the org default, so anyone starting a new project in Claude Design lands on the parent brand unless they choose BigCommerce or Feedonomics.</p>`,
       },
       {
         type: "text",
-        heading: "What I Recommend",
+        heading: "What I Can and Can't Measure",
+        body: `<p>The clearest signal I have is our Asana queue. Since the systems went live, deck requests have taken a smaller share of design intake, and a handful of review and proof requests still come in, mostly from partner and event teams the deck system wasn't built for.</p><p>Asana can't show the outcome I cared about most. A deck someone builds in Claude Design never becomes a ticket, so the work that no longer reaches the brand team appears nowhere in the data. I don't have usage counts from Claude Design yet, so my next step is getting that visibility, along with extending the system to the partner and event decks that still come to us.</p>`,
+      },
+      {
+        type: "text",
+        heading: "Build it for the people who aren't designers",
         body: `<p>If you're building a design system in Claude Design, build it around the people who aren't designers. Start from real specs, not screenshots, so every system is built the same way. Give each brand its own system, because AI doesn't handle ambiguity well. Put every rule in the system instead of the prompt. And aim for 90%, not 100%. Letting people finish the last 10% themselves is what makes them want to use it.</p>`,
       },
     ],
@@ -1048,7 +1032,7 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        heading: "My Recommendation",
+        heading: "Treat it as an 80/20 job",
         body: `<p>Treat case study PDFs as an 80/20 job. Claude Design is very good at structure: layout, type, pagination, and staying on brand across seven pages. Designers are still the right people for the last 20%, choosing imagery and catching the small spacing issues an import can introduce. That matches how we tiered our <a href="/work/brand-systems-claude-design">brand systems in Claude Design</a>: PDFs go through design, and the system does the heavy lifting first.</p><p>In practice, that means three things. Keep the rules in the template, not in the prompt. Refine in Claude Design before exporting, while changes are cheap. And make standalone HTML with html.to.design the default route into Figma, so every file arrives with its fonts and images intact.</p>`,
       },
     ],
