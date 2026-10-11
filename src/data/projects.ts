@@ -208,6 +208,10 @@ export const projects: Project[] = [
     content: [
       {
         type: "text",
+        body: `<p>We wanted more animation on our website, but making and publishing it depended on developers or outside help. Claude made animations easier to create, but getting them onto the site safely still meant a technical review every time.</p><p>I set out to close that gap: give designers more independence, while making sure every animation still meets our standards for brand, accessibility, and performance.</p>`,
+      },
+      {
+        type: "text",
         heading: "It Started With a Marquee",
         body: `<p>Our team designed a marquee of component pills in Figma for the <a href="https://www.bigcommerce.com/product/store-design/" target="_blank" rel="noopener noreferrer">Store Design page</a>, and I brought it to life with Claude Code as an embed. A navigation issue on the site around the same time had us double-checking every recent change, so it was a good moment to get a developer's eyes on the code.</p>`,
       },
@@ -262,7 +266,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "What I Built",
-        body: `<p>I'm now building directly in our codebase with Claude Code, and this is one of the first components I've made that way. It's being built for all three of our brand sites. For the asset path, two pieces work together: the Claude Embed component runs pasted code in its own walled-off space, so it can't touch the rest of the page, and the Embed Asset skill checks and fixes a designer's code before it goes in.</p>`,
+        body: `<p>I'm now building directly in our codebase with Claude Code, and this is one of the first components I've made that way. It's being built for all three of our brand sites. For the asset path, two pieces work together: the Claude Embed component runs pasted code inside a Shadow DOM, which isolates the animation so its styles and scripts can't interfere with the rest of the website, and the Embed Asset skill checks and fixes a designer's code before it goes in.</p>`,
       },
       {
         type: "pathway",
@@ -357,7 +361,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Where It Landed",
-        body: `<p>From Claude to a live page, without a ticket: paste the code, and the asset runs. The skill is my way of scaling a developer's judgment. I turned one review into rules the tool applies on its own, then built the riskiest ones into the component so they can't happen at all. Review still happens, but once, for the system. The component is in code review now.</p>`,
+        body: `<p>From Claude to a live page, without a ticket: paste the code, and the asset runs. The skill is my way of scaling a developer's judgment. I turned one review into rules the tool applies on its own, then built the riskiest ones into the component so they can't happen at all. Review still happens, but once, for the system. The component is in use on our sites now.</p>`,
       },
       {
         type: "process",
