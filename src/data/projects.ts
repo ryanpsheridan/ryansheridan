@@ -59,13 +59,115 @@ export interface DividerBlock {
   type: "divider";
 }
 
+export interface VersusRow {
+  /** Short overline naming what the row compares. */
+  label: string;
+  before: string;
+  after: string;
+}
+
+/**
+ * Before-and-after rows, lighter than a table: each row is a label over two
+ * short cells, with the "after" side tinted so the eye lands on the outcome.
+ */
+export interface VersusBlock {
+  type: "versus";
+  intro?: string;
+  beforeTitle: string;
+  afterTitle: string;
+  rows: VersusRow[];
+}
+
+/** Copy beside a narrow image, for tall UI screenshots like a properties panel. */
+export interface SplitBlock {
+  type: "split";
+  heading?: string;
+  body: string;
+  image: ImageGridImage;
+}
+
+export interface ProcessStep {
+  label: string;
+  /** Marks the step where work waited, so the slow spot stands out. */
+  slow?: boolean;
+  /** Marks the finished outcome in green. */
+  success?: boolean;
+}
+
+export interface ProcessRow {
+  label: string;
+  note?: string;
+  accent?: boolean;
+  steps: ProcessStep[];
+}
+
+/** Left-to-right process rows, one per era of a workflow, for then-and-now comparisons. */
+export interface ProcessBlock {
+  type: "process";
+  rows: ProcessRow[];
+  caption?: string;
+}
+
+export interface PathwayOption {
+  title: string;
+  note?: string;
+}
+
+/**
+ * A two-way choice that resolves into a breakdown: the chosen option is
+ * selected, the other dims, and a line drops into the columns underneath. Plays once as it scrolls into
+ * view; without script or with reduced motion it shows the settled state.
+ */
+export interface PathwayBlock {
+  type: "pathway";
+  question: string;
+  chosen: PathwayOption;
+  other: PathwayOption;
+  columns: FlowColumn[];
+  caption?: string;
+}
+
+export interface FlowStep {
+  label: string;
+  note?: string;
+}
+
+export interface FlowColumn {
+  title: string;
+  note?: string;
+  /** Tints the steps in the link blue family to tell this column apart from its neighbour. */
+  accent?: boolean;
+  steps: FlowStep[];
+  /** Closing node under the steps, after an arrow. */
+  result?: string;
+  /** Small icon at the start of the result node. */
+  resultIcon?: "shield" | "swatch";
+}
+
+/**
+ * A small top-to-bottom diagram drawn with page styles instead of an image,
+ * so it stays crisp and on-system. An optional question node splits into
+ * the columns below it.
+ */
+export interface FlowBlock {
+  type: "flow";
+  question?: string;
+  columns: FlowColumn[];
+  caption?: string;
+}
+
 export type ContentBlock =
   | TextBlock
   | ImageGridBlock
   | CarouselBlock
   | CompareBlock
   | ComponentTableBlock
-  | DividerBlock;
+  | DividerBlock
+  | FlowBlock
+  | VersusBlock
+  | SplitBlock
+  | ProcessBlock
+  | PathwayBlock;
 
 export interface Project {
   slug: string;
@@ -91,6 +193,218 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  {
+    slug: "making-web-animation-self-serve",
+    title: "Making Web Animation Self-Serve",
+    year: 2026,
+    description: "A Makeswift component and Claude skill, built in our codebase with Claude Code, that let designers ship animation to live pages without a dev ticket.",
+    ogImage: "/project-claude-embed-cover.png",
+    thumbnail: "/project-claude-embed-thumbnail-animated.svg",
+    showOnHomepage: false,
+    tags: ["Component Design", "Claude Skill", "Automation"],
+    tools: ["Claude Code", "Claude", "Makeswift", "GSAP"],
+    client: "BigCommerce",
+    clientUrl: "https://www.bigcommerce.com/",
+    content: [
+      {
+        type: "text",
+        heading: "It Started With a Marquee",
+        body: `<p>Our team designed a marquee of component pills in Figma for the <a href="https://www.bigcommerce.com/product/store-design/" target="_blank" rel="noopener noreferrer">Store Design page</a>, and I brought it to life with Claude Code as an embed. A navigation issue on the site around the same time had us double-checking every recent change, so it was a good moment to get a developer's eyes on the code.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          {
+            src: "/project-claude-embed-marquee.webp",
+            alt: "Two rows of black pills labeled with storefront components, such as Anchor Menu, Carousel, Gallery and Product Card, under the heading Your storefront toolkit, built in",
+            caption: "The marquee on the live Store Design page",
+          },
+        ],
+      },
+      {
+        type: "text",
+        body: `<p>The review turned up four things worth fixing: the embed's colors could leak into the rest of the site, it could run twice and stack its animations, it loaded its animation library from an outside site, and screen readers read it twice. The developer sent back a cleaned-up version, and the marquee shipped the next morning. That same day, I turned those four fixes into the first rules of a Claude skill, so the next designer wouldn't need the same review.</p>`,
+      },
+      {
+        type: "text",
+        heading: "Asset or Component?",
+        body: `<p>Before building anything for this project, I started with one question: is this an asset or a component? An asset, like an animation or an interactive graphic, is fixed content that looks and works the same wherever it appears. A component is something editors need to change or reuse, like a carousel that gets different slides on every page. Components get built and registered in the codebase, which I can now do too with Claude Code. Assets had no safe way onto the page, and that's the gap this project closes.</p>`,
+      },
+      {
+        type: "text",
+        heading: "The Real Bottleneck",
+        body: `<p>Building animation ourselves is still new for us. We used to hire a freelance animator or ask our video producer, which took even longer. Then we started building animations in Claude, and an idea could turn into a working asset in an afternoon.</p><p>Getting it onto the site became the slow part. Every embed still went through a ticket and a developer's code review. The review mattered, because Makeswift's default embed drops code straight into the live page, where it can change fonts, shift the layout, or break other scripts. The goal was to keep the review, but do it once for the system instead of for every embed.</p>`,
+      },
+      {
+        type: "process",
+        rows: [
+          {
+            label: "Outsourced",
+            note: "Freelancer or video producer",
+            steps: [
+              { label: "A freelancer or our video producer builds it" },
+              { label: "WebP or MP4 files handed off to design", slow: true },
+              { label: "Uploaded to the site" },
+            ],
+          },
+          {
+            label: "In-house",
+            note: "Built in Claude",
+            steps: [
+              { label: "A designer builds it in Claude" },
+              { label: "Ticket and developer code review", slow: true },
+              { label: "Published to the site" },
+            ],
+          },
+        ],
+      },
+      {
+        type: "text",
+        heading: "What I Built",
+        body: `<p>I'm now building directly in our codebase with Claude Code, and this is one of the first components I've made that way. It's being built for all three of our brand sites. For the asset path, two pieces work together: the Claude Embed component runs pasted code in its own walled-off space, so it can't touch the rest of the page, and the Embed Asset skill checks and fixes a designer's code before it goes in.</p>`,
+      },
+      {
+        type: "pathway",
+        question: "Asset or component?",
+        chosen: { title: "Asset", note: "Fixed content, like an animation" },
+        other: { title: "Component", note: "Reusable and editable, like a carousel" },
+        columns: [
+          {
+            title: "Claude Embed component",
+            note: "Built once, reviewed once",
+            steps: [
+              { label: "Walls off the code", note: "Nothing leaks into the page" },
+              { label: "Supplies the animation library", note: "Loaded once, from our own code" },
+              { label: "Cleans up after itself", note: "Nothing left running" },
+            ],
+            result: "Protects the page",
+            resultIcon: "shield",
+          },
+          {
+            title: "Embed Asset skill",
+            note: "Runs on every asset",
+            accent: true,
+            steps: [
+              { label: "Brand colors and type", note: "Snapped to our tokens" },
+              { label: "Motion and performance", note: "Pauses off screen, respects reduced motion" },
+              { label: "Accessibility and search", note: "Contrast, labels, a crawlable image" },
+            ],
+            result: "Protects the brand",
+            resultIcon: "swatch",
+          },
+        ],
+      },
+      {
+        type: "versus",
+        intro: "Compared with Makeswift's default embed:",
+        beforeTitle: "Default embed",
+        afterTitle: "Claude Embed",
+        rows: [
+          { label: "Where code runs", before: "Straight into the page", after: "Walled off from the page" },
+          { label: "Page layout", before: "Jumps when it loads", after: "Space saved up front" },
+          { label: "Cleanup", before: "None", after: "Everything removed when it leaves" },
+          { label: "If a script fails", before: "Half-built embed", after: "Placeholder image stays" },
+          { label: "Search", before: "Invisible", after: "Crawlable image with alt text" },
+        ],
+      },
+      {
+        type: "split",
+        heading: "Editor Panel UI",
+        body: `<p>Editors, not developers, use this panel, so I designed the UX around what they reach for. Embed code sits up front, and everything else folds into groups named by task:</p><ul><li><strong>Placeholder image.</strong> The still that shows while the embed loads. Search engines read it, and "Load immediately" covers above-the-fold use.</li><li><strong>Size &amp; layout.</strong> Spacing and aspect ratio. The embed usually sets its own ratio, so editors can leave it alone.</li><li><strong>Loading &amp; mobile.</strong> Run only when visible, or skip on mobile.</li><li><strong>Appearance.</strong> Border, background color and corner radius, on our 4px scale.</li><li><strong>Accessibility.</strong> A label, or a "Decorative only" switch.</li><li><strong>Debugging.</strong> Show errors, off by default.</li></ul>`,
+        image: {
+          src: "/project-claude-embed-panel.webp",
+          alt: "Makeswift properties panel for Claude Embed: an Embed code text area and a Width field, then collapsed groups for Placeholder image, Size and layout, Loading and mobile, Appearance, Accessibility and Debugging",
+          caption: "The panel in Makeswift",
+        },
+      },
+      {
+        type: "text",
+        heading: "How the Skill Works",
+        body: `<p>Designers use it two ways: start a chat and build a new animation with the skill from the beginning, or hand it an animation made without it and ask for a cleanup. Either way, it first asks whether the piece is an asset or a component. If it's a component, it stops and writes a spec for building it as a proper Makeswift component, instead of forcing it into an embed.</p><p>For an asset, it fixes instead of suggesting. Off-brand colors snap to tokens, low-contrast text gets darker, and every change is listed. If a designer says "keep the green," it stays, marked as approved.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          {
+            src: "/project-claude-embed-changelog.webp",
+            alt: "A Claude chat: an uploaded shopping-agent-control-original.html file and the /embed-asset command, followed by a report grouped into Brand, Motion, Accessibility, and Needs dev or design review, ending with the finished embed file",
+            caption: "Example: a cleanup run in Claude, shortened",
+          },
+        ],
+      },
+      {
+        type: "text",
+        body: `<p>Then it checks its own work. On the Shopping Agent animation, the cleaned-up version matched the original frame for frame, apart from the intended color fixes.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          {
+            src: "/project-claude-embed-before-after.webp",
+            alt: "Two copies of the Shopping Agent animation side by side in the Makeswift builder, labeled Pre-skill and Post-skill, both showing a Knowledge Document upload in progress",
+            caption: "Before and after the skill. Nearly identical by design. The one visible change is darker gray text that now passes contrast.",
+          },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Testing It With the Team",
+        body: `<p>Before rollout, a developer, an SEO specialist, the web dev lead and a fellow designer all reviewed it. The SEO review added search rules and caught two contradictions, which I fixed. The designer ran his own concept through it. It flagged critical issues in his original, and he found three gaps in the skill itself, which I closed.</p>`,
+      },
+      {
+        type: "text",
+        heading: "Where It Landed",
+        body: `<p>From Claude to a live page, without a ticket: paste the code, and the asset runs. The skill is my way of scaling a developer's judgment. I turned one review into rules the tool applies on its own, then built the riskiest ones into the component so they can't happen at all. Review still happens, but once, for the system. The component is in code review now.</p>`,
+      },
+      {
+        type: "process",
+        rows: [
+          {
+            label: "Outsourced",
+            note: "Freelancer or video producer",
+            steps: [
+              { label: "A freelancer or our video producer builds it" },
+              { label: "WebP or MP4 files handed off to design", slow: true },
+              { label: "Uploaded to the site" },
+            ],
+          },
+          {
+            label: "In-house",
+            note: "Built in Claude",
+            steps: [
+              { label: "A designer builds it in Claude" },
+              { label: "Ticket and developer code review", slow: true },
+              { label: "Published to the site" },
+            ],
+          },
+          {
+            label: "Self-serve",
+            note: "With Claude Embed",
+            accent: true,
+            steps: [
+              { label: "A designer builds it with the skill" },
+              { label: "Pasted into Claude Embed" },
+              { label: "Live on the site", success: true },
+            ],
+          },
+        ],
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          {
+            src: "/project-claude-embed-paste-animated.svg",
+            alt: "The Makeswift builder with an empty Claude Embed block selected. Code is pasted into the Embed code field, and the Shopping Agent animation appears in the block and plays from the start.",
+            caption: "Pasting the cleaned-up code into Claude Embed in Makeswift",
+          },
+        ],
+      },
+    ],
+  },
   {
     slug: "commerce-multi-brand-system",
     title: "Multi-brand Design System",

@@ -1,0 +1,32 @@
+---
+/** Small line icons that lead a diagram's result node. Decorative: the label beside them carries the meaning. */
+interface Props {
+  name: "shield" | "swatch";
+}
+
+const { name } = Astro.props;
+---
+
+<svg class="result-icon" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  {name === "shield" && (
+    <>
+      <path d="M8 1.75 13.25 3.5v4.25c0 3-2.25 5.25-5.25 6.5-3-1.25-5.25-3.5-5.25-6.5V3.5Z" />
+      <path d="m5.75 8 1.6 1.6 2.9-3.1" />
+    </>
+  )}
+  {name === "swatch" && (
+    <>
+      <rect x="1.75" y="1.75" width="5" height="12.5" rx="1" />
+      <path d="m6.75 5.25 3-3 3.5 3.5-6.5 6.5" />
+      <path d="M6.75 14.25h6.5a1 1 0 0 0 1-1v-4" />
+      <circle cx="4.25" cy="11.25" r="0.75" fill="currentColor" stroke="none" />
+    </>
+  )}
+</svg>
+
+<style>
+  .result-icon {
+    flex: none;
+    color: var(--color-text-muted);
+  }
+</style>

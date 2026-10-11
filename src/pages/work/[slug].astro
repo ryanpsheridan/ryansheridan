@@ -4,6 +4,7 @@ import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import Media from "../../components/Media.astro";
 import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
+import ResultIcon from "../../components/ui/ResultIcon.astro";
 import { projects } from "../../data/projects";
 import type { GetStaticPaths } from "astro";
 import { breadcrumbSchema, projectSchema } from "../../data/schema";
@@ -183,6 +184,162 @@ const schema = [
                 );
               }
 
+              if (block.type === "versus") {
+                return (
+                  <div class="versus">
+                    {block.intro && <p class="versus-intro">{block.intro}</p>}
+                    <div class="versus-head" aria-hidden="true">
+                      <span class="versus-head-spacer" />
+                      <span>{block.beforeTitle}</span>
+                      <span>{block.afterTitle}</span>
+                    </div>
+                    <ul class="versus-rows">
+                      {block.rows.map((row) => (
+                        <li class="versus-row">
+                          <span class="versus-label">{row.label}</span>
+                          <p class="versus-cell is-before">
+                            <span class="visually-hidden">{block.beforeTitle}: </span>
+                            {row.before}
+                          </p>
+                          <p class="versus-cell is-after">
+                            <span class="visually-hidden">{block.afterTitle}: </span>
+                            {row.after}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              }
+
+              if (block.type === "pathway") {
+                return (
+                  <figure class="pathway" data-pathway>
+                    <div class="flow-node flow-question">{block.question}</div>
+                    <div class="flow-split" aria-hidden="true" />
+                    <div class="pathway-options">
+                      <div class="pathway-option is-chosen">
+                        <strong>{block.chosen.title}</strong>
+                        {block.chosen.note && <small>{block.chosen.note}</small>}
+                      </div>
+                      <div class="pathway-option is-other">
+                        <strong>{block.other.title}</strong>
+                        {block.other.note && <small>{block.other.note}</small>}
+                      </div>
+                    </div>
+                    <div class="pathway-link" aria-hidden="true" />
+                    <div class="pathway-panel">
+                      <div class="flow-cols" style={`--flow-cols: ${block.columns.length}`}>
+                        {block.columns.map((col) => (
+                          <div class:list={["flow-col", "pathway-col", { "is-accent": col.accent }]}>
+                            <div class="flow-node flow-title">
+                              {col.title}
+                              {col.note && <small>{col.note}</small>}
+                            </div>
+                            <div class="flow-arrow" aria-hidden="true" />
+                            <ul class="flow-steps">
+                              {col.steps.map((step) => (
+                                <li class="flow-node flow-step">
+                                  {step.label}
+                                  {step.note && <small>{step.note}</small>}
+                                </li>
+                              ))}
+                            </ul>
+                            {col.result && (
+                              <>
+                                <div class="flow-arrow" aria-hidden="true" />
+                                <div class="flow-node flow-result">
+                                {col.resultIcon && <ResultIcon name={col.resultIcon} />}
+                                {col.result}
+                              </div>
+                              </>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    {block.caption && <figcaption>{block.caption}</figcaption>}
+                  </figure>
+                );
+              }
+
+              if (block.type === "process") {
+                return (
+                  <figure class="process">
+                    {block.rows.map((row) => (
+                      <div class:list={["process-row", { "is-accent": row.accent }]}>
+                        <p class="process-label">
+                          {row.label}
+                          {row.note && <small>{row.note}</small>}
+                        </p>
+                        <ol class="process-steps">
+                          {row.steps.map((step) => (
+                            <li class:list={["process-step", { "is-slow": step.slow, "is-success": step.success }]}>{step.label}</li>
+                          ))}
+                        </ol>
+                      </div>
+                    ))}
+                    {block.caption && <figcaption>{block.caption}</figcaption>}
+                  </figure>
+                );
+              }
+
+              if (block.type === "split") {
+                return (
+                  <section class="content-section split">
+                    <div class="split-copy">
+                      {block.heading && <h2>{block.heading}</h2>}
+                      <div class="prose" set:html={block.body} />
+                    </div>
+                    <figure class="image-item split-image">
+                      {block.image.caption && <figcaption>{block.image.caption}</figcaption>}
+                      <Media src={block.image.src} alt={block.image.alt ?? block.image.caption ?? ""} class="lightbox-trigger" />
+                    </figure>
+                  </section>
+                );
+              }
+
+              if (block.type === "flow") {
+                return (
+                  <figure class="flow">
+                    {block.question && (
+                      <>
+                        <div class="flow-node flow-question">{block.question}</div>
+                        <div class="flow-split" aria-hidden="true" />
+                      </>
+                    )}
+                    <div class="flow-cols" style={`--flow-cols: ${block.columns.length}`}>
+                      {block.columns.map((col) => (
+                        <div class:list={["flow-col", { "is-accent": col.accent }]}>
+                          <div class="flow-node flow-title">
+                            {col.title}
+                            {col.note && <small>{col.note}</small>}
+                          </div>
+                          <div class="flow-arrow" aria-hidden="true" />
+                          <ul class="flow-steps">
+                            {col.steps.map((step) => (
+                              <li class="flow-node flow-step">
+                                {step.label}
+                                {step.note && <small>{step.note}</small>}
+                              </li>
+                            ))}
+                          </ul>
+                          {col.result && (
+                            <>
+                              <div class="flow-arrow" aria-hidden="true" />
+                              <div class="flow-node flow-result">
+                                {col.resultIcon && <ResultIcon name={col.resultIcon} />}
+                                {col.result}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    {block.caption && <figcaption>{block.caption}</figcaption>}
+                  </figure>
+                );
+              }
 
               return null;
             })
@@ -624,6 +781,503 @@ const schema = [
     }
   }
 
+  /* ---------- Versus rows ---------- */
+
+  .versus {
+    margin: 0 0 var(--space-6);
+    max-width: 40rem;
+  }
+
+  .versus-intro {
+    font-size: var(--text-m);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-4);
+  }
+
+  .versus-head,
+  .versus-row {
+    display: grid;
+    grid-template-columns: 9rem 1fr 1fr;
+    column-gap: var(--space-4);
+    align-items: baseline;
+  }
+
+  .versus-head {
+    padding-bottom: var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    color: var(--color-text-muted);
+  }
+
+  .versus-head span:last-child {
+    color: var(--color-link);
+  }
+
+  .versus-rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  .versus-row {
+    padding: var(--space-3) 0;
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .versus-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .versus-cell {
+    margin: 0;
+    font-size: var(--text-s);
+    line-height: 1.45;
+  }
+
+  .versus-cell.is-before {
+    color: var(--color-text-muted);
+  }
+
+  .versus-cell.is-after {
+    color: var(--color-text);
+    font-weight: var(--weight-medium);
+  }
+
+  /* Phones: the label sits above its pair, so the two answers get the width. */
+  @media (max-width: 640px) {
+    .versus-head,
+    .versus-row {
+      grid-template-columns: 1fr 1fr;
+      row-gap: var(--space-1);
+      align-items: start;
+    }
+
+    .versus-head-spacer {
+      display: none;
+    }
+
+    .versus-label {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* ---------- Process rows ---------- */
+
+  .process {
+    margin: 0 0 var(--space-6);
+    max-width: 40rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .process-row {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr);
+    gap: var(--space-3);
+    align-items: center;
+  }
+
+  .process-label {
+    margin: 0;
+    font-size: var(--text-s);
+    font-weight: var(--weight-medium);
+  }
+
+  .process-label small {
+    display: block;
+    font-size: var(--text-xs);
+    font-weight: var(--weight-regular);
+    color: var(--color-text-muted);
+  }
+
+  .process-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    column-gap: var(--space-5);
+  }
+
+  .process-step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.5rem;
+    padding: var(--space-2);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    text-align: center;
+    font-size: var(--text-xs);
+    line-height: 1.35;
+  }
+
+  /* Arrow in the gap before every step but the first. */
+  .process-step + .process-step::before {
+    content: "\2192";
+    position: absolute;
+    left: calc(var(--space-5) / -2);
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--color-border-strong);
+    font-size: var(--text-s);
+  }
+
+  .process-step.is-slow {
+    border-style: dashed;
+    border-color: var(--color-caution-border);
+    background: var(--color-caution-bg);
+  }
+
+  .process-row.is-accent .process-step {
+    background: var(--color-accent-bg);
+    border-color: var(--color-accent-border);
+    font-weight: var(--weight-medium);
+  }
+
+  .process figcaption {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 640px) {
+    .process-row {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+
+    .process-steps {
+      column-gap: var(--space-4);
+    }
+
+    .process-step + .process-step::before {
+      left: calc(var(--space-4) / -2);
+    }
+  }
+
+  .process-row .process-step.is-success {
+    background: var(--color-positive-bg);
+    border-color: var(--color-positive-border);
+    color: var(--color-positive);
+  }
+
+  /* ---------- Pathway: a choice that opens into a breakdown ---------- */
+
+  .pathway {
+    --flow-line: var(--color-border-strong);
+    --pathway-ease: var(--ease-standard);
+    margin: 0 0 var(--space-6);
+    max-width: 40rem;
+  }
+
+  .pathway-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--space-3);
+  }
+
+  .pathway-option {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: var(--space-3);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    text-align: center;
+    font-size: var(--text-s);
+    transition:
+      opacity var(--duration-moderate) var(--pathway-ease),
+      transform var(--duration-moderate) var(--pathway-ease),
+      background-color var(--duration-moderate) var(--pathway-ease),
+      border-color var(--duration-moderate) var(--pathway-ease),
+      box-shadow var(--duration-moderate) var(--pathway-ease);
+  }
+
+  .pathway-option strong {
+    font-weight: var(--weight-medium);
+  }
+
+  .pathway-option small {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .pathway-option.is-chosen {
+    background: var(--color-accent-bg);
+    border-color: var(--color-link);
+    box-shadow: 0 0 0 1px var(--color-link);
+  }
+
+  .pathway-option.is-other {
+    opacity: 0.6;
+  }
+
+  /* The drop from the chosen option, centred under the left column. */
+  .pathway-link {
+    width: var(--border-width);
+    height: var(--space-6);
+    margin-left: calc(25% - var(--space-3) / 4);
+    background: var(--color-link);
+    transform-origin: top;
+    transition: transform var(--duration-moderate) var(--pathway-ease);
+  }
+
+  .pathway-panel {
+    padding: var(--space-4);
+    border: var(--border-width) solid var(--color-accent-border);
+    border-radius: var(--radius-lg);
+    transition:
+      opacity var(--duration-moderate) var(--pathway-ease),
+      transform var(--duration-moderate) var(--pathway-ease);
+  }
+
+  .pathway-col {
+    transition:
+      opacity var(--duration-moderate) var(--pathway-ease),
+      transform var(--duration-moderate) var(--pathway-ease);
+  }
+
+  .pathway figcaption {
+    margin-top: var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  /* Armed by script before it scrolls into view: start unselected, then
+     play the choice and the reveal in sequence once it's on screen. */
+  .pathway.is-armed .pathway-option {
+    opacity: 0;
+    transform: translateY(var(--space-2));
+  }
+
+  .pathway.is-armed .pathway-option.is-chosen {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+    box-shadow: none;
+  }
+
+  .pathway.is-armed .pathway-link {
+    transform: scaleY(0);
+  }
+
+  .pathway.is-armed .pathway-panel,
+  .pathway.is-armed .pathway-col {
+    opacity: 0;
+    transform: translateY(var(--space-3));
+  }
+
+  .pathway.is-armed.is-revealed .pathway-option {
+    opacity: 1;
+    transform: none;
+  }
+
+  .pathway.is-armed.is-revealed .pathway-option.is-other {
+    opacity: 0.6;
+  }
+
+  .pathway.is-armed.is-revealed .pathway-option.is-chosen {
+    background: var(--color-accent-bg);
+    border-color: var(--color-link);
+    box-shadow: 0 0 0 1px var(--color-link);
+    transition-delay: 0s, 0s, 0.9s, 0.9s, 0.9s;
+  }
+
+  .pathway.is-armed.is-revealed .pathway-link {
+    transform: none;
+    transition-delay: 1.4s;
+  }
+
+  .pathway.is-armed.is-revealed .pathway-panel {
+    opacity: 1;
+    transform: none;
+    transition-delay: 1.7s;
+  }
+
+  .pathway.is-armed.is-revealed .pathway-col {
+    opacity: 1;
+    transform: none;
+  }
+
+  .pathway.is-armed.is-revealed .pathway-col:nth-child(1) {
+    transition-delay: 2s;
+  }
+
+  .pathway.is-armed.is-revealed .pathway-col:nth-child(2) {
+    transition-delay: 2.25s;
+  }
+
+  @media (max-width: 640px) {
+    .pathway-panel {
+      padding: var(--space-3);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pathway *,
+    .pathway-link {
+      transition: none !important;
+    }
+  }
+
+  /* ---------- Copy beside a narrow image ---------- */
+
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 13rem;
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  .split-image {
+    margin: 0;
+  }
+
+  .split-image :global(img) {
+    width: 100%;
+    display: block;
+    border: var(--border-width) solid var(--color-border);
+  }
+
+  @media (max-width: 640px) {
+    .split {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    .split-image {
+      max-width: 13rem;
+    }
+  }
+
+  /* ---------- Flow diagram ---------- */
+
+  .flow {
+    --flow-line: var(--color-border-strong);
+    margin: 0 0 var(--space-6);
+    max-width: 40rem;
+  }
+
+  .flow-node {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-3);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    text-align: center;
+    font-size: var(--text-s);
+    font-weight: var(--weight-medium);
+    line-height: 1.35;
+    color: var(--color-text);
+  }
+
+  .flow-node small {
+    display: block;
+    margin-top: var(--space-1);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-regular);
+    color: var(--color-text-muted);
+  }
+
+  .flow-question {
+    max-width: 16rem;
+    margin: 0 auto;
+  }
+
+  /* Stem from the question, a bar across, and a drop into the middle of
+     each column. Drawn for two columns, the only split in use. */
+  .flow-split {
+    position: relative;
+    height: var(--space-5);
+    background:
+      linear-gradient(var(--flow-line), var(--flow-line)) 50% 0 / var(--border-width) 50% no-repeat,
+      linear-gradient(var(--flow-line), var(--flow-line)) 50% 50% / calc(50% + var(--space-3) / 2) var(--border-width) no-repeat;
+  }
+
+  .flow-split::before,
+  .flow-split::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    bottom: 0;
+    width: var(--border-width);
+    background: var(--flow-line);
+  }
+
+  .flow-split::before {
+    left: calc(25% - var(--space-3) / 4);
+  }
+
+  .flow-split::after {
+    right: calc(25% - var(--space-3) / 4);
+  }
+
+  .flow-cols {
+    display: grid;
+    grid-template-columns: repeat(var(--flow-cols), 1fr);
+    column-gap: var(--space-3);
+  }
+
+  /* Each column shares the grid's rows, so titles, steps and results line
+     up across columns even when one label wraps and its neighbour doesn't. */
+  .flow-col {
+    display: grid;
+    grid-row: span 5;
+    grid-template-rows: subgrid;
+  }
+
+  .flow-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+  }
+
+  .flow-step {
+    flex: 1;
+  }
+
+  .flow-col.is-accent .flow-step {
+    background: var(--color-accent-bg);
+    border-color: var(--color-accent-border);
+  }
+
+  .flow-result {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    background: var(--color-bg);
+    border-color: var(--color-border-strong);
+  }
+
+  .flow-arrow {
+    height: var(--space-5);
+    background: linear-gradient(var(--flow-line), var(--flow-line)) 50% 0 / var(--border-width) 100% no-repeat;
+  }
+
+  .flow figcaption {
+    margin-top: var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
   .back-link-wrapper {
     margin-top: var(--space-6);
     padding: var(--space-5) 0;
@@ -740,4 +1394,27 @@ const schema = [
       });
     });
   });
+</script>
+
+<script>
+  // Plays each pathway diagram once as it comes into view. Without this
+  // script, or with reduced motion, the settled state shows from the start.
+  const pathways = document.querySelectorAll<HTMLElement>("[data-pathway]");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (pathways.length && !reduce && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add("is-revealed");
+          io.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.35 },
+    );
+    for (const el of pathways) {
+      el.classList.add("is-armed");
+      io.observe(el);
+    }
+  }
 </script>

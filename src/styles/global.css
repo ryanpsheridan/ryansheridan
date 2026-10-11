@@ -451,6 +451,36 @@ img {
   border: var(--border-width) solid var(--color-border);
 }
 
+/* Wide tables scroll inside their own box so the page never scrolls sideways. */
+.prose .table-scroll {
+  overflow-x: auto;
+  margin: var(--space-4) 0 var(--space-5);
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-s);
+  line-height: var(--leading-relaxed);
+}
+
+.prose th,
+.prose td {
+  text-align: left;
+  vertical-align: top;
+  padding: var(--space-3) var(--space-4) var(--space-3) 0;
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.prose thead th {
+  font-weight: var(--weight-medium);
+  color: var(--color-text-muted);
+}
+
+.prose tbody th {
+  font-weight: var(--weight-medium);
+}
+
 /* ---------- Form fields ---------- */
 
 .field {
