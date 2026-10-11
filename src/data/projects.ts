@@ -197,7 +197,7 @@ export const projects: Project[] = [
     slug: "making-web-animation-self-serve",
     title: "Making Web Animation Self-Serve",
     year: 2026,
-    description: "A Makeswift component and Claude skill, built in our codebase with Claude Code, that let designers ship animation to live pages without a dev ticket.",
+    description: "A Makeswift component and Claude skill, built in our codebase with Claude Code, built to let designers ship animation to live pages without a dev ticket.",
     ogImage: "/project-claude-embed-cover.png",
     thumbnail: "/project-claude-embed-thumbnail-animated.svg",
     showOnHomepage: true,
@@ -235,7 +235,7 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        body: `<ul><li><strong>Users and context.</strong> Designers who build animations in Claude, and editors who place them on pages in Makeswift.</li><li><strong>Process.</strong> I turned one developer's code review into rules, then into a component and a Claude skill.</li><li><strong>Collaboration.</strong> A developer, an SEO specialist, the web dev lead and a designer each reviewed the work and changed it.</li><li><strong>Technical.</strong> A Shadow DOM component I built in our codebase with Claude Code, for all three brand sites.</li></ul>`,
+        body: `<ul><li><strong>Users and context.</strong> Designers who build animations in Claude, and editors who place them on pages in Makeswift.</li><li><strong>Process.</strong> I turned one engineer's code review into rules, then into a component and a Claude skill.</li><li><strong>Collaboration.</strong> I ran the skill by our senior engineering manager and an SEO specialist, and a web strategy manager and another designer are testing it with their own animations.</li><li><strong>Technical.</strong> A Shadow DOM component I built in our codebase with Claude Code, for all three brand sites.</li></ul>`,
       },
       {
         type: "text",
@@ -245,7 +245,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "One code review became the first set of rules",
-        body: `<p>Our team designed a marquee of component pills in Figma for the <a href="https://www.bigcommerce.com/product/store-design/" target="_blank" rel="noopener noreferrer">Store Design page</a>, and I animated it with Claude Code as an embed, then asked a developer to review the code.</p>`,
+        body: `<p>Our team designed a marquee of component pills in Figma for the <a href="https://www.bigcommerce.com/product/store-design/" target="_blank" rel="noopener noreferrer">Store Design page</a>, and I animated it with Claude Code as an embed, then sent it to an engineer for review through a code review ticket.</p>`,
       },
       {
         type: "imageGrid",
@@ -270,7 +270,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "A walled-off component and a skill protect the page and the brand",
-        body: `<p>I built this directly in our codebase with Claude Code, for all three of our brand sites. The Claude Embed component runs pasted code inside a Shadow DOM, which isolates the animation so its styles and scripts can't interfere with the rest of the website. The Embed Asset skill checks and fixes a designer's code before it goes in. Developers review the system once, so they no longer review every embed.</p>`,
+        body: `<p>I built this directly in our codebase with Claude Code, for all three of our brand sites. The Claude Embed component runs pasted code inside a Shadow DOM, which isolates the animation so its styles and scripts can't interfere with the rest of the website. The Embed Asset skill checks and fixes a designer's code before it goes in. Developers review the system once, so they won't need to review every embed.</p>`,
       },
       {
         type: "pathway",
@@ -360,12 +360,12 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Testing it with the team",
-        body: `<ul><li><strong>Developer.</strong> Their review of the marquee code set the first four rules.</li><li><strong>SEO specialist.</strong> Added search rules, like no headings or content links inside an asset, caught a conflict with the accessibility rules, and moved the search checks higher.</li><li><strong>Web dev lead.</strong> Settled ownership, so this skill replaces our old embed skill.</li><li><strong>Designer.</strong> Ran their own concept through it and found three gaps: it refused assets that carry text, assumed the markup was the finished state, and clashed with mocks of our product's UI. I closed all three.</li></ul>`,
+        body: `<ul><li><strong>Senior engineering manager.</strong> His code review ticket on the marquee set the first four rules. I ran the skill by him, and he settled ownership, so this skill replaces our old embed skill.</li><li><strong>SEO specialist.</strong> Added search rules, like no headings or content links inside an asset, caught a conflict with the accessibility rules, and moved the search checks higher.</li><li><strong>Web strategy manager.</strong> Testing the component and skill with their own animations.</li><li><strong>Designer.</strong> Tested the skill with their own animation and found three gaps: it refused assets that carry text, assumed the markup was the finished state, and clashed with mocks of our product's UI. I closed all three.</li></ul><p>Their input shaped the skill's rules, and each team knows how the new process works.</p>`,
       },
       {
         type: "text",
-        heading: "Animation now goes live without a ticket",
-        body: `<p>Designers paste the cleaned-up code, and the asset runs. I turned one developer's review into rules the skill applies on its own, then built the riskiest ones into the component so they can't happen at all. Review still happens once, for the system, and the component is in use on our sites now.</p>`,
+        heading: "Built to go live without a ticket",
+        body: `<p>Designers paste the cleaned-up code into the component, and the asset runs. I turned one engineer's review into rules the skill applies on its own, then built the riskiest ones into the component so they can't happen at all. Review is meant to happen once, for the system, instead of for every embed. The component and skill are built and in testing, and the first animations are next.</p>`,
       },
       {
         type: "process",
