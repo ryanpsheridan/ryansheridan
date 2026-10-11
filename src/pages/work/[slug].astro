@@ -59,6 +59,12 @@ const schema = [
               if (block.type === "text") {
                 return (
                   <section class="content-section">
+                    {block.eyebrow && (
+                      <p class="section-eyebrow">
+                        {block.eyebrow.icon && <ResultIcon name={block.eyebrow.icon} />}
+                        {block.eyebrow.label}
+                      </p>
+                    )}
                     {block.heading && <h2>{block.heading}</h2>}
                     {block.body && <div class="prose" set:html={block.body} />}
                   </section>
@@ -779,6 +785,24 @@ const schema = [
       grid-template-columns: 1fr;
       gap: var(--space-3);
     }
+  }
+
+  /* Names the part of the project the next sections cover, with the same
+     icon its column carries in the diagram above. */
+  .section-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-3);
+    padding-top: var(--space-5);
+    border-top: var(--border-width) solid var(--color-border);
+    font-family: var(--font-mono);
+    font-size: var(--text-s);
+    color: var(--color-link);
+  }
+
+  .section-eyebrow :global(.result-icon) {
+    color: var(--color-link);
   }
 
   /* ---------- Versus rows ---------- */
