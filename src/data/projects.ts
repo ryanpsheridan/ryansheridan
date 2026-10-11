@@ -199,7 +199,7 @@ export const projects: Project[] = [
     slug: "making-web-animation-self-serve",
     title: "Making Web Animation Self-Serve",
     year: 2026,
-    description: "A Makeswift component and Claude skill, built in our codebase with Claude Code, built to let designers ship animation to live pages without a dev ticket.",
+    description: "A Makeswift component and Claude skill, built in our codebase with Claude Code, to let designers ship animation to live pages without a dev ticket.",
     ogImage: "/project-claude-embed-cover.png",
     thumbnail: "/project-claude-embed-thumbnail-animated.svg",
     showOnHomepage: true,
@@ -294,7 +294,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "A walled-off component and a skill protect the page and the brand",
-        body: `<p>I built this directly in our codebase with Claude Code, for all three of our brand sites. The Claude Embed component runs pasted code inside a Shadow DOM, which isolates the animation so its styles and scripts can't interfere with the rest of the website. The Embed Asset skill checks and fixes a designer's code before it goes in. Developers review the system once, so they won't need to review every embed.</p>`,
+        body: `<p>I built this directly in our codebase with Claude Code, for all three of our brand sites. The Claude Embed component runs pasted code inside a Shadow DOM, which isolates the animation so its styles and scripts can't interfere with the rest of the website. The Embed Asset skill checks and fixes a designer's code before it goes in.</p>`,
       },
       {
         type: "text",
