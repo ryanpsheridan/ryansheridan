@@ -357,7 +357,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Where It Landed",
-        body: `<p>From Claude to a live page, without a ticket: paste the code, and the asset runs. The skill is my way of scaling a developer's judgment. I turned one review into rules the tool applies on its own, then built the riskiest ones into the component so they can't happen at all. Review still happens, but once, for the system. The component is in code review now.</p>`,
+        body: `<p>From Claude to a live page, without a ticket: paste the code, and the asset runs. The skill is my way of scaling a developer's judgment. I turned one review into rules the tool applies on its own, then built the riskiest ones into the component so they can't happen at all. Review still happens, but once, for the system. The component is in use on our sites now.</p>`,
       },
       {
         type: "process",
