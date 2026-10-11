@@ -183,6 +183,48 @@ const schema = [
                 );
               }
 
+              if (block.type === "versus") {
+                return (
+                  <div class="versus">
+                    {block.intro && <p class="versus-intro">{block.intro}</p>}
+                    <div class="versus-head" aria-hidden="true">
+                      <span>{block.beforeTitle}</span>
+                      <span>{block.afterTitle}</span>
+                    </div>
+                    <ul class="versus-rows">
+                      {block.rows.map((row) => (
+                        <li class="versus-row">
+                          <span class="versus-label">{row.label}</span>
+                          <p class="versus-cell is-before">
+                            <span class="visually-hidden">{block.beforeTitle}: </span>
+                            {row.before}
+                          </p>
+                          <p class="versus-cell is-after">
+                            <span class="visually-hidden">{block.afterTitle}: </span>
+                            {row.after}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              }
+
+              if (block.type === "split") {
+                return (
+                  <section class="content-section split">
+                    <div class="split-copy">
+                      {block.heading && <h2>{block.heading}</h2>}
+                      <div class="prose" set:html={block.body} />
+                    </div>
+                    <figure class="image-item split-image">
+                      {block.image.caption && <figcaption>{block.image.caption}</figcaption>}
+                      <Media src={block.image.src} alt={block.image.alt ?? block.image.caption ?? ""} class="lightbox-trigger" />
+                    </figure>
+                  </section>
+                );
+              }
+
               if (block.type === "flow") {
                 return (
                   <figure class="flow">
@@ -659,6 +701,105 @@ const schema = [
     .component-table-group {
       grid-template-columns: 1fr;
       gap: var(--space-3);
+    }
+  }
+
+  /* ---------- Versus rows ---------- */
+
+  .versus {
+    margin: 0 0 var(--space-6);
+    max-width: 40rem;
+  }
+
+  .versus-intro {
+    font-size: var(--text-m);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-4);
+  }
+
+  .versus-head,
+  .versus-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--space-2);
+  }
+
+  .versus-head {
+    margin-bottom: var(--space-2);
+    font-size: var(--text-s);
+    font-weight: var(--weight-medium);
+  }
+
+  .versus-head span:first-child {
+    color: var(--color-text-muted);
+  }
+
+  .versus-rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .versus-label {
+    grid-column: 1 / -1;
+    margin-bottom: var(--space-1);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .versus-cell {
+    margin: 0;
+    padding: var(--space-2) var(--space-3);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--text-s);
+    line-height: 1.45;
+  }
+
+  .versus-cell.is-before {
+    color: var(--color-text-muted);
+  }
+
+  .versus-cell.is-after {
+    background: var(--color-accent-bg);
+    border-color: var(--color-accent-border);
+    color: var(--color-text);
+    font-weight: var(--weight-medium);
+  }
+
+  /* ---------- Copy beside a narrow image ---------- */
+
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 15rem;
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  .split-image {
+    margin: 0;
+  }
+
+  .split-image :global(img) {
+    width: 100%;
+    display: block;
+    border: var(--border-width) solid var(--color-border);
+  }
+
+  @media (max-width: 640px) {
+    .split {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    .split-image {
+      max-width: 15rem;
     }
   }
 
