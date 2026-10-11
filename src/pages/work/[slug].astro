@@ -183,6 +183,44 @@ const schema = [
                 );
               }
 
+              if (block.type === "flow") {
+                return (
+                  <figure class="flow">
+                    {block.question && (
+                      <>
+                        <div class="flow-node flow-question">{block.question}</div>
+                        <div class="flow-split" aria-hidden="true" />
+                      </>
+                    )}
+                    <div class="flow-cols" style={`--flow-cols: ${block.columns.length}`}>
+                      {block.columns.map((col) => (
+                        <div class:list={["flow-col", { "is-accent": col.accent }]}>
+                          <div class="flow-node flow-title">
+                            {col.title}
+                            {col.note && <small>{col.note}</small>}
+                          </div>
+                          <div class="flow-arrow" aria-hidden="true" />
+                          <ul class="flow-steps">
+                            {col.steps.map((step) => (
+                              <li class="flow-node flow-step">
+                                {step.label}
+                                {step.note && <small>{step.note}</small>}
+                              </li>
+                            ))}
+                          </ul>
+                          {col.result && (
+                            <>
+                              <div class="flow-arrow" aria-hidden="true" />
+                              <div class="flow-node flow-result">{col.result}</div>
+                            </>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    {block.caption && <figcaption>{block.caption}</figcaption>}
+                  </figure>
+                );
+              }
 
               return null;
             })
@@ -622,6 +660,119 @@ const schema = [
       grid-template-columns: 1fr;
       gap: var(--space-3);
     }
+  }
+
+  /* ---------- Flow diagram ---------- */
+
+  .flow {
+    --flow-line: var(--color-border-strong);
+    margin: 0 0 var(--space-6);
+    max-width: 40rem;
+  }
+
+  .flow-node {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-3);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    text-align: center;
+    font-size: var(--text-s);
+    font-weight: var(--weight-medium);
+    line-height: 1.35;
+    color: var(--color-text);
+  }
+
+  .flow-node small {
+    display: block;
+    margin-top: var(--space-1);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-regular);
+    color: var(--color-text-muted);
+  }
+
+  .flow-question {
+    max-width: 16rem;
+    margin: 0 auto;
+  }
+
+  /* Stem from the question, a bar across, and a drop into the middle of
+     each column. Drawn for two columns, the only split in use. */
+  .flow-split {
+    position: relative;
+    height: var(--space-5);
+    background:
+      linear-gradient(var(--flow-line), var(--flow-line)) 50% 0 / var(--border-width) 50% no-repeat,
+      linear-gradient(var(--flow-line), var(--flow-line)) 50% 50% / calc(50% + var(--space-3) / 2) var(--border-width) no-repeat;
+  }
+
+  .flow-split::before,
+  .flow-split::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    bottom: 0;
+    width: var(--border-width);
+    background: var(--flow-line);
+  }
+
+  .flow-split::before {
+    left: calc(25% - var(--space-3) / 4);
+  }
+
+  .flow-split::after {
+    right: calc(25% - var(--space-3) / 4);
+  }
+
+  .flow-cols {
+    display: grid;
+    grid-template-columns: repeat(var(--flow-cols), 1fr);
+    column-gap: var(--space-3);
+  }
+
+  /* Each column shares the grid's rows, so titles, steps and results line
+     up across columns even when one label wraps and its neighbour doesn't. */
+  .flow-col {
+    display: grid;
+    grid-row: span 5;
+    grid-template-rows: subgrid;
+  }
+
+  .flow-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+  }
+
+  .flow-step {
+    flex: 1;
+  }
+
+  .flow-col.is-accent .flow-step {
+    background: var(--color-accent-bg);
+    border-color: var(--color-accent-border);
+  }
+
+  .flow-result {
+    background: var(--color-bg);
+    border-color: var(--color-border-strong);
+  }
+
+  .flow-arrow {
+    height: var(--space-5);
+    background: linear-gradient(var(--flow-line), var(--flow-line)) 50% 0 / var(--border-width) 100% no-repeat;
+  }
+
+  .flow figcaption {
+    margin-top: var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
   }
 
   .back-link-wrapper {
