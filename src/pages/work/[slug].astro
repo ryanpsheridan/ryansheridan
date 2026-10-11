@@ -4,6 +4,7 @@ import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import Media from "../../components/Media.astro";
 import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
+import ResultIcon from "../../components/ui/ResultIcon.astro";
 import { projects } from "../../data/projects";
 import type { GetStaticPaths } from "astro";
 import { breadcrumbSchema, projectSchema } from "../../data/schema";
@@ -188,6 +189,7 @@ const schema = [
                   <div class="versus">
                     {block.intro && <p class="versus-intro">{block.intro}</p>}
                     <div class="versus-head" aria-hidden="true">
+                      <span class="versus-head-spacer" />
                       <span>{block.beforeTitle}</span>
                       <span>{block.afterTitle}</span>
                     </div>
@@ -217,19 +219,16 @@ const schema = [
                     <div class="flow-split" aria-hidden="true" />
                     <div class="pathway-options">
                       <div class="pathway-option is-chosen">
-                        <span class="pathway-badge">{block.chosen.badge}</span>
                         <strong>{block.chosen.title}</strong>
                         {block.chosen.note && <small>{block.chosen.note}</small>}
                       </div>
                       <div class="pathway-option is-other">
                         <strong>{block.other.title}</strong>
                         {block.other.note && <small>{block.other.note}</small>}
-                        <span class="pathway-outcome">{block.other.outcome}</span>
                       </div>
                     </div>
                     <div class="pathway-link" aria-hidden="true" />
                     <div class="pathway-panel">
-                      <p class="pathway-panel-label">{block.panelLabel}</p>
                       <div class="flow-cols" style={`--flow-cols: ${block.columns.length}`}>
                         {block.columns.map((col) => (
                           <div class:list={["flow-col", "pathway-col", { "is-accent": col.accent }]}>
@@ -249,7 +248,10 @@ const schema = [
                             {col.result && (
                               <>
                                 <div class="flow-arrow" aria-hidden="true" />
-                                <div class="flow-node flow-result">{col.result}</div>
+                                <div class="flow-node flow-result">
+                                {col.resultIcon && <ResultIcon name={col.resultIcon} />}
+                                {col.result}
+                              </div>
                               </>
                             )}
                           </div>
@@ -325,7 +327,10 @@ const schema = [
                           {col.result && (
                             <>
                               <div class="flow-arrow" aria-hidden="true" />
-                              <div class="flow-node flow-result">{col.result}</div>
+                              <div class="flow-node flow-result">
+                                {col.resultIcon && <ResultIcon name={col.resultIcon} />}
+                                {col.result}
+                              </div>
                             </>
                           )}
                         </div>
@@ -792,32 +797,35 @@ const schema = [
   .versus-head,
   .versus-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: var(--space-2);
+    grid-template-columns: 9rem 1fr 1fr;
+    column-gap: var(--space-4);
+    align-items: baseline;
   }
 
   .versus-head {
-    margin-bottom: var(--space-2);
-    font-size: var(--text-s);
+    padding-bottom: var(--space-2);
+    font-size: var(--text-xs);
     font-weight: var(--weight-medium);
+    color: var(--color-text-muted);
   }
 
-  .versus-head span:first-child {
-    color: var(--color-text-muted);
+  .versus-head span:last-child {
+    color: var(--color-link);
   }
 
   .versus-rows {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  .versus-row {
+    padding: var(--space-3) 0;
+    border-bottom: var(--border-width) solid var(--color-border);
   }
 
   .versus-label {
-    grid-column: 1 / -1;
-    margin-bottom: var(--space-1);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     letter-spacing: 0.04em;
@@ -827,9 +835,6 @@ const schema = [
 
   .versus-cell {
     margin: 0;
-    padding: var(--space-2) var(--space-3);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-md);
     font-size: var(--text-s);
     line-height: 1.45;
   }
@@ -839,10 +844,26 @@ const schema = [
   }
 
   .versus-cell.is-after {
-    background: var(--color-accent-bg);
-    border-color: var(--color-accent-border);
     color: var(--color-text);
     font-weight: var(--weight-medium);
+  }
+
+  /* Phones: the label sits above its pair, so the two answers get the width. */
+  @media (max-width: 640px) {
+    .versus-head,
+    .versus-row {
+      grid-template-columns: 1fr 1fr;
+      row-gap: var(--space-1);
+      align-items: start;
+    }
+
+    .versus-head-spacer {
+      display: none;
+    }
+
+    .versus-label {
+      grid-column: 1 / -1;
+    }
   }
 
   /* ---------- Process rows ---------- */
@@ -969,8 +990,8 @@ const schema = [
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-1);
-    padding: var(--space-4) var(--space-3);
+    gap: 2px;
+    padding: var(--space-3);
     border: var(--border-width) solid var(--color-border);
     border-radius: var(--radius-md);
     background: var(--color-surface);
@@ -999,34 +1020,8 @@ const schema = [
     box-shadow: 0 0 0 1px var(--color-link);
   }
 
-  .pathway-badge {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 0 var(--space-2);
-    border-radius: var(--radius-full);
-    background: var(--color-link);
-    color: #ffffff;
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    line-height: 1.6;
-    white-space: nowrap;
-    transition: opacity var(--duration-moderate) var(--pathway-ease);
-  }
-
   .pathway-option.is-other {
     opacity: 0.6;
-  }
-
-  .pathway-outcome {
-    margin-top: var(--space-1);
-    font-size: var(--text-xs);
-    color: var(--color-text-muted);
-  }
-
-  .pathway-outcome::before {
-    content: "\2192\00a0";
   }
 
   /* The drop from the chosen option, centred under the left column. */
@@ -1046,15 +1041,6 @@ const schema = [
     transition:
       opacity var(--duration-moderate) var(--pathway-ease),
       transform var(--duration-moderate) var(--pathway-ease);
-  }
-
-  .pathway-panel-label {
-    margin: 0 0 var(--space-3);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--color-link);
   }
 
   .pathway-col {
@@ -1082,10 +1068,6 @@ const schema = [
     box-shadow: none;
   }
 
-  .pathway.is-armed .pathway-badge {
-    opacity: 0;
-  }
-
   .pathway.is-armed .pathway-link {
     transform: scaleY(0);
   }
@@ -1110,11 +1092,6 @@ const schema = [
     border-color: var(--color-link);
     box-shadow: 0 0 0 1px var(--color-link);
     transition-delay: 0s, 0s, 0.9s, 0.9s, 0.9s;
-  }
-
-  .pathway.is-armed.is-revealed .pathway-badge {
-    opacity: 1;
-    transition-delay: 1s;
   }
 
   .pathway.is-armed.is-revealed .pathway-link {
@@ -1282,6 +1259,10 @@ const schema = [
   }
 
   .flow-result {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
     background: var(--color-bg);
     border-color: var(--color-border-strong);
   }

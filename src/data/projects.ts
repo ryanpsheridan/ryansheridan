@@ -115,17 +115,14 @@ export interface PathwayOption {
 
 /**
  * A two-way choice that resolves into a breakdown: the chosen option is
- * selected, the other dims with a short note on where it goes instead, and
- * a line drops into the columns underneath. Plays once as it scrolls into
+ * selected, the other dims, and a line drops into the columns underneath. Plays once as it scrolls into
  * view; without script or with reduced motion it shows the settled state.
  */
 export interface PathwayBlock {
   type: "pathway";
   question: string;
-  chosen: PathwayOption & { badge: string };
-  other: PathwayOption & { outcome: string };
-  /** Overline on the panel the chosen option opens into. */
-  panelLabel: string;
+  chosen: PathwayOption;
+  other: PathwayOption;
   columns: FlowColumn[];
   caption?: string;
 }
@@ -143,6 +140,8 @@ export interface FlowColumn {
   steps: FlowStep[];
   /** Closing node under the steps, after an arrow. */
   result?: string;
+  /** Small icon at the start of the result node. */
+  resultIcon?: "shield" | "swatch";
 }
 
 /**
@@ -230,7 +229,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Asset or Component?",
-        body: `<p>Before building anything for this project, I started with one question: is this an asset or a component? An asset, like an animation or an interactive graphic, is fixed content that looks and works the same wherever it appears. A component is something editors need to change or reuse, like a carousel that gets different slides on every page. Components already had a path: a developer builds them. Assets didn't, and that's the gap this project closes.</p>`,
+        body: `<p>Before building anything for this project, I started with one question: is this an asset or a component? An asset, like an animation or an interactive graphic, is fixed content that looks and works the same wherever it appears. A component is something editors need to change or reuse, like a carousel that gets different slides on every page. Components get built and registered in the codebase, which I can now do too with Claude Code. Assets had no safe way onto the page, and that's the gap this project closes.</p>`,
       },
       {
         type: "text",
@@ -268,9 +267,8 @@ export const projects: Project[] = [
       {
         type: "pathway",
         question: "Asset or component?",
-        chosen: { title: "Asset", note: "Fixed content, like an animation", badge: "This project" },
-        other: { title: "Component", note: "Reusable and editable, like a carousel", outcome: "A developer builds it" },
-        panelLabel: "The asset path: what I built",
+        chosen: { title: "Asset", note: "Fixed content, like an animation" },
+        other: { title: "Component", note: "Reusable and editable, like a carousel" },
         columns: [
           {
             title: "Claude Embed component",
@@ -281,6 +279,7 @@ export const projects: Project[] = [
               { label: "Cleans up after itself", note: "Nothing left running" },
             ],
             result: "Protects the page",
+            resultIcon: "shield",
           },
           {
             title: "Embed Asset skill",
@@ -292,9 +291,9 @@ export const projects: Project[] = [
               { label: "Accessibility and search", note: "Contrast, labels, a crawlable image" },
             ],
             result: "Protects the brand",
+            resultIcon: "swatch",
           },
         ],
-        caption: "Assets take the self-serve path. Components still go to a developer.",
       },
       {
         type: "versus",
@@ -322,7 +321,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "How the Skill Works",
-        body: `<p>Designers use it two ways: start a chat and build a new animation with the skill from the beginning, or hand it an animation made without it and ask for a cleanup. Either way, it first asks whether the piece is an asset or a component. If it's a component, it stops and writes a spec for the developers instead of building the wrong thing.</p><p>For an asset, it fixes instead of suggesting. Off-brand colors snap to tokens, low-contrast text gets darker, and every change is listed. If a designer says "keep the green," it stays, marked as approved.</p>`,
+        body: `<p>Designers use it two ways: start a chat and build a new animation with the skill from the beginning, or hand it an animation made without it and ask for a cleanup. Either way, it first asks whether the piece is an asset or a component. If it's a component, it stops and writes a spec for building it as a proper Makeswift component, instead of forcing it into an embed.</p><p>For an asset, it fixes instead of suggesting. Off-brand colors snap to tokens, low-contrast text gets darker, and every change is listed. If a designer says "keep the green," it stays, marked as approved.</p>`,
       },
       {
         type: "imageGrid",
