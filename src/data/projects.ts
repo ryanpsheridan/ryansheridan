@@ -208,6 +208,10 @@ export const projects: Project[] = [
     content: [
       {
         type: "text",
+        body: `<p>We wanted more animation on our website, but making and publishing it depended on developers or outside help. Claude made animations easier to create, but getting them onto the site safely still meant a technical review every time.</p><p>I set out to close that gap: give designers more independence, while making sure every animation still meets our standards for brand, accessibility, and performance.</p>`,
+      },
+      {
+        type: "text",
         heading: "It Started With a Marquee",
         body: `<p>Our team designed a marquee of component pills in Figma for the <a href="https://www.bigcommerce.com/product/store-design/" target="_blank" rel="noopener noreferrer">Store Design page</a>, and I brought it to life with Claude Code as an embed. A navigation issue on the site around the same time had us double-checking every recent change, so it was a good moment to get a developer's eyes on the code.</p>`,
       },
