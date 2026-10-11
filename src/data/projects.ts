@@ -208,7 +208,7 @@ export const projects: Project[] = [
     content: [
       {
         type: "text",
-        body: `<p>Designers on our team can build an animation with Claude in an afternoon. Getting it onto the site still meant a ticket and a wait for a developer to review the code, because Makeswift's default embed drops code straight into the live page, where it can change fonts, shift the layout, or break other scripts. Before Claude, we hired a freelance animator or asked our video producer, which took even longer.</p><p>I set out to remove that wait while keeping every animation on brand, accessible, and fast.</p>`,
+        body: `<p>Designers on our team can build an animation with Claude in an afternoon. The slow part was getting it onto the site, which took a ticket and a wait for a developer to review the code. That review is there for a good reason. With Makeswift's default embed, pasted code runs right on the live page and can change fonts, shift the layout, or break other scripts. Before Claude, we hired a freelance animator or asked our video producer, which took even longer. I wanted to cut the wait and keep the protection.</p>`,
       },
       {
         type: "process",
@@ -260,7 +260,7 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        body: `<p>The review found four problems: the embed's colors could leak into the rest of the site, it could run twice and stack its animations, it loaded its animation library from an outside site, and screen readers read it twice. The developer sent back a fix, the marquee shipped the next morning, and that same day I turned the four fixes into the first rules of a Claude skill.</p>`,
+        body: `<p>The review found four problems: the embed's colors could leak into the rest of the site, it could run twice and stack its animations, it loaded its animation library from an outside site, and screen readers read it twice. The four issues were fixed, and I turned them into the first rules of a Claude skill.</p>`,
       },
       {
         type: "text",
@@ -344,7 +344,7 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        body: `<p>On the Shopping Agent animation, the cleaned-up version matched the original frame for frame, apart from the intended color fixes.</p>`,
+        body: `<p>On the Shopping Agent animation, the cleaned-up version looks nearly identical to the original. The one visible change is darker gray text, which is the contrast fix.</p>`,
       },
       {
         type: "imageGrid",
@@ -359,7 +359,7 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        heading: "Four colleagues reviewed the skill, and each review changed it",
+        heading: "Testing it with the team",
         body: `<ul><li><strong>Developer.</strong> Their review of the marquee code set the first four rules.</li><li><strong>SEO specialist.</strong> Added search rules, like no headings or content links inside an asset, caught a conflict with the accessibility rules, and moved the search checks higher.</li><li><strong>Web dev lead.</strong> Settled ownership, so this skill replaces our old embed skill.</li><li><strong>Designer.</strong> Ran their own concept through it and found three gaps: it refused assets that carry text, assumed the markup was the finished state, and clashed with mocks of our product's UI. I closed all three.</li></ul>`,
       },
       {
