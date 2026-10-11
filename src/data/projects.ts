@@ -210,7 +210,7 @@ export const projects: Project[] = [
     content: [
       {
         type: "text",
-        body: `<p>Designers on our team can build an animation with Claude in an afternoon, but getting it onto our website was slow. To go live, each one needed either a ticket for a developer to review the code, or a request to build it as a new component, which is a lot of work for a one-off animation. That review matters, because code added to a web page can change fonts, shift the layout, or break other parts of the site. Before Claude, we hired a freelance animator or asked our video producer. My goal was to remove the wait without losing that protection.</p>`,
+        body: `<p>Our designers could quickly create animations with Claude, but publishing them was slow. They either needed developer reviews or custom components, which was too much overhead for one-off assets. I wanted to eliminate these delays while keeping our site safe from bugs and layout issues.</p>`,
       },
       {
         type: "process",
@@ -234,6 +234,26 @@ export const projects: Project[] = [
             ],
           },
         ],
+      },
+      {
+        type: "text",
+        heading: "It started with one code review",
+        body: `<p>Our team designed a marquee of component pills in Figma for the <a href="https://www.bigcommerce.com/product/store-design/" target="_blank" rel="noopener noreferrer">Store Design page</a>. I animated it with Claude Code, then opened a Jira ticket for the engineering team to review the code. That's the in-house path in the diagram above.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          {
+            src: "/project-claude-embed-marquee.webp",
+            alt: "Two rows of black pills labeled with storefront components, such as Anchor Menu, Carousel, Gallery and Product Card, under the heading Your storefront toolkit, built in",
+            caption: "The marquee on the live Store Design page",
+          },
+        ],
+      },
+      {
+        type: "text",
+        body: `<p>The review found four problems: the embed's colors could leak into the rest of the site, it could run twice and stack its animations, it loaded its animation library from an outside site, and screen readers read it twice. Engineering sent back feedback and updated code, and I turned the four issues into the first rules of a Claude skill.</p>`,
       },
       {
         type: "text",
@@ -290,8 +310,7 @@ export const projects: Project[] = [
           { label: "Where code runs", before: "Straight into the page", after: "Walled off from the page" },
           { label: "Page layout", before: "Jumps when it loads", after: "Space saved up front" },
           { label: "Cleanup", before: "None", after: "Everything removed when it leaves" },
-          { label: "If a script fails", before: "Half-built embed", after: "Placeholder image stays" },
-          { label: "Search", before: "Invisible", after: "Crawlable image with alt text" },
+          { label: "Placeholder image", before: "None", after: "A still that shows while it loads, which search engines read" },
         ],
       },
       {
@@ -307,26 +326,6 @@ export const projects: Project[] = [
       {
         type: "text",
         eyebrow: { label: "Embed Asset skill", icon: "swatch" },
-        heading: "One code review became the first set of rules",
-        body: `<p>Our team designed a marquee of component pills in Figma for the <a href="https://www.bigcommerce.com/product/store-design/" target="_blank" rel="noopener noreferrer">Store Design page</a>, and I animated it with Claude Code as an embed, then sent it to an engineer for review through a code review ticket.</p>`,
-      },
-      {
-        type: "imageGrid",
-        framed: true,
-        images: [
-          {
-            src: "/project-claude-embed-marquee.webp",
-            alt: "Two rows of black pills labeled with storefront components, such as Anchor Menu, Carousel, Gallery and Product Card, under the heading Your storefront toolkit, built in",
-            caption: "The marquee on the live Store Design page",
-          },
-        ],
-      },
-      {
-        type: "text",
-        body: `<p>The review found four problems: the embed's colors could leak into the rest of the site, it could run twice and stack its animations, it loaded its animation library from an outside site, and screen readers read it twice. The four issues were fixed, and I turned them into the first rules of a Claude skill.</p>`,
-      },
-      {
-        type: "text",
         heading: "The skill fixes the code and lists every change",
         body: `<p>Designers can build a new animation with the skill from the start, or hand it an existing one to clean up. It first checks whether the piece is an asset or a component, and for a component it writes a spec instead of forcing it into an embed.</p><p>For an asset, it snaps off-brand colors to tokens, darkens low-contrast text, and lists every change. If a designer says "keep the green," it stays, marked as approved.</p>`,
       },
@@ -359,7 +358,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "Testing it with the team",
-        body: `<ul><li><strong>Senior engineering manager.</strong> His code review ticket on the marquee set the first four rules. I ran the skill by him, and he settled ownership, so this skill replaces our old embed skill.</li><li><strong>SEO specialist.</strong> Added search rules, like no headings or content links inside an asset, caught a conflict with the accessibility rules, and moved the search checks higher.</li><li><strong>Web strategy manager.</strong> Testing the component and skill with their own animations.</li><li><strong>Designer.</strong> Tested the skill with their own animation and found three gaps: it refused assets that carry text, assumed the markup was the finished state, and clashed with mocks of our product's UI. I closed all three.</li></ul><p>Their input shaped the skill's rules, and each team knows how the new process works.</p>`,
+        body: `<ul><li><strong>Senior engineering manager.</strong> Their code review ticket on the marquee set the first four rules. I ran the skill by them, and they settled ownership, so this skill replaces our old embed skill.</li><li><strong>SEO specialist.</strong> Added search rules, like no headings or content links inside an asset, caught a conflict with the accessibility rules, and moved the search checks higher.</li><li><strong>Web strategy manager.</strong> Testing the component and skill with their own animations.</li><li><strong>Designer.</strong> Tested their own animations with the component and skill as I worked through several versions of both.</li></ul><p>Their input shaped the skill's rules, and each team knows how the new process works.</p>`,
       },
       {
         type: "text",
