@@ -740,6 +740,107 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: "claude-embed",
+    title: "Claude Embed",
+    year: 2026,
+    description: "A Makeswift component and Claude skill that let designers ship AI-built animations to live pages safely, without a developer reviewing every one.",
+    // Placeholder art until real screenshots land. Add an ogImage (PNG or JPG)
+    // with the final thumbnail, since link previews skip SVG.
+    thumbnail: "/project-claude-embed-thumbnail.svg",
+    showOnHomepage: false,
+    tags: ["Claude Skill", "Design System", "Automation"],
+    tools: ["Claude", "Makeswift", "GSAP"],
+    client: "Commerce",
+    clientUrl: "https://www.commerce.com/",
+    content: [
+      {
+        type: "text",
+        heading: "It Started With a Code Review",
+        body: `<p>Earlier this year I built an animated "marquee pills" graphic for a product page using Claude Code. Around the same time, the site navigation went down. My embed was one of the suspects, so I pulled it and asked a developer to review it. I had already run it past another AI tool, but I didn't trust that answer enough to ship on it.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          { src: "/project-claude-embed-original.svg", caption: "The original marquee pills animation" },
+        ],
+      },
+      {
+        type: "text",
+        body: `<p>The review found four real problems:</p><div class="table-scroll"><table><thead><tr><th>What the review found</th><th>What it became</th></tr></thead><tbody><tr><td>Color variables leaked into the whole site and could collide with other embeds</td><td>The component isolates styles by design, and the skill keeps colors scoped to the embed</td></tr><tr><td>Nothing stopped the code from running twice, so animations stacked and slowly dragged the page down</td><td>The component tears down and rebuilds cleanly on every re-render</td></tr><tr><td>The animation library loaded from a public source with no safety check</td><td>The component loads it once from our own code, and the skill bans extra scripts</td></tr><tr><td>Screen readers read the graphic twice, and icons had no labels</td><td>The skill requires decorative graphics to be hidden from screen readers, and the component has an Accessibility folder for labels</td></tr></tbody></table></div><p>The developer sent back fixes and I shipped the next morning. That same day I turned the review into a Claude skill and shared it with them, which fed into a wider dev team effort on shared skills.</p>`,
+      },
+      {
+        type: "text",
+        heading: "The Bigger Problem",
+        body: `<p>That review showed the real issue. Designers now build animations with Claude, but the only way onto a Makeswift page was a generic embed that drops code straight into the live site. Fonts can change site-wide, layouts jump, and scripts break each other. So every embed needs a developer to check it, and then designers aren't really shipping their own work.</p>`,
+      },
+      {
+        type: "text",
+        heading: "What I Built",
+        body: `<p>Two pieces that work together, built into both of our Makeswift codebases: the Commerce and Feedonomics sites, and BigCommerce.</p><ul><li><strong>The component</strong> runs embedded code in its own isolated space, so it can't touch the rest of the page. It provides the animation library, cleans up after itself, and reserves space so the page doesn't jump.</li><li><strong>The skill</strong> takes a designer's raw asset and fixes it before it goes in: brand colors, contrast, corner radius, motion, accessibility and search. The designer gets a file ready to paste, plus a list of every change.</li></ul><p>The component protects the page. The skill protects the brand. Developers review the system once, not every embed.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [
+          { src: "/project-claude-embed-system.svg", caption: "How the skill and the component fit between Claude and the live page" },
+        ],
+      },
+      {
+        type: "text",
+        body: `<div class="table-scroll"><table><thead><tr><th></th><th>Default embed</th><th>Claude Embed</th></tr></thead><tbody><tr><th scope="row">Where code runs</th><td>Straight into the page</td><td>Isolated from the page</td></tr><tr><th scope="row">Cleanup</th><td>None</td><td>Everything removed on unmount</td></tr><tr><th scope="row">Page layout</th><td>Jumps when it loads</td><td>Space reserved up front</td></tr><tr><th scope="row">Reduced motion</th><td>Up to the asset</td><td>Built in</td></tr><tr><th scope="row">If a script fails</th><td>Half-built embed</td><td>Placeholder image stays</td></tr><tr><th scope="row">Search</th><td>Invisible</td><td>Crawlable placeholder image with alt text</td></tr></tbody></table></div>`,
+      },
+      {
+        type: "text",
+        heading: "Designing the Editor Panel",
+        body: `<p>The people using this are editors, not developers, so the settings panel had to feel like every other component they use.</p><ul><li><strong>One main field.</strong> Editors see "Embed code" up front. Everything else is folded into labeled groups most people never open.</li><li><strong>Plain language.</strong> "HTML" became "Embed code," and "thumbnail" became "Placeholder image."</li><li><strong>Safe defaults.</strong> Respecting reduced motion and waiting until the embed is on screen are both on by default.</li><li><strong>On-system.</strong> Corner radius follows our 4px token scale, and I used Makeswift's built-in grouping instead of forcing a custom divider.</li></ul>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        sideBySide: true,
+        images: [
+          { src: "/project-claude-embed-panel-closed.svg", caption: "The panel as most editors see it" },
+          { src: "/project-claude-embed-panel-open.svg", caption: "Every folder opened" },
+        ],
+      },
+      {
+        type: "text",
+        heading: "How the Skill Works",
+        body: `<ul><li><strong>It fixes instead of suggesting.</strong> Off-brand colors snap to tokens, low-contrast text gets corrected, and every change is logged. If a designer says "keep the green," it's kept and marked as approved.</li><li><strong>It knows its limits.</strong> If editors will need to change the content later, it stops and writes up a developer spec instead of building the wrong thing.</li><li><strong>It's verified, not assumed.</strong> On one production animation, the output matched the original frame for frame, with zero differing pixels across 15 points in the loop.</li></ul>`,
+      },
+      {
+        type: "compare",
+        before: { src: "/project-claude-embed-before.svg", label: "Raw asset" },
+        after: { src: "/project-claude-embed-after.svg", label: "After the skill" },
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          { src: "/project-claude-embed-changelog.svg", caption: "The skill logs every change it makes" },
+          { src: "/project-claude-embed-pixel-diff.svg", caption: "Checking the output against the original, frame for frame" },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Pressure-Testing It With the Team",
+        body: `<p>Before rollout I had it reviewed by a developer, an SEO specialist, the web dev lead, and a fellow designer. The SEO review added search rules and caught two contradictions, which I fixed. The designer ran his own concept through it. It flagged critical issues in his original, and he found three gaps in the skill itself, which I closed.</p>`,
+      },
+      {
+        type: "text",
+        heading: "Where It Landed",
+        body: `<blockquote><p>The skill is my way of scaling a developer's judgment. Instead of asking for a review every time, I turned that review into rules the tool applies automatically, then built the riskiest ones into the component so they can't happen at all. Reviews still happen, but once, for the system.</p></blockquote><p>The component is currently in code review.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          { src: "/project-claude-embed-publish.svg", caption: "Pasting an embed into Makeswift" },
+        ],
+      },
+    ],
+  },
+  {
     slug: "figma-project-starter",
     title: "Figma Project Starter",
     year: 2026,
