@@ -262,7 +262,7 @@ export const projects: Project[] = [
       {
         type: "text",
         heading: "What I Built",
-        body: `<p>I'm now building directly in our codebase with Claude Code, and this is one of the first components I've made that way. It's being built for all three of our brand sites. For the asset path, two pieces work together: the Claude Embed component runs pasted code in its own walled-off space, so it can't touch the rest of the page, and the Embed Asset skill checks and fixes a designer's code before it goes in.</p>`,
+        body: `<p>I'm now building directly in our codebase with Claude Code, and this is one of the first components I've made that way. It's being built for all three of our brand sites. For the asset path, two pieces work together: the Claude Embed component runs pasted code inside a Shadow DOM, which isolates the animation so its styles and scripts can't interfere with the rest of the website, and the Embed Asset skill checks and fixes a designer's code before it goes in.</p>`,
       },
       {
         type: "pathway",
