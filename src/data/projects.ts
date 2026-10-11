@@ -362,7 +362,7 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        heading: "What I Recommend",
+        heading: "Build the system in the order people need it",
         body: `<p>If you're doing a rebrand and a platform move at the same time, build the system in the order people will need it. Tokens first, so the brand has names before it has pages. Then documentation, so developers build from specs instead of screenshots. Then a review process with real sign-offs, so "done" means the same thing to design, publishing, and SEO.</p><p>The real test of a design system is whether someone who wasn't on the project can build a page next quarter without breaking anything. That's what we built this for.</p>`,
       },
     ],
@@ -502,7 +502,7 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        heading: "What I Recommend",
+        heading: "Build it for the people who aren't designers",
         body: `<p>If you're building a design system in Claude Design, build it around the people who aren't designers. Start from real specs, not screenshots, so every system is built the same way. Give each brand its own system, because AI doesn't handle ambiguity well. Put every rule in the system instead of the prompt. And aim for 90%, not 100%. Letting people finish the last 10% themselves is what makes them want to use it.</p>`,
       },
     ],
@@ -718,7 +718,7 @@ export const projects: Project[] = [
       },
       {
         type: "text",
-        heading: "My Recommendation",
+        heading: "Treat it as an 80/20 job",
         body: `<p>Treat case study PDFs as an 80/20 job. Claude Design is very good at structure: layout, type, pagination, and staying on brand across seven pages. Designers are still the right people for the last 20%, choosing imagery and catching the small spacing issues an import can introduce. That matches how we tiered our <a href="/work/brand-systems-claude-design">brand systems in Claude Design</a>: PDFs go through design, and the system does the heavy lifting first.</p><p>In practice, that means three things. Keep the rules in the template, not in the prompt. Refine in Claude Design before exporting, while changes are cheap. And make standalone HTML with html.to.design the default route into Figma, so every file arrives with its fonts and images intact.</p>`,
       },
     ],
