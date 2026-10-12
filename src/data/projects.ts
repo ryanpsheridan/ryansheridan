@@ -186,6 +186,11 @@ export interface Project {
    */
   ogImage?: string;
   showOnHomepage: boolean;
+  /**
+   * 1-based slot on the homepage, for a project that should sit somewhere
+   * other than its place in this list. /work keeps the list order.
+   */
+  homepagePosition?: number;
   tags: string[];
   tools: string[];
   client: string;
@@ -203,6 +208,7 @@ export const projects: Project[] = [
     ogImage: "/project-claude-embed-cover.png",
     thumbnail: "/project-claude-embed-thumbnail-animated.svg",
     showOnHomepage: true,
+    homepagePosition: 3,
     tags: ["Component Design", "Claude Skill", "Automation"],
     tools: ["Claude Code", "Claude", "Makeswift", "GSAP"],
     client: "BigCommerce",
@@ -1422,7 +1428,13 @@ export const projects: Project[] = [
 ];
 
 export function getHomepageProjects(): Project[] {
-  return projects.filter((p) => p.showOnHomepage);
+  const featured = projects.filter((p) => p.showOnHomepage);
+  const placed = featured.filter((p) => p.homepagePosition !== undefined);
+  const list = featured.filter((p) => p.homepagePosition === undefined);
+  for (const p of [...placed].sort((a, b) => a.homepagePosition! - b.homepagePosition!)) {
+    list.splice(Math.min(p.homepagePosition! - 1, list.length), 0, p);
+  }
+  return list;
 }
 
 export function getProjectBySlug(slug: string): Project | undefined {
