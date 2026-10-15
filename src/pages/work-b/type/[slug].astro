@@ -1,0 +1,12 @@
+---
+import WorkIndexB from "../../../components/work/WorkIndexB.astro";
+import { projectTypes } from "../../../data/work";
+
+export function getStaticPaths() {
+  return projectTypes.map((facet) => ({ params: { slug: facet.slug }, props: { facet } }));
+}
+
+const { facet } = Astro.props;
+---
+
+<WorkIndexB active={{ kind: "type", facet }} />

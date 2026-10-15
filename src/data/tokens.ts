@@ -247,7 +247,7 @@ export const shapeTokens: TokenGroup[] = [
     description: "Named stacking levels, so nothing has to guess a number.",
     tokens: [
       { name: "z-raised", value: "2", description: "Content lifted over a fixed background effect, like the footer over the cursor field." },
-      { name: "z-sticky", value: "10", description: "Sticky headers inside a page, like the year bars on /work." },
+      { name: "z-sticky", value: "10", description: "Sticky headers inside a page." },
       { name: "z-overlay", value: "150", description: "The full-screen menu." },
       { name: "z-nav", value: "200", description: "The sticky nav, which stays above the menu so its close button works." },
       { name: "z-modal", value: "1000", description: "The lightbox." },

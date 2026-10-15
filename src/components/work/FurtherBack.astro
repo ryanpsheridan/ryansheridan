@@ -1,0 +1,96 @@
+---
+/**
+ * The archive reveal under the /work grid. Shows how many older projects are
+ * tucked away and which years they span; the script in work-grid.ts fills in
+ * the numbers and opens the rest on click.
+ */
+interface Props {
+  more: number;
+  range: string;
+}
+
+const { more, range } = Astro.props;
+---
+
+<div class="further" data-further hidden={more === 0}>
+  <button type="button" class="further-button" data-further-button>
+    <span class="further-label">Go further back</span>
+    <span class="further-meta"><span data-further-count>{more} more</span> · <span data-further-range>{range}</span></span>
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M10 4v12M5 11l5 5 5-5" />
+    </svg>
+  </button>
+</div>
+
+<style>
+  /* A hairline either side frames the button like a chapter break. */
+  .further {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    margin-top: var(--space-7);
+  }
+
+  .further[hidden] {
+    display: none;
+  }
+
+  .further::before,
+  .further::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--color-border);
+  }
+
+  .further-button {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-4);
+    color: var(--color-text);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .further-label {
+    font-size: var(--text-l);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .further-meta {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .further-button svg {
+    width: 16px;
+    height: 16px;
+    margin-top: var(--space-2);
+    color: var(--color-text-muted);
+    transition:
+      transform var(--duration-moderate) var(--ease-emphasized),
+      color var(--duration-fast) var(--ease-standard);
+  }
+
+  .further-button:hover svg {
+    color: var(--color-text);
+    transform: translateY(4px);
+  }
+
+  .further-button:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .further-button svg {
+      transition: none;
+    }
+  }
+</style>

@@ -38,13 +38,12 @@ const sample = getHomepageProjects()[0];
   <section aria-labelledby="row">
     <h2 id="row">/work card</h2>
     <p class="ds-text">
-      Three across on desktop, two on tablets, one on phones, grouped under sticky year headers. Each card stacks a
-      16:10 frame, the client as an overline, the title, a short summary, and badges pinned to the foot so they line
-      up across a row. The title link stretches over the whole card, so everything is clickable without nesting
-      links, and the thumbnail is hidden from screen readers since the title already names the project. On hover a
-      small arrow slides into the frame's corner. A row of mono filters above the grid narrows by tag, hides empty
-      years, and keeps the choice in <code>?tag=</code>. While a year header is stuck, a dark rule fills across its
-      hairline as you read through that year.
+      Three across on desktop, two on tablets, one on phones, newest first. Each card stacks a 16:10 frame, the
+      title, a summary held to exactly three lines (longer ones end in an ellipsis), and the type badges tucked
+      right under it. The title link stretches over the whole card, and the thumbnail is hidden from screen
+      readers since the title already names the project. On hover a small arrow slides into the frame's corner.
+      A type dropdown sits on the title's baseline at the right and keeps the choice in <code>?tag=</code>. Only
+      the newest nine show at first; "Go further back" opens the rest, named by count and year range.
     </p>
   </section>
 
