@@ -2,7 +2,6 @@
 import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
-import CursorField from "../components/CursorField.astro";
 ---
 
 <Layout
@@ -11,7 +10,6 @@ import CursorField from "../components/CursorField.astro";
   noindex
 >
   <Nav />
-  <CursorField variant="compass" region="vignette" fixed />
   <main id="main" class="not-found">
     <div class="nf-inner">
       <p class="nf-code">404</p>
@@ -23,7 +21,7 @@ import CursorField from "../components/CursorField.astro";
 
       <div class="nf-links">
         <a href="/work" class="nf-button btn btn-primary">View all work</a>
-        <a href="/" class="nf-plain link-quiet">Back home <span class="arrow" aria-hidden="true">&rarr;</span></a>
+        <a href="/" class="btn btn-secondary">Back home</a>
       </div>
     </div>
   </main>
@@ -32,8 +30,6 @@ import CursorField from "../components/CursorField.astro";
 
 <style>
   .not-found {
-    position: relative;
-    z-index: 1;
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 120px var(--page-padding) 160px;
@@ -77,15 +73,6 @@ import CursorField from "../components/CursorField.astro";
     justify-content: center;
     gap: var(--space-4);
     flex-wrap: wrap;
-  }
-
-  .nf-plain {
-    font-family: var(--font-mono);
-    font-size: var(--text-s);
-  }
-
-  .arrow {
-    font-size: var(--text-xs);
   }
 
   @media (max-width: 640px) {

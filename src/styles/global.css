@@ -171,10 +171,12 @@ img {
   border-color: var(--color-inverse-hover);
 }
 
+/* The primary's shape with no fill, edged in the light hairline. The label
+   names it as a button, so the edge can stay quiet; hover firms it to ink. */
 .btn-secondary {
   color: var(--color-text);
   background: var(--color-bg);
-  border-color: var(--color-border-strong);
+  border-color: var(--color-border);
 }
 
 .btn-secondary:hover {

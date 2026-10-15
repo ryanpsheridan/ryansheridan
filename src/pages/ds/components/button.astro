@@ -24,7 +24,7 @@ import Button from "../../../components/ui/Button.astro";
     <h2 id="examples">Examples</h2>
     <Example
       title="Variants"
-      description="Primary is filled with text color. Secondary is outlined in the strong border."
+      description="Primary is filled with text color. Secondary is the same shape with no fill, outlined in the light border."
       code={`<Button href="/work">View all work</Button>
 <Button variant="secondary">Download PDF</Button>`}
     >
@@ -94,7 +94,7 @@ import Button from "../../../components/ui/Button.astro";
       rows={[
         { name: ".btn", description: "Base: shape, type, height, transitions. Always pair with a variant." },
         { name: ".btn-primary", description: "Filled. Hover darkens to <code>--color-inverse-hover</code>." },
-        { name: ".btn-secondary", description: "Outlined. Hover firms the outline to text color." },
+        { name: ".btn-secondary", description: "Outlined in --color-border. Hover firms the outline to text color." },
         { name: ".btn-sm / .btn-lg", description: "Size modifiers." },
       ]}
     />
@@ -105,7 +105,7 @@ import Button from "../../../components/ui/Button.astro";
     <ul class="ds-list">
       <li>A button that goes somewhere is an <code>&lt;a&gt;</code>; one that does something is a <code>&lt;button&gt;</code>. The component picks for you based on <code>href</code>.</li>
       <li>Every size clears the 24px minimum target (WCAG 2.5.8). Default and large clear 44px.</li>
-      <li>White on black is 18.9:1; on the hover color, 12.6:1. The secondary outline is 3.4:1.</li>
+      <li>White on black is 18.9:1; on the hover color, 12.6:1. The secondary outline is a light hairline: its label, not its edge, marks it as a button, so the edge is exempt from the 3:1 control contrast.</li>
       <li>Arrows are hidden from screen readers. The label must make sense without them.</li>
     </ul>
   </section>
