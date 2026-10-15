@@ -5,6 +5,7 @@ import Footer from "../../components/Footer.astro";
 import Media from "../../components/Media.astro";
 import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
 import ResultIcon from "../../components/ui/ResultIcon.astro";
+import ToolIcon from "../../components/ui/ToolIcon.astro";
 import { projects } from "../../data/projects";
 import { typeHref, toolHref } from "../../data/work";
 import type { GetStaticPaths } from "astro";
@@ -385,7 +386,7 @@ const schema = [
           <div class="meta-group">
             <span class="overline">Tools</span>
             <div class="badge-list">
-              {project.tools.map((tool) => <a href={toolHref(tool)} class="badge">{tool}</a>)}
+              {project.tools.map((tool) => <a href={toolHref(tool)} class="badge badge-tool"><ToolIcon name={tool} />{tool}</a>)}
             </div>
           </div>
         </div>

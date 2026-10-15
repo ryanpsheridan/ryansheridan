@@ -1,0 +1,33 @@
+---
+/**
+ * A tool's small mark, drawn in currentColor at 1em so it sits on the text
+ * beside it. Decorative: the tool's name is always written out next to it.
+ */
+import { getTool } from "../../data/tools";
+
+type Props = { name: string; class?: string };
+
+const { name, class: className } = Astro.props;
+const tool = getTool(name);
+---
+
+{tool && (
+  <svg class:list={["tool-icon", className]} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    {tool.path ? (
+      <path d={tool.path} fill="currentColor" />
+    ) : (
+      <>
+        <rect x="1.5" y="1.5" width="21" height="21" rx="5" fill="none" stroke="currentColor" stroke-width="2" />
+        <text x="12" y="16.4" text-anchor="middle" font-size="11" font-weight="600" font-family="var(--font-sans)" fill="currentColor">{tool.monogram}</text>
+      </>
+    )}
+  </svg>
+)}
+
+<style>
+  .tool-icon {
+    flex-shrink: 0;
+    width: 1em;
+    height: 1em;
+  }
+</style>

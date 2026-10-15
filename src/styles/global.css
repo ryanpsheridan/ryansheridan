@@ -259,6 +259,16 @@ img {
 
 /* ---------- Badge ---------- */
 
+/* A tool's badge leads with its mark (see ToolIcon). */
+.badge-tool {
+  gap: 6px;
+}
+
+.badge.badge-tool .tool-icon {
+  width: 12px;
+  height: 12px;
+}
+
 .badge-list {
   display: flex;
   flex-wrap: wrap;

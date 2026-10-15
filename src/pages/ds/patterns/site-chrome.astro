@@ -33,9 +33,9 @@ import Footer from "../components/Footer.astro";
       <table class="ds-table">
         <thead><tr><th scope="col">Part</th><th scope="col">Spec</th></tr></thead>
         <tbody>
-          <tr><td>Bar</td><td>Sticky, <code>--nav-height</code> (64px): 8px padding around a 48px menu button. White, on <code>--z-nav</code>.</td></tr>
+          <tr><td>Bar</td><td>Sticky, <code>--nav-height</code>: 80px on desktop (16px padding around a 48px row), 64px under 769px (8px around the 48px menu button). White, on <code>--z-nav</code>.</td></tr>
           <tr><td>Logo</td><td>"ryan sheridan design," lowercase mono, <code>--text-s</code>. Links home.</td></tr>
-          <tr><td>Links</td><td>From 769px: Work, About, Contact, LinkedIn, right aligned in 13px mono, 32px apart, muted until hovered. The current section is marked in full ink. No Home link, since the logo is the way home.</td></tr>
+          <tr><td>Links</td><td>From 769px: Work, About, Contact, LinkedIn, right aligned, 32px apart, set exactly like the logo. Hover and the current section get an underline. LinkedIn carries no arrow in the bar. No Home link, since the logo is the way home.</td></tr>
           <tr><td>Menu button</td><td>Below 769px only, in place of the links. 48px target, two 20px bars that cross into an X when open. Labeled "Menu," then "Close menu."</td></tr>
           <tr><td>Menu</td><td>Full screen, centered links at <code>--text-h3</code>, 16px apart. Fades over <code>--duration-moderate</code>.</td></tr>
         </tbody>

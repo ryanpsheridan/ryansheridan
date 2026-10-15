@@ -15,7 +15,7 @@
         <li><a href="/contact">Contact</a></li>
         <li>
           <a href="https://www.linkedin.com/in/ryansheridandesign/" target="_blank" rel="noopener noreferrer">
-            LinkedIn <span class="arrow" aria-hidden="true">&nearr;</span><span class="visually-hidden">(opens in a new tab)</span>
+            LinkedIn<span class="visually-hidden"> (opens in a new tab)</span>
           </a>
         </li>
       </ul>
@@ -49,7 +49,8 @@
     position: sticky;
     top: 0;
     z-index: var(--z-nav);
-    /* 8 + the 48px menu button + 8 = --nav-height. */
+    /* 8 + the 48px menu button + 8 = --nav-height (64px) on smaller
+       screens. Desktop gives it more air below. */
     padding: var(--space-2) var(--page-padding);
     background: var(--color-bg);
   }
@@ -87,25 +88,40 @@
     list-style: none;
   }
 
+  /* Set exactly like the logo, so the bar reads as one line of type. Hover
+     and the current page are marked with an underline, not a color. */
   .nav-links a {
+    color: var(--color-text);
     font-family: var(--font-mono);
     font-size: var(--text-s);
-    color: var(--color-text-muted);
-    transition: color var(--duration-fast) var(--ease-standard);
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--tracking-snug);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: text-decoration-color var(--duration-fast) var(--ease-standard);
   }
 
   .nav-links a:hover,
   .nav-links a[aria-current="page"] {
     color: var(--color-text);
-  }
-
-  .nav-links .arrow {
-    font-size: var(--text-xs);
+    text-decoration-color: currentColor;
   }
 
   /* Wide enough for the links, the bar carries them and the menu button
      steps aside. Kept in step with the homepage's split breakpoint. */
   @media (min-width: 769px) {
+    /* 16 + 48 + 16 = the desktop --nav-height (80px). */
+    nav {
+      padding-top: var(--space-3);
+      padding-bottom: var(--space-3);
+    }
+
+    .nav-inner {
+      min-height: var(--control-md);
+    }
+
     .nav-links {
       display: flex;
     }

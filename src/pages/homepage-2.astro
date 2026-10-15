@@ -1,0 +1,12 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Home from "../components/Home.astro";
+---
+
+{/* The homepage with the "Creating …" headline, whose last word follows the
+    project in view. Kept at its own URL to compare against /, and out of
+    search: noindex here and left off the sitemap's allowlist in
+    astro.config.mjs. */}
+<Layout title="Ryan Sheridan — Creating systems, brands and automations." description="Portfolio of Ryan Sheridan, Principal Designer specializing in design systems, marketing sites, and brand infrastructure." noindex>
+  <Home headline="creating" />
+</Layout>

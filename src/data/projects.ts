@@ -196,6 +196,12 @@ export interface Project {
    * other than its place in this list. /work keeps the list order.
    */
   homepagePosition?: number;
+  /**
+   * The word that finishes "Creating …" while this project is beside the
+   * headline on /homepage-2. Lowercase, usually a plural noun. Falls back
+   * to the first tag.
+   */
+  homepageWord?: string;
   tags: string[];
   tools: string[];
   client: string;
@@ -214,6 +220,7 @@ export const projects: Project[] = [
     thumbnail: "/project-claude-embed-thumbnail-animated.svg",
     showOnHomepage: true,
     homepagePosition: 3,
+    homepageWord: "motion",
     tags: ["Component Design", "Claude Skill", "Automation"],
     tools: ["Claude Code", "Claude", "Makeswift", "GSAP"],
     client: "BigCommerce",
@@ -435,6 +442,7 @@ export const projects: Project[] = [
     ogImage: "/project-multi-brand1.jpg",
     thumbnail: "/figma-variables-thumbnail-fdx-animated.svg",
     showOnHomepage: true,
+    homepageWord: "systems",
     tags: ["Design System"],
     tools: ["Figma"],
     client: "Commerce",
@@ -506,6 +514,7 @@ export const projects: Project[] = [
     ogImage: "/project-feedonomics1.jpg",
     thumbnail: "/feedonomics-data-journey-animated.svg",
     showOnHomepage: true,
+    homepageWord: "websites",
     tags: ["Design System", "Web Design"],
     tools: ["Figma", "Makeswift", "Contentful"],
     client: "Feedonomics",
@@ -711,6 +720,7 @@ export const projects: Project[] = [
     ogImage: "/project-claude-design1.jpg",
     thumbnail: "/brand-systems-deck-typing-animated.svg",
     showOnHomepage: true,
+    homepageWord: "AI workflows",
     tags: ["Design System", "Automation"],
     tools: ["Claude Design", "Claude", "Figma"],
     client: "Commerce",
@@ -851,6 +861,7 @@ export const projects: Project[] = [
     ogImage: "/project-rhow-coffee02.jpg",
     thumbnail: "/rhow-logo-spec-animated-dark.svg",
     showOnHomepage: true,
+    homepageWord: "brands",
     tags: ["Branding", "Illustration"],
     tools: ["Adobe Illustrator", "Figma"],
     client: "RHOW Coffee",
@@ -935,6 +946,7 @@ export const projects: Project[] = [
     ogImage: "/project-claude-design-pdf1.jpg",
     thumbnail: "/claude-design-pdf-mizuno-typing-animated.svg",
     showOnHomepage: true,
+    homepageWord: "automations",
     tags: ["Design System", "Automation"],
     tools: ["Claude Design", "Figma", "html.to.design"],
     client: "BigCommerce",

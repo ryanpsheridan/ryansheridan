@@ -4,6 +4,7 @@ import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import { breadcrumbSchema } from "../data/schema";
 import Breadcrumbs from "../components/ui/Breadcrumbs.astro";
+import ToolLink from "../components/ui/ToolLink.astro";
 ---
 
 <Layout
@@ -141,18 +142,18 @@ import Breadcrumbs from "../components/ui/Breadcrumbs.astro";
           <div class="skill-group">
             <h3>Tools</h3>
             <ul>
-              <li>Figma</li>
-              <li>Framer</li>
-              <li>Webflow</li>
-              <li>Makeswift</li>
+              <li><ToolLink name="Figma" /></li>
+              <li><ToolLink name="Framer" /></li>
+              <li><ToolLink name="Webflow" /></li>
+              <li><ToolLink name="Makeswift" /></li>
             </ul>
           </div>
           <div class="skill-group">
             <h3>AI Workflows</h3>
             <ul>
-              <li>Claude Code</li>
-              <li>Claude Design</li>
-              <li>Model Context Protocol</li>
+              <li><ToolLink name="Claude Code" /></li>
+              <li><ToolLink name="Claude Design" /></li>
+              <li><ToolLink name="Model Context Protocol" /></li>
             </ul>
           </div>
         </div>

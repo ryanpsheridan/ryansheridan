@@ -9,6 +9,7 @@ const schema = [
   breadcrumbSchema([{ name: "About", path: "/about" }]),
 ];
 import Breadcrumbs from "../components/ui/Breadcrumbs.astro";
+import ToolLink from "../components/ui/ToolLink.astro";
 ---
 
 <Layout
@@ -88,40 +89,40 @@ import Breadcrumbs from "../components/ui/Breadcrumbs.astro";
         <div class="tool-group">
           <h3>Design</h3>
           <ul>
-            <li><a href="https://www.figma.com" target="_blank" rel="noopener noreferrer">Figma</a></li>
-            <li><a href="https://www.adobe.com/products/photoshop.html" target="_blank" rel="noopener noreferrer">Photoshop</a></li>
-            <li><a href="https://www.adobe.com/products/illustrator.html" target="_blank" rel="noopener noreferrer">Illustrator</a></li>
-            <li><a href="https://www.adobe.com/products/indesign.html" target="_blank" rel="noopener noreferrer">InDesign</a></li>
+            <li><ToolLink name="Figma" /></li>
+            <li><ToolLink name="Photoshop" /></li>
+            <li><ToolLink name="Illustrator" /></li>
+            <li><ToolLink name="InDesign" /></li>
           </ul>
         </div>
         <div class="tool-group">
           <h3>Web Platforms</h3>
           <ul>
-            <li><a href="https://webflow.com" target="_blank" rel="noopener noreferrer">Webflow</a></li>
-            <li><a href="https://www.framer.com" target="_blank" rel="noopener noreferrer">Framer</a></li>
-            <li><a href="https://www.makeswift.com" target="_blank" rel="noopener noreferrer">Makeswift</a></li>
-            <li><a href="https://www.squarespace.com" target="_blank" rel="noopener noreferrer">Squarespace</a></li>
-            <li><a href="https://www.wix.com" target="_blank" rel="noopener noreferrer">Wix</a></li>
-            <li><a href="https://www.gohighlevel.com" target="_blank" rel="noopener noreferrer">GoHighLevel</a></li>
+            <li><ToolLink name="Webflow" /></li>
+            <li><ToolLink name="Framer" /></li>
+            <li><ToolLink name="Makeswift" /></li>
+            <li><ToolLink name="Squarespace" /></li>
+            <li><ToolLink name="Wix" /></li>
+            <li><ToolLink name="GoHighLevel" /></li>
           </ul>
         </div>
         <div class="tool-group">
           <h3>AI Workflows</h3>
           <ul>
-            <li><a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude</a></li>
-            <li><a href="https://claude.ai/code" target="_blank" rel="noopener noreferrer">Claude Code</a></li>
-            <li><a href="https://claude.ai/design" target="_blank" rel="noopener noreferrer">Claude Design</a></li>
-            <li><a href="https://chatgpt.com" target="_blank" rel="noopener noreferrer">ChatGPT</a></li>
-            <li><a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer">Gemini</a></li>
-            <li><a href="https://www.perplexity.ai" target="_blank" rel="noopener noreferrer">Perplexity</a></li>
+            <li><ToolLink name="Claude" /></li>
+            <li><ToolLink name="Claude Code" /></li>
+            <li><ToolLink name="Claude Design" /></li>
+            <li><ToolLink name="ChatGPT" /></li>
+            <li><ToolLink name="Gemini" /></li>
+            <li><ToolLink name="Perplexity" /></li>
           </ul>
         </div>
         <div class="tool-group">
           <h3>DesignOps & Dev</h3>
           <ul>
-            <li><a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-            <li><a href="https://vercel.com" target="_blank" rel="noopener noreferrer">Vercel</a></li>
-            <li><a href="https://claude.ai/code" target="_blank" rel="noopener noreferrer">Claude Code</a></li>
+            <li><ToolLink name="GitHub" /></li>
+            <li><ToolLink name="Vercel" /></li>
+            <li><ToolLink name="Claude Code" /></li>
           </ul>
         </div>
       </div>
@@ -293,15 +294,6 @@ import Breadcrumbs from "../components/ui/Breadcrumbs.astro";
 
   .tool-group li {
     font-size: var(--text-s);
-  }
-
-  .tool-group a {
-    color: var(--color-text-muted);
-    transition: color var(--duration-fast) var(--ease-standard);
-  }
-
-  .tool-group a:hover {
-    color: var(--color-text);
   }
 
   .certification-item {

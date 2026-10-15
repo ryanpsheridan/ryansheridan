@@ -1,0 +1,54 @@
+---
+/**
+ * A tool named on the site, linked to the tool's own site in the link blue
+ * with its mark in front. Every list of tools uses this, so they all read
+ * the same. A name with no entry in data/tools.ts renders as plain text.
+ */
+import { getTool } from "../../data/tools";
+import ToolIcon from "./ToolIcon.astro";
+
+type Props = {
+  /** The tool's name or an alias, as listed in data/tools.ts. */
+  name: string;
+  /** Shown instead of the name, when a list wants a shorter label. */
+  label?: string;
+};
+
+const { name, label = name } = Astro.props;
+const tool = getTool(name);
+---
+
+{tool ? (
+  <a class="tool-link" href={tool.url} target="_blank" rel="noopener noreferrer">
+    <ToolIcon name={name} />
+    <span>{label}</span><span class="visually-hidden">(opens in a new tab)</span>
+  </a>
+) : (
+  <span>{label}</span>
+)}
+
+<style>
+  .tool-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    color: var(--color-link);
+    text-decoration: underline;
+    text-decoration-color: var(--color-link-subtle);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      text-decoration-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .tool-link:hover {
+    color: var(--color-link-hover);
+    text-decoration-color: var(--color-link-hover);
+  }
+
+  .tool-link :global(.tool-icon) {
+    width: 1.1em;
+    height: 1.1em;
+  }
+</style>
