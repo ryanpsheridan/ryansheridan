@@ -27,12 +27,21 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     <div class="split-inner">
       <div class="left-panel">
         <div class="headline-block" data-blueprint-scope>
-          {/* Read out once as the whole list, since the visible word keeps
-              changing; the moving part is hidden from assistive tech. */}
-          <h1 class="sticky-title creating-title" data-spec="type" data-spec-name="Display" aria-label={`Designing and scaling ${[...new Set(words)].join(", ")}.`}>
-            <span class="creating-lead" aria-hidden="true">Designing and</span><br />
-            <span class="creating-lead" aria-hidden="true">scaling</span>{" "}
-            <span class="word-slot" aria-hidden="true" data-word-slot data-words={JSON.stringify(words)}><span class="word">{words[0]}.</span></span>
+          {/* Two versions of the one headline, shown by width. Desktop gets
+              the rotating line, read out once as the whole list since the
+              visible word keeps changing. Below 769px, where the headline
+              no longer sits beside the work, the original line in full. */}
+          <h1 class="sticky-title creating-title" data-spec="type" data-spec-name="Display">
+            <span class="headline-rotating">
+              <span class="visually-hidden">Designing and scaling {[...new Set(words)].join(", ")}.</span>
+              <span class="creating-lead" aria-hidden="true">Designing and</span><br />
+              <span class="creating-lead" aria-hidden="true">scaling</span>{" "}
+              <span class="word-slot" aria-hidden="true" data-word-slot data-words={JSON.stringify(words)}><span class="word">{words[0]}.</span></span>
+            </span>
+            <span class="headline-full">
+              Designing <span class="accent">systems</span>,<br />
+              <span class="accent">sites</span> and <span class="accent">brands</span>.
+            </span>
           </h1>
           {/* The way into the blueprint: the page drawing its own specs over
               itself. The shortcut in the sentence is a real toggle too, for
@@ -153,8 +162,8 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
   /**
    * The "Designing and scaling …" headline: its last word follows the work. On desktop,
    * where the headline is sticky beside the list, it changes as each project
-   * crosses the middle of the screen. On a phone the headline sits above
-   * the list, so the words take turns on a timer while it is in view.
+   * crosses the middle of the screen. Smaller screens show the original
+   * headline instead (see .headline-full).
    */
   const slot = document.querySelector<HTMLElement>("[data-word-slot]");
   if (slot) {
@@ -204,20 +213,9 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     );
     rows.forEach((row) => watch.observe(row));
 
-    // Phones: a slow turn through the words while the headline is on screen.
-    let timer = 0;
-    let headlineInView = true;
-    function updateTimer() {
-      window.clearInterval(timer);
-      if (splitView.matches || still.matches || !headlineInView) return;
-      timer = window.setInterval(() => showWord((current + 1) % words.length), 2200);
-    }
-    new IntersectionObserver(([entry]) => {
-      headlineInView = entry.isIntersecting;
-      updateTimer();
-    }).observe(slot);
+    // Below 769px the original headline shows instead and the word sits
+    // still. Widening back to desktop starts it on the first project.
     splitView.addEventListener("change", () => {
-      updateTimer();
       if (splitView.matches) showWord(0);
     });
   }
@@ -589,6 +587,25 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
   .creating-title {
     white-space: nowrap;
     font-size: min(var(--text-h1), 9.2cqi);
+  }
+
+  .headline-full {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .headline-rotating {
+      display: none;
+    }
+
+    .headline-full {
+      display: inline;
+    }
+
+    .creating-title {
+      white-space: normal;
+      font-size: var(--text-h1);
+    }
   }
 
   .creating-lead {
