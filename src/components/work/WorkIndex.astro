@@ -4,8 +4,8 @@
  * types, year). How the thumbnail shows up on hover depends on `variant`:
  *
  * - follow: floats beside the cursor.
- * - panel:  a sticky frame to the right of the list swaps to the row you
- *           point at, with that project's types under it.
+ * - panel:  titles only, each with up to two type badges, and a sticky
+ *           16:10 frame on the right that swaps to the row you point at.
  * - inline: a small thumbnail slides open in front of the title.
  * - fill:   the row itself fills with the image, edge to edge.
  *
@@ -24,8 +24,7 @@ interface Props {
 }
 
 const { variant } = Astro.props;
-// At most two types per row keeps every line short enough to scan. The
-// panel caption has room for all of them.
+// At most two types per row keeps every line short enough to scan.
 const types = (tags: string[]) => tags.slice(0, 2).join(", ");
 ---
 
@@ -46,6 +45,11 @@ const types = (tags: string[]) => tags.slice(0, 2).join(", ");
                 <a href={`/work/${project.slug}`} class="index-link">
                   <span class="index-title">{project.title}</span>
                 </a>
+                {variant === "panel" && (
+                  <span class="index-badges badge-list">
+                    {project.tags.slice(0, 2).map((tag) => <span class="badge">{tag}</span>)}
+                  </span>
+                )}
                 <span class="index-type">{types(project.tags)}</span>
                 <span class="index-year">
                   <time datetime={String(project.year)}>{project.year}</time>
@@ -62,7 +66,6 @@ const types = (tags: string[]) => tags.slice(0, 2).join(", ");
                 {workProjects.map((project, i) => (
                   <div class:list={["preview-frame", { "is-active": variant === "panel" && i === 0 }]} data-preview-for={project.slug}>
                     <span class="preview-image">{project.thumbnail && <Media src={project.thumbnail} alt="" />}</span>
-                    {variant === "panel" && <span class="preview-caption">{project.tags.join(", ")}</span>}
                   </div>
                 ))}
               </div>
@@ -178,7 +181,8 @@ const types = (tags: string[]) => tags.slice(0, 2).join(", ");
     font-variant-numeric: tabular-nums;
   }
 
-  .row-media {
+  .row-media,
+  .index-badges {
     display: none;
   }
 
@@ -186,10 +190,6 @@ const types = (tags: string[]) => tags.slice(0, 2).join(", ");
     display: block;
     width: 100%;
     height: 100%;
-  }
-
-  .preview-caption {
-    display: none;
   }
 
   .row-media :global(img),
@@ -245,12 +245,26 @@ const types = (tags: string[]) => tags.slice(0, 2).join(", ");
       align-items: start;
     }
 
+    /* Just the title, with up to two type badges under it. */
     .is-panel .index-row {
-      grid-template-columns: 3rem minmax(0, 1fr) 3.5rem;
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: var(--space-2);
+      padding: var(--space-4) 0;
     }
 
-    .is-panel .index-type {
+    .is-panel .index-row::before,
+    .is-panel .index-type,
+    .is-panel .index-year {
       display: none;
+    }
+
+    .is-panel .index-badges {
+      display: flex;
+      transition: transform var(--duration-moderate) var(--ease-emphasized);
+    }
+
+    .is-panel .index-row:hover .index-badges {
+      transform: translateX(var(--space-2));
     }
 
     .is-panel .index-row:hover .index-title {
@@ -262,8 +276,8 @@ const types = (tags: string[]) => tags.slice(0, 2).join(", ");
       top: calc(var(--nav-height) + var(--space-5));
     }
 
-    /* Every frame sits in the same grid cell, so the stack is as tall as
-       its tallest caption and swapping never changes its height. */
+    /* Every frame sits in the same grid cell, so swapping never changes
+       the stack's height. */
     .is-panel .preview-stack {
       display: grid;
     }
@@ -277,20 +291,11 @@ const types = (tags: string[]) => tags.slice(0, 2).join(", ");
     .is-panel .preview-image {
       display: block;
       height: auto;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 16 / 10;
       overflow: hidden;
       background: var(--color-surface);
     }
 
-    .is-panel .preview-caption {
-      display: block;
-      margin-top: var(--space-3);
-      font-family: var(--font-mono);
-      font-size: var(--text-xs);
-      letter-spacing: var(--tracking-wide);
-      text-transform: uppercase;
-      color: var(--color-text-muted);
-    }
 
     /* inline: a thumbnail slot in front of each title, closed at rest. Its
        height is always reserved, so opening it never moves the rows. */
@@ -395,8 +400,7 @@ const types = (tags: string[]) => tags.slice(0, 2).join(", ");
 
   /* Tablet: the type column goes; title and year remain. */
   @media (max-width: 1024px) and (hover: hover) {
-    .index-row,
-    .is-panel .index-row {
+    .index-row {
       grid-template-columns: 3rem minmax(0, 1fr) 3.5rem;
     }
 
@@ -468,6 +472,18 @@ const types = (tags: string[]) => tags.slice(0, 2).join(", ");
 
     .index-year {
       grid-area: year;
+    }
+
+    .is-panel .index-type,
+    .is-panel .index-year {
+      display: none;
+    }
+
+    .is-panel .index-badges {
+      grid-row: 3;
+      grid-column: 1 / -1;
+      display: flex;
+      margin-top: var(--space-2);
     }
   }
 
