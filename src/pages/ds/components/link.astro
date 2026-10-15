@@ -8,7 +8,7 @@ import DoDont from "../../../components/ds/DoDont.astro";
 <DsLayout
   section="Components"
   title="Link"
-  lead="Three kinds, by where the link sits: blue inside a sentence, grey in the chrome around it, underlined when it stands alone."
+  lead="Every text link is blue. Three kinds, by where the link sits: inside a sentence, beside the copy as a secondary route, or standing alone. The tool lists on About and the resume are the one quiet exception."
 >
   <section aria-labelledby="usage">
     <h2 id="usage">When to use which</h2>
@@ -17,7 +17,7 @@ import DoDont from "../../../components/ds/DoDont.astro";
         <thead><tr><th scope="col">Kind</th><th scope="col">Use for</th><th scope="col">On the site</th></tr></thead>
         <tbody>
           <tr><td>Inline</td><td>A link inside running copy.</td><td class="muted">Case study text</td></tr>
-          <tr><td>Quiet</td><td>Navigation chrome and secondary routes, where blue would shout.</td><td class="muted">Footer, back links, "Start a website project"</td></tr>
+          <tr><td>Quiet</td><td>Secondary routes beside the copy. Blue, underlined on hover.</td><td class="muted">Back links, "Start a website project", "Back home"</td></tr>
           <tr><td>Underlined</td><td>A standalone link that should still read as one.</td><td class="muted">Client site, email, certification</td></tr>
         </tbody>
       </table>
@@ -39,7 +39,7 @@ import DoDont from "../../../components/ds/DoDont.astro";
 
     <Example
       title="Quiet"
-      description="Muted until hovered."
+      description="Blue, with the underline arriving on hover."
       lang="html"
       code={`<a href="/work" class="link-quiet">← All work</a>`}
     >
@@ -73,8 +73,8 @@ import DoDont from "../../../components/ds/DoDont.astro";
       kind="Class"
       rows={[
         { name: ".prose a", description: "Inline link, applied by context. No class needed." },
-        { name: ".link-quiet", description: "Muted text, text color on hover." },
-        { name: ".link-underline", description: "Text color, 1px strong underline offset 4px." },
+        { name: ".link-quiet", description: "Link blue, underline and darker blue on hover." },
+        { name: ".link-underline", description: "Link blue, 1px light-blue underline offset 4px, darker on hover." },
       ]}
     />
   </section>
@@ -83,7 +83,7 @@ import DoDont from "../../../components/ds/DoDont.astro";
     <h2 id="a11y">Accessibility</h2>
     <ul class="ds-list">
       <li>Inline links are underlined. Blue against black text is only 2.8:1, so color alone wouldn't mark them (WCAG 1.4.1).</li>
-      <li>Quiet links only appear in chrome, set apart by position, never in the middle of a sentence.</li>
+      <li>Quiet links only appear beside the copy, set apart by position, never in the middle of a sentence.</li>
       <li>Every link text names its destination on its own, since screen reader users often list links out of context.</li>
     </ul>
   </section>

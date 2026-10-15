@@ -201,17 +201,23 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
       if (event.propertyName === "width") slot.style.removeProperty("width");
     });
 
-    // The project crossing the middle of the screen owns the word.
+    // A project takes the word once its image, not the padding above it,
+    // reaches the middle of the screen, so the word turns as the work
+    // arrives rather than ahead of it.
     const watch = new IntersectionObserver(
       (entries) => {
         if (!splitView.matches) return;
         for (const entry of entries) {
-          if (entry.isIntersecting) showWord(Number((entry.target as HTMLElement).dataset.index));
+          const row = entry.target.closest<HTMLElement>(".project-row");
+          if (entry.isIntersecting && row) showWord(Number(row.dataset.index));
         }
       },
       { rootMargin: "-50% 0px -50% 0px" }
     );
-    rows.forEach((row) => watch.observe(row));
+    rows.forEach((row) => {
+      const image = row.querySelector(".cell-image");
+      if (image) watch.observe(image);
+    });
 
     // Below 769px the original headline shows instead and the word sits
     // still. Widening back to desktop starts it on the first project.

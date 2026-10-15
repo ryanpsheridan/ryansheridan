@@ -250,8 +250,8 @@ import ToolLink from "../components/ui/ToolLink.astro";
   }
 
   .contact-list a:hover {
-    color: var(--color-text);
-    text-decoration-color: var(--color-text);
+    color: var(--color-link-hover);
+    text-decoration-color: var(--color-link-hover);
   }
 
   .divider {
@@ -373,6 +373,10 @@ import ToolLink from "../components/ui/ToolLink.astro";
     font-size: var(--text-m);
     font-weight: var(--weight-medium);
     letter-spacing: var(--tracking-snug);
+  }
+
+  /* The certification is a link, so it keeps the link blue. */
+  .education-name {
     color: var(--color-text);
   }
 

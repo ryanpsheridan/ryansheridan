@@ -230,31 +230,44 @@ img {
 
 /* ---------- Links ---------- */
 
-/* Grey until hovered. For chrome and secondary routes: footer, back links,
-   "or start a project". */
+/* Every text link on the site is the link blue. The only quiet links are
+   the tool lists on About and the resume (ToolLink). Nav, footer, buttons,
+   cards, and badges are controls, not text links, and keep their own look. */
+
+/* Blue, no underline until hovered. For secondary routes beside other
+   copy: back links, "or start a project". */
 .link-quiet {
-  color: var(--color-text-muted);
-  transition: color var(--duration-fast) var(--ease-standard);
+  color: var(--color-link);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    text-decoration-color var(--duration-fast) var(--ease-standard);
 }
 
 .link-quiet:hover {
-  color: var(--color-text);
+  color: var(--color-link-hover);
+  text-decoration-color: var(--color-link-hover);
 }
 
-/* Text color with a hairline under it. For a standalone link that should
-   read as one: a client site, an email address, a certification. */
+/* Blue with a hairline under it. For a standalone link that should read as
+   one: a client site, an email address, a certification. */
 .link-underline {
-  color: var(--color-text);
+  color: var(--color-link);
   text-decoration: underline;
-  text-decoration-color: var(--color-border-strong);
+  text-decoration-color: var(--color-link-subtle);
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
-  transition: text-decoration-color var(--duration-fast) var(--ease-standard);
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    text-decoration-color var(--duration-fast) var(--ease-standard);
 }
 
 .link-underline:hover {
-  color: var(--color-text);
-  text-decoration-color: var(--color-text);
+  color: var(--color-link-hover);
+  text-decoration-color: var(--color-link-hover);
 }
 
 /* ---------- Badge ---------- */
@@ -370,13 +383,14 @@ a.badge[aria-current="page"] {
   color: var(--color-border-strong);
 }
 
+/* Blue like every text link; the page you're on stays ink. */
 .breadcrumbs a {
-  color: var(--color-text-muted);
+  color: var(--color-link);
   transition: color var(--duration-fast) var(--ease-standard);
 }
 
 .breadcrumbs a:hover {
-  color: var(--color-text);
+  color: var(--color-link-hover);
 }
 
 .breadcrumbs [aria-current="page"] {
