@@ -1,0 +1,12 @@
+---
+import WorkList from "../../../components/WorkList.astro";
+import { projectTools } from "../../../data/work";
+
+export function getStaticPaths() {
+  return projectTools.map((facet) => ({ params: { slug: facet.slug }, props: { facet } }));
+}
+
+const { facet } = Astro.props;
+---
+
+<WorkList active={{ kind: "tool", facet }} />

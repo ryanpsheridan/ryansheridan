@@ -8,14 +8,14 @@ import DoDont from "../../../components/ds/DoDont.astro";
 <DsLayout
   section="Components"
   title="Badge"
-  lead="A small mono tag that labels a project with its type or the tools behind it. Read-only: badges describe, they don't do."
+  lead="A small mono tag that labels a project with its type or the tools behind it. Each one links to the page that lists every project with that type or tool."
 >
   <section aria-labelledby="usage">
     <h2 id="usage">When to use it</h2>
     <ul class="ds-list">
       <li>Project types under a card title, on the homepage and /work.</li>
       <li>Project type and tools in a case study sidebar.</li>
-      <li>Not as a button or filter. If clicking it should do something, it's a different component.</li>
+      <li>As a link only to that type's or tool's page (<code>/work/type/…</code>, <code>/work/tool/…</code>). For any other action, use a button.</li>
     </ul>
   </section>
 
@@ -34,13 +34,16 @@ import DoDont from "../../../components/ds/DoDont.astro";
     </Example>
 
     <Example
-      title="From data"
+      title="Linked, from data"
+      description="Wherever a project's types or tools appear, each badge links to its page. Looks the same at rest; the text and edge darken on hover. The badge for the page you're on is filled."
       lang="astro"
-      code={`<div class="badge-list">
-  {project.tags.map((tag) => <span class="badge">{tag}</span>)}
+      code={`import { typeHref } from "../data/work";
+
+<div class="badge-list">
+  {project.tags.map((tag) => <a href={typeHref(tag)} class="badge">{tag}</a>)}
 </div>`}
     >
-      <div class="badge-list"><span class="badge">Claude Skill</span><span class="badge">Automation</span><span class="badge">Design System</span></div>
+      <div class="badge-list"><a href="/work/type/claude-skill" class="badge">Claude Skill</a><a href="/work/type/automation" class="badge" aria-current="page">Automation</a><a href="/work/type/design-system" class="badge">Design System</a></div>
     </Example>
   </section>
 
@@ -51,13 +54,15 @@ import DoDont from "../../../components/ds/DoDont.astro";
       rows={[
         { name: ".badge-list", description: "Wrapping flex row, 8px gap." },
         { name: ".badge", description: "24px tall, 12px mono, muted text, hairline border, 4px radius." },
+        { name: "a.badge", description: "A linked badge. Darkens on hover and sits above a card-wide link so it takes its own clicks." },
+        { name: "a.badge[aria-current=\"page\"]", description: "The badge for the page you're on: filled dark." },
       ]}
     />
   </section>
 
   <section aria-labelledby="a11y">
     <h2 id="a11y">Accessibility</h2>
-    <p class="ds-text">Badges are plain text. Muted on white is 6.7:1. The border is decorative, so it doesn't need to meet 3:1.</p>
+    <p class="ds-text">Muted on white is 6.7:1. The border is decorative, so it doesn't need to meet 3:1. Linked badges take the site's standard focus ring, and the one for the current page carries <code>aria-current="page"</code> so screen readers announce it.</p>
   </section>
 
   <section aria-labelledby="content">

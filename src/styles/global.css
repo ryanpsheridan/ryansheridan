@@ -280,6 +280,30 @@ img {
   border-radius: var(--radius-sm);
 }
 
+/* A badge that links to its project type or tool page. Same at rest; the
+   text and edge darken on hover. It sits above any card-wide link around
+   it, so it takes its own clicks. The badge for the page you're on is
+   filled. */
+a.badge {
+  position: relative;
+  z-index: 1;
+  text-decoration: none;
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard);
+}
+
+a.badge:hover {
+  color: var(--color-text);
+  border-color: var(--color-border-strong);
+}
+
+a.badge[aria-current="page"] {
+  color: var(--color-bg);
+  background: var(--color-text);
+  border-color: var(--color-text);
+}
+
 /* ---------- Overline ---------- */
 
 /* Small uppercase mono label that names what sits under it. */
