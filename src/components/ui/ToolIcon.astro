@@ -12,7 +12,7 @@ const tool = getTool(name);
 ---
 
 {tool && (
-  <svg class:list={["tool-icon", className]} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  <svg class:list={["tool-icon", className]} viewBox={tool.viewBox ?? "0 0 24 24"} aria-hidden="true" focusable="false">
     {tool.path ? (
       <path d={tool.path} fill="currentColor" />
     ) : (

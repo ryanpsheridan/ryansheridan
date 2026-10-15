@@ -720,7 +720,7 @@ export const projects: Project[] = [
     ogImage: "/project-claude-design1.jpg",
     thumbnail: "/brand-systems-deck-typing-animated.svg",
     showOnHomepage: true,
-    homepageWord: "AI workflows",
+    homepageWord: "workflows",
     tags: ["Design System", "Automation"],
     tools: ["Claude Design", "Claude", "Figma"],
     client: "Commerce",

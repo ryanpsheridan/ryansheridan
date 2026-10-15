@@ -1,7 +1,8 @@
 ---
 /**
  * A tool named on the site, linked to the tool's own site in the link blue
- * with its mark in front. Every list of tools uses this, so they all read
+ * with its mark in front, drawn in ink so the marks read as logos rather
+ * than as more link. Every list of tools uses this, so they all read
  * the same. A name with no entry in data/tools.ts renders as plain text.
  */
 import { getTool } from "../../data/tools";
@@ -50,5 +51,6 @@ const tool = getTool(name);
   .tool-link :global(.tool-icon) {
     width: 1.1em;
     height: 1.1em;
+    color: var(--color-text);
   }
 </style>

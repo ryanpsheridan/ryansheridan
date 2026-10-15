@@ -202,7 +202,7 @@ export const spacingTokens: TokenGroup[] = [
       { name: "page-padding", value: "40px", description: "Gutter between the screen edge and content. 24px under 768px." },
       { name: "page-top", value: "80px", description: "From the nav to the first thing on a page." },
       { name: "page-bottom", value: "160px", description: "From the last thing on a page to the footer, on pages that end in a form or call to action." },
-      { name: "nav-height", value: "80px", description: "Height of the sticky nav. Sticky elements below it offset by this. 64px under 768px, where the links fold into the menu button." },
+      { name: "nav-height", value: "64px", description: "Height of the sticky nav. Sticky elements below it offset by this." },
       { name: "control-sm", value: "40px", description: "Height of small buttons and icon buttons." },
       { name: "control-md", value: "48px", description: "Height of default buttons, text fields, and selects." },
       { name: "control-lg", value: "56px", description: "Height of large buttons for a page's main action." },
@@ -290,7 +290,7 @@ export const allTokenGroups: TokenGroup[] = [
 
 /** Tokens whose value changes at a breakpoint. Media queries can't read custom properties, so the widths live here. */
 export const responsiveOverrides: { maxWidth: number; tokens: Record<string, string> }[] = [
-  { maxWidth: 768, tokens: { "page-padding": "24px", "nav-height": "64px" } },
+  { maxWidth: 768, tokens: { "page-padding": "24px" } },
 ];
 
 /** Breakpoints. Write media queries with these exact numbers. */
