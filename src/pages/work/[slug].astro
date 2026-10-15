@@ -97,7 +97,7 @@ const schema = [
                 const perView = block.perView ?? 3;
                 return (
                   <div
-                    class:list={["carousel", { "is-contained": block.contain }]}
+                    class:list={["carousel", { "is-contained": block.contain, "is-crop-top": block.cropTop }]}
                     data-carousel
                     data-per-view={perView}
                   >
@@ -655,6 +655,10 @@ const schema = [
   .carousel.is-contained .carousel-item :global(img) {
     object-fit: contain;
     background: #1e1e1e;
+  }
+
+  .carousel.is-crop-top .carousel-item :global(img) {
+    object-position: top;
   }
 
   .carousel-item figcaption {

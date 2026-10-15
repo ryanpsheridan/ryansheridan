@@ -37,6 +37,11 @@ export interface CarouselBlock {
   ratio?: string;
   /** Letterbox each slide inside the frame instead of cropping it (UI screenshots). */
   contain?: boolean;
+  /**
+   * Anchor the crop to the top of each image instead of its centre, for
+   * full-page screenshots. The lightbox still opens the whole page.
+   */
+  cropTop?: boolean;
 }
 
 export interface CompareBlock {
@@ -1312,8 +1317,9 @@ export const projects: Project[] = [
     client: "MC Salon & Spa",
     content: [
       {
-        type: "text",
+        type: "split",
         heading: "A Full Site Overhaul, Built to Grow",
+        image: { src: "/mc-salon-interior.webp", alt: "Inside MC Salon & Spa: black styling stations with lit mirrors and planters on top, salon chairs on floor mats, and a white kitchenette along the wall", caption: "The salon floor" },
         body: `<p>MC Salon Spa & Studio started out on Wix with a simple three-page site: a homepage, a shop page with a handful of products, and a contact page. It was hard for them to update, and once COVID hit they needed a lot more from it. They wanted to sell and ship hair products to their clients and offer curbside pickup, so the online shop had to become a real part of the business.</p><p>This was my first big technical project built around an in-depth CMS. I started with the homepage, filling it out with what the salon is about, where to book, a look at their stylists, and contact info at the bottom. From there I built out the service pages, covering everything on their menu: haircuts, color, extensions, hair treatments, styling, and men's grooming, plus their spa and lash services. Then came the bulk of the work, a custom ecommerce store built on the Webflow CMS. After months of designing and developing, the site launched in January 2021.</p>`,
       },
       {
@@ -1324,6 +1330,26 @@ export const projects: Project[] = [
           { src: "/project-mc-salon5.webp", alt: "MC Salon homepage with a virtual tour, a specialized approach section, and the latest tutorial video", caption: "Homepage" },
           { src: "/project-mc-salon3.webp", alt: "MC Salon service menu with salon services, pricing, and a schedule an appointment button", caption: "Service menu" },
           { src: "/project-mc-salon2.webp", alt: "MC Salon shop page listing R+Co hair products, with a product card for Atlantis Moisturizing B5 Shampoo", caption: "Shop" },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Every Page, Built in Webflow",
+        body: `<p>Most of the site ran on the Webflow CMS, so the salon could add a stylist, a product, or a brand without asking me to build a new page. Products, brands, and staff were each their own collection, and one template per collection laid out every item the same way. A brand page like R+Co pulled in only that brand's products, and each product page filled its "You may also like" row from the same collection.</p><p>These are full-page captures of the live site before it came down. Click any of them to scroll the whole page.</p>`,
+      },
+      {
+        type: "carousel",
+        perView: 3,
+        ratio: "3 / 5",
+        cropTop: true,
+        images: [
+          { src: "/mc-salon-page-home.webp", alt: "Full MC Salon homepage: an R+Co hero slider, a specialized approach section, the latest tutorial with stylist favorite products, affiliate brand logos, a review slider, and the footer", caption: "Homepage" },
+          { src: "/mc-salon-page-all-products.webp", alt: "Full all products page: stylist favorites, then a three-column grid of new products with brand and price, and brand and category filters on the left", caption: "All products" },
+          { src: "/mc-salon-page-brand.webp", alt: "Full R+Co brand page: a hero image, a brand list in the sidebar with R+Co selected, and a grid of only R+Co products", caption: "Brand page template" },
+          { src: "/mc-salon-page-product.webp", alt: "Full product page for R+Co Dallas Thickening Spray with description, quantity, add to cart, and a You may also like grid of eight products", caption: "Product page template" },
+          { src: "/mc-salon-page-staff.webp", alt: "Full our staff page: a four-column grid of thirty stylists, estheticians, and artists, each card with a photo, name, and role", caption: "Our staff" },
+          { src: "/mc-salon-page-services.webp", alt: "Full service menu page with salon, spa, and lashes tabs, services listed with starting prices, and a book now button", caption: "Service menu" },
+          { src: "/mc-salon-page-locations.webp", alt: "Full locations page with hours, addresses, and virtual tour links for MC Salon & Spa and Studio MC, then a contact form", caption: "Locations" },
         ],
       },
       {
