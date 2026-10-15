@@ -7,10 +7,13 @@ import { getHomepageProjects } from "../data/projects";
 import { typeHref } from "../data/work";
 import Media from "../components/Media.astro";
 import Button from "../components/ui/Button.astro";
-import ExploreWork from "../components/ExploreWork.astro";
 
 const projects = getHomepageProjects();
+const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
 ---
+
+{/* The headline's last word follows the project beside it (each
+    project's homepageWord); below 769px it is the original line in full. */}
 
 <Layout title="Ryan Sheridan — Designing systems, sites and brands." description="Portfolio of Ryan Sheridan, Principal Designer specializing in design systems, marketing sites, and brand infrastructure.">
   {/* First in the document on purpose: the intro's blocking inline script
@@ -22,9 +25,21 @@ const projects = getHomepageProjects();
     <div class="split-inner">
       <div class="left-panel">
         <div class="headline-block" data-blueprint-scope>
-          <h1 class="sticky-title" data-spec="type" data-spec-name="Display">
-            Designing <span class="accent">systems</span>,<br />
-            <span class="accent">sites</span> and <span class="accent">brands</span>.
+          {/* Two versions of the one headline, shown by width. Desktop gets
+              the rotating line, read out once as the whole list since the
+              visible word keeps changing. Below 769px, where the headline
+              no longer sits beside the work, the original line in full. */}
+          <h1 class="sticky-title creating-title" data-spec="type" data-spec-name="Display">
+            <span class="headline-rotating">
+              <span class="visually-hidden">Designing and scaling {[...new Set(words)].join(", ")}.</span>
+              <span class="creating-lead" aria-hidden="true">Designing and</span><br />
+              <span class="creating-lead" aria-hidden="true">scaling</span>{" "}
+              <span class="word-slot" aria-hidden="true" data-word-slot data-words={JSON.stringify(words)}><span class="word">{words[0]}.</span></span>
+            </span>
+            <span class="headline-full">
+              Designing <span class="accent">systems</span>,<br />
+              <span class="accent">sites</span> and <span class="accent">brands</span>.
+            </span>
           </h1>
           {/* The way into the blueprint: the page drawing its own specs over
               itself. The shortcut in the sentence is a real toggle too, for
@@ -62,8 +77,6 @@ const projects = getHomepageProjects();
         <div class="scroll-spacer"></div>
       </div>
     </div>
-
-    <ExploreWork />
 
     {/* The blueprint's own layers: the panel columns, fixed to the screen so
         they run the full height as the page scrolls, and the tags for the
@@ -143,6 +156,90 @@ const projects = getHomepageProjects();
 
   updateSpacer();
   window.addEventListener("resize", updateSpacer);
+
+  /**
+   * The "Designing and scaling …" headline: its last word follows the work. On desktop,
+   * where the headline is sticky beside the list, it changes as each project
+   * crosses the middle of the screen. Smaller screens show the original
+   * headline instead (see .headline-full).
+   */
+  const slot = document.querySelector<HTMLElement>("[data-word-slot]");
+  if (slot) {
+    const words: string[] = JSON.parse(slot.dataset.words ?? "[]");
+    const still = matchMedia("(prefers-reduced-motion: reduce)");
+    let current = 0;
+
+    function showWord(index: number) {
+      if (index === current || !words[index]) return;
+      const old = slot!.querySelector<HTMLElement>(".word:not(.is-leaving)");
+      current = index;
+      if (old && `${words[index]}.` === old.textContent) return;
+      const next = document.createElement("span");
+      next.className = "word";
+      next.textContent = `${words[index]}.`;
+      if (still.matches || !old) {
+        slot!.replaceChildren(next);
+        return;
+      }
+      // Hold the slot at the old word's width, then ease it to the new one
+      // while the old word rolls up and out and the new one rolls in.
+      slot!.style.width = `${slot!.getBoundingClientRect().width}px`;
+      next.classList.add("is-entering");
+      old.classList.add("is-leaving");
+      slot!.append(next);
+      requestAnimationFrame(() => {
+        slot!.style.width = `${next.getBoundingClientRect().width}px`;
+        next.classList.remove("is-entering");
+      });
+      old.addEventListener("animationend", () => old.remove(), { once: true });
+      window.setTimeout(() => old.remove(), 1000);
+    }
+
+    slot.addEventListener("transitionend", (event) => {
+      if (event.propertyName === "width") slot.style.removeProperty("width");
+    });
+
+    // A project takes the word once its image, not the padding above it,
+    // crosses a line on the screen. The line depends on which way the page
+    // is moving: scrolling up, the middle of the screen; scrolling down, 10%
+    // above it, so the word waits until the work has settled into place.
+    let lastY = window.scrollY;
+    let goingDown = true;
+    window.addEventListener(
+      "scroll",
+      () => {
+        const y = window.scrollY;
+        if (y !== lastY) goingDown = y > lastY;
+        lastY = y;
+      },
+      { passive: true }
+    );
+
+    const watchAt = (top: number, down: boolean) => {
+      const watch = new IntersectionObserver(
+        (entries) => {
+          if (!splitView.matches || goingDown !== down) return;
+          for (const entry of entries) {
+            const row = entry.target.closest<HTMLElement>(".project-row");
+            if (entry.isIntersecting && row) showWord(Number(row.dataset.index));
+          }
+        },
+        { rootMargin: `-${top}% 0px -${100 - top}% 0px` }
+      );
+      rows.forEach((row) => {
+        const image = row.querySelector(".cell-image");
+        if (image) watch.observe(image);
+      });
+    };
+    watchAt(40, true);
+    watchAt(50, false);
+
+    // Below 769px the original headline shows instead and the word sits
+    // still. Widening back to desktop starts it on the first project.
+    splitView.addEventListener("change", () => {
+      if (splitView.matches) showWord(0);
+    });
+  }
 
   /**
    * The blueprint: the page drawing its own specs over itself. The columns,
@@ -495,6 +592,91 @@ const projects = getHomepageProjects();
     letter-spacing: var(--tracking-tight);
     line-height: var(--leading-tight);
     color: var(--color-text);
+  }
+
+  /*
+    "Designing and / scaling …" on two lines, the changing word always on
+    the second. The fixed lead sits a step back in the muted
+    ink so the changing word carries the weight, the usual treatment for a
+    rotating headline. The size steps down with the column (a container
+    query on .left-panel) so the longest word still fits on its line.
+  */
+  .left-panel {
+    container-type: inline-size;
+  }
+
+  .creating-title {
+    white-space: nowrap;
+    font-size: min(var(--text-h1), 9.2cqi);
+  }
+
+  .headline-full {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .headline-rotating {
+      display: none;
+    }
+
+    .headline-full {
+      display: inline;
+    }
+
+    .creating-title {
+      white-space: normal;
+      font-size: var(--text-h1);
+    }
+  }
+
+  .creating-lead {
+    color: var(--color-text-muted);
+  }
+
+  /* The slot stacks the outgoing and incoming words in one grid cell,
+     clips the roll, and eases its width between them. Aligned to the top
+     of the line, since a clipped box otherwise sits on its bottom edge
+     rather than the text baseline. */
+  .word-slot {
+    display: inline-grid;
+    overflow: hidden;
+    vertical-align: top;
+    transition: width var(--duration-slow) var(--ease-emphasized);
+  }
+
+  .word-slot :global(.word) {
+    grid-area: 1 / 1;
+    /* Its own width, not the cell's, so the script can measure it. */
+    justify-self: start;
+    white-space: nowrap;
+    color: var(--color-text);
+    transition:
+      transform var(--duration-slow) var(--ease-emphasized),
+      opacity var(--duration-slow) var(--ease-emphasized);
+  }
+
+  .word-slot :global(.word.is-entering) {
+    transform: translateY(100%);
+    opacity: 0;
+    transition: none;
+  }
+
+  .word-slot :global(.word.is-leaving) {
+    animation: word-out var(--duration-slow) var(--ease-emphasized) forwards;
+  }
+
+  @keyframes word-out {
+    to {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .word-slot,
+    .word-slot :global(.word) {
+      transition: none;
+    }
   }
 
   /* A line or two on what the work is, ending on the way into the

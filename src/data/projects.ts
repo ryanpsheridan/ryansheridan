@@ -198,7 +198,7 @@ export interface Project {
   homepagePosition?: number;
   /**
    * The word that finishes "Designing and scaling …" while this project is beside the
-   * headline on /homepage-2. Lowercase, usually a plural noun. Falls back
+   * headline on the homepage. Lowercase, usually a plural noun. Falls back
    * to the first tag.
    */
   homepageWord?: string;
