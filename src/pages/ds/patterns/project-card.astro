@@ -10,7 +10,7 @@ const sample = getHomepageProjects()[0];
 <DsLayout
   section="Patterns"
   title="Project card"
-  lead="How a project appears before you open it. Two layouts, both built from the same project data: a stacked card on the homepage and a row on /work."
+  lead="How a project appears before you open it. Two layouts, both built from the same project data: a stacked card on the homepage and a denser grid card on /work."
 >
   <section aria-labelledby="preview">
     <h2 id="preview">Homepage card</h2>
@@ -36,11 +36,15 @@ const sample = getHomepageProjects()[0];
   </section>
 
   <section aria-labelledby="row">
-    <h2 id="row">/work row</h2>
+    <h2 id="row">/work card</h2>
     <p class="ds-text">
-      Thumbnail, then title, badges, and summary, then "View project" at the far right. 64px padding, a hairline
-      between rows. The title link stretches over the whole row, so everything is clickable without nesting
-      links, and the thumbnail is hidden from screen readers since the title already names the project.
+      Three across on desktop, two on tablets, one on phones, grouped under sticky year headers. Each card stacks a
+      16:10 frame, the client as an overline, the title, a short summary, and badges pinned to the foot so they line
+      up across a row. The title link stretches over the whole card, so everything is clickable without nesting
+      links, and the thumbnail is hidden from screen readers since the title already names the project. On hover a
+      small arrow slides into the frame's corner. A row of mono filters above the grid narrows by tag, hides empty
+      years, and keeps the choice in <code>?tag=</code>. While a year header is stuck, a dark rule fills across its
+      hairline as you read through that year.
     </p>
   </section>
 
