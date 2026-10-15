@@ -21,20 +21,23 @@ const projects = getHomepageProjects();
     <div class="split-inner">
       <div class="left-panel">
         <div class="headline-block" data-blueprint-scope>
+          <img class="avatar" src="/profile-avatar.webp" alt="Ryan Sheridan" width="64" height="64" fetchpriority="high" data-spec="box" />
           <h1 class="sticky-title" data-spec="type" data-spec-name="Display">
             Designing <span class="accent">systems</span>,<br />
             <span class="accent">sites</span> and <span class="accent">brands</span>.
           </h1>
-          {/* The way into the blueprint: the page drawing its own specs over
-              itself. The shortcut in the sentence is a real toggle too, for
-              anyone reading with a mouse or a finger; the drawing it adds is hidden from
-              assistive tech, since it describes the page rather than adding
-              to it. */}
           <p class="intro" data-spec="type" data-spec-name="Body">
-            <span class="intro-hint"><button type="button" class="kbd-toggle" aria-pressed="false" aria-label="Show the specs (shortcut Cmd + I)" aria-keyshortcuts="Meta+I Control+I" data-blueprint-toggle><span data-shortcut-mod>Cmd</span> + I</button> to peek under the&nbsp;hood.</span>
+            Planning, UX, and a healthy amount of white space. Every brand gets room to be itself. Pun intended.
           </p>
-          <div class="cta-row">
+          {/* Held back until the visitor reaches the last project, so the
+              list gets read before being skipped. Space is reserved, so the
+              headline doesn't move when they arrive. On a phone the same pair
+              sits after the list instead (see .cta-row-end). */}
+          <div class="cta-row cta-row-side" data-end-cta inert>
             <Button href="/work">View all work</Button>
+            <Button variant="secondary" class="peek-btn" aria-pressed="false" aria-label="Show the specs (shortcut Cmd + I)" aria-keyshortcuts="Meta+I Control+I" data-blueprint-toggle>
+              Peek under the hood<kbd aria-hidden="true"><span data-shortcut-mod>Cmd</span> I</kbd>
+            </Button>
           </div>
           <div class="blueprint-tags" aria-hidden="true"></div>
         </div>
@@ -58,6 +61,12 @@ const projects = getHomepageProjects();
           );
           return i === 0 ? <div class="first-project-frame">{row}</div> : row;
         })}
+        <div class="cta-row cta-row-end">
+          <Button href="/work">View all work</Button>
+          <Button variant="secondary" class="peek-btn" aria-pressed="false" aria-label="Show the specs (shortcut Cmd + I)" aria-keyshortcuts="Meta+I Control+I" data-blueprint-toggle>
+            Peek under the hood<kbd aria-hidden="true"><span data-shortcut-mod>Cmd</span> I</kbd>
+          </Button>
+        </div>
         <div class="scroll-spacer"></div>
       </div>
     </div>
@@ -141,6 +150,24 @@ const projects = getHomepageProjects();
   updateSpacer();
   window.addEventListener("resize", updateSpacer);
 
+  // The buttons under the headline wait for the last project: once it is
+  // halfway on screen they rise in, and stay. Until then they are inert, so
+  // they're out of the tab order too. A phone never shows this pair; its
+  // copy sits after the list.
+  const endCta = document.querySelector<HTMLElement>("[data-end-cta]");
+  if (endCta && lastRow) {
+    const reveal = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        endCta.classList.add("is-revealed");
+        endCta.inert = false;
+        reveal.disconnect();
+      },
+      { threshold: 0.5 }
+    );
+    reveal.observe(lastRow);
+  }
+
   /**
    * The blueprint: the page drawing its own specs over itself. The columns,
    * type specs, frame sizes, and spacing are all measured off the page as it
@@ -152,10 +179,10 @@ const projects = getHomepageProjects();
    * the work.
    */
   const page = document.querySelector<HTMLElement>("main[data-blueprint-scope]");
-  const blueprintToggle = document.querySelector<HTMLButtonElement>("[data-blueprint-toggle]");
+  const blueprintToggles = document.querySelectorAll<HTMLButtonElement>("[data-blueprint-toggle]");
   const columns = document.querySelector<HTMLElement>("[data-blueprint-columns]");
 
-  if (page && blueprintToggle && columns) {
+  if (page && blueprintToggles.length && columns) {
     const splitInner = page.querySelector<HTMLElement>(".split-inner")!;
     const panels = [page.querySelector<HTMLElement>(".left-panel")!, page.querySelector<HTMLElement>(".right-panel")!];
 
@@ -345,13 +372,20 @@ const projects = getHomepageProjects();
           // the column tag sits, so the outline speaks for itself there.
           if (vw > 700) tag(screenLayer, typeLabel(logo, "Logo"), b.right + 12, b.top + b.height / 2, "translateY(-50%)");
         }
-        if (menu) {
+        if (menu && menu.offsetParent) {
           outline(menu, "box");
           const b = menu.getBoundingClientRect();
           tag(screenLayer, `${px(b.width)} × ${px(b.height)}`, b.left - 10, b.top + b.height / 2, "translate(-100%, -50%)");
         }
+        const navLinks = nav.querySelector<HTMLElement>(".nav-links");
+        if (navLinks && navLinks.offsetParent) {
+          outline(navLinks, "type");
+          const first = navLinks.querySelector<HTMLElement>("a");
+          const b = navLinks.getBoundingClientRect();
+          if (first) tag(screenLayer, typeLabel(first, "Link"), b.right, b.bottom + 10, "translateX(-100%)");
+        }
         if (navInner && vw > 700) {
-          const lx = navInner.left + navInner.width * 0.6;
+          const lx = navInner.left + navInner.width * 0.45;
           vertical(screenLayer, lx, box.top, navInner.top - box.top);
           vertical(screenLayer, lx, navInner.bottom, box.bottom - navInner.bottom);
         }
@@ -405,17 +439,21 @@ const projects = getHomepageProjects();
     const isTouch = matchMedia("(hover: none) and (pointer: coarse)").matches;
     const mod = isMac || isTouch ? "Cmd" : "Ctrl";
     document.querySelectorAll("[data-shortcut-mod]").forEach((el) => (el.textContent = mod));
-    blueprintToggle.setAttribute("aria-label", `Show the specs (shortcut ${mod} + I)`);
+    blueprintToggles.forEach((toggle) => toggle.setAttribute("aria-label", `Show the specs (shortcut ${mod} + I)`));
 
     function setBlueprint(on: boolean) {
       page!.classList.toggle("is-blueprint", on);
       document.documentElement.classList.toggle("blueprint-on", on);
-      blueprintToggle!.setAttribute("aria-pressed", String(on));
-      blueprintToggle!.setAttribute("aria-label", `${on ? "Hide" : "Show"} the specs (shortcut ${mod} + I)`);
+      blueprintToggles.forEach((toggle) => {
+        toggle.setAttribute("aria-pressed", String(on));
+        toggle.setAttribute("aria-label", `${on ? "Hide" : "Show"} the specs (shortcut ${mod} + I)`);
+      });
       build();
     }
 
-    blueprintToggle.addEventListener("click", () => setBlueprint(!page.classList.contains("is-blueprint")));
+    blueprintToggles.forEach((toggle) =>
+      toggle.addEventListener("click", () => setBlueprint(!page.classList.contains("is-blueprint")))
+    );
 
     document.querySelector("[data-blueprint-off]")?.addEventListener("click", () => setBlueprint(false));
 
@@ -494,9 +532,20 @@ const projects = getHomepageProjects();
     color: var(--color-text);
   }
 
-  /* A line or two on what the work is, ending on the way into the
-     blueprint. Held to a reading measure so it never runs the width of the
-     headline. */
+  /* A small round headshot, left aligned over the headline, so the page
+     says who is behind the work before it says what the work is. */
+  .avatar {
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin-bottom: var(--space-5);
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    background: var(--color-surface);
+  }
+
+  /* A line on how the work gets made. Held to a reading measure so it
+     never runs the width of the headline. */
   .intro {
     max-width: 44ch;
     margin-top: var(--space-4);
@@ -504,45 +553,6 @@ const projects = getHomepageProjects();
     font-weight: var(--weight-light);
     line-height: var(--leading-normal);
     color: var(--color-text-muted);
-  }
-
-  /* The shortcut in the sentence, set as inline code and working as a
-     button. Its parts hold together so it never breaks across a line. */
-  .kbd-toggle {
-    display: inline-block;
-    margin: 0 1px 0 0;
-    padding: 0 var(--space-1);
-    font-family: var(--font-mono);
-    font-size: 0.85em;
-    line-height: 1.5;
-    white-space: nowrap;
-    color: var(--color-text);
-    background: color-mix(in srgb, var(--color-text) 6%, transparent);
-    border: 1px solid transparent;
-    border-radius: var(--radius-sm);
-    box-shadow: none;
-    appearance: none;
-    -webkit-appearance: none;
-    cursor: pointer;
-    transition:
-      border-color var(--duration-fast) var(--ease-standard),
-      background var(--duration-fast) var(--ease-standard),
-      color var(--duration-fast) var(--ease-standard),
-      transform var(--duration-instant) var(--ease-standard);
-  }
-
-  .kbd-toggle:hover {
-    background: color-mix(in srgb, var(--color-text) 11%, transparent);
-  }
-
-  .kbd-toggle:active {
-    transform: translateY(1px);
-  }
-
-  .kbd-toggle[aria-pressed="true"] {
-    color: #ffffff;
-    background: var(--blueprint);
-    border-color: var(--blueprint);
   }
 
   .cta-row {
@@ -553,8 +563,50 @@ const projects = getHomepageProjects();
     margin-top: var(--space-5);
   }
 
-  .kbd-toggle:focus-visible {
-    outline-offset: 3px;
+  /* Under the headline, the pair keeps its space but stays out of sight
+     until the script sees the last project. */
+  .cta-row-side:not(.is-revealed) {
+    visibility: hidden;
+  }
+
+  .cta-row-side.is-revealed {
+    animation: headline-rise var(--duration-slower) var(--ease-emphasized) both;
+  }
+
+  /* The phone's copy, after the list. */
+  .cta-row-end {
+    display: none;
+  }
+
+  /* The way into the blueprint: the page drawing its own specs over itself.
+     The shortcut rides along as a key cap, and the button lights up in the
+     blueprint's blue while the specs are on. */
+  .cta-row :global(.peek-btn) kbd {
+    min-width: 0;
+    padding: 0 var(--space-1);
+    font-size: 0.85em;
+    color: var(--color-text-muted);
+    border-bottom-width: 1px;
+  }
+
+  .cta-row :global(.peek-btn[aria-pressed="true"]),
+  .cta-row :global(.peek-btn[aria-pressed="true"]:hover) {
+    color: #ffffff;
+    background: var(--blueprint);
+    border-color: var(--blueprint);
+  }
+
+  .cta-row :global(.peek-btn[aria-pressed="true"]) kbd {
+    color: #ffffff;
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* Touch screens tap rather than press, so the key cap would only mislead. */
+  @media (hover: none) and (pointer: coarse) {
+    .cta-row :global(.peek-btn) kbd {
+      display: none;
+    }
   }
 
   /*
@@ -813,18 +865,18 @@ const projects = getHomepageProjects();
      script. It holds its first frame while the intro scrim is up and plays
      the moment the scrim hands off (straight away for returning visitors,
      who skip the intro). */
+  .headline-block > .avatar,
   .headline-block > .sticky-title,
-  .headline-block > .intro,
-  .headline-block > .cta-row {
+  .headline-block > .intro {
     animation: headline-rise var(--duration-slower) var(--ease-emphasized) both;
     animation-delay: calc(0.12s + var(--stagger, 0) * 0.09s);
   }
 
-  .headline-block > .intro {
+  .headline-block > .sticky-title {
     --stagger: 1;
   }
 
-  .headline-block > .cta-row {
+  .headline-block > .intro {
     --stagger: 2;
   }
 
@@ -844,9 +896,10 @@ const projects = getHomepageProjects();
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .headline-block > .avatar,
     .headline-block > .sticky-title,
     .headline-block > .intro,
-      .headline-block > .cta-row {
+    .cta-row-side.is-revealed {
       animation: none;
     }
   }
@@ -976,6 +1029,15 @@ const projects = getHomepageProjects();
 
     .right-panel {
       width: 100%;
+    }
+
+    .cta-row-side {
+      display: none;
+    }
+
+    .cta-row-end {
+      display: flex;
+      margin-top: var(--space-3);
     }
 
     .project-row {

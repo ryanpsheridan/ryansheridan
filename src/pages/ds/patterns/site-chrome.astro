@@ -6,7 +6,7 @@ import CodeBlock from "../../../components/ds/CodeBlock.astro";
 <DsLayout
   section="Patterns"
   title="Nav and footer"
-  lead="The frame around every page: a sticky nav with a full-screen menu, and a footer that repeats the main routes."
+  lead="The frame around every page: a sticky nav that lists every route on desktop and folds them into a full-screen menu on smaller screens, and a footer that repeats the main routes."
 >
   <section aria-labelledby="usage">
     <h2 id="usage">Usage</h2>
@@ -35,7 +35,8 @@ import Footer from "../components/Footer.astro";
         <tbody>
           <tr><td>Bar</td><td>Sticky, <code>--nav-height</code> (64px): 8px padding around a 48px menu button. White, on <code>--z-nav</code>.</td></tr>
           <tr><td>Logo</td><td>"ryan sheridan design," lowercase mono, <code>--text-s</code>. Links home.</td></tr>
-          <tr><td>Menu button</td><td>48px target, two 20px bars that cross into an X when open. Labeled "Menu," then "Close menu."</td></tr>
+          <tr><td>Links</td><td>From 769px: Work, About, Contact, LinkedIn, right aligned in 13px mono, 32px apart, muted until hovered. The current section is marked in full ink. No Home link, since the logo is the way home.</td></tr>
+          <tr><td>Menu button</td><td>Below 769px only, in place of the links. 48px target, two 20px bars that cross into an X when open. Labeled "Menu," then "Close menu."</td></tr>
           <tr><td>Menu</td><td>Full screen, centered links at <code>--text-h3</code>, 16px apart. Fades over <code>--duration-moderate</code>.</td></tr>
         </tbody>
       </table>
@@ -45,6 +46,7 @@ import Footer from "../components/Footer.astro";
       <li>Closed, the menu is <code>inert</code>: its links are out of the tab order and hidden from screen readers.</li>
       <li>Escape closes it and returns focus to the menu button. So does choosing a link.</li>
       <li>The page behind it stops scrolling while it's open.</li>
+      <li>Widening the window past 769px while it's open closes it, since the button that closes it is gone.</li>
     </ul>
   </section>
 
@@ -65,7 +67,7 @@ import Footer from "../components/Footer.astro";
   <section aria-labelledby="content">
     <h2 id="content">Content</h2>
     <ul class="ds-list">
-      <li>Menu items are one word, the page's short name: Home, Work, About, Contact.</li>
+      <li>Menu items are one word, the page's short name: Home, Work, About, Contact. The desktop bar drops Home.</li>
       <li>External links end in ↗ and announce that they open a new tab.</li>
       <li>Keep the menu and footer lists in the same order.</li>
     </ul>
