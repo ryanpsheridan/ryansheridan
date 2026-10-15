@@ -4,6 +4,7 @@ import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import IntroLoader from "../components/IntroLoader.astro";
 import { getHomepageProjects } from "../data/projects";
+import { typeHref } from "../data/work";
 import Media from "../components/Media.astro";
 
 const projects = getHomepageProjects();
@@ -32,17 +33,19 @@ const projects = getHomepageProjects();
       <div class="right-panel">
         {projects.map((project, i) => {
           const row = (
-            <a href={`/work/${project.slug}`} class={`project-row${i === 0 ? " entrance-hidden" : ""}`} data-index={i}>
+            <div class={`project-row${i === 0 ? " entrance-hidden" : ""}`} data-index={i}>
               <div class="cell-image">
                 {project.thumbnail && <Media src={project.thumbnail} alt={project.title} />}
               </div>
               <div class="cell-info">
-                <h2 class="project-title">{project.title}</h2>
+                <h2 class="project-title">
+                  <a href={`/work/${project.slug}`} class="project-link">{project.title}</a>
+                </h2>
                 <div class="badge-list project-tags">
-                  {project.tags.map((tag) => <span class="badge">{tag}</span>)}
+                  {project.tags.map((tag) => <a href={typeHref(tag)} class="badge">{tag}</a>)}
                 </div>
               </div>
-            </a>
+            </div>
           );
           return i === 0 ? <div class="first-project-frame">{row}</div> : row;
         })}
@@ -461,9 +464,32 @@ const projects = getHomepageProjects();
   }
 
   .project-row {
+    position: relative;
     display: block;
     color: var(--color-text);
     padding: var(--space-8) 0;
+  }
+
+  /* The title link covers the whole card, so the image is a click target
+     too, while the type badges sit above it as links of their own. */
+  .project-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .project-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .project-link:focus-visible {
+    outline: none;
+  }
+
+  .project-link:focus-visible::after {
+    outline: var(--focus-width) solid var(--color-focus);
+    outline-offset: var(--focus-offset);
   }
 
   .cell-image {

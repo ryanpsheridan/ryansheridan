@@ -10,11 +10,11 @@ const sample = getHomepageProjects()[0];
 <DsLayout
   section="Patterns"
   title="Project card"
-  lead="How a project appears before you open it. Two layouts, both built from the same project data: a stacked card on the homepage and a denser grid card on /work."
+  lead="How a project appears before you open it. Two layouts, both built from the same project data: a stacked card on the homepage and a row on /work."
 >
   <section aria-labelledby="preview">
     <h2 id="preview">Homepage card</h2>
-    <p class="ds-text">A 16:10 frame, the title, and the project's type badges. The whole card is one link.</p>
+    <p class="ds-text">A 16:10 frame, the title, and the project's type badges. The title link stretches over the whole card, and each badge is its own link to that type's page.</p>
     <div class="card-demo">
       <a href={`/work/${sample.slug}`} class="card">
         <div class="card-image">{sample.thumbnail && <Media src={sample.thumbnail} alt={sample.title} />}</div>
@@ -36,14 +36,17 @@ const sample = getHomepageProjects()[0];
   </section>
 
   <section aria-labelledby="row">
-    <h2 id="row">/work card</h2>
+    <h2 id="row">/work row</h2>
     <p class="ds-text">
-      Three across on desktop, two on tablets, one on phones, newest first. Each card stacks a 16:10 frame, the
-      title, a summary held to exactly three lines (longer ones end in an ellipsis), and the type badges tucked
-      right under it. The title link stretches over the whole card, and the thumbnail is hidden from screen
-      readers since the title already names the project. On hover a small arrow slides into the frame's corner.
-      A type dropdown sits on the title's baseline at the right and keeps the choice in <code>?tag=</code>. Only
-      the newest nine show at first; "Go further back" opens the rest, named by count and year range.
+      Thumbnail, then title, badges, and summary, then "View project" at the far right. 64px padding, a hairline
+      between rows. The title link stretches over the whole row, so everything is clickable without nesting
+      links, and the thumbnail is hidden from screen readers since the title already names the project. Each
+      badge links to its type's page.
+    </p>
+    <p class="ds-text">
+      The same list runs /work and every type and tool page (<code>/work/type/…</code>, <code>/work/tool/…</code>),
+      newest first, with no year dividers. The page title names the type or tool, and a dropdown on the title's
+      baseline jumps between them.
     </p>
   </section>
 

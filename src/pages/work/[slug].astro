@@ -6,6 +6,7 @@ import Media from "../../components/Media.astro";
 import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
 import ResultIcon from "../../components/ui/ResultIcon.astro";
 import { projects } from "../../data/projects";
+import { typeHref, toolHref } from "../../data/work";
 import type { GetStaticPaths } from "astro";
 import { breadcrumbSchema, projectSchema } from "../../data/schema";
 
@@ -378,13 +379,13 @@ const schema = [
           <div class="meta-group">
             <span class="overline">Project type</span>
             <div class="badge-list">
-              {project.tags.map((tag) => <span class="badge">{tag}</span>)}
+              {project.tags.map((tag) => <a href={typeHref(tag)} class="badge">{tag}</a>)}
             </div>
           </div>
           <div class="meta-group">
             <span class="overline">Tools</span>
             <div class="badge-list">
-              {project.tools.map((tool) => <span class="badge">{tool}</span>)}
+              {project.tools.map((tool) => <a href={toolHref(tool)} class="badge">{tool}</a>)}
             </div>
           </div>
         </div>

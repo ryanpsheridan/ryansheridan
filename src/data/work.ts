@@ -1,8 +1,12 @@
 import { projects, type Project } from "./projects";
 
-/** URL-safe form of a tag or tool name: "html.to.design" becomes "html-to-design". */
+/** URL-safe form of a type or tool name: "html.to.design" becomes "html-to-design". */
 export const toSlug = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+/** Every project's type badge and tool badge links to its own page. */
+export const typeHref = (name: string) => `/work/type/${toSlug(name)}`;
+export const toolHref = (name: string) => `/work/tool/${toSlug(name)}`;
 
 /** Newest first. Array sort is stable, so same-year projects keep their order from projects.ts. */
 export const workProjects: Project[] = [...projects].sort((a, b) => b.year - a.year);
@@ -24,5 +28,3 @@ function facet(pick: (p: Project) => string[]): Facet[] {
 
 export const projectTypes = facet((p) => p.tags);
 export const projectTools = facet((p) => p.tools);
-
-export const projectCount = (n: number) => `${n} ${n === 1 ? "project" : "projects"}`;
