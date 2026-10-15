@@ -1,0 +1,60 @@
+---
+/**
+ * The /work page header: breadcrumbs and title on the left, the project type
+ * dropdown on the right, both sitting on the title's baseline. Pair with
+ * initWorkFilter from scripts/work-filter.ts.
+ */
+import Breadcrumbs from "../ui/Breadcrumbs.astro";
+import Select from "../ui/Select.astro";
+import { workProjects, projectTypes } from "../../data/work";
+---
+
+<header class="work-header">
+  <div>
+    <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Work" }]} />
+    <h1>All work</h1>
+  </div>
+  <div class="work-filter">
+    <label for="work-type" class="visually-hidden">Project type</label>
+    <Select id="work-type" data-work-type>
+      <option value="">All projects ({workProjects.length})</option>
+      {projectTypes.map((t) => <option value={t.name}>{t.name} ({t.count})</option>)}
+    </Select>
+  </div>
+</header>
+<p class="visually-hidden" aria-live="polite" data-filter-status></p>
+
+<style>
+  .work-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-5);
+    margin-bottom: var(--space-7);
+  }
+
+  h1 {
+    font-size: var(--text-h2);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    margin: 0;
+  }
+
+  .work-filter {
+    flex: 0 0 auto;
+    width: 260px;
+  }
+
+  @media (max-width: 640px) {
+    .work-header {
+      flex-direction: column;
+      align-items: stretch;
+      margin-bottom: var(--space-6);
+    }
+
+    .work-filter {
+      width: 100%;
+    }
+  }
+</style>

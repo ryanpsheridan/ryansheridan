@@ -1,0 +1,355 @@
+---
+/**
+ * Option C for /work: an index. One quiet line per project (number, title,
+ * type, year) and nothing else. The thumbnail only appears when you point at
+ * a row, floating beside the cursor. On touch screens, where there is no
+ * hover, each row carries a small thumbnail instead.
+ */
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import Media from "../../components/Media.astro";
+import WorkHeader from "../../components/work/WorkHeader.astro";
+import { workProjects } from "../../data/work";
+---
+
+<Layout title="Work — Ryan Sheridan" description="Case studies by Ryan Sheridan." noindex>
+  <Nav />
+  <main id="main" class="work-page">
+    <div class="work-inner">
+      <WorkHeader />
+
+      <ol class="index" data-index>
+        {
+          workProjects.map((project) => (
+            <li class="index-row" data-tags={project.tags.join("|")} data-slug={project.slug}>
+              <span class="index-thumb" aria-hidden="true">
+                {project.thumbnail && <Media src={project.thumbnail} alt="" />}
+              </span>
+              <a href={`/work/${project.slug}`} class="index-link">
+                <span class="index-title">{project.title}</span>
+              </a>
+              <span class="index-type">{project.tags.join(", ")}</span>
+              <span class="index-year"><time datetime={String(project.year)}>{project.year}</time></span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </main>
+
+  {/* One floating frame per project, stacked; the hovered row's frame fades
+      in and the stack trails the cursor. */}
+  <div class="preview" data-preview aria-hidden="true">
+    {
+      workProjects.map((project) => (
+        <div class="preview-frame" data-preview-for={project.slug}>
+          {project.thumbnail && <Media src={project.thumbnail} alt="" />}
+        </div>
+      ))
+    }
+  </div>
+  <Footer />
+</Layout>
+
+<style>
+  .work-page {
+    padding: var(--page-top) var(--page-padding) 0;
+  }
+
+  .work-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding-bottom: var(--space-8);
+  }
+
+  .index {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-border);
+    counter-reset: work;
+  }
+
+  /* Number, title, type, year. Hidden rows take no number, so the count
+     stays in order under a filter. */
+  .index-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr) minmax(0, 18rem) 4rem;
+    align-items: baseline;
+    column-gap: var(--space-5);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--color-border);
+    counter-increment: work;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+  }
+
+  .index-row[hidden] {
+    display: none;
+  }
+
+  .index-row::before {
+    content: counter(work, decimal-leading-zero);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .index-thumb {
+    display: none;
+  }
+
+  .index-link {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  /* The title link covers the whole row. */
+  .index-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .index-link:focus-visible {
+    outline: none;
+  }
+
+  .index-link:focus-visible::after {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
+  }
+
+  .index-title {
+    display: inline-block;
+    font-size: var(--text-h4);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-snug);
+    line-height: var(--leading-snug);
+    transition: transform var(--duration-moderate) var(--ease-emphasized);
+  }
+
+  .index-type,
+  .index-year {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .index-year {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Pointing at one row quiets the others, and the title nudges forward. */
+  @media (hover: hover) {
+    .index:has(.index-row:hover) .index-row:not(:hover) {
+      opacity: 0.35;
+    }
+
+    .index-row:hover .index-title {
+      transform: translateX(var(--space-2));
+    }
+  }
+
+  .preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--z-sticky);
+    width: 340px;
+    aspect-ratio: 16 / 10;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate3d(var(--x, 0), var(--y, 0), 0);
+    scale: 0.96;
+    transition:
+      opacity var(--duration-fast) var(--ease-standard),
+      scale var(--duration-moderate) var(--ease-emphasized);
+  }
+
+  .preview.is-on {
+    opacity: 1;
+    scale: 1;
+  }
+
+  .preview-frame {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: var(--color-surface);
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+  }
+
+  .preview-frame.is-active {
+    opacity: 1;
+  }
+
+  .preview-frame :global(img),
+  .preview-frame :global(video) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: auto;
+  }
+
+  @media (hover: none), (max-width: 1024px) {
+    .preview {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .index-row,
+    .index-title,
+    .preview,
+    .preview-frame {
+      transition: none;
+    }
+  }
+
+  /* Tablet: the type column goes; title and year remain. */
+  @media (max-width: 1024px) {
+    .index-row {
+      grid-template-columns: 3rem minmax(0, 1fr) 4rem;
+    }
+
+    .index-type {
+      display: none;
+    }
+  }
+
+  /* Phone, or anywhere without hover: a small thumbnail leads each row, with
+     the type and year on one line under the title. */
+  @media (max-width: 640px), (hover: none) {
+    .index-row {
+      grid-template-columns: 96px minmax(0, 1fr) auto;
+      grid-template-areas:
+        "thumb title title"
+        "thumb type year";
+      align-items: center;
+      row-gap: var(--space-1);
+      padding: var(--space-3) 0;
+    }
+
+    .index-row::before {
+      display: none;
+    }
+
+    .index-thumb {
+      grid-area: thumb;
+      display: block;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: var(--color-surface);
+    }
+
+    .index-thumb :global(img),
+    .index-thumb :global(video) {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      aspect-ratio: auto;
+    }
+
+    .index-link {
+      grid-area: title;
+      align-self: end;
+    }
+
+    .index-title {
+      font-size: var(--text-l);
+    }
+
+    .index-type {
+      grid-area: type;
+      display: block;
+      align-self: start;
+    }
+
+    .index-year {
+      grid-area: year;
+      align-self: start;
+    }
+  }
+</style>
+
+<script>
+  import { initWorkFilter } from "../../scripts/work-filter";
+
+  const rows = [...document.querySelectorAll<HTMLElement>(".index-row")];
+  initWorkFilter(rows);
+
+  const preview = document.querySelector<HTMLElement>("[data-preview]");
+  const frames = new Map(
+    [...document.querySelectorAll<HTMLElement>("[data-preview-for]")].map((f) => [f.dataset.previewFor, f]),
+  );
+  const canHover = window.matchMedia("(hover: hover) and (min-width: 1025px)");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (preview) {
+    // The frame trails the cursor, easing toward it each frame, and sits
+    // above and to the right so it never covers the row being read.
+    let targetX = 0;
+    let targetY = 0;
+    let x = 0;
+    let y = 0;
+    let running = false;
+
+    const place = () => {
+      const w = preview.offsetWidth;
+      const h = preview.offsetHeight;
+      const tx = Math.min(targetX + 32, window.innerWidth - w - 16);
+      const ty = Math.max(16, Math.min(targetY - h / 2, window.innerHeight - h - 16));
+      const ease = reduceMotion.matches ? 1 : 0.18;
+      x += (tx - x) * ease;
+      y += (ty - y) * ease;
+      preview.style.setProperty("--x", `${x}px`);
+      preview.style.setProperty("--y", `${y}px`);
+      if (running && (Math.abs(tx - x) > 0.5 || Math.abs(ty - y) > 0.5)) requestAnimationFrame(place);
+      else running = false;
+    };
+
+    const follow = (e: PointerEvent) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+      if (!running) {
+        running = true;
+        requestAnimationFrame(place);
+      }
+    };
+
+    // Show the row's frame, appearing right at the cursor rather than
+    // gliding in from wherever it last was.
+    const show = (row: HTMLElement, e: PointerEvent) => {
+      if (!canHover.matches) return;
+      frames.forEach((f, slug) => f.classList.toggle("is-active", slug === row.dataset.slug));
+      if (!preview.classList.contains("is-on")) {
+        targetX = e.clientX;
+        targetY = e.clientY;
+        x = Math.min(targetX + 32, window.innerWidth - preview.offsetWidth - 16);
+        y = targetY - preview.offsetHeight / 2;
+        place();
+        preview.classList.add("is-on");
+      }
+    };
+
+    rows.forEach((row) => {
+      row.addEventListener("pointerenter", (e) => show(row, e));
+      row.addEventListener("pointermove", (e) => {
+        show(row, e);
+        follow(e);
+      });
+    });
+
+    document.querySelector("[data-index]")?.addEventListener("pointerleave", () => preview.classList.remove("is-on"));
+    window.addEventListener("scroll", () => preview.classList.remove("is-on"), { passive: true });
+  }
+</script>
