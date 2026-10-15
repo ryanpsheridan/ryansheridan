@@ -1260,51 +1260,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "five-star-vacation-home-rental",
-    title: "Five Star Vacation Home Rental",
-    year: 2021,
-    description: "A Webflow website for Five Star Vacation Home Rentals, presenting high-end short-term rentals across Austin and the Texas Hill Country.",
-    ogImage: "/project-five-star1.jpg",
-    thumbnail: "/five-star-cms-animated.svg",
-    showOnHomepage: false,
-    tags: ["Web Design"],
-    tools: ["Webflow"],
-    client: "Five Star Vacation Home Rental",
-    clientUrl: "https://www.fivestarvhr.com/",
-    content: [
-      {
-        type: "text",
-        heading: "A Luxury Rental Business That Needed to Look the Part",
-        body: `<p>Five Star Vacation Home Rentals manages high-end short-term rentals across Austin and the Texas Hill Country, but they didn't have a website. They needed one place to show every property they manage so guests could browse the full lineup.</p><p>They came with a big library of professional photography, which is always a great thing to have when designing. Properties are organized by region, and the brand leans into black and gold.</p>`,
-      },
-      {
-        type: "imageGrid",
-        images: [{ src: "/project-five-star2.webp", alt: "Five Star properties page with tabs for Austin, Texas Hill Country, San Antonio, and Lake Austin above a grid of rental photos" }],
-      },
-      {
-        type: "text",
-        body: `<p>The site doesn't handle booking itself. Each property links out to its listing on Airbnb or Vrbo, and the reservation happens there. That kept the site focused on one job: showing off the homes.</p>`,
-      },
-      {
-        type: "imageGrid",
-        images: [{ src: "/five-star-booking-handoff-animated.svg", alt: "A Five Star property page with Book on Airbnb and Book on Vrbo buttons, each opening that platform's listing to reserve" }],
-      },
-      {
-        type: "text",
-        body: `<p>There's also a separate page for owners who want Five Star to manage their home.</p><p><a href="https://www.fivestarvhr.com/" target="_blank" rel="noopener noreferrer">www.fivestarvhr.com</a></p>`,
-      },
-      {
-        type: "imageGrid",
-        images: [{ src: "/project-five-star3.webp", alt: "Five Star owner page explaining how the company maximizes returns for property owners" }],
-      },
-      {
-        type: "text",
-        heading: "Built for Their Team to Run",
-        body: `<p>The site also had to be something the owner and his team could keep up on their own. I built it in Webflow and trained their staff on the Webflow CMS, so they can publish blog posts, update photos, and make everyday edits without waiting on me. They've been running the site on their own for a couple of years now and reach out when they need something more technical.</p>`,
-      },
-    ],
-  },
-  {
     slug: "mc-salon-spa-studio",
     title: "MC Salon Spa & Studio",
     year: 2021,
@@ -1369,6 +1324,51 @@ export const projects: Project[] = [
         heading: "Where It Ended Up",
         image: { src: "/mc-salon-interior.webp", alt: "Inside MC Salon & Spa: black styling stations with lit mirrors and planters on top, salon chairs on floor mats, and a white kitchenette along the wall", caption: "The salon floor" },
         body: `<p>The owners sold the business in 2024, and the site is now run by someone else on a different platform. This version doesn't exist anymore, but it was my first big CMS build and taught me a lot.</p>`,
+      },
+    ],
+  },
+  {
+    slug: "five-star-vacation-home-rental",
+    title: "Five Star Vacation Home Rental",
+    year: 2021,
+    description: "A Webflow website for Five Star Vacation Home Rentals, presenting high-end short-term rentals across Austin and the Texas Hill Country.",
+    ogImage: "/project-five-star1.jpg",
+    thumbnail: "/five-star-cms-animated.svg",
+    showOnHomepage: false,
+    tags: ["Web Design"],
+    tools: ["Webflow"],
+    client: "Five Star Vacation Home Rental",
+    clientUrl: "https://www.fivestarvhr.com/",
+    content: [
+      {
+        type: "text",
+        heading: "A Luxury Rental Business That Needed to Look the Part",
+        body: `<p>Five Star Vacation Home Rentals manages high-end short-term rentals across Austin and the Texas Hill Country, but they didn't have a website. They needed one place to show every property they manage so guests could browse the full lineup.</p><p>They came with a big library of professional photography, which is always a great thing to have when designing. Properties are organized by region, and the brand leans into black and gold.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [{ src: "/project-five-star2.webp", alt: "Five Star properties page with tabs for Austin, Texas Hill Country, San Antonio, and Lake Austin above a grid of rental photos" }],
+      },
+      {
+        type: "text",
+        body: `<p>The site doesn't handle booking itself. Each property links out to its listing on Airbnb or Vrbo, and the reservation happens there. That kept the site focused on one job: showing off the homes.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [{ src: "/five-star-booking-handoff-animated.svg", alt: "A Five Star property page with Book on Airbnb and Book on Vrbo buttons, each opening that platform's listing to reserve" }],
+      },
+      {
+        type: "text",
+        body: `<p>There's also a separate page for owners who want Five Star to manage their home.</p><p><a href="https://www.fivestarvhr.com/" target="_blank" rel="noopener noreferrer">www.fivestarvhr.com</a></p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [{ src: "/project-five-star3.webp", alt: "Five Star owner page explaining how the company maximizes returns for property owners" }],
+      },
+      {
+        type: "text",
+        heading: "Built for Their Team to Run",
+        body: `<p>The site also had to be something the owner and his team could keep up on their own. I built it in Webflow and trained their staff on the Webflow CMS, so they can publish blog posts, update photos, and make everyday edits without waiting on me. They've been running the site on their own for a couple of years now and reach out when they need something more technical.</p>`,
       },
     ],
   },
