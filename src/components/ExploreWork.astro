@@ -9,19 +9,21 @@ import ToolIcon from "./ui/ToolIcon.astro";
 ---
 
 <section class="explore" aria-labelledby="explore-title">
-  <h2 id="explore-title" class="explore-title">Explore the work</h2>
-  <div class="explore-row">
-    <span class="overline">Project type</span>
-    <div class="badge-list">
-      {projectTypes.map((t) => <a href={typeHref(t.name)} class="badge">{t.name}</a>)}
+  <div class="explore-inner">
+    <h2 id="explore-title" class="explore-title">Browse by type or tool</h2>
+    <div class="explore-row">
+      <span class="overline">Project type</span>
+      <div class="badge-list">
+        {projectTypes.map((t) => <a href={typeHref(t.name)} class="badge">{t.name}</a>)}
+      </div>
     </div>
-  </div>
-  <div class="explore-row">
-    <span class="overline">Tools</span>
-    <div class="badge-list">
-      {projectTools.map((t) => (
-        <a href={toolHref(t.name)} class="badge badge-tool"><ToolIcon name={t.name} />{t.name}</a>
-      ))}
+    <div class="explore-row">
+      <span class="overline">Tools</span>
+      <div class="badge-list">
+        {projectTools.map((t) => (
+          <a href={toolHref(t.name)} class="badge badge-tool"><ToolIcon name={t.name} />{t.name}</a>
+        ))}
+      </div>
     </div>
   </div>
 </section>
@@ -35,6 +37,15 @@ import ToolIcon from "./ui/ToolIcon.astro";
     border-top: var(--border-width) solid var(--color-border);
   }
 
+  /* The rule runs the full width; the content keeps to the left column,
+     the same width as the headline panel above it. */
+  @media (min-width: 769px) {
+    .explore-inner {
+      width: 50%;
+      padding-right: var(--space-5);
+    }
+  }
+
   .explore-title {
     margin-bottom: var(--space-5);
     font-size: var(--text-h5);
@@ -45,7 +56,7 @@ import ToolIcon from "./ui/ToolIcon.astro";
   /* Label in a narrow column, badges beside it; stacked on a phone. */
   .explore-row {
     display: grid;
-    grid-template-columns: 160px minmax(0, 1fr);
+    grid-template-columns: 128px minmax(0, 1fr);
     gap: var(--space-4);
     align-items: baseline;
   }
