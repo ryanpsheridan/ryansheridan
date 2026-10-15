@@ -12,12 +12,12 @@ const projects = getHomepageProjects();
 const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
 ---
 
-{/* The homepage with a "Creating …" headline whose last word follows the
+{/* The homepage with a "Designing and scaling …" headline whose last word follows the
     project in view. Kept at its own URL to compare against /, and out of
     search: noindex here and left off the sitemap's allowlist in
     astro.config.mjs. Everything below the headline matches /. */}
 
-<Layout title="Ryan Sheridan — Creating systems, brands and automations." description="Portfolio of Ryan Sheridan, Principal Designer specializing in design systems, marketing sites, and brand infrastructure." noindex>
+<Layout title="Ryan Sheridan — Designing and scaling systems, brands and automations." description="Portfolio of Ryan Sheridan, Principal Designer specializing in design systems, marketing sites, and brand infrastructure." noindex>
   {/* First in the document on purpose: the intro's blocking inline script
       stamps the page before the nav below it can paint, otherwise the nav
       flashes for a frame before the scrim covers it. */}
@@ -29,8 +29,9 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
         <div class="headline-block" data-blueprint-scope>
           {/* Read out once as the whole list, since the visible word keeps
               changing; the moving part is hidden from assistive tech. */}
-          <h1 class="sticky-title creating-title" data-spec="type" data-spec-name="Display" aria-label={`Creating ${[...new Set(words)].join(", ")}.`}>
-            <span class="creating-lead" aria-hidden="true">Creating</span>{" "}
+          <h1 class="sticky-title creating-title" data-spec="type" data-spec-name="Display" aria-label={`Designing and scaling ${[...new Set(words)].join(", ")}.`}>
+            <span class="creating-lead" aria-hidden="true">Designing and</span><br />
+            <span class="creating-lead" aria-hidden="true">scaling</span>{" "}
             <span class="word-slot" aria-hidden="true" data-word-slot data-words={JSON.stringify(words)}><span class="word">{words[0]}.</span></span>
           </h1>
           {/* The way into the blueprint: the page drawing its own specs over
@@ -150,7 +151,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
   window.addEventListener("resize", updateSpacer);
 
   /**
-   * The "Creating …" headline: its last word follows the work. On desktop,
+   * The "Designing and scaling …" headline: its last word follows the work. On desktop,
    * where the headline is sticky beside the list, it changes as each project
    * crosses the middle of the screen. On a phone the headline sits above
    * the list, so the words take turns on a timer while it is in view.
@@ -575,10 +576,11 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
   }
 
   /*
-    "Creating …" on one line. The fixed lead sits a step back in the muted
+    "Designing and / scaling …" on two lines, the changing word always on
+    the second. The fixed lead sits a step back in the muted
     ink so the changing word carries the weight, the usual treatment for a
     rotating headline. The size steps down with the column (a container
-    query on .left-panel) so the longest word still fits on the line.
+    query on .left-panel) so the longest word still fits on its line.
   */
   .left-panel {
     container-type: inline-size;

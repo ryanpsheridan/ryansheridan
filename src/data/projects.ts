@@ -197,7 +197,7 @@ export interface Project {
    */
   homepagePosition?: number;
   /**
-   * The word that finishes "Creating …" while this project is beside the
+   * The word that finishes "Designing and scaling …" while this project is beside the
    * headline on /homepage-2. Lowercase, usually a plural noun. Falls back
    * to the first tag.
    */
@@ -220,7 +220,7 @@ export const projects: Project[] = [
     thumbnail: "/project-claude-embed-thumbnail-animated.svg",
     showOnHomepage: true,
     homepagePosition: 3,
-    homepageWord: "motion",
+    homepageWord: "automations",
     tags: ["Component Design", "Claude Skill", "Automation"],
     tools: ["Claude Code", "Claude", "Makeswift", "GSAP"],
     client: "BigCommerce",

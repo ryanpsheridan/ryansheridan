@@ -1,8 +1,8 @@
 ---
 /**
- * A tool named on the site, linked to the tool's own site in the link blue
- * with its mark in front, drawn in ink so the marks read as logos rather
- * than as more link. Every list of tools uses this, so they all read
+ * A tool named on the site, linked to the tool's own site with its mark in
+ * front. Quiet, like the About page's lists always were: muted text that
+ * darkens on hover, with the mark in ink so it reads as a logo. Every list of tools uses this, so they all read
  * the same. A name with no entry in data/tools.ts renders as plain text.
  */
 import { getTool } from "../../data/tools";
@@ -33,19 +33,12 @@ const tool = getTool(name);
     display: inline-flex;
     align-items: center;
     gap: 0.5em;
-    color: var(--color-link);
-    text-decoration: underline;
-    text-decoration-color: var(--color-link-subtle);
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
-    transition:
-      color var(--duration-fast) var(--ease-standard),
-      text-decoration-color var(--duration-fast) var(--ease-standard);
+    color: var(--color-text-muted);
+    transition: color var(--duration-fast) var(--ease-standard);
   }
 
   .tool-link:hover {
-    color: var(--color-link-hover);
-    text-decoration-color: var(--color-link-hover);
+    color: var(--color-text);
   }
 
   .tool-link :global(.tool-icon) {
