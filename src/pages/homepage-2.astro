@@ -202,22 +202,39 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     });
 
     // A project takes the word once its image, not the padding above it,
-    // reaches the middle of the screen, so the word turns as the work
-    // arrives rather than ahead of it.
-    const watch = new IntersectionObserver(
-      (entries) => {
-        if (!splitView.matches) return;
-        for (const entry of entries) {
-          const row = entry.target.closest<HTMLElement>(".project-row");
-          if (entry.isIntersecting && row) showWord(Number(row.dataset.index));
-        }
+    // crosses a line on the screen. The line depends on which way the page
+    // is moving: scrolling up, the middle of the screen; scrolling down, 10%
+    // above it, so the word waits until the work has settled into place.
+    let lastY = window.scrollY;
+    let goingDown = true;
+    window.addEventListener(
+      "scroll",
+      () => {
+        const y = window.scrollY;
+        if (y !== lastY) goingDown = y > lastY;
+        lastY = y;
       },
-      { rootMargin: "-50% 0px -50% 0px" }
+      { passive: true }
     );
-    rows.forEach((row) => {
-      const image = row.querySelector(".cell-image");
-      if (image) watch.observe(image);
-    });
+
+    const watchAt = (top: number, down: boolean) => {
+      const watch = new IntersectionObserver(
+        (entries) => {
+          if (!splitView.matches || goingDown !== down) return;
+          for (const entry of entries) {
+            const row = entry.target.closest<HTMLElement>(".project-row");
+            if (entry.isIntersecting && row) showWord(Number(row.dataset.index));
+          }
+        },
+        { rootMargin: `-${top}% 0px -${100 - top}% 0px` }
+      );
+      rows.forEach((row) => {
+        const image = row.querySelector(".cell-image");
+        if (image) watch.observe(image);
+      });
+    };
+    watchAt(40, true);
+    watchAt(50, false);
 
     // Below 769px the original headline shows instead and the word sits
     // still. Widening back to desktop starts it on the first project.
