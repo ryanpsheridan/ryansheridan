@@ -25,7 +25,15 @@ export function initWorkFilter(items: HTMLElement[], onChange?: () => void) {
     onChange?.();
   }
 
-  select.addEventListener("change", () => apply(select.value, true));
+  // Picking with a mouse or finger lets go of focus afterward, so the focus
+  // ring doesn't linger. Keyboard users keep focus where they are.
+  let pointerPick = false;
+  select.addEventListener("pointerdown", () => (pointerPick = true));
+  select.addEventListener("keydown", () => (pointerPick = false));
+  select.addEventListener("change", () => {
+    apply(select.value, true);
+    if (pointerPick) select.blur();
+  });
 
   const initial = new URLSearchParams(window.location.search).get("tag") ?? "";
   if (initial && [...select.options].some((o) => o.value === initial)) {

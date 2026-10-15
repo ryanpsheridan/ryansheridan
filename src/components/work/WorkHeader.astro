@@ -46,6 +46,17 @@ import { workProjects, projectTypes } from "../../data/work";
     width: 260px;
   }
 
+  /* A lighter edge than a form field: here the dropdown is a quiet tool
+     beside the title, and the chevron already says what it is. It darkens
+     on hover and on keyboard focus. */
+  .work-filter :global(.input) {
+    border-color: var(--color-border);
+  }
+
+  .work-filter :global(.input:hover) {
+    border-color: var(--color-border-strong);
+  }
+
   @media (max-width: 640px) {
     .work-header {
       flex-direction: column;

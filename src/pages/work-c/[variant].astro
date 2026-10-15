@@ -1,0 +1,11 @@
+---
+import WorkIndex from "../../components/work/WorkIndex.astro";
+
+export function getStaticPaths() {
+  return (["panel", "inline", "fill"] as const).map((variant) => ({ params: { variant }, props: { variant } }));
+}
+
+const { variant } = Astro.props;
+---
+
+<WorkIndex variant={variant} />

@@ -1,0 +1,570 @@
+---
+/**
+ * The /work index: one quiet line per project (number, title, up to two
+ * types, year). How the thumbnail shows up on hover depends on `variant`:
+ *
+ * - follow: floats beside the cursor.
+ * - panel:  a sticky frame to the right of the list swaps to the row you
+ *           point at, with that project's types under it.
+ * - inline: a small thumbnail slides open in front of the title.
+ * - fill:   the row itself fills with the image, edge to edge.
+ *
+ * On phones and touch screens every variant becomes a stack of cards: the
+ * image, then the title, then type and year.
+ */
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../Nav.astro";
+import Footer from "../Footer.astro";
+import Media from "../Media.astro";
+import WorkHeader from "./WorkHeader.astro";
+import { workProjects } from "../../data/work";
+
+interface Props {
+  variant: "follow" | "panel" | "inline" | "fill";
+}
+
+const { variant } = Astro.props;
+// At most two types per row keeps every line short enough to scan. The
+// panel caption has room for all of them.
+const types = (tags: string[]) => tags.slice(0, 2).join(", ");
+---
+
+<Layout title="Work — Ryan Sheridan" description="Case studies by Ryan Sheridan." noindex>
+  <Nav />
+  <main id="main" class="work-page">
+    <div class="work-inner">
+      <WorkHeader />
+
+      <div class:list={["index-layout", `is-${variant}`]} data-variant={variant}>
+        <ol class="index" data-index>
+          {
+            workProjects.map((project) => (
+              <li class="index-row" data-tags={project.tags.join("|")} data-slug={project.slug}>
+                <span class="row-media" aria-hidden="true">
+                  {project.thumbnail && <Media src={project.thumbnail} alt="" />}
+                </span>
+                <a href={`/work/${project.slug}`} class="index-link">
+                  <span class="index-title">{project.title}</span>
+                </a>
+                <span class="index-type">{types(project.tags)}</span>
+                <span class="index-year">
+                  <time datetime={String(project.year)}>{project.year}</time>
+                </span>
+              </li>
+            ))
+          }
+        </ol>
+
+        {
+          (variant === "panel" || variant === "follow") && (
+            <div class="preview" data-preview aria-hidden="true">
+              <div class="preview-stack">
+                {workProjects.map((project, i) => (
+                  <div class:list={["preview-frame", { "is-active": variant === "panel" && i === 0 }]} data-preview-for={project.slug}>
+                    <span class="preview-image">{project.thumbnail && <Media src={project.thumbnail} alt="" />}</span>
+                    {variant === "panel" && <span class="preview-caption">{project.tags.join(", ")}</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .work-page {
+    padding: var(--page-top) var(--page-padding) 0;
+  }
+
+  .work-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding-bottom: var(--space-8);
+  }
+
+  .index {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-border);
+    counter-reset: work;
+  }
+
+  /* Number, title, type, year. Hidden rows take no number, so the count
+     stays in order under a filter. */
+  .index-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr) minmax(0, 15rem) 3.5rem;
+    align-items: center;
+    column-gap: var(--space-5);
+    min-height: 82px;
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-border);
+    counter-increment: work;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+  }
+
+  .index-row[hidden] {
+    display: none;
+  }
+
+  .index-row::before {
+    content: counter(work, decimal-leading-zero);
+    position: relative;
+    z-index: 1;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+
+  .index-link {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  /* The title link covers the whole row (or the whole card on phones). */
+  .index-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+  }
+
+  .index-link:focus-visible {
+    outline: none;
+  }
+
+  .index-row:has(.index-link:focus-visible) {
+    outline: 2px solid var(--color-text);
+    outline-offset: -2px;
+  }
+
+  .index-title {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    font-size: var(--text-h4);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-snug);
+    line-height: var(--leading-snug);
+    transition:
+      transform var(--duration-moderate) var(--ease-emphasized),
+      color var(--duration-fast) var(--ease-standard);
+  }
+
+  .index-type,
+  .index-year {
+    position: relative;
+    z-index: 1;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+
+  .index-year {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .row-media {
+    display: none;
+  }
+
+  .preview-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .preview-caption {
+    display: none;
+  }
+
+  .row-media :global(img),
+  .row-media :global(video),
+  .preview-frame :global(img),
+  .preview-frame :global(video) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: auto;
+  }
+
+  /* ---------- Desktop with a pointer: the hover treatments ---------- */
+
+  @media (hover: hover) and (min-width: 641px) {
+    /* Pointing at one row quiets the others. */
+    .index:has(.index-row:hover) .index-row:not(:hover) {
+      opacity: 0.35;
+    }
+
+    /* follow: a frame that trails the cursor. */
+    .is-follow .preview {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: var(--z-sticky);
+      width: 340px;
+      aspect-ratio: 16 / 10;
+      pointer-events: none;
+      opacity: 0;
+      scale: 0.96;
+      transform: translate3d(var(--x, 0), var(--y, 0), 0);
+      transition:
+        opacity var(--duration-fast) var(--ease-standard),
+        scale var(--duration-moderate) var(--ease-emphasized);
+    }
+
+    .is-follow .preview.is-on {
+      opacity: 1;
+      scale: 1;
+    }
+
+    .is-follow .index-row:hover .index-title {
+      transform: translateX(var(--space-2));
+    }
+
+    /* panel: the list on the left, a sticky frame on the right that always
+       shows something, and swaps to whichever row you point at. */
+    .is-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+      gap: var(--space-7);
+      align-items: start;
+    }
+
+    .is-panel .index-row {
+      grid-template-columns: 3rem minmax(0, 1fr) 3.5rem;
+    }
+
+    .is-panel .index-type {
+      display: none;
+    }
+
+    .is-panel .index-row:hover .index-title {
+      transform: translateX(var(--space-2));
+    }
+
+    .is-panel .preview {
+      position: sticky;
+      top: calc(var(--nav-height) + var(--space-5));
+    }
+
+    /* Every frame sits in the same grid cell, so the stack is as tall as
+       its tallest caption and swapping never changes its height. */
+    .is-panel .preview-stack {
+      display: grid;
+    }
+
+    .is-panel .preview-frame {
+      position: relative;
+      grid-area: 1 / 1;
+      background: none;
+    }
+
+    .is-panel .preview-image {
+      display: block;
+      height: auto;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      background: var(--color-surface);
+    }
+
+    .is-panel .preview-caption {
+      display: block;
+      margin-top: var(--space-3);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      letter-spacing: var(--tracking-wide);
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    /* inline: a thumbnail slot in front of each title, closed at rest. Its
+       height is always reserved, so opening it never moves the rows. */
+    .is-inline .row-media {
+      display: inline-block;
+      width: 0;
+      height: 56px;
+      margin-right: 0;
+      vertical-align: middle;
+      overflow: hidden;
+      background: var(--color-surface);
+      transition:
+        width var(--duration-moderate) var(--ease-emphasized),
+        margin-right var(--duration-moderate) var(--ease-emphasized);
+    }
+
+    /* No column gap here, or the closed slot would still leave one behind;
+       the type and year columns carry their own leading space instead. */
+    .is-inline .index-row {
+      grid-template-columns: 3rem auto minmax(0, 1fr) calc(15rem + var(--space-5)) calc(3.5rem + var(--space-5));
+      column-gap: 0;
+    }
+
+    .is-inline .index-row > :is(.index-type, .index-year) {
+      padding-left: var(--space-5);
+    }
+
+    .is-inline .index-row:hover .row-media {
+      width: 90px;
+      margin-right: var(--space-4);
+    }
+
+    /* fill: the image opens from a thin line to the whole row, behind a
+       scrim that keeps white text readable. */
+    .is-fill .row-media {
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      clip-path: inset(50% 0 50% 0);
+      transition: clip-path var(--duration-moderate) var(--ease-emphasized);
+    }
+
+    .is-fill .row-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgb(0 0 0 / 0.6), rgb(0 0 0 / 0.25));
+    }
+
+    .is-fill .row-media :global(img),
+    .is-fill .row-media :global(video) {
+      scale: 1.08;
+      transition: scale var(--duration-slower) var(--ease-emphasized);
+    }
+
+    .is-fill .index-row:hover .row-media {
+      clip-path: inset(0);
+    }
+
+    .is-fill .index-row:hover .row-media :global(img),
+    .is-fill .index-row:hover .row-media :global(video) {
+      scale: 1;
+    }
+
+    .is-fill .index-row:hover::before,
+    .is-fill .index-row:hover .index-type,
+    .is-fill .index-row:hover .index-year,
+    .is-fill .index-row:hover .index-title {
+      color: #fff;
+    }
+
+    .is-fill .index-row:hover .index-title {
+      transform: translateX(var(--space-3));
+    }
+  }
+
+  .preview-frame {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: var(--color-surface);
+    opacity: 0;
+    transition: opacity var(--duration-moderate) var(--ease-standard);
+  }
+
+  .preview-frame.is-active {
+    opacity: 1;
+  }
+
+  .is-follow .preview-stack {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* No hover, no preview: on touch screens the rows become cards below. */
+  @media (hover: none), (max-width: 640px) {
+    .preview {
+      display: none;
+    }
+  }
+
+  /* Tablet: the type column goes; title and year remain. */
+  @media (max-width: 1024px) and (hover: hover) {
+    .index-row,
+    .is-panel .index-row {
+      grid-template-columns: 3rem minmax(0, 1fr) 3.5rem;
+    }
+
+    .is-inline .index-row {
+      grid-template-columns: 3rem auto minmax(0, 1fr) calc(3.5rem + var(--space-5));
+    }
+
+    .index-type {
+      display: none;
+    }
+
+    .is-panel {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      gap: var(--space-5);
+    }
+  }
+
+  /* ---------- Phones and touch screens: cards ---------- */
+
+  @media (hover: none), (max-width: 640px) {
+    .index {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-7) var(--space-5);
+      border-top: none;
+    }
+
+    .index-row,
+    .is-panel .index-row,
+    .is-inline .index-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        "media media"
+        "title title"
+        "type year";
+      align-items: baseline;
+      gap: var(--space-1) var(--space-3);
+      min-height: 0;
+      padding: 0;
+      border-bottom: none;
+    }
+
+    .index-row::before {
+      display: none;
+    }
+
+    .row-media {
+      grid-area: media;
+      display: block;
+      aspect-ratio: 16 / 10;
+      margin-bottom: var(--space-3);
+      overflow: hidden;
+      background: var(--color-surface);
+    }
+
+    .index-link {
+      grid-area: title;
+    }
+
+    .index-title {
+      font-size: var(--text-h5);
+    }
+
+    .index-type {
+      grid-area: type;
+      display: block;
+    }
+
+    .index-year {
+      grid-area: year;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .index {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-6);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .index-row,
+    .index-title,
+    .preview,
+    .preview-frame,
+    .row-media,
+    .row-media :global(img),
+    .row-media :global(video) {
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  import { initWorkFilter } from "../../scripts/work-filter";
+
+  const root = document.querySelector<HTMLElement>("[data-variant]")!;
+  const variant = root.dataset.variant;
+  const rows = [...root.querySelectorAll<HTMLElement>(".index-row")];
+  const preview = root.querySelector<HTMLElement>("[data-preview]");
+  const frames = new Map(
+    [...root.querySelectorAll<HTMLElement>("[data-preview-for]")].map((f) => [f.dataset.previewFor, f]),
+  );
+  const canHover = window.matchMedia("(hover: hover) and (min-width: 641px)");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  const activate = (slug?: string) => frames.forEach((f, s) => f.classList.toggle("is-active", s === slug));
+
+  // panel: the frame always shows a project. At rest that is the first one
+  // in the list, and it returns there when a filter changes.
+  const firstVisible = () => rows.find((r) => !r.hidden)?.dataset.slug;
+  initWorkFilter(rows, () => {
+    if (variant === "panel") activate(firstVisible());
+  });
+
+  if (variant === "panel") {
+    rows.forEach((row) => {
+      row.addEventListener("pointerenter", () => activate(row.dataset.slug));
+      row.addEventListener("focusin", () => activate(row.dataset.slug));
+    });
+  }
+
+  if (variant === "follow" && preview) {
+    // The frame trails the cursor, easing toward it each frame, and sits to
+    // the right so it never covers the title being read.
+    let targetX = 0;
+    let targetY = 0;
+    let x = 0;
+    let y = 0;
+    let running = false;
+
+    const place = () => {
+      const w = preview.offsetWidth;
+      const h = preview.offsetHeight;
+      const tx = Math.min(targetX + 32, window.innerWidth - w - 16);
+      const ty = Math.max(16, Math.min(targetY - h / 2, window.innerHeight - h - 16));
+      const ease = reduceMotion.matches ? 1 : 0.18;
+      x += (tx - x) * ease;
+      y += (ty - y) * ease;
+      preview.style.setProperty("--x", `${x}px`);
+      preview.style.setProperty("--y", `${y}px`);
+      if (running && (Math.abs(tx - x) > 0.5 || Math.abs(ty - y) > 0.5)) requestAnimationFrame(place);
+      else running = false;
+    };
+
+    const show = (row: HTMLElement, e: PointerEvent) => {
+      if (!canHover.matches) return;
+      activate(row.dataset.slug);
+      targetX = e.clientX;
+      targetY = e.clientY;
+      if (!preview.classList.contains("is-on")) {
+        // Appear right at the cursor rather than gliding in from a corner.
+        x = Math.min(targetX + 32, window.innerWidth - preview.offsetWidth - 16);
+        y = targetY - preview.offsetHeight / 2;
+        preview.classList.add("is-on");
+      }
+      if (!running) {
+        running = true;
+        requestAnimationFrame(place);
+      }
+    };
+
+    rows.forEach((row) => {
+      row.addEventListener("pointerenter", (e) => show(row, e));
+      row.addEventListener("pointermove", (e) => show(row, e));
+    });
+    root.querySelector("[data-index]")?.addEventListener("pointerleave", () => preview.classList.remove("is-on"));
+    window.addEventListener("scroll", () => preview.classList.remove("is-on"), { passive: true });
+  }
+</script>
