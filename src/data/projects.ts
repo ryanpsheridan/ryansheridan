@@ -455,7 +455,7 @@ export const projects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          { src: "/multi-brand-mode-switch-animated.svg", alt: "Figma variables table beside a card layout, with a mode menu switching the design between Base, Commerce, BigCommerce, and Feedonomics" },
+          { src: "/multi-brand-mode-switch-animated.svg", alt: "Figma variables table beside a hero section, with a mode menu switching the design between Base, Commerce, BigCommerce, and Feedonomics as the colors, type, buttons, and image width change" },
           { src: "/multi-brand-variables-animated.svg", alt: "Figma variables panel listing color and typeface tokens with values for the Base, Commerce, BigCommerce, and Feedonomics modes" },
         ],
       },
