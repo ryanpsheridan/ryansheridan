@@ -500,7 +500,7 @@ export const projects: Project[] = [
         type: "imageGrid",
         images: [
           { src: "/project-multi-brand4.webp", alt: "Component library sections, including hero, card, carousel, accordion, and form, next to a card grid with the brand mode set to Commerce" },
-          { src: "/project-multi-brand5.webp", alt: "Library updates page explaining how shared text styles and colors now follow the selected brand mode" },
+          { src: "/project-multi-brand-file-pages.webp", alt: "Figma page list for the Multi-Brand design system file, grouped into Read Me, Foundations, Components & Sections, Marketing, File Templates, and Archive" },
         ],
       },
     ],
