@@ -119,18 +119,22 @@ export interface ProcessBlock {
   caption?: string;
 }
 
-export interface TimelineStat {
-  value: string;
+export interface TimelineStatRow {
   label: string;
-  /** Small line under the label for the breakdown behind the value, such as per-page scores. */
-  detail?: string;
+  value: string;
+}
+
+/** A small table: a title over one hairline row per label and value. */
+export interface TimelineStat {
+  label: string;
+  rows: TimelineStatRow[];
 }
 
 export interface TimelineEntry {
   /** Short bold heading naming the chapter. */
   heading: string;
   body: string;
-  /** Optional numbers that back the chapter up. Usually one. */
+  /** Optional tables of numbers that back the chapter up. */
   stats?: TimelineStat[];
   /** Where the numbers came from: what was measured, when, and under what conditions. */
   statsNote?: string;
@@ -276,10 +280,24 @@ const allProjects: Project[] = [
             heading: "Foundations first",
             body: "I audited the code and the live site before touching anything, then shipped the first small package behind a preview. It tightened the contact form\u2019s security and stopped real customer inquiries from being silently lost. It also cut known security advisories from 23 to 2, made the form usable by keyboard and screen reader, and fixed a button that was invisible. Every step is previewed, approved and logged, and each ships with a short email to the owner.",
             stats: [
-              { value: "93 to 94", label: "Lighthouse accessibility", detail: "Home 94, Events 94, Contact 93" },
-              { value: "91 to 100", label: "Lighthouse SEO", detail: "Home 91, Events 100, Contact 100" },
+              {
+                label: "Lighthouse accessibility",
+                rows: [
+                  { label: "Home", value: "94" },
+                  { label: "Events", value: "94" },
+                  { label: "Contact", value: "93" },
+                ],
+              },
+              {
+                label: "Lighthouse SEO",
+                rows: [
+                  { label: "Home", value: "91" },
+                  { label: "Events", value: "100" },
+                  { label: "Contact", value: "100" },
+                ],
+              },
             ],
-            statsNote: "Baseline before any change. The site already passed these automated checks, so the work targets what they miss. Lab tests, 22 Oct 2026.",
+            statsNote: "Placeholder: I may or may not keep these numbers on the page. They are the baseline before any change, and the site already passed these automated checks, so the work targets what they miss. Lab tests, 22 Oct 2026.",
           },
         ],
       },

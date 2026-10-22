@@ -207,15 +207,21 @@ const schema = [
                           <p class="timeline-body">{entry.body}</p>
                           {entry.stats && (
                             <div class="timeline-stats">
-                              <dl>
+                              <div class="timeline-tables">
                                 {entry.stats.map((stat) => (
-                                  <div class="timeline-stat">
-                                    <dt>{stat.label}</dt>
-                                    {stat.detail && <dd class="timeline-stat-detail">{stat.detail}</dd>}
-                                    <dd>{stat.value}</dd>
-                                  </div>
+                                  <table class="timeline-table">
+                                    <caption>{stat.label}</caption>
+                                    <tbody>
+                                      {stat.rows.map((row) => (
+                                        <tr>
+                                          <th scope="row">{row.label}</th>
+                                          <td>{row.value}</td>
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
                                 ))}
-                              </dl>
+                              </div>
                               {entry.statsNote && <p class="timeline-stats-note">{entry.statsNote}</p>}
                             </div>
                           )}
@@ -884,50 +890,47 @@ const schema = [
     margin-top: var(--space-6);
   }
 
-  .timeline-stats dl {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-5) 0;
-    margin: 0;
+  .timeline-tables {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 20rem));
+    gap: var(--space-5) var(--space-6);
   }
 
-  /* Big figure over a small label, with a hairline between neighbours. */
-  .timeline-stat {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    padding: 0 var(--space-6);
-    border-left: var(--border-width) solid var(--color-border);
+  .timeline-table {
+    width: 100%;
+    border-collapse: collapse;
   }
 
-  .timeline-stat:first-child {
-    padding-left: 0;
-    border-left: none;
-  }
-
-  .timeline-stat dt {
-    order: 2;
+  .timeline-table caption {
+    padding-bottom: var(--space-3);
+    text-align: left;
     font-size: var(--text-s);
     color: var(--color-text-muted);
   }
 
-  .timeline-stat dd {
-    order: 1;
-    margin: 0;
-    font-size: var(--text-h3);
-    font-weight: var(--weight-light);
-    letter-spacing: var(--tracking-snug);
-    line-height: 1.1;
+  .timeline-table th,
+  .timeline-table td {
+    padding: var(--space-3) 0;
+    border-top: var(--border-width) solid var(--color-border);
+    font-size: var(--text-m);
+    line-height: 1.2;
   }
 
-  .timeline-stat dd.timeline-stat-detail {
-    order: 3;
-    margin-top: calc(var(--space-1) * -1);
-    font-size: var(--text-xs);
+  .timeline-table th {
+    text-align: left;
     font-weight: var(--weight-regular, 400);
-    letter-spacing: normal;
-    line-height: var(--leading-relaxed);
-    color: var(--color-text-muted);
+    color: var(--color-text);
+  }
+
+  .timeline-table td {
+    text-align: right;
+    font-weight: var(--weight-medium);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .timeline-table tr:last-child th,
+  .timeline-table tr:last-child td {
+    border-bottom: var(--border-width) solid var(--color-border);
   }
 
   .timeline-stats-note {
@@ -938,19 +941,9 @@ const schema = [
     color: var(--color-text-muted);
   }
 
-  /* Phones: stats stack, and the divider moves from the side to the top. */
   @media (max-width: 640px) {
-    .timeline-stat,
-    .timeline-stat:first-child {
-      flex: 1 1 100%;
-      padding: var(--space-4) 0 0;
-      border-left: none;
-      border-top: var(--border-width) solid var(--color-border);
-    }
-
-    .timeline-stat:first-child {
-      padding-top: 0;
-      border-top: none;
+    .timeline-tables {
+      grid-template-columns: 1fr;
     }
   }
 
