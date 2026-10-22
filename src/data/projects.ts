@@ -277,7 +277,7 @@ const allProjects: Project[] = [
               { value: "94, 94, 93", label: "Lighthouse accessibility" },
               { value: "91, 100, 100", label: "Lighthouse SEO" },
             ],
-            statsNote: "Home, events and contact pages, before any change. Lab tests, 22 Oct 2026.",
+            statsNote: "Baseline before any change, on the home, events and contact pages. The site already passed these automated checks, so the work targets what they miss. Lab tests, 22 Oct 2026.",
           },
         ],
       },
