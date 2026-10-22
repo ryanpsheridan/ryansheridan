@@ -122,6 +122,8 @@ export interface ProcessBlock {
 export interface TimelineStat {
   value: string;
   label: string;
+  /** Small line under the label for the breakdown behind the value, such as per-page scores. */
+  detail?: string;
 }
 
 export interface TimelineEntry {
@@ -274,10 +276,10 @@ const allProjects: Project[] = [
             heading: "Foundations first",
             body: "I audited the code and the live site before touching anything, then shipped the first small package behind a preview. It tightened the contact form\u2019s security and stopped real customer inquiries from being silently lost. It also cut known security advisories from 23 to 2, made the form usable by keyboard and screen reader, and fixed a button that was invisible. Every step is previewed, approved and logged, and each ships with a short email to the owner.",
             stats: [
-              { value: "94, 94, 93", label: "Lighthouse accessibility" },
-              { value: "91, 100, 100", label: "Lighthouse SEO" },
+              { value: "93 to 94", label: "Lighthouse accessibility", detail: "Home 94, Events 94, Contact 93" },
+              { value: "91 to 100", label: "Lighthouse SEO", detail: "Home 91, Events 100, Contact 100" },
             ],
-            statsNote: "Baseline before any change, on the home, events and contact pages. The site already passed these automated checks, so the work targets what they miss. Lab tests, 22 Oct 2026.",
+            statsNote: "Baseline before any change. The site already passed these automated checks, so the work targets what they miss. Lab tests, 22 Oct 2026.",
           },
         ],
       },

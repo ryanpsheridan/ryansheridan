@@ -211,6 +211,7 @@ const schema = [
                                 {entry.stats.map((stat) => (
                                   <div class="timeline-stat">
                                     <dt>{stat.label}</dt>
+                                    {stat.detail && <dd class="timeline-stat-detail">{stat.detail}</dd>}
                                     <dd>{stat.value}</dd>
                                   </div>
                                 ))}
@@ -893,7 +894,7 @@ const schema = [
   /* Big figure over a small label, with a hairline between neighbours. */
   .timeline-stat {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     gap: var(--space-2);
     padding: 0 var(--space-6);
     border-left: var(--border-width) solid var(--color-border);
@@ -905,16 +906,28 @@ const schema = [
   }
 
   .timeline-stat dt {
+    order: 2;
     font-size: var(--text-s);
     color: var(--color-text-muted);
   }
 
   .timeline-stat dd {
+    order: 1;
     margin: 0;
     font-size: var(--text-h3);
     font-weight: var(--weight-light);
     letter-spacing: var(--tracking-snug);
     line-height: 1.1;
+  }
+
+  .timeline-stat dd.timeline-stat-detail {
+    order: 3;
+    margin-top: calc(var(--space-1) * -1);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-regular, 400);
+    letter-spacing: normal;
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
   }
 
   .timeline-stats-note {
