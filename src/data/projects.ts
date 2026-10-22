@@ -119,6 +119,31 @@ export interface ProcessBlock {
   caption?: string;
 }
 
+export interface TimelineStat {
+  value: string;
+  label: string;
+}
+
+export interface TimelineEntry {
+  /** Short bold heading naming the chapter. */
+  heading: string;
+  body: string;
+  /** Optional numbers that back the chapter up. Usually one. */
+  stats?: TimelineStat[];
+  /** Where the numbers came from: what was measured, when, and under what conditions. */
+  statsNote?: string;
+}
+
+/**
+ * A running log for work in progress: one entry per chapter, oldest first, so
+ * the next chapter is one more object at the end of `entries`.
+ */
+export interface TimelineBlock {
+  type: "timeline";
+  heading?: string;
+  entries: TimelineEntry[];
+}
+
 export interface PathwayOption {
   title: string;
   note?: string;
@@ -178,7 +203,8 @@ export type ContentBlock =
   | VersusBlock
   | SplitBlock
   | ProcessBlock
-  | PathwayBlock;
+  | PathwayBlock
+  | TimelineBlock;
 
 export interface Project {
   slug: string;
@@ -239,6 +265,21 @@ const allProjects: Project[] = [
         type: "text",
         heading: "The Project",
         body: `<p><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">Ohio Golf Club Indoor</a> is an indoor golf facility in Akron, Ohio with nine TrackMan hitting bays, a short game area, lessons and fittings, memberships, events, and a fall league. I am redesigning its website from the ground up.</p><p>This page is a work in progress. Below is where the site stands today, page by page. Each After tab fills in as the redesign comes together.</p>`,
+      },
+      {
+        type: "timeline",
+        heading: "Progress",
+        entries: [
+          {
+            heading: "Foundations first",
+            body: "I audited the code and the live site before touching anything, then shipped the first small package behind a preview. It tightened the contact form\u2019s security and stopped real customer inquiries from being silently lost. It also cut known security advisories from 23 to 2, made the form usable by keyboard and screen reader, and fixed a button that was invisible. Every step is previewed, approved and logged, and each ships with a short email to the owner.",
+            stats: [
+              { value: "94, 94, 93", label: "Lighthouse accessibility" },
+              { value: "91, 100, 100", label: "Lighthouse SEO" },
+            ],
+            statsNote: "Home, events and contact pages, before any change. Lab tests, 22 Oct 2026.",
+          },
+        ],
       },
       {
         type: "text",

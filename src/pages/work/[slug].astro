@@ -196,6 +196,36 @@ const schema = [
                 );
               }
 
+              if (block.type === "timeline") {
+                return (
+                  <section class="content-section timeline">
+                    {block.heading && <h2>{block.heading}</h2>}
+                    <ol class="timeline-list">
+                      {block.entries.map((entry, i) => (
+                        <li class="timeline-entry">
+                          <p class="timeline-step">Chapter {String(i + 1).padStart(2, "0")}</p>
+                          <h3>{entry.heading}</h3>
+                          <p class="timeline-body">{entry.body}</p>
+                          {entry.stats && (
+                            <div class="timeline-stats">
+                              <dl>
+                                {entry.stats.map((stat) => (
+                                  <div class="timeline-stat">
+                                    <dt>{stat.label}</dt>
+                                    <dd>{stat.value}</dd>
+                                  </div>
+                                ))}
+                              </dl>
+                              {entry.statsNote && <p class="timeline-stats-note">{entry.statsNote}</p>}
+                            </div>
+                          )}
+                        </li>
+                      ))}
+                    </ol>
+                  </section>
+                );
+              }
+
               if (block.type === "versus") {
                 return (
                   <div class="versus">
@@ -821,6 +851,75 @@ const schema = [
 
   .section-eyebrow :global(.result-icon) {
     color: var(--color-link);
+  }
+
+  /* ---------- Timeline ---------- */
+
+  .timeline-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  .timeline-entry {
+    padding: var(--space-4) 0;
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .timeline-step {
+    margin: 0 0 var(--space-1);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .timeline-entry h3 {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-l);
+    font-weight: var(--weight-medium);
+    line-height: var(--leading-snug);
+  }
+
+  .timeline-body {
+    margin: 0;
+    font-size: var(--text-m);
+    line-height: var(--leading-relaxed);
+  }
+
+  .timeline-stats {
+    margin-top: var(--space-3);
+  }
+
+  .timeline-stats dl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+    margin: 0;
+  }
+
+  .timeline-stat {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .timeline-stat dt {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .timeline-stat dd {
+    margin: 0;
+    font-size: var(--text-l);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .timeline-stats-note {
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
   }
 
   /* ---------- Versus rows ---------- */
