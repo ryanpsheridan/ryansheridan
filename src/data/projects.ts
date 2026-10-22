@@ -223,7 +223,7 @@ export interface Project {
 
 const allProjects: Project[] = [
   {
-    slug: "ohio-golf-club-indoor-website",
+    slug: "ohio-golf-club",
     title: "Ohio Golf Club Indoor Website Redesign",
     year: 2026,
     draft: true,
