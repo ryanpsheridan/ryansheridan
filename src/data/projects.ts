@@ -190,6 +190,13 @@ export interface Project {
    * platforms render neither in a preview card.
    */
   ogImage?: string;
+  /**
+   * Work in progress. The page still builds at /work/<slug> (noindex, like
+   * every project page) so it can be shared by link, but it is left out of
+   * /work, the homepage, type and tool pages, and llms.txt. Delete the flag
+   * to publish it.
+   */
+  draft?: boolean;
   showOnHomepage: boolean;
   /**
    * 1-based slot on the homepage, for a project that should sit somewhere
@@ -210,7 +217,26 @@ export interface Project {
   content: ContentBlock[];
 }
 
-export const projects: Project[] = [
+const allProjects: Project[] = [
+  {
+    slug: "ohio-golf-club-indoor-website",
+    title: "Ohio Golf Club Indoor Website Redesign",
+    year: 2026,
+    draft: true,
+    description: "A full redesign of the website for Ohio Golf Club Indoor, a golf simulator facility in Ohio, covering bay booking, memberships, leagues, and events.",
+    thumbnail: "/project-ohio-golf-club-indoor-thumbnail.webp",
+    showOnHomepage: false,
+    tags: ["Web Design"],
+    tools: ["Figma"],
+    client: "Ohio Golf Club Indoor",
+    clientUrl: "https://www.ohiogolfclubindoor.com/",
+    content: [
+      {
+        type: "text",
+        body: `<p>Work in progress. Ohio Golf Club Indoor is rebuilding its website from the ground up, and this page will document the redesign as it comes together.</p>`,
+      },
+    ],
+  },
   {
     slug: "making-web-animation-self-serve",
     title: "Making Web Animation Self-Serve",
@@ -1474,6 +1500,12 @@ export function getHomepageProjects(): Project[] {
   return list;
 }
 
+/** Everything listed on the site. Drafts are excluded; see `Project.draft`. */
+export const projects: Project[] = allProjects.filter((p) => !p.draft);
+
+/** Every project that gets a page, drafts included. */
+export const projectsWithDrafts: Project[] = allProjects;
+
 export function getProjectBySlug(slug: string): Project | undefined {
-  return projects.find((p) => p.slug === slug);
+  return allProjects.find((p) => p.slug === slug);
 }

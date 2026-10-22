@@ -6,13 +6,13 @@ import Media from "../../components/Media.astro";
 import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
 import ResultIcon from "../../components/ui/ResultIcon.astro";
 import ToolIcon from "../../components/ui/ToolIcon.astro";
-import { projects } from "../../data/projects";
+import { projectsWithDrafts } from "../../data/projects";
 import { typeHref, toolHref } from "../../data/work";
 import type { GetStaticPaths } from "astro";
 import { breadcrumbSchema, projectSchema } from "../../data/schema";
 
 export const getStaticPaths: GetStaticPaths = () => {
-  return projects.map((project) => ({
+  return projectsWithDrafts.map((project) => ({
     params: { slug: project.slug },
     props: { project },
   }));
