@@ -201,9 +201,8 @@ const schema = [
                   <section class="content-section timeline">
                     {block.heading && <h2>{block.heading}</h2>}
                     <ol class="timeline-list">
-                      {block.entries.map((entry, i) => (
+                      {block.entries.map((entry) => (
                         <li class="timeline-entry">
-                          <p class="timeline-step">Chapter {String(i + 1).padStart(2, "0")}</p>
                           <h3>{entry.heading}</h3>
                           <p class="timeline-body">{entry.body}</p>
                           {entry.stats && (
@@ -857,25 +856,18 @@ const schema = [
 
   .timeline-list {
     list-style: none;
-    margin: 0;
+    margin: var(--space-5) 0 0;
     padding: 0;
     border-top: var(--border-width) solid var(--color-border);
   }
 
   .timeline-entry {
-    padding: var(--space-4) 0;
+    padding: var(--space-5) 0 var(--space-6);
     border-bottom: var(--border-width) solid var(--color-border);
   }
 
-  .timeline-step {
-    margin: 0 0 var(--space-1);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--color-text-muted);
-  }
-
   .timeline-entry h3 {
-    margin: 0 0 var(--space-2);
+    margin: 0 0 var(--space-3);
     font-size: var(--text-l);
     font-weight: var(--weight-medium);
     line-height: var(--leading-snug);
@@ -888,38 +880,65 @@ const schema = [
   }
 
   .timeline-stats {
-    margin-top: var(--space-3);
+    margin-top: var(--space-6);
   }
 
   .timeline-stats dl {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2) var(--space-6);
+    gap: var(--space-5) 0;
     margin: 0;
   }
 
+  /* Big figure over a small label, with a hairline between neighbours. */
   .timeline-stat {
     display: flex;
     flex-direction: column-reverse;
+    gap: var(--space-2);
+    padding: 0 var(--space-6);
+    border-left: var(--border-width) solid var(--color-border);
+  }
+
+  .timeline-stat:first-child {
+    padding-left: 0;
+    border-left: none;
   }
 
   .timeline-stat dt {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
+    font-size: var(--text-s);
     color: var(--color-text-muted);
   }
 
   .timeline-stat dd {
     margin: 0;
-    font-size: var(--text-l);
+    font-size: var(--text-h3);
     font-weight: var(--weight-light);
     letter-spacing: var(--tracking-snug);
+    line-height: 1.1;
   }
 
   .timeline-stats-note {
-    margin: var(--space-2) 0 0;
+    margin: var(--space-4) 0 0;
+    max-width: 36rem;
     font-size: var(--text-xs);
+    line-height: var(--leading-relaxed);
     color: var(--color-text-muted);
+  }
+
+  /* Phones: stats stack, and the divider moves from the side to the top. */
+  @media (max-width: 640px) {
+    .timeline-stat,
+    .timeline-stat:first-child {
+      flex: 1 1 100%;
+      padding: var(--space-4) 0 0;
+      border-left: none;
+      border-top: var(--border-width) solid var(--color-border);
+    }
+
+    .timeline-stat:first-child {
+      padding-top: 0;
+      border-top: none;
+    }
   }
 
   /* ---------- Versus rows ---------- */
