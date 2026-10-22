@@ -147,11 +147,11 @@ const schema = [
                   <div class="compare-block">
                     <div class="compare-controls">
                       <div class="segmented" role="group" aria-label="Show version">
-                        <button type="button" class="compare-tab" data-tab="before" aria-pressed="false">
+                        <button type="button" class="compare-tab" data-tab="before" aria-pressed={String(!block.after)}>
                           {block.before.label || "Before"}
                         </button>
-                        <button type="button" class="compare-tab" data-tab="after" aria-pressed="true">
-                          {block.after.label || "After"}
+                        <button type="button" class="compare-tab" data-tab="after" aria-pressed={String(!!block.after)}>
+                          {block.after?.label || "After"}
                         </button>
                       </div>
                       {block.liveUrl && (
@@ -161,11 +161,15 @@ const schema = [
                       )}
                     </div>
                     <div class="compare-frame">
-                      <div class="compare-pane" data-pane="before">
+                      <div class={`compare-pane${block.after ? "" : " is-active"}`} data-pane="before">
                         <Media src={block.before.src} alt={block.before.alt ?? block.before.label ?? "Before"} class="lightbox-trigger" />
                       </div>
-                      <div class="compare-pane is-active" data-pane="after">
-                        <Media src={block.after.src} alt={block.after.alt ?? block.after.label ?? "After"} class="lightbox-trigger" />
+                      <div class={`compare-pane${block.after ? " is-active" : ""}`} data-pane="after">
+                        {block.after ? (
+                          <Media src={block.after.src} alt={block.after.alt ?? block.after.label ?? "After"} class="lightbox-trigger" />
+                        ) : (
+                          <p class="compare-pending">Redesign in progress</p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -737,6 +741,15 @@ const schema = [
 
   .compare-pane.is-active {
     display: block;
+  }
+
+  .compare-pending {
+    margin: 0;
+    padding: calc(var(--space-6) * 3) var(--space-4);
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
   }
 
   .compare-pane :global(img) {

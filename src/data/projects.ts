@@ -47,7 +47,11 @@ export interface CarouselBlock {
 export interface CompareBlock {
   type: "compare";
   before: { src: string; alt?: string; label?: string };
-  after: { src: string; alt?: string; label?: string };
+  /**
+   * Leave out while the redesign isn't done: the block opens on "before" and
+   * the after tab shows an in-progress placeholder.
+   */
+  after?: { src: string; alt?: string; label?: string };
   liveUrl?: string;
 }
 
@@ -233,7 +237,62 @@ const allProjects: Project[] = [
     content: [
       {
         type: "text",
-        body: `<p>Work in progress. Ohio Golf Club Indoor is rebuilding its website from the ground up, and this page will document the redesign as it comes together.</p>`,
+        heading: "The Project",
+        body: `<p><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">Ohio Golf Club Indoor</a> is an indoor golf facility in Akron, Ohio with nine TrackMan hitting bays, a short game area, lessons and fittings, memberships, events, and a fall league. I am redesigning its website from the ground up.</p><p>This page is a work in progress. Below is where the site stands today, page by page. Each After tab fills in as the redesign comes together.</p>`,
+      },
+      {
+        type: "text",
+        heading: "Home",
+        body: `<p>The homepage leads with the fall league, then hands visitors to three image cards for lessons, bays, and memberships, followed by an Instagram prompt, a feature overview, and the lessons pitch.</p>`,
+      },
+      {
+        type: "compare",
+        before: { src: "/project-ogc-before-home.webp", alt: "The current Ohio Golf Club homepage, with a fall league hero, three image cards for lessons, bays, and memberships, and a section on private lessons and fittings", label: "Before" },
+      },
+      {
+        type: "text",
+        heading: "Fall League",
+        body: `<p>The league has the most detailed page on the site, with a season overview, a format breakdown, a playoff bracket, and a registration call to action.</p>`,
+      },
+      {
+        type: "compare",
+        before: { src: "/project-ogc-before-fall-league.webp", alt: "The current Fall League page, with a season summary, a how-it-works breakdown of pools, scoring, and playoffs, and a registration section", label: "Before" },
+      },
+      {
+        type: "text",
+        heading: "Events",
+        body: `<p>Events covers birthdays, reunions, corporate gatherings, milestones, and golf outings, with a single Plan Your Event action repeated down the page.</p>`,
+      },
+      {
+        type: "compare",
+        before: { src: "/project-ogc-before-events.webp", alt: "The current Ohio Golf Club events page, with five event types in cards and a Plan Your Event call to action", label: "Before" },
+      },
+      {
+        type: "text",
+        heading: "Carl’s Place",
+        body: `<p>Carl’s Place is the custom indoor simulator side of the business, with a photo carousel, three reasons to choose the team, and testimonials.</p>`,
+      },
+      {
+        type: "compare",
+        before: { src: "/project-ogc-before-carls-place.webp", alt: "The current Carl’s Place page for custom indoor golf simulators, with a carousel, three feature cards, and testimonials", label: "Before" },
+      },
+      {
+        type: "text",
+        heading: "Our Team",
+        body: `<p>The team page shows five staff members with a photo, role, email, and short bio each.</p>`,
+      },
+      {
+        type: "compare",
+        before: { src: "/project-ogc-before-team.webp", alt: "The current Ohio Golf Club team page, with portraits, titles, emails, and bios for five staff members", label: "Before" },
+      },
+      {
+        type: "text",
+        heading: "Contact",
+        body: `<p>Contact is a modal on every page, with name, email, phone, and message fields.</p>`,
+      },
+      {
+        type: "compare",
+        before: { src: "/project-ogc-before-contact-modal.webp", alt: "The current Ohio Golf Club contact modal over the homepage, with name, email, phone, and message fields", label: "Before" },
       },
     ],
   },
