@@ -283,10 +283,10 @@ const allProjects: Project[] = [
         afterTitle: "Now",
         rows: [
           { label: "Known security advisories", before: "23", after: "2" },
-          { label: "Pages with their own title", before: "1 of 6", after: "Not measured yet" },
+          { label: "Pages with their own title", before: "1 of 6", after: "6 of 6" },
           { label: "Opening hours on the site", before: "Missing", after: "Not changed yet" },
           { label: "Lighthouse performance", before: "Baseline pending", after: "Not measured yet" },
-          { label: "Non-brand search impressions", before: "Baseline pending", after: "Not measured yet" },
+          { label: "Search clicks and impressions", before: "101 clicks from about 6,700 impressions (1 Sep to 20 Oct 2026)", after: "To be measured again after six weeks" },
           { label: "Hours and prices in AI answers", before: "Baseline pending", after: "Not measured yet" },
         ],
       },
@@ -316,6 +316,10 @@ const allProjects: Project[] = [
               },
             ],
             statsNote: "Placeholder: I may or may not keep these numbers on the page. They are the baseline before any change, and the site already passed these automated checks, so the work targets what they miss. Lab tests, 22 Oct 2026.",
+          },
+          {
+            heading: "Evidence-led search fixes",
+            body: "Search Console showed the club\u2019s pages were seen hundreds of times for searches like \u201cindoor golf\u201d and \u201cgolf simulator near me\u201d but earned no clicks, because five of six pages shared one generic title. Each page now has its own title and description, one official address, a sitemap and correct link previews, with no visible change to the site. Baseline: 101 clicks from about 6,700 impressions (Search Console, 1 Sep to 20 Oct 2026), to be re-measured after six weeks.",
           },
         ],
       },
