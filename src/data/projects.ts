@@ -273,6 +273,24 @@ const allProjects: Project[] = [
         body: `<p><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">Ohio Golf Club Indoor</a> is an indoor golf facility in Akron, Ohio with nine TrackMan hitting bays, a short game area, lessons and fittings, memberships, events, and a fall league. I am redesigning its website from the ground up.</p><p>This page is a work in progress. Below is where the site stands today, page by page. Each After tab fills in as the redesign comes together.</p>`,
       },
       {
+        type: "text",
+        heading: "Scorecard",
+        body: `<p>What I can measure, kept up to date as the work ships. Before is where the site started. Now fills in as each number is measured again.</p>`,
+      },
+      {
+        type: "versus",
+        beforeTitle: "Before",
+        afterTitle: "Now",
+        rows: [
+          { label: "Known security advisories", before: "23", after: "2" },
+          { label: "Pages with their own title", before: "1 of 6", after: "Not measured yet" },
+          { label: "Opening hours on the site", before: "Missing", after: "Not changed yet" },
+          { label: "Lighthouse performance", before: "Baseline pending", after: "Not measured yet" },
+          { label: "Non-brand search impressions", before: "Baseline pending", after: "Not measured yet" },
+          { label: "Hours and prices in AI answers", before: "Baseline pending", after: "Not measured yet" },
+        ],
+      },
+      {
         type: "timeline",
         heading: "Progress",
         entries: [
