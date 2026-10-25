@@ -1,9 +1,9 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Nav from "../components/Nav.astro";
-import Footer from "../components/Footer.astro";
-import { breadcrumbSchema } from "../data/schema";
-import Breadcrumbs from "../components/ui/Breadcrumbs.astro";
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import { breadcrumbSchema } from "../../data/schema";
+import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
 
 const venmoUrl = "https://venmo.com/u/ryan-sheridan-44";
 ---
@@ -11,12 +11,12 @@ const venmoUrl = "https://venmo.com/u/ryan-sheridan-44";
 <Layout
   title="Invoice | Ryan Sheridan"
   description="Invoice template for Ryan Sheridan. Fill in the fields and download a PDF."
-  schema={[breadcrumbSchema([{ name: "Invoice", path: "/invoice" }])]}
+  schema={[breadcrumbSchema([{ name: "Invoice template", path: "/invoice/template" }])]}
   noindex
 >
   <Nav />
   <main id="main" class="invoice-page">
-    <Breadcrumbs class="page-crumbs" items={[{ label: "Home", href: "/" }, { label: "Invoice" }]} />
+    <Breadcrumbs class="page-crumbs" items={[{ label: "Home", href: "/" }, { label: "Invoice template" }]} />
 
     <div class="invoice-toolbar">
       <button id="reset-btn" type="button" class="btn btn-secondary btn-sm">Reset</button>
