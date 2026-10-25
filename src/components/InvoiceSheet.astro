@@ -1,0 +1,656 @@
+---
+import Breadcrumbs from "./ui/Breadcrumbs.astro";
+
+interface Props {
+  /** Breadcrumb label for the current page. */
+  crumb: string;
+  /** localStorage key, so each invoice page keeps its own draft. */
+  storeKey: string;
+  /** Prefilled "Bill to" block. */
+  billTo?: string;
+  /** Prefilled service line descriptions. */
+  items?: string[];
+}
+
+const { crumb, storeKey, billTo = "", items = [] } = Astro.props;
+const venmoUrl = "https://venmo.com/u/ryan-sheridan-44";
+---
+
+<main
+  id="main"
+  class="invoice-page"
+  data-store={storeKey}
+  data-bill-to={billTo}
+  data-items={JSON.stringify(items)}
+>
+  <Breadcrumbs class="page-crumbs" items={[{ label: "Home", href: "/" }, { label: crumb }]} />
+
+  <div class="invoice-toolbar">
+    <button id="reset-btn" type="button" class="btn btn-secondary btn-sm">Reset</button>
+    <button id="print-btn" type="button" class="btn btn-secondary btn-sm">Download PDF</button>
+  </div>
+
+  <div class="sheet">
+    <header class="invoice-header">
+      <div>
+        <h1>Invoice</h1>
+        <p class="from-name">Ryan Sheridan</p>
+      </div>
+      <ul class="contact-list">
+        <li><a href="mailto:ryansheridandesign@gmail.com">ryansheridandesign@gmail.com</a></li>
+        <li><a href="tel:+17204278262">720-427-8262</a></li>
+        <li><a href="https://ryansheridan.studio/" target="_blank" rel="noopener noreferrer">ryansheridan.studio</a></li>
+      </ul>
+    </header>
+
+    <hr class="divider" />
+
+    <section class="parties">
+      <div class="bill-to">
+        <label class="label" for="bill-to">Bill to</label>
+        <textarea
+          id="bill-to"
+          class="cell cell-area"
+          data-persist
+          rows="3"
+          placeholder="Client name&#10;Company&#10;client@email.com"></textarea>
+      </div>
+      <dl class="meta">
+        <div class="meta-row">
+          <dt><label class="label" for="inv-number">Invoice no.</label></dt>
+          <dd><input id="inv-number" class="cell" type="text" data-persist placeholder="001" autocomplete="off" /></dd>
+        </div>
+        <div class="meta-row">
+          <dt><label class="label" for="inv-date">Date</label></dt>
+          <dd><input id="inv-date" class="cell" type="date" data-persist /></dd>
+        </div>
+        <div class="meta-row">
+          <dt><label class="label" for="inv-due">Due</label></dt>
+          <dd><input id="inv-due" class="cell" type="date" data-persist /></dd>
+        </div>
+      </dl>
+    </section>
+
+    <hr class="divider" />
+
+    <section class="items">
+      <div class="item-head" aria-hidden="true">
+        <span>Description</span>
+        <span class="num">Qty</span>
+        <span class="num">Rate</span>
+        <span class="num">Amount</span>
+        <span class="item-action"></span>
+      </div>
+      <div id="item-rows"></div>
+      <button id="add-row" type="button" class="btn btn-secondary btn-sm add-row">Add line</button>
+    </section>
+
+    <section class="summary">
+      <p class="pay-line">
+        Pay with Venmo:{" "}
+        <a href={venmoUrl} target="_blank" rel="noopener noreferrer" class="link-underline">venmo.com/u/ryan-sheridan-44</a>
+      </p>
+      <p class="total">
+        <span class="label">Total due</span>
+        <span id="total">$0.00</span>
+      </p>
+    </section>
+
+    <section class="notes" id="notes-section">
+      <label class="label" for="notes">Notes</label>
+      <textarea
+        id="notes"
+        class="cell cell-area"
+        data-persist
+        rows="1"
+        placeholder="Project details, payment terms, thank you."></textarea>
+    </section>
+  </div>
+</main>
+
+<script>
+  const page = document.querySelector<HTMLElement>(".invoice-page") as HTMLElement;
+  const STORE = page.dataset.store ?? "invoice-draft";
+  const BILL_TO = page.dataset.billTo ?? "";
+  const ITEMS: string[] = JSON.parse(page.dataset.items ?? "[]");
+
+  const rowsEl = document.getElementById("item-rows") as HTMLElement;
+  const totalEl = document.getElementById("total") as HTMLElement;
+  const persisted = () =>
+    Array.from(document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("[data-persist]"));
+  const areas = () => Array.from(document.querySelectorAll<HTMLTextAreaElement>("textarea.cell-area"));
+
+  const money = (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD" });
+
+  // Description boxes size through CSS (a hidden copy of the text sets the
+  // height), so they re-wrap correctly when the page prints at a different width.
+  function grow(el: HTMLTextAreaElement) {
+    (el.parentElement as HTMLElement).dataset.value = el.value;
+  }
+
+  function autosize(el: HTMLTextAreaElement) {
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  }
+
+  // An empty notes block is left out of the PDF.
+  function syncNotes() {
+    const notes = document.getElementById("notes") as HTMLTextAreaElement;
+    document.getElementById("notes-section")?.classList.toggle("is-empty", !notes.value.trim());
+  }
+
+  function addRow(desc = "", qty = "1", rate = "") {
+    const row = document.createElement("div");
+    row.className = "item-row";
+    row.innerHTML = `
+      <span class="grow"><textarea class="cell r-desc" rows="1" aria-label="Description" placeholder="Design systems consulting"></textarea></span>
+      <input class="cell num r-qty" type="number" inputmode="decimal" min="0" step="any" aria-label="Quantity" />
+      <input class="cell num r-rate" type="number" inputmode="decimal" min="0" step="any" aria-label="Rate" placeholder="0.00" />
+      <span class="num r-amount">$0.00</span>
+      <button type="button" class="item-action remove-row" aria-label="Remove line">Remove</button>
+    `;
+    const descEl = row.querySelector(".r-desc") as HTMLTextAreaElement;
+    descEl.value = desc;
+    (row.querySelector(".r-qty") as HTMLInputElement).value = qty;
+    (row.querySelector(".r-rate") as HTMLInputElement).value = rate;
+    rowsEl.appendChild(row);
+    grow(descEl);
+  }
+
+  function recalc() {
+    let total = 0;
+    rowsEl.querySelectorAll<HTMLElement>(".item-row").forEach((row) => {
+      const qty = parseFloat((row.querySelector(".r-qty") as HTMLInputElement).value) || 0;
+      const rate = parseFloat((row.querySelector(".r-rate") as HTMLInputElement).value) || 0;
+      const amount = qty * rate;
+      total += amount;
+      (row.querySelector(".r-amount") as HTMLElement).textContent = money(amount);
+    });
+    totalEl.textContent = money(total);
+  }
+
+  function save() {
+    try {
+      const data = {
+        fields: Object.fromEntries(persisted().map((el) => [el.id, el.value])),
+        rows: Array.from(rowsEl.querySelectorAll<HTMLElement>(".item-row")).map((row) => [
+          (row.querySelector(".r-desc") as HTMLTextAreaElement).value,
+          (row.querySelector(".r-qty") as HTMLInputElement).value,
+          (row.querySelector(".r-rate") as HTMLInputElement).value,
+        ]),
+      };
+      localStorage.setItem(STORE, JSON.stringify(data));
+    } catch {
+      // Storage can be blocked; the page works without it.
+    }
+  }
+
+  function defaults() {
+    const today = new Date();
+    const due = new Date(today);
+    due.setDate(due.getDate() + 14);
+    const iso = (d: Date) =>
+      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    persisted().forEach((el) => (el.value = ""));
+    (document.getElementById("inv-date") as HTMLInputElement).value = iso(today);
+    (document.getElementById("inv-due") as HTMLInputElement).value = iso(due);
+    (document.getElementById("bill-to") as HTMLTextAreaElement).value = BILL_TO;
+    rowsEl.innerHTML = "";
+    if (ITEMS.length) ITEMS.forEach((desc) => addRow(desc, "1", ""));
+    else addRow();
+  }
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORE);
+      if (!raw) return false;
+      const data = JSON.parse(raw);
+      persisted().forEach((el) => {
+        if (typeof data.fields?.[el.id] === "string") el.value = data.fields[el.id];
+      });
+      rowsEl.innerHTML = "";
+      (data.rows?.length ? data.rows : [["", "1", ""]]).forEach((r: string[]) => addRow(r[0], r[1], r[2]));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function refresh() {
+    recalc();
+    syncNotes();
+    areas().forEach(autosize);
+  }
+
+  if (!load()) defaults();
+  refresh();
+
+  document.addEventListener("input", (e) => {
+    const target = e.target as HTMLElement;
+    if (target instanceof HTMLTextAreaElement) {
+      if (target.classList.contains("r-desc")) grow(target);
+      else autosize(target);
+    }
+    recalc();
+    syncNotes();
+    save();
+  });
+
+  rowsEl.addEventListener("click", (e) => {
+    const btn = (e.target as HTMLElement).closest(".remove-row");
+    if (!btn) return;
+    btn.closest(".item-row")?.remove();
+    if (!rowsEl.children.length) addRow();
+    recalc();
+    save();
+  });
+
+  document.getElementById("add-row")?.addEventListener("click", () => {
+    addRow();
+    (rowsEl.lastElementChild?.querySelector(".r-desc") as HTMLTextAreaElement | null)?.focus();
+    save();
+  });
+
+  document.getElementById("reset-btn")?.addEventListener("click", () => {
+    try {
+      localStorage.removeItem(STORE);
+    } catch {
+      // ignore
+    }
+    defaults();
+    refresh();
+  });
+
+  document.getElementById("print-btn")?.addEventListener("click", () => {
+    (document.activeElement as HTMLElement | null)?.blur();
+    areas().forEach(autosize);
+    window.print();
+  });
+</script>
+
+<style is:global>
+  /* Everything here is global because the line items are built in script.
+     No weight on this page goes above 400. */
+  .invoice-page {
+    padding: var(--page-top) var(--page-padding) 0;
+    font-weight: var(--weight-regular);
+  }
+
+  .invoice-page .page-crumbs,
+  .invoice-page .invoice-toolbar,
+  .invoice-page .sheet {
+    max-width: var(--content-width);
+    margin-inline: auto;
+  }
+
+  .invoice-page .invoice-toolbar {
+    margin-bottom: var(--space-4);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-2);
+  }
+
+  .invoice-page .btn,
+  .invoice-page .remove-row {
+    font-weight: var(--weight-regular);
+  }
+
+  .invoice-page .invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--space-4);
+  }
+
+  .invoice-page h1 {
+    font-size: var(--text-h2);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+  }
+
+  .invoice-page .contact-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: right;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .invoice-page .from-name {
+    font-size: var(--text-s);
+    margin-top: var(--space-1);
+  }
+
+  .invoice-page .contact-list a {
+    text-decoration: underline;
+    text-decoration-color: var(--color-link-subtle);
+    text-underline-offset: 3px;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      text-decoration-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .invoice-page .contact-list a:hover {
+    color: var(--color-link-hover);
+    text-decoration-color: var(--color-link-hover);
+  }
+
+  .invoice-page .divider {
+    margin: var(--space-4) 0;
+  }
+
+  .invoice-page .label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  /* Bill to on the left, invoice details on the right. */
+  .invoice-page .parties {
+    display: grid;
+    grid-template-columns: 1fr minmax(0, 260px);
+    gap: var(--space-5);
+  }
+
+  .invoice-page .meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .invoice-page .meta-row {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    align-items: center;
+  }
+
+  .invoice-page .meta .cell {
+    text-align: right;
+  }
+
+  .invoice-page .item-row,
+  .invoice-page .item-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 48px 80px 100px 56px;
+    gap: var(--space-3);
+    align-items: start;
+  }
+
+  .invoice-page .item-head {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    padding-bottom: var(--space-1);
+    border-bottom: var(--border-width) solid var(--color-border-strong);
+  }
+
+  .invoice-page .item-row {
+    padding: var(--space-1) 0;
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .invoice-page .num {
+    text-align: right;
+  }
+
+  .invoice-page .add-row {
+    margin-top: var(--space-3);
+  }
+
+  .invoice-page .r-amount,
+  .invoice-page .remove-row {
+    padding-block: calc(var(--space-1) + 1px);
+  }
+
+  .invoice-page .r-amount {
+    font-family: var(--font-mono);
+    font-size: var(--text-s);
+  }
+
+  .invoice-page .remove-row {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    text-align: right;
+  }
+
+  .invoice-page .remove-row:hover {
+    color: var(--color-text);
+  }
+
+  /* Payment link on the left, total on the right. */
+  .invoice-page .summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-4);
+    margin-top: var(--space-5);
+  }
+
+  .invoice-page .pay-line {
+    font-size: var(--text-s);
+  }
+
+  .invoice-page .total {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    font-size: var(--text-h3, var(--text-m));
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .invoice-page .notes {
+    margin-top: var(--space-5);
+  }
+
+  .invoice-page .cell {
+    display: block;
+    min-width: 0;
+    padding: var(--space-1) var(--space-2);
+    margin-inline: calc(var(--space-2) * -1);
+    width: calc(100% + var(--space-2) * 2);
+    font-family: inherit;
+    font-size: var(--text-s);
+    font-weight: var(--weight-light);
+    line-height: var(--leading-normal);
+    color: var(--color-text);
+    background: transparent;
+    border: var(--border-width) solid transparent;
+    border-radius: var(--radius-sm);
+    transition: border-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .invoice-page .cell::placeholder {
+    color: var(--color-placeholder);
+  }
+
+  .invoice-page .cell:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  .invoice-page .cell:focus-visible {
+    border-color: var(--color-text);
+  }
+
+  .invoice-page input.num {
+    text-align: right;
+    font-family: var(--font-mono);
+    font-size: var(--text-s);
+  }
+
+  .invoice-page input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+
+  .invoice-page input[type="number"]::-webkit-outer-spin-button,
+  .invoice-page input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .invoice-page textarea.cell-area,
+  .invoice-page .grow textarea {
+    resize: none;
+    overflow: hidden;
+  }
+
+  .invoice-page .grow {
+    display: grid;
+    margin-inline: calc(var(--space-2) * -1);
+  }
+
+  .invoice-page .grow::after,
+  .invoice-page .grow .cell {
+    grid-area: 1 / 1;
+    margin: 0;
+    width: 100%;
+    padding: var(--space-1) var(--space-2);
+    font-family: inherit;
+    font-size: var(--text-s);
+    font-weight: var(--weight-light);
+    line-height: var(--leading-normal);
+    border: var(--border-width) solid transparent;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  .invoice-page .grow::after {
+    content: attr(data-value) " ";
+    visibility: hidden;
+  }
+
+  @media (max-width: 640px) {
+    .invoice-page .invoice-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .invoice-page .contact-list {
+      text-align: left;
+    }
+
+    .invoice-page .parties {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+
+    .invoice-page .summary {
+      flex-direction: column;
+    }
+
+    .invoice-page .item-head {
+      display: none;
+    }
+
+    .invoice-page .item-row {
+      grid-template-columns: 1fr 1fr 1fr;
+      row-gap: var(--space-1);
+      padding: var(--space-3) 0;
+    }
+
+    .invoice-page .item-row .grow {
+      grid-column: 1 / -1;
+    }
+
+    .invoice-page .item-row .r-amount {
+      text-align: left;
+    }
+  }
+
+  @media print {
+    :is(nav, footer),
+    .invoice-page .page-crumbs,
+    .invoice-page .invoice-toolbar,
+    .invoice-page .add-row,
+    .invoice-page .remove-row,
+    .invoice-page .item-head .item-action {
+      display: none !important;
+    }
+
+    @page {
+      margin: 0.5in 0.6in;
+    }
+
+    main.invoice-page {
+      padding: 0 !important;
+    }
+
+    .invoice-page .sheet {
+      max-width: 100%;
+    }
+
+    body {
+      font-size: 13px;
+    }
+
+    .invoice-page h1 {
+      font-size: 26px;
+    }
+
+    .invoice-page .divider {
+      margin: 12px 0;
+    }
+
+    .invoice-page .summary,
+    .invoice-page .notes {
+      margin-top: 14px;
+    }
+
+    .invoice-page .cell,
+    .invoice-page .grow .cell,
+    .invoice-page .grow::after {
+      font-size: 12px;
+      line-height: 1.4;
+      padding-block: 2px;
+    }
+
+    .invoice-page .r-amount,
+    .invoice-page input.num {
+      font-size: 12px;
+    }
+
+    .invoice-page .item-row,
+    .invoice-page .item-head {
+      grid-template-columns: minmax(0, 1fr) 48px 80px 100px;
+    }
+
+    .invoice-page .item-row {
+      padding: 2px 0;
+      break-inside: avoid;
+    }
+
+    /* Fields print as plain text: no borders, focus rings, or picker icons. */
+    .invoice-page .cell,
+    .invoice-page .cell:hover,
+    .invoice-page :focus,
+    .invoice-page :focus-visible {
+      border-color: transparent !important;
+      outline: none !important;
+    }
+
+    .invoice-page .cell::placeholder {
+      color: transparent;
+    }
+
+    .invoice-page input[type="date"]::-webkit-calendar-picker-indicator {
+      display: none;
+    }
+
+    .invoice-page .notes.is-empty {
+      display: none;
+    }
+
+    .invoice-page a {
+      color: var(--color-text) !important;
+    }
+  }
+</style>
