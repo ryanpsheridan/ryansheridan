@@ -8,16 +8,12 @@ import { breadcrumbSchema } from "../../data/schema";
 const billTo = "Ohio Golf Club\n2262 S Arlington Rd\nAkron, OH 44319\n(330) 958-0052";
 const items = [
   {
-    desc: "SEO foundation: unique page titles and descriptions for all six pages, one official site address, a sitemap, corrected link previews, the Google rating badge, and a Search Console baseline for measuring results.",
-    rate: "650",
+    desc: "Website audit and tune-up: contact form security and usability fixes, and dependency updates.",
+    rate: "250",
   },
   {
-    desc: "Bay Rentals and Memberships pages: design and build, with pricing markup and an updated home page plans section.",
-    rate: "550",
-  },
-  {
-    desc: "Website audit: contact form security and usability fixes, and dependency updates.",
-    rate: "200",
+    desc: "SEO foundation: unique page titles and descriptions for all six pages, one official site address, a sitemap, corrected link previews, the Google rating badge, and the sitemap and pages submitted to Google Search Console.",
+    rate: "625",
   },
   {
     desc: "Full site review: checked and fixed every link, resolved bugs, and removed outdated Instagram feed code that was no longer working.",
@@ -26,6 +22,10 @@ const items = [
   {
     desc: "Design system cleanup and style guide page, preparing the site for redesign.",
     rate: "0",
+  },
+  {
+    desc: "Bay Rentals and Memberships pages: design and build, with pricing markup and an updated home page plans section.",
+    rate: "500",
   },
 ];
 ---
@@ -39,9 +39,10 @@ const items = [
   <Nav />
   <InvoiceSheet
     crumb="Ohio Golf Club invoice"
-    storeKey="invoice-draft-ohio-golf-club-v4"
+    storeKey="invoice-draft-ohio-golf-club-v5"
     billTo={billTo}
     items={items}
+    noQty
   />
   <Footer />
 </Layout>
