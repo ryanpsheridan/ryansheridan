@@ -10,23 +10,23 @@ import { breadcrumbSchema } from "../../data/schema";
 const billTo = ["Ohio Golf Club", "2262 S Arlington Rd", "Akron, OH 44319", "(330) 958-0052"];
 const items = [
   {
-    desc: "Website audit and tune-up: contact form security and usability fixes, and dependency updates.",
+    desc: "Website audit and tune-up: contact form security and accessibility fixes, and dependency updates.",
     rate: 250,
   },
   {
-    desc: "SEO foundation: site hours, unique page titles and descriptions for all six pages, one official site address, corrected link previews, the Google rating badge, and a sitemap with all pages submitted to Google Search Console.",
+    desc: "SEO foundation: site hours, unique page titles and descriptions for every page, one official site address, corrected link previews, the Google rating badge, and a sitemap.",
     rate: 625,
   },
   {
-    desc: "Full site review: checked and fixed every link, resolved bugs, and removed outdated Instagram feed code that was no longer working.",
+    desc: "Full site review: fixed the nav Contact button and the footer social links, checked the site\u2019s links, resolved bugs, and removed the dead Instagram feed (replacement grid ready for photos).",
     rate: 250,
   },
   {
-    desc: "Design system cleanup and style guide page, preparing the site for redesign.",
+    desc: "Style guide page created, design system cleanup and preparing the site for redesign.",
     rate: 0,
   },
   {
-    desc: "Bay Rentals and Memberships pages: design and build, with pricing markup and an updated home page plans section.",
+    desc: "Bay Rentals and Memberships pages: design and build, with FAQs, reviews, search-ready price data, and an updated home page plans section. Prices come from one shared file, which also prepares them for the CMS.",
     rate: 500,
   },
 ];
@@ -41,6 +41,7 @@ const items = [
   <Nav />
   <InvoiceSheet
     crumb="Ohio Golf Club invoice"
+    invoiceNumber="001"
     date="Oct 25, 2026"
     due="Nov 8, 2026"
     billTo={billTo}
