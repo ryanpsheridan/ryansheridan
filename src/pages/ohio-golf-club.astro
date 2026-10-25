@@ -356,44 +356,11 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
                 which version someone gets.
               </p>
               <div>
-                <p class="k">The fix</p>
+                <p class="k">Worth knowing</p>
                 <p>
-                  A standard format, published at <a href="https://schema.org/" target="_blank" rel="noopener">schema.org</a>, for spelling the same facts out in your page&rsquo;s code. Google, Bing and the AI assistants all read it. Visitors never see it.
+                  Spelling prices out in a form search engines and AI assistants can read directly is one
+                  way to keep the answer consistent. It&rsquo;s a possible later step, not part of this proposal.
                 </p>
-                <div class="codes">
-                  <div>
-                    <p class="k">On the page today</p>
-                    <pre class="code">&lt;h3&gt;Classic&lt;/h3&gt;
-&lt;p&gt;$200/Month&lt;/p&gt;</pre>
-                  </div>
-                  <div>
-                    <p class="k">Added alongside it</p>
-                    <pre class="code good">&lbrace;
-  "@type": "Offer",
-  "name": "Classic Membership",
-  "price": "200.00",
-  "priceCurrency": "USD"
-&rbrace;</pre>
-                  </div>
-                </div>
-                <p class="cap">
-                  Left, Google has to guess which line is the membership name and which is the price.
-                  Right, it&rsquo;s spelled out and there&rsquo;s nothing to guess.
-                  <em>Simplified example, not your actual code.</em>
-                </p>
-              </div>
-              <div>
-                <p class="k">Both put the same facts in the code. The difference is where that code comes from.</p>
-                <div class="opts two">
-                  <div class="opt rec">
-                    <div class="top"><span class="tag rec">Recommended</span><h4>One place to edit</h4></div>
-                    <p>Built from your page content, so there&rsquo;s one source. Change a price once and both update.</p>
-                  </div>
-                  <div class="opt alt">
-                    <div class="top"><span class="tag alt">Partial</span><h4>Two places to edit</h4></div>
-                    <p>Written separately, so every price change has to be made twice. Miss one and they disagree.</p>
-                  </div>
-                </div>
               </div>
               <aside class="impact">
                 <p class="impact-k">Conversion impact</p>
@@ -573,20 +540,11 @@ const impactOf = (n: string) => findings.find((f) => f.n === n)?.impact;
                 Someone following the Screengolfers address drives to a place that isn&rsquo;t you. Someone
                 comparing prices who sees $250 may rule you out before ever reaching your site.
               </p>
-              <div class="opts two">
-                <div class="opt rec">
-                  <div class="top"><span class="tag rec">Recommended</span><h4>Full sweep</h4></div>
-                  <p>
-                    Correct these three, then the rest, so your name, address, phone and hours match
-                    everywhere. Consistency across listings is one of the things Google uses to rank
-                    local businesses.
-                  </p>
-                </div>
-                <div class="opt alt">
-                  <div class="top"><span class="tag alt">Smaller start</span><h4>The main three</h4></div>
-                  <p>Just the listings appearing in searches and AI answers today.</p>
-                </div>
-              </div>
+              <p>
+                These listings belong to the directories, so corrections have to be requested by someone
+                at the club. Worth a spot on the to-do list: it&rsquo;s a small job, and the sooner it&rsquo;s
+                done the fewer sites copy the old details.
+              </p>
               <aside class="impact">
                 <p class="impact-k">Conversion impact</p>
                 <p>{impactOf("05")}</p>
