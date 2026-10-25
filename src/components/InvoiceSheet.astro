@@ -1,35 +1,44 @@
 ---
 import Breadcrumbs from "./ui/Breadcrumbs.astro";
 
+interface Item {
+  desc: string;
+  /** Leave out on every line to drop the Qty and Rate columns. */
+  qty?: number;
+  /** Price per unit, or the whole line amount when there is no qty. 0 prints "Included". */
+  rate: number;
+}
+
 interface Props {
   /** Breadcrumb label for the current page. */
   crumb: string;
-  /** localStorage key, so each invoice page keeps its own draft. */
-  storeKey: string;
-  /** Prefilled "Bill to" block. */
-  billTo?: string;
-  /** Prefilled service lines. A rate of 0 shows as "Included". */
-  items?: { desc: string; rate?: string }[];
-  /** Drop the Qty and Rate columns: each line is a single amount. */
-  noQty?: boolean;
+  invoiceNumber?: string;
+  /** Shown as written, e.g. "Oct 25, 2026". */
+  date: string;
+  due: string;
+  /** One entry per line of the Bill to block. */
+  billTo: string[];
+  items: Item[];
+  notes?: string;
 }
 
-const { crumb, storeKey, billTo = "", items = [], noQty = false } = Astro.props;
+const { crumb, invoiceNumber, date, due, billTo, items, notes } = Astro.props;
+
+const hasQty = items.some((item) => item.qty !== undefined);
+const money = (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD" });
+const lines = items.map((item) => {
+  const qty = item.qty ?? 1;
+  return { ...item, qty, amount: qty * item.rate, included: item.rate === 0 };
+});
+const total = lines.reduce((sum, line) => sum + line.amount, 0);
+
 const venmoUrl = "https://venmo.com/u/ryan-sheridan-44";
 ---
 
-<main
-  id="main"
-  class:list={["invoice-page", { "no-qty": noQty }]}
-  data-no-qty={noQty ? "true" : "false"}
-  data-store={storeKey}
-  data-bill-to={billTo}
-  data-items={JSON.stringify(items)}
->
+<main id="main" class:list={["invoice-page", { "has-qty": hasQty }]}>
   <Breadcrumbs class="page-crumbs" items={[{ label: "Home", href: "/" }, { label: crumb }]} />
 
   <div class="invoice-toolbar">
-    <button id="reset-btn" type="button" class="btn btn-secondary btn-sm">Reset</button>
     <button id="print-btn" type="button" class="btn btn-secondary btn-sm">Download PDF</button>
   </div>
 
@@ -50,26 +59,27 @@ const venmoUrl = "https://venmo.com/u/ryan-sheridan-44";
 
     <section class="parties">
       <div class="bill-to">
-        <label class="label" for="bill-to">Bill to</label>
-        <textarea
-          id="bill-to"
-          class="cell cell-area"
-          data-persist
-          rows="3"
-          placeholder="Client name&#10;Company&#10;client@email.com"></textarea>
+        <p class="label">Bill to</p>
+        <p class="bill-lines">
+          {billTo.map((line) => <span>{line}</span>)}
+        </p>
       </div>
       <dl class="meta">
+        {
+          invoiceNumber && (
+            <div class="meta-row">
+              <dt class="label">Invoice no.</dt>
+              <dd>{invoiceNumber}</dd>
+            </div>
+          )
+        }
         <div class="meta-row">
-          <dt><label class="label" for="inv-number">Invoice no.</label></dt>
-          <dd><input id="inv-number" class="cell" type="text" data-persist placeholder="001" autocomplete="off" /></dd>
+          <dt class="label">Date</dt>
+          <dd>{date}</dd>
         </div>
         <div class="meta-row">
-          <dt><label class="label" for="inv-date">Date</label></dt>
-          <dd><input id="inv-date" class="cell" type="date" data-persist /></dd>
-        </div>
-        <div class="meta-row">
-          <dt><label class="label" for="inv-due">Due</label></dt>
-          <dd><input id="inv-due" class="cell" type="date" data-persist /></dd>
+          <dt class="label">Due</dt>
+          <dd>{due}</dd>
         </div>
       </dl>
     </section>
@@ -77,13 +87,32 @@ const venmoUrl = "https://venmo.com/u/ryan-sheridan-44";
     <section class="items">
       <div class="item-head" aria-hidden="true">
         <span>Description</span>
-        <span class="num h-qty">Qty</span>
-        <span class="num h-rate">Rate</span>
+        {hasQty && <span class="num">Qty</span>}
+        {hasQty && <span class="num">Rate</span>}
         <span class="num">Amount</span>
-        <span class="item-action"></span>
       </div>
-      <div id="item-rows"></div>
-      <button id="add-row" type="button" class="btn btn-secondary btn-sm add-row">Add line</button>
+      <ul class="item-list">
+        {
+          lines.map((line) => (
+            <li class="item-row">
+              <span class="desc">{line.desc}</span>
+              {hasQty && (
+                <span class="num qty">
+                  <span class="mobile-label">Qty </span>
+                  {line.qty}
+                </span>
+              )}
+              {hasQty && (
+                <span class="num rate">
+                  <span class="mobile-label">Rate </span>
+                  {money(line.rate)}
+                </span>
+              )}
+              <span class="num amount">{line.included ? "Included" : money(line.amount)}</span>
+            </li>
+          ))
+        }
+      </ul>
     </section>
 
     <section class="summary">
@@ -93,257 +122,69 @@ const venmoUrl = "https://venmo.com/u/ryan-sheridan-44";
       </p>
       <p class="total">
         <span class="label">Total due</span>
-        <span id="total">$0.00</span>
+        <span>{money(total)}</span>
       </p>
     </section>
 
-    <section class="notes" id="notes-section">
-      <label class="label" for="notes">Notes</label>
-      <textarea
-        id="notes"
-        class="cell cell-area"
-        data-persist
-        rows="1"
-        placeholder="Project details, payment terms, thank you."></textarea>
-    </section>
+    {
+      notes && (
+        <section class="notes">
+          <p class="label">Notes</p>
+          <p class="notes-text">{notes}</p>
+        </section>
+      )
+    }
   </div>
 </main>
 
 <script>
-  const page = document.querySelector<HTMLElement>(".invoice-page") as HTMLElement;
-  const STORE = page.dataset.store ?? "invoice-draft";
-  const BILL_TO = page.dataset.billTo ?? "";
-  const NO_QTY = page.dataset.noQty === "true";
-  const ITEMS: { desc: string; rate?: string }[] = JSON.parse(page.dataset.items ?? "[]");
-
-  const rowsEl = document.getElementById("item-rows") as HTMLElement;
-  const totalEl = document.getElementById("total") as HTMLElement;
-  const persisted = () =>
-    Array.from(document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("[data-persist]"));
-  const areas = () => Array.from(document.querySelectorAll<HTMLTextAreaElement>("textarea.cell-area"));
-
-  const money = (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD" });
-  const num = (v: string) => parseFloat(v.replace(/[^0-9.]/g, "")) || 0;
-
-  // Without a quantity column the rate field is the line amount. It reads as
-  // "$625.00" (or "Included" for 0) at rest and as a plain number while editing.
-  function showAmount(el: HTMLInputElement) {
-    if (!el.value.trim()) return;
-    el.value = num(el.value) === 0 ? "Included" : money(num(el.value));
-  }
-
-  function editAmount(el: HTMLInputElement) {
-    el.value = /^included$/i.test(el.value.trim()) ? "0" : el.value.replace(/[$,]/g, "").replace(/\.00$/, "");
-  }
-
-  // Description boxes size through CSS (a hidden copy of the text sets the
-  // height), so they re-wrap correctly when the page prints at a different width.
-  function grow(el: HTMLTextAreaElement) {
-    (el.parentElement as HTMLElement).dataset.value = el.value;
-  }
-
-  function autosize(el: HTMLTextAreaElement) {
-    el.style.height = "auto";
-    el.style.height = `${el.scrollHeight}px`;
-  }
-
-  // An empty notes block is left out of the PDF.
-  function syncNotes() {
-    const notes = document.getElementById("notes") as HTMLTextAreaElement;
-    document.getElementById("notes-section")?.classList.toggle("is-empty", !notes.value.trim());
-  }
-
-  function addRow(desc = "", qty = "1", rate = "") {
-    const row = document.createElement("div");
-    row.className = "item-row";
-    row.innerHTML = `
-      <span class="grow"><textarea class="cell r-desc" rows="1" aria-label="Description" placeholder="Design systems consulting"></textarea></span>
-      <input class="cell num r-qty" type="number" inputmode="decimal" min="0" step="any" aria-label="Quantity" />
-      <input class="cell num r-rate" type="${NO_QTY ? "text" : "number"}" inputmode="decimal" min="0" step="any" aria-label="${NO_QTY ? "Amount" : "Rate"}" placeholder="${NO_QTY ? "$0.00" : "0.00"}" autocomplete="off" />
-      <span class="num r-amount">$0.00</span>
-      <button type="button" class="item-action remove-row" aria-label="Remove line">Remove</button>
-    `;
-    const descEl = row.querySelector(".r-desc") as HTMLTextAreaElement;
-    descEl.value = desc;
-    (row.querySelector(".r-qty") as HTMLInputElement).value = qty;
-    const rateEl = row.querySelector(".r-rate") as HTMLInputElement;
-    rateEl.value = rate;
-    if (NO_QTY) showAmount(rateEl);
-    rowsEl.appendChild(row);
-    grow(descEl);
-  }
-
-  function recalc() {
-    let total = 0;
-    rowsEl.querySelectorAll<HTMLElement>(".item-row").forEach((row) => {
-      const rateRaw = (row.querySelector(".r-rate") as HTMLInputElement).value;
-      const qty = NO_QTY ? 1 : num((row.querySelector(".r-qty") as HTMLInputElement).value);
-      const amount = qty * num(rateRaw);
-      const included = rateRaw.trim() === "0" || /^included$/i.test(rateRaw.trim());
-      total += amount;
-      (row.querySelector(".r-amount") as HTMLElement).textContent = included ? "Included" : money(amount);
-    });
-    totalEl.textContent = money(total);
-  }
-
-  function save() {
-    try {
-      const data = {
-        fields: Object.fromEntries(persisted().map((el) => [el.id, el.value])),
-        rows: Array.from(rowsEl.querySelectorAll<HTMLElement>(".item-row")).map((row) => [
-          (row.querySelector(".r-desc") as HTMLTextAreaElement).value,
-          (row.querySelector(".r-qty") as HTMLInputElement).value,
-          (row.querySelector(".r-rate") as HTMLInputElement).value,
-        ]),
-      };
-      localStorage.setItem(STORE, JSON.stringify(data));
-    } catch {
-      // Storage can be blocked; the page works without it.
-    }
-  }
-
-  function defaults() {
-    const today = new Date();
-    const due = new Date(today);
-    due.setDate(due.getDate() + 14);
-    const iso = (d: Date) =>
-      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-    persisted().forEach((el) => (el.value = ""));
-    (document.getElementById("inv-date") as HTMLInputElement).value = iso(today);
-    (document.getElementById("inv-due") as HTMLInputElement).value = iso(due);
-    (document.getElementById("bill-to") as HTMLTextAreaElement).value = BILL_TO;
-    rowsEl.innerHTML = "";
-    if (ITEMS.length) ITEMS.forEach((item) => addRow(item.desc, "1", item.rate ?? ""));
-    else addRow();
-  }
-
-  function load() {
-    try {
-      const raw = localStorage.getItem(STORE);
-      if (!raw) return false;
-      const data = JSON.parse(raw);
-      persisted().forEach((el) => {
-        if (typeof data.fields?.[el.id] === "string") el.value = data.fields[el.id];
-      });
-      rowsEl.innerHTML = "";
-      (data.rows?.length ? data.rows : [["", "1", ""]]).forEach((r: string[]) => addRow(r[0], r[1], r[2]));
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  function refresh() {
-    recalc();
-    syncNotes();
-    areas().forEach(autosize);
-  }
-
-  if (!load()) defaults();
-  refresh();
-
-  if (NO_QTY) {
-    rowsEl.addEventListener("focusin", (e) => {
-      const el = e.target as HTMLElement;
-      if (!el.classList.contains("r-rate")) return;
-      editAmount(el as HTMLInputElement);
-      (el as HTMLInputElement).select();
-    });
-    rowsEl.addEventListener("focusout", (e) => {
-      const el = e.target as HTMLElement;
-      if (el.classList.contains("r-rate")) {
-        showAmount(el as HTMLInputElement);
-        recalc();
-        save();
-      }
-    });
-  }
-
-  document.addEventListener("input", (e) => {
-    const target = e.target as HTMLElement;
-    if (target instanceof HTMLTextAreaElement) {
-      if (target.classList.contains("r-desc")) grow(target);
-      else autosize(target);
-    }
-    recalc();
-    syncNotes();
-    save();
-  });
-
-  rowsEl.addEventListener("click", (e) => {
-    const btn = (e.target as HTMLElement).closest(".remove-row");
-    if (!btn) return;
-    btn.closest(".item-row")?.remove();
-    if (!rowsEl.children.length) addRow();
-    recalc();
-    save();
-  });
-
-  document.getElementById("add-row")?.addEventListener("click", () => {
-    addRow();
-    (rowsEl.lastElementChild?.querySelector(".r-desc") as HTMLTextAreaElement | null)?.focus();
-    save();
-  });
-
-  document.getElementById("reset-btn")?.addEventListener("click", () => {
-    try {
-      localStorage.removeItem(STORE);
-    } catch {
-      // ignore
-    }
-    defaults();
-    refresh();
-  });
-
-  document.getElementById("print-btn")?.addEventListener("click", () => {
-    (document.activeElement as HTMLElement | null)?.blur();
-    areas().forEach(autosize);
-    window.print();
-  });
+  document.getElementById("print-btn")?.addEventListener("click", () => window.print());
 </script>
 
-<style is:global>
-  /* Everything here is global because the line items are built in script.
-     No weight on this page goes above 400. */
+<style>
+  /* No weight on this page goes above 400. */
   .invoice-page {
     padding: var(--page-top) var(--page-padding) 0;
     font-weight: var(--weight-regular);
   }
 
-  .invoice-page .page-crumbs,
-  .invoice-page .invoice-toolbar,
-  .invoice-page .sheet {
+  .page-crumbs,
+  .invoice-toolbar,
+  .sheet {
     max-width: var(--content-width);
     margin-inline: auto;
   }
 
-  .invoice-page .invoice-toolbar {
+  .invoice-toolbar {
     margin-bottom: var(--space-4);
     display: flex;
     justify-content: flex-end;
-    gap: var(--space-2);
   }
 
-  .invoice-page .btn,
-  .invoice-page .remove-row {
+  .invoice-toolbar .btn {
     font-weight: var(--weight-regular);
   }
 
-  .invoice-page .invoice-header {
+  .invoice-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
     gap: var(--space-4);
   }
 
-  .invoice-page h1 {
+  h1 {
     font-size: var(--text-h2);
     font-weight: var(--weight-light);
     letter-spacing: var(--tracking-tight);
     line-height: var(--leading-tight);
   }
 
-  .invoice-page .contact-list {
+  .from-name {
+    font-size: var(--text-s);
+    margin-top: var(--space-1);
+  }
+
+  .contact-list {
     list-style: none;
     display: flex;
     flex-direction: column;
@@ -354,12 +195,7 @@ const venmoUrl = "https://venmo.com/u/ryan-sheridan-44";
     color: var(--color-text-muted);
   }
 
-  .invoice-page .from-name {
-    font-size: var(--text-s);
-    margin-top: var(--space-1);
-  }
-
-  .invoice-page .contact-list a {
+  .contact-list a {
     text-decoration: underline;
     text-decoration-color: var(--color-link-subtle);
     text-underline-offset: 3px;
@@ -368,58 +204,71 @@ const venmoUrl = "https://venmo.com/u/ryan-sheridan-44";
       text-decoration-color var(--duration-fast) var(--ease-standard);
   }
 
-  .invoice-page .contact-list a:hover {
+  .contact-list a:hover {
     color: var(--color-link-hover);
     text-decoration-color: var(--color-link-hover);
   }
 
-  .invoice-page .divider {
+  .divider {
     margin: var(--space-4) 0;
   }
 
-  .invoice-page .items {
-    margin-top: var(--space-5);
-  }
-
-  .invoice-page .label {
-    display: block;
+  .label {
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     color: var(--color-text-muted);
   }
 
   /* Bill to on the left, invoice details on the right. */
-  .invoice-page .parties {
+  .parties {
     display: grid;
     grid-template-columns: 1fr minmax(0, 260px);
     gap: var(--space-5);
   }
 
-  .invoice-page .meta {
+  .bill-lines {
+    display: flex;
+    flex-direction: column;
+    margin-top: var(--space-1);
+    font-size: var(--text-s);
+    line-height: var(--leading-normal);
+  }
+
+  .meta {
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
   }
 
-  .invoice-page .meta-row {
+  .meta-row {
     display: grid;
     grid-template-columns: 88px 1fr;
-    align-items: center;
+    align-items: baseline;
+    font-size: var(--text-s);
   }
 
-  .invoice-page .meta .cell {
+  .meta-row dd {
     text-align: right;
   }
 
-  .invoice-page .item-row,
-  .invoice-page .item-head {
+  .items {
+    margin-top: var(--space-5);
+  }
+
+  .item-head,
+  .item-row {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 48px 80px 100px 56px;
+    grid-template-columns: minmax(0, 1fr) 110px;
     gap: var(--space-3);
     align-items: start;
   }
 
-  .invoice-page .item-head {
+  .has-qty .item-head,
+  .has-qty .item-row {
+    grid-template-columns: minmax(0, 1fr) 48px 80px 100px;
+  }
+
+  .item-head {
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     color: var(--color-text-muted);
@@ -427,57 +276,33 @@ const venmoUrl = "https://venmo.com/u/ryan-sheridan-44";
     border-bottom: var(--border-width) solid var(--color-border);
   }
 
-  .invoice-page.no-qty .item-row,
-  .invoice-page.no-qty .item-head {
-    grid-template-columns: minmax(0, 1fr) 110px 56px;
+  .item-list {
+    list-style: none;
   }
 
-  .invoice-page.no-qty .h-qty,
-  .invoice-page.no-qty .h-rate,
-  .invoice-page.no-qty .r-qty,
-  .invoice-page.no-qty .r-amount {
+  .item-row {
+    padding: var(--space-2) 0;
+    border-bottom: var(--border-width) solid var(--color-border);
+    font-size: var(--text-s);
+    line-height: var(--leading-normal);
+  }
+
+  .num {
+    text-align: right;
+  }
+
+  .qty,
+  .rate,
+  .amount {
+    font-family: var(--font-mono);
+  }
+
+  .mobile-label {
     display: none;
   }
 
-  .invoice-page .item-row {
-    padding: var(--space-1) 0;
-    border-bottom: var(--border-width) solid var(--color-border);
-  }
-
-  .invoice-page .num {
-    text-align: right;
-  }
-
-  .invoice-page .add-row {
-    margin-top: var(--space-3);
-  }
-
-  .invoice-page .r-amount,
-  .invoice-page .remove-row {
-    padding-block: calc(var(--space-1) + 1px);
-  }
-
-  .invoice-page .r-amount {
-    font-family: var(--font-mono);
-    font-size: var(--text-s);
-  }
-
-  .invoice-page .remove-row {
-    background: none;
-    border: 0;
-    cursor: pointer;
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--color-text-muted);
-    text-align: right;
-  }
-
-  .invoice-page .remove-row:hover {
-    color: var(--color-text);
-  }
-
   /* Payment link on the left, total on the right. */
-  .invoice-page .summary {
+  .summary {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -485,11 +310,11 @@ const venmoUrl = "https://venmo.com/u/ryan-sheridan-44";
     margin-top: var(--space-5);
   }
 
-  .invoice-page .pay-line {
+  .pay-line {
     font-size: var(--text-s);
   }
 
-  .invoice-page .total {
+  .total {
     display: flex;
     align-items: baseline;
     gap: var(--space-4);
@@ -497,132 +322,85 @@ const venmoUrl = "https://venmo.com/u/ryan-sheridan-44";
     letter-spacing: var(--tracking-snug);
   }
 
-  .invoice-page .notes {
+  .notes {
     margin-top: var(--space-5);
   }
 
-  .invoice-page .cell {
-    display: block;
-    min-width: 0;
-    padding: var(--space-1) var(--space-2);
-    margin-inline: calc(var(--space-2) * -1);
-    width: calc(100% + var(--space-2) * 2);
-    font-family: inherit;
+  .notes-text {
+    margin-top: var(--space-1);
     font-size: var(--text-s);
-    font-weight: var(--weight-light);
     line-height: var(--leading-normal);
-    color: var(--color-text);
-    background: transparent;
-    border: var(--border-width) solid transparent;
-    border-radius: var(--radius-sm);
-    transition: border-color var(--duration-fast) var(--ease-standard);
-  }
-
-  .invoice-page .cell::placeholder {
-    color: var(--color-placeholder);
-  }
-
-  .invoice-page .cell:hover {
-    border-color: var(--color-border-strong);
-  }
-
-  .invoice-page .cell:focus-visible {
-    border-color: var(--color-text);
-  }
-
-  .invoice-page input.num {
-    text-align: right;
-    font-family: var(--font-mono);
-    font-size: var(--text-s);
-  }
-
-  .invoice-page input[type="number"] {
-    appearance: textfield;
-    -moz-appearance: textfield;
-  }
-
-  .invoice-page input[type="number"]::-webkit-outer-spin-button,
-  .invoice-page input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  .invoice-page textarea.cell-area,
-  .invoice-page .grow textarea {
-    resize: none;
-    overflow: hidden;
-  }
-
-  .invoice-page .grow {
-    display: grid;
-    margin-inline: calc(var(--space-2) * -1);
-  }
-
-  .invoice-page .grow::after,
-  .invoice-page .grow .cell {
-    grid-area: 1 / 1;
-    margin: 0;
-    width: 100%;
-    padding: var(--space-1) var(--space-2);
-    font-family: inherit;
-    font-size: var(--text-s);
-    font-weight: var(--weight-light);
-    line-height: var(--leading-normal);
-    border: var(--border-width) solid transparent;
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
-  }
-
-  .invoice-page .grow::after {
-    content: attr(data-value) " ";
-    visibility: hidden;
+    white-space: pre-line;
   }
 
   @media (max-width: 640px) {
-    .invoice-page .invoice-header {
+    .invoice-header {
       flex-direction: column;
       align-items: flex-start;
     }
 
-    .invoice-page .contact-list {
+    .contact-list {
       text-align: left;
     }
 
-    .invoice-page .parties {
+    .parties {
       grid-template-columns: 1fr;
-      gap: var(--space-3);
+      gap: var(--space-4);
     }
 
-    .invoice-page .summary {
-      flex-direction: column;
+    .meta-row dd {
+      text-align: left;
     }
 
-    .invoice-page .item-head {
+    .item-head {
       display: none;
     }
 
-    .invoice-page .item-row {
-      grid-template-columns: 1fr 1fr 1fr;
+    .item-row,
+    .has-qty .item-row {
+      grid-template-columns: 1fr 1fr;
       row-gap: var(--space-1);
       padding: var(--space-3) 0;
     }
 
-    .invoice-page .item-row .grow {
+    .desc {
       grid-column: 1 / -1;
     }
 
-    .invoice-page .item-row .r-amount {
+    /* Without Qty and Rate the amount sits under the description. */
+    .item-row .amount {
+      grid-column: 1 / -1;
       text-align: left;
+    }
+
+    .has-qty .item-row .qty {
+      text-align: left;
+    }
+
+    .has-qty .item-row .rate {
+      text-align: right;
+    }
+
+    .has-qty .item-row .amount {
+      grid-column: 1 / -1;
+      text-align: left;
+    }
+
+    .mobile-label {
+      display: inline;
+      color: var(--color-text-muted);
+    }
+
+    .summary {
+      flex-direction: column;
     }
   }
 
   @media print {
-    :is(nav, footer),
-    .invoice-page .page-crumbs,
-    .invoice-page .invoice-toolbar,
-    .invoice-page .add-row,
-    .invoice-page .remove-row,
-    .invoice-page .item-head .item-action {
+    :global(nav),
+    :global(footer),
+    .page-crumbs,
+    .invoice-toolbar {
       display: none !important;
     }
 
@@ -630,81 +408,39 @@ const venmoUrl = "https://venmo.com/u/ryan-sheridan-44";
       margin: 0.5in 0.6in;
     }
 
-    main.invoice-page {
-      padding: 0 !important;
+    .invoice-page {
+      padding: 0;
     }
 
-    .invoice-page .sheet {
+    .sheet {
       max-width: 100%;
     }
 
-    body {
+    :global(body) {
       font-size: 13px;
     }
 
-    .invoice-page h1 {
+    h1 {
       font-size: 26px;
     }
 
-    .invoice-page .divider {
+    .divider {
       margin: 12px 0;
     }
 
-    .invoice-page .summary,
-    .invoice-page .notes {
+    .items,
+    .summary,
+    .notes {
       margin-top: 14px;
     }
 
-    .invoice-page .cell,
-    .invoice-page .grow .cell,
-    .invoice-page .grow::after {
+    .item-row {
+      padding: 4px 0;
       font-size: 12px;
-      line-height: 1.4;
-      padding-block: 2px;
-    }
-
-    .invoice-page .r-amount,
-    .invoice-page input.num {
-      font-size: 12px;
-    }
-
-    .invoice-page .item-row,
-    .invoice-page .item-head {
-      grid-template-columns: minmax(0, 1fr) 48px 80px 100px;
-    }
-
-    .invoice-page.no-qty .item-row,
-    .invoice-page.no-qty .item-head {
-      grid-template-columns: minmax(0, 1fr) 110px;
-    }
-
-    .invoice-page .item-row {
-      padding: 2px 0;
       break-inside: avoid;
     }
 
-    /* Fields print as plain text: no borders, focus rings, or picker icons. */
-    .invoice-page .cell,
-    .invoice-page .cell:hover,
-    .invoice-page :focus,
-    .invoice-page :focus-visible {
-      border-color: transparent !important;
-      outline: none !important;
-    }
-
-    .invoice-page .cell::placeholder {
-      color: transparent;
-    }
-
-    .invoice-page input[type="date"]::-webkit-calendar-picker-indicator {
-      display: none;
-    }
-
-    .invoice-page .notes.is-empty {
-      display: none;
-    }
-
-    .invoice-page a {
+    a {
       color: var(--color-text) !important;
     }
   }

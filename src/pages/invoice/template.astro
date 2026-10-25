@@ -8,11 +8,19 @@ import { breadcrumbSchema } from "../../data/schema";
 
 <Layout
   title="Invoice | Ryan Sheridan"
-  description="Invoice template for Ryan Sheridan. Fill in the fields and download a PDF."
+  description="Invoice template for Ryan Sheridan."
   schema={[breadcrumbSchema([{ name: "Invoice template", path: "/invoice/template" }])]}
   noindex
 >
   <Nav />
-  <InvoiceSheet crumb="Invoice template" storeKey="invoice-draft-v2" />
+  <InvoiceSheet
+    crumb="Invoice template"
+    invoiceNumber="001"
+    date="Oct 25, 2026"
+    due="Nov 8, 2026"
+    billTo={["Client name", "Company", "client@email.com"]}
+    items={[{ desc: "Design systems consulting", qty: 10, rate: 125 }]}
+    notes="Thank you."
+  />
   <Footer />
 </Layout>
