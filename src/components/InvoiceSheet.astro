@@ -8,8 +8,8 @@ interface Props {
   storeKey: string;
   /** Prefilled "Bill to" block. */
   billTo?: string;
-  /** Prefilled service line descriptions. */
-  items?: string[];
+  /** Prefilled service lines. A rate of 0 shows as "Included". */
+  items?: { desc: string; rate?: string }[];
 }
 
 const { crumb, storeKey, billTo = "", items = [] } = Astro.props;
@@ -112,7 +112,7 @@ const venmoUrl = "https://venmo.com/u/ryan-sheridan-44";
   const page = document.querySelector<HTMLElement>(".invoice-page") as HTMLElement;
   const STORE = page.dataset.store ?? "invoice-draft";
   const BILL_TO = page.dataset.billTo ?? "";
-  const ITEMS: string[] = JSON.parse(page.dataset.items ?? "[]");
+  const ITEMS: { desc: string; rate?: string }[] = JSON.parse(page.dataset.items ?? "[]");
 
   const rowsEl = document.getElementById("item-rows") as HTMLElement;
   const totalEl = document.getElementById("total") as HTMLElement;
@@ -163,8 +163,9 @@ const venmoUrl = "https://venmo.com/u/ryan-sheridan-44";
       const qty = parseFloat((row.querySelector(".r-qty") as HTMLInputElement).value) || 0;
       const rate = parseFloat((row.querySelector(".r-rate") as HTMLInputElement).value) || 0;
       const amount = qty * rate;
+      const included = (row.querySelector(".r-rate") as HTMLInputElement).value.trim() === "0";
       total += amount;
-      (row.querySelector(".r-amount") as HTMLElement).textContent = money(amount);
+      (row.querySelector(".r-amount") as HTMLElement).textContent = included ? "Included" : money(amount);
     });
     totalEl.textContent = money(total);
   }
@@ -196,7 +197,7 @@ const venmoUrl = "https://venmo.com/u/ryan-sheridan-44";
     (document.getElementById("inv-due") as HTMLInputElement).value = iso(due);
     (document.getElementById("bill-to") as HTMLTextAreaElement).value = BILL_TO;
     rowsEl.innerHTML = "";
-    if (ITEMS.length) ITEMS.forEach((desc) => addRow(desc, "1", ""));
+    if (ITEMS.length) ITEMS.forEach((item) => addRow(item.desc, "1", item.rate ?? ""));
     else addRow();
   }
 
