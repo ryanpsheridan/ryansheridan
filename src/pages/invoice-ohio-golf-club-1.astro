@@ -1,9 +1,9 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import Nav from "../../components/Nav.astro";
-import Footer from "../../components/Footer.astro";
-import InvoiceSheet from "../../components/InvoiceSheet.astro";
-import { breadcrumbSchema } from "../../data/schema";
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import InvoiceSheet from "../components/InvoiceSheet.astro";
+import { breadcrumbSchema } from "../data/schema";
 
 // Everything on the invoice is edited here. Rates are whole dollars; a rate of 0
 // prints as "Included". Leave `qty` off every line to hide the Qty and Rate columns.
@@ -35,7 +35,7 @@ const items = [
 <Layout
   title="Ohio Golf Club Invoice | Ryan Sheridan"
   description="Invoice for Ohio Golf Club from Ryan Sheridan."
-  schema={[breadcrumbSchema([{ name: "Ohio Golf Club invoice", path: "/invoice/ohio-golf-club" }])]}
+  schema={[breadcrumbSchema([{ name: "Ohio Golf Club invoice", path: "/invoice-ohio-golf-club-1" }])]}
   noindex
 >
   <Nav />
