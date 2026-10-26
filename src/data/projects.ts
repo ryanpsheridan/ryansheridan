@@ -1,3 +1,5 @@
+import { ogcSearchConsole } from "./ogc-search-console";
+
 export interface TextBlock {
   type: "text";
   /** Small label above the heading that names which part of the project a run of sections covers. */
@@ -119,6 +121,22 @@ export interface ProcessBlock {
   caption?: string;
 }
 
+export interface BarChartPoint {
+  date: string;
+  value: number;
+}
+
+/** One bar per day, with an optional dated marker for when something shipped. Bars from the marker on are drawn in the accent color. */
+export interface BarChartBlock {
+  type: "barChart";
+  title: string;
+  /** Read aloud and in the label, e.g. "impressions". */
+  unit: string;
+  points: BarChartPoint[];
+  marker?: { date: string; label: string };
+  caption?: string;
+}
+
 export interface TimelineStatRow {
   label: string;
   value: string;
@@ -210,7 +228,8 @@ export type ContentBlock =
   | SplitBlock
   | ProcessBlock
   | PathwayBlock
-  | TimelineBlock;
+  | TimelineBlock
+  | BarChartBlock;
 
 export interface Project {
   slug: string;
@@ -286,9 +305,22 @@ const allProjects: Project[] = [
           { label: "Pages with their own title", before: "1 of 6", after: "6 of 6" },
           { label: "Opening hours on the site", before: "Missing", after: "Not changed yet" },
           { label: "Lighthouse performance", before: "Baseline pending", after: "Not measured yet" },
-          { label: "Search clicks and impressions", before: "101 clicks from about 6,700 impressions (1 Sep to 20 Oct 2026)", after: "To be measured again after six weeks" },
+          { label: "Search clicks and impressions", before: "About 0.5 clicks and 38 impressions a day (28 days to 22 Oct 2026)", after: "To be measured again after six weeks" },
           { label: "Hours and prices in AI answers", before: "Baseline pending", after: "Not measured yet" },
         ],
+      },
+      {
+        type: "text",
+        heading: "Search Console",
+        body: `<p>Search Console is the clearest before and after for the search work. I made the first SEO push on 23 Oct 2026, so everything left of the marker is the baseline. I will add the weeks that follow as they come in.</p>`,
+      },
+      {
+        type: "barChart",
+        title: "Daily search impressions",
+        unit: "impressions",
+        points: ogcSearchConsole.map((d) => ({ date: d.date, value: d.impressions })),
+        marker: { date: "2026-10-23", label: "First SEO push" },
+        caption: "Search Console, web search, 1 Sep to 23 Oct 2026. September was busier than anything since, with 2,262 impressions in the week of 7 Sep, then it settled to about 250 a week by October. The baseline I am measuring against is the 28 days before the push: 14 clicks and 1,060 impressions, about 38 impressions a day. The day of the push had 144. One day is not a trend yet.",
       },
       {
         type: "timeline",

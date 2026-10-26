@@ -20,6 +20,37 @@ export const getStaticPaths: GetStaticPaths = () => {
 
 const { project } = Astro.props;
 
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const shortDate = (iso: string) => {
+  const d = new Date(`${iso}T00:00:00Z`);
+  return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}`;
+};
+
+/** Lays a bar chart out in a fixed viewBox so the SVG scales with its column. */
+function barChartGeometry(block: Extract<(typeof projects)[number]["content"][number], { type: "barChart" }>) {
+  const W = 560, H = 240, L = 44, R = 8, T = 16, B = 28;
+  const max = Math.max(...block.points.map((p) => p.value));
+  const step = [10, 20, 25, 50, 100, 200, 250, 500, 1000].find((s) => Math.ceil(max / s) <= 5) ?? 1000;
+  const top = Math.ceil(max / step) * step;
+  const n = block.points.length;
+  const slot = (W - L - R) / n;
+  const barW = slot * 0.72;
+  const plotH = H - T - B;
+  const markerIndex = block.marker ? block.points.findIndex((p) => p.date >= block.marker!.date) : -1;
+  return {
+    W, H, L, R, T, B,
+    ticks: Array.from({ length: top / step + 1 }, (_, i) => ({ value: i * step, y: H - B - (i * step / top) * plotH })),
+    bars: block.points.map((p, i) => {
+      const h = (p.value / top) * plotH;
+      return { x: L + i * slot + (slot - barW) / 2, y: H - B - h, w: barW, h, after: markerIndex >= 0 && i >= markerIndex };
+    }),
+    labels: block.points.flatMap((p, i) => (i % 14 === 0 ? [{ x: L + i * slot + slot / 2, text: shortDate(p.date) }] : [])),
+    marker: markerIndex >= 0 ? { x: L + markerIndex * slot + slot / 2, atEnd: markerIndex > n / 2 } : null,
+    summary: `${block.title}: ${n} days from ${shortDate(block.points[0].date)} to ${shortDate(block.points[n - 1].date)}, peaking at ${max} ${block.unit}.`,
+  };
+}
+
+
 const schema = [
   projectSchema(project),
   breadcrumbSchema([
@@ -193,6 +224,36 @@ const schema = [
                       ))}
                     </div>
                   </div>
+                );
+              }
+
+              if (block.type === "barChart") {
+                const g = barChartGeometry(block);
+                return (
+                  <figure class="bar-chart">
+                    <p class="bar-chart-title">{block.title}</p>
+                    <svg viewBox={`0 0 ${g.W} ${g.H}`} role="img" aria-label={g.summary}>
+                      {g.ticks.map((t) => (
+                        <g>
+                          <line class="bar-chart-grid" x1={g.L} x2={g.W - g.R} y1={t.y} y2={t.y} />
+                          <text class="bar-chart-axis" x={g.L - 8} y={t.y + 4} text-anchor="end">{t.value}</text>
+                        </g>
+                      ))}
+                      {g.bars.map((b) => (
+                        <rect class:list={["bar-chart-bar", { "is-after": b.after }]} x={b.x} y={b.y} width={b.w} height={b.h} />
+                      ))}
+                      {g.labels.map((l) => (
+                        <text class="bar-chart-axis" x={l.x} y={g.H - 8} text-anchor="middle">{l.text}</text>
+                      ))}
+                      {g.marker && block.marker && (
+                        <g>
+                          <line class="bar-chart-marker" x1={g.marker.x} x2={g.marker.x} y1={g.T} y2={g.H - g.B} />
+                          <text class="bar-chart-marker-label" x={g.marker.x + (g.marker.atEnd ? -6 : 6)} y={g.T + 10} text-anchor={g.marker.atEnd ? "end" : "start"}>{block.marker.label}</text>
+                        </g>
+                      )}
+                    </svg>
+                    {block.caption && <figcaption class="bar-chart-caption">{block.caption}</figcaption>}
+                  </figure>
                 );
               }
 
@@ -857,6 +918,65 @@ const schema = [
 
   .section-eyebrow :global(.result-icon) {
     color: var(--color-link);
+  }
+
+  /* ---------- Bar chart ---------- */
+
+  .bar-chart {
+    margin: 0 0 var(--space-6);
+    max-width: 40rem;
+  }
+
+  .bar-chart-title {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-s);
+    color: var(--color-text-muted);
+  }
+
+  .bar-chart svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .bar-chart-grid {
+    stroke: var(--color-border);
+    stroke-width: 1;
+  }
+
+  .bar-chart-axis {
+    font-size: 13px;
+    fill: var(--color-text-muted);
+  }
+
+  .bar-chart-bar {
+    fill: var(--color-text-muted);
+    opacity: 0.35;
+  }
+
+  .bar-chart-bar.is-after {
+    fill: var(--color-link);
+    opacity: 1;
+  }
+
+  .bar-chart-marker {
+    stroke: var(--color-text);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+
+  .bar-chart-marker-label {
+    font-size: 13px;
+    font-weight: var(--weight-medium);
+    fill: var(--color-text);
+  }
+
+  .bar-chart-caption {
+    margin: var(--space-3) 0 0;
+    font-size: var(--text-xs);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-muted);
   }
 
   /* ---------- Timeline ---------- */
