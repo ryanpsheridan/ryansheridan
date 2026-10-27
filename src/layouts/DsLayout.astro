@@ -8,7 +8,7 @@ import Layout from "./Layout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import Breadcrumbs from "../components/ui/Breadcrumbs.astro";
-import { dsNav, DS_VERSION } from "../data/ds";
+import { dsNav } from "../data/ds";
 
 interface Props {
   title: string;
@@ -60,7 +60,6 @@ if (path !== "/ds") {
       <nav aria-label="Design system" data-lenis-prevent>
         <a href="/ds" class="ds-wordmark">
           <span>ds</span>
-          <span class="ds-version">v{DS_VERSION}</span>
         </a>
         {dsNav.map((group) => (
           <div class="ds-nav-group">
@@ -156,11 +155,6 @@ if (path !== "/ds") {
 
   .ds-wordmark:hover {
     color: var(--color-text);
-  }
-
-  .ds-version {
-    font-size: var(--text-xs);
-    color: var(--color-text-muted);
   }
 
   .ds-nav-group + .ds-nav-group {
@@ -501,7 +495,7 @@ if (path !== "/ds") {
   .ds-content :global(a.ds-card) {
     padding-right: calc(var(--space-4) + var(--space-5));
     background: var(--color-bg);
-    border: var(--border-width) solid var(--color-border-strong);
+    border: var(--border-width) solid var(--color-border);
     transition:
       border-color var(--duration-fast) var(--ease-standard),
       background-color var(--duration-fast) var(--ease-standard);

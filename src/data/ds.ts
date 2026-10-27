@@ -57,7 +57,6 @@ export const dsNav = [
   { title: "Patterns", base: "/ds/patterns", pages: patterns },
 ];
 
-export const DS_VERSION = "1.1";
 
 /** WCAG relative-luminance contrast between two hex colors. */
 export function contrast(a: string, b: string): number {
