@@ -514,28 +514,7 @@ const allProjects: Project[] = [
         type: "text",
         eyebrow: { label: "Shadow Embed component", icon: "shield" },
         heading: "The component handles the risky parts of an embed",
-        body: `<p>I built Shadow Embed directly in our codebase with Claude Code, for all three of our brand sites. It's a Makeswift component that runs a designer's code inside a Shadow DOM, so the animation's styles and scripts can't reach the rest of the page. It started out as Claude Embed, which is the name in the screenshots below.</p>`,
-      },
-      {
-        type: "versus",
-        beforeTitle: "Default embed",
-        afterTitle: "Shadow Embed",
-        rows: [
-          { label: "Where code runs", before: "Straight into the page", after: "Walled off from the page" },
-          { label: "Page layout", before: "Jumps when it loads", after: "Space saved up front" },
-          { label: "Cleanup", before: "None", after: "Everything removed when it leaves" },
-          { label: "Placeholder image", before: "None", after: "A still that shows while it loads, which search engines read" },
-        ],
-      },
-      {
-        type: "split",
-        heading: "The editor panel groups controls by task",
-        body: `<p>Embed code sits first, and every other setting folds into a group named for what editors reach for: the placeholder image, size and layout, loading and mobile, appearance, accessibility, and debugging. Rarely used settings stay out of the way.</p>`,
-        image: {
-          src: "/project-claude-embed-panel.webp",
-          alt: "Makeswift properties panel for the component, under its earlier name Claude Embed: an Embed code text area and a Width field, then collapsed groups for Placeholder image, Size and layout, Loading and mobile, Appearance, Accessibility and Debugging",
-          caption: "The panel in Makeswift",
-        },
+        body: `<p>I built Shadow Embed directly in our codebase with Claude Code, for all three of our brand sites. It's a Makeswift component that runs a designer's code inside a Shadow DOM, so the animation's styles and scripts can't reach the rest of the page. It saves the asset's space before it loads so nothing jumps, removes everything when it leaves, and shows a placeholder still that search engines can read. In the editor, embed code comes first and every other setting folds into a group named for its task.</p>`,
       },
       {
         type: "text",
@@ -593,20 +572,9 @@ const allProjects: Project[] = [
         ],
       },
       {
-        type: "imageGrid",
-        framed: true,
-        images: [
-          {
-            src: "/project-claude-embed-paste-animated.svg",
-            alt: "The Makeswift builder with an empty embed block selected. Code is pasted into the Embed code field, and the Shopping Agent animation appears in the block and plays from the start.",
-            caption: "Pasting cleaned-up code into the component in Makeswift",
-          },
-        ],
-      },
-      {
         type: "text",
-        heading: "Then the hard part became the motion itself",
-        body: `<p>Once anyone could ship an animation, the risk moved from broken code to busy motion. Teammates outside design were building blog animations that ran long and asked readers to follow too much at once. So I wrote motion guidelines: a short internal page that sorts animation by what it's for, gives each kind a length and a trigger, and hands over a prompt to start from in Claude.</p><p>Here are three of the kinds, built with the skill and running live inside a shadow root, the same way the component runs them.</p>`,
+        heading: "The last piece was guidance on the motion",
+        body: `<p>With anyone able to ship an animation, the system needed one more thing: help choosing what that animation should do. Teammates outside design were building blog animations that ran long and asked readers to follow too much at once. So I wrote motion guidelines: a short internal page that sorts animation by what it's for, gives each kind a length and a trigger, and hands over a prompt to start from in Claude.</p><p>Here are three of the kinds, built with the skill and running live inside a shadow root, the same way the component runs them.</p>`,
       },
       {
         type: "motionExamples",
