@@ -1,0 +1,565 @@
+---
+/**
+ * The blueprint: the page drawing its own specs over itself, in the site's
+ * link blue. Columns, type specs, frame sizes, and spacing are measured off
+ * the page as it renders, so resizing the window changes the numbers, and a
+ * spacing value is named after the site's --space token when it lands on one.
+ *
+ * Drop it at the end of a page's <main>, then mark up the page:
+ *   [data-blueprint-toggle]   a button that turns the specs on (Cmd/Ctrl + I
+ *                             works from anywhere too)
+ *   [data-spec-columns]       the layout's real columns: its children are the
+ *                             columns when they sit side by side
+ *   [data-spec="type"]        labelled with its font, size/line-height, and
+ *                             tracking; data-spec-name names it
+ *   [data-spec="box"]         labelled with its width x height
+ *   [data-spec-flow]          blocks stacked down the page: the gap between
+ *                             each one and the next is measured
+ * The nav, gutters, and footer are drawn on every page that uses it.
+ */
+---
+
+<div class="blueprint-columns" aria-hidden="true" data-blueprint-columns></div>
+
+<div class="blueprint-bar" data-blueprint-bar>
+  <span class="blueprint-bar-label">Specs on</span>
+  <button type="button" class="blueprint-bar-hide" data-blueprint-off>Hide</button>
+  <span class="blueprint-bar-keys"><kbd><span data-shortcut-mod>Cmd</span> + I</kbd> or <kbd>Esc</kbd></span>
+</div>
+
+<style is:global>
+  :root {
+    --blueprint: var(--color-link);
+  }
+
+  .blueprint-columns {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 205;
+    display: grid;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  html.blueprint-on .blueprint-columns {
+    opacity: 1;
+  }
+
+  .blueprint-columns span {
+    background: color-mix(in srgb, var(--blueprint) 5%, transparent);
+    border-inline: 1px solid color-mix(in srgb, var(--blueprint) 22%, transparent);
+  }
+
+  /* Tag layers: one fixed to the screen (gutters, nav), one that scrolls
+     with the document (everything in main, and the footer). */
+  div.blueprint-tags {
+    pointer-events: none;
+  }
+
+  div.blueprint-tags.bp-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 210;
+  }
+
+  div.blueprint-tags.bp-doc {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    z-index: 210;
+  }
+
+  .blueprint-tag {
+    position: absolute;
+    white-space: nowrap;
+    padding: 3px 6px;
+    border-radius: 3px;
+    background: var(--blueprint);
+    color: #ffffff;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    animation: blueprint-in 0.25s ease both;
+  }
+
+  .blueprint-line {
+    position: absolute;
+    width: 1px;
+    background: var(--blueprint);
+    animation: blueprint-in 0.25s ease both;
+  }
+
+  /* End caps, so a line reads as a measurement rather than a rule. */
+  .blueprint-line::before,
+  .blueprint-line::after {
+    content: "";
+    position: absolute;
+    left: -4px;
+    width: 9px;
+    height: 1px;
+    background: var(--blueprint);
+  }
+
+  .blueprint-line::before {
+    top: 0;
+  }
+
+  .blueprint-line::after {
+    bottom: 0;
+  }
+
+  .bp-gutter,
+  .bp-pad {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    animation: blueprint-in 0.25s ease both;
+  }
+
+  /* Hatched, the way a design tool marks space that holds nothing. */
+  .bp-gutter {
+    background: repeating-linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--blueprint) 14%, transparent) 0 1px,
+      transparent 1px 9px
+    );
+  }
+
+  .bp-pad {
+    background: color-mix(in srgb, var(--blueprint) 7%, transparent);
+  }
+
+  html.blueprint-on .bp-outline-type {
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--blueprint) 55%, transparent);
+  }
+
+  html.blueprint-on .bp-outline-box {
+    outline: 1px dashed var(--blueprint);
+    outline-offset: -1px;
+  }
+
+  @keyframes blueprint-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .blueprint-columns {
+      transition: none;
+    }
+
+    .blueprint-tag,
+    .blueprint-line,
+    .bp-gutter,
+    .bp-pad {
+      animation: none;
+    }
+  }
+
+  /* While the specs are up: a small bar pinned to the bottom of the screen,
+     in the blueprint's own blue, so there is always a way out. */
+  .blueprint-bar {
+    position: fixed;
+    left: 50%;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    z-index: 220;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    white-space: nowrap;
+    padding: 6px 6px 6px 16px;
+    font-size: var(--text-s);
+    color: #ffffff;
+    background: var(--blueprint);
+    border-radius: 999px;
+    box-shadow: var(--shadow-overlay);
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, 8px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
+  }
+
+  html.blueprint-on .blueprint-bar {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .blueprint-bar-label {
+    font-weight: 500;
+  }
+
+  .blueprint-bar-hide {
+    font: inherit;
+    font-weight: 500;
+    color: var(--blueprint);
+    background: #ffffff;
+    border: 0;
+    border-radius: 999px;
+    padding: 5px 14px;
+    cursor: pointer;
+  }
+
+  .blueprint-bar-hide:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+  }
+
+  .blueprint-bar-keys {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    opacity: 0.85;
+    padding-right: 10px;
+  }
+
+  /* Touch screens tap the shortcut rather than press it, and have no keys
+     to list in the bar. Narrow windows have no room for them either. */
+  @media ((hover: none) and (pointer: coarse)), (max-width: 600px) {
+    .blueprint-bar-keys {
+      display: none;
+    }
+
+    .blueprint-bar {
+      padding-right: 6px;
+    }
+  }
+
+  .blueprint-bar kbd {
+    display: inline-block;
+    min-width: 1.7em;
+    padding: 1px 6px;
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    line-height: 1.5;
+    text-align: center;
+    color: #ffffff;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-bottom-width: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* The inline toggle: the shortcut in a sentence, a real button. */
+  .kbd-toggle {
+    display: inline-block;
+    margin: 0 1px 0 0;
+    padding: 0 var(--space-1);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    line-height: 1.5;
+    white-space: nowrap;
+    color: var(--color-text);
+    background: color-mix(in srgb, var(--color-text) 6%, transparent);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    transition:
+      background var(--duration-fast) var(--ease-standard),
+      transform var(--duration-instant) var(--ease-standard);
+  }
+
+  .kbd-toggle:hover {
+    background: color-mix(in srgb, var(--color-text) 11%, transparent);
+  }
+
+  .kbd-toggle:active {
+    transform: translateY(1px);
+  }
+
+  .kbd-toggle[aria-pressed="true"] {
+    color: #ffffff;
+    background: var(--blueprint);
+  }
+
+  .kbd-toggle:focus-visible {
+    outline-offset: 3px;
+  }
+</style>
+
+<script>
+  const page = document.querySelector<HTMLElement>("main");
+  const toggle = document.querySelector<HTMLButtonElement>("[data-blueprint-toggle]");
+  const columns = document.querySelector<HTMLElement>("[data-blueprint-columns]");
+  const layout = document.querySelector<HTMLElement>("[data-spec-columns]");
+
+  if (page && toggle && columns && layout) {
+    const tokens = getComputedStyle(document.documentElement);
+    const space = new Map<number, string>();
+    for (let n = 1; n <= 8; n++) {
+      const value = parseFloat(tokens.getPropertyValue(`--space-${n}`));
+      if (!Number.isNaN(value)) space.set(value, `space-${n}`);
+    }
+
+    const px = (value: number) => Math.round(value);
+
+    // The bar, the columns, and the tag layers hang off the body, above the
+    // sticky nav, so they cover the whole canvas rather than just main.
+    const bar = document.querySelector<HTMLElement>("[data-blueprint-bar]");
+    if (bar) document.body.append(bar);
+    document.body.append(columns);
+    const [screenLayer, docLayer] = ["bp-screen", "bp-doc"].map((name) => {
+      const layer = document.createElement("div");
+      layer.className = `blueprint-tags ${name}`;
+      layer.setAttribute("aria-hidden", "true");
+      document.body.append(layer);
+      return layer;
+    });
+
+    const nav = document.querySelector<HTMLElement>("nav:not(.footer-nav)");
+    const footer = document.querySelector<HTMLElement>("footer");
+    const outlined: Element[] = [];
+    function outline(el: Element | null | undefined, kind: "type" | "box") {
+      if (!el) return;
+      el.classList.add(`bp-outline-${kind}`);
+      outlined.push(el);
+    }
+
+    function spacingLabel(distance: number) {
+      const d = px(distance);
+      if (space.has(d)) return `${space.get(d)} · ${d}`;
+      if (d % 2 === 0 && space.has(d / 2)) return `${space.get(d / 2)} × 2 · ${d}`;
+      return `${d}`;
+    }
+
+    function typeLabel(el: HTMLElement, name?: string) {
+      const s = getComputedStyle(el);
+      const size = parseFloat(s.fontSize);
+      const lineHeight = s.lineHeight === "normal" ? "auto" : px(parseFloat(s.lineHeight));
+      const tracking = parseFloat(s.letterSpacing);
+      const em = Number.isNaN(tracking) ? "0" : (tracking / size).toFixed(2);
+      const family = s.fontFamily.split(",")[0].replace(/["']/g, "");
+      return `${name ?? el.dataset.specName ?? "Text"} · ${family} ${s.fontWeight} · ${px(size)}/${lineHeight} · ${em}em`;
+    }
+
+    function tag(layer: HTMLElement, text: string, x: number, y: number, shift = "") {
+      const el = document.createElement("span");
+      el.className = "blueprint-tag";
+      el.textContent = text;
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      if (shift) el.style.transform = shift;
+      layer.appendChild(el);
+      return el;
+    }
+
+    function vertical(layer: HTMLElement, x: number, top: number, length: number) {
+      const el = document.createElement("span");
+      el.className = "blueprint-line";
+      el.style.left = `${x}px`;
+      el.style.top = `${top}px`;
+      el.style.height = `${length}px`;
+      layer.appendChild(el);
+      tag(layer, spacingLabel(length), x + 8, top + length / 2, "translateY(-50%)");
+    }
+
+    // Bounds in document coordinates, so the doc layer scrolls with the page.
+    function at(el: Element) {
+      const b = el.getBoundingClientRect();
+      return { left: b.left + scrollX, right: b.right + scrollX, top: b.top + scrollY, bottom: b.bottom + scrollY, width: b.width, height: b.height };
+    }
+
+    function build() {
+      screenLayer.replaceChildren();
+      docLayer.replaceChildren();
+      outlined.splice(0).forEach((el) => el.classList.remove("bp-outline-type", "bp-outline-box"));
+      if (!document.documentElement.classList.contains("blueprint-on")) return;
+
+      // Columns: the layout's real ones. Side by side on desktop, stacked
+      // into one on a phone.
+      const inner = layout!.getBoundingClientRect();
+      const kids = Array.from(layout!.children) as HTMLElement[];
+      const sideBySide = kids.length > 1 && kids[1].getBoundingClientRect().left >= kids[0].getBoundingClientRect().right - 1;
+      const count = sideBySide ? kids.length : 1;
+      columns!.style.left = `${inner.left}px`;
+      columns!.style.width = `${inner.width}px`;
+      columns!.style.gridTemplateColumns = sideBySide
+        ? kids.map((k) => `${k.getBoundingClientRect().width}px`).join(" ")
+        : "minmax(0, 1fr)";
+      if (columns!.childElementCount !== count) {
+        columns!.replaceChildren(...Array.from({ length: count }, () => document.createElement("span")));
+      }
+      const main = at(page!);
+      const lay = at(layout!);
+      tag(
+        docLayer,
+        sideBySide
+          ? `${count} col · ${kids.map((k) => px(k.getBoundingClientRect().width)).join(" + ")} · max ${px(inner.width)}`
+          : `1 col · ${px(inner.width)} wide`,
+        lay.right,
+        main.top + 8,
+        "translateX(-100%)"
+      );
+
+      page!.querySelectorAll<HTMLElement>('[data-spec="type"]').forEach((el) => {
+        const b = at(el);
+        outline(el, "type");
+        tag(docLayer, typeLabel(el), b.left, b.top - 24);
+      });
+
+      page!.querySelectorAll<HTMLElement>('[data-spec="box"]').forEach((el) => {
+        const b = at(el);
+        outline(el, "box");
+        tag(docLayer, `${px(b.width)} × ${px(b.height)}`, b.right - 8, b.bottom - 8, "translate(-100%, -100%)");
+      });
+
+      // Spacing down the page: the gap from each flow block to the next.
+      const flow = Array.from(page!.querySelectorAll<HTMLElement>("[data-spec-flow]"));
+      flow.forEach((el, i) => {
+        const next = flow[i + 1];
+        if (!next) return;
+        const a = at(el);
+        const b = at(next);
+        if (b.top - a.bottom > 1) vertical(docLayer, lay.left + 32, a.bottom, b.top - a.bottom);
+      });
+
+      drawCanvas(inner);
+    }
+
+    function drawCanvas(inner: DOMRect) {
+      const vw = document.documentElement.clientWidth;
+      const vh = window.innerHeight;
+      const pad = parseFloat(tokens.getPropertyValue("--page-padding")) || 0;
+
+      // Gutters, edge of the screen to the content on each side: the page
+      // padding next to the content, and whatever auto margin centers the
+      // layout beyond it.
+      for (const [from, to] of [[0, inner.left], [inner.right, vw]]) {
+        const width = to - from;
+        if (width < 1) continue;
+        const band = document.createElement("span");
+        band.className = "bp-gutter";
+        band.style.left = `${from}px`;
+        band.style.width = `${width}px`;
+        const strip = document.createElement("span");
+        strip.className = "bp-pad";
+        strip.style.left = `${from === 0 ? to - Math.min(pad, width) : from}px`;
+        strip.style.width = `${Math.min(pad, width)}px`;
+        screenLayer.append(band, strip);
+        const margin = width - pad;
+        const label = margin > 1 ? `page-padding ${px(pad)} + margin ${px(margin)}` : `page-padding · ${px(pad)}`;
+        tag(screenLayer, label, from + width / 2, vh / 2, "translate(-50%, -50%) rotate(-90deg)");
+      }
+
+      // The nav: sticky, so it is drawn on the screen layer and stays put.
+      if (nav) {
+        const box = nav.getBoundingClientRect();
+        const navInner = nav.querySelector(".nav-inner")?.getBoundingClientRect();
+        const logo = nav.querySelector<HTMLElement>(".logo");
+        const menu = nav.querySelector<HTMLElement>(".hamburger");
+        outline(nav, "box");
+        if (logo) {
+          outline(logo, "type");
+          const b = logo.getBoundingClientRect();
+          if (vw > 700) tag(screenLayer, typeLabel(logo, "Logo"), b.right + 12, b.top + b.height / 2, "translateY(-50%)");
+        }
+        if (menu) {
+          outline(menu, "box");
+          const b = menu.getBoundingClientRect();
+          tag(screenLayer, `${px(b.width)} × ${px(b.height)}`, b.left - 10, b.top + b.height / 2, "translate(-100%, -50%)");
+        }
+        if (navInner && vw > 700) {
+          const lx = navInner.left + navInner.width * 0.6;
+          vertical(screenLayer, lx, box.top, navInner.top - box.top);
+          vertical(screenLayer, lx, navInner.bottom, box.bottom - navInner.bottom);
+        }
+      }
+
+      // The footer, in document coordinates so it scrolls with the page.
+      if (footer) {
+        const f = at(footer);
+        const fInner = footer.querySelector(".footer-inner");
+        const fTop = footer.querySelector(".footer-top");
+        const fBottom = footer.querySelector(".footer-bottom");
+        outline(footer, "box");
+        if (fInner && fTop && fBottom) {
+          const fi = at(fInner);
+          const ft = at(fTop);
+          const fb = at(fBottom);
+          const lx = fi.left + fi.width * 0.36;
+          const main = at(page!);
+          if (f.top - main.bottom > 1) vertical(docLayer, lx, main.bottom, f.top - main.bottom);
+          // Measured inside the top border, so it reads as the padding.
+          const inside = f.top + footer.clientTop;
+          vertical(docLayer, lx, inside, fi.top - inside);
+          vertical(docLayer, lx, ft.bottom, fb.top - ft.bottom);
+          vertical(docLayer, lx, fb.bottom, f.bottom - fb.bottom);
+        }
+        const texts: [string, string, boolean][] = [
+          [".footer-logo", "Logo", false],
+          [".footer-nav a", "Link", true],
+          [".footer-copyright", "Meta", false],
+        ];
+        for (const [selector, name, end] of texts) {
+          const el = footer.querySelector<HTMLElement>(selector);
+          if (!el) continue;
+          outline(el, "type");
+          const b = at(el);
+          tag(docLayer, typeLabel(el, name), end ? b.right : b.left, b.top - 24, end ? "translateX(-100%)" : "");
+        }
+      }
+    }
+
+    // Cmd on a Mac, Ctrl on other desktops. The page ships saying Cmd and
+    // corrects itself here, so the label always matches the key that works.
+    // Touch screens keep Cmd, since there the shortcut is only tapped.
+    const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+    const isTouch = matchMedia("(hover: none) and (pointer: coarse)").matches;
+    const mod = isMac || isTouch ? "Cmd" : "Ctrl";
+    document.querySelectorAll("[data-shortcut-mod]").forEach((el) => (el.textContent = mod));
+    toggle.setAttribute("aria-label", `Show the specs (shortcut ${mod} + I)`);
+
+    const isOn = () => document.documentElement.classList.contains("blueprint-on");
+
+    function setBlueprint(on: boolean) {
+      document.documentElement.classList.toggle("blueprint-on", on);
+      toggle!.setAttribute("aria-pressed", String(on));
+      toggle!.setAttribute("aria-label", `${on ? "Hide" : "Show"} the specs (shortcut ${mod} + I)`);
+      build();
+    }
+
+    toggle.addEventListener("click", () => setBlueprint(!isOn()));
+    document.querySelector("[data-blueprint-off]")?.addEventListener("click", () => setBlueprint(false));
+
+    // Escape puts it away from anywhere, like any overlay, without moving focus.
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && isOn()) setBlueprint(false);
+    });
+
+    // Cmd + I (Ctrl + I off a Mac) toggles it in place, from anywhere on the
+    // page. Left alone while typing, where it means italic, and with Shift or
+    // Alt held, so Cmd + Opt + I still opens the dev tools.
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "i" && event.key !== "I") return;
+      if (!(isMac ? event.metaKey : event.ctrlKey)) return;
+      if (event.shiftKey || event.altKey || event.repeat) return;
+      const target = event.target as HTMLElement | null;
+      if (target?.closest("input, textarea, select, [contenteditable]")) return;
+      event.preventDefault();
+      setBlueprint(!isOn());
+    });
+
+    // Measurements are taken off the live page, so they redraw whenever it
+    // changes size, one frame at a time.
+    let queued = false;
+    const rebuild = () => {
+      if (queued || !isOn()) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        build();
+      });
+    };
+    addEventListener("resize", rebuild);
+    new ResizeObserver(rebuild).observe(document.body);
+  }
+</script>

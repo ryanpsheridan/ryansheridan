@@ -8,6 +8,7 @@ const schema = [
   { "@type": "ProfilePage", mainEntity: { "@id": PERSON_ID }, about: { "@id": PERSON_ID } },
   breadcrumbSchema([{ name: "About", path: "/about" }]),
 ];
+import Blueprint from "../components/Blueprint.astro";
 import Breadcrumbs from "../components/ui/Breadcrumbs.astro";
 import ToolLink from "../components/ui/ToolLink.astro";
 ---
@@ -23,11 +24,11 @@ import ToolLink from "../components/ui/ToolLink.astro";
   <main id="main" class="about-page">
     <Breadcrumbs class="page-crumbs" items={[{ label: "Home", href: "/" }, { label: "About" }]} />
 
-    <div class="about-hero">
+    <div class="about-hero" data-spec-columns data-spec-flow>
       <div class="about-intro">
-        <h1>Ryan Sheridan</h1>
+        <h1 data-spec="type" data-spec-name="Display">Ryan Sheridan</h1>
         <p class="role">Principal Designer, Design Systems</p>
-        <p class="bio">
+        <p class="bio" data-spec="type" data-spec-name="Body">
           I lead design systems and web experience at Commerce, the parent
           company of BigCommerce. Over the past eight years, I’ve built and
           scaled brand systems, marketing sites, and design infrastructure
@@ -59,16 +60,24 @@ import ToolLink from "../components/ui/ToolLink.astro";
           is my whole world, and I’m always working on a side project that
           pushes my limits.
         </p>
+        {/* The way into the blueprint: the page drawing its own specs over
+            itself. The shortcut in the sentence is a real toggle for anyone
+            with a mouse or a finger; the drawing it adds is hidden from
+            assistive tech, since it describes the page rather than adding
+            to it. */}
+        <p class="peek">
+          <button type="button" class="kbd-toggle" aria-pressed="false" aria-label="Show the specs (shortcut Cmd + I)" aria-keyshortcuts="Meta+I Control+I" data-blueprint-toggle><span data-shortcut-mod>Cmd</span> + I</button> to peek under the&nbsp;hood.
+        </p>
       </div>
-      <div class="about-photo">
+      <div class="about-photo" data-spec="box">
         <img src="/profile-photo.webp" alt="Ryan Sheridan" />
       </div>
     </div>
 
     <hr class="divider" />
 
-    <section class="experience">
-      <h2>Experience</h2>
+    <section class="experience" data-spec-flow>
+      <h2 data-spec="type" data-spec-name="Heading">Experience</h2>
       <div class="timeline">
         <div class="timeline-item">
           <span class="timeline-period">2025 – Present</span>
@@ -96,7 +105,7 @@ import ToolLink from "../components/ui/ToolLink.astro";
 
     <hr class="divider" />
 
-    <section class="tools-section">
+    <section class="tools-section" data-spec-flow>
       <h2>Tools</h2>
       <div class="tools-grid">
         <div class="tool-group">
@@ -143,7 +152,7 @@ import ToolLink from "../components/ui/ToolLink.astro";
 
     <hr class="divider" />
 
-    <section class="certification-section">
+    <section class="certification-section" data-spec-flow>
       <h2>Certification</h2>
       <div class="certification-item">
         <a href="https://www.udemy.com/certificate/UC-18d85801-2609-449f-b7ed-fefe40a5db46/" target="_blank" rel="noopener noreferrer" class="certification-name link-underline">User Experience (UX): The Ultimate Guide to Usability and UX</a>
@@ -154,7 +163,7 @@ import ToolLink from "../components/ui/ToolLink.astro";
 
     <hr class="divider" />
 
-    <section class="contact-section">
+    <section class="contact-section" data-spec-flow>
       <h2>Get in touch</h2>
       <div class="contact-links">
         <a href="mailto:ryansheridandesign@gmail.com" class="contact-link link-underline">
@@ -170,6 +179,7 @@ import ToolLink from "../components/ui/ToolLink.astro";
         </a>
       </div>
     </section>
+  <Blueprint />
   </main>
   <Footer />
 </Layout>
@@ -220,6 +230,11 @@ import ToolLink from "../components/ui/ToolLink.astro";
 
   .bio:last-of-type {
     margin-bottom: 0;
+  }
+
+  .peek {
+    font-size: var(--text-s);
+    color: var(--color-text-muted);
   }
 
   /* "My dog": underlined in ink, not link blue, since it opens a picture
