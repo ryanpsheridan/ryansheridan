@@ -627,7 +627,7 @@ const allProjects: Project[] = [
     year: 2026,
     description: "Four separate Figma libraries for Commerce, BigCommerce, Feedonomics, and Makeswift, merged into one multi-brand design system with shared tokens and brand modes.",
     ogImage: "/project-multi-brand1.jpg",
-    thumbnail: "/multi-brand-mode-switch-animated.svg",
+    thumbnail: "/project-multi-brand-sections.webp",
     showOnHomepage: true,
     homepageWord: "systems",
     tags: ["Design System"],
@@ -686,7 +686,7 @@ const allProjects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          { src: "/project-multi-brand-sections.webp", alt: "Figma section library listing Hero, Section Header, Multi Column, Card, Metrics and Stats, and Logo Showcase categories with dozens of layout variants each, beside a six-card grid with the brand mode menu set to CM" },
+          { src: "/multi-brand-mode-switch-animated.svg", alt: "A Multi-Brand variables table beside a hero section while the Figma mode menu switches between Base, CM, BC, and FDX and the section's surface color and type update" },
         ],
       },
     ],
