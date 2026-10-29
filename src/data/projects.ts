@@ -69,7 +69,7 @@ export interface ComponentTableBlock {
 }
 
 export interface EmbedItem {
-  /** Public path to a self-contained HTML page, shown in a sandboxed iframe. */
+  /** Public path to an HTML fragment (style, markup, script) that mounts into a shadow root on the page. */
   src: string;
   /** Accessible name for the frame. */
   title: string;
@@ -78,12 +78,31 @@ export interface EmbedItem {
 }
 
 /**
- * Live, interactive pieces in a two-column grid. Each loads lazily in a
- * sandboxed iframe, so nothing runs until it nears the viewport.
+ * Live, interactive pieces in a two-column grid. Each mounts into its own
+ * shadow root as it nears the viewport, so it takes no part in scrolling.
  */
 export interface EmbedGridBlock {
   type: "embedGrid";
   items: EmbedItem[];
+}
+
+export interface CompareSetItem {
+  /** Tab label for this pair. */
+  label: string;
+  before: { src: string; alt?: string };
+  after: { src: string; alt?: string };
+}
+
+/**
+ * Several before-and-after pairs behind one control: pick a pair, then flip
+ * between its two sides. Every image sits in the same fixed frame, so the
+ * page doesn't jump as you switch.
+ */
+export interface CompareSetBlock {
+  type: "compareSet";
+  beforeLabel?: string;
+  afterLabel?: string;
+  sets: CompareSetItem[];
 }
 
 export interface DividerBlock {
@@ -239,6 +258,7 @@ export type ContentBlock =
   | ImageGridBlock
   | CarouselBlock
   | EmbedGridBlock
+  | CompareSetBlock
   | CompareBlock
   | ComponentTableBlock
   | DividerBlock
@@ -461,18 +481,33 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Showing the idea, not the screen",
-        body: `<p>The prototype did its job, but it was dense and built for working, not for explaining. Each section of the page makes one point, so each visual keeps only what supports it: the sentiment panel drops the surrounding charts, and the order tracker shows a single order. Everything on the storefront side traces back to the product recordings. Here is each one next to the frame it came from.</p>`,
+        body: `<p>The prototype did its job, but it was dense and built for working, not for explaining. Each section of the page makes one point, so each visual keeps only what supports it: the sentiment panel drops the surrounding charts, and the order tracker shows a single order. Everything on the storefront side traces back to the product recordings. Pick a visual and flip between the prototype frame and the version on the page.</p>`,
       },
       {
-        type: "carousel",
-        perView: 1,
-        ratio: "1800 / 660",
-        contain: true,
-        images: [
-          { src: "/project-shopping-agent-compare-picks.webp", alt: "Left: the prototype storefront with a chat of movie poster recommendations. Right: the redrawn product picks visual with three sunglasses cards", caption: "Product picks: from the storefront recording to the page visual" },
-          { src: "/project-shopping-agent-compare-order.webp", alt: "Left: the prototype chat listing past orders with shipping progress. Right: the redrawn order tracker visual showing a single shipped order", caption: "Order status: from a long order list to one clear step tracker" },
-          { src: "/project-shopping-agent-compare-colors.webp", alt: "Left: two frames of the prototype Colors settings, before and after clicking a color swatch. Right: the redrawn color picker visual", caption: "Brand colors: from two frames of the walkthrough to one picker" },
-          { src: "/project-shopping-agent-compare-sentiment.webp", alt: "Left: the user sentiment card from the prototype dashboard. Right: the same idea redrawn as a clean dashboard panel", caption: "Sentiment: from a crowded dashboard to a single panel" },
+        type: "compareSet",
+        beforeLabel: "In the prototype",
+        afterLabel: "On the page",
+        sets: [
+          {
+            label: "Product picks",
+            before: { src: "/project-shopping-agent-proto-picks.webp", alt: "The prototype storefront for a movie poster store, with the agent's chat open on the right showing poster recommendations" },
+            after: { src: "/project-shopping-agent-product-picks.svg", alt: "The redrawn product picks visual: a shopper asks for sunglasses for the beach and the agent replies with a row of product cards" },
+          },
+          {
+            label: "Order status",
+            before: { src: "/project-shopping-agent-proto-order.webp", alt: "The prototype product page with the agent's chat listing a shopper's past orders and their shipping progress" },
+            after: { src: "/project-shopping-agent-order-status.svg", alt: "The redrawn order status visual: a single order card showing the steps from Order Placed to Delivered" },
+          },
+          {
+            label: "Brand colors",
+            before: { src: "/project-shopping-agent-proto-colors.webp", alt: "Two frames from the prototype walkthrough of the Colors settings, before and after clicking a color swatch to open the picker" },
+            after: { src: "/project-shopping-agent-brand-colors.svg", alt: "The redrawn brand colors visual: a Colors panel with a color picker open" },
+          },
+          {
+            label: "Sentiment",
+            before: { src: "/project-shopping-agent-proto-sentiment.webp", alt: "The user sentiment card from the prototype dashboard, with percentage badges and a cursor over the Positive row" },
+            after: { src: "/project-shopping-agent-sentiment.svg", alt: "The same idea redrawn as a clean dashboard panel with Positive, Neutral and Negative bars" },
+          },
         ],
       },
       {

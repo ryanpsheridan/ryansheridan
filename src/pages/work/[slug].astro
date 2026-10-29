@@ -131,12 +131,43 @@ const schema = [
                   <div class="embed-grid">
                     {block.items.map((item) => (
                       <figure class="embed-item">
-                        <div class="embed-frame">
-                          <iframe src={item.src} title={item.title} loading="lazy" sandbox="allow-scripts" />
-                        </div>
+                        <div class="embed-frame" data-embed={item.src} role="group" aria-label={item.title} />
                         {item.caption && <figcaption>{item.caption}</figcaption>}
                       </figure>
                     ))}
+                  </div>
+                );
+              }
+
+              if (block.type === "compareSet") {
+                return (
+                  <div class="compare-set" data-compare-set>
+                    <div class="compare-controls">
+                      <div class="segmented" role="group" aria-label="Choose a visual">
+                        {block.sets.map((set, i) => (
+                          <button type="button" class="cs-set" data-set={i} aria-pressed={String(i === 0)}>
+                            {set.label}
+                          </button>
+                        ))}
+                      </div>
+                      <div class="segmented" role="group" aria-label="Show version">
+                        <button type="button" class="cs-side" data-side="before" aria-pressed="true">
+                          {block.beforeLabel || "Before"}
+                        </button>
+                        <button type="button" class="cs-side" data-side="after" aria-pressed="false">
+                          {block.afterLabel || "After"}
+                        </button>
+                      </div>
+                    </div>
+                    <div class="compare-frame is-fixed">
+                      {block.sets.flatMap((set, i) =>
+                        (["before", "after"] as const).map((side) => (
+                          <div class:list={["compare-pane", "cs-pane", `is-${side}`, { "is-active": i === 0 && side === "before" }]} data-set={i} data-side={side}>
+                            <Media src={set[side].src} alt={set[side].alt ?? set.label} class="lightbox-trigger" />
+                          </div>
+                        )),
+                      )}
+                    </div>
                   </div>
                 );
               }
@@ -742,17 +773,42 @@ const schema = [
   }
 
   .embed-frame {
+    display: block;
     aspect-ratio: 530 / 522;
     overflow: hidden;
     background: #161c26;
     border: var(--border-width) solid var(--color-border);
   }
 
-  .embed-frame iframe {
+  .compare-set {
+    margin: 0 0 var(--space-6);
+  }
+
+  .compare-set .compare-controls {
+    flex-wrap: wrap;
+  }
+
+  .compare-frame.is-fixed {
+    max-height: none;
+    aspect-ratio: 16 / 10;
+    background: var(--color-surface);
+  }
+
+  .compare-frame.is-fixed .compare-pane.is-active {
     display: block;
     width: 100%;
     height: 100%;
-    border: 0;
+  }
+
+  .compare-frame.is-fixed .compare-pane.is-after {
+    background: #161c26;
+  }
+
+  .compare-frame.is-fixed .compare-pane :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    aspect-ratio: auto;
   }
 
   .embed-item figcaption {
@@ -1719,6 +1775,21 @@ const schema = [
     update();
   });
 
+  document.querySelectorAll<HTMLElement>("[data-compare-set]").forEach((root) => {
+    const setTabs = root.querySelectorAll<HTMLButtonElement>(".cs-set");
+    const sideTabs = root.querySelectorAll<HTMLButtonElement>(".cs-side");
+    const panes = root.querySelectorAll<HTMLElement>(".cs-pane");
+    let set = "0";
+    let side = "before";
+    const show = () => {
+      setTabs.forEach((t) => t.setAttribute("aria-pressed", String(t.dataset.set === set)));
+      sideTabs.forEach((t) => t.setAttribute("aria-pressed", String(t.dataset.side === side)));
+      panes.forEach((p) => p.classList.toggle("is-active", p.dataset.set === set && p.dataset.side === side));
+    };
+    setTabs.forEach((t) => t.addEventListener("click", () => { set = t.dataset.set!; show(); }));
+    sideTabs.forEach((t) => t.addEventListener("click", () => { side = t.dataset.side!; show(); }));
+  });
+
   document.querySelectorAll<HTMLElement>(".compare-block").forEach((block) => {
     const tabs = block.querySelectorAll<HTMLButtonElement>(".compare-tab");
     const panes = block.querySelectorAll<HTMLElement>(".compare-pane");
@@ -1731,6 +1802,62 @@ const schema = [
       });
     });
   });
+</script>
+
+<script>
+  // Mounts each interactive visual into its own shadow root, straight in the
+  // page. It used to sit in an iframe, which grabbed the wheel as the pointer
+  // crossed it. The fragments expect root, host, onCleanup, listen and gsap,
+  // as the site's Makeswift embed supplies them.
+  const embeds = document.querySelectorAll<HTMLElement>("[data-embed]");
+  if (embeds.length && "IntersectionObserver" in window) {
+    type Gsap = unknown;
+    let gsapLoad: Promise<Gsap | undefined> | undefined;
+    const loadGsap = () =>
+      (gsapLoad ??= new Promise<Gsap | undefined>((resolve) => {
+        const loaded = (window as unknown as { gsap?: Gsap }).gsap;
+        if (loaded) return resolve(loaded);
+        const script = document.createElement("script");
+        script.src = "/vendor/gsap.min.js";
+        script.onload = () => resolve((window as unknown as { gsap?: Gsap }).gsap);
+        script.onerror = () => resolve(undefined);
+        document.head.appendChild(script);
+      }));
+
+    const mount = async (host: HTMLElement) => {
+      try {
+        const [html, gsap] = await Promise.all([fetch(host.dataset.embed!).then((r) => r.text()), loadGsap()]);
+        const tpl = document.createElement("template");
+        tpl.innerHTML = html;
+        const scripts = [...tpl.content.querySelectorAll("script")];
+        const code = scripts.map((s) => s.textContent).join("\n");
+        scripts.forEach((s) => s.remove());
+        const root = host.shadowRoot ?? host.attachShadow({ mode: "open" });
+        root.append(tpl.content);
+        if (!gsap) return; // finished state, no motion
+        const cleanups: (() => void)[] = [];
+        const listen = (target: EventTarget, type: string, handler: EventListener, opts?: AddEventListenerOptions) => {
+          target.addEventListener(type, handler, opts);
+          cleanups.push(() => target.removeEventListener(type, handler, opts));
+        };
+        new Function("root", "host", "onCleanup", "listen", "gsap", code)(root, host, (fn: () => void) => cleanups.push(fn), listen, gsap);
+      } catch {
+        /* leave the dark placeholder */
+      }
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          io.unobserve(entry.target);
+          mount(entry.target as HTMLElement);
+        }
+      },
+      { rootMargin: "300px 0px" },
+    );
+    embeds.forEach((el) => io.observe(el));
+  }
 </script>
 
 <script>
