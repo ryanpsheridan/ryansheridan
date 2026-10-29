@@ -224,10 +224,9 @@ export interface MotionExample {
   /** Still of the asset's resting state, shown until it loads. */
   poster: string;
   alt: string;
+  /** Tab label. */
   title: string;
   body: string;
-  /** What to try with it, for an asset that responds to the visitor. */
-  hint?: string;
   /** Who made which part, when it isn't all mine. */
   credit?: string;
   /** Shows the asset small on a tile of this color, the way an icon sits on a page. */
@@ -446,8 +445,8 @@ const allProjects: Project[] = [
     title: "Making Web Animation Self-Serve",
     year: 2026,
     description: "A Makeswift component, a Claude skill, and motion guidelines that let designers and non-designers ship good animation to live pages without a dev ticket.",
-    ogImage: "/project-claude-embed-cover.png",
-    thumbnail: "/project-claude-embed-thumbnail-animated.svg",
+    ogImage: "/project-shadow-embed-cover.png",
+    thumbnail: "/project-shadow-embed-thumbnail-animated.svg",
     showOnHomepage: false,
     homepageWord: "automations",
     tags: ["Component Design", "Claude Skill", "Automation"],
@@ -549,8 +548,8 @@ const allProjects: Project[] = [
         framed: true,
         images: [
           {
-            src: "/project-claude-embed-changelog.webp",
-            alt: "A Claude chat: an uploaded shopping-agent-control-original.html file and the /embed-asset command, followed by a report grouped into Brand, Motion, Accessibility, and Needs dev or design review, ending with the finished embed file",
+            src: "/project-shadow-embed-changelog.webp",
+            alt: "A Claude chat: an uploaded shopping-agent-control-original.html file and the /shadow-embed-builder command, followed by a report grouped into Brand, Motion, Accessibility, and Needs dev or design review, ending with the finished embed file",
             caption: "A cleanup run in Claude, shortened",
           },
         ],
@@ -607,7 +606,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Then the hard part became the motion itself",
-        body: `<p>Once anyone could ship an animation, the risk moved from broken code to busy motion. Teammates outside design were building blog animations that ran long and asked readers to follow too much at once. So I wrote motion guidelines: a short internal page that sorts animation by what it's for, gives each kind a length and a trigger, and hands over a prompt to start from in Claude.</p><p>These three were built with the skill, and they run live here inside a shadow root, the same way the component runs them.</p>`,
+        body: `<p>Once anyone could ship an animation, the risk moved from broken code to busy motion. Teammates outside design were building blog animations that ran long and asked readers to follow too much at once. So I wrote motion guidelines: a short internal page that sorts animation by what it's for, gives each kind a length and a trigger, and hands over a prompt to start from in Claude.</p><p>Here are three of the kinds, built with the skill and running live inside a shadow root, the same way the component runs them.</p>`,
       },
       {
         type: "motionExamples",
@@ -617,9 +616,8 @@ const allProjects: Project[] = [
             ratio: "364 / 420",
             poster: "/project-shadow-embed-language-switcher-poster.webp",
             alt: "A storefront product card for a leather armchair, with a language switcher above it set to English",
-            title: "Shows, then hands over",
-            body: "Plays a short demo once as it scrolls into view, then rests. On hover the switcher lifts slightly to say it's live.",
-            hint: "Pick a language",
+            title: "Plays once",
+            body: "A short demo plays once as it comes into view, then hands over. Pick a language to take it from there.",
             credit: "I edited and animated this illustration; I didn't draw it.",
           },
           {
@@ -627,17 +625,16 @@ const allProjects: Project[] = [
             ratio: "530 / 522",
             poster: "/project-shadow-embed-color-picker-poster.webp",
             alt: "A Colors settings panel with a color picker open beside it",
-            title: "Waits for the visitor",
-            body: "Nothing moves until the pointer arrives. Then the handle follows it and the color values update.",
-            hint: "Point at it, or drag across it",
+            title: "Waits for you",
+            body: "Nothing moves until you do. Point at it or drag across it, and the handle follows.",
           },
           {
             embed: "/embeds/layout-spark-icon.html",
             ratio: "1 / 1",
             poster: "/project-shadow-embed-layout-spark-icon-poster.webp",
             alt: "A page layout icon with a sparkle",
-            title: "Idles quietly",
-            body: "One part moves at a time, then a long rest. It's small enough that it never competes with the page.",
+            title: "Idles",
+            body: "One part moves at a time, then a long rest, at a size that never competes with the page.",
             credit: "I animated this icon; I didn't draw it.",
             tile: "#fffcbd",
           },
