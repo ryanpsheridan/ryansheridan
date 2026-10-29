@@ -1,0 +1,105 @@
+---
+/**
+ * Runs a Shadow Embed asset live on the page, under the same contract as the
+ * Makeswift component it was built for: the markup goes into a shadow root,
+ * and each <script> runs as a function with root, host, gsap, ScrollTrigger,
+ * onCleanup and listen in scope. The asset file is fetched (and GSAP loaded)
+ * only as it nears the viewport. Until then, and without JavaScript, the
+ * poster still shows in its place.
+ */
+interface Props {
+  /** Asset file under public/embeds/. */
+  src: string;
+  /** The asset's --embed-aspect-ratio, so the box is reserved before it loads. */
+  ratio: string;
+  /** Still of the asset's resting state. */
+  poster: string;
+  alt: string;
+  class?: string;
+}
+
+const { src, ratio, poster, alt, class: className } = Astro.props;
+---
+
+<div class:list={["shadow-embed", className]} data-shadow-embed={src} style={`aspect-ratio: ${ratio}`}>
+  <img src={poster} alt={alt} loading="lazy" decoding="async" />
+</div>
+
+<style>
+  .shadow-embed {
+    display: block;
+    width: 100%;
+  }
+
+  .shadow-embed img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>
+
+<script>
+  type Cleanup = () => void;
+
+  const hosts = document.querySelectorAll<HTMLElement>("[data-shadow-embed]");
+
+  let motion: Promise<{ gsap: unknown; ScrollTrigger: unknown }> | undefined;
+  const loadMotion = () =>
+    (motion ??= Promise.all([import("gsap"), import("gsap/ScrollTrigger")]).then(([g, st]) => {
+      g.gsap.registerPlugin(st.ScrollTrigger);
+      return { gsap: g.gsap, ScrollTrigger: st.ScrollTrigger };
+    }));
+
+  async function mount(host: HTMLElement) {
+    const [html, { gsap, ScrollTrigger }] = await Promise.all([
+      fetch(host.dataset.shadowEmbed!).then((r) => {
+        if (!r.ok) throw new Error(`${r.status} ${r.url}`);
+        return r.text();
+      }),
+      loadMotion(),
+    ]);
+
+    const template = document.createElement("template");
+    template.innerHTML = html;
+    const scripts = Array.from(template.content.querySelectorAll("script"), (s) => {
+      s.remove();
+      return s.textContent ?? "";
+    });
+
+    // Attaching the shadow root hides the poster: light-DOM children don't
+    // render without a slot.
+    const root = host.attachShadow({ mode: "open" });
+    root.append(template.content);
+
+    // Every page here is a full load, so nothing unmounts and these never
+    // run. They are collected only so assets can call the contract as written.
+    const cleanups: Cleanup[] = [];
+    const onCleanup = (fn: Cleanup) => cleanups.push(fn);
+    const listen = (target: EventTarget, type: string, handler: EventListener, opts?: AddEventListenerOptions) => {
+      target.addEventListener(type, handler, opts);
+      cleanups.push(() => target.removeEventListener(type, handler, opts));
+    };
+
+    for (const code of scripts) {
+      const run = new Function("root", "host", "gsap", "ScrollTrigger", "onCleanup", "listen", code);
+      const returned = run(root, host, gsap, ScrollTrigger, onCleanup, listen);
+      if (typeof returned === "function") cleanups.push(returned);
+    }
+  }
+
+  if (hosts.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          io.unobserve(entry.target);
+          // On failure the poster simply stays.
+          mount(entry.target as HTMLElement).catch((err) => console.error("Shadow embed failed", err));
+        }
+      },
+      { rootMargin: "300px 0px" },
+    );
+    hosts.forEach((host) => io.observe(host));
+  }
+</script>

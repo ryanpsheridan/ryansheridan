@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import Media from "../../components/Media.astro";
+import ShadowEmbed from "../../components/ShadowEmbed.astro";
 import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
 import ResultIcon from "../../components/ui/ResultIcon.astro";
 import ToolIcon from "../../components/ui/ToolIcon.astro";
@@ -369,6 +370,29 @@ const schema = [
                     </div>
                     {block.caption && <figcaption>{block.caption}</figcaption>}
                   </figure>
+                );
+              }
+
+              if (block.type === "motionExamples") {
+                return (
+                  <div class="motion-examples">
+                    {block.items.map((item) => (
+                      <figure class="motion-example">
+                        <div
+                          class:list={["motion-stage", { "is-tiled": item.tile }]}
+                          style={item.tile ? `--motion-tile: ${item.tile}` : undefined}
+                        >
+                          <ShadowEmbed src={item.embed} ratio={item.ratio} poster={item.poster} alt={item.alt} />
+                        </div>
+                        <figcaption>
+                          <strong>{item.title}</strong>
+                          <span>{item.body}</span>
+                          {item.hint && <span class="motion-hint">{item.hint}</span>}
+                          {item.credit && <small>{item.credit}</small>}
+                        </figcaption>
+                      </figure>
+                    ))}
+                  </div>
                 );
               }
 
@@ -1416,6 +1440,96 @@ const schema = [
   }
 
   /* ---------- Copy beside a narrow image ---------- */
+
+  /* Full-size assets sit two across, and their captions share a row line via
+     subgrid whatever each asset's shape. A tiled asset (an icon) runs as a
+     compact row underneath, shown at the small size it's meant for. */
+  .motion-examples {
+    margin: 0 0 var(--space-6);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3) var(--space-4);
+  }
+
+  .motion-example {
+    margin: 0;
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+  }
+
+  .motion-stage {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .motion-stage:not(.is-tiled) > :global(*) {
+    border: var(--border-width) solid var(--color-border);
+  }
+
+  .motion-example:has(.is-tiled) {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    grid-template-rows: none;
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: center;
+    margin-top: var(--space-3);
+  }
+
+  .motion-stage.is-tiled {
+    aspect-ratio: 1;
+    align-items: center;
+    justify-content: center;
+    background: var(--motion-tile);
+  }
+
+  .motion-stage.is-tiled > :global(*) {
+    width: 32%;
+  }
+
+  .motion-example figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    font-size: var(--text-s);
+    color: var(--color-text-muted);
+    max-width: 28rem;
+  }
+
+  .motion-example strong {
+    font-weight: var(--weight-medium);
+    color: var(--color-text);
+  }
+
+  .motion-hint {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text);
+  }
+
+  .motion-hint::before {
+    content: "Try it: ";
+    color: var(--color-text-muted);
+  }
+
+  .motion-example small {
+    font-size: var(--text-xs);
+  }
+
+  @media (max-width: 640px) {
+    .motion-examples {
+      grid-template-columns: 1fr;
+    }
+
+    .motion-example:not(:has(.is-tiled)) + .motion-example {
+      margin-top: var(--space-4);
+    }
+
+    .motion-example:has(.is-tiled) {
+      grid-template-columns: 6rem minmax(0, 1fr);
+    }
+  }
 
   .split {
     display: grid;

@@ -1,0 +1,141 @@
+<style>
+  /* ===== BRAND COLORS: the only place colors are defined. Update here on rebrand. ===== */
+  :host, .mds-stage {
+    --mds-ink: #000000; /* Black (Type / Primary on BC). Use White on dark backgrounds. */
+    display: block;
+    font-family: inherit;
+  }
+  /* ===== end brand colors ===== */
+
+  /* Timing: one part animates every --mds-step. Four parts, so the full loop is 4 x step. */
+  :host, .mds-stage {
+    --mds-step: 6s;
+    --mds-cycle: calc(var(--mds-step) * 4);
+  }
+
+  /* Height: required. Matches the icon's 32 x 32 viewBox. */
+  :host, .mds-stage { --embed-aspect-ratio: 1 / 1; aspect-ratio: var(--embed-aspect-ratio); }
+
+  .mds-stage { width: 100%; }
+  .mds-icon { display: block; width: 100%; height: 100%; }
+
+  /* Finished state (no script, reduced motion, placeholder): every line fully drawn. */
+  .mds-icon path {
+    fill: none;
+    stroke: var(--mds-ink);
+    stroke-width: 2.21;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .mds-line { stroke-dasharray: 100 300; stroke-dashoffset: 0; }
+  .mds-spark { transform-box: fill-box; transform-origin: center; }
+
+  /* Motion only starts once the script adds .mds-playing (when the icon is first seen).
+     Each part runs a short burst (about 6% of the loop), then rests until its next turn. */
+  .mds-playing .mds-spark  { animation: mds-spin var(--mds-cycle) 0s infinite; }
+  .mds-playing .mds-frame  { animation: mds-draw var(--mds-cycle) var(--mds-step) infinite; }
+  .mds-playing .mds-header { animation: mds-draw var(--mds-cycle) calc(var(--mds-step) * 2) infinite; }
+  .mds-playing .mds-side   { animation: mds-draw var(--mds-cycle) calc(var(--mds-step) * 3) infinite; }
+  .mds-playing.mds-paused .mds-spark,
+  .mds-playing.mds-paused .mds-frame,
+  .mds-playing.mds-paused .mds-header,
+  .mds-playing.mds-paused .mds-side { animation-play-state: paused; }
+
+  /* Sparkle: shrink, then spin a quarter turn and pop back. A quarter turn looks identical to the start. */
+  @keyframes mds-spin {
+    0%   { transform: rotate(0deg) scale(1); animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
+    2.5% { transform: rotate(45deg) scale(.55); animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
+    6%   { transform: rotate(90deg) scale(1); }
+    100% { transform: rotate(90deg) scale(1); }
+  }
+
+  /* Lines: wipe off in the drawing direction, then draw back on. The reset happens while fully hidden. */
+  @keyframes mds-draw {
+    0%   { stroke-dashoffset: 0; animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
+    2.4% { stroke-dashoffset: -110; animation-timing-function: step-end; }
+    2.5% { stroke-dashoffset: 110; animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
+    6%   { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mds-spark, .mds-frame, .mds-header, .mds-side { animation: none !important; }
+  }
+</style>
+
+<div class="mds-stage" role="img" aria-label="Design spark icon: a page layout with a sparkle">
+  <svg class="mds-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <path class="mds-spark" d="M21.76 19.44
+      L22.86 16.78
+      C22.92 16.63 23.07 16.54 23.23 16.54
+      C23.39 16.54 23.54 16.63 23.6 16.78
+      L24.69 19.44
+      C25.13 20.5 25.96 21.34 27.02 21.77
+      L29.68 22.86
+      C29.83 22.93 29.92 23.07 29.92 23.23
+      C29.92 23.4 29.83 23.54 29.68 23.6
+      L27.02 24.7
+      C25.96 25.13 25.13 25.97 24.69 27.03
+      L23.6 29.68
+      C23.54 29.83 23.39 29.93 23.23 29.93
+      C23.07 29.93 22.92 29.83 22.86 29.68
+      L21.76 27.03
+      C21.33 25.97 20.49 25.13 19.43 24.7
+      L16.78 23.6
+      C16.63 23.54 16.53 23.4 16.53 23.23
+      C16.53 23.07 16.63 22.93 16.78 22.86
+      L19.43 21.77
+      C20.49 21.34 21.33 20.5 21.76 19.44
+      Z"/>
+    <path class="mds-line mds-frame" pathLength="100" d="M12.78 25.64H2.07V2.07H25.64V12.79"/>
+    <path class="mds-line mds-header" pathLength="100" d="M2.07 8.5H25.64"/>
+    <path class="mds-line mds-side" pathLength="100" d="M9.57 8.5V25.64"/>
+  </svg>
+</div>
+
+<script>
+  // Works in Shadow Embed (root, host, onCleanup, listen supplied by the wrapper)
+  // and in a plain page such as Claude's preview (none of those exist).
+  (function () {
+    var scope = typeof root !== "undefined" ? root : document;
+    var anchor = typeof host !== "undefined" ? host : null;
+    var addCleanup = typeof onCleanup === "function" ? onCleanup : function () {};
+    var on = typeof listen === "function" ? listen : function (target, type, handler, opts) {
+      target.addEventListener(type, handler, opts);
+    };
+
+    var stage = scope.querySelector(".mds-stage");
+    if (!stage) { return; }
+
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var visible = false;
+    var started = false;
+
+    // Start from the first part the first time the icon is seen, pause when off screen,
+    // and show the finished icon (no motion) when reduced motion is requested.
+    function sync() {
+      if (reduce.matches) {
+        stage.classList.remove("mds-playing");
+        started = false;
+        return;
+      }
+      if (visible) {
+        if (!started) {
+          started = true;
+          stage.classList.add("mds-playing");
+        }
+        stage.classList.remove("mds-paused");
+      } else {
+        stage.classList.add("mds-paused");
+      }
+    }
+    on(reduce, "change", sync);
+
+    var io = new IntersectionObserver(function (entries) {
+      visible = entries[0].isIntersecting;
+      sync();
+    });
+    io.observe(anchor || stage);
+    addCleanup(function () { io.disconnect(); });
+  })();
+</script>
