@@ -126,48 +126,29 @@ const schema = [
                 );
               }
 
-              if (block.type === "embedGrid") {
+              if (block.type === "visualPair") {
                 return (
-                  <div class="embed-grid">
-                    {block.items.map((item) => (
-                      <figure class="embed-item">
-                        <div class="embed-frame" data-embed={item.src} role="group" aria-label={item.title} />
-                        {item.caption && <figcaption>{item.caption}</figcaption>}
-                      </figure>
-                    ))}
-                  </div>
-                );
-              }
-
-              if (block.type === "compareSet") {
-                return (
-                  <div class="compare-set" data-compare-set>
+                  <div class="compare-block pair-block">
+                    <h3 class="pair-title">{block.title}</h3>
                     <div class="compare-controls">
-                      <div class="segmented" role="group" aria-label="Choose a visual">
-                        {block.sets.map((set, i) => (
-                          <button type="button" class="cs-set" data-set={i} aria-pressed={String(i === 0)}>
-                            {set.label}
-                          </button>
-                        ))}
-                      </div>
-                      <div class="segmented" role="group" aria-label="Show version">
-                        <button type="button" class="cs-side" data-side="before" aria-pressed="true">
+                      <div class="segmented" role="group" aria-label={`Show version of ${block.title}`}>
+                        <button type="button" class="compare-tab" data-tab="before" aria-pressed="false">
                           {block.beforeLabel || "Before"}
                         </button>
-                        <button type="button" class="cs-side" data-side="after" aria-pressed="false">
+                        <button type="button" class="compare-tab" data-tab="after" aria-pressed="true">
                           {block.afterLabel || "After"}
                         </button>
                       </div>
                     </div>
                     <div class="compare-frame is-fixed">
-                      {block.sets.flatMap((set, i) =>
-                        (["before", "after"] as const).map((side) => (
-                          <div class:list={["compare-pane", "cs-pane", `is-${side}`, { "is-active": i === 0 && side === "before" }]} data-set={i} data-side={side}>
-                            <Media src={set[side].src} alt={set[side].alt ?? set.label} class="lightbox-trigger" />
-                          </div>
-                        )),
-                      )}
+                      <div class="compare-pane is-before" data-pane="before">
+                        <Media src={block.before.src} alt={block.before.alt ?? block.title} class="lightbox-trigger" />
+                      </div>
+                      <div class="compare-pane is-after is-active" data-pane="after">
+                        <div class="embed-frame" data-embed={block.embed.src} role="group" aria-label={block.embed.title} />
+                      </div>
                     </div>
+                    {block.hint && <p class="pair-hint">{block.hint}</p>}
                   </div>
                 );
               }
@@ -761,31 +742,27 @@ const schema = [
     }
   }
 
-  .embed-grid {
-    margin: 0 0 var(--space-6);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-3);
+  .pair-block {
+    margin: 0 0 var(--space-7);
   }
 
-  .embed-item {
-    margin: 0;
+  .pair-title {
+    font-size: var(--text-h4);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-snug);
+    line-height: var(--leading-snug);
+    margin: 0 0 var(--space-3);
   }
 
-  .embed-frame {
-    display: block;
-    aspect-ratio: 530 / 522;
-    overflow: hidden;
-    background: #161c26;
-    border: var(--border-width) solid var(--color-border);
+  .pair-hint {
+    margin: var(--space-2) 0 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
   }
 
-  .compare-set {
-    margin: 0 0 var(--space-6);
-  }
-
-  .compare-set .compare-controls {
-    flex-wrap: wrap;
+  .pair-block:has(.compare-tab[data-tab="before"][aria-pressed="true"]) .pair-hint {
+    visibility: hidden;
   }
 
   .compare-frame.is-fixed {
@@ -802,6 +779,7 @@ const schema = [
 
   .compare-frame.is-fixed .compare-pane.is-after {
     background: #161c26;
+    text-align: center;
   }
 
   .compare-frame.is-fixed .compare-pane :global(img) {
@@ -811,17 +789,14 @@ const schema = [
     aspect-ratio: auto;
   }
 
-  .embed-item figcaption {
-    font-family: var(--font-sans);
-    font-size: var(--text-xs);
-    color: var(--color-text-muted);
-    margin-top: var(--space-2);
-  }
-
-  @media (max-width: 640px) {
-    .embed-grid {
-      grid-template-columns: 1fr;
-    }
+  .embed-frame {
+    display: block;
+    height: 100%;
+    width: auto;
+    aspect-ratio: 530 / 522;
+    margin: 0 auto;
+    overflow: hidden;
+    background: #161c26;
   }
 
   .carousel {
@@ -1773,21 +1748,6 @@ const schema = [
     track.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
     update();
-  });
-
-  document.querySelectorAll<HTMLElement>("[data-compare-set]").forEach((root) => {
-    const setTabs = root.querySelectorAll<HTMLButtonElement>(".cs-set");
-    const sideTabs = root.querySelectorAll<HTMLButtonElement>(".cs-side");
-    const panes = root.querySelectorAll<HTMLElement>(".cs-pane");
-    let set = "0";
-    let side = "before";
-    const show = () => {
-      setTabs.forEach((t) => t.setAttribute("aria-pressed", String(t.dataset.set === set)));
-      sideTabs.forEach((t) => t.setAttribute("aria-pressed", String(t.dataset.side === side)));
-      panes.forEach((p) => p.classList.toggle("is-active", p.dataset.set === set && p.dataset.side === side));
-    };
-    setTabs.forEach((t) => t.addEventListener("click", () => { set = t.dataset.set!; show(); }));
-    sideTabs.forEach((t) => t.addEventListener("click", () => { side = t.dataset.side!; show(); }));
   });
 
   document.querySelectorAll<HTMLElement>(".compare-block").forEach((block) => {
