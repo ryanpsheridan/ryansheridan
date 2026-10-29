@@ -127,6 +127,35 @@ const schema = [
                 );
               }
 
+              if (block.type === "visualPair") {
+                return (
+                  <div class="compare-block pair-block">
+                    <h3 class="pair-title">{block.title}</h3>
+                    <div class="compare-controls">
+                      <div class="segmented" role="group" aria-label={`Show version of ${block.title}`}>
+                        <button type="button" class="compare-tab" data-tab="before" aria-pressed="false">
+                          {block.beforeLabel || "Before"}
+                        </button>
+                        <button type="button" class="compare-tab" data-tab="after" aria-pressed="true">
+                          {block.afterLabel || "After"}
+                        </button>
+                      </div>
+                      {block.hint && <p class="pair-hint">{block.hint}</p>}
+                    </div>
+                    <div class="compare-frame is-fixed">
+                      <div class="compare-pane is-before" data-pane="before">
+                        <Media src={block.before.src} alt={block.before.alt ?? block.title} class="lightbox-trigger" />
+                      </div>
+                      <div class="compare-pane is-after is-active" data-pane="after">
+                        <div class="embed-frame" role="group" aria-label={block.embed.title}>
+                          <ShadowEmbed src={block.embed.src} ratio={block.embed.ratio} poster={block.embed.poster} alt={block.embed.title} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
               if (block.type === "carousel") {
                 const perView = block.perView ?? 3;
                 return (
@@ -746,6 +775,68 @@ const schema = [
     .image-grid.is-side-by-side {
       grid-template-columns: 1fr;
     }
+  }
+
+  .pair-block {
+    margin: 0 0 var(--space-7);
+  }
+
+  .pair-title {
+    font-size: var(--text-h4);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-snug);
+    line-height: var(--leading-snug);
+    margin: 0 0 var(--space-3);
+  }
+
+  .pair-block .compare-controls {
+    flex-wrap: wrap;
+  }
+
+  .pair-hint {
+    margin: 0 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    text-align: right;
+  }
+
+  .pair-block:has(.compare-tab[data-tab="before"][aria-pressed="true"]) .pair-hint {
+    visibility: hidden;
+  }
+
+  .compare-frame.is-fixed {
+    max-height: none;
+    aspect-ratio: 16 / 10;
+    background: var(--color-surface);
+  }
+
+  .compare-frame.is-fixed .compare-pane.is-active {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .compare-frame.is-fixed .compare-pane.is-after {
+    background: #161c26;
+    text-align: center;
+  }
+
+  .compare-frame.is-fixed .compare-pane :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    aspect-ratio: auto;
+  }
+
+  .embed-frame {
+    display: block;
+    height: 100%;
+    width: auto;
+    aspect-ratio: 530 / 522;
+    margin: 0 auto;
+    overflow: hidden;
+    background: #161c26;
   }
 
   .carousel {
