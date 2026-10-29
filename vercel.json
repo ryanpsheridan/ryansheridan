@@ -14,6 +14,7 @@
     { "source": "/work/shopping-agent-launch-page", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
     { "source": "/project-shopping-agent-(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
     { "source": "/project-ogc-before-(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
-    { "source": "/project-ohio-golf-club-indoor-thumbnail.webp", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
+    { "source": "/project-ohio-golf-club-indoor-thumbnail.webp", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/embeds/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] }
   ]
 }

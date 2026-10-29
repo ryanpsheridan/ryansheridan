@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import Media from "../../components/Media.astro";
+import ShadowEmbed from "../../components/ShadowEmbed.astro";
 import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
 import ResultIcon from "../../components/ui/ResultIcon.astro";
 import ToolIcon from "../../components/ui/ToolIcon.astro";
@@ -395,6 +396,38 @@ const schema = [
                       </div>
                     </div>
                     {block.caption && <figcaption>{block.caption}</figcaption>}
+                  </figure>
+                );
+              }
+
+              if (block.type === "motionExamples") {
+                return (
+                  <figure class="motion-examples" data-motion-examples>
+                    <div class="segmented" role="group" aria-label="Show example">
+                      {block.items.map((item, i) => (
+                        <button type="button" data-motion-tab={i} aria-pressed={String(i === 0)}>
+                          {item.title}
+                        </button>
+                      ))}
+                    </div>
+                    <div class="motion-stage">
+                      {block.items.map((item, i) => (
+                        <div class:list={["motion-pane", { "is-active": i === 0 }]} data-motion-pane={i}>
+                          <div
+                            class:list={["motion-asset", { "is-tiled": item.tile }]}
+                            style={`--asset-ratio: ${item.ratio}${item.tile ? `; --motion-tile: ${item.tile}` : ""}`}
+                          >
+                            <ShadowEmbed src={item.embed} ratio={item.ratio} poster={item.poster} alt={item.alt} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    {block.items.map((item, i) => (
+                      <figcaption class:list={["motion-caption", { "is-active": i === 0 }]} data-motion-pane={i}>
+                        {item.body}
+                        {item.credit && <small>{item.credit}</small>}
+                      </figcaption>
+                    ))}
                   </figure>
                 );
               }
@@ -1416,12 +1449,6 @@ const schema = [
       transform var(--duration-moderate) var(--pathway-ease);
   }
 
-  .pathway-col {
-    transition:
-      opacity var(--duration-moderate) var(--pathway-ease),
-      transform var(--duration-moderate) var(--pathway-ease);
-  }
-
   .pathway figcaption {
     margin-top: var(--space-3);
     font-size: var(--text-xs);
@@ -1429,7 +1456,7 @@ const schema = [
   }
 
   /* Armed by script before it scrolls into view: start unselected, then
-     play the choice and the reveal in sequence once it's on screen. */
+     make the choice and open the panel in one quick beat, under a second. */
   .pathway.is-armed .pathway-option {
     opacity: 0;
     transform: translateY(var(--space-2));
@@ -1445,8 +1472,7 @@ const schema = [
     transform: scaleY(0);
   }
 
-  .pathway.is-armed .pathway-panel,
-  .pathway.is-armed .pathway-col {
+  .pathway.is-armed .pathway-panel {
     opacity: 0;
     transform: translateY(var(--space-3));
   }
@@ -1464,31 +1490,18 @@ const schema = [
     background: var(--color-accent-bg);
     border-color: var(--color-link);
     box-shadow: 0 0 0 1px var(--color-link);
-    transition-delay: 0s, 0s, 0.9s, 0.9s, 0.9s;
+    transition-delay: 0s, 0s, 0.25s, 0.25s, 0.25s;
   }
 
   .pathway.is-armed.is-revealed .pathway-link {
     transform: none;
-    transition-delay: 1.4s;
+    transition-delay: 0.45s;
   }
 
   .pathway.is-armed.is-revealed .pathway-panel {
     opacity: 1;
     transform: none;
-    transition-delay: 1.7s;
-  }
-
-  .pathway.is-armed.is-revealed .pathway-col {
-    opacity: 1;
-    transform: none;
-  }
-
-  .pathway.is-armed.is-revealed .pathway-col:nth-child(1) {
-    transition-delay: 2s;
-  }
-
-  .pathway.is-armed.is-revealed .pathway-col:nth-child(2) {
-    transition-delay: 2.25s;
+    transition-delay: 0.6s;
   }
 
   @media (max-width: 640px) {
@@ -1505,6 +1518,82 @@ const schema = [
   }
 
   /* ---------- Copy beside a narrow image ---------- */
+
+  /* One example at a time on a quiet stage, switched with a segmented
+     control. Hidden panes never reach the viewport, so each embed loads and
+     plays its entrance the first time its tab is picked. */
+  .motion-examples {
+    margin: 0 0 var(--space-6);
+  }
+
+  .motion-examples .segmented {
+    margin-bottom: var(--space-3);
+  }
+
+  .motion-stage {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+  }
+
+  .motion-pane {
+    position: absolute;
+    inset: 0;
+    display: none;
+    place-items: center;
+    padding: var(--space-5);
+  }
+
+  .motion-pane.is-active {
+    display: grid;
+  }
+
+  .motion-asset {
+    height: 100%;
+    max-width: 100%;
+    aspect-ratio: var(--asset-ratio);
+    display: grid;
+    place-items: center;
+  }
+
+  .motion-asset.is-tiled {
+    height: 45%;
+    aspect-ratio: 1;
+    background: var(--motion-tile);
+  }
+
+  .motion-asset.is-tiled > :global(*) {
+    width: 32%;
+  }
+
+  .motion-caption {
+    display: none;
+    margin-top: var(--space-3);
+    max-width: var(--content-width);
+    font-size: var(--text-s);
+    color: var(--color-text-muted);
+  }
+
+  .motion-caption.is-active {
+    display: block;
+  }
+
+  .motion-caption small {
+    display: block;
+    margin-top: var(--space-1);
+    font-size: var(--text-xs);
+  }
+
+  @media (max-width: 640px) {
+    .motion-stage {
+      aspect-ratio: 1 / 1.1;
+    }
+
+    .motion-pane {
+      padding: var(--space-3);
+    }
+  }
 
   .split {
     display: grid;
@@ -1755,6 +1844,18 @@ const schema = [
     update();
   });
 
+  document.querySelectorAll<HTMLElement>("[data-motion-examples]").forEach((block) => {
+    const tabs = block.querySelectorAll<HTMLButtonElement>("[data-motion-tab]");
+    const panes = block.querySelectorAll<HTMLElement>("[data-motion-pane]");
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((t) => t.setAttribute("aria-pressed", String(t === tab)));
+        panes.forEach((p) => p.classList.toggle("is-active", p.dataset.motionPane === tab.dataset.motionTab));
+      });
+    });
+  });
+
   document.querySelectorAll<HTMLElement>(".compare-block").forEach((block) => {
     const tabs = block.querySelectorAll<HTMLButtonElement>(".compare-tab");
     const panes = block.querySelectorAll<HTMLElement>(".compare-pane");
@@ -1839,7 +1940,7 @@ const schema = [
           io.unobserve(entry.target);
         }
       },
-      { threshold: 0.35 },
+      { threshold: 0.2 },
     );
     for (const el of pathways) {
       el.classList.add("is-armed");

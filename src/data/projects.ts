@@ -252,6 +252,28 @@ export interface FlowBlock {
   caption?: string;
 }
 
+export interface MotionExample {
+  /** A Shadow Embed asset under public/embeds/, run live on the page. */
+  embed: string;
+  /** The asset's --embed-aspect-ratio, such as "364 / 420". */
+  ratio: string;
+  /** Still of the asset's resting state, shown until it loads. */
+  poster: string;
+  alt: string;
+  /** Tab label. */
+  title: string;
+  body: string;
+  /** Who made which part, when it isn't all mine. */
+  credit?: string;
+  /** Shows the asset small on a tile of this color, the way an icon sits on a page. */
+  tile?: string;
+}
+
+export interface MotionExamplesBlock {
+  type: "motionExamples";
+  items: MotionExample[];
+}
+
 export type ContentBlock =
   | TextBlock
   | ImageGridBlock
@@ -265,6 +287,7 @@ export type ContentBlock =
   | SplitBlock
   | ProcessBlock
   | PathwayBlock
+  | MotionExamplesBlock
   | TimelineBlock
   | BarChartBlock;
 
@@ -289,6 +312,12 @@ export interface Project {
    * to publish it.
    */
   draft?: boolean;
+  /**
+   * Retired from the site but kept here in case it comes back. Unlike a
+   * draft, no page is built at all, so the old /work/<slug> URL 404s. Delete
+   * the flag to bring it back.
+   */
+  archived?: boolean;
   showOnHomepage: boolean;
   /**
    * 1-based slot on the homepage, for a project that should sit somewhere
@@ -519,11 +548,12 @@ const allProjects: Project[] = [
     slug: "making-web-animation-self-serve",
     title: "Making Web Animation Self-Serve",
     year: 2026,
-    description: "A Makeswift component and Claude skill, built in our codebase with Claude Code, to let designers ship animation to live pages without a dev ticket.",
-    ogImage: "/project-claude-embed-cover.png",
-    thumbnail: "/project-claude-embed-thumbnail-animated.svg",
-    showOnHomepage: false,
-    homepageWord: "automations",
+    description: "A Makeswift component, a Claude skill, and motion guidelines that let designers and non-designers ship good animation to live pages without a dev ticket.",
+    ogImage: "/project-shadow-embed-cover.png",
+    thumbnail: "/project-shadow-embed-thumbnail-animated.svg",
+    showOnHomepage: true,
+    homepagePosition: 2,
+    homepageWord: "motion",
     tags: ["Component Design", "Claude Skill", "Automation"],
     tools: ["Claude Code", "Claude", "Makeswift", "GSAP"],
     client: "BigCommerce",
@@ -534,32 +564,9 @@ const allProjects: Project[] = [
         body: `<p>Our designers could quickly create animations with Claude, but publishing them was slow. They either needed developer reviews or custom components, which was too much overhead for one-off assets. I wanted to eliminate these delays while keeping our site safe from bugs and layout issues.</p>`,
       },
       {
-        type: "process",
-        rows: [
-          {
-            label: "Outsourced",
-            note: "Freelancer or video producer",
-            steps: [
-              { label: "An animator builds it" },
-              { label: "WebP or MP4 files handed off to design", slow: true },
-              { label: "Uploaded to the site" },
-            ],
-          },
-          {
-            label: "In-house",
-            note: "Built in Claude",
-            steps: [
-              { label: "A designer builds directly in Claude" },
-              { label: "Ticket and developer code review", slow: true },
-              { label: "Published to the site" },
-            ],
-          },
-        ],
-      },
-      {
         type: "text",
         heading: "It started with one code review",
-        body: `<p>Our team designed a marquee of component pills in Figma for the <a href="https://www.bigcommerce.com/product/store-design/" target="_blank" rel="noopener noreferrer">Store Design page</a>. I animated it with Claude Code, then opened a Jira ticket for the engineering team to review the code. That's the in-house path in the diagram above.</p>`,
+        body: `<p>Our team designed a marquee of component pills for the <a href="https://www.bigcommerce.com/product/store-design/" target="_blank" rel="noopener noreferrer">Store Design page</a>. I animated it with Claude Code and opened a ticket for engineering to review the code. The review found four problems: the embed's colors could leak into the rest of the site, it could run twice and stack its animations, it loaded its animation library from an outside site, and screen readers read it twice. I turned those four issues into the first rules of a Claude skill.</p>`,
       },
       {
         type: "imageGrid",
@@ -574,12 +581,8 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        body: `<p>The review found four problems: the embed's colors could leak into the rest of the site, it could run twice and stack its animations, it loaded its animation library from an outside site, and screen readers read it twice. Engineering sent back feedback and updated code, and I turned the four issues into the first rules of a Claude skill.</p>`,
-      },
-      {
-        type: "text",
         heading: "Asset or component was the first question",
-        body: `<p>Before building anything, I asked whether each piece is an asset or a component. An asset, like an animation, is fixed content that looks and works the same wherever it appears. A component is something editors change or reuse, like a carousel with different slides on every page, and it gets built and registered in the codebase. Assets had no safe way onto the page, so that's the gap this project closes.</p>`,
+        body: `<p>An asset, like an animation, is fixed content that looks and works the same wherever it appears. A component is something editors change or reuse, like a carousel, and it gets built and registered in the codebase. Assets had no safe way onto the page, so I built two pieces for them: a component that protects the page and a skill that protects the brand.</p>`,
       },
       {
         type: "pathway",
@@ -588,7 +591,7 @@ const allProjects: Project[] = [
         other: { title: "Component", note: "Reusable and editable, like a carousel" },
         columns: [
           {
-            title: "Claude Embed component",
+            title: "Shadow Embed component",
             note: "Built once, reviewed once",
             steps: [
               { label: "Walls off the code", note: "Nothing leaks into the page" },
@@ -599,7 +602,7 @@ const allProjects: Project[] = [
             resultIcon: "shield",
           },
           {
-            title: "Embed Asset skill",
+            title: "Shadow Embed Builder skill",
             note: "Runs on every asset",
             accent: true,
             steps: [
@@ -614,77 +617,31 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        heading: "A walled-off component and a skill protect the page and the brand",
-        body: `<p>I built this directly in our codebase with Claude Code, for all three of our brand sites. The Claude Embed component runs pasted code inside a Shadow DOM, which isolates the animation so its styles and scripts can't interfere with the rest of the website. The Embed Asset skill checks and fixes a designer's code before it goes in.</p>`,
-      },
-      {
-        type: "text",
-        eyebrow: { label: "Claude Embed component", icon: "shield" },
+        eyebrow: { label: "Shadow Embed component", icon: "shield" },
         heading: "The component handles the risky parts of an embed",
-        body: `<p>Claude Embed is a new Makeswift component, and it's the piece editors place on a page. A designer's code goes into its Embed code field, and the component takes care of the things the default embed leaves to the code itself. Here's how the two compare:</p>`,
-      },
-      {
-        type: "versus",
-        beforeTitle: "Default embed",
-        afterTitle: "Claude Embed",
-        rows: [
-          { label: "Where code runs", before: "Straight into the page", after: "Walled off from the page" },
-          { label: "Page layout", before: "Jumps when it loads", after: "Space saved up front" },
-          { label: "Cleanup", before: "None", after: "Everything removed when it leaves" },
-          { label: "Placeholder image", before: "None", after: "A still that shows while it loads, which search engines read" },
-        ],
-      },
-      {
-        type: "split",
-        heading: "The editor panel UI groups controls by task",
-        body: `<p>Editors set up Claude Embed from its settings panel in Makeswift, so I designed the panel around what they reach for. Embed code sits first, and every other setting folds into a group named for its task, which keeps rarely used settings out of the way:</p><ul><li><strong>Placeholder image:</strong> the still that shows first, which search engines read</li><li><strong>Size &amp; layout:</strong> spacing and aspect ratio</li><li><strong>Loading &amp; mobile:</strong> run when visible, or skip on mobile</li><li><strong>Appearance:</strong> border, background and corner radius</li><li><strong>Accessibility:</strong> a label, or a Decorative only switch</li><li><strong>Debugging:</strong> show errors</li></ul>`,
-        image: {
-          src: "/project-claude-embed-panel.webp",
-          alt: "Makeswift properties panel for Claude Embed: an Embed code text area and a Width field, then collapsed groups for Placeholder image, Size and layout, Loading and mobile, Appearance, Accessibility and Debugging",
-          caption: "The panel in Makeswift",
-        },
+        body: `<p>I built Shadow Embed directly in our codebase with Claude Code, for all three of our brand sites. It's a Makeswift component that runs a designer's code inside a Shadow DOM, so the animation's styles and scripts can't reach the rest of the page. It saves the asset's space before it loads so nothing jumps, removes everything when it leaves, and shows a placeholder still that search engines can read. In the editor, embed code comes first and every other setting folds into a group named for its task.</p>`,
       },
       {
         type: "text",
-        eyebrow: { label: "Embed Asset skill", icon: "swatch" },
+        eyebrow: { label: "Shadow Embed Builder skill", icon: "swatch" },
         heading: "The skill fixes the code and lists every change",
-        body: `<p>Designers can build a new animation with the skill from the start, or hand it an existing one to clean up. It first checks whether the piece is an asset or a component, and for a component it writes a spec instead of forcing it into an embed.</p><p>For an asset, it snaps off-brand colors to tokens, darkens low-contrast text, and lists every change. If a designer says "keep the green," it stays, marked as approved.</p>`,
+        body: `<p>Designers can build a new animation with the skill from the start, or hand it an existing one to clean up. For a component, it writes a spec instead of forcing it into an embed. For an asset, it snaps off-brand colors to tokens, darkens low-contrast text, and lists every change. If a designer says "keep the green," it stays, marked as approved.</p>`,
       },
       {
         type: "imageGrid",
         framed: true,
         images: [
           {
-            src: "/project-claude-embed-changelog.webp",
-            alt: "A Claude chat: an uploaded shopping-agent-control-original.html file and the /embed-asset command, followed by a report grouped into Brand, Motion, Accessibility, and Needs dev or design review, ending with the finished embed file",
-            caption: "Example: a cleanup run in Claude, shortened",
+            src: "/project-shadow-embed-changelog.webp",
+            alt: "A Claude chat: an uploaded shopping-agent-control-original.html file and the /shadow-embed-builder command, followed by a report grouped into Brand, Motion, Accessibility, and Needs dev or design review, ending with the finished embed file",
+            caption: "A cleanup run in Claude, shortened",
           },
         ],
-      },
-      {
-        type: "text",
-        body: `<p>On the Shopping Agent animation, the cleaned-up version looks nearly identical to the original. The one visible change is darker gray text, which is the contrast fix.</p>`,
-      },
-      {
-        type: "imageGrid",
-        framed: true,
-        images: [
-          {
-            src: "/project-claude-embed-before-after.webp",
-            alt: "Two copies of the Shopping Agent animation side by side in the Makeswift builder, labeled Pre-skill and Post-skill, both showing a Knowledge Document upload in progress",
-            caption: "Before and after the skill. The one visible change is darker gray text that now passes contrast.",
-          },
-        ],
-      },
-      {
-        type: "text",
-        heading: "Testing it with the team",
-        body: `<ul><li><strong>Senior engineering manager.</strong> Their code review ticket on the marquee set the first four rules. I ran the skill by them, and they settled ownership, so this skill replaces our old embed skill.</li><li><strong>SEO specialist.</strong> Added search rules, like no headings or content links inside an asset, caught a conflict with the accessibility rules, and moved the search checks higher.</li><li><strong>Web strategy manager.</strong> Testing the component and skill with their own animations.</li><li><strong>Designer.</strong> Tested their own animations with the component and skill as I worked through several versions of both.</li></ul><p>Their input shaped the skill's rules, and each team knows how the new process works.</p>`,
       },
       {
         type: "text",
         heading: "Built to go live without a ticket",
-        body: `<p>Designers paste the cleaned-up code into the component, and the asset runs. I turned one engineer's review into rules the skill applies on its own, then built the riskiest ones into the component so they can't happen at all. Review is meant to happen once, for the system, instead of for every embed. The component and skill are built and in testing, and the first animations are next.</p>`,
+        body: `<p>Designers paste the cleaned-up code into the component, and the asset runs. Review happens once, for the system, instead of for every embed.</p>`,
       },
       {
         type: "process",
@@ -709,31 +666,62 @@ const allProjects: Project[] = [
           },
           {
             label: "Self-serve",
-            note: "With Claude Embed",
+            note: "With Shadow Embed",
             accent: true,
             steps: [
               { label: "A designer builds it with the skill" },
-              { label: "Pasted into Claude Embed" },
+              { label: "Pasted into Shadow Embed" },
               { label: "Live on the site", success: true },
             ],
           },
         ],
       },
       {
-        type: "imageGrid",
-        framed: true,
-        images: [
+        type: "text",
+        heading: "The last piece was guidance on the motion",
+        body: `<p>With anyone able to ship an animation, the system needed one more thing: help choosing what that animation should do. Teammates outside design were building blog animations that ran long and asked readers to follow too much at once. So I wrote motion guidelines: a short internal page that sorts animation by what it's for, gives each kind a length and a trigger, and hands over a prompt to start from in Claude.</p><p>Here are three of the kinds, built with the skill and running live inside a shadow root, the same way the component runs them.</p>`,
+      },
+      {
+        type: "motionExamples",
+        items: [
           {
-            src: "/project-claude-embed-paste-animated.svg",
-            alt: "The Makeswift builder with an empty Claude Embed block selected. Code is pasted into the Embed code field, and the Shopping Agent animation appears in the block and plays from the start.",
-            caption: "Pasting the cleaned-up code into Claude Embed in Makeswift",
+            embed: "/embeds/color-picker.html",
+            ratio: "530 / 522",
+            poster: "/project-shadow-embed-color-picker-poster.webp",
+            alt: "A Colors settings panel with a color picker open beside it",
+            title: "Waits for you",
+            body: "Nothing moves until you do. Point at it or drag across it, and the handle follows.",
+          },
+          {
+            embed: "/embeds/language-switcher.html",
+            ratio: "364 / 420",
+            poster: "/project-shadow-embed-language-switcher-poster.webp",
+            alt: "A storefront product card for a leather armchair, with a language switcher above it set to English",
+            title: "Plays once",
+            body: "A short demo plays once as it comes into view, then hands over. Pick a language to take it from there.",
+            credit: "I edited and animated this illustration; I didn't draw it.",
+          },
+          {
+            embed: "/embeds/layout-spark-icon.html",
+            ratio: "1 / 1",
+            poster: "/project-shadow-embed-layout-spark-icon-poster.webp",
+            alt: "A page layout icon with a sparkle",
+            title: "Idles",
+            body: "One part moves at a time, then a long rest, at a size that never competes with the page.",
+            credit: "I animated this icon; I didn't draw it.",
+            tile: "#fffcbd",
           },
         ],
       },
       {
         type: "text",
-        heading: "The project in short",
-        body: `<ul><li><strong>Users and context.</strong> Designers who build animations in Claude, and editors who place them on pages in Makeswift.</li><li><strong>Process.</strong> I turned one engineer's code review into rules, then into a component and a Claude skill.</li><li><strong>Collaboration.</strong> I ran the skill by our senior engineering manager and an SEO specialist, and a web strategy manager and another designer are testing it with their own animations.</li><li><strong>Technical.</strong> A Shadow DOM component I built in our codebase with Claude Code, for all three brand sites.</li></ul>`,
+        heading: "One question picks the motion",
+        body: `<p>The guidelines end with a picker. Instead of learning the types first, a person chooses what their image is trying to do, like explain a process or show what a visitor can do, and it points them to the motion that fits. It's the same idea as asking asset or component: start with the goal, and the rules follow.</p>`,
+      },
+      {
+        type: "text",
+        heading: "Shaped by the team, used by the team",
+        body: `<p>Our senior engineering manager's review set the skill's first rules, and they made it the replacement for our old embed skill. An SEO specialist added the search rules and caught a conflict with the accessibility ones. Now teammates outside design use the guidelines to cut their blog animations down to one clear idea at a time.</p>`,
       },
     ],
   },
@@ -1247,8 +1235,7 @@ const allProjects: Project[] = [
     description: "A Claude Design system that replaces hand-built InDesign case study PDFs, saving design and marketing time on every copy change and layout update.",
     ogImage: "/project-claude-design-pdf1.jpg",
     thumbnail: "/claude-design-pdf-mizuno-typing-animated.svg",
-    showOnHomepage: true,
-    homepagePosition: 3,
+    showOnHomepage: false,
     homepageWord: "automations",
     tags: ["Design System", "Automation"],
     tools: ["Claude Design", "Figma", "html.to.design"],
@@ -1739,6 +1726,7 @@ const allProjects: Project[] = [
     description: "A quarterly report designed in InDesign that shows a design team's output: productivity data, process improvements, campaign highlights, and illustration.",
     ogImage: "/project-quarter-in-design1.jpg",
     thumbnail: "/project-quarter-in-design1.webp",
+    archived: true,
     showOnHomepage: false,
     tags: ["Visual Design"],
     tools: ["InDesign"],
@@ -1778,12 +1766,12 @@ export function getHomepageProjects(): Project[] {
   return list;
 }
 
-/** Everything listed on the site. Drafts are excluded; see `Project.draft`. */
-export const projects: Project[] = allProjects.filter((p) => !p.draft);
+/** Every project that gets a page, drafts included. Archived ones are excluded; see `Project.archived`. */
+export const projectsWithDrafts: Project[] = allProjects.filter((p) => !p.archived);
 
-/** Every project that gets a page, drafts included. */
-export const projectsWithDrafts: Project[] = allProjects;
+/** Everything listed on the site. Drafts are excluded; see `Project.draft`. */
+export const projects: Project[] = projectsWithDrafts.filter((p) => !p.draft);
 
 export function getProjectBySlug(slug: string): Project | undefined {
-  return allProjects.find((p) => p.slug === slug);
+  return projectsWithDrafts.find((p) => p.slug === slug);
 }

@@ -23,8 +23,10 @@ Consult these guides before working on related tasks:
 
 ## Animated assets
 
-Every animated asset in `public/` must loop forever. This is the default for
-all current and future animated SVGs, with no exceptions. Verify with:
+Animated image files in `public/` (SVGs and GIFs used as thumbnails, featured
+images, and case study images) must loop forever. They play as plain images,
+so a visitor can't restart or interact with them, and a loop that stops leaves
+a frozen frame. Verify with:
 
 ```
 npm run check:animations
@@ -45,6 +47,19 @@ When removing an animation from an existing SVG, freeze the element at a frame
 the animation actually held rather than letting it fall back to its base
 attribute value, which is often a degenerate state such as an empty progress
 bar. Delete the orphaned `@keyframes` in the same pass.
+
+### Live embeds
+
+Interactive assets in `public/embeds/` are the exception. They are Shadow
+Embed assets (the Makeswift component from the "Making Web Animation
+Self-Serve" case study) and run live through `src/components/ShadowEmbed.astro`,
+which supplies the same `root`, `host`, `gsap`, `ScrollTrigger`, `onCleanup`
+and `listen` contract as the real component. They don't have to loop: one may
+play once and rest, or wait for the visitor, because that behavior is what the
+case study shows. They still need a reduced-motion state, must pause off
+screen, and each needs a poster still of its resting state for the moment
+before it loads. `/embeds/` is served with `X-Robots-Tag: noindex` (see
+`vercel.json`).
 
 ## Search indexing
 
