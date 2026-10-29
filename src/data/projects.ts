@@ -68,6 +68,24 @@ export interface ComponentTableBlock {
   groups: ComponentTableGroup[];
 }
 
+export interface EmbedItem {
+  /** Public path to a self-contained HTML page, shown in a sandboxed iframe. */
+  src: string;
+  /** Accessible name for the frame. */
+  title: string;
+  /** Tells the viewer how to try it, e.g. "Drag a card to reorder". */
+  caption?: string;
+}
+
+/**
+ * Live, interactive pieces in a two-column grid. Each loads lazily in a
+ * sandboxed iframe, so nothing runs until it nears the viewport.
+ */
+export interface EmbedGridBlock {
+  type: "embedGrid";
+  items: EmbedItem[];
+}
+
 export interface DividerBlock {
   type: "divider";
 }
@@ -220,6 +238,7 @@ export type ContentBlock =
   | TextBlock
   | ImageGridBlock
   | CarouselBlock
+  | EmbedGridBlock
   | CompareBlock
   | ComponentTableBlock
   | DividerBlock
@@ -428,32 +447,38 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Making a new AI feature easy to picture",
-        body: `<p>Shopping Agent is a new <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> feature that answers shoppers' questions on a merchant's storefront and helps them find the right product. Product gave us the idea, a few screen recordings, and screenshots of the control panel before it shipped. My job was to turn that into a landing page people would understand at a glance.</p><p>I started from the copywriter's first draft, read the project brief, and ran a kickoff to agree on what the feature does, how it helps merchants, and how to make that clear on the page. Then I designed the page and every image on it.</p>`,
+        body: `<p>Shopping Agent is a new <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> feature that answers shoppers' questions on a merchant's storefront and helps them find the right product. Product gave us the idea, a few screen recordings, and screenshots of the prototype before it shipped. My job was to turn that into a landing page people would understand at a glance.</p><p>I started from the copywriter's first draft, read the project brief, and ran a kickoff to agree on what the feature does, how it helps merchants, and how to make that clear on the page. Then I designed the page and every image on it.</p>`,
       },
       {
-        type: "imageGrid",
-        sideBySide: true,
-        images: [
-          { src: "/project-shopping-agent-product-picks.svg", alt: "A shopper asks for sunglasses for the beach, and the agent replies with a row of product cards, each with an Add to cart button" },
-          { src: "/project-shopping-agent-order-status.svg", alt: "A shopper asks where their sunglasses order is, and the agent answers with a tracker showing the order has shipped" },
-          { src: "/project-shopping-agent-brand-colors.svg", alt: "A color picker panel for setting the agent's brand colors" },
-          { src: "/project-shopping-agent-sentiment.svg", alt: "A dashboard panel showing positive, neutral and negative shopper sentiment as bars" },
+        type: "embedGrid",
+        items: [
+          { src: "/project-shopping-agent-embed-picks.html", title: "Interactive product picks: three sunglasses cards in a chat that can be reordered", caption: "Drag a card to reorder" },
+          { src: "/project-shopping-agent-embed-order.html", title: "Interactive order tracker: an order card that steps from Order Placed to Delivered", caption: "Move across the card to step through the order" },
+          { src: "/project-shopping-agent-embed-colors.html", title: "Interactive color picker in the agent's Colors settings", caption: "Move over the picker to try colors" },
+          { src: "/project-shopping-agent-embed-sentiment.html", title: "Interactive sentiment dashboard with Positive, Neutral and Negative rows", caption: "Hover a row to switch sentiment" },
         ],
       },
       {
         type: "text",
         heading: "Showing the idea, not the screen",
-        body: `<p>The real control panel does its job, but it is dense and built for working, not for explaining. Each section of the page makes one point, so each visual keeps only what supports it: the sentiment panel drops the surrounding charts, and the order tracker shows a single order. Everything on the storefront side traces back to the product recordings.</p>`,
+        body: `<p>The prototype did its job, but it was dense and built for working, not for explaining. Each section of the page makes one point, so each visual keeps only what supports it: the sentiment panel drops the surrounding charts, and the order tracker shows a single order. Everything on the storefront side traces back to the product recordings. Here is each one next to the frame it came from.</p>`,
       },
       {
-        type: "compare",
-        before: { src: "/project-shopping-agent-sentiment-original.webp", alt: "The user sentiment card from the Shopping Agent control panel, with percentage badges and a cursor over the positive row", label: "In the product" },
-        after: { src: "/project-shopping-agent-sentiment.svg", alt: "The same sentiment idea redrawn as a clean dashboard panel on a dark gradient", label: "On the page" },
+        type: "carousel",
+        perView: 1,
+        ratio: "1800 / 660",
+        contain: true,
+        images: [
+          { src: "/project-shopping-agent-compare-picks.webp", alt: "Left: the prototype storefront with a chat of movie poster recommendations. Right: the redrawn product picks visual with three sunglasses cards", caption: "Product picks: from the storefront recording to the page visual" },
+          { src: "/project-shopping-agent-compare-order.webp", alt: "Left: the prototype chat listing past orders with shipping progress. Right: the redrawn order tracker visual showing a single shipped order", caption: "Order status: from a long order list to one clear step tracker" },
+          { src: "/project-shopping-agent-compare-colors.webp", alt: "Left: two frames of the prototype Colors settings, before and after clicking a color swatch. Right: the redrawn color picker visual", caption: "Brand colors: from two frames of the walkthrough to one picker" },
+          { src: "/project-shopping-agent-compare-sentiment.webp", alt: "Left: the user sentiment card from the prototype dashboard. Right: the same idea redrawn as a clean dashboard panel", caption: "Sentiment: from a crowded dashboard to a single panel" },
+        ],
       },
       {
         type: "text",
         heading: "Drafting the images with a Claude skill",
-        body: `<p>Shopping Agent needed a family of images that looked like they belonged together and matched the rest of our site. I pointed a Claude skill at images already on bigcommerce.com so it could build new ones in Figma in the same style. I then tightened each draft by hand and art directed the rest by voice, so the time went into choices rather than pushing pixels.</p>`,
+        body: `<p>Shopping Agent needed a family of images that looked like they belonged together and matched the rest of our site. I pointed a Claude skill at images already on bigcommerce.com so it could build new ones in Figma in the same style. I then tightened each draft by hand and art directed the rest by voice, so the time went into choices rather than pushing pixels. The four visuals above are the interactive versions, animated with Claude.</p>`,
       },
     ],
   },
