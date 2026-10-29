@@ -580,6 +580,14 @@ const allProjects: Project[] = [
         type: "motionExamples",
         items: [
           {
+            embed: "/embeds/color-picker.html",
+            ratio: "530 / 522",
+            poster: "/project-shadow-embed-color-picker-poster.webp",
+            alt: "A Colors settings panel with a color picker open beside it",
+            title: "Waits for you",
+            body: "Nothing moves until you do. Point at it or drag across it, and the handle follows.",
+          },
+          {
             embed: "/embeds/language-switcher.html",
             ratio: "364 / 420",
             poster: "/project-shadow-embed-language-switcher-poster.webp",
@@ -587,14 +595,6 @@ const allProjects: Project[] = [
             title: "Plays once",
             body: "A short demo plays once as it comes into view, then hands over. Pick a language to take it from there.",
             credit: "I edited and animated this illustration; I didn't draw it.",
-          },
-          {
-            embed: "/embeds/color-picker.html",
-            ratio: "530 / 522",
-            poster: "/project-shadow-embed-color-picker-poster.webp",
-            alt: "A Colors settings panel with a color picker open beside it",
-            title: "Waits for you",
-            body: "Nothing moves until you do. Point at it or drag across it, and the handle follows.",
           },
           {
             embed: "/embeds/layout-spark-icon.html",
