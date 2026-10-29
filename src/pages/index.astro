@@ -6,14 +6,9 @@ import IntroLoader from "../components/IntroLoader.astro";
 import { getHomepageProjects } from "../data/projects";
 import { typeHref } from "../data/work";
 import Media from "../components/Media.astro";
-import Button from "../components/ui/Button.astro";
 
 const projects = getHomepageProjects();
-const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
 ---
-
-{/* The headline's last word follows the project beside it (each
-    project's homepageWord); below 769px it is the original line in full. */}
 
 <Layout title="Ryan Sheridan — Designing systems, sites and brands." description="Portfolio of Ryan Sheridan, Principal Designer specializing in design systems, marketing sites, and brand infrastructure.">
   {/* First in the document on purpose: the intro's blocking inline script
@@ -21,49 +16,27 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
       flashes for a frame before the scrim covers it. */}
   <IntroLoader />
   <Nav />
-  <main id="main" class="split-layout" data-blueprint-scope>
+  <main id="main" class="split-layout">
     <div class="split-inner">
       <div class="left-panel">
-        <div class="headline-block" data-blueprint-scope>
-          {/* Two versions of the one headline, shown by width. Desktop gets
-              the rotating line, read out once as the whole list since the
-              visible word keeps changing. Below 769px, where the headline
-              no longer sits beside the work, the original line in full. */}
-          <h1 class="sticky-title creating-title" data-spec="type" data-spec-name="Display">
-            <span class="headline-rotating">
-              <span class="visually-hidden">Designing and scaling {[...new Set(words)].join(", ")}.</span>
-              <span class="creating-lead" aria-hidden="true">Designing and</span><br />
-              <span class="creating-lead" aria-hidden="true">scaling</span>{" "}
-              <span class="word-slot" aria-hidden="true" data-word-slot data-words={JSON.stringify(words)}><span class="word">{words[0]}.</span></span>
-            </span>
-            <span class="headline-full">
-              Designing <span class="accent">systems</span>,<br />
-              <span class="accent">sites</span> and <span class="accent">brands</span>.
-            </span>
+        <div class="headline-block">
+          <h1 class="sticky-title">
+            <span class="reveal-wrap" data-load-reveal><span class="reveal-inner">Designing <span class="accent">systems</span></span></span><span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner">,</span></span><br />
+            <span class="reveal-wrap" data-reveal-index="1"><span class="reveal-inner"><span class="accent">sites</span></span></span><span class="reveal-wrap" data-reveal-index="2"><span class="reveal-inner">{" and "}<span class="accent">brands</span>.</span></span>
           </h1>
-          {/* The way into the blueprint: the page drawing its own specs over
-              itself. The shortcut in the sentence is a real toggle too, for
-              anyone reading with a mouse or a finger; the drawing it adds is hidden from
-              assistive tech, since it describes the page rather than adding
-              to it. */}
-          <p class="intro" data-spec="type" data-spec-name="Body">
-            <span class="intro-hint"><button type="button" class="kbd-toggle" aria-pressed="false" aria-label="Show the specs (shortcut Cmd + I)" aria-keyshortcuts="Meta+I Control+I" data-blueprint-toggle><span data-shortcut-mod>Cmd</span> + I</button> to peek under the&nbsp;hood.</span>
-          </p>
-          <div class="cta-row">
-            <Button href="/work">View all work</Button>
-          </div>
-          <div class="blueprint-tags" aria-hidden="true"></div>
+          <p class="tagline"><span class="reveal-wrap" data-reveal-index="3"><span class="reveal-inner">Based out of Austin, Texas</span></span></p>
+          <a href="/work" class="view-all-link" data-reveal-index={projects.length - 1}>View all work</a>
         </div>
       </div>
       <div class="right-panel">
         {projects.map((project, i) => {
           const row = (
             <div class={`project-row${i === 0 ? " entrance-hidden" : ""}`} data-index={i}>
-              <div class="cell-image" data-spec="box">
+              <div class="cell-image">
                 {project.thumbnail && <Media src={project.thumbnail} alt={project.title} />}
               </div>
               <div class="cell-info">
-                <h2 class="project-title" data-spec={i === 0 ? "type" : undefined} data-spec-name="Title" data-spec-align="end">
+                <h2 class="project-title">
                   <a href={`/work/${project.slug}`} class="project-link">{project.title}</a>
                 </h2>
                 <div class="badge-list project-tags">
@@ -77,65 +50,84 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
         <div class="scroll-spacer"></div>
       </div>
     </div>
-
-    {/* The blueprint's own layers: the panel columns, fixed to the screen so
-        they run the full height as the page scrolls, and the tags for the
-        work column, which scroll with it. */}
-    <div class="blueprint-columns" aria-hidden="true" data-blueprint-columns></div>
-    <div class="blueprint-tags" aria-hidden="true"></div>
-
-    {/* The toggle lives at the end of the work, so while the specs are up
-        this is the way out wherever you are on the page. */}
-    <div class="blueprint-bar" data-blueprint-bar>
-      <span class="blueprint-bar-label">Specs on</span>
-      <button type="button" class="blueprint-bar-hide" data-blueprint-off>Hide</button>
-      <span class="blueprint-bar-keys"><kbd><span data-shortcut-mod>Cmd</span> + I</kbd> or <kbd>Esc</kbd></span>
-    </div>
   </main>
+
+  {/* Outside main so it can hold the left margin for the whole page rather
+      than the headline panel. Decorative: the work is reachable by scrolling
+      whether or not anyone sees this, so it is hidden from assistive tech
+      rather than announced as something to act on. */}
+  <div class="scroll-rail" data-scroll-rail aria-hidden="true">
+    <span class="scroll-rail-label">Scroll</span>
+    <span class="scroll-rail-track"><span class="scroll-rail-fill"></span></span>
+  </div>
 
   <Footer />
 </Layout>
 
 <script>
+  function splitIntoChars(root: HTMLElement) {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const textNodes: Text[] = [];
+    let node: Node | null;
+    while ((node = walker.nextNode())) textNodes.push(node as Text);
+
+    let i = 0;
+    textNodes.forEach((textNode) => {
+      const frag = document.createDocumentFragment();
+      for (const ch of textNode.textContent ?? "") {
+        if (ch === " ") {
+          frag.appendChild(document.createTextNode(" "));
+          continue;
+        }
+        const span = document.createElement("span");
+        span.className = "char";
+        span.textContent = ch;
+        span.style.transitionDelay = `${150 + i * 26}ms`;
+        frag.appendChild(span);
+        i++;
+      }
+      textNode.parentNode?.replaceChild(frag, textNode);
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>(".reveal-inner").forEach((el) => splitIntoChars(el));
+
+  const revealTargets = document.querySelectorAll<HTMLElement>("[data-reveal-index]");
   const rows = document.querySelectorAll<HTMLElement>(".project-row");
+
+  let revealed = -1;
+
+  function revealUpTo(index: number) {
+    if (index <= revealed) return;
+    revealed = index;
+
+    revealTargets.forEach((el) => {
+      const revealIndex = Number(el.dataset.revealIndex);
+      if (revealIndex > index) return;
+      el.classList.add("visible");
+    });
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          revealUpTo(Number((entry.target as HTMLElement).dataset.index));
+        }
+      });
+    },
+    { rootMargin: "-45% 0px -45% 0px" }
+  );
+
+  rows.forEach((row) => observer.observe(row));
+
   const firstProject = document.querySelector<HTMLElement>('.project-row[data-index="0"]');
+  const introWrap = document.querySelector<HTMLElement>(".reveal-wrap[data-load-reveal]");
 
-  requestAnimationFrame(() => firstProject?.classList.add("visible"));
-
-  // Line the first project's image up with the headline block. Centering the
-  // whole row would count its caption too and leave the image sitting high,
-  // so measure both and shift the frame by the difference.
-  const firstFrame = document.querySelector<HTMLElement>(".first-project-frame");
-  const firstImage = firstFrame?.querySelector<HTMLElement>(".cell-image");
-  const headline = document.querySelector<HTMLElement>(".headline-block");
-  const splitView = window.matchMedia("(min-width: 769px)");
-
-  function alignFirstProject() {
-    if (!firstFrame || !firstImage || !headline) return;
-    if (!splitView.matches) {
-      firstFrame.style.removeProperty("--align-shift");
-      return;
-    }
-    const current = parseFloat(firstFrame.style.getPropertyValue("--align-shift")) || 0;
-    const head = headline.getBoundingClientRect();
-    const image = firstImage.getBoundingClientRect();
-    // The headline is sticky, so its place on screen holds while scrolling;
-    // compare it with where the image sits when the page is at the top.
-    // Leave out the row's entrance slide, which may still be in flight.
-    const entrance = firstProject ? new DOMMatrixReadOnly(getComputedStyle(firstProject).transform).m42 : 0;
-    const imageCenterAtTop = image.top + window.scrollY - current - entrance + image.height / 2;
-    const shift = (head.top + head.bottom) / 2 - imageCenterAtTop;
-    firstFrame.style.setProperty("--align-shift", `${shift.toFixed(1)}px`);
-  }
-
-  alignFirstProject();
-  document.fonts?.ready.then(alignFirstProject);
-  window.addEventListener("resize", alignFirstProject);
-  if (firstFrame && headline) {
-    const alignObserver = new ResizeObserver(alignFirstProject);
-    alignObserver.observe(firstFrame);
-    alignObserver.observe(headline);
-  }
+  requestAnimationFrame(() => {
+    firstProject?.classList.add("visible");
+    setTimeout(() => introWrap?.classList.add("visible"), 400);
+  });
 
   // Size the trailing spacer so the sticky headline releases right as the
   // last project becomes vertically centered in the viewport, instead of
@@ -158,398 +150,70 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
   window.addEventListener("resize", updateSpacer);
 
   /**
-   * The "Designing and scaling …" headline: its last word follows the work. On desktop,
-   * where the headline is sticky beside the list, it changes as each project
-   * crosses the middle of the screen. Smaller screens show the original
-   * headline instead (see .headline-full).
-   */
-  const slot = document.querySelector<HTMLElement>("[data-word-slot]");
-  if (slot) {
-    const words: string[] = JSON.parse(slot.dataset.words ?? "[]");
-    const still = matchMedia("(prefers-reduced-motion: reduce)");
-    let current = 0;
-
-    function showWord(index: number) {
-      if (index === current || !words[index]) return;
-      const old = slot!.querySelector<HTMLElement>(".word:not(.is-leaving)");
-      current = index;
-      if (old && `${words[index]}.` === old.textContent) return;
-      const next = document.createElement("span");
-      next.className = "word";
-      next.textContent = `${words[index]}.`;
-      if (still.matches || !old) {
-        slot!.replaceChildren(next);
-        return;
-      }
-      // Hold the slot at the old word's width, then ease it to the new one
-      // while the old word rolls up and out and the new one rolls in.
-      slot!.style.width = `${slot!.getBoundingClientRect().width}px`;
-      next.classList.add("is-entering");
-      old.classList.add("is-leaving");
-      slot!.append(next);
-      requestAnimationFrame(() => {
-        slot!.style.width = `${next.getBoundingClientRect().width}px`;
-        next.classList.remove("is-entering");
-      });
-      old.addEventListener("animationend", () => old.remove(), { once: true });
-      window.setTimeout(() => old.remove(), 1000);
-    }
-
-    slot.addEventListener("transitionend", (event) => {
-      if (event.propertyName === "width") slot.style.removeProperty("width");
-    });
-
-    // A project takes the word once its image, not the padding above it,
-    // crosses a line on the screen. The line depends on which way the page
-    // is moving: scrolling up, the middle of the screen; scrolling down, 10%
-    // above it, so the word waits until the work has settled into place.
-    let lastY = window.scrollY;
-    let goingDown = true;
-    window.addEventListener(
-      "scroll",
-      () => {
-        const y = window.scrollY;
-        if (y !== lastY) goingDown = y > lastY;
-        lastY = y;
-      },
-      { passive: true }
-    );
-
-    const watchAt = (top: number, down: boolean) => {
-      const watch = new IntersectionObserver(
-        (entries) => {
-          if (!splitView.matches || goingDown !== down) return;
-          for (const entry of entries) {
-            const row = entry.target.closest<HTMLElement>(".project-row");
-            if (entry.isIntersecting && row) showWord(Number(row.dataset.index));
-          }
-        },
-        { rootMargin: `-${top}% 0px -${100 - top}% 0px` }
-      );
-      rows.forEach((row) => {
-        const image = row.querySelector(".cell-image");
-        if (image) watch.observe(image);
-      });
-    };
-    watchAt(40, true);
-    watchAt(50, false);
-
-    // Below 769px the original headline shows instead and the word sits
-    // still. Widening back to desktop starts it on the first project.
-    splitView.addEventListener("change", () => {
-      if (splitView.matches) showWord(0);
-    });
-  }
-
-  /**
-   * The blueprint: the page drawing its own specs over itself. The columns,
-   * type specs, frame sizes, and spacing are all measured off the page as it
-   * renders, so resizing the window changes the numbers, and a spacing value
-   * is named after the site's --space token when it lands on one.
+   * The scroll rail: an invitation until the page moves, a progress reading
+   * after that, and back to an invitation if someone returns to the top.
    *
-   * Tags are drawn into the nearest [data-blueprint-scope], so the ones for
-   * the sticky headline travel with it and the ones for the work scroll with
-   * the work.
+   * It waits out the intro rather than counting frames against it, so it never
+   * animates behind the scrim.
    */
-  const page = document.querySelector<HTMLElement>("main[data-blueprint-scope]");
-  const blueprintToggle = document.querySelector<HTMLButtonElement>("[data-blueprint-toggle]");
-  const columns = document.querySelector<HTMLElement>("[data-blueprint-columns]");
+  const rail = document.querySelector<HTMLElement>("[data-scroll-rail]");
 
-  if (page && blueprintToggle && columns) {
-    const splitInner = page.querySelector<HTMLElement>(".split-inner")!;
-    const panels = [page.querySelector<HTMLElement>(".left-panel")!, page.querySelector<HTMLElement>(".right-panel")!];
-
-    const tokens = getComputedStyle(document.documentElement);
-    const space = new Map<number, string>();
-    for (let n = 1; n <= 8; n++) {
-      const value = parseFloat(tokens.getPropertyValue(`--space-${n}`));
-      if (!Number.isNaN(value)) space.set(value, `space-${n}`);
-    }
-
-    const px = (value: number) => Math.round(value);
-
-    // The floating bar hangs off the body too, so it rides above the footer.
-    const bar = document.querySelector<HTMLElement>("[data-blueprint-bar]");
-    if (bar) document.body.append(bar);
-
-    // The rest of the canvas: the page gutters, the nav, and the footer. They
-    // live outside main, so their layers hang off the body, above the sticky
-    // nav: one fixed to the screen (gutters, nav) and one that scrolls with
-    // the document (footer). The column bands move out with them so they run
-    // through the nav and footer too. Each layer borrows main's scope
-    // attribute so it picks up the same tag and line styles.
-    const nav = document.querySelector<HTMLElement>("nav:not(.footer-nav)");
-    const footer = document.querySelector<HTMLElement>("footer");
-    const scopeAttr = Array.from(columns.attributes).find((a) => a.name.startsWith("data-astro-cid"))?.name;
-    document.body.append(columns);
-    const [screenLayer, docLayer] = ["bp-screen", "bp-doc"].map((name) => {
-      const layer = document.createElement("div");
-      layer.className = `blueprint-tags ${name}`;
-      layer.setAttribute("aria-hidden", "true");
-      if (scopeAttr) layer.setAttribute(scopeAttr, "");
-      document.body.append(layer);
-      return layer;
-    });
-    const outlined: Element[] = [];
-    function outline(el: Element | null | undefined, kind: "type" | "box") {
-      if (!el) return;
-      el.classList.add(`bp-outline-${kind}`);
-      outlined.push(el);
-    }
-
-    function spacingLabel(distance: number) {
-      const d = px(distance);
-      if (space.has(d)) return `${space.get(d)} · ${d}`;
-      // Two paddings meeting, top of one row against the bottom of the last.
-      if (d % 2 === 0 && space.has(d / 2)) return `${space.get(d / 2)} × 2 · ${d}`;
-      return `${d}`;
-    }
-
-    function typeLabel(el: HTMLElement, name?: string) {
-      const s = getComputedStyle(el);
-      const size = parseFloat(s.fontSize);
-      const lineHeight = s.lineHeight === "normal" ? "auto" : px(parseFloat(s.lineHeight));
-      const tracking = parseFloat(s.letterSpacing);
-      const em = Number.isNaN(tracking) ? "0" : (tracking / size).toFixed(2);
-      const family = s.fontFamily.split(",")[0].replace(/["']/g, "");
-      return `${name ?? el.dataset.specName ?? "Text"} · ${family} ${s.fontWeight} · ${px(size)}/${lineHeight} · ${em}em`;
-    }
-
-    function scopeOf(el: Element) {
-      const scope = el.closest<HTMLElement>("[data-blueprint-scope]") ?? page!;
-      const layer = scope.querySelector<HTMLElement>(":scope > .blueprint-tags")!;
-      const origin = scope.getBoundingClientRect();
-      return { layer, x: origin.left, y: origin.top };
-    }
-
-    function tag(layer: HTMLElement, text: string, x: number, y: number, shift = "") {
-      const el = document.createElement("span");
-      el.className = "blueprint-tag";
-      el.textContent = text;
-      el.style.left = `${x}px`;
-      el.style.top = `${y}px`;
-      if (shift) el.style.transform = shift;
-      layer.appendChild(el);
-      return el;
-    }
-
-    function vertical(layer: HTMLElement, x: number, top: number, length: number) {
-      const el = document.createElement("span");
-      el.className = "blueprint-line";
-      el.style.left = `${x}px`;
-      el.style.top = `${top}px`;
-      el.style.height = `${length}px`;
-      layer.appendChild(el);
-      tag(layer, spacingLabel(length), x + 8, top + length / 2, "translateY(-50%)");
-    }
-
-    function build() {
-      page!.querySelectorAll(".blueprint-tag, .blueprint-line").forEach((el) => el.remove());
-      screenLayer.replaceChildren();
-      docLayer.replaceChildren();
-      outlined.splice(0).forEach((el) => el.classList.remove("bp-outline-type", "bp-outline-box"));
-      if (!page!.classList.contains("is-blueprint")) return;
-
-      // Columns: the layout's real ones. Side by side on desktop, the two
-      // panels; stacked on a phone, one. Judged across only, since the sticky
-      // headline panel drifts vertically as the work scrolls past it.
-      const inner = splitInner.getBoundingClientRect();
-      const [left, right] = panels.map((panel) => panel.getBoundingClientRect());
-      const sideBySide = right.left >= left.right - 1;
-      const count = sideBySide ? 2 : 1;
-      columns.style.left = `${inner.left}px`;
-      columns.style.width = `${inner.width}px`;
-      columns.style.gridTemplateColumns = `repeat(${count}, minmax(0, 1fr))`;
-      if (columns.childElementCount !== count) {
-        columns.replaceChildren(...Array.from({ length: count }, () => document.createElement("span")));
-      }
-
-      const pageScope = scopeOf(page!);
-      tag(
-        pageScope.layer,
-        `${count} col · ${px(inner.width / count)} wide · max ${px(inner.width)}`,
-        right.right - pageScope.x,
-        8,
-        "translateX(-100%)"
-      );
-
-      page!.querySelectorAll<HTMLElement>('[data-spec="type"]').forEach((el) => {
-        const { layer, x, y } = scopeOf(el);
-        const box = el.getBoundingClientRect();
-        const end = el.dataset.specAlign === "end";
-        tag(layer, typeLabel(el), (end ? box.right : box.left) - x, box.top - y - 24, end ? "translateX(-100%)" : "");
-      });
-
-      page!.querySelectorAll<HTMLElement>('[data-spec="box"]').forEach((el) => {
-        const { layer, x, y } = scopeOf(el);
-        const box = el.getBoundingClientRect();
-        tag(layer, `${px(box.width)} × ${px(box.height)}`, box.right - x - 8, box.bottom - y - 8, "translate(-100%, -100%)");
-      });
-
-      // Spacing down the work column: frame to title inside each project,
-      // and the last line of one project to the frame of the next.
-      const { layer, x, y } = pageScope;
-      rows.forEach((row, i) => {
-        const image = row.querySelector<HTMLElement>(".cell-image")!.getBoundingClientRect();
-        const title = row.querySelector<HTMLElement>(".project-title")!.getBoundingClientRect();
-        // The spec'd title carries its own tag in that gap, so it skips the line.
-        const titleEl = row.querySelector<HTMLElement>(".project-title")!;
-        if (!titleEl.dataset.spec && title.top > image.bottom) vertical(layer, image.left - x + 32, image.bottom - y, title.top - image.bottom);
-
-        const next = rows[i + 1];
-        if (!next) return;
-        const tags = row.querySelector<HTMLElement>(".project-tags")!.getBoundingClientRect();
-        const nextImage = next.querySelector<HTMLElement>(".cell-image")!.getBoundingClientRect();
-        if (nextImage.top > tags.bottom) vertical(layer, image.left - x + 32, tags.bottom - y, nextImage.top - tags.bottom);
-      });
-
-      drawCanvas(inner);
-    }
-
-    function drawCanvas(inner: DOMRect) {
-      const vw = document.documentElement.clientWidth;
-      const vh = window.innerHeight;
-      const pad = parseFloat(tokens.getPropertyValue("--page-padding")) || 0;
-
-      // Gutters, edge of the screen to the content on each side: the page
-      // padding next to the content, and whatever auto margin centers the
-      // layout beyond it. Labeled up the middle, since a gutter is narrow.
-      for (const [from, to] of [[0, inner.left], [inner.right, vw]]) {
-        const width = to - from;
-        if (width < 1) continue;
-        const band = document.createElement("span");
-        band.className = "bp-gutter";
-        band.style.left = `${from}px`;
-        band.style.width = `${width}px`;
-        const strip = document.createElement("span");
-        strip.className = "bp-pad";
-        strip.style.left = `${from === 0 ? to - Math.min(pad, width) : from}px`;
-        strip.style.width = `${Math.min(pad, width)}px`;
-        screenLayer.append(band, strip);
-        const margin = width - pad;
-        const label = margin > 1 ? `page-padding ${px(pad)} + margin ${px(margin)}` : `page-padding · ${px(pad)}`;
-        tag(screenLayer, label, from + width / 2, vh / 2, "translate(-50%, -50%) rotate(-90deg)");
-      }
-
-      // The nav: sticky, so it is drawn on the screen layer and stays put.
-      if (nav) {
-        const box = nav.getBoundingClientRect();
-        const navInner = nav.querySelector(".nav-inner")?.getBoundingClientRect();
-        const logo = nav.querySelector<HTMLElement>(".logo");
-        const menu = nav.querySelector<HTMLElement>(".hamburger");
-        outline(nav, "box");
-        if (logo) {
-          outline(logo, "type");
-          const b = logo.getBoundingClientRect();
-          // On a phone there's no room beside the logo, and below it is where
-          // the column tag sits, so the outline speaks for itself there.
-          if (vw > 700) tag(screenLayer, typeLabel(logo, "Logo"), b.right + 12, b.top + b.height / 2, "translateY(-50%)");
-        }
-        if (menu) {
-          outline(menu, "box");
-          const b = menu.getBoundingClientRect();
-          tag(screenLayer, `${px(b.width)} × ${px(b.height)}`, b.left - 10, b.top + b.height / 2, "translate(-100%, -50%)");
-        }
-        if (navInner && vw > 700) {
-          const lx = navInner.left + navInner.width * 0.6;
-          vertical(screenLayer, lx, box.top, navInner.top - box.top);
-          vertical(screenLayer, lx, navInner.bottom, box.bottom - navInner.bottom);
-        }
-      }
-
-      // The footer: drawn in document coordinates so it scrolls with the page.
-      if (footer) {
-        const sx = window.scrollX;
-        const sy = window.scrollY;
-        const at = (el: Element) => {
-          const b = el.getBoundingClientRect();
-          return { left: b.left + sx, right: b.right + sx, top: b.top + sy, bottom: b.bottom + sy, width: b.width };
-        };
-        const f = at(footer);
-        const fInner = footer.querySelector(".footer-inner");
-        const fTop = footer.querySelector(".footer-top");
-        const fBottom = footer.querySelector(".footer-bottom");
-        outline(footer, "box");
-        if (fInner && fTop && fBottom) {
-          const fi = at(fInner);
-          const ft = at(fTop);
-          const fb = at(fBottom);
-          const lx = fi.left + fi.width * 0.36;
-          const main = at(page!);
-          if (f.top - main.bottom > 1) vertical(docLayer, lx, main.bottom, f.top - main.bottom);
-          // Measured inside the top border, so it reads as the padding.
-          const inside = f.top + footer.clientTop;
-          vertical(docLayer, lx, inside, fi.top - inside);
-          vertical(docLayer, lx, ft.bottom, fb.top - ft.bottom);
-          vertical(docLayer, lx, fb.bottom, f.bottom - fb.bottom);
-        }
-        const texts: [string, string, boolean][] = [
-          [".footer-logo", "Logo", false],
-          [".footer-nav a", "Link", true],
-          [".footer-copyright", "Meta", false],
-        ];
-        for (const [selector, name, end] of texts) {
-          const el = footer.querySelector<HTMLElement>(selector);
-          if (!el) continue;
-          outline(el, "type");
-          const b = at(el);
-          tag(docLayer, typeLabel(el, name), end ? b.right : b.left, b.top - 24, end ? "translateX(-100%)" : "");
-        }
-      }
-    }
-
-    // Cmd on a Mac, Ctrl on other desktops. The page ships saying Cmd and
-    // corrects itself here, so the label always matches the key that works.
-    // Touch screens keep Cmd, since there the shortcut is only tapped.
-    const isMac = /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
-    const isTouch = matchMedia("(hover: none) and (pointer: coarse)").matches;
-    const mod = isMac || isTouch ? "Cmd" : "Ctrl";
-    document.querySelectorAll("[data-shortcut-mod]").forEach((el) => (el.textContent = mod));
-    blueprintToggle.setAttribute("aria-label", `Show the specs (shortcut ${mod} + I)`);
-
-    function setBlueprint(on: boolean) {
-      page!.classList.toggle("is-blueprint", on);
-      document.documentElement.classList.toggle("blueprint-on", on);
-      blueprintToggle!.setAttribute("aria-pressed", String(on));
-      blueprintToggle!.setAttribute("aria-label", `${on ? "Hide" : "Show"} the specs (shortcut ${mod} + I)`);
-      build();
-    }
-
-    blueprintToggle.addEventListener("click", () => setBlueprint(!page.classList.contains("is-blueprint")));
-
-    document.querySelector("[data-blueprint-off]")?.addEventListener("click", () => setBlueprint(false));
-
-    // Escape puts it away from anywhere, like any overlay, without moving focus.
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && page.classList.contains("is-blueprint")) setBlueprint(false);
-    });
-
-    // Cmd + I (Ctrl + I off a Mac) toggles it in place, from anywhere on the
-    // page. Left alone while typing, where it means italic, and with Shift or
-    // Alt held, so Cmd + Opt + I still opens the dev tools.
-    document.addEventListener("keydown", (event) => {
-      if (event.key !== "i" && event.key !== "I") return;
-      if (!(isMac ? event.metaKey : event.ctrlKey)) return;
-      if (event.shiftKey || event.altKey || event.repeat) return;
-      const target = event.target as HTMLElement | null;
-      if (target?.closest("input, textarea, select, [contenteditable]")) return;
-      event.preventDefault();
-      setBlueprint(!page.classList.contains("is-blueprint"));
-    });
-
+  if (rail) {
+    let shown = false;
+    let scrolled = false;
     let queued = false;
-    const rebuild = () => {
+
+    const reveal = () => {
+      if (shown) return;
+      shown = true;
+      rail.classList.add("visible");
+    };
+
+    function measure() {
+      queued = false;
+      // How far the document can travel. A page shorter than the viewport has
+      // nowhere to go, so it reads as untouched rather than as complete.
+      const span = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = span > 0 ? Math.min(Math.max(window.scrollY / span, 0), 1) : 0;
+      rail.style.setProperty("--progress", String(progress));
+
+      // One way only. Someone who has scrolled knows how, and being told again
+      // on the way back up reads as the page forgetting. A stray trackpad
+      // twitch is not a scroll, hence the threshold. From here the rail is
+      // only ever a progress reading, including at the top, where it reads
+      // empty rather than inviting.
+      if (scrolled || window.scrollY <= 40) return;
+      scrolled = true;
+      rail.classList.add("is-scrolled");
+    }
+
+    function onScroll() {
       if (queued) return;
       queued = true;
-      requestAnimationFrame(() => {
-        queued = false;
-        build();
-      });
-    };
+      requestAnimationFrame(measure);
+    }
 
-    new ResizeObserver(rebuild).observe(page);
-    window.addEventListener("resize", rebuild);
-    document.fonts?.ready.then(rebuild);
+    const root = document.documentElement;
+
+    if (root.classList.contains("intro-open")) {
+      // The intro drops this class on hand-off; that is the page's own signal
+      // that it is on screen, and it beats guessing at the intro's duration.
+      const watcher = new MutationObserver(() => {
+        if (root.classList.contains("intro-open")) return;
+        watcher.disconnect();
+        window.setTimeout(reveal, 900);
+      });
+      watcher.observe(root, { attributes: true, attributeFilter: ["class"] });
+    } else {
+      window.setTimeout(reveal, 1200);
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    // The document's height is what progress is measured against, and both the
+    // spacer above and a resize change it.
+    window.addEventListener("resize", onScroll);
+    // Landing mid-page, on a refresh or a back-navigation, starts in progress.
+    measure();
   }
 </script>
 
@@ -587,466 +251,206 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
 
   .sticky-title {
     max-width: 100%;
-    font-size: var(--text-h1);
-    font-weight: var(--weight-light);
-    letter-spacing: var(--tracking-tight);
-    line-height: var(--leading-tight);
+    font-size: clamp(2rem, 1.4rem + 2.4vw, 50px);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1.25;
     color: var(--color-text);
   }
 
-  /*
-    "Designing and / scaling …" on two lines, the changing word always on
-    the second. The fixed lead sits a step back in the muted
-    ink so the changing word carries the weight, the usual treatment for a
-    rotating headline. The size steps down with the column (a container
-    query on .left-panel) so the longest word still fits on its line.
-  */
-  .left-panel {
-    container-type: inline-size;
-  }
-
-  .creating-title {
-    white-space: nowrap;
-    font-size: min(var(--text-h1), 9.2cqi);
-  }
-
-  .headline-full {
-    display: none;
-  }
-
-  @media (max-width: 768px) {
-    .headline-rotating {
-      display: none;
-    }
-
-    .headline-full {
-      display: inline;
-    }
-
-    .creating-title {
-      white-space: normal;
-      font-size: var(--text-h1);
-    }
-  }
-
-  .creating-lead {
+  .tagline {
+    margin-top: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
     color: var(--color-text-muted);
   }
 
-  /* The slot stacks the outgoing and incoming words in one grid cell,
-     clips the roll, and eases its width between them. Aligned to the top
-     of the line, since a clipped box otherwise sits on its bottom edge
-     rather than the text baseline. */
-  .word-slot {
-    display: inline-grid;
-    overflow: hidden;
-    vertical-align: top;
-    transition: width var(--duration-slow) var(--ease-emphasized);
-  }
-
-  .word-slot :global(.word) {
-    grid-area: 1 / 1;
-    /* Its own width, not the cell's, so the script can measure it. */
-    justify-self: start;
-    white-space: nowrap;
-    color: var(--color-text);
-    transition:
-      transform var(--duration-slow) var(--ease-emphasized),
-      opacity var(--duration-slow) var(--ease-emphasized);
-  }
-
-  .word-slot :global(.word.is-entering) {
-    transform: translateY(100%);
+  .view-all-link {
+    display: inline-flex;
+    align-items: center;
+    margin-top: var(--space-5);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--color-bg);
+    background: var(--color-text);
+    border: 1px solid var(--color-text);
+    border-radius: 999px;
+    padding: 12px 22px;
     opacity: 0;
-    transition: none;
+    transform: translateY(8px);
+    transition: opacity 0.55s ease 0.15s, transform 0.55s ease 0.15s, background 0.2s;
   }
 
-  .word-slot :global(.word.is-leaving) {
-    animation: word-out var(--duration-slow) var(--ease-emphasized) forwards;
+  .view-all-link:hover {
+    background: #333333;
+    border-color: #333333;
   }
 
-  @keyframes word-out {
-    to {
+  .view-all-link.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /*
+    A rail in the left margin, centered on the screen and fixed there, so it
+    holds one position for the whole page instead of belonging to any section.
+
+    It is two things in sequence. Before the page moves it is an invitation: a
+    segment travels down the track under a label. Once the page moves it is a
+    reading of how far through you are, the same track filling from the top.
+    Nothing is swapped out between the two; the fill and the traveller trade
+    places on one line.
+
+    Sized to live inside the page's own margin: a quarter of the space either
+    side of the content column puts it between the viewport edge and the text,
+    and the clamp keeps it off both when that space runs out.
+  */
+  .scroll-rail {
+    position: fixed;
+    left: clamp(14px, calc((100vw - var(--max-width)) / 4), 72px);
+    top: 50%;
+    /* The rail's box is the track and nothing else, so this centers the line
+       itself. The label hangs off it absolutely for the same reason: in flow
+       it would push the track down by its own height and the bar would sit
+       below the middle of the screen. */
+    height: 180px;
+    transform: translateY(-50%);
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
+  }
+
+  .scroll-rail.visible {
+    opacity: 1;
+  }
+
+  /* Vertical, because the margin it sits in is narrower than the word. */
+  .scroll-rail-label {
+    position: absolute;
+    bottom: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    writing-mode: vertical-rl;
+    transition: opacity 0.5s ease;
+  }
+
+  /* The label is the invitation, and the invitation is spent once the page
+     moves. The track carries on as the progress reading. */
+  .scroll-rail.is-scrolled .scroll-rail-label {
+    opacity: 0;
+  }
+
+  .scroll-rail-track {
+    position: relative;
+    display: block;
+    width: 1px;
+    height: 100%;
+    background: var(--color-border);
+    overflow: hidden;
+  }
+
+  /* Progress. Scaled rather than resized, so it is a transform per frame
+     instead of a layout pass, and anchored to the top so it grows downward. */
+  .scroll-rail-fill {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 1px;
+    height: 100%;
+    background: var(--color-text);
+    transform-origin: top;
+    transform: scaleY(var(--progress, 0));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .scroll-rail.is-scrolled .scroll-rail-fill {
+    opacity: 1;
+  }
+
+  /* The traveller: only ever visible before the first scroll, which is what
+     keeps the rail an invitation until it has a reading to give. */
+  .scroll-rail-track::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 1px;
+    height: 22%;
+    background: var(--color-text);
+    animation: scroll-rail-travel 2.6s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+    transition: opacity 0.4s ease;
+  }
+
+  .scroll-rail.is-scrolled .scroll-rail-track::after {
+    opacity: 0;
+    animation: none;
+  }
+
+  @keyframes scroll-rail-travel {
+    0% {
       transform: translateY(-100%);
       opacity: 0;
     }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .word-slot,
-    .word-slot :global(.word) {
-      transition: none;
-    }
-  }
-
-  /* A line or two on what the work is, ending on the way into the
-     blueprint. Held to a reading measure so it never runs the width of the
-     headline. */
-  .intro {
-    max-width: 44ch;
-    margin-top: var(--space-4);
-    font-size: var(--text-l);
-    font-weight: var(--weight-light);
-    line-height: var(--leading-normal);
-    color: var(--color-text-muted);
-  }
-
-  /* The shortcut in the sentence, set as inline code and working as a
-     button. Its parts hold together so it never breaks across a line. */
-  .kbd-toggle {
-    display: inline-block;
-    margin: 0 1px 0 0;
-    padding: 0 var(--space-1);
-    font-family: var(--font-mono);
-    font-size: 0.85em;
-    line-height: 1.5;
-    white-space: nowrap;
-    color: var(--color-text);
-    background: color-mix(in srgb, var(--color-text) 6%, transparent);
-    border: 1px solid transparent;
-    border-radius: var(--radius-sm);
-    box-shadow: none;
-    appearance: none;
-    -webkit-appearance: none;
-    cursor: pointer;
-    transition:
-      border-color var(--duration-fast) var(--ease-standard),
-      background var(--duration-fast) var(--ease-standard),
-      color var(--duration-fast) var(--ease-standard),
-      transform var(--duration-instant) var(--ease-standard);
-  }
-
-  .kbd-toggle:hover {
-    background: color-mix(in srgb, var(--color-text) 11%, transparent);
-  }
-
-  .kbd-toggle:active {
-    transform: translateY(1px);
-  }
-
-  .kbd-toggle[aria-pressed="true"] {
-    color: #ffffff;
-    background: var(--blueprint);
-    border-color: var(--blueprint);
-  }
-
-  .cta-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-3);
-    margin-top: var(--space-5);
-  }
-
-  .kbd-toggle:focus-visible {
-    outline-offset: 3px;
-  }
-
-  /*
-    The blueprint. Drawn in the site's own link blue, so the page is annotated
-    in a color the system already has rather than one invented for it. White
-    on it is 6.7:1.
-  */
-  .split-layout {
-    --blueprint: var(--color-link);
-  }
-
-  .headline-block {
-    position: relative;
-  }
-
-  .blueprint-tags {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  .blueprint-columns {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    z-index: 205;
-    display: grid;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.25s ease;
-  }
-
-  :global(html.blueprint-on) .blueprint-columns {
-    opacity: 1;
-  }
-
-  .blueprint-columns :global(span) {
-    background: color-mix(in srgb, var(--blueprint) 5%, transparent);
-    border-inline: 1px solid color-mix(in srgb, var(--blueprint) 22%, transparent);
-  }
-
-  .split-layout.is-blueprint [data-spec="box"] {
-    outline: 1px dashed var(--blueprint);
-    outline-offset: -1px;
-  }
-
-  .split-layout.is-blueprint [data-spec="type"] {
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--blueprint) 55%, transparent);
-  }
-
-  .blueprint-tags :global(.blueprint-tag) {
-    position: absolute;
-    white-space: nowrap;
-    padding: 3px 6px;
-    border-radius: 3px;
-    background: var(--blueprint);
-    color: #ffffff;
-    font-family: var(--font-mono);
-    font-size: 10.5px;
-    font-weight: 400;
-    line-height: 1.3;
-    letter-spacing: 0.01em;
-    animation: blueprint-in 0.25s ease both;
-  }
-
-  .blueprint-tags :global(.blueprint-line) {
-    position: absolute;
-    width: 1px;
-    background: var(--blueprint);
-    animation: blueprint-in 0.25s ease both;
-  }
-
-  /* End caps, so a line reads as a measurement rather than a rule. */
-  .blueprint-tags :global(.blueprint-line::before),
-  .blueprint-tags :global(.blueprint-line::after) {
-    content: "";
-    position: absolute;
-    left: -4px;
-    width: 9px;
-    height: 1px;
-    background: var(--blueprint);
-  }
-
-  .blueprint-tags :global(.blueprint-line::before) {
-    top: 0;
-  }
-
-  .blueprint-tags :global(.blueprint-line::after) {
-    bottom: 0;
-  }
-
-  /* The canvas beyond main: the layers for the gutters, nav, and footer,
-     hung off the body above the sticky nav (see the script). */
-  :global(html.blueprint-on) {
-    --blueprint: var(--color-link);
-  }
-
-  :global(div.blueprint-tags.bp-screen) {
-    position: fixed;
-    inset: 0;
-    z-index: 210;
-  }
-
-  :global(div.blueprint-tags.bp-doc) {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: auto;
-    bottom: auto;
-    width: 0;
-    height: 0;
-    z-index: 210;
-  }
-
-  :global(.bp-gutter),
-  :global(.bp-pad) {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    animation: blueprint-in 0.25s ease both;
-  }
-
-  /* Hatched, the way a design tool marks space that holds nothing. */
-  :global(.bp-gutter) {
-    background: repeating-linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--blueprint) 14%, transparent) 0 1px,
-      transparent 1px 9px
-    );
-  }
-
-  :global(.bp-pad) {
-    background: color-mix(in srgb, var(--blueprint) 7%, transparent);
-  }
-
-  :global(html.blueprint-on .bp-outline-type) {
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--blueprint) 55%, transparent);
-  }
-
-  :global(html.blueprint-on .bp-outline-box) {
-    outline: 1px dashed var(--blueprint);
-    outline-offset: -1px;
-  }
-
-  @keyframes blueprint-in {
-    from {
-      opacity: 0;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .blueprint-columns {
-      transition: none;
-    }
-
-    .blueprint-tags :global(.blueprint-tag),
-    .blueprint-tags :global(.blueprint-line),
-    :global(.bp-gutter),
-    :global(.bp-pad) {
-      animation: none;
-    }
-  }
-
-  kbd {
-    display: inline-block;
-    min-width: 1.7em;
-    padding: 1px 6px;
-    font-family: var(--font-mono);
-    font-size: 0.9em;
-    line-height: 1.5;
-    text-align: center;
-    color: var(--color-text);
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-bottom-width: 2px;
-    border-radius: var(--radius-sm);
-  }
-
-  /* While the specs are up: a small bar pinned to the bottom of the screen,
-     in the blueprint's own blue, so there is always a way out. */
-  .blueprint-bar {
-    position: fixed;
-    left: 50%;
-    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-    z-index: 220;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 6px 6px 6px 16px;
-    font-size: var(--text-s);
-    color: #ffffff;
-    background: var(--blueprint);
-    border-radius: 999px;
-    box-shadow: var(--shadow-overlay);
-    opacity: 0;
-    visibility: hidden;
-    transform: translate(-50%, 8px);
-    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
-  }
-
-  :global(html.blueprint-on) .blueprint-bar {
-    opacity: 1;
-    visibility: visible;
-    transform: translate(-50%, 0);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-
-  .blueprint-bar-label {
-    font-weight: 500;
-  }
-
-  .blueprint-bar-hide {
-    font: inherit;
-    font-weight: 500;
-    color: var(--blueprint);
-    background: #ffffff;
-    border: 0;
-    border-radius: 999px;
-    padding: 5px 14px;
-    cursor: pointer;
-  }
-
-  .blueprint-bar-hide:focus-visible {
-    outline: 2px solid #ffffff;
-    outline-offset: 2px;
-  }
-
-  .blueprint-bar-keys {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    opacity: 0.85;
-    padding-right: 10px;
-  }
-
-  /* Touch screens tap the shortcut rather than press it, and have no keys
-     to list in the bar. */
-  @media (hover: none) and (pointer: coarse) {
-    .blueprint-bar-keys {
-      display: none;
-    }
-
-    .blueprint-bar {
-      padding-right: 6px;
-    }
-  }
-
-  .blueprint-bar kbd {
-    color: #ffffff;
-    background: transparent;
-    border-color: rgba(255, 255, 255, 0.5);
-  }
-
-  /* The left column arrives in reading order: headline, intro, then the
-     button. Pure CSS, so the text is never left hidden waiting on a
-     script. It holds its first frame while the intro scrim is up and plays
-     the moment the scrim hands off (straight away for returning visitors,
-     who skip the intro). */
-  .headline-block > .sticky-title,
-  .headline-block > .intro,
-  .headline-block > .cta-row {
-    animation: headline-rise var(--duration-slower) var(--ease-emphasized) both;
-    animation-delay: calc(0.12s + var(--stagger, 0) * 0.09s);
-  }
-
-  .headline-block > .intro {
-    --stagger: 1;
-  }
-
-  .headline-block > .cta-row {
-    --stagger: 2;
-  }
-
-  :global(html.intro-open) .headline-block > * {
-    animation-play-state: paused;
-  }
-
-  @keyframes headline-rise {
-    from {
-      opacity: 0;
-      transform: translateY(var(--space-3));
-    }
-    to {
+    30% {
       opacity: 1;
-      transform: none;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(455%);
+      opacity: 0;
     }
   }
 
+  /* Reduced motion keeps both readings and drops the travel: the invitation
+     becomes a still mark, the progress still tracks. */
   @media (prefers-reduced-motion: reduce) {
-    .headline-block > .sticky-title,
-    .headline-block > .intro,
-      .headline-block > .cta-row {
+    .scroll-rail-track::after {
       animation: none;
+      height: 100%;
+      opacity: 0.3;
     }
   }
 
   .entrance-hidden {
     opacity: 0;
-    transform: translateY(var(--space-2));
-    transition:
-      opacity var(--duration-slower) var(--ease-standard),
-      transform var(--duration-slower) var(--ease-standard);
+    transform: translateY(10px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
   }
 
   .entrance-hidden.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  .reveal-wrap {
+    display: inline;
+    vertical-align: bottom;
+  }
+
+  .reveal-inner {
+    display: inline;
+  }
+
+  :global(.char) {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(6px);
+    color: var(--color-text-muted);
+    transition: opacity 0.5s ease, transform 0.5s ease, color 0.5s ease;
+  }
+
+  :global(.reveal-wrap.visible .char) {
+    opacity: 1;
+    transform: translateY(0);
+    color: var(--color-text);
   }
 
   .right-panel {
@@ -1089,7 +493,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
   .cell-image {
     aspect-ratio: 16 / 10;
     overflow: hidden;
-    background: var(--color-surface);
+    background: var(--color-tag-bg);
     margin-bottom: var(--space-4);
   }
 
@@ -1097,25 +501,19 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform var(--duration-slow) var(--ease-standard);
+    transition: transform 0.4s ease;
   }
 
   .project-title {
-    font-size: var(--text-h5);
-    font-weight: var(--weight-light);
-    letter-spacing: var(--tracking-snug);
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: -0.01em;
     margin-bottom: var(--space-3);
   }
 
   @media (hover: hover) {
     .project-row:hover .cell-image :global(img) {
       transform: scale(1.03);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .cell-image :global(img) {
-      transition: none;
     }
   }
 
@@ -1128,9 +526,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
       min-height: calc(100vh - var(--nav-height));
       display: flex;
       align-items: center;
-      /* --align-shift is measured in the script so the image, not the image
-         plus its caption, centers on the headline block. */
-      transform: translateY(var(--align-shift, calc(var(--nav-height) / -2)));
+      transform: translateY(calc(var(--nav-height) / -2));
     }
 
     .first-project-frame .project-row {
@@ -1141,7 +537,6 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
   }
 
   @media (max-width: 768px) {
-
     .split-inner {
       flex-direction: column;
     }
@@ -1155,6 +550,12 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
       align-items: flex-start;
     }
 
+    .scroll-rail {
+      display: none;
+    }
+
+
+
     .headline-block {
       transform: none;
     }
@@ -1167,11 +568,25 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
       padding: var(--space-5) 0;
     }
 
-    /* Skip the entrance on mobile; the first project is simply there. */
+    /* Show everything immediately on mobile; skip the scroll/entrance choreography. */
+    :global(.char) {
+      opacity: 1 !important;
+      transform: none !important;
+      color: var(--color-text) !important;
+      transition: none !important;
+    }
+
+    .view-all-link,
     .entrance-hidden {
       opacity: 1 !important;
       transform: none !important;
       transition: none !important;
+    }
+
+    /* Shown outright like everything else on mobile; the rail's own states
+       carry on from there. */
+    .scroll-rail {
+      opacity: 1;
     }
   }
 </style>
