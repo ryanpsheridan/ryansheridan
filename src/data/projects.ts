@@ -465,7 +465,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Making a new AI feature easy to picture",
-        body: `<p>Shopping Agent is a new <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> feature that answers shoppers' questions on a merchant's storefront and helps them find the right product. Product gave us the idea, a few screen recordings, and screenshots of the prototype before it shipped. My job was to turn that into a landing page people would understand at a glance.</p><p>I started from the copywriter's first draft, read the project brief, and ran a kickoff to agree on what the feature does, how it helps merchants, and how to make that clear on the page. Then I designed the page and every image on it.</p><p>The page is easier to judge whole, so here it is in one piece: <a href="/project-shopping-agent-full-page.pdf" target="_blank" rel="noopener noreferrer">view the full landing page as a PDF<span aria-hidden="true"> &#8599;</span><span class="visually-hidden"> (opens in a new tab, 5 MB)</span></a>.</p>`,
+        body: `<p>Shopping Agent is a new <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> feature that answers shoppers' questions on a merchant's storefront and helps them find the right product. Product gave us the idea, a few screen recordings, and screenshots of the prototype before it shipped. My job was to turn that into a landing page people would understand at a glance.</p><p>I started from the copywriter's first draft, read the project brief, and ran a kickoff to agree on what the feature does, how it helps merchants, and how to make that clear on the page. Then I designed the page and every image on it.</p>`,
       },
       {
         type: "text",
@@ -496,7 +496,7 @@ const allProjects: Project[] = [
         beforeLabel: "In the prototype",
         afterLabel: "On the page",
         hint: "Move over the picker to try colors",
-        before: { src: "/project-shopping-agent-proto-colors.webp", alt: "Two frames from the prototype walkthrough of the Colors settings, before and after clicking a color swatch to open the picker" },
+        before: { src: "/project-shopping-agent-proto-colors.webp", alt: "The prototype's Colors settings with the color picker open over the Primary/accent swatch" },
         embed: { src: "/project-shopping-agent-embed-colors.html", title: "Interactive color picker in the agent's Colors settings" },
       },
       {
