@@ -39,6 +39,7 @@ export const colorTokens: TokenGroup[] = [
       { name: "color-surface", value: "#f9f9f9", description: "Quiet fill behind thumbnails while they load, and the selected choice card." },
       { name: "color-text", value: "#111111", description: "Primary text, icons, and the fill of primary buttons. 18.9:1 on white." },
       { name: "color-text-muted", value: "#5c5c60", description: "Secondary copy, metadata, and resting quiet links. 6.7:1 on white, so it is safe for long passages." },
+      { name: "color-text-quiet", value: "#75757b", description: "The words in a large headline that hold still while another word changes. 4.6:1 on white, so it clears AA for any text and AAA for large type, and 4.2:1 against --color-text so the two read as different. For display sizes only; use --color-text-muted for body copy." },
       { name: "color-placeholder", value: "#75757b", description: "Placeholder text in fields. 4.6:1 on white, readable without passing for a typed answer." },
       { name: "color-border", value: "#e5e5e5", description: "Hairlines that divide content: rules, card edges, badge outlines. Decorative only." },
       { name: "color-border-strong", value: "#8a8a8f", description: "The edge of anything you can type into or press. 3.4:1 on white, which WCAG asks of control boundaries." },

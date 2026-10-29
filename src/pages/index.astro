@@ -54,7 +54,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
                 works from anywhere. The drawing it adds is hidden from
                 assistive tech, since it describes the page rather than
                 adding to it. */}
-            <Button variant="secondary" class="peek-btn" aria-pressed="false" aria-keyshortcuts="Meta+I Control+I" data-blueprint-toggle>Look under the hood</Button>
+            <Button variant="secondary" class="peek-btn" aria-keyshortcuts="Meta+I Control+I" data-blueprint-toggle><span data-peek-label>Look under the hood</span></Button>
           </div>
           <div class="blueprint-tags" aria-hidden="true"></div>
         </div>
@@ -81,7 +81,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
         {/* Below 769px the headline no longer sits beside the work, so the
             way into the blueprint comes at the end of it instead. */}
         <div class="peek-end">
-          <Button variant="secondary" aria-pressed="false" aria-keyshortcuts="Meta+I Control+I" data-blueprint-toggle>Look under the hood</Button>
+          <Button variant="secondary" aria-keyshortcuts="Meta+I Control+I" data-blueprint-toggle><span data-peek-label>Look under the hood</span></Button>
         </div>
         <div class="scroll-spacer"></div>
       </div>
@@ -535,7 +535,11 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     function setBlueprint(on: boolean) {
       page!.classList.toggle("is-blueprint", on);
       document.documentElement.classList.toggle("blueprint-on", on);
-      blueprintToggles.forEach((button) => button.setAttribute("aria-pressed", String(on)));
+      // The label says what a press does next, so it carries the state and
+      // the buttons don't also need aria-pressed.
+      document.querySelectorAll("[data-peek-label]").forEach((label) => {
+        label.textContent = on ? "Hide the specs" : "Look under the hood";
+      });
       if (on) ctaRow?.classList.add("peek-visible");
       build();
     }
@@ -657,7 +661,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
   }
 
   .creating-lead {
-    color: var(--color-text-muted);
+    color: var(--color-text-quiet);
   }
 
   /* The slot stacks the outgoing and incoming words in one grid cell,
