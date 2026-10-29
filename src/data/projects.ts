@@ -252,6 +252,12 @@ export interface Project {
    * to publish it.
    */
   draft?: boolean;
+  /**
+   * Retired from the site but kept here in case it comes back. Unlike a
+   * draft, no page is built at all, so the old /work/<slug> URL 404s. Delete
+   * the flag to bring it back.
+   */
+  archived?: boolean;
   showOnHomepage: boolean;
   /**
    * 1-based slot on the homepage, for a project that should sit somewhere
@@ -1635,6 +1641,7 @@ const allProjects: Project[] = [
     description: "A quarterly report designed in InDesign that shows a design team's output: productivity data, process improvements, campaign highlights, and illustration.",
     ogImage: "/project-quarter-in-design1.jpg",
     thumbnail: "/project-quarter-in-design1.webp",
+    archived: true,
     showOnHomepage: false,
     tags: ["Visual Design"],
     tools: ["InDesign"],
@@ -1674,12 +1681,12 @@ export function getHomepageProjects(): Project[] {
   return list;
 }
 
-/** Everything listed on the site. Drafts are excluded; see `Project.draft`. */
-export const projects: Project[] = allProjects.filter((p) => !p.draft);
+/** Every project that gets a page, drafts included. Archived ones are excluded; see `Project.archived`. */
+export const projectsWithDrafts: Project[] = allProjects.filter((p) => !p.archived);
 
-/** Every project that gets a page, drafts included. */
-export const projectsWithDrafts: Project[] = allProjects;
+/** Everything listed on the site. Drafts are excluded; see `Project.draft`. */
+export const projects: Project[] = projectsWithDrafts.filter((p) => !p.draft);
 
 export function getProjectBySlug(slug: string): Project | undefined {
-  return allProjects.find((p) => p.slug === slug);
+  return projectsWithDrafts.find((p) => p.slug === slug);
 }
