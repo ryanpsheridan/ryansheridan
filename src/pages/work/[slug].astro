@@ -139,6 +139,7 @@ const schema = [
                           {block.afterLabel || "After"}
                         </button>
                       </div>
+                      {block.hint && <p class="pair-hint">{block.hint}</p>}
                     </div>
                     <div class="compare-frame is-fixed">
                       <div class="compare-pane is-before" data-pane="before">
@@ -148,7 +149,6 @@ const schema = [
                         <div class="embed-frame" data-embed={block.embed.src} role="group" aria-label={block.embed.title} />
                       </div>
                     </div>
-                    {block.hint && <p class="pair-hint">{block.hint}</p>}
                   </div>
                 );
               }
@@ -754,11 +754,16 @@ const schema = [
     margin: 0 0 var(--space-3);
   }
 
+  .pair-block .compare-controls {
+    flex-wrap: wrap;
+  }
+
   .pair-hint {
-    margin: var(--space-2) 0 0;
-    font-family: var(--font-sans);
+    margin: 0 0 0 auto;
+    font-family: var(--font-mono);
     font-size: var(--text-xs);
     color: var(--color-text-muted);
+    text-align: right;
   }
 
   .pair-block:has(.compare-tab[data-tab="before"][aria-pressed="true"]) .pair-hint {
