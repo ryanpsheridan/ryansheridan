@@ -147,7 +147,9 @@ const schema = [
                         <Media src={block.before.src} alt={block.before.alt ?? block.title} class="lightbox-trigger" />
                       </div>
                       <div class="compare-pane is-after is-active" data-pane="after">
-                        <div class="embed-frame" data-embed={block.embed.src} role="group" aria-label={block.embed.title} />
+                        <div class="embed-frame" role="group" aria-label={block.embed.title}>
+                          <ShadowEmbed src={block.embed.src} ratio={block.embed.ratio} poster={block.embed.poster} alt={block.embed.title} />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1868,62 +1870,6 @@ const schema = [
       });
     });
   });
-</script>
-
-<script>
-  // Mounts each interactive visual into its own shadow root, straight in the
-  // page. It used to sit in an iframe, which grabbed the wheel as the pointer
-  // crossed it. The fragments expect root, host, onCleanup, listen and gsap,
-  // as the site's Makeswift embed supplies them.
-  const embeds = document.querySelectorAll<HTMLElement>("[data-embed]");
-  if (embeds.length && "IntersectionObserver" in window) {
-    type Gsap = unknown;
-    let gsapLoad: Promise<Gsap | undefined> | undefined;
-    const loadGsap = () =>
-      (gsapLoad ??= new Promise<Gsap | undefined>((resolve) => {
-        const loaded = (window as unknown as { gsap?: Gsap }).gsap;
-        if (loaded) return resolve(loaded);
-        const script = document.createElement("script");
-        script.src = "/vendor/gsap.min.js";
-        script.onload = () => resolve((window as unknown as { gsap?: Gsap }).gsap);
-        script.onerror = () => resolve(undefined);
-        document.head.appendChild(script);
-      }));
-
-    const mount = async (host: HTMLElement) => {
-      try {
-        const [html, gsap] = await Promise.all([fetch(host.dataset.embed!).then((r) => r.text()), loadGsap()]);
-        const tpl = document.createElement("template");
-        tpl.innerHTML = html;
-        const scripts = [...tpl.content.querySelectorAll("script")];
-        const code = scripts.map((s) => s.textContent).join("\n");
-        scripts.forEach((s) => s.remove());
-        const root = host.shadowRoot ?? host.attachShadow({ mode: "open" });
-        root.append(tpl.content);
-        if (!gsap) return; // finished state, no motion
-        const cleanups: (() => void)[] = [];
-        const listen = (target: EventTarget, type: string, handler: EventListener, opts?: AddEventListenerOptions) => {
-          target.addEventListener(type, handler, opts);
-          cleanups.push(() => target.removeEventListener(type, handler, opts));
-        };
-        new Function("root", "host", "onCleanup", "listen", "gsap", code)(root, host, (fn: () => void) => cleanups.push(fn), listen, gsap);
-      } catch {
-        /* leave the dark placeholder */
-      }
-    };
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          io.unobserve(entry.target);
-          mount(entry.target as HTMLElement);
-        }
-      },
-      { rootMargin: "300px 0px" },
-    );
-    embeds.forEach((el) => io.observe(el));
-  }
 </script>
 
 <script>

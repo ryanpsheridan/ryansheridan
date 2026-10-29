@@ -68,28 +68,10 @@ export interface ComponentTableBlock {
   groups: ComponentTableGroup[];
 }
 
-export interface EmbedItem {
-  /** Public path to an HTML fragment (style, markup, script) that mounts into a shadow root on the page. */
-  src: string;
-  /** Accessible name for the frame. */
-  title: string;
-  /** Tells the viewer how to try it, e.g. "Drag a card to reorder". */
-  caption?: string;
-}
-
-/**
- * Live, interactive pieces in a two-column grid. Each mounts into its own
- * shadow root as it nears the viewport, so it takes no part in scrolling.
- */
-export interface EmbedGridBlock {
-  type: "embedGrid";
-  items: EmbedItem[];
-}
-
 /**
  * One idea shown two ways under a single title: the interactive piece as it
  * runs on the page (selected first) and the prototype frame it came from. The
- * piece is an HTML fragment that mounts into its own shadow root as it nears
+ * piece is a Shadow Embed asset, mounted into its own shadow root as it nears
  * the viewport, so it takes no part in scrolling.
  */
 export interface VisualPairBlock {
@@ -100,8 +82,8 @@ export interface VisualPairBlock {
   /** Tells the viewer how to try the interactive side. */
   hint?: string;
   before: { src: string; alt?: string };
-  /** Public path to an HTML fragment (style, markup, script) plus its accessible name. */
-  embed: { src: string; title: string };
+  /** A Shadow Embed asset under public/embeds/, its aspect ratio, a still of its resting state, and its accessible name. */
+  embed: { src: string; ratio: string; poster: string; title: string };
 }
 
 export interface DividerBlock {
@@ -508,7 +490,7 @@ const allProjects: Project[] = [
         afterLabel: "On the page",
         hint: "Drag a card to reorder",
         before: { src: "/project-shopping-agent-proto-picks.webp", alt: "The prototype storefront for a movie poster store, with the agent's chat open on the right showing poster recommendations" },
-        embed: { src: "/project-shopping-agent-embed-picks.html", title: "Interactive product picks: three sunglasses cards in a chat that can be reordered" },
+        embed: { src: "/embeds/shopping-agent-picks.html", ratio: "530 / 522", poster: "/project-shopping-agent-product-picks.svg", title: "Interactive product picks: three sunglasses cards in a chat that can be reordered" },
       },
       {
         type: "visualPair",
@@ -517,7 +499,7 @@ const allProjects: Project[] = [
         afterLabel: "On the page",
         hint: "Move across the card to step through the order",
         before: { src: "/project-shopping-agent-proto-order.webp", alt: "The prototype product page with the agent's chat listing a shopper's past orders and their shipping progress" },
-        embed: { src: "/project-shopping-agent-embed-order.html", title: "Interactive order tracker: an order card that steps from Order Placed to Delivered" },
+        embed: { src: "/embeds/shopping-agent-order.html", ratio: "530 / 522", poster: "/project-shopping-agent-order-status.svg", title: "Interactive order tracker: an order card that steps from Order Placed to Delivered" },
       },
       {
         type: "visualPair",
@@ -526,7 +508,7 @@ const allProjects: Project[] = [
         afterLabel: "On the page",
         hint: "Move over the picker to try colors",
         before: { src: "/project-shopping-agent-proto-colors.webp", alt: "The prototype's Colors settings with the color picker open over the Primary/accent swatch" },
-        embed: { src: "/project-shopping-agent-embed-colors.html", title: "Interactive color picker in the agent's Colors settings" },
+        embed: { src: "/embeds/shopping-agent-colors.html", ratio: "530 / 522", poster: "/project-shopping-agent-brand-colors.svg", title: "Interactive color picker in the agent's Colors settings" },
       },
       {
         type: "visualPair",
@@ -535,7 +517,7 @@ const allProjects: Project[] = [
         afterLabel: "On the page",
         hint: "Hover a row to switch sentiment",
         before: { src: "/project-shopping-agent-proto-sentiment.webp", alt: "The user sentiment card from the prototype dashboard, with percentage badges and a cursor over the Positive row" },
-        embed: { src: "/project-shopping-agent-embed-sentiment.html", title: "Interactive sentiment dashboard with Positive, Neutral and Negative rows" },
+        embed: { src: "/embeds/shopping-agent-sentiment.html", ratio: "530 / 522", poster: "/project-shopping-agent-sentiment.svg", title: "Interactive sentiment dashboard with Positive, Neutral and Negative rows" },
       },
       {
         type: "text",
