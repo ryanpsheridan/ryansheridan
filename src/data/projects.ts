@@ -412,6 +412,52 @@ const allProjects: Project[] = [
     ],
   },
   {
+    slug: "shopping-agent-launch-page",
+    title: "Shopping Agent Launch Page",
+    year: 2026,
+    draft: true,
+    description: "Page design and product visuals for BigCommerce's Shopping Agent launch, built from pre-release screenshots with a Claude skill that drafts images in Figma.",
+    thumbnail: "/project-shopping-agent-storefront.svg",
+    ogImage: "/project-shopping-agent-og.jpg",
+    showOnHomepage: false,
+    tags: ["Visual Design", "Web Design", "Claude Skill"],
+    tools: ["Figma", "Claude"],
+    client: "BigCommerce",
+    clientUrl: "https://www.bigcommerce.com/",
+    content: [
+      {
+        type: "text",
+        heading: "Making a new AI feature easy to picture",
+        body: `<p>Shopping Agent is a new <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> feature that answers shoppers' questions on a merchant's storefront and helps them find the right product. Product gave us the idea, a few screen recordings, and screenshots of the control panel before it shipped. My job was to turn that into a landing page people would understand at a glance.</p><p>I started from the copywriter's first draft, read the project brief, and ran a kickoff to agree on what the feature does, how it helps merchants, and how to make that clear on the page. Then I designed the page and every image on it.</p>`,
+      },
+      {
+        type: "imageGrid",
+        sideBySide: true,
+        images: [
+          { src: "/project-shopping-agent-product-picks.svg", alt: "A shopper asks for sunglasses for the beach, and the agent replies with a row of product cards, each with an Add to cart button" },
+          { src: "/project-shopping-agent-order-status.svg", alt: "A shopper asks where their sunglasses order is, and the agent answers with a tracker showing the order has shipped" },
+          { src: "/project-shopping-agent-brand-colors.svg", alt: "A color picker panel for setting the agent's brand colors" },
+          { src: "/project-shopping-agent-sentiment.svg", alt: "A dashboard panel showing positive, neutral and negative shopper sentiment as bars" },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Showing the idea, not the screen",
+        body: `<p>The real control panel does its job, but it is dense and built for working, not for explaining. Each section of the page makes one point, so each visual keeps only what supports it: the sentiment panel drops the surrounding charts, and the order tracker shows a single order. Everything on the storefront side traces back to the product recordings.</p>`,
+      },
+      {
+        type: "compare",
+        before: { src: "/project-shopping-agent-sentiment-original.webp", alt: "The user sentiment card from the Shopping Agent control panel, with percentage badges and a cursor over the positive row", label: "In the product" },
+        after: { src: "/project-shopping-agent-sentiment.svg", alt: "The same sentiment idea redrawn as a clean dashboard panel on a dark gradient", label: "On the page" },
+      },
+      {
+        type: "text",
+        heading: "Drafting the images with a Claude skill",
+        body: `<p>Shopping Agent needed a family of images that looked like they belonged together and matched the rest of our site. I pointed a Claude skill at images already on bigcommerce.com so it could build new ones in Figma in the same style. I then tightened each draft by hand and art directed the rest by voice, so the time went into choices rather than pushing pixels.</p>`,
+      },
+    ],
+  },
+  {
     slug: "making-web-animation-self-serve",
     title: "Making Web Animation Self-Serve",
     year: 2026,
