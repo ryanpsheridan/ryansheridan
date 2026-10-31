@@ -351,16 +351,17 @@ const allProjects: Project[] = [
         rows: [
           { label: "Known security advisories", before: "23", after: "2" },
           { label: "Pages with their own title", before: "1 of 6", after: "6 of 6" },
-          { label: "Opening hours on the site", before: "Missing", after: "Not changed yet" },
+          { label: "Opening hours on the site", before: "Missing", after: "In the structured data since 30 Oct 2026" },
+          { label: "Pages that state pricing", before: "None. PDFs, Club Caddie and the home page disagreed", after: "2 (bay rentals and memberships)" },
           { label: "Lighthouse performance", before: "Baseline pending", after: "Not measured yet" },
-          { label: "Search clicks and impressions", before: "About 0.5 clicks and 38 impressions a day (28 days to 22 Oct 2026)", after: "To be measured again after six weeks" },
+          { label: "Search clicks and impressions", before: "About 0.5 clicks and 38 impressions a day (28 days to 22 Oct 2026)", after: "Early read: 38 clicks and 1,777 impressions in the six days after the first push (24 to 29 Oct). Six-week re-measure still to come" },
           { label: "Hours and prices in AI answers", before: "Baseline pending", after: "Not measured yet" },
         ],
       },
       {
         type: "text",
         heading: "Search Console",
-        body: `<p>Search Console is the clearest before and after for the search work. I made the first SEO push on 23 Oct 2026, so everything left of the marker is the baseline. I will add the weeks that follow as they come in.</p>`,
+        body: `<p>Search Console is the clearest before and after for the search work. I made the first SEO push on 23 Oct 2026, so everything left of the marker is the baseline. I will add the weeks that follow as they come in. A second push, the pricing and membership pages, went out on 30 Oct 2026, so it is not in the chart yet.</p>`,
       },
       {
         type: "barChart",
@@ -368,7 +369,7 @@ const allProjects: Project[] = [
         unit: "impressions",
         points: ogcSearchConsole.map((d) => ({ date: d.date, value: d.impressions })),
         marker: { date: "2026-10-23", label: "First SEO push" },
-        caption: "Search Console, web search, 1 Sep to 23 Oct 2026. September was busier than anything since, with 2,262 impressions in the week of 7 Sep, then it settled to about 250 a week by October. The baseline I am measuring against is the 28 days before the push: 14 clicks and 1,060 impressions, about 38 impressions a day. The day of the push had 144. One day is not a trend yet.",
+        caption: "Search Console, web search, 1 Sep to 29 Oct 2026. September was busier than anything since, with 2,262 impressions in the week of 7 Sep, then it settled to about 250 a week by October. The baseline I am measuring against is the 28 days before the push: 14 clicks and 1,060 impressions, about 38 impressions a day. The six days after the push had 38 clicks and 1,777 impressions, roughly 296 impressions a day, a clear step up from the baseline. September had a similar surge, so I am not reading it as proof yet. The 30 Oct pricing push is not in this data.",
       },
       {
         type: "timeline",
@@ -400,6 +401,10 @@ const allProjects: Project[] = [
           {
             heading: "Evidence-led search fixes",
             body: "Search Console showed the club\u2019s pages were seen hundreds of times for searches like \u201cindoor golf\u201d and \u201cgolf simulator near me\u201d but earned no clicks, because five of six pages shared one generic title. Each page now has its own title and description, one official address, a sitemap and correct link previews, with no visible change to the site. Baseline: 101 clicks from about 6,700 impressions (Search Console, 1 Sep to 20 Oct 2026), to be re-measured after six weeks.",
+          },
+          {
+            heading: "Pricing and membership pages",
+            body: "Pricing lived in PDFs, Club Caddie screens and the home page, and none of them agreed. Bay rentals and memberships are two different things, but visitors could not tell. On 30 Oct 2026 I shipped a page for each, /bay-rentals and /memberships, with key facts up top, rate tables, a plan comparison ledger, an FAQ and a closing call to action. The home hero now leads with membership instead of the fall league promo, and its memberships section reuses the same ledger. Every rate, plan, hour, FAQ and location lives in one set of typed data files, checked against the owner\u2019s final pricing guide cell by cell, so a price change happens once. Components are now organized as atoms, molecules and organisms, with color, radius, shadow and type tokens named by role, so a later brand refresh is a token swap. I also fixed buttons with invisible text, a Contact button that did nothing on several pages, placeholder footer links and a broken Instagram feed. Each new page has its own title, description and structured data, and both are in the sitemap. No results to report yet.",
           },
         ],
       },

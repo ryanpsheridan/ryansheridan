@@ -63,4 +63,10 @@ export const ogcSearchConsole: SearchConsoleDay[] = [
   { date: "2026-10-21", clicks: 1, impressions: 41 },
   { date: "2026-10-22", clicks: 0, impressions: 42 },
   { date: "2026-10-23", clicks: 2, impressions: 144 },
+  { date: "2026-10-24", clicks: 4, impressions: 242 },
+  { date: "2026-10-25", clicks: 2, impressions: 355 },
+  { date: "2026-10-26", clicks: 4, impressions: 408 },
+  { date: "2026-10-27", clicks: 9, impressions: 298 },
+  { date: "2026-10-28", clicks: 11, impressions: 205 },
+  { date: "2026-10-29", clicks: 8, impressions: 269 },
 ];
