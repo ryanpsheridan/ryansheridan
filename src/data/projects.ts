@@ -1,5 +1,4 @@
 import { ogcSearchConsole } from "./ogc-search-console";
-import { IS_PRODUCTION } from "./environment";
 
 export interface TextBlock {
   type: "text";
@@ -301,12 +300,6 @@ export interface Project {
    * the flag to bring it back.
    */
   archived?: boolean;
-  /**
-   * Live on staging and branch previews, but absent from production: no page
-   * is built and its files are stripped from the build (see astro.config.mjs).
-   * Delete the flag when it is ready to ship.
-   */
-  previewOnly?: boolean;
   showOnHomepage: boolean;
   /**
    * 1-based slot on the homepage, for a project that should sit somewhere
@@ -470,11 +463,11 @@ const allProjects: Project[] = [
     slug: "shopping-agent-launch-page",
     title: "Shopping Agent Launch Page",
     year: 2026,
-    previewOnly: true,
+    draft: true,
     description: "Page design and product visuals for BigCommerce's Shopping Agent launch, built from pre-release screenshots with a Claude skill that drafts images in Figma.",
     thumbnail: "/project-shopping-agent-featured.webp",
     ogImage: "/project-shopping-agent-og.jpg",
-    showOnHomepage: true,
+    showOnHomepage: false,
     tags: ["Visual Design", "Web Design", "Claude Skill"],
     tools: ["Figma", "Claude"],
     client: "BigCommerce",
@@ -1755,8 +1748,8 @@ export function getHomepageProjects(): Project[] {
   return list;
 }
 
-/** Every project that gets a page, drafts included. Archived ones, and preview-only ones on production, are excluded; see `Project.archived` and `Project.previewOnly`. */
-export const projectsWithDrafts: Project[] = allProjects.filter((p) => !p.archived && !(p.previewOnly && IS_PRODUCTION));
+/** Every project that gets a page, drafts included. Archived ones are excluded; see `Project.archived`. */
+export const projectsWithDrafts: Project[] = allProjects.filter((p) => !p.archived);
 
 /** Everything listed on the site. Drafts are excluded; see `Project.draft`. */
 export const projects: Project[] = projectsWithDrafts.filter((p) => !p.draft);
