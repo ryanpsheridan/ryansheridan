@@ -1,3 +1,4 @@
+import { IS_PREVIEW } from "./environment";
 import { ogcSearchConsole } from "./ogc-search-console";
 
 export interface TextBlock {
@@ -290,8 +291,8 @@ export interface Project {
   /**
    * Work in progress. The page still builds at /work/<slug> (noindex, like
    * every project page) so it can be shared by link, but it is left out of
-   * /work, the homepage, type and tool pages, and llms.txt. Delete the flag
-   * to publish it.
+   * /work, the homepage, type and tool pages, and llms.txt. Staging and branch
+   * previews list drafts like any other project. Delete the flag to publish it.
    */
   draft?: boolean;
   /**
@@ -1752,8 +1753,12 @@ export function getHomepageProjects(): Project[] {
 /** Every project that gets a page, drafts included. Archived ones are excluded; see `Project.archived`. */
 export const projectsWithDrafts: Project[] = allProjects.filter((p) => !p.archived);
 
-/** Everything listed on the site. Drafts are excluded; see `Project.draft`. */
-export const projects: Project[] = projectsWithDrafts.filter((p) => !p.draft);
+/**
+ * Everything listed on the site. Drafts are excluded in production; see
+ * `Project.draft`. Staging and branch previews list them too, so a draft can
+ * be reviewed in /work before it ships.
+ */
+export const projects: Project[] = projectsWithDrafts.filter((p) => IS_PREVIEW || !p.draft);
 
 export function getProjectBySlug(slug: string): Project | undefined {
   return projectsWithDrafts.find((p) => p.slug === slug);
