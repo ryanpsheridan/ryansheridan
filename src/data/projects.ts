@@ -475,6 +475,7 @@ const allProjects: Project[] = [
     thumbnail: "/project-shopping-agent-featured.webp",
     ogImage: "/project-shopping-agent-og.jpg",
     showOnHomepage: true,
+    homepageWord: "launch pages",
     tags: ["Visual Design", "Web Design", "Claude Skill"],
     tools: ["Figma", "Claude"],
     client: "BigCommerce",
