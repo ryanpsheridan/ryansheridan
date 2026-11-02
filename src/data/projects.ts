@@ -295,6 +295,13 @@ export interface Project {
    */
   draft?: boolean;
   /**
+   * Only exists on staging and branch previews (Vercel's "preview"
+   * environment, and `astro dev`). Production builds no page for it, leave it
+   * out of every listing, and delete its assets (see `stagingOnlyAssets` in
+   * astro.config.mjs). Delete the flag to ship it to production.
+   */
+  stagingOnly?: boolean;
+  /**
    * Retired from the site but kept here in case it comes back. Unlike a
    * draft, no page is built at all, so the old /work/<slug> URL 404s. Delete
    * the flag to bring it back.
@@ -463,11 +470,12 @@ const allProjects: Project[] = [
     slug: "shopping-agent-launch-page",
     title: "Shopping Agent Launch Page",
     year: 2026,
-    draft: true,
+    stagingOnly: true,
     description: "Page design and product visuals for BigCommerce's Shopping Agent launch, built from pre-release screenshots with a Claude skill that drafts images in Figma.",
     thumbnail: "/project-shopping-agent-featured.webp",
     ogImage: "/project-shopping-agent-og.jpg",
-    showOnHomepage: false,
+    showOnHomepage: true,
+    homepageWord: "launch pages",
     tags: ["Visual Design", "Web Design", "Claude Skill"],
     tools: ["Figma", "Claude"],
     client: "BigCommerce",
@@ -1748,8 +1756,18 @@ export function getHomepageProjects(): Project[] {
   return list;
 }
 
-/** Every project that gets a page, drafts included. Archived ones are excluded; see `Project.archived`. */
-export const projectsWithDrafts: Project[] = allProjects.filter((p) => !p.archived);
+/**
+ * Staging means a Vercel "preview" environment (the staging environment and
+ * branch previews) or the dev server. Anything else, including a local build
+ * with no Vercel variables, counts as production, so a staging-only project
+ * fails closed.
+ */
+const isStaging = import.meta.env.DEV || process.env.VERCEL_ENV === "preview";
+
+/** Every project that gets a page, drafts included. Archived ones are excluded; see `Project.archived`, and staging-only ones outside staging; see `Project.stagingOnly`. */
+export const projectsWithDrafts: Project[] = allProjects.filter(
+  (p) => !p.archived && (!p.stagingOnly || isStaging),
+);
 
 /** Everything listed on the site. Drafts are excluded; see `Project.draft`. */
 export const projects: Project[] = projectsWithDrafts.filter((p) => !p.draft);
