@@ -34,7 +34,8 @@ export default defineConfig({
       name: 'strip-preview-only-files',
       hooks: {
         'astro:build:done': ({ dir }) => {
-          if (process.env.VERCEL_ENV !== 'production') return;
+          // Same test as IS_PRODUCTION in src/data/environment.ts.
+          if (process.env.VERCEL_ENV !== 'production' || process.env.VERCEL_GIT_COMMIT_REF === 'staging') return;
           for (const file of [
             ...['featured', 'og', 'proto-picks', 'proto-order', 'proto-colors', 'proto-sentiment'].map((n) => `project-shopping-agent-${n}.${n === 'og' ? 'jpg' : 'webp'}`),
             ...['product-picks', 'order-status', 'brand-colors', 'sentiment'].map((n) => `project-shopping-agent-${n}.svg`),
