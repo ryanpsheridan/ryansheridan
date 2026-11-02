@@ -20,6 +20,7 @@ interface Props {
 }
 
 import { SITE_URL, personSchema, websiteSchema } from "../data/schema";
+import { IS_PREVIEW } from "../data/environment";
 import { tokensToCss } from "../data/tokens";
 import "../styles/global.css";
 
@@ -39,8 +40,10 @@ const {
   ogImageAlt = "Ryan Sheridan, Principal Designer",
   ogType = "website",
   schema = [],
-  noindex = false,
+  noindex: noindexProp = false,
 } = Astro.props;
+// Staging and branch previews never belong in search, whatever the page says.
+const noindex = noindexProp || IS_PREVIEW;
 const ogImageURL = new URL(ogImage, canonicalURL.origin).href;
 
 // One graph per page: who Ryan is and what the site is, then whatever the

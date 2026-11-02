@@ -1,4 +1,5 @@
 import { ogcSearchConsole } from "./ogc-search-console";
+import { IS_PRODUCTION } from "./environment";
 
 export interface TextBlock {
   type: "text";
@@ -295,18 +296,17 @@ export interface Project {
    */
   draft?: boolean;
   /**
-   * Only exists on staging and branch previews (Vercel's "preview"
-   * environment, and `astro dev`). Production builds no page for it, leave it
-   * out of every listing, and delete its assets (see `stagingOnlyAssets` in
-   * astro.config.mjs). Delete the flag to ship it to production.
-   */
-  stagingOnly?: boolean;
-  /**
    * Retired from the site but kept here in case it comes back. Unlike a
    * draft, no page is built at all, so the old /work/<slug> URL 404s. Delete
    * the flag to bring it back.
    */
   archived?: boolean;
+  /**
+   * Live on staging and branch previews, but absent from production: no page
+   * is built and its files are stripped from the build (see astro.config.mjs).
+   * Delete the flag when it is ready to ship.
+   */
+  previewOnly?: boolean;
   showOnHomepage: boolean;
   /**
    * 1-based slot on the homepage, for a project that should sit somewhere
@@ -470,12 +470,11 @@ const allProjects: Project[] = [
     slug: "shopping-agent-launch-page",
     title: "Shopping Agent Launch Page",
     year: 2026,
-    stagingOnly: true,
+    previewOnly: true,
     description: "Page design and product visuals for BigCommerce's Shopping Agent launch, built from pre-release screenshots with a Claude skill that drafts images in Figma.",
     thumbnail: "/project-shopping-agent-featured.webp",
     ogImage: "/project-shopping-agent-og.jpg",
     showOnHomepage: true,
-    homepageWord: "launch pages",
     tags: ["Visual Design", "Web Design", "Claude Skill"],
     tools: ["Figma", "Claude"],
     client: "BigCommerce",
@@ -1756,18 +1755,8 @@ export function getHomepageProjects(): Project[] {
   return list;
 }
 
-/**
- * Staging means a Vercel "preview" environment (the staging environment and
- * branch previews) or the dev server. Anything else, including a local build
- * with no Vercel variables, counts as production, so a staging-only project
- * fails closed.
- */
-const isStaging = import.meta.env.DEV || process.env.VERCEL_ENV === "preview";
-
-/** Every project that gets a page, drafts included. Archived ones are excluded; see `Project.archived`, and staging-only ones outside staging; see `Project.stagingOnly`. */
-export const projectsWithDrafts: Project[] = allProjects.filter(
-  (p) => !p.archived && (!p.stagingOnly || isStaging),
-);
+/** Every project that gets a page, drafts included. Archived ones, and preview-only ones on production, are excluded; see `Project.archived` and `Project.previewOnly`. */
+export const projectsWithDrafts: Project[] = allProjects.filter((p) => !p.archived && !(p.previewOnly && IS_PRODUCTION));
 
 /** Everything listed on the site. Drafts are excluded; see `Project.draft`. */
 export const projects: Project[] = projectsWithDrafts.filter((p) => !p.draft);

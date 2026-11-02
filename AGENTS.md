@@ -8,6 +8,22 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
+## Staging
+
+`staging` is a long-lived branch that Vercel builds as a preview and serves at
+`https://staging.ryansheridan.studio`. Push work there to check it live without
+touching production, then merge `staging` into `main` to ship.
+
+Every non-production Vercel deployment (staging and branch previews) is
+`noindex` and serves `Disallow: /` from `/robots.txt`, driven by `VERCEL_ENV` in
+`src/data/environment.ts`. Staging never needs a "Request indexing" note.
+
+A project marked `previewOnly` in `src/data/projects.ts` shows on staging and
+branch previews (with its homepage slot, `/work` card and `llms.txt` entry) but
+builds nothing on production: no page, and `astro.config.mjs` strips its images
+and embeds from the build. Delete the flag, and the stripping block in the
+config, to ship it.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build

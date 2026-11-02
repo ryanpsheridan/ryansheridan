@@ -2,32 +2,7 @@
 import { defineConfig } from 'astro/config';
 
 import sitemap from '@astrojs/sitemap';
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-// Files in public/ that belong to a `stagingOnly` project, as a path prefix
-// inside the build. Production deletes them so they aren't served at a direct
-// URL either; staging and branch previews keep them.
-const stagingOnlyAssets = ['project-shopping-agent-', 'embeds/shopping-agent-'];
-
-const pruneStagingOnlyAssets = () => ({
-  name: 'prune-staging-only-assets',
-  hooks: {
-    'astro:build:done': ({ dir }) => {
-      if (process.env.VERCEL_ENV === 'preview') return;
-      const root = fileURLToPath(dir);
-      for (const prefix of stagingOnlyAssets) {
-        const folder = path.join(root, path.dirname(prefix));
-        if (!fs.existsSync(folder)) continue;
-        for (const name of fs.readdirSync(folder)) {
-          const file = path.join(folder, name);
-          if (name.startsWith(path.basename(prefix)) && fs.statSync(file).isFile()) fs.rmSync(file);
-        }
-      }
-    },
-  },
-});
+import { rmSync } from 'node:fs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -52,7 +27,24 @@ export default defineConfig({
     '/work/claude-design-consistency-first-design-second': '/work/brand-systems-claude-design',
   },
   integrations: [
-    pruneStagingOnlyAssets(),
+    {
+      // Projects marked `previewOnly` in src/data/projects.ts build no page on
+      // production, but their images and embeds sit in public/ and would still
+      // ship. Strip them from the production build. Delete this with the flag.
+      name: 'strip-preview-only-files',
+      hooks: {
+        'astro:build:done': ({ dir }) => {
+          if (process.env.VERCEL_ENV !== 'production') return;
+          for (const file of [
+            ...['featured', 'og', 'proto-picks', 'proto-order', 'proto-colors', 'proto-sentiment'].map((n) => `project-shopping-agent-${n}.${n === 'og' ? 'jpg' : 'webp'}`),
+            ...['product-picks', 'order-status', 'brand-colors', 'sentiment'].map((n) => `project-shopping-agent-${n}.svg`),
+            ...['picks', 'order', 'colors', 'sentiment'].map((n) => `embeds/shopping-agent-${n}.html`),
+          ]) {
+            rmSync(new URL(file, dir), { force: true });
+          }
+        },
+      },
+    },
     sitemap({
       // Only the pages that are meant to show up in search are listed. Every
       // other page carries noindex, so an allowlist keeps the sitemap and the
