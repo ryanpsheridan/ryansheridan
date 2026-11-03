@@ -35,14 +35,9 @@ const pattern: Slot[] = [
 
 <Layout title="Homepage grid test | Ryan Sheridan" description="A test layout of the Ryan Sheridan portfolio homepage on a visible four-column grid." noindex>
   <Nav />
-  <main id="main" class="grid-page" data-grid-page>
-    <div class="gridded">
-    {/* The columns behind the opening and the work. Hidden until the
-        "Show my work" button turns the grid on, and decorative either way. */}
-    <div class="grid-lines" aria-hidden="true"></div>
-
+  <main id="main" class="grid-page is-grid-on" data-grid-page>
     {/* The live homepage's opening, held to the first two columns with the
-        other two left open. */}
+        other two left open. Only the grid's outer edges run past it. */}
     <section class="hero" aria-labelledby="hero-title">
       <div class="band-inner">
         <div class="cell hero-copy">
@@ -53,15 +48,17 @@ const pattern: Slot[] = [
           <p class="intro">Principal Designer at Commerce, leading design systems, websites, and AI&nbsp;workflows.</p>
           <div class="cta-row">
             <Button href="/work">View all work</Button>
-            {/* The page's own "look under the hood": draws the grid the
-                layout is built on, the columns and the edge of every tile. */}
-            <Button variant="secondary" aria-pressed="false" data-grid-toggle><span data-grid-label>Show my work</span></Button>
+            {/* Placeholder: for now it hides and shows the grid, which is on
+                by default. To be replaced with its own idea. */}
+            <Button variant="secondary" aria-pressed="true" data-grid-toggle><span data-grid-label>Hide the grid</span></Button>
           </div>
         </div>
       </div>
     </section>
 
     <section class="work" aria-label="Selected work">
+      {/* The four columns, behind the work only. Decorative. */}
+      <div class="grid-lines" aria-hidden="true"></div>
       <div class="band-inner work-grid">
         {projects.map((project, i) => {
           const slot = pattern[i % pattern.length];
@@ -70,8 +67,12 @@ const pattern: Slot[] = [
               class="tile"
               style={`--row:${i + 1};--col:${slot.col};--span:${slot.span};--m-col:${slot.mCol};--m-span:${slot.mSpan}`}
             >
-              <div class="tile-media">
-                {project.thumbnail && <Media src={project.thumbnail} alt={project.title} loading={i === 0 ? "eager" : "lazy"} />}
+              {/* The box holds the image alone; the caption sits under it,
+                  out in the grid. */}
+              <div class="tile-frame">
+                <div class="tile-media">
+                  {project.thumbnail && <Media src={project.thumbnail} alt={project.title} loading={i === 0 ? "eager" : "lazy"} />}
+                </div>
               </div>
               <div class="tile-caption">
                 <h3 class="tile-title">
@@ -86,7 +87,6 @@ const pattern: Slot[] = [
         })}
       </div>
     </section>
-    </div>
 
     <section class="closing" aria-labelledby="closing-title">
       <div class="band-inner">
@@ -135,7 +135,7 @@ const pattern: Slot[] = [
     margin-top: 0;
   }
 
-  .gridded {
+  .work {
     position: relative;
     isolation: isolate;
   }
@@ -183,10 +183,18 @@ const pattern: Slot[] = [
 
   /* ---------- Hero: the homepage's opening, in the first two columns ---------- */
 
+  /* A rule under the opening, and only the grid's outer edges beside it,
+     so no line runs through the copy. */
+  .hero {
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
   .hero .band-inner {
     min-height: calc(100svh - var(--nav-height) - var(--space-8));
     align-items: center;
     padding-block: var(--space-8);
+    border-inline: var(--border-width) solid var(--grid-line);
+    transition: border-color 400ms var(--grid-ease);
   }
 
   .hero-copy {
@@ -221,7 +229,7 @@ const pattern: Slot[] = [
 
   .work-grid {
     row-gap: var(--space-8);
-    padding-bottom: var(--space-8);
+    padding-block: var(--space-8);
   }
 
   /* A full box on every side: the side edges sit on column lines, and
@@ -232,19 +240,25 @@ const pattern: Slot[] = [
        fit side by side would be packed into one row and touch. */
     grid-row: var(--row);
     grid-column: var(--col) / span var(--span);
+  }
+
+  /* The box around the image. A full edge on every side: the sides sit on
+     column lines, and drawing them here keeps them where the box's fill
+     would cover the line. */
+  .tile-frame {
+    padding: var(--cell-pad);
     background: var(--color-bg);
     border: var(--border-width) solid var(--grid-line);
-    /* The tile edges come in once the columns have mostly drawn. */
+    /* The box edges come in once the columns have mostly drawn. */
     transition: border-color 400ms var(--grid-ease) 450ms;
   }
 
-  .grid-page:not(.is-grid-on) .tile {
+  .grid-page:not(.is-grid-on) .tile-frame {
     transition-delay: 0ms;
   }
 
   .tile-media {
     aspect-ratio: 16 / 10;
-    margin: var(--cell-pad) var(--cell-pad) 0;
     overflow: hidden;
     background: var(--color-surface);
   }
@@ -269,7 +283,7 @@ const pattern: Slot[] = [
   }
 
   .tile-caption {
-    padding: var(--space-3) var(--cell-pad) var(--cell-pad);
+    padding: var(--space-3) var(--cell-pad) 0;
   }
 
   .tile-title {
@@ -320,7 +334,8 @@ const pattern: Slot[] = [
 
   @media (prefers-reduced-motion: reduce) {
     .grid-lines,
-    .tile,
+    .tile-frame,
+    .hero .band-inner,
     .closing .band-inner {
       transition: none;
     }
@@ -364,7 +379,7 @@ const pattern: Slot[] = [
 
     .work-grid {
       row-gap: var(--space-7);
-      padding-bottom: var(--space-7);
+      padding-block: var(--space-7);
     }
 
     .tile {
