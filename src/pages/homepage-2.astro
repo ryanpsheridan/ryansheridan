@@ -13,34 +13,97 @@ import { typeHref } from "../data/work";
   different widths rather than in one even list. Same type, color, badges and
   tokens as the rest of the site. Kept at its own URL and out of search
   (noindex here, and the sitemap only lists an allowlist in astro.config.mjs).
+
+  The hero's second button is the subject of the test. Five ideas for what it
+  does live side by side, picked with the switcher pinned to the bottom of
+  the page (or ?idea=inspect|rearrange|index|sort|drag):
+
+    1. Inspect    Redlines over the live page: columns, spans, tokens.
+    2. Rearrange  Steps the work through other layouts on the same grid.
+    3. Index      Packs every project into one column each, four across.
+    4. Sort       Columns become disciplines; each project moves under its own.
+    5. Drag       Visitors move and resize the tiles; they snap to columns.
 */
 
 const projects = getHomepageProjects();
 
 /*
-  Where each project sits, repeating down the list: the column it starts in
-  and how many of the four it spans, on desktop and then on phones. One
-  project to a row, never narrower than two columns, so tiles never touch and
-  the empty columns beside them read as chosen.
+  Where each project sits: the column it starts in and how many of the four it
+  spans, on desktop and then on phones. One project to a row, never narrower
+  than two columns, so tiles never touch and the empty columns beside them
+  read as chosen. The first layout is the page's own; the rest are the ones
+  "Rearrange" steps through.
 */
 type Slot = { col: number; span: number; mCol: number; mSpan: number };
-const pattern: Slot[] = [
-  { col: 1, span: 3, mCol: 1, mSpan: 4 },
-  { col: 3, span: 2, mCol: 2, mSpan: 3 },
-  { col: 2, span: 3, mCol: 1, mSpan: 3 },
-  { col: 1, span: 2, mCol: 2, mSpan: 3 },
-  { col: 3, span: 2, mCol: 1, mSpan: 3 },
+const layouts: Slot[][] = [
+  [
+    { col: 1, span: 3, mCol: 1, mSpan: 4 },
+    { col: 3, span: 2, mCol: 2, mSpan: 3 },
+    { col: 2, span: 3, mCol: 1, mSpan: 3 },
+    { col: 1, span: 2, mCol: 2, mSpan: 3 },
+    { col: 3, span: 2, mCol: 1, mSpan: 3 },
+  ],
+  [
+    { col: 1, span: 2, mCol: 1, mSpan: 3 },
+    { col: 2, span: 3, mCol: 2, mSpan: 3 },
+    { col: 3, span: 2, mCol: 1, mSpan: 4 },
+    { col: 1, span: 3, mCol: 2, mSpan: 3 },
+    { col: 2, span: 2, mCol: 1, mSpan: 3 },
+  ],
+  [
+    { col: 1, span: 2, mCol: 1, mSpan: 3 },
+    { col: 3, span: 2, mCol: 2, mSpan: 3 },
+    { col: 2, span: 2, mCol: 1, mSpan: 3 },
+    { col: 1, span: 2, mCol: 2, mSpan: 3 },
+    { col: 3, span: 2, mCol: 1, mSpan: 3 },
+  ],
+  [
+    { col: 1, span: 4, mCol: 1, mSpan: 4 },
+    { col: 2, span: 2, mCol: 1, mSpan: 3 },
+    { col: 1, span: 3, mCol: 2, mSpan: 3 },
+    { col: 3, span: 2, mCol: 1, mSpan: 4 },
+    { col: 1, span: 4, mCol: 2, mSpan: 3 },
+  ],
 ];
+
+/*
+  "Sort" turns the four columns into the four things the headline names.
+  A project goes under the first discipline in this order that one of its
+  tags belongs to, most specific first, so a design system that also ships
+  AI tooling lands under AI rather than with every other system.
+*/
+const disciplines = [
+  { label: "Systems", tags: ["Design System", "Component Design"] },
+  { label: "Sites", tags: ["Web Design"] },
+  { label: "Brands", tags: ["Branding", "Illustration", "Visual Design"] },
+  { label: "AI", tags: ["Claude Skill", "Automation"] },
+];
+const precedence = [3, 2, 1, 0];
+const disciplineOf = (tags: string[]) =>
+  precedence.find((d) => tags.some((t) => disciplines[d].tags.includes(t))) ?? 0;
+
+const counts = [0, 0, 0, 0];
+const sorted = projects.map((project) => {
+  const d = disciplineOf(project.tags);
+  counts[d] += 1;
+  return { d, row: counts[d] };
+});
+// On phones the board is one list, grouped by discipline in column order.
+const phoneOrder = sorted
+  .map((s, i) => ({ ...s, i }))
+  .sort((a, b) => a.d - b.d || a.row - b.row)
+  .map((s) => s.i);
 ---
 
 <Layout title="Homepage grid test | Ryan Sheridan" description="A test layout of the Ryan Sheridan portfolio homepage on a visible four-column grid." noindex>
   <Nav />
-  <main id="main" class="grid-page is-grid-on" data-grid-page>
+  <main id="main" class="grid-page is-grid-on" data-grid-page data-layouts={JSON.stringify(layouts)}>
     {/* The live homepage's opening, held to the first two columns with the
         other two left open. Only the grid's outer edges run past it. */}
     <section class="hero" aria-labelledby="hero-title">
       <div class="band-inner">
-        <div class="cell hero-copy">
+        <div class="cell hero-copy" data-spec-target>
+          <span class="spec spec-label" aria-hidden="true" data-spec-label></span>
           <h1 id="hero-title" class="hero-title">
             <span class="quiet">Designing and</span><br />
             <span class="quiet">scaling</span> systems, sites and&nbsp;brands.
@@ -48,9 +111,11 @@ const pattern: Slot[] = [
           <p class="intro">Principal Designer at Commerce, leading design systems, websites, and AI&nbsp;workflows.</p>
           <div class="cta-row">
             <Button href="/work">View all work</Button>
-            {/* Placeholder: for now it hides and shows the grid, which is on
-                by default. To be replaced with its own idea. */}
-            <Button variant="secondary" aria-pressed="true" data-grid-toggle><span data-grid-label>Hide the grid</span></Button>
+            {/* The idea under test. Its label, pressed state and behavior
+                are set by the script from the switcher below. */}
+            <Button variant="secondary" aria-pressed="false" data-idea-button>
+              <span data-idea-label>Inspect</span><span class="idea-count" data-idea-count hidden></span>
+            </Button>
           </div>
         </div>
       </div>
@@ -59,22 +124,47 @@ const pattern: Slot[] = [
     <section class="work" aria-label="Selected work">
       {/* The four columns, behind the work only. Decorative. */}
       <div class="grid-lines" aria-hidden="true"></div>
-      <div class="band-inner work-grid">
+
+      {/* A label over each column: its number and width under Inspect, its
+          discipline under Sort. Hidden otherwise. */}
+      <div class="band-inner col-heads" aria-hidden="true">
+        {disciplines.map((d, i) => (
+          <div class="col-head">
+            <span class="head-inspect" data-head-inspect>Col {i + 1}</span>
+            <span class="head-sort">{d.label} <span class="head-count">{counts[i]}</span></span>
+          </div>
+        ))}
+      </div>
+
+      <div class="band-inner work-grid" data-work-grid>
         {projects.map((project, i) => {
-          const slot = pattern[i % pattern.length];
+          const slot = layouts[0][i];
+          const s = sorted[i];
           return (
             <article
               class="tile"
-              style={`--row:${i + 1};--col:${slot.col};--span:${slot.span};--m-col:${slot.mCol};--m-span:${slot.mSpan}`}
+              style={`--row:${i + 1};--m-row:${i + 1};--col:${slot.col};--span:${slot.span};--m-col:${slot.mCol};--m-span:${slot.mSpan}`}
+              data-tile
+              data-title={project.title}
+              data-sort-col={s.d + 1}
+              data-sort-row={s.row}
+              data-sort-m-row={phoneOrder.indexOf(i) + 1}
+              data-discipline={disciplines[s.d].label}
             >
+              <span class="spec spec-label" aria-hidden="true" data-spec-label></span>
+              {i < projects.length - 1 && (
+                <span class="spec spec-gap" aria-hidden="true"><span data-spec-gap></span></span>
+              )}
               {/* The box holds the image alone; the caption sits under it,
                   out in the grid. */}
-              <div class="tile-frame">
+              <div class="tile-frame" data-tile-frame>
                 <div class="tile-media">
                   {project.thumbnail && <Media src={project.thumbnail} alt={project.title} loading={i === 0 ? "eager" : "lazy"} />}
                 </div>
+                <span class="drag-handle" aria-hidden="true" data-drag-handle></span>
               </div>
               <div class="tile-caption">
+                <p class="tile-discipline">{disciplines[s.d].label}</p>
                 <h3 class="tile-title">
                   <a href={`/work/${project.slug}`} class="tile-link">{project.title}</a>
                 </h3>
@@ -101,6 +191,18 @@ const pattern: Slot[] = [
         </div>
       </div>
     </section>
+
+    <p class="visually-hidden" aria-live="polite" data-announce></p>
+
+    {/* Test only: which idea the hero's second button runs. */}
+    <div class="idea-switch" role="group" aria-label="Test: choose what the hero's second button does">
+      <span class="idea-switch-label">Idea</span>
+      <button type="button" class="idea-option" data-idea="inspect" aria-pressed="true">Inspect</button>
+      <button type="button" class="idea-option" data-idea="rearrange" aria-pressed="false">Rearrange</button>
+      <button type="button" class="idea-option" data-idea="index" aria-pressed="false">Index</button>
+      <button type="button" class="idea-option" data-idea="sort" aria-pressed="false">Sort</button>
+      <button type="button" class="idea-option" data-idea="drag" aria-pressed="false">Drag</button>
+    </div>
   </main>
   <Footer />
 </Layout>
@@ -114,10 +216,14 @@ const pattern: Slot[] = [
   .grid-page {
     --grid-w: min(var(--max-width), 100% - 2 * var(--page-padding));
     --cell-pad: calc(var(--space-1) * 3);
+    --row-gap: var(--space-8);
     /* Every grid line on the page takes this color. Transparent until the
        grid is turned on, so turning it on moves nothing. */
     --grid-line: transparent;
     --grid-ease: var(--ease-standard);
+    /* Inspect's redline ink and fill: the link blue and its tint. */
+    --spec-ink: var(--color-link);
+    --spec-fill: var(--color-accent-bg);
   }
 
   .grid-page.is-grid-on {
@@ -143,6 +249,7 @@ const pattern: Slot[] = [
   @media (max-width: 768px) {
     .grid-page {
       --cell-pad: var(--space-2);
+      --row-gap: var(--space-7);
     }
   }
 
@@ -198,6 +305,7 @@ const pattern: Slot[] = [
   }
 
   .hero-copy {
+    position: relative;
     grid-column: 1 / span 2;
   }
 
@@ -225,15 +333,21 @@ const pattern: Slot[] = [
     margin-top: var(--space-5);
   }
 
+  /* Rearrange's step count, set in mono beside the label. */
+  .idea-count {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-regular);
+    color: var(--color-text-muted);
+  }
+
   /* ---------- Work ---------- */
 
   .work-grid {
-    row-gap: var(--space-8);
+    row-gap: var(--row-gap);
     padding-block: var(--space-8);
   }
 
-  /* A full box on every side: the side edges sit on column lines, and
-     drawing them here keeps them when the tile's fill would cover the line. */
   .tile {
     position: relative;
     /* Its own row, always: left to auto-placement, two narrow tiles that
@@ -246,6 +360,7 @@ const pattern: Slot[] = [
      column lines, and drawing them here keeps them where the box's fill
      would cover the line. */
   .tile-frame {
+    position: relative;
     padding: var(--cell-pad);
     background: var(--color-bg);
     border: var(--border-width) solid var(--grid-line);
@@ -271,7 +386,7 @@ const pattern: Slot[] = [
   }
 
   @media (hover: hover) {
-    .tile:hover .tile-media :global(img) {
+    .grid-page:not([data-mode="drag"]) .tile:hover .tile-media :global(img) {
       transform: scale(1.03);
     }
   }
@@ -292,6 +407,17 @@ const pattern: Slot[] = [
     letter-spacing: var(--tracking-snug);
     line-height: var(--leading-snug);
     margin-bottom: var(--space-3);
+  }
+
+  /* Only shown on phones under Sort, where the column heads are gone. */
+  .tile-discipline {
+    display: none;
+    margin-bottom: var(--space-1);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
   }
 
   /* The title link covers the whole tile, so the image is a click target
@@ -315,6 +441,231 @@ const pattern: Slot[] = [
     outline-offset: var(--focus-offset);
   }
 
+  /* ---------- Column heads (Inspect and Sort) ---------- */
+
+  /* Sits in the work section's top padding, so showing it moves nothing. */
+  .col-heads {
+    position: absolute;
+    top: var(--space-4);
+    left: 0;
+    right: 0;
+    pointer-events: none;
+  }
+
+  .col-head {
+    padding-inline: var(--cell-pad);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: var(--leading-snug);
+  }
+
+  .head-inspect,
+  .head-sort {
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(4px);
+    transition:
+      opacity 300ms var(--grid-ease),
+      transform 300ms var(--grid-ease),
+      visibility 0s 300ms;
+  }
+
+  .head-inspect {
+    color: var(--spec-ink);
+  }
+
+  .head-sort {
+    margin-top: calc(-1em * var(--leading-snug));
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text);
+  }
+
+  .head-count {
+    color: var(--color-text-quiet);
+  }
+
+  .grid-page[data-mode="inspect"] .head-inspect,
+  .grid-page[data-mode="sort"] .head-sort {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  /* ---------- 1. Inspect: redlines over the live page ---------- */
+
+  .spec {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-regular);
+    letter-spacing: 0;
+    line-height: 1;
+    color: var(--spec-ink);
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 300ms var(--grid-ease),
+      visibility 0s 300ms;
+  }
+
+  .grid-page[data-mode="inspect"] .spec {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  /* A tag sitting on the box's top edge, the way a design tool labels a
+     selected frame. */
+  .spec-label {
+    bottom: 100%;
+    left: 0;
+    padding: 3px 6px;
+    color: var(--color-bg);
+    background: var(--spec-ink);
+  }
+
+  /* Sits on the dashed outline, which is offset out from the cell. */
+  .hero-copy > .spec-label {
+    bottom: calc(100% + var(--space-2));
+    left: calc(-1 * var(--space-2));
+  }
+
+  /* The row gap under a tile, measured: a line with end caps and its token. */
+  .spec-gap {
+    top: 100%;
+    left: calc(var(--cell-pad) + var(--space-4));
+    height: var(--row-gap);
+    border-left: var(--border-width) solid var(--spec-ink);
+    display: flex;
+    align-items: center;
+  }
+
+  .spec-gap::before,
+  .spec-gap::after {
+    content: "";
+    position: absolute;
+    left: -5px;
+    width: 9px;
+    border-top: var(--border-width) solid var(--spec-ink);
+  }
+
+  .spec-gap::before {
+    top: 0;
+  }
+
+  .spec-gap::after {
+    bottom: 0;
+  }
+
+  .spec-gap > span {
+    padding-left: var(--space-2);
+  }
+
+  /* The padding inside each box, tinted, and an outline on the opening's
+     cell so its span reads. */
+  .tile-frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: var(--cell-pad) solid var(--spec-fill);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 300ms var(--grid-ease);
+  }
+
+  .grid-page[data-mode="inspect"] .tile-frame::before {
+    opacity: 1;
+  }
+
+  .grid-page[data-mode="inspect"] .tile-frame {
+    border-color: var(--spec-ink);
+    transition-delay: 0ms;
+  }
+
+  .hero-copy {
+    outline: var(--border-width) dashed transparent;
+    outline-offset: var(--space-2);
+    transition: outline-color 300ms var(--grid-ease);
+  }
+
+  .grid-page[data-mode="inspect"] .hero-copy {
+    outline-color: var(--color-link-subtle);
+  }
+
+  /* ---------- 3 and 4. Index and Sort: one column per project ---------- */
+
+  .grid-page:is([data-mode="index"], [data-mode="sort"]) .work-grid {
+    row-gap: var(--space-6);
+  }
+
+  .grid-page:is([data-mode="index"], [data-mode="sort"]) .tile-title {
+    font-size: var(--text-m);
+    margin-bottom: 0;
+  }
+
+  .grid-page:is([data-mode="index"], [data-mode="sort"]) .badge-list {
+    display: none;
+  }
+
+  /* ---------- 5. Drag: move and resize, snapping to columns ---------- */
+
+  .grid-page[data-mode="drag"] .tile-link,
+  .grid-page[data-mode="drag"] .badge {
+    pointer-events: none;
+  }
+
+  .grid-page[data-mode="drag"] .tile-frame {
+    cursor: grab;
+    touch-action: pan-y;
+    user-select: none;
+    transition-delay: 0ms;
+  }
+
+  .grid-page[data-mode="drag"] .tile-frame:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  .grid-page[data-mode="drag"] .tile.is-dragging .tile-frame,
+  .grid-page[data-mode="drag"] .tile-frame:focus-visible {
+    cursor: grabbing;
+    border-color: var(--color-text);
+    outline: none;
+  }
+
+  .grid-page[data-mode="drag"] .tile.is-dragging {
+    z-index: 2;
+  }
+
+  .drag-handle {
+    position: absolute;
+    top: 50%;
+    right: -4px;
+    width: 7px;
+    height: var(--space-5);
+    border-radius: var(--radius-full);
+    background: var(--color-text);
+    transform: translateY(-50%);
+    cursor: ew-resize;
+    display: none;
+  }
+
+  /* A bigger hit area than the pill itself. */
+  .drag-handle::before {
+    content: "";
+    position: absolute;
+    inset: -12px -10px;
+  }
+
+  .grid-page[data-mode="drag"] .drag-handle {
+    display: block;
+  }
+
   /* ---------- Closing ---------- */
 
   .closing {
@@ -335,8 +686,13 @@ const pattern: Slot[] = [
   @media (prefers-reduced-motion: reduce) {
     .grid-lines,
     .tile-frame,
+    .tile-frame::before,
     .hero .band-inner,
-    .closing .band-inner {
+    .closing .band-inner,
+    .hero-copy,
+    .spec,
+    .head-inspect,
+    .head-sort {
       transition: none;
     }
   }
@@ -350,6 +706,57 @@ const pattern: Slot[] = [
     font-weight: var(--weight-light);
     letter-spacing: var(--tracking-tight);
     line-height: var(--leading-tight);
+  }
+
+  /* ---------- Test switcher ---------- */
+
+  .idea-switch {
+    position: fixed;
+    z-index: 50;
+    left: 50%;
+    bottom: var(--space-3);
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    max-width: calc(100% - 2 * var(--space-3));
+    padding: var(--space-1);
+    background: var(--color-bg);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-full);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+  }
+
+  .idea-switch-label {
+    padding-inline: var(--space-2) var(--space-1);
+    color: var(--color-text-quiet);
+  }
+
+  .idea-option {
+    height: var(--control-sm);
+    padding: 0 var(--space-3);
+    font: inherit;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: 0;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .idea-option:hover {
+    color: var(--color-text);
+  }
+
+  .idea-option[aria-pressed="true"] {
+    color: var(--color-bg);
+    background: var(--color-text);
+  }
+
+  .idea-option:focus-visible {
+    outline: var(--focus-width) solid var(--color-focus);
+    outline-offset: 2px;
   }
 
   /* ---------- Tablet: the opening and closing take three columns ---------- */
@@ -378,11 +785,11 @@ const pattern: Slot[] = [
     }
 
     .work-grid {
-      row-gap: var(--space-7);
       padding-block: var(--space-7);
     }
 
     .tile {
+      grid-row: var(--m-row);
       grid-column: var(--m-col) / span var(--m-span);
     }
 
@@ -390,23 +797,352 @@ const pattern: Slot[] = [
       font-size: var(--text-l);
     }
 
+    .grid-page:is([data-mode="index"], [data-mode="sort"]) .work-grid {
+      row-gap: var(--space-5);
+    }
+
+    .grid-page:is([data-mode="index"], [data-mode="sort"]) .tile-title {
+      font-size: var(--text-s);
+    }
+
+    /* The board is one list on phones, so the heads give way to a label
+       on each project. */
+    .grid-page[data-mode="sort"] .head-sort {
+      display: none;
+    }
+
+    .grid-page[data-mode="sort"] .tile-discipline {
+      display: block;
+    }
+
+    /* Column widths are too narrow for words on a phone; numbers only. */
+    .head-inspect :global([data-head-px]) {
+      display: none;
+    }
+
     .closing .band-inner {
       padding-block: var(--space-7) calc(var(--space-7) + var(--space-4));
+    }
+
+    .idea-switch-label {
+      display: none;
+    }
+
+    .idea-option {
+      padding: 0 var(--space-2);
     }
   }
 </style>
 
 <script>
-  // "Show my work": turns the page's grid on and off. The state is the
-  // class on <main>; the button's pressed state and label follow it.
-  const page = document.querySelector<HTMLElement>("[data-grid-page]");
-  const toggle = document.querySelector<HTMLButtonElement>("[data-grid-toggle]");
-  const label = toggle?.querySelector<HTMLElement>("[data-grid-label]");
+  /*
+    The hero's second button, five ways. The switcher picks the idea; the
+    button runs it. Every idea starts from the page's own layout, so
+    switching resets whatever the last one left behind.
 
-  toggle?.addEventListener("click", () => {
-    if (!page) return;
-    const on = page.classList.toggle("is-grid-on");
-    toggle.setAttribute("aria-pressed", String(on));
-    if (label) label.textContent = on ? "Hide the grid" : "Show my work";
+    Tile positions live in custom properties on each tile (--col, --span,
+    --row and their --m- phone twins), so every idea is a change to those
+    numbers, animated with FLIP: measure, change, then play each tile back
+    from where it was.
+  */
+  type Idea = "inspect" | "rearrange" | "index" | "sort" | "drag";
+  type Slot = { col: number; span: number; row: number; mCol: number; mSpan: number; mRow: number };
+  type Layout = Omit<Slot, "row" | "mRow">[];
+
+  const page = document.querySelector<HTMLElement>("[data-grid-page]")!;
+  const button = document.querySelector<HTMLButtonElement>("[data-idea-button]")!;
+  const label = button.querySelector<HTMLElement>("[data-idea-label]")!;
+  const count = button.querySelector<HTMLElement>("[data-idea-count]")!;
+  const announcer = document.querySelector<HTMLElement>("[data-announce]")!;
+  const grid = document.querySelector<HTMLElement>("[data-work-grid]")!;
+  const tiles = [...document.querySelectorAll<HTMLElement>("[data-tile]")];
+  const options = [...document.querySelectorAll<HTMLButtonElement>("[data-idea]")];
+  const layouts: Layout[] = JSON.parse(page.dataset.layouts ?? "[]");
+
+  const phone = matchMedia("(max-width: 768px)");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+  const ease = getComputedStyle(document.documentElement).getPropertyValue("--ease-standard").trim() || "ease";
+
+  const ideas: Record<Idea, { label: string; pressedLabel?: string }> = {
+    inspect: { label: "Inspect", pressedLabel: "Done inspecting" },
+    rearrange: { label: "Rearrange" },
+    index: { label: "See everything", pressedLabel: "Back to the layout" },
+    sort: { label: "Sort by discipline", pressedLabel: "Back to the layout" },
+    drag: { label: "Move things around", pressedLabel: "Done moving" },
+  };
+
+  let idea: Idea = "inspect";
+  let active = false;
+  let layoutIndex = 0;
+
+  const announce = (text: string) => {
+    announcer.textContent = "";
+    requestAnimationFrame(() => (announcer.textContent = text));
+  };
+
+  // ---------- Slots ----------
+
+  const keys: Record<keyof Slot, string> = {
+    col: "--col", span: "--span", row: "--row", mCol: "--m-col", mSpan: "--m-span", mRow: "--m-row",
+  };
+
+  const getSlot = (tile: HTMLElement): Slot => {
+    const slot = {} as Slot;
+    for (const k in keys) slot[k as keyof Slot] = parseInt(tile.style.getPropertyValue(keys[k as keyof Slot]), 10);
+    return slot;
+  };
+
+  const setSlot = (tile: HTMLElement, slot: Partial<Slot>) => {
+    for (const k in slot) tile.style.setProperty(keys[k as keyof Slot], String(slot[k as keyof Slot]));
+  };
+
+  const applyLayout = (n: number) =>
+    tiles.forEach((tile, i) => setSlot(tile, { ...layouts[n][i], row: i + 1, mRow: i + 1 }));
+
+  // ---------- FLIP ----------
+
+  const flip = (change: () => void, duration = 600, only = tiles) => {
+    const before = only.map((t) => t.getBoundingClientRect());
+    change();
+    if (reduce.matches) return;
+    only.forEach((tile, i) => {
+      const a = before[i];
+      const b = tile.getBoundingClientRect();
+      const dx = a.left - b.left;
+      const dy = a.top - b.top;
+      const s = a.width / b.width;
+      if (Math.abs(dx) < 1 && Math.abs(dy) < 1 && Math.abs(s - 1) < 0.01) return;
+      tile.animate(
+        [
+          { transformOrigin: "0 0", transform: `translate(${dx}px, ${dy}px) scale(${s})` },
+          { transformOrigin: "0 0", transform: "none" },
+        ],
+        { duration, easing: ease },
+      );
+    });
+  };
+
+  // ---------- 1. Inspect ----------
+
+  // Token names for the sizes Inspect measures, so a redline reads as the
+  // token rather than a bare number.
+  const spaceTokens: Record<number, string> = { 32: "--space-5", 48: "--space-6", 64: "--space-7", 96: "--space-8" };
+
+  const measure = () => {
+    const width = grid.clientWidth;
+    const colPx = Math.round(width / 4);
+    document.querySelectorAll<HTMLElement>("[data-head-inspect]").forEach((head, i) => {
+      head.innerHTML = `Col ${i + 1}<span data-head-px> · ${colPx}px</span>`;
+    });
+    document.querySelectorAll<HTMLElement>("[data-spec-label]").forEach((tag) => {
+      const box = tag.parentElement!;
+      const cs = getComputedStyle(box);
+      const pct = Math.round((box.offsetWidth / width) * 100);
+      tag.textContent = `col ${cs.gridColumnStart} / ${cs.gridColumnEnd} · ${pct}%`;
+    });
+    const gap = Math.round(parseFloat(getComputedStyle(grid).rowGap));
+    const token = spaceTokens[gap];
+    document.querySelectorAll<HTMLElement>("[data-spec-gap]").forEach((g) => {
+      g.textContent = token ? `${token} · ${gap}px` : `${gap}px`;
+    });
+  };
+
+  new ResizeObserver(() => {
+    if (page.dataset.mode === "inspect") measure();
+  }).observe(grid);
+
+  // ---------- 3. Index ----------
+
+  const toIndex = () =>
+    tiles.forEach((tile, i) =>
+      setSlot(tile, {
+        col: (i % 4) + 1, span: 1, row: Math.floor(i / 4) + 1,
+        mCol: (i % 2) * 2 + 1, mSpan: 2, mRow: Math.floor(i / 2) + 1,
+      }),
+    );
+
+  // ---------- 4. Sort ----------
+
+  const toSort = () =>
+    tiles.forEach((tile) =>
+      setSlot(tile, {
+        col: Number(tile.dataset.sortCol), span: 1, row: Number(tile.dataset.sortRow),
+        mCol: 1, mSpan: 4, mRow: Number(tile.dataset.sortMRow),
+      }),
+    );
+
+  const sortSummary = () => {
+    const groups = new Map<string, string[]>();
+    tiles.forEach((t) => groups.set(t.dataset.discipline!, [...(groups.get(t.dataset.discipline!) ?? []), t.dataset.title!]));
+    return [...groups].map(([d, names]) => `${d}: ${names.join(", ")}`).join(". ");
+  };
+
+  // ---------- 5. Drag ----------
+
+  // Which pair of numbers the visitor is editing: the desktop slot or the
+  // phone one, by the width they're looking at.
+  const editable = (slot: Slot) =>
+    phone.matches ? { col: slot.mCol, span: slot.mSpan, colKey: "mCol" as const, spanKey: "mSpan" as const }
+                  : { col: slot.col, span: slot.span, colKey: "col" as const, spanKey: "span" as const };
+
+  const clamp = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
+
+  const describe = (tile: HTMLElement) => {
+    const { col, span } = editable(getSlot(tile));
+    return `${tile.dataset.title}: column ${col}, ${span} columns wide.`;
+  };
+
+  // Moves or resizes a tile by whole columns, keeping it inside the four
+  // and never narrower than two. Returns whether anything changed.
+  const nudge = (tile: HTMLElement, kind: "move" | "resize", to: { col: number; span: number }) => {
+    const slot = getSlot(tile);
+    const e = editable(slot);
+    const span = kind === "resize" ? clamp(to.span, 2, 5 - e.col) : e.span;
+    const col = kind === "move" ? clamp(to.col, 1, 5 - span) : e.col;
+    if (col === e.col && span === e.span) return false;
+    flip(() => setSlot(tile, { [e.colKey]: col, [e.spanKey]: span }), 220, [tile]);
+    return true;
+  };
+
+  let drag: { tile: HTMLElement; kind: "move" | "resize"; x0: number; col0: number; span0: number; colW: number } | null = null;
+
+  grid.addEventListener("pointerdown", (event) => {
+    if (page.dataset.mode !== "drag" || event.button !== 0) return;
+    const target = event.target as HTMLElement;
+    const frame = target.closest<HTMLElement>("[data-tile-frame]");
+    if (!frame) return;
+    const tile = frame.closest<HTMLElement>("[data-tile]")!;
+    const { col, span } = editable(getSlot(tile));
+    drag = {
+      tile,
+      kind: target.closest("[data-drag-handle]") ? "resize" : "move",
+      x0: event.clientX,
+      col0: col,
+      span0: span,
+      colW: grid.clientWidth / 4,
+    };
+    tile.classList.add("is-dragging");
+    frame.setPointerCapture(event.pointerId);
+    event.preventDefault();
   });
+
+  grid.addEventListener("pointermove", (event) => {
+    if (!drag) return;
+    const steps = Math.round((event.clientX - drag.x0) / drag.colW);
+    nudge(drag.tile, drag.kind, { col: drag.col0 + steps, span: drag.span0 + steps });
+  });
+
+  const endDrag = () => {
+    if (!drag) return;
+    drag.tile.classList.remove("is-dragging");
+    announce(describe(drag.tile));
+    drag = null;
+  };
+  grid.addEventListener("pointerup", endDrag);
+  grid.addEventListener("pointercancel", endDrag);
+
+  grid.addEventListener("keydown", (event) => {
+    if (page.dataset.mode !== "drag") return;
+    const frame = (event.target as HTMLElement).closest<HTMLElement>("[data-tile-frame]");
+    if (!frame || (event.key !== "ArrowLeft" && event.key !== "ArrowRight")) return;
+    event.preventDefault();
+    const tile = frame.closest<HTMLElement>("[data-tile]")!;
+    const step = event.key === "ArrowRight" ? 1 : -1;
+    const { col, span } = editable(getSlot(tile));
+    const changed = event.shiftKey
+      ? nudge(tile, "resize", { col, span: span + step })
+      : nudge(tile, "move", { col: col + step, span });
+    if (changed) {
+      frame.setAttribute("aria-label", describe(tile) + " Arrow keys move it, Shift and arrow keys resize it.");
+      announce(describe(tile));
+    }
+  });
+
+  const setDraggable = (on: boolean) =>
+    tiles.forEach((tile) => {
+      const frame = tile.querySelector<HTMLElement>("[data-tile-frame]")!;
+      if (on) {
+        frame.tabIndex = 0;
+        frame.setAttribute("role", "group");
+        frame.setAttribute("aria-label", describe(tile) + " Arrow keys move it, Shift and arrow keys resize it.");
+      } else {
+        frame.removeAttribute("tabindex");
+        frame.removeAttribute("role");
+        frame.removeAttribute("aria-label");
+      }
+    });
+
+  // ---------- The button ----------
+
+  const render = () => {
+    const def = ideas[idea];
+    const toggle = def.pressedLabel !== undefined;
+    label.textContent = toggle && active ? def.pressedLabel! : def.label;
+    if (toggle) button.setAttribute("aria-pressed", String(active));
+    else button.removeAttribute("aria-pressed");
+    count.hidden = idea !== "rearrange";
+    count.textContent = `${layoutIndex + 1}/${layouts.length}`;
+  };
+
+  button.addEventListener("click", () => {
+    if (idea === "rearrange") {
+      layoutIndex = (layoutIndex + 1) % layouts.length;
+      flip(() => applyLayout(layoutIndex));
+      announce(`Layout ${layoutIndex + 1} of ${layouts.length}.`);
+      render();
+      return;
+    }
+
+    active = !active;
+    switch (idea) {
+      case "inspect":
+        if (active) measure();
+        page.dataset.mode = active ? "inspect" : "";
+        announce(active ? "Showing the grid's columns, spans and spacing tokens." : "Redlines hidden.");
+        break;
+      case "index":
+        flip(() => {
+          page.dataset.mode = active ? "index" : "";
+          active ? toIndex() : applyLayout(0);
+        });
+        announce(active ? "Every project, four across." : "Back to the layout.");
+        break;
+      case "sort":
+        flip(() => {
+          page.dataset.mode = active ? "sort" : "";
+          active ? toSort() : applyLayout(0);
+        });
+        announce(active ? `Sorted by discipline. ${sortSummary()}.` : "Back to the layout.");
+        break;
+      case "drag":
+        page.dataset.mode = active ? "drag" : "";
+        setDraggable(active);
+        announce(active ? "Drag a project sideways to move it, or its edge handle to resize it. Each one snaps to the columns." : "Done moving.");
+        break;
+    }
+    render();
+  });
+
+  // ---------- The switcher ----------
+
+  const choose = (next: Idea, updateUrl = true) => {
+    idea = next;
+    active = false;
+    layoutIndex = 0;
+    page.dataset.mode = "";
+    setDraggable(false);
+    applyLayout(0);
+    options.forEach((o) => o.setAttribute("aria-pressed", String(o.dataset.idea === next)));
+    render();
+    if (updateUrl) {
+      const url = new URL(location.href);
+      url.searchParams.set("idea", next);
+      history.replaceState(null, "", url);
+    }
+  };
+
+  options.forEach((o) => o.addEventListener("click", () => choose(o.dataset.idea as Idea)));
+
+  const fromUrl = new URLSearchParams(location.search).get("idea");
+  choose(fromUrl && fromUrl in ideas ? (fromUrl as Idea) : "inspect", false);
 </script>
