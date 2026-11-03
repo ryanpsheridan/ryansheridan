@@ -1,0 +1,516 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import Media from "../components/Media.astro";
+import Button from "../components/ui/Button.astro";
+import { getHomepageProjects, projects as allListed } from "../data/projects";
+
+/*
+  A test of the homepage on a visible four-column grid: the columns are drawn
+  as hairlines down the whole page, and the work is laid across them at
+  different sizes rather than in one even list. Same type, color and tokens
+  as the rest of the site. Kept at its own URL and out of search (noindex
+  here, and the sitemap only lists an allowlist in astro.config.mjs).
+*/
+
+const projects = getHomepageProjects();
+const years = allListed.map((p) => p.year);
+const firstYear = Math.min(...years);
+const lastYear = Math.max(...years);
+const pad = (n: number) => String(n).padStart(2, "0");
+
+/*
+  How the work is laid out, one band at a time, repeating. Each slot names the
+  column it starts in and how many of the four it spans, on desktop and then
+  on phones. The gaps are on purpose: an empty column next to a tile is what
+  makes the sizes read as chosen. `align` drops a smaller tile to the bottom
+  of its band so the two in a band don't share a top edge.
+*/
+type Slot = { col: number; span: number; mCol: number; mSpan: number; align?: "end" };
+const pattern: Slot[][] = [
+  [{ col: 1, span: 3, mCol: 1, mSpan: 4 }],
+  [{ col: 2, span: 1, mCol: 1, mSpan: 3, align: "end" }, { col: 3, span: 2, mCol: 2, mSpan: 3 }],
+  [{ col: 1, span: 2, mCol: 1, mSpan: 3 }, { col: 4, span: 1, mCol: 2, mSpan: 3, align: "end" }],
+  [{ col: 2, span: 3, mCol: 1, mSpan: 4 }],
+];
+
+type Placed = { project: (typeof projects)[number]; index: number; slot: Slot };
+const bands: Placed[][] = [];
+let next = 0;
+for (let b = 0; next < projects.length; b++) {
+  const band: Placed[] = [];
+  for (const slot of pattern[b % pattern.length]) {
+    if (next >= projects.length) break;
+    band.push({ project: projects[next], index: next, slot });
+    next++;
+  }
+  bands.push(band);
+}
+---
+
+<Layout title="Homepage grid test | Ryan Sheridan" description="A test layout of the Ryan Sheridan portfolio homepage on a visible four-column grid." noindex>
+  <Nav />
+  <main id="main" class="grid-page">
+    {/* The columns, drawn once behind everything and running the full
+        height of the page. Decorative, so hidden from assistive tech. */}
+    <div class="grid-lines" aria-hidden="true"></div>
+
+    <section class="band hero" aria-labelledby="hero-title">
+      <div class="band-inner">
+        <div class="cell hero-title-cell">
+          <p class="label">Ryan Sheridan</p>
+          <h1 id="hero-title" class="hero-title">
+            <span class="quiet">Designing and scaling</span><br />
+            systems, sites and brands.
+          </h1>
+        </div>
+        <div class="cell hero-aside">
+          <p class="intro">Principal Designer at Commerce, leading design systems, websites, and AI&nbsp;workflows.</p>
+          <div class="cta-row">
+            <Button href="/work">View all work</Button>
+            <Button href="/contact" variant="secondary">Contact</Button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band facts" aria-label="At a glance">
+      <dl class="band-inner">
+        <div class="cell fact"><dt class="label">Based in</dt><dd>Austin, Texas</dd></div>
+        <div class="cell fact"><dt class="label">Role</dt><dd>Principal Designer, Commerce</dd></div>
+        <div class="cell fact"><dt class="label">Focus</dt><dd>Design systems, websites, AI workflows</dd></div>
+        <div class="cell fact"><dt class="label">Work shown</dt><dd>{firstYear} to {lastYear}</dd></div>
+      </dl>
+    </section>
+
+    <section class="band work-head" aria-labelledby="work-title">
+      <div class="band-inner">
+        <div class="cell work-head-title">
+          <h2 id="work-title" class="label">Selected work ({pad(projects.length)})</h2>
+        </div>
+        <div class="cell work-head-link">
+          <Button href="/work" variant="secondary" size="sm" arrow="right">All work</Button>
+        </div>
+      </div>
+    </section>
+
+    <div class="work">
+      {bands.map((band) => (
+        <div class="band work-band">
+          <div class="band-inner">
+            {band.map(({ project, index, slot }) => (
+              <article
+                class:list={["tile", `span-${slot.span}`, slot.align === "end" && "is-low"]}
+                style={`--col:${slot.col};--span:${slot.span};--m-col:${slot.mCol};--m-span:${slot.mSpan}`}
+              >
+                <div class="tile-media">
+                  {project.thumbnail && <Media src={project.thumbnail} alt={project.title} loading={index === 0 ? "eager" : "lazy"} />}
+                </div>
+                <div class="tile-caption">
+                  <span class="tile-index" aria-hidden="true">{pad(index + 1)}/</span>
+                  <h3 class="tile-title">
+                    <a href={`/work/${project.slug}`} class="tile-link">{project.title}</a>
+                  </h3>
+                  <span class="tile-year">{project.year}</span>
+                  <ul class="tile-tags" aria-label="Type of work">
+                    {project.tags.map((tag) => <li>{tag}</li>)}
+                  </ul>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <section class="band closing" aria-labelledby="closing-title">
+      <div class="band-inner">
+        <div class="cell closing-title-cell">
+          <h2 id="closing-title" class="closing-title">
+            <span class="quiet">Have a system, site</span><br />
+            or brand to build?
+          </h2>
+        </div>
+        <div class="cell closing-aside">
+          <Button href="/start-a-project" arrow="right">Start a project</Button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  /*
+    The grid: four equal columns, no gutters, inside the same width the nav
+    and footer use. Every band shares it, so every edge on the page lands on
+    one of five lines.
+  */
+  .grid-page {
+    --grid-w: min(var(--max-width), 100% - 2 * var(--page-padding));
+    --cell-pad: var(--space-4);
+    position: relative;
+    isolation: isolate;
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  @media (max-width: 768px) {
+    .grid-page {
+      --cell-pad: var(--space-3);
+    }
+  }
+
+  .grid-lines {
+    position: absolute;
+    inset: 0 auto 0 50%;
+    width: var(--grid-w);
+    transform: translateX(-50%);
+    z-index: -1;
+    pointer-events: none;
+    /* A line at the left of each column, plus the right edge of the last. */
+    background: linear-gradient(to right, var(--color-border) var(--border-width), transparent var(--border-width)) 0 0 / 25% 100% repeat-x;
+    border-right: var(--border-width) solid var(--color-border);
+  }
+
+  .band {
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .band-inner {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: var(--grid-w);
+    margin-inline: auto;
+  }
+
+  .cell {
+    padding: var(--cell-pad);
+  }
+
+  /* Mono overline with a dot, used to name each band. */
+  .label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    line-height: var(--leading-snug);
+    color: var(--color-text-muted);
+  }
+
+  .label::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    flex: none;
+  }
+
+  .quiet {
+    color: var(--color-text-quiet);
+  }
+
+  /* ---------- Hero ---------- */
+
+  .hero .cell {
+    padding-block: var(--space-8) var(--space-6);
+  }
+
+  .hero-title-cell {
+    grid-column: 1 / span 3;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .hero-title {
+    font-size: var(--text-display-1);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    color: var(--color-text);
+  }
+
+  .hero-aside {
+    grid-column: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: var(--space-4);
+  }
+
+  .intro {
+    font-size: var(--text-m);
+    line-height: var(--leading-normal);
+    color: var(--color-text-muted);
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  /* ---------- Facts row ---------- */
+
+  .facts .band-inner {
+    margin-block: 0;
+  }
+
+  .fact {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .fact dd {
+    font-size: var(--text-m);
+    color: var(--color-text);
+  }
+
+  /* ---------- Work header ---------- */
+
+  .work-head .cell {
+    padding-block: var(--space-7) var(--space-4);
+  }
+
+  .work-head-title {
+    grid-column: 1 / span 2;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .work-head-link {
+    grid-column: 4;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+
+  /* ---------- Work tiles ---------- */
+
+  /* Only the tiles draw horizontal rules here; the bands between them stay
+     open so the column lines carry the structure. */
+  .band.work-band {
+    border-bottom: 0;
+  }
+
+  .work-band .band-inner {
+    padding-block: var(--space-5);
+    row-gap: var(--space-6);
+  }
+
+  .work-band:first-child .band-inner {
+    padding-top: var(--space-6);
+  }
+
+  .work-band:last-child .band-inner {
+    padding-bottom: var(--space-8);
+  }
+
+  .tile {
+    position: relative;
+    grid-column: var(--col) / span var(--span);
+    align-self: start;
+    background: var(--color-bg);
+    border-block: var(--border-width) solid var(--color-border);
+  }
+
+  .tile.is-low {
+    align-self: end;
+  }
+
+  .tile-media {
+    aspect-ratio: 16 / 10;
+    margin: var(--cell-pad) var(--cell-pad) 0;
+    overflow: hidden;
+    background: var(--color-surface);
+  }
+
+  .tile-media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-standard);
+  }
+
+  @media (hover: hover) {
+    .tile:hover .tile-media :global(img) {
+      transform: scale(1.03);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tile-media :global(img) {
+      transition: none;
+    }
+  }
+
+  .tile-caption {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    column-gap: var(--space-3);
+    row-gap: var(--space-2);
+    align-items: baseline;
+    padding: var(--space-3) var(--cell-pad) var(--cell-pad);
+  }
+
+  .tile-index,
+  .tile-year {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-quiet);
+  }
+
+  .tile-title {
+    font-size: var(--text-h5);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-snug);
+    line-height: var(--leading-snug);
+  }
+
+  /* Small tiles are one column wide: the title takes the line to itself. */
+  .span-1 .tile-title {
+    font-size: var(--text-l);
+  }
+
+  .tile-link {
+    color: var(--color-text);
+  }
+
+  .tile-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .tile-link:focus-visible {
+    outline: none;
+  }
+
+  .tile-link:focus-visible::after {
+    outline: var(--focus-width) solid var(--color-focus);
+    outline-offset: var(--focus-offset);
+  }
+
+  .tile-tags {
+    grid-column: 2 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  /* ---------- Closing ---------- */
+
+  .closing .cell {
+    padding-block: var(--space-8);
+  }
+
+  .closing-title-cell {
+    grid-column: 1 / span 2;
+  }
+
+  .closing-title {
+    font-size: var(--text-h2);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+  }
+
+  .closing-aside {
+    grid-column: 4;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+
+  /* ---------- Tablet: same four columns, the hero aside drops below ---------- */
+
+  @media (max-width: 1024px) {
+    .hero .hero-title-cell {
+      grid-column: 1 / -1;
+      padding-bottom: 0;
+    }
+
+    .hero .hero-aside {
+      grid-column: 3 / -1;
+      padding-top: var(--space-6);
+    }
+
+    .fact:nth-child(n) {
+      grid-column: span 2;
+    }
+
+    .fact:nth-child(-n + 2) {
+      border-bottom: var(--border-width) solid var(--color-border);
+    }
+
+    .closing-title-cell {
+      grid-column: 1 / span 3;
+    }
+  }
+
+  /* ---------- Phones: still four columns, tiles take their phone spans ---------- */
+
+  @media (max-width: 768px) {
+    .hero .hero-title-cell {
+      padding-top: var(--space-7);
+    }
+
+    .hero .hero-aside {
+      grid-column: 1 / -1;
+      padding-block: var(--space-5) var(--space-6);
+    }
+
+    .work-head-title {
+      grid-column: 1 / span 3;
+    }
+
+    .work-head-link {
+      grid-column: 4;
+      padding-inline: 0 var(--cell-pad);
+    }
+
+    .work-band .band-inner {
+      row-gap: var(--space-5);
+    }
+
+    .tile {
+      grid-column: var(--m-col) / span var(--m-span);
+    }
+
+    .tile.is-low {
+      align-self: start;
+    }
+
+    .span-1 .tile-title,
+    .tile-title {
+      font-size: var(--text-l);
+    }
+
+    .closing .closing-title-cell,
+    .closing .closing-aside {
+      grid-column: 1 / -1;
+    }
+
+    .closing .closing-title-cell {
+      padding-block: var(--space-7) var(--space-4);
+    }
+
+    .closing .closing-aside {
+      justify-content: flex-start;
+      padding-block: 0 var(--space-7);
+    }
+  }
+</style>
