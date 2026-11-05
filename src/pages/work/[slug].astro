@@ -1813,6 +1813,34 @@ const schema = [
     });
   });
 
+  // Every image opens in the lightbox, but the Enlarge image button only
+  // shows where the frame hides part of the picture: an object-fit: cover
+  // crop (landing pages cut to a 3/4 carousel frame), or a full-length page
+  // taller than the frame that clips it (the before/after compare frames).
+  // An image shown whole gets .is-full, which hides the button until it takes
+  // keyboard focus.
+  const clippedByFrame = (img: HTMLImageElement) => {
+    for (let el = img.parentElement; el && el !== document.body; el = el.parentElement) {
+      if (getComputedStyle(el).overflowY !== "visible") return img.getBoundingClientRect().height > el.clientHeight + 2;
+    }
+    return false;
+  };
+  const markCropped = (zoomable: HTMLElement) => {
+    const img = zoomable.querySelector<HTMLImageElement>(".lightbox-trigger");
+    if (!img || !img.naturalWidth || !img.clientHeight) return;
+    const natural = img.naturalWidth / img.naturalHeight;
+    const shown = img.clientWidth / img.clientHeight;
+    const cropped = (getComputedStyle(img).objectFit === "cover" && Math.abs(shown / natural - 1) > 0.02) || clippedByFrame(img);
+    zoomable.classList.toggle("is-full", !cropped);
+  };
+  const cropWatch = new ResizeObserver((entries) => entries.forEach((e) => markCropped(e.target as HTMLElement)));
+  document.querySelectorAll<HTMLElement>(".zoomable").forEach((zoomable) => {
+    const img = zoomable.querySelector<HTMLImageElement>(".lightbox-trigger");
+    if (img && !img.complete) img.addEventListener("load", () => markCropped(zoomable), { once: true });
+    markCropped(zoomable);
+    cropWatch.observe(zoomable);
+  });
+
   function closeLightbox() {
     if (!lightbox.classList.contains("open")) return;
     lightbox.classList.remove("open");

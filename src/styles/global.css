@@ -247,6 +247,14 @@ img {
   right: var(--space-3);
 }
 
+/* Shown whole, the image needs no cue that there is more to see, so the
+   button stays out of sight until a keyboard user tabs to it. Case study
+   pages set .is-full; without that script the button always shows. */
+.zoomable.is-full .zoomable-open:not(:focus-visible) {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .icon-btn:disabled {
   opacity: 0.35;
   cursor: default;
