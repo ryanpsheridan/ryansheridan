@@ -1,0 +1,31 @@
+---
+/**
+ * An image that opens full size in the case study lightbox. Clicking the
+ * image opens it, and so does the "Enlarge image" icon button in its top
+ * right corner. The button is what shows people the image opens, and it is
+ * how keyboard and screen reader users open it, since the image itself is
+ * not focusable. Videos can't open in the lightbox, so they render plain.
+ *
+ * The page that uses it supplies the lightbox and wires up `.lightbox-trigger`
+ * and `[data-lightbox-open]` (see src/pages/work/[slug].astro).
+ */
+import Media from "../Media.astro";
+
+interface Props {
+  src: string;
+  alt?: string;
+}
+
+const { src, alt = "" } = Astro.props;
+const isVideo = /\.(mp4|webm)$/i.test(src);
+const expand = `<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square" aria-hidden="true"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9" /></svg>`;
+---
+
+{isVideo ? (
+  <Media src={src} alt={alt} />
+) : (
+  <div class="zoomable">
+    <Media src={src} alt={alt} class="lightbox-trigger" />
+    <button type="button" class="icon-btn is-overlay zoomable-open" data-lightbox-open aria-label="Enlarge image" set:html={expand} />
+  </div>
+)}

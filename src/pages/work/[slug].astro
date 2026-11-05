@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import Media from "../../components/Media.astro";
+import Zoomable from "../../components/ui/Zoomable.astro";
 import ShadowEmbed from "../../components/ShadowEmbed.astro";
 import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
 import ResultIcon from "../../components/ui/ResultIcon.astro";
@@ -119,7 +120,7 @@ const schema = [
                       return (
                         <figure class="image-item">
                           {caption && <figcaption>{caption}</figcaption>}
-                          <Media src={src} alt={alt ?? caption ?? ""} class="lightbox-trigger" />
+                          <Zoomable src={src} alt={alt ?? caption ?? ""} />
                         </figure>
                       );
                     })}
@@ -144,7 +145,7 @@ const schema = [
                     </div>
                     <div class="compare-frame is-fixed">
                       <div class="compare-pane is-before" data-pane="before">
-                        <Media src={block.before.src} alt={block.before.alt ?? block.title} class="lightbox-trigger" />
+                        <Zoomable src={block.before.src} alt={block.before.alt ?? block.title} />
                       </div>
                       <div class="compare-pane is-after is-active" data-pane="after">
                         <div class="embed-frame" role="group" aria-label={block.embed.title}>
@@ -178,7 +179,7 @@ const schema = [
                         const alt = typeof img === "string" ? undefined : img.alt;
                         return (
                           <figure class="carousel-item">
-                            <Media src={src} alt={alt ?? caption ?? ""} class="lightbox-trigger" />
+                            <Zoomable src={src} alt={alt ?? caption ?? ""} />
                             {caption && <figcaption>{caption}</figcaption>}
                           </figure>
                         );
@@ -223,11 +224,11 @@ const schema = [
                     </div>
                     <div class="compare-frame">
                       <div class={`compare-pane${block.after ? "" : " is-active"}`} data-pane="before">
-                        <Media src={block.before.src} alt={block.before.alt ?? block.before.label ?? "Before"} class="lightbox-trigger" />
+                        <Zoomable src={block.before.src} alt={block.before.alt ?? block.before.label ?? "Before"} />
                       </div>
                       <div class={`compare-pane${block.after ? " is-active" : ""}`} data-pane="after">
                         {block.after ? (
-                          <Media src={block.after.src} alt={block.after.alt ?? block.after.label ?? "After"} class="lightbox-trigger" />
+                          <Zoomable src={block.after.src} alt={block.after.alt ?? block.after.label ?? "After"} />
                         ) : (
                           <p class="compare-pending">Redesign in progress</p>
                         )}
@@ -464,7 +465,7 @@ const schema = [
                     </div>
                     <figure class="image-item split-image">
                       {block.image.caption && <figcaption>{block.image.caption}</figcaption>}
-                      <Media src={block.image.src} alt={block.image.alt ?? block.image.caption ?? ""} class="lightbox-trigger" />
+                      <Zoomable src={block.image.src} alt={block.image.alt ?? block.image.caption ?? ""} />
                     </figure>
                   </section>
                 );
@@ -820,6 +821,10 @@ const schema = [
   .compare-frame.is-fixed .compare-pane.is-after {
     background: #161c26;
     text-align: center;
+  }
+
+  .compare-frame.is-fixed .compare-pane :global(.zoomable) {
+    height: 100%;
   }
 
   .compare-frame.is-fixed .compare-pane :global(img) {
@@ -1797,6 +1802,14 @@ const schema = [
       lightbox.classList.add("open");
       document.body.style.overflow = "hidden";
       lightboxClose.focus();
+    });
+  });
+
+  // The "Enlarge image" button on each image opens the same lightbox, for
+  // keyboard and screen reader users and as the visible cue that it opens.
+  document.querySelectorAll<HTMLButtonElement>("[data-lightbox-open]").forEach((button) => {
+    button.addEventListener("click", () => {
+      button.parentElement?.querySelector<HTMLImageElement>(".lightbox-trigger")?.click();
     });
   });
 

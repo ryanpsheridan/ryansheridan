@@ -225,6 +225,28 @@ img {
   border-color: var(--color-text);
 }
 
+/* On top of an image, where a transparent button would vanish into the
+   picture: a solid page-colored fill behind the same outline and icon. */
+.icon-btn.is-overlay {
+  background: var(--color-bg);
+}
+
+.icon-btn.is-overlay:hover:not(:disabled) {
+  border-color: var(--color-text);
+}
+
+/* An image that opens in the lightbox (Zoomable). The Enlarge image button
+   sits in its top right corner. */
+.zoomable {
+  position: relative;
+}
+
+.zoomable-open {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+}
+
 .icon-btn:disabled {
   opacity: 0.35;
   cursor: default;

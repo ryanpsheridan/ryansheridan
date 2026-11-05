@@ -3,6 +3,7 @@ import DsLayout from "../../../layouts/DsLayout.astro";
 import Example from "../../../components/ds/Example.astro";
 import PropsTable from "../../../components/ds/PropsTable.astro";
 import Media from "../../../components/Media.astro";
+import Zoomable from "../../../components/ui/Zoomable.astro";
 ---
 
 <DsLayout
@@ -35,6 +36,14 @@ import Media from "../../../components/Media.astro";
     >
       <div style="max-width: 400px"><Media src="/flow-stays-logo-spec-animated.svg" alt="Flow Stays logo construction" /></div>
     </Example>
+    <Example
+      title="Opens full size (Zoomable)"
+      description="Every case study image that opens in the lightbox uses Zoomable: Media plus an Enlarge image icon button in the top right corner. The button is the visible cue that it opens, and the way to open it from a keyboard. The lightbox itself lives on case study pages, so the button does nothing here."
+      layout="fill"
+      code={`<Zoomable src="/profile-photo.webp" alt="Ryan Sheridan" />`}
+    >
+      <div style="max-width: 320px"><Zoomable src="/profile-photo.webp" alt="Ryan Sheridan" /></div>
+    </Example>
   </section>
 
   <section aria-labelledby="api">
@@ -55,6 +64,7 @@ import Media from "../../../components/Media.astro";
       <li>Videos pause on their poster frame under reduced motion. Animated SVGs carry their own reduced-motion guard (<code>npm run check:animations</code> enforces it).</li>
       <li>A reserved aspect ratio means no layout shift, which matters most to people using magnification.</li>
       <li>Alt text describes; see <a href="/ds/content#ui">Content</a>.</li>
+      <li>An image that opens full size is a <code>Zoomable</code>, so it always has a real button for keyboard and screen reader users. Videos render plain, since the lightbox shows images only.</li>
     </ul>
   </section>
 </DsLayout>

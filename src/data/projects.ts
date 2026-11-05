@@ -338,7 +338,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Project",
-        body: `<p><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">Ohio Golf Club Indoor</a> is an indoor golf facility in Akron, Ohio, with nine TrackMan bays, a short game area, lessons, memberships and leagues. It is a real freelance client, outside my day job, and I am the only designer and developer on the site.</p><p>I rebuilt it with an agentic workflow. I set the direction, the rules and the bar, Claude Code wrote most of the code, and nothing reached the live site until I had checked it. The new site is complete on staging and goes live in the next release.</p>`,
+        body: `<p><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">Ohio Golf Club Indoor</a> is an indoor golf facility in Akron, Ohio, with nine TrackMan bays, a short game area, lessons, memberships and leagues. It is a real freelance client, outside my day job, and I am the only designer and developer on the site.</p><p>I rebuilt it with an agentic workflow. I set the direction, the rules and the bar, Claude Code wrote most of the code, and nothing reached the live site until I had checked it. The rebuilt site is on staging and goes live in the next release.</p>`,
       },
       {
         type: "compare",
@@ -348,12 +348,12 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Two kinds of users",
-        body: `<p>The obvious users are golfers: book a bay, find a league, check tonight’s hours, mostly on a phone. The less obvious ones are the client and the staff. Before, changing the hours or adding a league meant a message to a developer, and a site the client can’t update goes stale. So the staff got the same care as the visitors, and every decision below serves one or both.</p>`,
+        body: `<p>The obvious users are golfers: book a bay, find a league, check tonight’s hours, often on a phone. The less obvious ones are the client and the staff. Before, changing the hours or adding a league meant a message to a developer, and a site the client can’t update goes stale. So the staff got the same care as the visitors, and every decision below serves one or both.</p>`,
       },
       {
         type: "text",
         heading: "How I worked",
-        body: `<p>Before changing anything, I had the agent audit the code and the live site, and I reviewed what it found: a contact form that could silently lose customer inquiries, outdated code with known security issues, and a button nobody could see. Those were fixed first, in one small package.</p><p>Then I set the rules the agent works by. They live in an instructions file it reads at the start of every session, with a separate skill for how changes are released. Priorities come in a fixed order: accessibility, then page speed, then ease of use, then search. Build from small shared components. Name colors by what they do, not what they look like, so a future brand refresh changes values, not code. Keep prices, hours and copy in one place, never typed twice.</p>`,
+        body: `<p>Before changing anything, I had the agent audit the code and the live site, and I reviewed what it found: a contact form that could silently lose customer inquiries, outdated code with known security issues, and a Cancel button that was hard to read. Those were fixed first, in one small package.</p><p>Then I set the rules the agent works by. They live in an instructions file it reads at the start of every session, with a separate skill for how changes are released. Priorities come in a fixed order: accessibility, then page speed, then ease of use, then search. Build from small shared components. Name colors by what they do, not what they look like, so a future brand refresh changes values, not code. Keep prices, hours and FAQs in one place, never typed twice.</p>`,
       },
       {
         type: "process",
@@ -373,13 +373,13 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "A design system, not a reskin",
-        body: `<p>I explored three brand directions and five versions of the home page before settling on one dark system for every page: two typefaces, DM Sans and DM Mono, a small set of color, spacing and corner tokens, and quiet textures instead of stock effects. Every token and shared component is documented on an internal style guide that changes whenever the site does, so the next person, or the next agent, builds from the same parts.</p>`,
+        body: `<p>I explored three brand directions and five versions of the home page before settling on one dark system for every page: two typefaces, DM Sans and DM Mono, a small set of color, spacing and corner tokens, and a few subtle textures. Every token and shared component is documented on an internal style guide that changes whenever the site does, so the next person, or the next agent, builds from the same parts.</p>`,
       },
       {
         type: "imageGrid",
         framed: true,
         images: [
-          { src: "/project-ogc-after-style-guide.webp", alt: "The top of the internal Ohio Golf Club style guide, with its title, a note on where the tokens live, and a section list from brand option to components", caption: "The internal style guide, kept in step with the site" },
+          { src: "/project-ogc-after-style-guide.webp", alt: "The type scale in the internal Ohio Golf Club style guide, from display-1 to heading-3, each with its size, weight and where it is used", caption: "The type scale in the internal style guide, kept in step with the site" },
         ],
       },
       {
@@ -395,7 +395,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Private events",
-        body: `<p>The old events page mixed private parties with the club’s own events. Private events now have a page of their own, with the occasions the club hosts and the request form right on the page.</p>`,
+        body: `<p>The old events page was about private parties only. Now the events page lists the club’s own events, and private events have a page of their own, with the occasions the club hosts and the request form right on the page.</p>`,
       },
       {
         type: "compare",
@@ -415,7 +415,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Mobile first, in practice",
-        body: `<p>Most visitors arrive on a phone, so every page got a mobile pass: spacing, tap targets of at least 44 pixels, and a scroll fade-in toned down and switched off for anyone whose device asks for reduced motion. The menu took four rounds. It began as one long list that scrolled on a small phone. Folding the desktop dropdowns into sections that open in place fixed that. In testing, the first build let only one section open at a time, so opening one closed another above it and the list jumped under your finger. Now each section opens on its own.</p>`,
+        body: `<p>Most people who find the site through search are on a phone, so the whole site got a mobile pass: spacing, larger tap targets, and a scroll fade-in toned down and switched off for anyone whose device asks for reduced motion. The menu took four rounds. It began as one long list that scrolled on a small phone. Folding the desktop dropdowns into sections that open in place fixed that. In testing, the first build let only one section open at a time, so opening one closed another above it and the list jumped under your finger. Now each section opens on its own.</p>`,
       },
       {
         type: "imageGrid",
@@ -431,7 +431,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Why a CMS",
-        body: `<p>The goal was that the staff never have to ask me to change a price. I set up Pages CMS, a free editor that saves straight into the site’s code repository: no database, no monthly fee and nothing extra to host. Staff edit leagues, events, weekly hours, holidays, the announcement strip, bay rates, membership plans, Google reviews and the team in plain forms.</p><p>The forms are built to be hard to break. Every entry is checked before the site rebuilds, and a broken one stops that update instead of going live. Event dates write their own display text. Plans can be added or removed without copy edits, because no sentence on the site names a plan. And the structure is ready for a second location.</p>`,
+        body: `<p>Before, every update went through a developer. Now the staff make their own. I set up Pages CMS, a free editor that saves straight into the site’s code repository: no database, no monthly fee and nothing extra to host. Staff edit leagues, events, weekly hours, holidays, the announcement strip, bay rates, membership plans, Google reviews and the team in plain forms.</p><p>The forms are built to be hard to break. Every entry is checked when the site builds, and a broken one stops that build, so the live site stays as it was. Event dates write their own display text. Plans can be added or removed without copy edits, because no sentence on the site names a plan. And the structure is ready for a second location.</p>`,
       },
       {
         type: "imageGrid",
@@ -448,8 +448,8 @@ const allProjects: Project[] = [
             note: "No developer involved",
             steps: [
               { label: "Staff edit a form in Pages CMS" },
-              { label: "Every entry checked" },
               { label: "The site rebuilds" },
+              { label: "Every entry checked" },
               { label: "Live on the site", success: true },
             ],
           },
@@ -458,7 +458,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Search and answer engines",
-        body: `<p>Search Console showed the club’s pages appearing hundreds of times for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, because five of six pages shared one generic title. On 23 October 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs, holiday hours and FAQs. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p><p>Treat this as a starting point. In the 12 days after the first push, the site averaged about 4.8 clicks and 240 impressions a day, against 0.5 clicks and 38 impressions a day in the 28 days before. It is an early read: September was busy too, and the rebuild itself is not live yet. I will add results here as the weeks come in.</p>`,
+        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. On 23 October 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs and holiday hours. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p><p>Treat this as a starting point. In the 12 days after the first push, the site averaged about 4.8 clicks and 240 impressions a day, against 0.5 clicks and 38 impressions a day in the 28 days before. It is an early read, and the rebuild itself is not live yet. I will add results here as the weeks come in.</p>`,
       },
       {
         type: "barChart",
@@ -474,7 +474,7 @@ const allProjects: Project[] = [
         unit: "impressions",
         points: ogcSearchConsole.map((d) => ({ date: d.date, value: d.impressions })),
         marker: { date: "2026-10-23", label: "First SEO push" },
-        caption: "Search Console, web search, 1 Sep to 3 Nov 2026. September was a seasonal peak, with 2,262 impressions in the week of 7 Sep, and October settled to about 250 a week. 1,060 impressions in the 28 days before the push, 2,879 in the 12 days from it.",
+        caption: "Search Console, web search, 1 Sep to 3 Nov 2026. 1,060 impressions in the 28 days before the push, 2,879 in the 12 days from it.",
       },
       {
         type: "text",
