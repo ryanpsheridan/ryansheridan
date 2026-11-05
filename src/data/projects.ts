@@ -792,7 +792,7 @@ const allProjects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          { src: "/multi-brand-variables-animated.svg", alt: "Figma Variables window for the Multi-Brand file switching between the Primitive collection of raw color values and the Brand collection with CM, BC, and FDX columns" },
+          { src: "/project-multi-brand-sections.webp", alt: "The Multi-Brand section library in Figma, grouped into Hero, Section Header, Multi Column, Card, Metrics and Stats, and Logo Showcase, beside a six-card Multi Column section with the Mode menu set to CM" },
         ],
       },
       {
@@ -806,16 +806,9 @@ const allProjects: Project[] = [
         body: `<p>The variables split into two collections. <strong>Primitives</strong> hold the raw values: every brand's color ramps, the fonts, and shared number scales for frame widths, containers, padding, spacing, and motion. <strong>Brand</strong> tokens give those values a job, and each one carries a column for Commerce (CM), BigCommerce (BC), and Feedonomics (FDX).</p><p>That's what lets one component serve every brand. <em>Display 1</em> is 101px for Commerce, 64 for BigCommerce, and 72 for Feedonomics. <em>Surface/Base</em> is Pearl, White, or Stone. <em>Hyperlink</em> is Iris, Blue 400, or Cobalt. Where the brands agree, like the spacing scale and motion timing, all three columns point at the same primitive, so a change lands everywhere at once.</p>`,
       },
       {
-        type: "carousel",
-        perView: 1,
-        ratio: "16 / 10",
-        contain: true,
+        type: "imageGrid",
         images: [
-          { src: "/multi-brand-tokens-01.svg", alt: "Brand collection font size tokens from Display 1 to Type XS with separate values for CM, BC, and FDX", caption: "01 · One type scale, three sets of sizes" },
-          { src: "/multi-brand-tokens-02.svg", alt: "Brand collection weight tokens and surface tokens, with Base, Secondary, Tertiary, and Inverse mapped to each brand's colors", caption: "02 · Weight and surface, per brand" },
-          { src: "/multi-brand-tokens-03.svg", alt: "Brand collection spacing tokens, viewport widths, and section padding, with every brand pointing at the shared number primitives", caption: "03 · Spacing and layout, shared across brands" },
-          { src: "/multi-brand-tokens-04.svg", alt: "Brand collection duration tokens from 0 to 300 milliseconds and border color tokens for CM, BC, and FDX", caption: "04 · Motion and borders" },
-          { src: "/multi-brand-tokens-05.svg", alt: "Primitive collection listing color groups for CMRC, BC, FDX, and MS, with the Numbers group selected to show frame width, container, and padding values", caption: "05 · Primitives: every brand's colors, one set of numbers" },
+          { src: "/multi-brand-tokens-scroll-animated.svg", alt: "The Brand collection of the Multi-Brand Figma library scrolling from text color and typeface tokens through font size, letter spacing, and line height, with a value for CM, BC, and FDX in every row" },
         ],
       },
       {
