@@ -776,7 +776,7 @@ const allProjects: Project[] = [
     year: 2026,
     description: "Four separate Figma libraries for Commerce, BigCommerce, Feedonomics, and Makeswift, merged into one multi-brand design system with shared tokens and brand modes.",
     ogImage: "/project-multi-brand1.jpg",
-    thumbnail: "/project-multi-brand-sections.webp",
+    thumbnail: "/multi-brand-modes-animated.svg",
     showOnHomepage: true,
     homepageWord: "systems",
     tags: ["Design System"],
