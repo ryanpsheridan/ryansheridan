@@ -338,7 +338,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Project",
-        body: `<p><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">Ohio Golf Club Indoor</a> is an indoor golf facility in Akron, Ohio, with nine TrackMan bays, a short game area, lessons, memberships and leagues. It is a real freelance client, outside my day job. The owner, Brandon Boggs, runs the business, and I am the only designer and developer on the site.</p><p>I rebuilt it with an agentic workflow. I set the direction, the rules and the bar, Claude Code wrote most of the code, and nothing reached the live site until I had checked it. The new site is complete on staging and goes live in the next release.</p>`,
+        body: `<p><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">Ohio Golf Club Indoor</a> is an indoor golf facility in Akron, Ohio, with nine TrackMan bays, a short game area, lessons, memberships and leagues. It is a real freelance client, outside my day job, and I am the only designer and developer on the site.</p><p>I rebuilt it with an agentic workflow. I set the direction, the rules and the bar, Claude Code wrote most of the code, and nothing reached the live site until I had checked it. The new site is complete on staging and goes live in the next release.</p>`,
       },
       {
         type: "compare",
@@ -348,12 +348,12 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Two kinds of users",
-        body: `<p>The obvious users are golfers: book a bay, find a league, check tonight’s hours, mostly on a phone. The less obvious ones are Brandon and his staff. Before, changing the hours or adding a league meant a message to a developer, and a site the owner can’t update goes stale. So the club’s own team got the same care as its visitors, and every decision below serves one or both.</p>`,
+        body: `<p>The obvious users are golfers: book a bay, find a league, check tonight’s hours, mostly on a phone. The less obvious ones are the client and the staff. Before, changing the hours or adding a league meant a message to a developer, and a site the client can’t update goes stale. So the staff got the same care as the visitors, and every decision below serves one or both.</p>`,
       },
       {
         type: "text",
         heading: "How I worked",
-        body: `<p>I audited the code and the live site before changing anything. The audit found a contact form that could silently lose customer inquiries, 23 known security advisories in the code’s dependencies, and a button nobody could see. Those were fixed first, in one small package.</p><p>Then I wrote the rules the agent works by, in a file it reads at the start of every task. Accessible first, then fast, then a good experience, then search. Build from small shared components. Name colors by their role, not their value, so the planned brand refresh is new values, not a rebuild. Keep prices, hours and copy in one place, never typed twice. And every change takes the same path.</p>`,
+        body: `<p>Before changing anything, I had the agent audit the code and the live site, and I reviewed what it found: a contact form that could silently lose customer inquiries, outdated code with known security issues, and a button nobody could see. Those were fixed first, in one small package.</p><p>Then I set the rules the agent works by. They live in an instructions file it reads at the start of every session, with a separate skill for how changes are released. Priorities come in a fixed order: accessibility, then page speed, then ease of use, then search. Build from small shared components. Name colors by what they do, not what they look like, so a future brand refresh changes values, not code. Keep prices, hours and copy in one place, never typed twice.</p>`,
       },
       {
         type: "process",
@@ -363,18 +363,17 @@ const allProjects: Project[] = [
             note: "Tweak, feature or fix",
             steps: [
               { label: "Brief" },
-              { label: "Branch with its own preview link" },
-              { label: "Staging, the whole site for review" },
-              { label: "Live, only on my say", success: true },
+              { label: "Preview branch" },
+              { label: "Staging" },
+              { label: "Production", success: true },
             ],
           },
         ],
-        caption: "Every branch gets a preview link, so I review real pages, not descriptions of them.",
       },
       {
         type: "text",
         heading: "A design system, not a reskin",
-        body: `<p>I explored three brand directions and five versions of the home page before settling on one dark system for every page: one type family, a small set of color, spacing and corner tokens, and quiet textures instead of stock effects. Every token and shared component is documented on an internal style guide that changes whenever the site does, so the next person, or the next agent, builds from the same parts.</p>`,
+        body: `<p>I explored three brand directions and five versions of the home page before settling on one dark system for every page: two typefaces, DM Sans and DM Mono, a small set of color, spacing and corner tokens, and quiet textures instead of stock effects. Every token and shared component is documented on an internal style guide that changes whenever the site does, so the next person, or the next agent, builds from the same parts.</p>`,
       },
       {
         type: "imageGrid",
@@ -405,8 +404,8 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        heading: "Contact, and an honest trade-off",
-        body: `<p>Contact used to be a pop-up on every page. It is now a page, with the form, hours and directions together. Lessons moved the same way, and that one is a real trade-off. Booking a lesson used to open a form in place, and now it takes one more step, to a page. I took the extra step because a page can rank and a pop-up can’t. The lesson page’s title, heading, copy and FAQ follow the searches Search Console showed people already making.</p>`,
+        heading: "Contact and lessons on real pages",
+        body: `<p>Contact used to be a pop-up on every page. It is now a page, with the form, hours and directions together, and lessons have a page of their own. A page can be found in search, linked to and bookmarked, which a pop-up can’t. The lesson page’s title, heading, copy and FAQ follow the searches Search Console showed people already making.</p>`,
       },
       {
         type: "compare",
@@ -424,7 +423,7 @@ const allProjects: Project[] = [
         framed: true,
         images: [
           { src: "/project-ogc-before-mobile-home.webp", alt: "The old Ohio Golf Club homepage on a phone, with a membership hero and two buttons", caption: "Before: home on a phone" },
-          { src: "/project-ogc-after-mobile-home.webp", alt: "The new Ohio Golf Club homepage on a phone, with the announcement strip, a dark hero and Book a Bay and See Memberships buttons", caption: "After: home on a phone" },
+          { src: "/project-ogc-after-mobile-home.webp", alt: "The new Ohio Golf Club homepage on a phone, with a coming soon strip for the second location, a dark hero, Book a Bay and See Memberships buttons, and a band of key facts", caption: "After: home on a phone" },
           { src: "/project-ogc-before-mobile-menu.webp", alt: "The old phone menu, a centered card of links over the homepage", caption: "Before: the phone menu" },
           { src: "/project-ogc-after-mobile-menu.webp", alt: "The new phone menu, a full-screen list of seven rows, with Leagues and Events, Contact and Log in as sections that open in place", caption: "After: the phone menu" },
         ],
@@ -432,7 +431,14 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Why a CMS",
-        body: `<p>The goal was that Brandon’s team never has to ask me to change a price. I set up Pages CMS, a free editor that saves straight into the site’s code repository: no database, no monthly fee and nothing extra to host. Staff edit leagues, events, weekly hours, holidays, the announcement strip, bay rates, membership plans, Google reviews and the team in plain forms.</p><p>The forms are built to be hard to break. Every entry is checked before the site rebuilds, and a broken one stops that update instead of going live. Event dates write their own display text. Plans can be added or removed without copy edits, because no sentence on the site names a plan. And the structure is ready for a second location.</p>`,
+        body: `<p>The goal was that the staff never have to ask me to change a price. I set up Pages CMS, a free editor that saves straight into the site’s code repository: no database, no monthly fee and nothing extra to host. Staff edit leagues, events, weekly hours, holidays, the announcement strip, bay rates, membership plans, Google reviews and the team in plain forms.</p><p>The forms are built to be hard to break. Every entry is checked before the site rebuilds, and a broken one stops that update instead of going live. Event dates write their own display text. Plans can be added or removed without copy edits, because no sentence on the site names a plan. And the structure is ready for a second location.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          { src: "/project-ogc-cms-editor.webp", alt: "Pages CMS editing the Fall League, with a sidebar of leagues, events, hours, holidays, the announcement strip, team, Google reviews, bay rates and membership plans, and form fields for the title, status, summary, main photo and registration link, each with a short note on where it shows", caption: "Editing a league in Pages CMS, with notes on where each field shows on the site" },
+        ],
       },
       {
         type: "process",
@@ -452,7 +458,15 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Search and answer engines",
-        body: `<p>Search Console showed the club’s pages appearing hundreds of times for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, because five of six pages shared one generic title. On 23 October every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs, holiday hours and FAQs. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p>`,
+        body: `<p>Search Console showed the club’s pages appearing hundreds of times for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, because five of six pages shared one generic title. On 23 October 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs, holiday hours and FAQs. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p><p>Treat this as a starting point. In the 12 days after the first push, the site averaged about 4.8 clicks and 240 impressions a day, against 0.5 clicks and 38 impressions a day in the 28 days before. It is an early read: September was busy too, and the rebuild itself is not live yet. I will add results here as the weeks come in.</p>`,
+      },
+      {
+        type: "barChart",
+        title: "Daily search clicks",
+        unit: "clicks",
+        points: ogcSearchConsole.map((d) => ({ date: d.date, value: d.clicks })),
+        marker: { date: "2026-10-23", label: "First SEO push" },
+        caption: "Search Console, web search, 1 Sep to 3 Nov 2026. 14 clicks in the 28 days before the push, 57 in the 12 days from it.",
       },
       {
         type: "barChart",
@@ -460,7 +474,7 @@ const allProjects: Project[] = [
         unit: "impressions",
         points: ogcSearchConsole.map((d) => ({ date: d.date, value: d.impressions })),
         marker: { date: "2026-10-23", label: "First SEO push" },
-        caption: "Search Console, web search, 1 Sep to 23 Oct 2026. September was a seasonal peak, with 2,262 impressions in the week of 7 Sep, and October settled to about 250 a week. The baseline is the 28 days before the first push: 14 clicks and 1,060 impressions. The rebuild is not live yet, so its effect is still to come.",
+        caption: "Search Console, web search, 1 Sep to 3 Nov 2026. September was a seasonal peak, with 2,262 impressions in the week of 7 Sep, and October settled to about 250 a week. 1,060 impressions in the 28 days before the push, 2,879 in the 12 days from it.",
       },
       {
         type: "text",
@@ -472,18 +486,18 @@ const allProjects: Project[] = [
         beforeTitle: "Before",
         afterTitle: "After",
         rows: [
-          { label: "Known security advisories", before: "23", after: "2" },
+          { label: "Known security issues in the code", before: "23", after: "2" },
           { label: "Pages with their own title", before: "1 of 6", after: "Every page" },
           { label: "Contact form", before: "Could lose inquiries without anyone knowing", after: "Fixed, and on a page of its own" },
           { label: "Opening hours", before: "Missing", after: "In the footer and on each location, with holidays and open now" },
-          { label: "Content the club edits itself", before: "None", after: "Nine kinds, in Pages CMS" },
-          { label: "Search clicks", before: "About 0.5 a day (28 days to 22 Oct 2026)", after: "Measured six weeks after launch" },
+          { label: "Content the staff edit themselves", before: "None", after: "Leagues, events, hours, prices, reviews and the team" },
+          { label: "Search clicks", before: "About 0.5 a day (28 days to 22 Oct 2026)", after: "About 4.8 a day in the first 12 days (to 3 Nov 2026), still measuring" },
         ],
       },
       {
         type: "text",
         heading: "More of the new site",
-        body: `<p>Memberships with plan cards and a comparison table, a lesson request page, the leagues list, bay rentals, the team and Carl’s Place, the club’s custom simulator business.</p>`,
+        body: `<p>Memberships with plan cards and a comparison table, a lesson request page, the leagues list, bay rentals, the team and Carl’s Place, the club’s custom simulator business. Each slide shows the top of the page. Click an image to see the whole page.</p>`,
       },
       {
         type: "carousel",
@@ -502,7 +516,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Working with an agent",
-        body: `<p>The agent was fast and tireless at the parts that used to eat my time: building pages from the system, wiring up the CMS, running the checks before every handoff, and keeping the style guide in step with the site. Where it needed me was judgment: choosing the direction, deciding what not to build, catching the moments where the first answer was wrong, and holding every change to the same bar before Brandon saw it.</p>`,
+        body: `<p>The agent was fast and tireless at the parts that used to eat my time: building pages from the system, wiring up the CMS, running the checks before every handoff, and keeping the style guide in step with the site. Where it needed me was judgment: choosing the direction, deciding what not to build, catching the moments where the first answer was wrong, and holding every change to the same bar before the client saw it.</p>`,
       },
     ],
   },
