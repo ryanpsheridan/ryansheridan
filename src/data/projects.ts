@@ -831,12 +831,6 @@ const allProjects: Project[] = [
           { src: "/project-feedonomics-tokens-applied-surface.webp", alt: "The same Feedonomics page in Figma with the hero section selected and its fill set to the Surface/Inverse token from the Multi-Brand library", caption: "Surface: the hero is filled with Surface/Inverse, not a brand color." },
         ],
       },
-      {
-        type: "imageGrid",
-        images: [
-          { src: "/multi-brand-mode-switch-animated.svg", alt: "The Brand variables table beside a hero section while the Mode menu switches between CM, BC, and FDX: the highlighted table column follows the mode, and the section's surface, type, and buttons change to each brand" },
-        ],
-      },
     ],
   },
   {
