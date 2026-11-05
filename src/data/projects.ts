@@ -331,7 +331,7 @@ const allProjects: Project[] = [
     thumbnail: "/project-ohio-golf-club-indoor-thumbnail.webp",
     showOnHomepage: false,
     tags: ["Web Design", "Design System"],
-    tools: ["Figma", "Claude Code", "Next.js", "Pages CMS", "GitHub", "Vercel"],
+    tools: ["Claude Code", "Next.js", "Pages CMS", "GitHub", "Vercel"],
     client: "Ohio Golf Club Indoor",
     clientUrl: "https://www.ohiogolfclubindoor.com/",
     content: [
@@ -415,7 +415,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Mobile first, in practice",
-        body: `<p>Most people who find the site through search are on a phone, so the whole site got a mobile pass: spacing, larger tap targets, and a scroll fade-in toned down and switched off for anyone whose device asks for reduced motion. The menu took four rounds. It began as one long list that scrolled on a small phone. Folding the desktop dropdowns into sections that open in place fixed that. In testing, the first build let only one section open at a time, so opening one closed another above it and the list jumped under your finger. Now each section opens on its own.</p>`,
+        body: `<p>About 60 percent of the people who reach the site from search are on a phone, so the whole site got a mobile pass: spacing, larger tap targets, and a scroll fade-in toned down and switched off for anyone whose device asks for reduced motion. The menu took four rounds. It began as one long list that scrolled on a small phone. Folding the desktop dropdowns into sections that open in place fixed that. In testing, the first build let only one section open at a time, so opening one closed another above it and the list jumped under your finger. Now each section opens on its own.</p>`,
       },
       {
         type: "imageGrid",
@@ -458,7 +458,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Search and answer engines",
-        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. On 23 October 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs and holiday hours. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p><p>Treat this as a starting point. In the 12 days after the first push, the site averaged about 4.8 clicks and 240 impressions a day, against 0.5 clicks and 38 impressions a day in the 28 days before. It is an early read, and the rebuild itself is not live yet. I will add results here as the weeks come in.</p>`,
+        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. On 23 October 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs, holiday hours, and FAQ markup on the new lesson page to match the pages that already had it. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p><p>Treat this as a starting point. In the 12 days after the first push, the site averaged about 4.8 clicks and 240 impressions a day, against 0.5 clicks and 38 impressions a day in the 28 days before. It is an early read, and the rebuild itself is not live yet. I will add results here as the weeks come in.</p>`,
       },
       {
         type: "barChart",
