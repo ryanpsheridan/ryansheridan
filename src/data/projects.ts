@@ -330,7 +330,7 @@ const allProjects: Project[] = [
     thumbnail: "/project-ogc-featured-animated.svg",
     ogImage: "/project-ogc-featured.jpg",
     showOnHomepage: true,
-    homepageWord: "client sites",
+    homepageWord: "websites",
     tags: ["Web Design", "Design System"],
     tools: ["Claude Code", "Next.js", "Pages CMS", "GitHub", "Vercel"],
     client: "Ohio Golf Club Indoor",
@@ -811,12 +811,11 @@ const allProjects: Project[] = [
         ratio: "16 / 10",
         contain: true,
         images: [
-          { src: "/project-feedonomics-tokens-04.webp", alt: "Brand collection in the Multi-Brand Figma library with CM, BC, and FDX columns mapping text color and typeface tokens to each brand's primitives", caption: "01 · Text color and typeface, per brand" },
-          { src: "/project-feedonomics-tokens-05.webp", alt: "Brand collection font size tokens from Display 1 to Type XS with separate values for CM, BC, and FDX", caption: "02 · One type scale, three sets of sizes" },
-          { src: "/project-feedonomics-tokens-06.webp", alt: "Brand collection weight tokens and surface tokens, with Base, Secondary, Tertiary, and Inverse mapped to each brand's colors", caption: "03 · Weight and surface, per brand" },
-          { src: "/project-feedonomics-tokens-07.webp", alt: "Brand collection spacing tokens, viewport widths, and section padding, with every brand pointing at the shared number primitives", caption: "04 · Spacing and layout, shared across brands" },
-          { src: "/project-feedonomics-tokens-08.webp", alt: "Brand collection duration tokens from 0 to 300 milliseconds and border color tokens for CM, BC, and FDX", caption: "05 · Motion and borders" },
-          { src: "/project-feedonomics-tokens-03.webp", alt: "Primitive collection listing color groups for CMRC, BC, FDX, and MS, beside number variables for frame widths, containers, and padding", caption: "06 · Primitives: every brand's colors, one set of numbers" },
+          { src: "/multi-brand-tokens-01.svg", alt: "Brand collection font size tokens from Display 1 to Type XS with separate values for CM, BC, and FDX", caption: "01 · One type scale, three sets of sizes" },
+          { src: "/multi-brand-tokens-02.svg", alt: "Brand collection weight tokens and surface tokens, with Base, Secondary, Tertiary, and Inverse mapped to each brand's colors", caption: "02 · Weight and surface, per brand" },
+          { src: "/multi-brand-tokens-03.svg", alt: "Brand collection spacing tokens, viewport widths, and section padding, with every brand pointing at the shared number primitives", caption: "03 · Spacing and layout, shared across brands" },
+          { src: "/multi-brand-tokens-04.svg", alt: "Brand collection duration tokens from 0 to 300 milliseconds and border color tokens for CM, BC, and FDX", caption: "04 · Motion and borders" },
+          { src: "/multi-brand-tokens-05.svg", alt: "Primitive collection listing color groups for CMRC, BC, FDX, and MS, with the Numbers group selected to show frame width, container, and padding values", caption: "05 · Primitives: every brand's colors, one set of numbers" },
         ],
       },
       {
@@ -835,7 +834,7 @@ const allProjects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          { src: "/multi-brand-mode-switch-animated.svg", alt: "A Multi-Brand variables table beside a hero section while the Figma mode menu switches between Base, CM, BC, and FDX and the section's surface color and type update" },
+          { src: "/multi-brand-mode-switch-animated.svg", alt: "The Brand variables table beside a hero section while the Mode menu switches between CM, BC, and FDX: the highlighted table column follows the mode, and the section's surface, type, and buttons change to each brand" },
         ],
       },
     ],
