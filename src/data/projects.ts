@@ -792,7 +792,7 @@ const allProjects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          { src: "/project-multi-brand-sections.webp", alt: "The Multi-Brand section library in Figma, grouped into Hero, Section Header, Multi Column, Card, Metrics and Stats, and Logo Showcase, beside a six-card Multi Column section with the Mode menu set to CM" },
+          { src: "/multi-brand-sections.svg", alt: "The Multi-Brand section library in Figma, grouped into Hero, Section Header, Multi Column, Card, Metrics and Stats, and Logo Showcase, beside a six-card Multi Column section with the Mode menu set to CM" },
         ],
       },
       {
@@ -820,8 +820,8 @@ const allProjects: Project[] = [
         type: "imageGrid",
         framed: true,
         images: [
-          { src: "/project-feedonomics-tokens-applied-type.webp", alt: "Feedonomics product page in Figma with the hero headline selected and the Multi-Brand text styles menu showing Display 2 at 64/70.4", caption: "Type: Display 2 from the Multi-Brand library resolves to the Feedonomics size." },
-          { src: "/project-feedonomics-tokens-applied-surface.webp", alt: "The same Feedonomics page in Figma with the hero section selected and its fill set to the Surface/Inverse token from the Multi-Brand library", caption: "Surface: the hero is filled with Surface/Inverse, not a brand color." },
+          { src: "/multi-brand-applied-type.webp", alt: "Feedonomics product page in Figma with the hero headline selected and the Multi-Brand text styles menu showing Display 2 at 64/70.4", caption: "Type: Display 2 from the Multi-Brand library resolves to the Feedonomics size." },
+          { src: "/multi-brand-applied-surface.webp", alt: "The same Feedonomics page in Figma with the hero section selected and its fill set to the Surface/Inverse token from the Multi-Brand library", caption: "Surface: the hero is filled with Surface/Inverse, not a brand color." },
         ],
       },
     ],
