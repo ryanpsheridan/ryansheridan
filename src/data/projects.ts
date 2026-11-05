@@ -324,7 +324,7 @@ export interface Project {
 const allProjects: Project[] = [
   {
     slug: "ohio-golf-club",
-    title: "Ohio Golf Club Indoor Website Redesign",
+    title: "Ohio Golf Club",
     year: 2026,
     draft: true,
     description: "Rebuilding the website for Ohio Golf Club Indoor in Akron with an agentic workflow: a new design system, a CMS the staff run themselves, and search work.",
