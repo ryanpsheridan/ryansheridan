@@ -1,4 +1,10 @@
 ---
+interface Props {
+  /** The page draws the blueprint (its own specs over itself), so the footer offers the way in. */
+  blueprint?: boolean;
+}
+
+const { blueprint = false } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
@@ -21,6 +27,16 @@ const year = new Date().getFullYear();
     </div>
     <div class="footer-bottom">
       <span class="footer-copyright">&copy; {year} Ryan Sheridan</span>
+      {blueprint && (
+        /* The way into the blueprint, kept down here as a colophon-style
+           extra for whoever reads to the end. A real toggle, the same as the
+           Cmd/Ctrl + I shortcut; on touch screens, where there is no
+           shortcut, the keycap gives way to the words. */
+        <button type="button" class="footer-peek" aria-pressed="false" aria-keyshortcuts="Meta+I Control+I" data-blueprint-toggle>
+          <kbd class="footer-peek-key"><span data-shortcut-mod>Cmd</span> + I</kbd>
+          <span class="footer-peek-label">Under the hood</span>
+        </button>
+      )}
     </div>
   </div>
 </footer>
@@ -83,6 +99,47 @@ const year = new Date().getFullYear();
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .footer-peek {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-s);
+    color: var(--color-text-muted);
+    background: none;
+    border: 0;
+    cursor: pointer;
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+
+  .footer-peek:hover,
+  .footer-peek[aria-pressed="true"] {
+    color: var(--color-text);
+  }
+
+  .footer-peek-key {
+    padding: 0 var(--space-1);
+    font: inherit;
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: inherit;
+    background: color-mix(in srgb, var(--color-text) 6%, transparent);
+    border-radius: var(--radius-sm);
+    transition: background var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard);
+  }
+
+  .footer-peek[aria-pressed="true"] .footer-peek-key {
+    color: #ffffff;
+    background: var(--blueprint, var(--color-link));
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .footer-peek-key {
+      display: none;
+    }
   }
 
   .footer-copyright {

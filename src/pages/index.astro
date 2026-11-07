@@ -46,15 +46,8 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
           <p class="intro" data-spec="type" data-spec-name="Body">
             Principal Designer at Commerce, leading design systems, websites, and AI&nbsp;workflows.
           </p>
-          <div class="cta-row" data-cta-row>
+          <div class="cta-row">
             <Button href="/work">View all work</Button>
-            {/* The way into the blueprint: the page drawing its own specs
-                over itself. It stays tucked away until the last project is
-                reached, a small reward for reading to the end; Cmd + I still
-                works from anywhere. The drawing it adds is hidden from
-                assistive tech, since it describes the page rather than
-                adding to it. */}
-            <Button variant="secondary" class="peek-btn" aria-keyshortcuts="Meta+I Control+I" data-blueprint-toggle><span data-peek-label>Look under the hood</span></Button>
           </div>
           <div class="blueprint-tags" aria-hidden="true"></div>
         </div>
@@ -78,11 +71,6 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
           );
           return i === 0 ? <div class="first-project-frame">{row}</div> : row;
         })}
-        {/* Below 769px the headline no longer sits beside the work, so the
-            way into the blueprint comes at the end of it instead. */}
-        <div class="peek-end">
-          <Button variant="secondary" aria-keyshortcuts="Meta+I Control+I" data-blueprint-toggle><span data-peek-label>Look under the hood</span></Button>
-        </div>
         <div class="scroll-spacer"></div>
       </div>
     </div>
@@ -102,7 +90,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     </div>
   </main>
 
-  <Footer />
+  <Footer blueprint />
 </Layout>
 
 <script>
@@ -358,21 +346,6 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     new MutationObserver(queuePick).observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
   }
 
-  // The way into the blueprint shows up once the last project reaches the
-  // line where the headline's word changes, and stays once found.
-  const peekRow = document.querySelector<HTMLElement>("[data-cta-row]");
-  const lastImage = lastRow?.querySelector(".cell-image");
-  if (peekRow && lastImage) {
-    const reveal = new IntersectionObserver(
-      (entries) => {
-        if (!entries.some((entry) => entry.isIntersecting)) return;
-        peekRow.classList.add("peek-visible");
-        reveal.disconnect();
-      },
-      { rootMargin: "-40% 0px -60% 0px" }
-    );
-    reveal.observe(lastImage);
-  }
 
   /**
    * The blueprint: the page drawing its own specs over itself. The columns,
@@ -386,7 +359,6 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
    */
   const page = document.querySelector<HTMLElement>("main[data-blueprint-scope]");
   const blueprintToggles = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-blueprint-toggle]"));
-  const ctaRow = document.querySelector<HTMLElement>("[data-cta-row]");
   const columns = document.querySelector<HTMLElement>("[data-blueprint-columns]");
 
   if (page && blueprintToggles.length && columns) {
@@ -643,12 +615,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     function setBlueprint(on: boolean) {
       page!.classList.toggle("is-blueprint", on);
       document.documentElement.classList.toggle("blueprint-on", on);
-      // The label says what a press does next, so it carries the state and
-      // the buttons don't also need aria-pressed.
-      document.querySelectorAll("[data-peek-label]").forEach((label) => {
-        label.textContent = on ? "Hide the specs" : "Look under the hood";
-      });
-      if (on) ctaRow?.classList.add("peek-visible");
+      blueprintToggles.forEach((button) => button.setAttribute("aria-pressed", String(on)));
       build();
     }
 
@@ -851,47 +818,6 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     align-items: center;
     gap: var(--space-3);
     margin-top: var(--space-5);
-  }
-
-  /* The secondary button beside "View all work" starts out of sight and
-     slides in once the last project is reached (see the script). */
-  .cta-row :global(.peek-btn) {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(calc(var(--space-2) * -1));
-    transition:
-      opacity var(--duration-slow) var(--ease-standard),
-      transform var(--duration-slow) var(--ease-standard),
-      visibility 0s linear var(--duration-slow);
-  }
-
-  .cta-row.peek-visible :global(.peek-btn) {
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    transition-delay: 0s;
-  }
-
-  .peek-end {
-    display: none;
-  }
-
-  @media (max-width: 768px) {
-    .cta-row :global(.peek-btn) {
-      display: none;
-    }
-
-    .peek-end {
-      display: flex;
-      padding: var(--space-5) 0 var(--space-6);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .cta-row :global(.peek-btn) {
-      transform: none;
-      transition: none;
-    }
   }
 
   /*

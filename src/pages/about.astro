@@ -60,14 +60,6 @@ import ToolLink from "../components/ui/ToolLink.astro";
           is my whole world, and I’m always working on a side project that
           pushes my limits.
         </p>
-        {/* The way into the blueprint: the page drawing its own specs over
-            itself. The shortcut in the sentence is a real toggle for anyone
-            with a mouse or a finger; the drawing it adds is hidden from
-            assistive tech, since it describes the page rather than adding
-            to it. */}
-        <p class="peek">
-          <button type="button" class="kbd-toggle" aria-pressed="false" aria-label="Show the specs (shortcut Cmd + I)" aria-keyshortcuts="Meta+I Control+I" data-blueprint-toggle><span data-shortcut-mod>Cmd</span> + I</button> to peek under the&nbsp;hood.
-        </p>
       </div>
       <div class="about-photo" data-spec="box">
         <img src="/profile-photo.webp" alt="Ryan Sheridan" />
@@ -181,7 +173,7 @@ import ToolLink from "../components/ui/ToolLink.astro";
     </section>
   <Blueprint />
   </main>
-  <Footer />
+  <Footer blueprint />
 </Layout>
 
 <style>
@@ -230,11 +222,6 @@ import ToolLink from "../components/ui/ToolLink.astro";
 
   .bio:last-of-type {
     margin-bottom: 0;
-  }
-
-  .peek {
-    font-size: var(--text-s);
-    color: var(--color-text-muted);
   }
 
   /* "My dog": underlined in ink, not link blue, since it opens a picture
