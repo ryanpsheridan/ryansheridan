@@ -842,7 +842,7 @@ const allProjects: Project[] = [
     year: 2026,
     description: "A Feedonomics rebrand built on multi-brand Figma tokens, engineering-ready component specs, and a developer review loop, shipped in Makeswift.",
     ogImage: "/project-feedonomics1.jpg",
-    thumbnail: "/feedonomics-cta-animated.svg",
+    thumbnail: "/feedonomics-data-journey-hover-animated.svg",
     showOnHomepage: true,
     homepageWord: "websites",
     tags: ["Design System", "Web Design"],
@@ -962,6 +962,18 @@ const allProjects: Project[] = [
         framed: true,
         images: [
           { src: "/project-feedonomics-quote-library.webp", alt: "Makeswift library page listing customers in an accordion, with Dell expanded to show its quote card, logo, attribution, and two stats", caption: "The quote library in Makeswift, organized for publishers" },
+        ],
+      },
+      {
+        type: "text",
+        heading: "A Closer Look: Expanding CTA Banner",
+        body: `<p>The Expanding CTA Banner sits at the end of the page, right above the footer. It starts as a gradient card on the page background. As it scrolls into view, it grows to the full width of the screen, and two thin lines draw in from the top and bottom edges until they frame the headline and the Get a demo button.</p><p>The motion follows the scroll, so the banner finishes as the visitor reaches the end of the page. It turns the last section into a moment that points at the one action we want them to take.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          { src: "/feedonomics-cta-animated.svg", alt: "Animation of the Expanding CTA Banner: a blue to peach gradient card reading See what Feedonomics can do for your business grows to fill the frame, and two thin lines draw in to frame the headline and the Get a demo button", caption: "The Expanding CTA Banner, rebuilt as a loop from a recording of the live section" },
         ],
       },
       {
