@@ -853,7 +853,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Project",
-        body: `<p><a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a> is one of three brands under <a href="https://www.commerce.com/" target="_blank" rel="noopener noreferrer">Commerce</a>, alongside <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> and <a href="https://www.makeswift.com/" target="_blank" rel="noopener noreferrer">Makeswift</a>. What started as a brand refresh turned into a full rebrand over six months. Everything but the logo changed, and the site moved to <strong>Makeswift</strong> for page building and <strong>Contentful</strong> for content, the same setup BigCommerce already used.</p><p>I led the design system. That meant turning the new brand into tokens, type, spacing, and components that developers could build and publishers could use long after launch.</p><p>Here is what this covers:</p><ul><li>Feedonomics tokens in Figma and Makeswift, and how pages use them</li><li>Component documentation for developers</li><li>The review process with developers, web publishing, and SEO</li><li>The resources section, before and after</li><li>What I recommend</li></ul>`,
+        body: `<p><a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a> is one of three brands under <a href="https://www.commerce.com/" target="_blank" rel="noopener noreferrer">Commerce</a>, alongside <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> and <a href="https://www.makeswift.com/" target="_blank" rel="noopener noreferrer">Makeswift</a>. What started as a brand refresh turned into a full rebrand over six months. Everything but the logo changed, and the site moved to <strong>Makeswift</strong> for page building and <strong>Contentful</strong> for content, the same setup BigCommerce already used.</p><p>I led the design system. That meant turning the new brand into tokens, type, spacing, and components that developers could build and publishers could use long after launch.</p>`,
       },
       {
         type: "compare",
@@ -864,7 +864,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Team",
-        body: `<p>Four of us did this work. <a href="https://www.linkedin.com/in/robrodriguezwork/" target="_blank" rel="noopener noreferrer"><strong>Rob Rodriguez</strong></a> led brand and art direction: color, gradients, type pairing, and brand graphics. <a href="https://www.linkedin.com/in/sydneybonner-copywritingconsultant/" target="_blank" rel="noopener noreferrer"><strong>Sydney Bonner</strong></a>, our copywriter, was the brains behind the brand's tone and voice. She moved the homepage from "The market leader in product feed management" to "Go from invisible to everywhere," and her copy guidelines set the rules: lead with benefits instead of features, write for everyone from executives to engineers, and sound like clever, confident feed nerds. Lines like "Make your products work harder. No coffee required." came from her. <a href="https://www.linkedin.com/in/jc-roque/" target="_blank" rel="noopener noreferrer"><strong>Juan Roque</strong></a>, our senior web designer, designed and built most of the pages. I owned the design system: the Feedonomics tokens in our multi-brand Figma library, the component specs, and the build in Makeswift.</p><p>We leaned on each other the whole way. Rob's brand decisions became tokens I could name and hand to developers. Juan's pages tested each component before it went to development, and a lot of his feedback is in the review doc. By the second half of the project, I was working with our developers almost every day, turning specs into real components.</p>`,
+        body: `<p>Four of us did this work. <a href="https://www.linkedin.com/in/robrodriguezwork/" target="_blank" rel="noopener noreferrer"><strong>Rob Rodriguez</strong></a> led brand and art direction: color, gradients, type pairing, and brand graphics. <a href="https://www.linkedin.com/in/sydneybonner-copywritingconsultant/" target="_blank" rel="noopener noreferrer"><strong>Sydney Bonner</strong></a>, our copywriter, was the brains behind the brand's tone and voice. She moved the homepage from "The market leader in product feed management" to "Go from invisible to everywhere," and her copy guidelines set the rules: lead with benefits instead of features, write for everyone from executives to engineers, and sound like clever, confident feed nerds. Lines like "Make your products work harder. No coffee required." came from her. <a href="https://www.linkedin.com/in/jc-roque/" target="_blank" rel="noopener noreferrer"><strong>Juan Roque</strong></a>, our senior web designer, designed and built most of the pages. I owned the design system: the Feedonomics tokens in our multi-brand Figma library, the component specs, and the build in Makeswift.</p><p>Rob's brand decisions became tokens I could name and hand to developers, and Juan's pages tested each component before it went to development.</p>`,
       },
       {
         type: "text",
@@ -874,35 +874,25 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Tokens First",
-        body: `<p>Rob's brand work came to me as colors, type, and art direction. I turned it into Figma variables in our <a href="/work/commerce-multi-brand-system">multi-brand library</a>, next to Commerce and BigCommerce, with the same names and structure. That way a component built once works for all three brands.</p><p>The tokens come in two layers:</p><ul><li><strong>Primitives</strong> are the raw values: 26 Feedonomics colors (10 brand colors and 16 more in Peach, Green, Yellow, and Purple ramps), plus number scales for widths, padding, spacing, and animation timing.</li><li><strong>Brand tokens</strong> give those values a job: text color, font, size, line height, weight, surface, radius, borders, and padding. Each has a value for Commerce, BigCommerce, and Feedonomics, plus mobile.</li></ul><p>Components only use brand tokens. A section uses <em>Surface/Inverse</em>, not Navy. So switching a component from BigCommerce to Feedonomics is one setting.</p>`,
+        body: `<p>Rob's brand work came to me as colors, type, and art direction. I turned it into Figma variables in our <a href="/work/commerce-multi-brand-system">multi-brand library</a>, next to Commerce and BigCommerce, with the same names and structure, so a component built once works for all three brands.</p><p><strong>Primitives</strong> hold the raw values, including 26 Feedonomics colors. <strong>Brand tokens</strong> give those values a job, like text color, size, surface, and padding, with a value for each brand. Components only use brand tokens. A section uses <em>Surface/Inverse</em>, not Navy, so switching a component from BigCommerce to Feedonomics is one setting.</p>`,
       },
       {
-        type: "carousel",
-        perView: 1,
-        ratio: "16 / 10",
-        contain: true,
+        type: "imageGrid",
         images: [
-          { src: "/project-feedonomics-tokens-01.webp", alt: "Figma variables panel showing the Feedonomics brand color primitives, Navy, Shadow, Slate, Cobalt, Sky, Ice, Frost, Stone, Peach, and Mint, with hex values", caption: "01 · Primitive: Feedonomics brand colors" },
-          { src: "/project-feedonomics-tokens-02.webp", alt: "Figma variables panel listing the Feedonomics expanded color ramps, Peach, Green, Yellow, and Purple from 100 to 400", caption: "02 · Primitive: Feedonomics expanded ramps" },
-          { src: "/project-feedonomics-tokens-03.webp", alt: "Figma number variables for layout frame widths from 1800 to 390, container widths of 1704, 1440, and 1140, and a padding scale", caption: "03 · Primitive: frame, container, and padding" },
-          { src: "/project-feedonomics-tokens-04.webp", alt: "Brand collection in Figma with CM, BC, and FDX columns mapping text color and typeface tokens to primitives for each brand", caption: "04 · Brand: text color and typeface per brand" },
-          { src: "/project-feedonomics-tokens-05.webp", alt: "Brand collection font size tokens from Display 1 to Type XS with separate values for CM, BC, and FDX", caption: "05 · Brand: font size per brand" },
-          { src: "/project-feedonomics-tokens-06.webp", alt: "Brand collection weight tokens and surface tokens, with Base, Secondary, Tertiary, and Inverse mapped to each brand's colors", caption: "06 · Brand: weight and surface" },
-          { src: "/project-feedonomics-tokens-07.webp", alt: "Brand collection spacing tokens, viewport widths, and section padding mapped to number primitives for each brand", caption: "07 · Brand: spacing, viewport, and section padding" },
-          { src: "/project-feedonomics-tokens-08.webp", alt: "Brand collection duration tokens from 0 to 300 milliseconds and border color tokens for each brand", caption: "08 · Brand: motion duration and borders" },
+          { src: "/multi-brand-tokens-scroll-animated.svg", alt: "The Brand collection of the Multi-Brand Figma library scrolling from text color and typeface tokens through font size, letter spacing, and line height, with a value for CM, BC, and FDX in every row" },
         ],
       },
       {
         type: "text",
         heading: "Tokens Applied to the Page",
-        body: `<p>In the Feedonomics page files, each page is set to the FDX brand once. After that, designers pick shared text styles and surface tokens, and the Feedonomics values fill in.</p><ul><li><strong>Type.</strong> A hero headline uses <em>Display 2</em>, which is 64/70.4 for Feedonomics. The same style gives BigCommerce its own size and gets smaller on mobile.</li><li><strong>Surface.</strong> Sections use surface tokens instead of colors: Base (Stone), Secondary (White), and Tertiary (Ice) for light sections, and three Inverse tokens for the navy ones.</li><li><strong>Spacing.</strong> On desktop, a 1440px frame, 1140px content width, 150px side padding, and 96px top and bottom. On mobile, a 390px frame with 24px and 64px.</li></ul><p>Makeswift doesn't connect to Figma. There's no sync and no MCP, so I built the same color and type tokens by hand in both, with matching names. Designers and publishers can check either one and get the same values.</p>`,
+        body: `<p>Each Feedonomics page file is set to the FDX brand once. After that, designers pick shared text styles and surface tokens, and the Feedonomics values fill in. A hero headline uses <em>Display 2</em>, which is 64/70.4 for Feedonomics. Sections use surface tokens, like Base (Stone) for light sections and Inverse for navy ones.</p><p>Makeswift doesn't connect to Figma, so I built the same color and type tokens by hand in both, with matching names. Designers and publishers can check either one and get the same values.</p>`,
       },
       {
         type: "imageGrid",
         framed: true,
         images: [
-          { src: "/project-feedonomics-tokens-applied-type.webp", alt: "Feedonomics product page in Figma with the hero headline selected and the Multi-Brand text styles menu showing Display 2 at 64/70.4", caption: "Type: the hero headline uses Display 2, which resolves to the Feedonomics size." },
-          { src: "/project-feedonomics-tokens-applied-surface.webp", alt: "The same Feedonomics page in Figma with the hero section selected and its fill set to the Surface/Inverse token from the Multi-Brand library", caption: "Surface: the hero section is filled with Surface/Inverse, not a hex value." },
+          { src: "/multi-brand-applied-type.webp", alt: "Feedonomics product page in Figma with the hero headline selected and the Multi-Brand text styles menu showing Display 2 at 64/70.4", caption: "Type: the hero headline uses Display 2, which resolves to the Feedonomics size." },
+          { src: "/multi-brand-applied-surface.webp", alt: "The same Feedonomics page in Figma with the hero section selected and its fill set to the Surface/Inverse token from the Multi-Brand library", caption: "Surface: the hero section is filled with Surface/Inverse, not a hex value." },
         ],
       },
       {
@@ -915,7 +905,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "A Kitchen Sink for Publishers",
-        body: `<p>Tokens alone don't build pages. In Makeswift I also built what we call the kitchen sink: about 50 ready-made sections, including heroes, multi-column layouts, forms, and stats blocks, all using the same tokens and spacing as Figma. Publishers pick a section, drop in their content, and don't need a designer to lay out the page.</p>`,
+        body: `<p>In Makeswift I also built what we call the kitchen sink: about 50 ready-made sections, like heroes, multi-column layouts, forms, and stats blocks, all on the same tokens as Figma. Publishers pick a section, drop in their content, and don't need a designer to lay out the page.</p>`,
       },
       {
         type: "compare",
@@ -926,7 +916,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Documentation for Developers",
-        body: `<p>Every component and page template has a documentation frame in the Figma file, with its status in the label: Ready for Review, Ready for Dev, or approved. Developers could always tell what was safe to build.</p><p>Each spec covers the same things:</p><ul><li><strong>Content rules.</strong> What's required, what's optional, and what happens when something is missing.</li><li><strong>States and motion.</strong> Hover, press, and focus, with timing. For example, the primary button's corners and inner glow share one 300ms ease.</li><li><strong>Breakpoints.</strong> Desktop, small desktop, tablet, and mobile. Long pages like success stories also show scrolling: the sticky table of contents on desktop turns into a dropdown on smaller screens.</li><li><strong>Makeswift settings.</strong> What publishers can change, what each setting is called, and its default.</li></ul>`,
+        body: `<p>Every component and page template has a documentation frame in the Figma file, with its status in the label: Ready for Review, Ready for Dev, or approved. Developers could always tell what was safe to build.</p><p>Each spec covers content rules, states and motion with timing, four breakpoints, and the Makeswift settings publishers can change, with their names and defaults.</p>`,
       },
       {
         type: "imageGrid",
@@ -939,12 +929,12 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Review Process",
-        body: `<p>The <strong>FDX Component Review</strong> is the doc where we worked through every component with developers. It has a tab for each of the nearly 40 components and page templates, and each one moved through the same statuses: not started, in review, in development, and approved. Approved meant design, web publishing, and SEO had all signed off.</p><p>Each tab links to the Makeswift test page and sorts feedback by topic, with a name on every note and a checkmark when it's fixed. I led design review, and more than 60 of the notes are mine. A few examples:</p><ul><li><strong>Footer.</strong> A 1140px content width, with 64px side padding on desktop, 32px on large screens, and 24px on smaller ones, to match the nav and other sections.</li><li><strong>Standard Card.</strong> No hover effects when a card has no link. I also removed three link settings that caused spacing problems and set one default button.</li><li><strong>Lists.</strong> Bullets take the text color, with a hanging indent and 8px spacing.</li><li><strong>Scroll-in container.</strong> An 800ms default transition, a setting for when the animation starts, and related settings grouped into a folder so the panel is easier to use.</li></ul><p>SEO and accessibility fixes went through the same process. Linked cards became real links, the button inside a card became plain text so there isn't a button inside a link, and accordion titles changed from H5 to H3 without looking any different. Because those fixes live in the components, every page gets them.</p>`,
+        body: `<p>The <strong>FDX Component Review</strong> is the doc where we worked through every component with developers. It has a tab for each of the nearly 40 components and page templates, and each one moved through the same statuses: not started, in review, in development, and approved. Approved meant design, web publishing, and SEO had all signed off.</p><p>Each tab links to the Makeswift test page and sorts feedback by topic, with a name on every note and a checkmark when it's fixed. I led design review, and more than 60 of the notes are mine. Two examples:</p><ul><li><strong>Standard Card.</strong> No hover effects when a card has no link. I also removed three link settings that caused spacing problems and set one default button.</li><li><strong>Scroll-in container.</strong> An 800ms default transition, a setting for when the animation starts, and related settings grouped into a folder so the panel is easier to use.</li></ul><p>SEO and accessibility fixes went through the same process. Linked cards became real links, and accordion titles changed from H5 to H3 without looking any different. Because those fixes live in the components, every page gets them.</p>`,
       },
       {
         type: "text",
         heading: "A Closer Look: Quote Slides",
-        body: `<p>Quote Slides is built from two parts already in the system: Pill Tabs with one pill per customer, and a quote card with the logo, quote, name, a Read case study link, and an optional stats column.</p><p>The card adjusts to its content. If a customer has stats, up to two show on the right. If they don't, like PUMA and Monwell, that column goes away instead of sitting empty. The pills use the spacing and mobile wrapping we settled on in review.</p>`,
+        body: `<p>Quote Slides is built from two parts already in the system: Pill Tabs with one pill per customer, and a quote card with the logo, quote, name, a Read case study link, and an optional stats column.</p><p>The card adjusts to its content. If a customer has stats, up to two show on the right. If they don't, that column goes away instead of sitting empty.</p>`,
       },
       {
         type: "imageGrid",
@@ -955,7 +945,7 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        body: `<p>For publishers, I set up a quote library in Makeswift. Every approved quote is on one page in an accordion, one customer per row, with the finished card inside. Publishers can find a quote and its stats without asking design, and churned customers are labeled so old quotes don't get used.</p>`,
+        body: `<p>For publishers, I set up a quote library in Makeswift: every approved quote on one page, one customer per row, with churned customers labeled so old quotes don't get used.</p>`,
       },
       {
         type: "imageGrid",
@@ -967,7 +957,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "A Closer Look: Expanding CTA Banner",
-        body: `<p>The Expanding CTA Banner sits at the end of the page, right above the footer. It starts as a gradient card on the page background. As it scrolls into view, it grows to the full width of the screen, and two thin lines draw in from the top and bottom edges until they frame the headline and the Get a demo button.</p><p>The motion follows the scroll, so the banner finishes as the visitor reaches the end of the page. It turns the last section into a moment that points at the one action we want them to take.</p>`,
+        body: `<p>The Expanding CTA Banner sits at the end of the page, right above the footer. It starts as a gradient card on the page background. As it scrolls into view, it grows to the full width of the screen, and two thin lines draw in from the top and bottom edges until they frame the headline and the Get a demo button. The motion follows the scroll, so it lands on the one action we want visitors to take.</p>`,
       },
       {
         type: "imageGrid",
@@ -1040,7 +1030,7 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        body: `<p>The blog post template follows the same approach. The old one was a white page with a generic sidebar. The new one uses the Stone background, a table of contents that follows you as you scroll, share and newsletter links, a key highlights box at the top, and the same type and spacing as every other page. Success stories, webinars, and guides use the same frame.</p>`,
+        body: `<p>The blog post template follows the same approach: the Stone background, a table of contents that follows you as you scroll, and a key highlights box at the top. Success stories, webinars, and guides use the same frame.</p>`,
       },
       {
         type: "compare",
