@@ -909,7 +909,7 @@ const allProjects: Project[] = [
         type: "imageGrid",
         framed: true,
         images: [
-          { src: "/project-feedonomics-kitchen-sink.svg", alt: "The Makeswift pages panel with the Kitchen Sink open: Foundations, Components, Sections, Testing, Experiments, Pages, and Motion folders, with Sections expanded to Cards, Carousel, FAQ, Form, Hero, Inset, Multi-Column, River, Starters, and Testimonials", caption: "The kitchen sink in Makeswift, with the Sections folder open" },
+          { src: "/project-feedonomics-kitchen-sink.svg", alt: "The Makeswift pages panel with the Kitchen Sink open and Multi-Column selected under Sections, beside two of its sections: a two-column layout with an image, text and four stats, and a three-column layout with a heading, a button and six text blocks", caption: "The kitchen sink in Makeswift, with two of the Multi-Column sections" },
         ],
       },
       {
