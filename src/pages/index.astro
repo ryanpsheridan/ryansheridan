@@ -63,7 +63,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
         {projects.map((project, i) => {
           const row = (
             <div class={`project-row${i === 0 ? " entrance-hidden" : ""}`} data-index={i}>
-              <div class="cell-image" data-spec="box">
+              <div class="cell-image" data-spec="box" data-start={project.homepageStart}>
                 {project.thumbnail && <Media src={project.thumbnail} alt={project.title} />}
               </div>
               <div class="cell-info">
@@ -181,7 +181,13 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     function showWord(index: number) {
       if (index === current || !words[index]) return;
       const old = slot!.querySelector<HTMLElement>(".word:not(.is-leaving)");
+      const back = index < current;
       current = index;
+      // The project whose word this is takes over on the same beat (see
+      // "Thumbnails play one at a time").
+      document.dispatchEvent(new CustomEvent("project-active", { detail: index }));
+      // Scrolling back up, the word drops in from above instead.
+      slot!.classList.toggle("is-back", back);
       if (old && `${words[index]}.` === old.textContent) return;
       const next = document.createElement("span");
       next.className = "word";
@@ -258,7 +264,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
    * fallback until its <object> is ready. Under reduced motion the SVGs
    * already rest on their still frame, so there is nothing to drive.
    */
-  type Thumb = { row: HTMLElement; doc: Document | null; playing: boolean };
+  type Thumb = { row: HTMLElement; doc: Document | null; playing: boolean; start: number };
   const thumbs: Thumb[] = [];
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -269,20 +275,25 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
   const rest = (t: Thumb) => {
     if (!t.doc) return;
     const { anims, svg } = timelineOf(t.doc);
-    anims.forEach((anim) => { anim.pause(); anim.currentTime = 0; });
+    anims.forEach((anim) => { anim.pause(); anim.currentTime = t.start * 1000; });
     svg?.pauseAnimations();
-    svg?.setCurrentTime(0);
+    svg?.setCurrentTime(t.start);
     t.playing = false;
   };
   const play = (t: Thumb) => {
     if (!t.doc || t.playing) return;
     const { anims, svg } = timelineOf(t.doc);
-    anims.forEach((anim) => { anim.currentTime = 0; anim.play(); });
-    svg?.setCurrentTime(0);
+    anims.forEach((anim) => { anim.currentTime = t.start * 1000; anim.play(); });
+    svg?.setCurrentTime(t.start);
     svg?.unpauseAnimations();
     t.playing = true;
   };
 
+  let activeIndex = 0;
+  document.addEventListener("project-active", (event) => {
+    activeIndex = (event as CustomEvent<number>).detail;
+    queuePick();
+  });
   let pickQueued = false;
   function pickActive() {
     pickQueued = false;
@@ -290,6 +301,15 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
       thumbs.forEach((t) => t.playing && rest(t));
       return;
     }
+    // Beside the sticky headline, the project that holds the headline's word
+    // plays, so the word and the work change together. Elsewhere, the one
+    // nearest the middle of the screen.
+    if (slot && splitView.matches) {
+      thumbs.forEach((t) => (Number(t.row.dataset.index) === activeIndex ? play(t) : t.playing && rest(t)));
+      rows.forEach((row) => row.classList.toggle("is-current", Number(row.dataset.index) === activeIndex));
+      return;
+    }
+    rows.forEach((row) => row.classList.remove("is-current"));
     const mid = window.innerHeight / 2;
     let best: Thumb | null = null;
     let bestDistance = Infinity;
@@ -314,7 +334,8 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
       const img = row.querySelector<HTMLImageElement>(".cell-image img");
       const src = img?.getAttribute("src");
       if (!img || !src || !src.endsWith(".svg")) return;
-      const t: Thumb = { row, doc: null, playing: false };
+      const start = Number(row.querySelector<HTMLElement>(".cell-image")?.dataset.start ?? 0) || 0;
+      const t: Thumb = { row, doc: null, playing: false, start };
       thumbs.push(t);
       const object = document.createElement("object");
       object.type = "image/svg+xml";
@@ -783,6 +804,21 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     animation: word-out var(--duration-slow) var(--ease-emphasized) forwards;
   }
 
+  .word-slot:global(.is-back) :global(.word.is-entering) {
+    transform: translateY(-100%);
+  }
+
+  .word-slot:global(.is-back) :global(.word.is-leaving) {
+    animation-name: word-out-back;
+  }
+
+  @keyframes word-out-back {
+    to {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+  }
+
   @keyframes word-out {
     to {
       transform: translateY(-100%);
@@ -1235,6 +1271,19 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
 
   .cell-image :global(img.is-replaced) {
     visibility: hidden;
+  }
+
+  /* Beside the sticky headline, the project holding the headline's word
+     keeps its caption at full strength and the others ease back, so the
+     word reads as belonging to that project. */
+  @media (min-width: 769px) {
+    .project-row :global(.cell-info) {
+      transition: opacity var(--duration-slow) var(--ease-standard);
+    }
+
+    .right-panel:has(.is-current) .project-row:not(.is-current) .cell-info {
+      opacity: 0.45;
+    }
   }
 
   .project-title {
