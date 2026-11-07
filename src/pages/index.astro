@@ -63,7 +63,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
         {projects.map((project, i) => {
           const row = (
             <div class={`project-row${i === 0 ? " entrance-hidden" : ""}`} data-index={i}>
-              <div class="cell-image" data-spec="box">
+              <div class="cell-image" data-spec="box" data-start={project.homepageStart}>
                 {project.thumbnail && <Media src={project.thumbnail} alt={project.title} />}
               </div>
               <div class="cell-info">
@@ -181,7 +181,13 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     function showWord(index: number) {
       if (index === current || !words[index]) return;
       const old = slot!.querySelector<HTMLElement>(".word:not(.is-leaving)");
+      const back = index < current;
       current = index;
+      // The project whose word this is takes over on the same beat (see
+      // "Thumbnails play one at a time").
+      document.dispatchEvent(new CustomEvent("project-active", { detail: index }));
+      // Scrolling back up, the word drops in from above instead.
+      slot!.classList.toggle("is-back", back);
       if (old && `${words[index]}.` === old.textContent) return;
       const next = document.createElement("span");
       next.className = "word";
@@ -248,6 +254,108 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     splitView.addEventListener("change", () => {
       if (splitView.matches) showWord(0);
     });
+  }
+
+  /**
+   * Thumbnails play one at a time. Each animated SVG is loaded into its own
+   * <object> document (as an <img> it can't be paused or rewound), held on
+   * its first frame, and only the project nearest the middle of the screen
+   * plays, from the start each time it takes over. The <img> stays as the
+   * fallback until its <object> is ready. Under reduced motion the SVGs
+   * already rest on their still frame, so there is nothing to drive.
+   */
+  type Thumb = { row: HTMLElement; doc: Document | null; playing: boolean; start: number };
+  const thumbs: Thumb[] = [];
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
+
+  const timelineOf = (doc: Document) => {
+    const svg = doc.documentElement as unknown as SVGSVGElement;
+    return { anims: doc.getAnimations(), svg: typeof svg.pauseAnimations === "function" ? svg : null };
+  };
+  const rest = (t: Thumb) => {
+    if (!t.doc) return;
+    const { anims, svg } = timelineOf(t.doc);
+    anims.forEach((anim) => { anim.pause(); anim.currentTime = t.start * 1000; });
+    svg?.pauseAnimations();
+    svg?.setCurrentTime(t.start);
+    t.playing = false;
+  };
+  const play = (t: Thumb) => {
+    if (!t.doc || t.playing) return;
+    const { anims, svg } = timelineOf(t.doc);
+    anims.forEach((anim) => { anim.currentTime = t.start * 1000; anim.play(); });
+    svg?.setCurrentTime(t.start);
+    svg?.unpauseAnimations();
+    t.playing = true;
+  };
+
+  let activeIndex = 0;
+  document.addEventListener("project-active", (event) => {
+    activeIndex = (event as CustomEvent<number>).detail;
+    queuePick();
+  });
+  let pickQueued = false;
+  function pickActive() {
+    pickQueued = false;
+    if (document.documentElement.classList.contains("intro-open")) {
+      thumbs.forEach((t) => t.playing && rest(t));
+      return;
+    }
+    // Beside the sticky headline, the project that holds the headline's word
+    // plays, so the word and the work change together. Elsewhere, the one
+    // nearest the middle of the screen.
+    if (slot && splitView.matches) {
+      thumbs.forEach((t) => (Number(t.row.dataset.index) === activeIndex ? play(t) : t.playing && rest(t)));
+      rows.forEach((row) => row.classList.toggle("is-current", Number(row.dataset.index) === activeIndex));
+      return;
+    }
+    rows.forEach((row) => row.classList.remove("is-current"));
+    const mid = window.innerHeight / 2;
+    let best: Thumb | null = null;
+    let bestDistance = Infinity;
+    for (const t of thumbs) {
+      const box = t.row.querySelector(".cell-image")!.getBoundingClientRect();
+      // Only a thumbnail that is at least half on screen can take over.
+      const visible = Math.min(box.bottom, window.innerHeight) - Math.max(box.top, 0);
+      if (visible < box.height / 2) continue;
+      const distance = Math.abs(box.top + box.height / 2 - mid);
+      if (distance < bestDistance) { bestDistance = distance; best = t; }
+    }
+    thumbs.forEach((t) => (t === best ? play(t) : t.playing && rest(t)));
+  }
+  const queuePick = () => {
+    if (pickQueued) return;
+    pickQueued = true;
+    requestAnimationFrame(pickActive);
+  };
+
+  if (!reduceMotion.matches) {
+    rows.forEach((row) => {
+      const img = row.querySelector<HTMLImageElement>(".cell-image img");
+      const src = img?.getAttribute("src");
+      if (!img || !src || !src.endsWith(".svg")) return;
+      const start = Number(row.querySelector<HTMLElement>(".cell-image")?.dataset.start ?? 0) || 0;
+      const t: Thumb = { row, doc: null, playing: false, start };
+      thumbs.push(t);
+      const object = document.createElement("object");
+      object.type = "image/svg+xml";
+      object.data = src;
+      object.className = "cell-object";
+      object.setAttribute("aria-hidden", "true");
+      object.tabIndex = -1;
+      object.addEventListener("load", () => {
+        const doc = object.contentDocument;
+        if (!doc) return object.remove();
+        t.doc = doc;
+        rest(t);
+        img.classList.add("is-replaced");
+        queuePick();
+      }, { once: true });
+      img.after(object);
+    });
+    window.addEventListener("scroll", queuePick, { passive: true });
+    window.addEventListener("resize", queuePick);
+    new MutationObserver(queuePick).observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
   }
 
   // The way into the blueprint shows up once the last project reaches the
@@ -696,6 +804,21 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     animation: word-out var(--duration-slow) var(--ease-emphasized) forwards;
   }
 
+  .word-slot:global(.is-back) :global(.word.is-entering) {
+    transform: translateY(-100%);
+  }
+
+  .word-slot:global(.is-back) :global(.word.is-leaving) {
+    animation-name: word-out-back;
+  }
+
+  @keyframes word-out-back {
+    to {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+  }
+
   @keyframes word-out {
     to {
       transform: translateY(-100%);
@@ -1130,6 +1253,39 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     transition: transform var(--duration-slow) var(--ease-standard);
   }
 
+  /* A thumbnail the script drives (see "Thumbnails play one at a time"):
+     its <object> sits over the <img>, which hides once the <object> is ready. */
+  .cell-image {
+    position: relative;
+  }
+
+  .cell-image :global(.cell-object) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+    transition: transform var(--duration-slow) var(--ease-standard);
+  }
+
+  .cell-image :global(img.is-replaced) {
+    visibility: hidden;
+  }
+
+  /* Beside the sticky headline, the project holding the headline's word
+     keeps its caption at full strength and the others ease back, so the
+     word reads as belonging to that project. */
+  @media (min-width: 769px) {
+    .project-row :global(.cell-info) {
+      transition: opacity var(--duration-slow) var(--ease-standard);
+    }
+
+    .right-panel:has(.is-current) .project-row:not(.is-current) .cell-info {
+      opacity: 0.45;
+    }
+  }
+
   .project-title {
     font-size: var(--text-h5);
     font-weight: var(--weight-light);
@@ -1138,7 +1294,8 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
   }
 
   @media (hover: hover) {
-    .project-row:hover .cell-image :global(img) {
+    .project-row:hover .cell-image :global(.cell-object),
+  .project-row:hover .cell-image :global(img) {
       transform: scale(1.03);
     }
   }

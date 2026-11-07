@@ -308,6 +308,14 @@ export interface Project {
    */
   homepagePosition?: number;
   /**
+   * Seconds into the thumbnail's loop to start from on the homepage, where
+   * each thumbnail plays from the top as its project takes over. Set it when
+   * the loop opens on a long hold, so the first movement lands about 1.2s in
+   * on every project. The loop itself, and the thumbnail anywhere else, keeps
+   * its full hold.
+   */
+  homepageStart?: number;
+  /**
    * The word that finishes "Designing and scaling …" while this project is beside the
    * headline on the homepage. Lowercase, usually a plural noun. Falls back
    * to the first tag.
@@ -330,6 +338,7 @@ const allProjects: Project[] = [
     thumbnail: "/project-ogc-featured-animated.svg",
     ogImage: "/project-ogc-featured.jpg",
     showOnHomepage: true,
+    homepageStart: 2.1,
     homepageWord: "websites",
     tags: ["Web Design", "Design System"],
     tools: ["Claude Code", "Next.js", "Pages CMS", "GitHub", "Vercel"],
@@ -778,6 +787,7 @@ const allProjects: Project[] = [
     ogImage: "/project-multi-brand1.jpg",
     thumbnail: "/multi-brand-modes-animated.svg",
     showOnHomepage: true,
+    homepageStart: 2.45,
     homepageWord: "systems",
     tags: ["Design System"],
     tools: ["Figma"],
@@ -1267,6 +1277,7 @@ const allProjects: Project[] = [
     ogImage: "/project-claude-design-pdf1.jpg",
     thumbnail: "/claude-design-pdf-mizuno-typing-animated.svg",
     showOnHomepage: true,
+    homepageStart: 1.7,
     homepagePosition: 5,
     homepageWord: "automations",
     tags: ["Design System", "Automation"],
