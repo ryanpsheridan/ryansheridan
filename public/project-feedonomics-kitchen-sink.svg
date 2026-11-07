@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" role="img" aria-labelledby="t"><title id="t">The Makeswift pages panel with the Kitchen Sink open: Foundations, Components, Sections, Testing, Experiments, Pages, and Motion folders, with Sections expanded to Cards, Carousel, FAQ, Form, Hero, Inset, Multi-Column, River, Starters, and Testimonials.</title>
+<defs><filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#0B1A40" flood-opacity=".12"/></filter><filter id="tabsh" x="-10%" y="-30%" width="120%" height="160%"><feDropShadow dx="0" dy="1" stdDeviation="1.2" flood-color="#060C2C" flood-opacity=".08"/></filter></defs>
+<rect width="1200" height="1200" fill="#E8E6E1"/>
+<g transform="translate(280.3 37.3) scale(1.08)" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+<rect width="592" height="1042" rx="14" fill="#fff" filter="url(#sh)"/>
+<rect x="10" y="17" width="522" height="54" rx="12" fill="#F5F5FA"/>
+<rect x="16" y="23" width="255" height="42" rx="8" fill="#fff" filter="url(#tabsh)"/>
+<text x="143.5" y="49" text-anchor="middle" fill="#060C2C" font-size="16.5" font-weight="500">Content</text>
+<text x="398.5" y="49" text-anchor="middle" fill="#797C8F" font-size="16.5" font-weight="500">Design</text>
+<g fill="none" stroke="#797C8F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M556 37h16M554 42h20"/><rect x="552" y="44" width="24" height="11" rx="2.5" fill="#797C8F"/></g><path d="M555.5 52.5l5-4 4 3 3-2 4 3" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="557.5" cy="47.5" r="1.4" fill="#fff"/>
+<path d="M0 83.5H592" stroke="#E5E7EF"/>
+<rect x="10" y="96" width="576" height="54" rx="8" fill="#F5F5FA"/>
+<g fill="none" stroke="#3B3F53" stroke-width="2.6" stroke-linecap="round"><circle cx="32.5" cy="121" r="6.5"/><path d="M37.5 126l5 5"/></g>
+<text x="56" y="129" fill="#7E8093" font-size="17.5" font-weight="400">Search pages</text>
+<path d="M23 180h10l-5 7z" fill="#B5B7C3"/>
+<text x="46" y="190" fill="#060C2C" font-size="17.5" font-weight="500">Pages</text>
+<path d="M0 206.5H592" stroke="#E6E7EF"/>
+<path d="M50 237h10l-5 7z" fill="#B5B7C3"/>
+<text x="73" y="246" fill="#3B3F53" font-size="17.5" font-weight="400">Kitchen Sink 👨‍🍳</text>
+<path d="M79 280v10l7-5z" fill="#B5B7C3"/>
+<text x="100" y="291" fill="#3B3F53" font-size="17.5" font-weight="400">1 Foundations</text>
+<path d="M79 325v10l7-5z" fill="#B5B7C3"/>
+<text x="100" y="336" fill="#3B3F53" font-size="17.5" font-weight="400">2 Components</text>
+<path d="M77 372h10l-5 7z" fill="#B5B7C3"/>
+<text x="100" y="381" fill="#3B3F53" font-size="17.5" font-weight="400">3 Sections</text>
+<circle cx="109.5" cy="420" r="4.5" fill="#B5B7C3"/>
+<text x="127" y="426" fill="#3B3F53" font-size="17.5" font-weight="400">Cards</text>
+<circle cx="109.5" cy="465" r="4.5" fill="#B5B7C3"/>
+<text x="127" y="471" fill="#3B3F53" font-size="17.5" font-weight="400">Carousel</text>
+<circle cx="109.5" cy="510" r="4.5" fill="#B5B7C3"/>
+<text x="127" y="516" fill="#3B3F53" font-size="17.5" font-weight="400">FAQ</text>
+<circle cx="109.5" cy="555" r="4.5" fill="#B5B7C3"/>
+<text x="127" y="561" fill="#3B3F53" font-size="17.5" font-weight="400">Form</text>
+<circle cx="109.5" cy="600" r="4.5" fill="#B5B7C3"/>
+<text x="127" y="606" fill="#3B3F53" font-size="17.5" font-weight="400">Hero</text>
+<circle cx="109.5" cy="645" r="4.5" fill="#B5B7C3"/>
+<text x="127" y="651" fill="#3B3F53" font-size="17.5" font-weight="400">Inset</text>
+<circle cx="109.5" cy="690" r="4.5" fill="#B5B7C3"/>
+<text x="127" y="696" fill="#3B3F53" font-size="17.5" font-weight="400">Multi-Column</text>
+<circle cx="109.5" cy="735" r="4.5" fill="#B5B7C3"/>
+<text x="127" y="741" fill="#3B3F53" font-size="17.5" font-weight="400">River</text>
+<circle cx="109.5" cy="780" r="4.5" fill="#B5B7C3"/>
+<text x="127" y="786" fill="#3B3F53" font-size="17.5" font-weight="400">Starters</text>
+<circle cx="109.5" cy="825" r="4.5" fill="#B5B7C3"/>
+<text x="127" y="831" fill="#3B3F53" font-size="17.5" font-weight="400">Testimonials</text>
+<path d="M79 865v10l7-5z" fill="#B5B7C3"/>
+<text x="100" y="876" fill="#3B3F53" font-size="17.5" font-weight="400">4 Testing</text>
+<path d="M79 910v10l7-5z" fill="#B5B7C3"/>
+<text x="100" y="921" fill="#3B3F53" font-size="17.5" font-weight="400">5 Experiments</text>
+<path d="M79 955v10l7-5z" fill="#B5B7C3"/>
+<text x="100" y="966" fill="#3B3F53" font-size="17.5" font-weight="400">6 Pages</text>
+<path d="M79 1000v10l7-5z" fill="#B5B7C3"/>
+<text x="100" y="1011" fill="#3B3F53" font-size="17.5" font-weight="400">7 Motion</text>
+</g>
+</svg>

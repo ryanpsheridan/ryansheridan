@@ -885,15 +885,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Tokens Applied to the Page",
-        body: `<p>Each Feedonomics page file is set to the FDX brand once. After that, designers pick shared text styles and surface tokens, and the Feedonomics values fill in. A hero headline uses <em>Display 2</em>, which is 64/70.4 for Feedonomics. Sections use surface tokens, like Base (Stone) for light sections and Inverse for navy ones.</p><p>Makeswift doesn't connect to Figma, so I built the same color and type tokens by hand in both, with matching names. Designers and publishers can check either one and get the same values.</p>`,
-      },
-      {
-        type: "imageGrid",
-        framed: true,
-        images: [
-          { src: "/multi-brand-applied-type.webp", alt: "Feedonomics product page in Figma with the hero headline selected and the Multi-Brand text styles menu showing Display 2 at 64/70.4", caption: "Type: the hero headline uses Display 2, which resolves to the Feedonomics size." },
-          { src: "/multi-brand-applied-surface.webp", alt: "The same Feedonomics page in Figma with the hero section selected and its fill set to the Surface/Inverse token from the Multi-Brand library", caption: "Surface: the hero section is filled with Surface/Inverse, not a hex value." },
-        ],
+        body: `<p>Each Feedonomics page file is set to the FDX brand once. After that, designers pick shared text styles and surface tokens, and the Feedonomics values fill in. A hero headline uses <em>Display 2</em>, which is 64/70.4 for Feedonomics. Sections use surface tokens, like Base (Stone) for light sections and Inverse for navy ones.</p><p>Makeswift doesn't connect to Figma, so I built the same color and type tokens by hand in both, with matching names. Designers and publishers can check either one and get the same values. The advertising page below shows them on a finished page.</p>`,
       },
       {
         type: "imageGrid",
@@ -903,15 +895,22 @@ const allProjects: Project[] = [
         ],
       },
       {
-        type: "text",
-        heading: "A Kitchen Sink for Publishers",
-        body: `<p>In Makeswift I also built what we call the kitchen sink: about 50 ready-made sections, like heroes, multi-column layouts, forms, and stats blocks, all on the same tokens as Figma. Publishers pick a section, drop in their content, and don't need a designer to lay out the page.</p>`,
-      },
-      {
         type: "compare",
         before: { src: "/project-feedonomics4.webp", alt: "The previous Feedonomics advertising feed management page", label: "Before" },
         after: { src: "/project-feedonomics5.webp", alt: "The redesigned Feedonomics advertising feed management page", label: "After" },
         liveUrl: "https://feedonomics.com/product/advertising-feed-management/",
+      },
+      {
+        type: "text",
+        heading: "A Kitchen Sink for Publishers",
+        body: `<p>In Makeswift I also built what we call the kitchen sink: about 50 ready-made sections on the same tokens as Figma, organized into folders for foundations, components, sections, motion, and full pages. Sections cover heroes, cards, carousels, FAQs, forms, rivers, and testimonials. Publishers pick a section, drop in their content, and don't need a designer to lay out the page.</p>`,
+      },
+      {
+        type: "imageGrid",
+        framed: true,
+        images: [
+          { src: "/project-feedonomics-kitchen-sink.svg", alt: "The Makeswift pages panel with the Kitchen Sink open: Foundations, Components, Sections, Testing, Experiments, Pages, and Motion folders, with Sections expanded to Cards, Carousel, FAQ, Form, Hero, Inset, Multi-Column, River, Starters, and Testimonials", caption: "The kitchen sink in Makeswift, with the Sections folder open" },
+        ],
       },
       {
         type: "text",
