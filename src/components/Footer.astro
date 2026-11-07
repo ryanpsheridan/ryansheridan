@@ -30,11 +30,13 @@ const year = new Date().getFullYear();
       {blueprint && (
         /* The way into the blueprint, kept down here as a colophon-style
            extra for whoever reads to the end. A real toggle, the same as the
-           Cmd/Ctrl + I shortcut; on touch screens, where there is no
-           shortcut, the keycap gives way to the words. */
+           Cmd/Ctrl + I shortcut, labelled for what a press does next, with
+           the shortcut after it as in a menu. Touch screens, where there is
+           no shortcut, get the words only. */
         <button type="button" class="footer-peek" aria-pressed="false" aria-keyshortcuts="Meta+I Control+I" data-blueprint-toggle>
+          <span class="footer-peek-label is-show">Show the specs</span>
+          <span class="footer-peek-label is-hide">Hide the specs</span>
           <kbd class="footer-peek-key"><span data-shortcut-mod>Cmd</span> + I</kbd>
-          <span class="footer-peek-label">Under the hood</span>
         </button>
       )}
     </div>
@@ -134,6 +136,15 @@ const year = new Date().getFullYear();
   .footer-peek[aria-pressed="true"] .footer-peek-key {
     color: #ffffff;
     background: var(--blueprint, var(--color-link));
+  }
+
+  .footer-peek-label.is-hide,
+  .footer-peek[aria-pressed="true"] .footer-peek-label.is-show {
+    display: none;
+  }
+
+  .footer-peek[aria-pressed="true"] .footer-peek-label.is-hide {
+    display: inline;
   }
 
   @media (hover: none) and (pointer: coarse) {
