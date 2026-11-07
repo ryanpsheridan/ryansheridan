@@ -842,7 +842,7 @@ const allProjects: Project[] = [
     year: 2026,
     description: "A Feedonomics rebrand built on multi-brand Figma tokens, engineering-ready component specs, and a developer review loop, shipped in Makeswift.",
     ogImage: "/project-feedonomics1.jpg",
-    thumbnail: "/feedonomics-data-journey-animated.svg",
+    thumbnail: "/feedonomics-cta-animated.svg",
     showOnHomepage: true,
     homepageWord: "websites",
     tags: ["Design System", "Web Design"],
