@@ -43,7 +43,8 @@ import ToolLink from "../components/ui/ToolLink.astro";
           infrastructure, and web experience across multiple brands at Commerce and
           BigCommerce. I work at the intersection of design and engineering: tokens,
           component libraries, governance, and the rules that let a system hold up at
-          scale.
+          scale. I also build AI workflows with Claude skills, Claude Design, and MCP
+          that let non-designers ship on-brand work.
         </p>
       </section>
 
@@ -59,9 +60,11 @@ import ToolLink from "../components/ui/ToolLink.astro";
           </div>
           <span class="job-company">Commerce · Austin, TX (Hybrid)</span>
           <ul class="job-bullets">
-            <li>Unified design tokens and components across Commerce, BigCommerce, Feedonomics, and Makeswift into one multi-brand Figma system, replacing four separate approaches with a single shared source of truth.</li>
-            <li>Built a suite of internal AI tools that automate design system work, including token audits, brand-mode setup, file scaffolding, and page production, cutting manual setup time and enforcing brand consistency without manual review.</li>
-            <li>Partnered directly with engineering to align design and code on token architecture, reducing drift between design intent and production implementation.</li>
+            <li>Merged four separate Figma libraries (Commerce, BigCommerce, Feedonomics, Makeswift) into one multi-brand system with shared tokens and 6 brand modes.</li>
+            <li>Led the Feedonomics rebrand on the shared tokens, from engineering-ready specs and developer review to launch in Makeswift.</li>
+            <li>Built Claude Design brand systems for three brands, so non-designers produce on-brand decks about 90% finished.</li>
+            <li>Made web animation self-serve: a Makeswift component, a Claude skill, and motion guidelines that let teams ship animation to live pages without a dev ticket.</li>
+            <li>Automated design ops with Claude skills: Asana-to-Figma file setup, and case study PDFs that replaced hand-built InDesign layouts.</li>
           </ul>
         </div>
 
@@ -105,13 +108,13 @@ import ToolLink from "../components/ui/ToolLink.astro";
         <div class="job">
           <div class="job-head">
             <span class="job-title">Web Designer, Freelance</span>
-            <span class="job-period">2026 – Present</span>
+            <span class="job-period">2021 – Present</span>
           </div>
           <span class="job-company">Austin, TX (Remote)</span>
           <ul class="job-bullets">
-            <li>Redesign client websites end to end and bring them to life with Claude Code: I set the direction, the rules, and the review bar, and every change goes through preview and staging before production.</li>
-            <li>Build token-based design systems with living style guides, and CMS setups that let non-technical staff update their own content.</li>
-            <li>Drive search improvements from Search Console data: page metadata, structured data, and pages built around real queries.</li>
+            <li>Built a complete website for a local business through an agentic workflow in Claude Code: I set the direction, rules, and review bar, and approved every change before production.</li>
+            <li>Gave it a token-based design system and style guide, a CMS the staff run themselves, and search work driven by Search Console.</li>
+            <li>Designed brand identities and Webflow websites for small businesses, from marks and logo suites to a Wix migration with a Shopify store.</li>
           </ul>
         </div>
 
@@ -159,6 +162,8 @@ import ToolLink from "../components/ui/ToolLink.astro";
               <li><ToolLink name="Framer" /></li>
               <li><ToolLink name="Webflow" /></li>
               <li><ToolLink name="Makeswift" /></li>
+              <li><ToolLink name="Adobe Illustrator" /></li>
+              <li><ToolLink name="GSAP" /></li>
             </ul>
           </div>
           <div class="skill-group">
@@ -166,6 +171,8 @@ import ToolLink from "../components/ui/ToolLink.astro";
             <ul>
               <li><ToolLink name="Claude Code" /></li>
               <li><ToolLink name="Claude Design" /></li>
+              <li><ToolLink name="Claude" label="Claude skills" /></li>
+              <li>MCP</li>
             </ul>
           </div>
         </div>
@@ -173,6 +180,7 @@ import ToolLink from "../components/ui/ToolLink.astro";
 
       <hr class="divider" />
 
+      <div class="credentials">
       <section class="education-section">
         <h2>Education</h2>
         <div class="education-item">
@@ -181,7 +189,7 @@ import ToolLink from "../components/ui/ToolLink.astro";
         </div>
       </section>
 
-      <hr class="divider" />
+      <hr class="divider credentials-divider" />
 
       <section class="certification-section">
         <h2>Certification</h2>
@@ -190,6 +198,7 @@ import ToolLink from "../components/ui/ToolLink.astro";
           <span class="certification-meta">Udemy · 2024</span>
         </div>
       </section>
+      </div>
     </div>
   </main>
   <Footer />
@@ -444,7 +453,7 @@ import ToolLink from "../components/ui/ToolLink.astro";
     }
 
     .divider {
-      margin: 20px 0;
+      margin: 14px 0;
     }
 
     h2 {
@@ -460,8 +469,20 @@ import ToolLink from "../components/ui/ToolLink.astro";
       line-height: 1.75;
     }
 
+    /* Education and certification share one row on paper to keep it to two pages. */
+    .credentials {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      break-inside: avoid;
+    }
+
+    .credentials-divider {
+      display: none;
+    }
+
     .job {
-      margin-bottom: 18px;
+      margin-bottom: 14px;
       break-inside: avoid;
     }
 
@@ -490,8 +511,11 @@ import ToolLink from "../components/ui/ToolLink.astro";
       margin-bottom: 10px;
     }
 
+    /* Skills wrap across the column on paper instead of stacking one per line. */
     .skill-group ul {
-      gap: 5px;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 5px 14px;
     }
 
     .skill-group li {
