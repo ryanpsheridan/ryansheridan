@@ -20,7 +20,6 @@ export default defineConfig({
     '/project-questionnaire': '/start-a-project',
     // Invoices first lived under /invoice/.
     '/invoice/template': '/invoice-template',
-    '/invoice/ohio-golf-club': '/invoice-ohio-golf-club-1',
     // Renamed from the first Claude Design write-up when it was rewritten
     // around the three brand systems.
     '/work/claude-design-consistency-first-design-second': '/work/brand-systems-claude-design',
