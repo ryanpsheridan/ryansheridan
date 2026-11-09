@@ -162,12 +162,8 @@ const schema = [
 
       {extra > 0 && (
         <div class="load-more" data-load-more hidden>
-          <button
-            type="button"
-            class="btn btn-secondary btn-lg"
-            aria-label={`Certified vintage: show ${extra} more ${extra === 1 ? "project" : "projects"}`}
-          >
-            Certified vintage
+          <button type="button" class="btn btn-secondary btn-lg">
+            Certified vintage ({extra} more)
           </button>
         </div>
       )}
