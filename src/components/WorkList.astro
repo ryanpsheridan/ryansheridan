@@ -5,7 +5,10 @@
  * dropdown on the right that jumps between those pages, then one row per
  * project: thumbnail, title, type badges and summary, and "View project".
  * Projects are grouped under a thin year row, newest year first; years with
- * no projects are skipped.
+ * no projects are skipped. The year row sticks under the nav until the next
+ * year pushes it out. Past the first FIRST_BATCH projects, the rest wait
+ * behind a "load more" button (shown only once the script runs, so without
+ * JavaScript the whole list is there).
  * Documented at /ds/patterns/project-card.
  */
 import Layout from "../layouts/Layout.astro";
@@ -27,6 +30,12 @@ const { active } = Astro.props;
 const list = active
   ? workProjects.filter((p) => (active.kind === "type" ? p.tags : p.tools).includes(active.facet.name))
   : workProjects;
+
+/** How many projects show before the "load more" button. */
+const FIRST_BATCH = 10;
+const extra = Math.max(0, list.length - FIRST_BATCH);
+const indexOf = new Map(list.map((p, i) => [p.slug, i]));
+const isExtra = (p: (typeof list)[number]) => (indexOf.get(p.slug) ?? 0) >= FIRST_BATCH;
 
 // Group by year. The list is already newest first, so each year's projects
 // keep their order.
@@ -110,11 +119,15 @@ const schema = [
       </header>
 
       {years.map(({ year, projects }) => (
-        <section class="year-group" aria-labelledby={`year-${year}`}>
+        <section
+          class="year-group"
+          aria-labelledby={`year-${year}`}
+          data-more={projects.every(isExtra) ? "" : undefined}
+        >
           <h2 class="year-row overline" id={`year-${year}`}>{year}</h2>
           <ul class="project-list">
           {projects.map((project) => (
-            <li class="project-row">
+            <li class="project-row" data-more={isExtra(project) ? "" : undefined}>
               <a href={`/work/${project.slug}`} class="row-thumb" tabindex="-1" aria-hidden="true">
                 {project.thumbnail && <Media src={project.thumbnail} alt="" />}
               </a>
@@ -146,6 +159,14 @@ const schema = [
           </ul>
         </section>
       ))}
+
+      {extra > 0 && (
+        <div class="load-more" data-load-more hidden>
+          <button type="button" class="btn btn-secondary btn-lg">
+            Dig into the archive ({extra} more)
+          </button>
+        </div>
+      )}
     </div>
   </main>
   <Footer />
@@ -202,14 +223,40 @@ const schema = [
 
   /* A thin year row above each year's projects: the mono overline on a
      hairline. It takes the place of the first row's own rule. */
+  /* A thin year row above each year's projects: the mono overline, right
+     aligned, on the same hairline as the rows. It sticks just under the nav
+     while its year scrolls by; the next year's row, at the end of this
+     section, pushes it out. */
   .year-row {
+    position: sticky;
+    top: var(--nav-height);
+    z-index: 2;
     margin: 0;
     padding: var(--space-3) 0;
-    border-top: 1px solid var(--color-border-strong);
+    text-align: right;
+    background: var(--color-bg);
+    border-top: 1px solid var(--color-border);
   }
 
   .year-group + .year-group {
     margin-top: var(--space-5);
+  }
+
+  /* Hidden until "load more" (the script adds the attribute). */
+  .year-group[hidden],
+  .project-row[hidden] {
+    display: none;
+  }
+
+  .load-more {
+    display: flex;
+    justify-content: center;
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .load-more[hidden] {
+    display: none;
   }
 
   .year-row + .project-list > .project-row:first-child {
@@ -381,6 +428,21 @@ const schema = [
 </style>
 
 <script>
+  // Load more: hide everything past the first batch and show the button.
+  // Without JavaScript none of this runs, so the full list stays visible.
+  const more = document.querySelector<HTMLElement>("[data-load-more]");
+  if (more) {
+    const extras = document.querySelectorAll<HTMLElement>(".work-page [data-more]");
+    extras.forEach((el) => (el.hidden = true));
+    more.hidden = false;
+    more.querySelector("button")?.addEventListener("click", () => {
+      extras.forEach((el) => (el.hidden = false));
+      more.remove();
+      // Send keyboard focus to the first project that just appeared.
+      document.querySelector<HTMLElement>(".project-row[data-more] .row-link")?.focus();
+    });
+  }
+
   // Choosing a type or tool goes to its page.
   const browse = document.querySelector<HTMLSelectElement>("[data-work-browse]");
   browse?.addEventListener("change", () => {

@@ -45,8 +45,10 @@ const sample = getHomepageProjects()[0];
     </p>
     <p class="ds-text">
       The same list runs /work and every type and tool page (<code>/work/type/…</code>, <code>/work/tool/…</code>),
-      newest first, grouped under a thin year row (the mono overline on a hairline, as an <code>h2</code>, with
-      project titles as <code>h3</code>). Years with no projects are skipped. The page title names the type or tool, and a dropdown on the title's
+      newest first, grouped under a thin year row: the mono overline, right aligned on the rows' hairline, as an
+      <code>h2</code> with project titles as <code>h3</code>. It sticks under the nav until the next year pushes it
+      out. Years with no projects are skipped. After 10 projects the rest wait behind a "load more" button, which
+      only appears once the script runs, so without JavaScript the full list shows. The page title names the type or tool, and a dropdown on the title's
       baseline jumps between them.
     </p>
   </section>
