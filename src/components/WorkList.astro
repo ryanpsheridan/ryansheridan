@@ -4,6 +4,8 @@
  * (/work/type/…, /work/tool/…). Breadcrumbs and title on the left, a
  * dropdown on the right that jumps between those pages, then one row per
  * project: thumbnail, title, type badges and summary, and "View project".
+ * Projects are grouped under a thin year row, newest year first; years with
+ * no projects are skipped.
  * Documented at /ds/patterns/project-card.
  */
 import Layout from "../layouts/Layout.astro";
@@ -25,6 +27,15 @@ const { active } = Astro.props;
 const list = active
   ? workProjects.filter((p) => (active.kind === "type" ? p.tags : p.tools).includes(active.facet.name))
   : workProjects;
+
+// Group by year. The list is already newest first, so each year's projects
+// keep their order.
+const years: { year: number; projects: typeof list }[] = [];
+for (const project of list) {
+  const last = years[years.length - 1];
+  if (last && last.year === project.year) last.projects.push(project);
+  else years.push({ year: project.year, projects: [project] });
+}
 
 const title = active ? active.facet.name : "All work";
 const path = active ? (active.kind === "type" ? typeHref : toolHref)(active.facet.name) : "/work";
@@ -98,17 +109,19 @@ const schema = [
         </div>
       </header>
 
-      <ul class="project-list">
-        {
-          list.map((project) => (
+      {years.map(({ year, projects }) => (
+        <section class="year-group" aria-labelledby={`year-${year}`}>
+          <h2 class="year-row overline" id={`year-${year}`}>{year}</h2>
+          <ul class="project-list">
+          {projects.map((project) => (
             <li class="project-row">
               <a href={`/work/${project.slug}`} class="row-thumb" tabindex="-1" aria-hidden="true">
                 {project.thumbnail && <Media src={project.thumbnail} alt="" />}
               </a>
               <div class="row-body">
-                <h2>
+                <h3>
                   <a href={`/work/${project.slug}`} class="row-link">{project.title}</a>
-                </h2>
+                </h3>
                 <div class="badge-list">
                   {project.tags.map((tag) => (
                     <a
@@ -129,9 +142,10 @@ const schema = [
                 </svg>
               </span>
             </li>
-          ))
-        }
-      </ul>
+          ))}
+          </ul>
+        </section>
+      ))}
     </div>
   </main>
   <Footer />
@@ -186,6 +200,23 @@ const schema = [
     padding: 0;
   }
 
+  /* A thin year row above each year's projects: the mono overline on a
+     hairline. It takes the place of the first row's own rule. */
+  .year-row {
+    margin: 0;
+    padding: var(--space-3) 0;
+    border-top: 1px solid var(--color-border-strong);
+  }
+
+  .year-group + .year-group {
+    margin-top: var(--space-5);
+  }
+
+  .year-row + .project-list > .project-row:first-child {
+    border-top: none;
+    padding-top: var(--space-5);
+  }
+
   /* One project per row, split by a hairline: thumbnail on the left, then
      the name, tags and summary as one column, then the link out on its own at
      the far right. Generous gutters and padding keep each row breathing. */
@@ -207,7 +238,7 @@ const schema = [
     max-width: 52ch;
   }
 
-  .row-body h2 {
+  .row-body h3 {
     font-size: var(--text-h5);
     font-weight: var(--weight-regular);
     letter-spacing: var(--tracking-snug);
@@ -215,7 +246,7 @@ const schema = [
     margin: 0 0 var(--space-1);
   }
 
-  .row-body h2 + .badge-list {
+  .row-body h3 + .badge-list {
     margin-top: var(--space-3);
   }
 
