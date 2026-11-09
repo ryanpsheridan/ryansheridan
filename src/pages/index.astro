@@ -4,7 +4,7 @@ import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import IntroLoader from "../components/IntroLoader.astro";
 import { getHomepageProjects } from "../data/projects";
-import { typeHref } from "../data/work";
+import { typeHref, workProjects } from "../data/work";
 import Media from "../components/Media.astro";
 import Button from "../components/ui/Button.astro";
 
@@ -71,6 +71,17 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
           );
           return i === 0 ? <div class="first-project-frame">{row}</div> : row;
         })}
+        {/* A sign-off after the last project, so anyone who scrolls this far
+            gets a next step without hunting back up for the headline button. */}
+        <p class="list-signoff">
+          <span class="signoff-lead">That's the highlights.</span>
+          <a href="/work" class="signoff-link">
+            See all {workProjects.length} projects
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 10h12M11 5l5 5-5 5" />
+            </svg>
+          </a>
+        </p>
         <div class="scroll-spacer"></div>
       </div>
     </div>
@@ -138,6 +149,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
   // last project becomes vertically centered in the viewport, instead of
   // releasing only once the project has scrolled away entirely.
   const spacer = document.querySelector<HTMLElement>(".scroll-spacer");
+  const signoff = document.querySelector<HTMLElement>(".list-signoff");
   const lastRow = rows[rows.length - 1];
 
   function updateSpacer() {
@@ -147,7 +159,10 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
       return;
     }
     const rowHeight = lastRow.getBoundingClientRect().height;
-    const height = Math.max(0, (window.innerHeight - rowHeight) / 2);
+    // The sign-off sits between the last row and the spacer, so it counts
+    // toward the room below that row.
+    const signoffHeight = signoff?.getBoundingClientRect().height ?? 0;
+    const height = Math.max(0, (window.innerHeight - rowHeight) / 2 - signoffHeight);
     spacer.style.height = `${height}px`;
   }
 
@@ -1134,6 +1149,50 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
 
   .scroll-spacer {
     height: 0;
+  }
+
+  /* The end-of-list sign-off: a muted line and a link out, on the same
+     hairline the work page uses between rows. */
+  .list-signoff {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-4);
+    margin: 0;
+    padding: var(--space-5) 0 var(--space-7);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-l);
+  }
+
+  .signoff-lead {
+    color: var(--color-text-muted);
+  }
+
+  .signoff-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .signoff-link svg {
+    width: 18px;
+    height: 18px;
+    transition: transform var(--duration-fast) var(--ease-standard);
+  }
+
+  @media (hover: hover) {
+    .signoff-link:hover svg {
+      transform: translateX(4px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .signoff-link svg {
+      transition: none;
+    }
   }
 
   .project-row {

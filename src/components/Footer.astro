@@ -48,10 +48,8 @@ const year = new Date().getFullYear();
     border-top: var(--border-width) solid var(--color-border);
     padding: var(--space-7) var(--page-padding) var(--space-6);
     margin-top: 120px;
-    /* Opaque and lifted, matching the nav. A fixed element at z-index 0 paints
-       over static content, so without this the CursorField would sit on top of
-       the footer, and without the background its rings would still show
-       through the footer's own area. */
+    /* Opaque and lifted, matching the nav, so a fixed layer behind the page
+       (such as the homepage blueprint) never paints over the footer. */
     position: relative;
     z-index: var(--z-raised);
     background: var(--color-bg);
