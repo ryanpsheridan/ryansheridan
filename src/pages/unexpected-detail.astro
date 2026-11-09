@@ -6,6 +6,7 @@ import Footer from "../components/Footer.astro";
 // Working canvas for the unexpected detail podcast identity. Private share,
 // noindex, and kept out of the sitemap by the allowlist in astro.config.mjs.
 // The brief below is lifted from the client's Working Creative Guide deck.
+// The page itself uses the portfolio type; only the logo tiles change fonts.
 
 const brief = [
   {
@@ -37,10 +38,259 @@ const direction = [
   "Lowercase, minimal, soft serif. The deck's typeface is a placeholder, not the answer.",
   "Explore stacking and alignment. Test the period, and whether it carries the color.",
   "Keep the wordmark simple. Color, texture, pattern, or photography in the cover tile is what makes it stand out in a podcast feed.",
-  "Open to color and to an unconventional host photo. Two empty chairs came up as an abstract idea.",
+  "Open to color and to an unconventional host photo.",
   "No tagline or description needed on the cover tile. Discovery happens in the show title and metadata.",
   "Needs to read at thumbnail size in a square tile, even though “unexpected” is a long word.",
 ];
+
+/*
+  Each lockup is drawn in a square tile twice, light and dark. Sizes are in
+  cqi (percent of the tile's width), so a lockup keeps its proportions at any
+  tile size, down to a podcast thumbnail.
+
+  font:   CSS font-family for the whole lockup.
+  lines:  one entry per line; `style` adds per-line CSS.
+  period: "peach" | "ink" | undefined, appended to the last line.
+  align:  text-align inside the lockup.
+  place:  where the lockup sits in the tile (CSS place-items).
+  style:  extra CSS on the lockup (size, weight, leading, tracking).
+*/
+type Line = { text: string; style?: string };
+type Logo = {
+  name: string;
+  font: string;
+  note: string;
+  family: string;
+  lines: Line[];
+  period?: "peach" | "ink";
+  align?: "left" | "center" | "right";
+  place?: string;
+  style?: string;
+};
+
+const logos: Logo[] = [
+  {
+    name: "Classic stack",
+    font: "Fraunces Black",
+    note: "Her deck's direction, tightened. Centered stack, peach period.",
+    family: '"Fraunces", serif',
+    lines: [{ text: "unexpected" }, { text: "detail" }],
+    period: "peach",
+    style: "font-size:14cqi;font-weight:850;line-height:.88;letter-spacing:-.02em;font-variation-settings:'SOFT' 50",
+  },
+  {
+    name: "Soft and wonky",
+    font: "Fraunces Soft",
+    note: "Fully soft, wonky axis on. Friendlier, a little odd in the right way.",
+    family: '"Fraunces", serif',
+    lines: [{ text: "unexpected" }, { text: "detail" }],
+    align: "left",
+    style: "font-size:14.5cqi;font-weight:650;line-height:.9;letter-spacing:-.025em;font-variation-settings:'SOFT' 100,'WONK' 1",
+  },
+  {
+    name: "Stagger",
+    font: "Gloock",
+    note: "Second line steps right, so the stack reads like a turn in the road.",
+    family: '"Gloock", serif',
+    lines: [{ text: "unexpected" }, { text: "detail", style: "padding-left:1.6em" }],
+    period: "peach",
+    align: "left",
+    style: "font-size:13cqi;line-height:.95;letter-spacing:-.01em",
+  },
+  {
+    name: "Single line, italic turn",
+    font: "Instrument Serif",
+    note: "One line. The italic on “detail” is the unexpected moment.",
+    family: '"Instrument Serif", serif',
+    lines: [{ text: "unexpected <i>detail</i>" }],
+    period: "peach",
+    style: "font-size:10.5cqi;line-height:1;letter-spacing:-.015em",
+  },
+  {
+    name: "Heavy italic",
+    font: "Playfair Display Black",
+    note: "Upright over italic in the same weight. High contrast, editorial.",
+    family: '"Playfair Display", serif',
+    lines: [{ text: "unexpected" }, { text: "<i>detail</i>" }],
+    style: "font-size:13cqi;font-weight:900;line-height:.92;letter-spacing:-.02em",
+  },
+  {
+    name: "Scale shift",
+    font: "Fraunces",
+    note: "“unexpected” whispers, “detail” shouts. Strongest at thumbnail size.",
+    family: '"Fraunces", serif',
+    lines: [
+      { text: "unexpected", style: "font-size:.32em;font-weight:400;letter-spacing:0;margin-bottom:.06em;padding-left:.12em" },
+      { text: "detail" },
+    ],
+    period: "peach",
+    align: "left",
+    style: "font-size:24cqi;font-weight:850;line-height:.85;letter-spacing:-.03em;font-variation-settings:'SOFT' 50",
+  },
+  {
+    name: "Right flush",
+    font: "DM Serif Display",
+    note: "Ragged left, flush right. Pulls the eye to the period.",
+    family: '"DM Serif Display", serif',
+    lines: [{ text: "unexpected" }, { text: "detail" }],
+    period: "peach",
+    align: "right",
+    style: "font-size:14cqi;line-height:.9;letter-spacing:-.015em",
+  },
+  {
+    name: "Fine italic",
+    font: "Cormorant Garamond Italic",
+    note: "Light and literary. Quiet confidence, closer to a book cover.",
+    family: '"Cormorant Garamond", serif',
+    lines: [{ text: "<i>unexpected</i>" }, { text: "<i>detail</i>" }],
+    style: "font-size:15cqi;font-weight:500;line-height:.92;letter-spacing:-.01em",
+  },
+  {
+    name: "Didone",
+    font: "Bodoni Moda Bold",
+    note: "Fashion-magazine contrast. A nod to the Vogue spark behind the name.",
+    family: '"Bodoni Moda", serif',
+    lines: [{ text: "unexpected" }, { text: "detail" }],
+    period: "ink",
+    style: "font-size:13cqi;font-weight:700;line-height:.95;letter-spacing:-.02em;font-optical-sizing:auto",
+  },
+  {
+    name: "Fat face",
+    font: "Abril Fatface",
+    note: "Tight leading, heavy ink. Loud in a crowded feed.",
+    family: '"Abril Fatface", serif',
+    lines: [{ text: "unexpected" }, { text: "detail" }],
+    period: "peach",
+    style: "font-size:13.5cqi;line-height:.94;letter-spacing:-.01em",
+  },
+  {
+    name: "Ruled",
+    font: "Newsreader",
+    note: "A hairline between the words, like a byline. Newsy, thoughtful.",
+    family: '"Newsreader", serif',
+    lines: [
+      { text: "unexpected", style: "padding-bottom:.12em;border-bottom:.025em solid currentColor;margin-bottom:.1em" },
+      { text: "detail" },
+    ],
+    align: "left",
+    style: "font-size:14cqi;font-weight:600;line-height:1;letter-spacing:-.02em;display:inline-grid",
+  },
+  {
+    name: "Rounded serif",
+    font: "Young Serif",
+    note: "Soft, chunky, warm. The closest match to “soft serif.”",
+    family: '"Young Serif", serif',
+    lines: [{ text: "unexpected" }, { text: "detail" }],
+    period: "peach",
+    style: "font-size:12.5cqi;line-height:.98;letter-spacing:-.02em",
+  },
+  {
+    name: "Caslon left",
+    font: "Libre Caslon Display",
+    note: "Old-style elegance, left aligned. Calm and classic.",
+    family: '"Libre Caslon Display", serif',
+    lines: [{ text: "unexpected" }, { text: "detail" }],
+    period: "ink",
+    align: "left",
+    style: "font-size:15cqi;line-height:.92;letter-spacing:-.015em",
+  },
+  {
+    name: "Book italic line",
+    font: "Source Serif 4 Italic",
+    note: "One italic line, small in a big field. Lets the tile do the work.",
+    family: '"Source Serif 4", serif',
+    lines: [{ text: "<i>unexpected detail</i>" }],
+    period: "peach",
+    style: "font-size:8.5cqi;font-weight:600;line-height:1;letter-spacing:-.015em",
+  },
+  {
+    name: "Grotesk counterpoint",
+    font: "Bricolage Grotesque",
+    note: "A sans for contrast. Quirky ink traps keep it from feeling corporate.",
+    family: '"Bricolage Grotesque", sans-serif',
+    lines: [{ text: "unexpected" }, { text: "detail" }],
+    period: "peach",
+    align: "left",
+    style: "font-size:14cqi;font-weight:700;line-height:.88;letter-spacing:-.045em;font-variation-settings:'opsz' 96",
+  },
+  {
+    name: "Clean sans",
+    font: "Geist",
+    note: "Neutral and modern. Useful as a baseline to judge the serifs against.",
+    family: '"Geist", sans-serif',
+    lines: [{ text: "unexpected" }, { text: "detail" }],
+    period: "peach",
+    align: "left",
+    style: "font-size:14cqi;font-weight:500;line-height:.92;letter-spacing:-.05em",
+  },
+  {
+    name: "Mixed pair",
+    font: "Instrument Serif + Geist",
+    note: "Italic serif meets plain sans. Two voices, one conversation.",
+    family: '"Instrument Serif", serif',
+    lines: [
+      { text: "<i>unexpected</i>" },
+      { text: "detail", style: "font-family:'Geist',sans-serif;font-weight:500;font-size:.86em;letter-spacing:-.05em" },
+    ],
+    period: "peach",
+    style: "font-size:16cqi;line-height:.92;letter-spacing:-.02em",
+  },
+  {
+    name: "Tracked light",
+    font: "Spectral Light",
+    note: "Wide tracking, light weight. Airy and premium, softer presence.",
+    family: '"Spectral", serif',
+    lines: [{ text: "unexpected" }, { text: "detail" }],
+    style: "font-size:7cqi;font-weight:300;line-height:1.5;letter-spacing:.22em;padding-left:.22em",
+  },
+  {
+    name: "Corner lockup",
+    font: "EB Garamond",
+    note: "Pinned bottom left, leaving open field for a photo or pattern later.",
+    family: '"EB Garamond", serif',
+    lines: [{ text: "unexpected" }, { text: "detail" }],
+    period: "peach",
+    align: "left",
+    place: "end start",
+    style: "font-size:11cqi;font-weight:500;line-height:.92;letter-spacing:-.02em;margin:0 0 8cqi 8cqi",
+  },
+  {
+    name: "Monogram",
+    font: "Fraunces + Geist",
+    note: "A “ud.” mark for the tile, with the full name small beneath.",
+    family: '"Fraunces", serif',
+    lines: [
+      { text: "ud", style: "font-size:1em" },
+      { text: "unexpected detail", style: "font-family:'Geist',sans-serif;font-size:.11em;font-weight:500;letter-spacing:.02em;margin-top:.25em" },
+    ],
+    period: "peach",
+    style: "font-size:38cqi;font-weight:850;line-height:.8;letter-spacing:-.04em;font-variation-settings:'SOFT' 100",
+  },
+];
+
+// The monogram's period belongs on "ud", not on the small line below it.
+const periodLine = (logo: Logo) => (logo.name === "Monogram" ? 0 : logo.lines.length - 1);
+
+const pad = (n: number) => String(n).padStart(2, "0");
+
+const fontsHref =
+  "https://fonts.googleapis.com/css2" +
+  "?family=Abril+Fatface" +
+  "&family=Bodoni+Moda:opsz,wght@6..96,700" +
+  "&family=Bricolage+Grotesque:opsz,wght@12..96,700" +
+  "&family=Cormorant+Garamond:ital,wght@1,500" +
+  "&family=DM+Serif+Display" +
+  "&family=EB+Garamond:wght@500" +
+  "&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1" +
+  "&family=Gloock" +
+  "&family=Instrument+Serif:ital@0;1" +
+  "&family=Libre+Caslon+Display" +
+  "&family=Newsreader:opsz,wght@6..72,600" +
+  "&family=Playfair+Display:ital,wght@0,900;1,900" +
+  "&family=Source+Serif+4:ital,opsz,wght@1,8..60,600" +
+  "&family=Spectral:wght@300" +
+  "&family=Young+Serif" +
+  "&display=swap";
 ---
 
 <Layout
@@ -48,16 +298,13 @@ const direction = [
   description="Working canvas for the unexpected detail podcast identity."
   noindex={true}
 >
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap"
-  />
+  <link rel="stylesheet" href={fontsHref} />
   <Nav />
   <main id="main" class="ud-page">
     <div class="ud-inner">
       <header class="ud-header">
-        <p class="eyebrow">Podcast identity · Working canvas</p>
-        <h1 class="ud-wordmark">unexpected detail<span class="dot">.</span></h1>
+        <p class="label">Podcast identity · Working canvas</p>
+        <h1>unexpected detail</h1>
         <p class="intro">
           An unscripted conversation show hosted by Marcy. Every episode is a detour with someone
           remarkable, past the résumé and into the left turns, half-baked ideas, and quiet
@@ -66,13 +313,13 @@ const direction = [
       </header>
 
       <section class="ud-section" aria-labelledby="brief-heading">
-        <h2 id="brief-heading" class="section-label">Brief</h2>
+        <h2 id="brief-heading" class="label">Brief</h2>
 
         <div class="taglines">
           {
             taglines.map((t) => (
-              <div class="tagline">
-                <p class="tag-label">{t.label}</p>
+              <div>
+                <p class="label">{t.label}</p>
                 <p class="tag-line">“{t.line}”</p>
               </div>
             ))
@@ -82,8 +329,8 @@ const direction = [
         <div class="brief-grid">
           {
             brief.map((item) => (
-              <article class="brief-card">
-                <p class="tag-label">{item.label}</p>
+              <article>
+                <p class="label">{item.label}</p>
                 <p class="brief-lead">{item.lead}</p>
                 <p class="brief-body">{item.body}</p>
               </article>
@@ -97,43 +344,60 @@ const direction = [
       </section>
 
       <section class="ud-section" aria-labelledby="direction-heading">
-        <h2 id="direction-heading" class="section-label">Direction from kickoff</h2>
+        <h2 id="direction-heading" class="label">Direction from kickoff</h2>
         <ul class="direction">
           {direction.map((d) => <li>{d}</li>)}
         </ul>
       </section>
 
-      <section class="ud-section" aria-labelledby="start-heading">
-        <h2 id="start-heading" class="section-label">Starting point</h2>
-        <p class="section-note">
-          The two lockups from the client's deck, rebuilt with a stand-in soft serif.
-        </p>
-        <div class="logo-grid">
-          <figure class="logo-card">
-            <div class="logo-stage">
-              <p class="lockup">unexpected<br />detail</p>
-            </div>
-            <figcaption>
-              <span class="option">Option 01 · Pure black and white</span>
-              Clean stacked letterforms, unadorned terminal.
-            </figcaption>
-          </figure>
-          <figure class="logo-card">
-            <div class="logo-stage">
-              <p class="lockup">unexpected<br />detail<span class="dot">.</span></p>
-            </div>
-            <figcaption>
-              <span class="option">Option 02 · With accent period</span>
-              Warm focal accent, defined typographic cadence.
-            </figcaption>
-          </figure>
-        </div>
-      </section>
-
       <section class="ud-section" aria-labelledby="explore-heading">
-        <h2 id="explore-heading" class="section-label">Logo explorations</h2>
-        <p class="section-note">Options land here.</p>
-        <div class="empty-slot">Coming soon</div>
+        <h2 id="explore-heading" class="label">Logo explorations · Round 01</h2>
+        <p class="section-note">
+          Twenty type and alignment studies, each shown light and dark. Color stays out of it for
+          now apart from the peach period. Backgrounds, patterns, and photography come next.
+        </p>
+
+        <ol class="logo-list">
+          {
+            logos.map((logo, i) => (
+              <li class="logo-item">
+                <div class="tiles">
+                  {(["light", "dark"] as const).map((theme) => (
+                    <div
+                      class={`tile tile--${theme}`}
+                      style={logo.place ? `place-items:${logo.place}` : undefined}
+                      role="img"
+                      aria-label={theme === "light" ? `${logo.name}, light` : `${logo.name}, dark`}
+                    >
+                      <p
+                        class="lockup"
+                        aria-hidden="true"
+                        style={`font-family:${logo.family};text-align:${logo.align ?? "center"};${logo.style ?? ""}`}
+                      >
+                        {logo.lines.map((line, j) => (
+                          <span class="line" style={line.style}>
+                            <Fragment set:html={line.text} />
+                            {logo.period && j === periodLine(logo) && (
+                              <span class={`dot dot--${logo.period}`}>.</span>
+                            )}
+                          </span>
+                        ))}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+                <div class="logo-meta">
+                  <p class="logo-title">
+                    <span class="num">{pad(i + 1)}</span>
+                    {logo.name}
+                  </p>
+                  <p class="logo-font">{logo.font}</p>
+                  <p class="logo-note">{logo.note}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
       </section>
     </div>
   </main>
@@ -143,10 +407,10 @@ const direction = [
 <style>
   .ud-page {
     --ud-ink: #141414;
-    --ud-peach: #f08a6c;
     --ud-paper: #faf9f6;
-    --ud-serif: "Fraunces", Georgia, "Times New Roman", serif;
-    padding: 80px var(--page-padding) var(--space-8, 96px);
+    --ud-peach: #f08a6c;
+    --ud-gap: clamp(120px, 6rem + 6vw, 220px);
+    padding: clamp(96px, 5rem + 6vw, 200px) var(--page-padding) var(--ud-gap);
   }
 
   .ud-inner {
@@ -154,10 +418,7 @@ const direction = [
     margin: 0 auto;
   }
 
-  .eyebrow,
-  .section-label,
-  .tag-label,
-  .option {
+  .label {
     font-family: var(--font-mono);
     font-size: 12px;
     font-weight: 400;
@@ -167,78 +428,67 @@ const direction = [
   }
 
   .ud-header {
-    margin-bottom: var(--space-7, 80px);
+    margin-bottom: var(--ud-gap);
   }
 
-  .ud-wordmark {
-    font-family: var(--ud-serif);
-    font-weight: 800;
-    font-size: clamp(44px, 2rem + 5vw, 104px);
-    line-height: 0.95;
-    letter-spacing: -0.02em;
-    margin: var(--space-3) 0 var(--space-4);
-  }
-
-  .dot {
-    color: var(--ud-peach);
+  h1 {
+    font-size: clamp(32px, 1.4rem + 2.4vw, 64px);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin: var(--space-4) 0 var(--space-5);
   }
 
   .intro {
     font-size: var(--text-base);
     color: var(--color-text-muted);
-    max-width: 62ch;
+    max-width: 52ch;
   }
 
   .ud-section {
-    border-top: 1px solid var(--color-border);
-    padding-top: var(--space-4);
-    margin-bottom: var(--space-7, 80px);
+    margin-bottom: var(--ud-gap);
   }
 
-  .section-label {
-    margin-bottom: var(--space-4);
+  .ud-section > h2 {
+    margin-bottom: var(--space-7);
   }
 
   .section-note {
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
     color: var(--color-text-muted);
-    margin: calc(var(--space-2) * -1) 0 var(--space-4);
+    max-width: 52ch;
+    margin: calc(var(--space-7) * -1 + var(--space-4)) 0 var(--space-8);
   }
 
   .taglines {
     display: grid;
-    gap: var(--space-4);
-    margin-bottom: var(--space-5);
+    gap: var(--space-7);
+    margin-bottom: var(--space-8);
   }
 
   .tag-line {
-    font-family: var(--ud-serif);
-    font-weight: 600;
-    font-size: clamp(24px, 1.2rem + 1.2vw, 40px);
-    letter-spacing: -0.01em;
+    font-size: clamp(24px, 1.1rem + 1.4vw, 40px);
+    font-weight: 300;
+    letter-spacing: -0.025em;
     line-height: 1.15;
-    margin-top: var(--space-1);
+    margin-top: var(--space-3);
   }
 
   .brief-grid {
     display: grid;
-    gap: var(--space-3);
-  }
-
-  .brief-card {
-    border: 1px solid var(--color-border);
-    padding: var(--space-4);
+    gap: var(--space-7);
   }
 
   .brief-lead {
-    font-weight: 500;
     font-size: var(--text-base);
-    margin: var(--space-2) 0;
+    font-weight: 400;
+    margin: var(--space-3) 0 var(--space-2);
   }
 
   .brief-body {
     font-size: var(--text-sm);
     color: var(--color-text-muted);
+    max-width: 40ch;
   }
 
   .pillars {
@@ -246,78 +496,140 @@ const direction = [
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
-    margin-top: var(--space-4);
+    margin-top: var(--space-8);
   }
 
   .pillars li {
     font-size: var(--text-sm);
+    color: var(--color-text-muted);
     border: 1px solid var(--color-border);
     border-radius: 999px;
-    padding: 4px 12px;
+    padding: 4px 14px;
   }
 
   .direction {
-    padding-left: 1.2em;
-    max-width: 70ch;
+    list-style: none;
+    max-width: 60ch;
     display: grid;
-    gap: var(--space-2);
+    gap: var(--space-4);
+    counter-reset: dir;
   }
 
-  .logo-grid {
+  .direction li {
+    counter-increment: dir;
     display: grid;
+    grid-template-columns: 3ch 1fr;
     gap: var(--space-3);
   }
 
-  .logo-card figcaption {
-    font-size: var(--text-sm);
+  .direction li::before {
+    content: counter(dir, decimal-leading-zero);
+    font-family: var(--font-mono);
+    font-size: 12px;
     color: var(--color-text-muted);
-    margin-top: var(--space-2);
+    padding-top: 0.35em;
   }
 
-  .option {
-    display: block;
-    margin-bottom: 2px;
-    color: var(--color-text);
+  /* Logo studies */
+
+  .logo-list {
+    list-style: none;
+    display: grid;
+    gap: var(--space-8) var(--space-6);
   }
 
-  /* Fixed paper and ink regardless of site theme: these are logo artboards. */
-  .logo-stage {
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+
+  /* Fixed paper and ink regardless of site theme: these are artboards. */
+  .tile {
+    container-type: inline-size;
     aspect-ratio: 1;
-    background: var(--ud-paper);
-    color: var(--ud-ink);
     display: grid;
     place-items: center;
-    border: 1px solid var(--color-border);
+    overflow: hidden;
+  }
+
+  .tile--light {
+    background: var(--ud-paper);
+    color: var(--ud-ink);
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.06);
+  }
+
+  .tile--dark {
+    background: var(--ud-ink);
+    color: var(--ud-paper);
   }
 
   .lockup {
-    font-family: var(--ud-serif);
-    font-weight: 800;
-    font-size: clamp(36px, 1rem + 5vw, 72px);
-    line-height: 0.9;
-    letter-spacing: -0.02em;
-    text-align: center;
+    font-kerning: normal;
+    font-synthesis: none;
   }
 
-  .empty-slot {
-    border: 1px dashed var(--color-border);
-    padding: var(--space-7, 80px) var(--space-4);
-    text-align: center;
+  .line {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .lockup :global(i) {
+    font-style: italic;
+  }
+
+  .dot--peach {
+    color: var(--ud-peach);
+  }
+
+  .dot--ink {
+    color: inherit;
+  }
+
+  .logo-meta {
+    margin-top: var(--space-4);
+  }
+
+  .logo-title {
+    font-size: var(--text-base);
+    font-weight: 400;
+    display: flex;
+    gap: var(--space-3);
+    align-items: baseline;
+  }
+
+  .num {
     font-family: var(--font-mono);
     font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
     color: var(--color-text-muted);
   }
 
+  .logo-font {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin: var(--space-1) 0 var(--space-2);
+  }
+
+  .logo-note {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    max-width: 44ch;
+  }
+
   @media (min-width: 700px) {
-    .taglines,
-    .logo-grid {
+    .taglines {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .brief-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .logo-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 </style>
