@@ -167,6 +167,14 @@ const schema = [
           </button>
         </div>
       )}
+
+      {/* Only shown once the vintage projects are open, when the list has
+          grown long enough to need a way back up. */}
+      {extra > 0 && (
+        <div class="load-more" data-back-to-top hidden>
+          <button type="button" class="btn btn-secondary btn-lg">Back to top</button>
+        </div>
+      )}
     </div>
   </main>
   <Footer />
@@ -251,6 +259,11 @@ const schema = [
     .year-row {
       transition: none;
     }
+  }
+
+  /* Clears the sticky nav when "Back to top" scrolls here. */
+  .year-group {
+    scroll-margin-top: var(--nav-height);
   }
 
   .year-group + .year-group {
@@ -478,8 +491,18 @@ const schema = [
       more.remove();
       // Send keyboard focus to the first project that just appeared.
       document.querySelector<HTMLElement>(".project-row[data-more] .row-link")?.focus();
+      if (backToTop) backToTop.hidden = false;
     });
   }
+
+  // Back to top: scrolls to the first year and its first project, and moves
+  // keyboard focus there too.
+  const backToTop = document.querySelector<HTMLElement>("[data-back-to-top]");
+  backToTop?.querySelector("button")?.addEventListener("click", () => {
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.querySelector(".year-group")?.scrollIntoView({ behavior: still ? "auto" : "smooth", block: "start" });
+    document.querySelector<HTMLElement>(".project-row .row-link")?.focus({ preventScroll: true });
+  });
 
   // Choosing a type or tool goes to its page.
   const browse = document.querySelector<HTMLSelectElement>("[data-work-browse]");
