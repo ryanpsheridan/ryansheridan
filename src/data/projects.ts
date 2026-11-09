@@ -542,7 +542,7 @@ const allProjects: Project[] = [
     ogImage: "/project-shopping-agent-og.jpg",
     showOnHomepage: false,
     homepageWord: "launch pages",
-    tags: ["Visual Design", "Web Design", "Claude Skill"],
+    tags: ["Visual Design", "Web Design", "Claude Skill", "Motion"],
     tools: ["Figma", "Claude"],
     client: "BigCommerce",
     clientUrl: "https://www.bigcommerce.com/",
@@ -550,7 +550,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Making a new AI feature easy to picture",
-        body: `<p>Shopping Agent is a new <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> feature that answers shoppers' questions on a merchant's storefront and helps them find the right product. Product gave us the idea, a few screen recordings, and screenshots of the prototype before it shipped. My job was to turn that into a <a href="https://www.bigcommerce.com/product/shopping-agent" target="_blank" rel="noopener noreferrer">landing page</a> people would understand at a glance.</p><p>I started from the copywriter's first draft, read the project brief, and ran a kickoff to agree on what the feature does, how it helps merchants, and how to make that clear on the page. Then I designed the page and every image on it.</p>`,
+        body: `<p>Shopping Agent is a new <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> feature that answers shoppers' questions on a merchant's storefront and helps them find the right product. Product gave us the idea, a few screen recordings, and screenshots of the prototype before it shipped. My job was to turn that into a <a href="https://www.bigcommerce.com/product/shopping-agent/" target="_blank" rel="noopener noreferrer">landing page</a> people would understand at a glance.</p><p>I started from the copywriter's first draft, read the project brief, and ran a kickoff to agree on what the feature does, how it helps merchants, and how to make that clear on the page. Then I designed the page and every image on it.</p>`,
       },
       {
         type: "text",
@@ -559,7 +559,7 @@ const allProjects: Project[] = [
       },
       {
         type: "visualPair",
-        title: "Behavior settings",
+        title: "Control what the agent can do",
         beforeLabel: "Product demo",
         afterLabel: "On the page",
         before: { src: "/project-shopping-agent-proto-behavior.webp", alt: "The product demo's Behavior tab in the BigCommerce control panel, with a Skills list where Brand search, Product category search, Order history, Add to cart, View cart and View checkout are all switched on" },
@@ -567,7 +567,7 @@ const allProjects: Project[] = [
       },
       {
         type: "visualPair",
-        title: "Product picks",
+        title: "Show the right products",
         beforeLabel: "Product demo",
         afterLabel: "On the page",
         before: { src: "/project-shopping-agent-proto-picks.webp", alt: "The product demo storefront for a movie poster store, with the agent's chat open on the right showing poster recommendations" },
@@ -575,7 +575,7 @@ const allProjects: Project[] = [
       },
       {
         type: "visualPair",
-        title: "Impact",
+        title: "Prove it converts",
         beforeLabel: "Product demo",
         afterLabel: "On the page",
         before: { src: "/project-shopping-agent-proto-dashboard.webp", alt: "The product demo's Shopping Agent dashboard: conversation totals, a purchase funnel, user sentiment, and agent impact on purchases with a 1.9x purchase conversion lift" },
@@ -583,17 +583,17 @@ const allProjects: Project[] = [
       },
       {
         type: "visualPair",
-        title: "Sentiment",
+        title: "Know how shoppers feel",
         beforeLabel: "Product demo",
         afterLabel: "On the page",
         hint: "Hover a row to switch sentiment",
         before: { src: "/project-shopping-agent-proto-dashboard.webp", alt: "The product demo's Shopping Agent dashboard, with the user sentiment card showing Positive, Neutral and Negative rows and a cursor over Positive" },
-        embed: { src: "/embeds/shopping-agent-sentiment.html", ratio: "530 / 522", poster: "/project-shopping-agent-sentiment-poster.webp", title: "Animated sentiment dashboard: Positive 72%, Neutral 21% and Negative 7% bars fill in turn, then hovering a row moves the highlight to it" },
+        embed: { src: "/embeds/shopping-agent-sentiment.html", ratio: "530 / 522", poster: "/project-shopping-agent-sentiment-poster.webp", title: "Animated sentiment card: Positive 72%, Neutral 21% and Negative 7% bars fill in turn, then hovering a row moves the highlight to it" },
       },
       {
         type: "text",
-        heading: "Drafting the images with a Claude skill",
-        body: `<p>Shopping Agent needed a family of images that looked like they belonged together and matched the rest of our site. I pointed a Claude skill at images already on bigcommerce.com so it could build new ones in Figma in the same style. I then tightened each draft by hand and art directed the rest by voice, so the time went into choices rather than pushing pixels. The animations on the visuals are built with Claude too.</p>`,
+        heading: "Teaching Claude how we make images",
+        body: `<p>Shopping Agent needed a family of images that looked like they belonged together and matched the rest of our site. I didn't prompt each one from scratch. I pointed a Claude skill at the images already on bigcommerce.com so it learned our style, brand tokens and a short set of motion rules. Give it a section of copy and it drafts the visual in Figma. I tighten each draft by hand and dictate notes on the rest, so my time goes into choices instead of pushing pixels.</p><p>The skill is a living file. When a review turns up a gap, I fix the skill instead of the one image. Our animations play once and stay short. When one invites a click, it now shows a quiet hover cue, because I added that rule after the first draft missed it. Every image after that gets it for free. Claude built the animations too, so they follow the same rules.</p>`,
       },
     ],
   },
