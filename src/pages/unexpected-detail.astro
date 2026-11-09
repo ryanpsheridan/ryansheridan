@@ -421,15 +421,14 @@ const details: Logo[] = [
 const studies = [...logos.map((logo, i) => ({ ...logo, no: i + 1 })), ...details];
 
 /*
-  Round 02: how the wordmark could live on a podcast tile. Each tile is an
-  HTML string with inline styles (still sized in cqi) so the same artwork can
-  be drawn twice: once large, once at 60px in the size test row. Photos are
-  gray placeholder blocks, labeled with `.ph`, which the size test hides.
+  How the wordmark could live on a podcast tile. Each tile is an HTML string
+  with inline styles (still sized in cqi) so the same artwork can be drawn
+  twice: once large, once at 60px in the size test row. Only ink, paper and
+  peach, and line work stays thin.
 */
 type Thumb = { id: string; name: string; source: string; note: string; bg: string; color: string; html: string };
 
 const peachDot = '<span style="color:var(--ud-peach)">.</span>';
-const ph = (text: string, style: string) => `<span class="ph" style="${style}">${text}</span>`;
 const art = (inner: string) =>
   `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%" aria-hidden="true">${inner}</svg>`;
 const mark = (style: string, inner: string) =>
@@ -449,36 +448,21 @@ const sprockets = Array.from({ length: 18 }, (_, i) => {
 
 const thumbs: Thumb[] = [
   {
-    id: "T1",
-    name: "Color field",
-    source: "Wordmark from study 01",
-    note: "One saturated field and nothing else. The peach period is the only accent.",
-    bg: "#2438c9",
-    color: "var(--ud-paper)",
-    html: mark(
-      "font-family:'Fraunces',serif;font-size:14cqi;font-weight:850;line-height:.88;letter-spacing:-.02em;font-variation-settings:'SOFT' 50;text-align:center",
-      `unexpected<br>detail${peachDot}`,
-    ),
-  },
-  {
     id: "T3",
     name: "Contact sheet",
     source: "Wordmark from study 04",
-    note: "A strip of frames running off both edges, one circled in peach grease pencil. Wordmark below.",
+    note: "A film strip reduced to thin outlines, running off both edges, with one frame circled in peach. Wordmark below.",
     bg: "var(--ud-paper)",
     color: "var(--ud-ink)",
     html:
       art(
-        '<rect x="-2" y="22" width="104" height="36" fill="#141414"/>' +
-          `<g fill="#faf9f6" opacity=".85">${sprockets}</g>` +
-          '<rect x="-10" y="29" width="24" height="22" fill="#8f8b85"/>' +
-          '<rect x="17" y="29" width="24" height="22" fill="#b7b3ad"/>' +
-          '<rect x="44" y="29" width="24" height="22" fill="#a39f98"/>' +
-          '<rect x="71" y="29" width="24" height="22" fill="#c4c1bb"/>' +
-          '<rect x="98" y="29" width="24" height="22" fill="#8f8b85"/>' +
-          '<path d="M41 41 C41 24 70 21 72 39 C74 56 47 60 41 45 C37 34 49 23 62 24" fill="none" stroke="var(--ud-peach)" stroke-width="1.7" stroke-linecap="round"/>',
+        `<g fill="none" stroke="currentColor" stroke-width=".6">` +
+          '<path d="M-2 23H102M-2 57H102"/>' +
+          [-10, 17, 44, 71, 98].map((x) => `<rect x="${x}" y="30" width="24" height="20"/>`).join("") +
+          `<path d="${Array.from({ length: 18 }, (_, i) => `M${(2.9 + i * 5.6).toFixed(1)} 25.2v2.6M${(2.9 + i * 5.6).toFixed(1)} 52.2v2.6`).join("")}"/>` +
+          "</g>" +
+          '<path d="M41 41 C41 24 70 21 72 39 C74 56 47 60 41 45 C37 34 49 23 62 24" fill="none" stroke="var(--ud-peach)" stroke-width="1" stroke-linecap="round"/>',
       ) +
-      ph("Placeholder frames", "left:8cqi;top:11cqi") +
       mark(
         "position:absolute;left:0;right:0;bottom:15cqi;text-align:center;font-family:'Instrument Serif',serif;font-size:10.5cqi;line-height:1;letter-spacing:-.015em",
         `unexpected <i style="font-style:italic">detail</i>${peachDot}`,
@@ -486,21 +470,19 @@ const thumbs: Thumb[] = [
   },
   {
     id: "T4",
-    name: "Object macro",
+    name: "Rings, one off center",
     source: "Wordmark from study 14",
-    note: "One object shot so close it stops reading as itself. The wordmark stays small and lets the crop carry the tile.",
-    bg: "#cbc8c2",
+    note: "Was the object macro. Now thin concentric rings cropped by the tile edge, with one ring that has slipped out of line.",
+    bg: "var(--ud-paper)",
     color: "var(--ud-ink)",
     html:
       art(
-        '<circle cx="72" cy="34" r="58" fill="#b9b5ae"/>' +
-          '<circle cx="72" cy="34" r="44" fill="#a8a49d"/>' +
-          '<circle cx="72" cy="34" r="39" fill="#b1ada6"/>' +
-          '<circle cx="72" cy="34" r="13" fill="#96928b"/>',
+        `<g fill="none" stroke="currentColor" stroke-width=".6">` +
+          [8, 16, 24, 32, 40].map((r, i) => `<circle cx="${i === 2 ? 78 : 74}" cy="${i === 2 ? 35 : 32}" r="${r}"/>`).join("") +
+          "</g>",
       ) +
-      ph("Placeholder photo", "left:8cqi;top:8cqi") +
       mark(
-        "position:absolute;left:8cqi;bottom:8cqi;font-family:'Source Serif 4',serif;font-style:italic;font-size:8.5cqi;font-weight:600;line-height:1;letter-spacing:-.015em",
+        "position:absolute;left:11.4cqi;bottom:11cqi;font-family:'Source Serif 4',serif;font-style:italic;font-size:9cqi;font-weight:600;line-height:1;letter-spacing:-.015em",
         `unexpected detail${peachDot}`,
       ),
   },
@@ -536,13 +518,13 @@ const thumbs: Thumb[] = [
     id: "T9",
     name: "Slipped stripe",
     source: "Wordmark from study 07",
-    note: "Seven even stripes, one of them slid sideways and running off the edge. No extra color needed.",
+    note: "Seven thin rules, one of them slid sideways and running off the edge. No extra color needed.",
     bg: "var(--ud-paper)",
     color: "var(--ud-ink)",
     html:
       art(
         [12, 19.5, 27, 34.5, 42, 49.5, 57]
-          .map((y, i) => `<rect x="${i === 4 ? 30 : 11.4}" y="${y}" width="77.2" height="3" fill="currentColor"/>`)
+          .map((y, i) => `<rect x="${i === 4 ? 30 : 11.4}" y="${y}" width="77.2" height=".7" fill="currentColor"/>`)
           .join(""),
       ) +
       mark(
@@ -554,7 +536,7 @@ const thumbs: Thumb[] = [
     id: "T10",
     name: "Turned square",
     source: "Wordmark from study 05",
-    note: "A grid of squares where one has turned on its corner. The break is in the shape, and the period keeps the peach.",
+    note: "A grid of outlined squares where one has turned on its corner. The break is in the shape, and the period keeps the peach.",
     bg: "var(--ud-paper)",
     color: "var(--ud-ink)",
     html:
@@ -562,7 +544,7 @@ const thumbs: Thumb[] = [
         [14, 31, 48]
           .flatMap((y, row) =>
             [11.4, 28.4, 45.4, 62.4, 79.4].map((x, col) =>
-              `<rect x="${x}" y="${y}" width="9.2" height="9.2" fill="currentColor"${row === 1 && col === 3 ? ` transform="rotate(45 ${x + 4.6} ${y + 4.6})"` : ""}/>`,
+              `<rect x="${x}" y="${y}" width="9.2" height="9.2" fill="none" stroke="currentColor" stroke-width=".6"${row === 1 && col === 3 ? ` transform="rotate(45 ${x + 4.6} ${y + 4.6})"` : ""}/>`,
             ),
           )
           .join(""),
@@ -589,6 +571,106 @@ const thumbs: Thumb[] = [
       mark(
         "position:absolute;left:11.4cqi;bottom:11cqi;font-family:'Source Serif 4',serif;font-style:italic;font-size:9cqi;font-weight:600;line-height:1;letter-spacing:-.015em",
         `unexpected detail${peachDot}`,
+      ),
+  },
+  {
+    id: "T12",
+    name: "Missing dot, period size",
+    source: "Wordmark from study 12",
+    note: "Every dot in the grid is exactly the size of the period. One is missing from the grid, and that same dot sits after “detail” in peach.",
+    bg: "var(--ud-paper)",
+    color: "var(--ud-ink)",
+    html:
+      art(
+        Array.from({ length: 7 }, (_, row) =>
+          Array.from({ length: 12 }, (_, col) =>
+            row === 3 && col === 8
+              ? ""
+              : `<circle cx="${(12.42 + col * 6.833).toFixed(2)}" cy="${(13 + row * 6.833).toFixed(2)}" r="1.02" fill="currentColor"/>`,
+          ).join(""),
+        ).join(""),
+      ) +
+      // The period is drawn, not typed, so it matches the grid dots exactly:
+      // .17em of a 12cqi font is 2.04cqi, the diameter of r=1.02 above.
+      mark(
+        "position:absolute;left:11.4cqi;bottom:9cqi;font-family:'Young Serif',serif;font-size:12cqi;line-height:.98;letter-spacing:-.02em",
+        'unexpected<br>detail<span style="display:inline-block;width:.17em;height:.17em;border-radius:50%;background:var(--ud-peach);margin-left:.05em"></span>',
+      ),
+  },
+  {
+    id: "T13",
+    name: "Ruled lines, right flush",
+    source: "Wordmark from study 07",
+    note: "The leaning line turned on its side. Thin rules like a notebook page, one of them tilting, with the wordmark flush right.",
+    bg: "var(--ud-paper)",
+    color: "var(--ud-ink)",
+    html:
+      art(
+        Array.from({ length: 8 }, (_, i) => {
+          const y = 14 + i * 6;
+          return `<rect x="11.4" y="${y}" width="77.2" height=".7" fill="currentColor"${i === 4 ? ` transform="rotate(-5 11.4 ${y})"` : ""}/>`;
+        }).join(""),
+      ) +
+      mark(
+        "position:absolute;right:11.4cqi;bottom:9cqi;text-align:right;font-family:'DM Serif Display',serif;font-size:12.5cqi;line-height:.9;letter-spacing:-.015em",
+        `unexpected<br>detail${peachDot}`,
+      ),
+  },
+  {
+    id: "T14",
+    name: "Leaning line, opposite corners",
+    source: "Wordmark from study 08",
+    note: "The leaning line on ink. The words split to opposite corners and the lines run through the gap between them.",
+    bg: "var(--ud-ink)",
+    color: "var(--ud-paper)",
+    html:
+      art(
+        Array.from({ length: 14 }, (_, i) => {
+          const x = 11.4 + i * 5.83;
+          return `<rect x="${x}" y="33" width="1" height="34" fill="currentColor"${i === 4 ? ` transform="rotate(14 ${x + 0.5} 67)"` : ""}/>`;
+        }).join(""),
+      ) +
+      mark(
+        "position:absolute;left:11.4cqi;top:8cqi;font-family:'Corben',serif;font-size:10.5cqi;font-weight:700;line-height:1;letter-spacing:-.02em",
+        "unexpected",
+      ) +
+      mark(
+        "position:absolute;right:11.4cqi;bottom:8cqi;font-family:'Corben',serif;font-size:10.5cqi;font-weight:700;line-height:1;letter-spacing:-.02em",
+        `detail${peachDot}`,
+      ),
+  },
+  {
+    id: "T15",
+    name: "Grid, one cell filled",
+    source: "Wordmark from study 13",
+    note: "A thin grid with a single peach cell, which stands in for the period. The wordmark moves to the top left in a light weight.",
+    bg: "var(--ud-paper)",
+    color: "var(--ud-ink)",
+    html:
+      art(
+        '<rect x="62.87" y="62.83" width="12.87" height="12.87" fill="var(--ud-peach)"/>' +
+          `<path fill="none" stroke="currentColor" stroke-width=".5" d="${
+            Array.from({ length: 7 }, (_, i) => `M${(11.4 + i * 12.867).toFixed(2)} 37.1V88.57`).join("") +
+            Array.from({ length: 5 }, (_, i) => `M11.4 ${(37.1 + i * 12.867).toFixed(2)}H88.6`).join("")
+          }"/>`,
+      ) +
+      mark(
+        "position:absolute;left:11.4cqi;top:8cqi;font-family:'Fraunces',serif;font-size:12.5cqi;font-weight:300;line-height:.98;letter-spacing:-.03em;font-variation-settings:'SOFT' 100",
+        "unexpected<br>detail",
+      ),
+  },
+  {
+    id: "T16",
+    name: "Detour",
+    source: "Wordmark from study 19",
+    note: "One thin line crosses the whole tile and takes a single detour on the way. The wordmark sits on the line.",
+    bg: "var(--ud-paper)",
+    color: "var(--ud-ink)",
+    html:
+      art('<path d="M-2 60H58l5 -9h10l5 9H102" fill="none" stroke="currentColor" stroke-width=".7" stroke-linejoin="round"/>') +
+      mark(
+        "position:absolute;left:11.4cqi;bottom:43cqi;font-family:'EB Garamond',serif;font-size:12cqi;font-weight:500;line-height:.92;letter-spacing:-.02em",
+        `unexpected<br>detail${peachDot}`,
       ),
   },
 ];
@@ -727,7 +809,7 @@ const fontsHref =
       </section>
 
       <section class="ud-section" aria-labelledby="thumbs-heading">
-        <h2 id="thumbs-heading" class="label">Thumbnail directions, round 02</h2>
+        <h2 id="thumbs-heading" class="label">Thumbnail directions</h2>
         <p class="section-note">
           How the wordmark could live on a podcast tile. Each direction has one thing that is off,
           cropped, or out of place.
@@ -761,7 +843,7 @@ const fontsHref =
         <div class="size-test">
           <h3 class="label">Size test, 60px</h3>
           <p class="size-note">
-            The same tiles at feed size. Placeholder labels are hidden here.
+            The same tiles at feed size.
           </p>
           <ul class="size-row">
             {
@@ -1089,16 +1171,6 @@ const fontsHref =
     box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.06);
   }
 
-  .thumb :global(.ph) {
-    position: absolute;
-    font-family: var(--font-mono);
-    font-size: max(3cqi, 9px);
-    letter-spacing: 0.02em;
-    line-height: 1;
-    color: var(--ud-ink);
-    opacity: 0.6;
-  }
-
   .size-test {
     margin-top: var(--ud-gap);
     padding-top: var(--space-5);
@@ -1126,10 +1198,6 @@ const fontsHref =
 
   .size-row .tile {
     width: 60px;
-  }
-
-  .size-row :global(.ph) {
-    display: none;
   }
 
   @media (min-width: 700px) {
