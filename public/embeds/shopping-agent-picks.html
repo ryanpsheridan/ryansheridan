@@ -857,10 +857,10 @@ dBegrtHVLlE4m6CXxr0LIdPoTgjjaNaSZozTHZ22TWz83dPnHZguCyI77pRXTP7pZQLNEJIbHAPp/HoG
     entrance.to(msgs, { opacity: 1, y: 0, duration: 0.45, ease: T.ease, stagger: 0.35 }, 0.45);
     entrance.to(cards, { opacity: 1, y: 0, duration: 0.55, ease: T.ease, stagger: 0.12 }, 1.2);
 
-    // Play once, when the embed is a quarter on screen. Hold still while it is scrolled away mid-play.
+    // Play once, when a tenth of the embed is on screen. Hold still while it is scrolled away mid-play.
     var io = new IntersectionObserver(function (entries) {
       if (entries[0].isIntersecting) { entrance.play(); } else { entrance.pause(); }
-    }, { threshold: 0.25 });
+    }, { threshold: 0.1 });
     io.observe(anchor || stage);
     entrance.eventCallback("onComplete", function () { io.disconnect(); });
 

@@ -400,14 +400,14 @@
     // Wait for this embed's turn in the row, then play once. Off screen it holds still.
     var io = new IntersectionObserver(function (entries) {
       if (stopped) { return; }
-      var inView = Math.min(entries[0].intersectionRatio, 0.25) === 0.25;
+      var inView = Math.min(entries[0].intersectionRatio, 0.1) === 0.1;
       if (!played) {
         if (inView && ATTRACT) { arrive(play); } else { leave(); }
         return;
       }
       if (finished || !timer) { return; }
       if (inView) { timer.play(); } else { timer.pause(); }
-    }, { threshold: [0, 0.25] });
+    }, { threshold: [0, 0.1] });
     io.observe(anchor || stage);
 
     addCleanup(function () {

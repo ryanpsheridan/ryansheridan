@@ -135,10 +135,10 @@
     entrance.to(nums, { opacity: 1, y: 0, duration: 0.4, ease: "power1.out", stagger: 0.15 }, 1.05);
     entrance.to(cards, { opacity: 1, x: 0, duration: 0.6, ease: T.ease, stagger: 0.12 }, 0.6);
 
-    // Play once, when the embed is a quarter on screen. Hold still while it is scrolled away mid-play.
+    // Play once, when a tenth of the embed is on screen. Hold still while it is scrolled away mid-play.
     var io = new IntersectionObserver(function (entries) {
       if (entries[0].isIntersecting) { entrance.play(); } else { entrance.pause(); }
-    }, { threshold: 0.25 });
+    }, { threshold: 0.1 });
     io.observe(anchor || stage);
     entrance.eventCallback("onComplete", function () { io.disconnect(); });
 

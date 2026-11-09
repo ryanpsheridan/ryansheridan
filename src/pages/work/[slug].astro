@@ -424,7 +424,7 @@ const schema = [
                         <div class:list={["motion-pane", { "is-active": i === 0 }]} data-motion-pane={i}>
                           <div
                             class:list={["motion-asset", { "is-tiled": item.tile }]}
-                            style={`--asset-ratio: ${item.ratio}${item.tile ? `; --motion-tile: ${item.tile}` : ""}`}
+                            style={`--asset-ratio: ${item.ratio}; --asset-wh: calc(${item.ratio})${item.tile ? `; --motion-tile: ${item.tile}` : ""}`}
                           >
                             <ShadowEmbed src={item.embed} ratio={item.ratio} poster={item.poster} alt={item.alt} fade={false} interactive={item.interactive ?? true} />
                           </div>
@@ -1566,22 +1566,24 @@ const schema = [
     display: none;
     place-items: center;
     padding: var(--space-5);
+    container-type: size;
   }
 
   .motion-pane.is-active {
     display: grid;
   }
 
+  /* As large as the pane allows on whichever side runs out first, so a
+     square asset never spills past a tall, narrow pane on a phone. */
   .motion-asset {
-    height: 100%;
-    max-width: 100%;
+    width: min(100cqw, 100cqh * var(--asset-wh));
     aspect-ratio: var(--asset-ratio);
     display: grid;
     place-items: center;
   }
 
   .motion-asset.is-tiled {
-    height: 45%;
+    width: min(45cqw, 45cqh);
     aspect-ratio: 1;
     background: var(--motion-tile);
   }
@@ -1943,7 +1945,7 @@ const schema = [
           io.unobserve(entry.target);
         }
       },
-      { threshold: 0.2 },
+      { threshold: 0.1 },
     );
     for (const el of pathways) {
       el.classList.add("is-armed");

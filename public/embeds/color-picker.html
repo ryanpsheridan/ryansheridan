@@ -553,11 +553,11 @@
     killers.push(function () { gsap.killTweensOf([handle, fx, vals]); });
     settlers.push(function () { gsap.set([handle, fx, vals], { clearProps: "all" }); });
 
-    // Play the entrance once, when the embed is a quarter on screen.
+    // Play the entrance once, when a tenth of the embed is on screen.
     var seen = false;
     var io = new IntersectionObserver(function (entries) {
       if (entries[0].isIntersecting && !seen) { seen = true; entrance.play(); }
-    }, { threshold: 0.25 });
+    }, { threshold: 0.1 });
     io.observe(anchor || stage);
 
     // Reduced motion switched on later: stop everything and show the finished state.
