@@ -293,6 +293,136 @@ const logos: Logo[] = [
 ];
 
 /*
+  Round 03: ten studies that each hide one deliberate detail, after the
+  accidental one in study 19 where the p's descender lands on the l. The em
+  offsets below are measured glyph widths for the exact font, weight and
+  tracking on that study, so retune them if any of those change.
+*/
+const peach = (text: string) => `<span style="color:var(--ud-peach)">${text}</span>`;
+
+const details: Logo[] = [
+  {
+    name: "One stroke",
+    font: "Geist Medium",
+    note: "Study 19's accident, made deliberate. The p's descender and the l are set on the same axis and fuse into one long stroke.",
+    family: '"Geist", sans-serif',
+    lines: [{ text: "unexpected", style: "padding-left:.109em" }, { text: "detail" }],
+    period: "peach",
+    align: "left",
+    style: "font-size:15cqi;font-weight:500;line-height:.86;letter-spacing:-.04em",
+  },
+  {
+    name: "Shared d",
+    font: "Fraunces SemiBold",
+    note: "“unexpected” ends on the letter “detail” starts with, so one d does both jobs. It carries the peach and the period steps aside.",
+    family: '"Fraunces", serif',
+    lines: [{ text: `unexpecte${peach("d")}etail` }],
+    style: "font-size:11.5cqi;font-weight:600;line-height:1;letter-spacing:-.02em;font-variation-settings:'SOFT' 100",
+  },
+  {
+    name: "Domino",
+    font: "Gloock",
+    note: "The second line starts exactly under the last letter of the first. d sits on d, like two tiles matched end to end.",
+    family: '"Gloock", serif',
+    lines: [{ text: "unexpected" }, { text: "detail", style: "padding-left:4.62em" }],
+    period: "peach",
+    align: "left",
+    style: "font-size:11cqi;line-height:.95;letter-spacing:-.01em",
+  },
+  {
+    name: "Stacked t",
+    font: "DM Serif Display",
+    note: "“detail” slides right until its t stands directly under the t in “unexpected”. One vertical runs through both words.",
+    family: '"DM Serif Display", serif',
+    lines: [{ text: "unexpected" }, { text: "detail", style: "padding-left:2.616em" }],
+    period: "peach",
+    align: "left",
+    style: "font-size:13cqi;line-height:.86;letter-spacing:-.015em",
+  },
+  {
+    name: "Fallen dot",
+    font: "Fraunces Soft",
+    note: "The i has lost its dot. It dropped to the baseline, turned peach, and became the period.",
+    family: '"Fraunces", serif',
+    lines: [{ text: "unexpected" }, { text: "detaıl" }],
+    period: "peach",
+    style: "font-size:14cqi;font-weight:650;line-height:.9;letter-spacing:-.02em;font-variation-settings:'SOFT' 100",
+  },
+  {
+    name: "Mirrored e",
+    font: "Bree Serif",
+    note: "One e faces the wrong way. Easy to miss at a glance, hard to unsee once found.",
+    family: '"Bree Serif", serif',
+    lines: [
+      { text: 'unexp<span style="display:inline-block;transform:scaleX(-1)">e</span>cted' },
+      { text: "detail" },
+    ],
+    period: "peach",
+    align: "left",
+    style: "font-size:14cqi;line-height:.95;letter-spacing:-.02em",
+  },
+  {
+    name: "Italic a",
+    font: "Instrument Serif",
+    note: "A single italic letter. The a changes shape from two stories to one, so it reads as a different character hiding in the word.",
+    family: '"Instrument Serif", serif',
+    lines: [{ text: "unexpected" }, { text: "det<i>a</i>il" }],
+    period: "peach",
+    style: "font-size:15.5cqi;line-height:.9;letter-spacing:-.02em",
+  },
+  {
+    name: "Mirror hinge",
+    font: "Young Serif",
+    note: "The name hides a mirror: “ted” closes one word and “det” opens the next. A peach dot marks the hinge.",
+    family: '"Young Serif", serif',
+    lines: [
+      { text: `unexpected<span style="color:var(--ud-peach);margin:0 .08em">·</span>detail` },
+    ],
+    style: "font-size:9.4cqi;line-height:1;letter-spacing:-.02em",
+  },
+  {
+    name: "Runaway period",
+    font: "Yeseva One",
+    note: "The wordmark sits bottom left with nothing after it. Its period has wandered to the opposite corner.",
+    family: '"Yeseva One", serif',
+    free: true,
+    lines: [
+      { text: '<span style="display:block;width:.24em;height:.24em;border-radius:50%;background:var(--ud-peach)"></span>', style: "right:8cqi;top:8cqi" },
+      { text: "unexpected", style: "left:8cqi;bottom:21cqi" },
+      { text: "detail", style: "left:8cqi;bottom:8cqi" },
+    ],
+    style: "font-size:13cqi;line-height:1;letter-spacing:-.01em",
+  },
+  {
+    name: "Even block",
+    font: "Playfair Display Black",
+    note: "“detail.” is scaled until it is exactly as wide as “unexpected”. Both edges line up, period included.",
+    family: '"Playfair Display", serif',
+    lines: [{ text: "unexpected" }, { text: "detail", style: "font-size:1.8037em" }],
+    period: "peach",
+    align: "left",
+    style: "font-size:13cqi;font-weight:900;line-height:.84;letter-spacing:-.02em",
+  },
+];
+
+const rounds = [
+  {
+    id: "explore-heading",
+    heading: "Logo explorations, round 01",
+    note: "Twenty type and alignment studies, each shown light and dark. Color stays out of it for now apart from the peach period. Backgrounds, patterns, and photography come next.",
+    logos,
+    start: 1,
+  },
+  {
+    id: "details-heading",
+    heading: "Hidden details, round 03",
+    note: "Ten more, each built around one deliberate detail in the letters themselves. They pick up from study 19, where the p in “unexpected” lands on the l in “detail”.",
+    logos: details,
+    start: logos.length + 1,
+  },
+];
+
+/*
   Round 02: how the wordmark could live on a podcast tile. Each tile is an
   HTML string with inline styles (still sized in cqi) so the same artwork can
   be drawn twice: once large, once at 60px in the size test row. Photos are
@@ -528,16 +658,15 @@ const fontsHref =
         </details>
       </div>
 
-      <section class="ud-section" aria-labelledby="explore-heading">
-        <h2 id="explore-heading" class="label">Logo explorations, round 01</h2>
-        <p class="section-note">
-          Twenty type and alignment studies, each shown light and dark. Color stays out of it for
-          now apart from the peach period. Backgrounds, patterns, and photography come next.
-        </p>
+      {
+        rounds.map((round) => (
+      <section class="ud-section" aria-labelledby={round.id}>
+        <h2 id={round.id} class="label">{round.heading}</h2>
+        <p class="section-note">{round.note}</p>
 
         <ol class="logo-list">
           {
-            logos.map((logo, i) => (
+            round.logos.map((logo, i) => (
               <li class="logo-item">
                 <div class="tiles">
                   {(["light", "dark"] as const).map((theme) => (
@@ -566,7 +695,7 @@ const fontsHref =
                 </div>
                 <div class="logo-meta">
                   <p class="logo-title">
-                    <span class="num">{pad(i + 1)}</span>
+                    <span class="num">{pad(round.start + i)}</span>
                     {logo.name}
                   </p>
                   <p class="logo-font">{logo.font}</p>
@@ -577,6 +706,8 @@ const fontsHref =
           }
         </ol>
       </section>
+        ))
+      }
 
       <section class="ud-section" aria-labelledby="thumbs-heading">
         <h2 id="thumbs-heading" class="label">Thumbnail directions, round 02</h2>
