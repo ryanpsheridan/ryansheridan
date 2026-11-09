@@ -549,7 +549,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Making a new AI feature easy to picture",
-        body: `<p>Shopping Agent is a new <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> feature that answers shoppers' questions on a merchant's storefront and helps them find the right product. Product gave us the idea, a few screen recordings, and screenshots of the prototype before it shipped. My job was to turn that into a landing page people would understand at a glance.</p><p>I started from the copywriter's first draft, read the project brief, and ran a kickoff to agree on what the feature does, how it helps merchants, and how to make that clear on the page. Then I designed the page and every image on it.</p>`,
+        body: `<p>Shopping Agent is a new <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> feature that answers shoppers' questions on a merchant's storefront and helps them find the right product. Product gave us the idea, a few screen recordings, and screenshots of the prototype before it shipped. My job was to turn that into a <a href="https://www.bigcommerce.com/product/shopping-agent" target="_blank" rel="noopener noreferrer">landing page</a> people would understand at a glance.</p><p>I started from the copywriter's first draft, read the project brief, and ran a kickoff to agree on what the feature does, how it helps merchants, and how to make that clear on the page. Then I designed the page and every image on it.</p>`,
       },
       {
         type: "text",
