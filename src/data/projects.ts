@@ -538,7 +538,7 @@ const allProjects: Project[] = [
     year: 2026,
     draft: true,
     description: "Page design and product visuals for BigCommerce's Shopping Agent launch, built from pre-release screenshots with a Claude skill that drafts images in Figma.",
-    thumbnail: "/project-shopping-agent-featured.webp",
+    thumbnail: "/project-shopping-agent-thumbnail.webp",
     ogImage: "/project-shopping-agent-og.jpg",
     showOnHomepage: false,
     homepageWord: "launch pages",
@@ -555,12 +555,14 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Showing the idea, not the screen",
-        body: `<p>The product demos did their job, but they were dense and built for working, not for explaining. Each section of the page makes one point, so each visual keeps only what supports it: the sentiment panel drops the surrounding charts, and the product picks keep the conversation to one question and one answer. Everything on the storefront side traces back to the product recordings. Each visual below plays as it scrolls into view, and where there's a product demo behind it, you can flip back to the frame it came from.</p>`,
+        body: `<p>The product demos did their job, but they were dense and built for working, not for explaining. Each section of the page makes one point, so each visual keeps only what supports it: the sentiment panel drops the surrounding charts, and the product picks keep the conversation to one question and one answer. Everything on the storefront side traces back to the product recordings. Each visual below plays as it scrolls into view, and you can flip back to the product demo it came from.</p>`,
       },
       {
         type: "visualPair",
         title: "Behavior settings",
+        beforeLabel: "Product demo",
         afterLabel: "On the page",
+        before: { src: "/project-shopping-agent-proto-behavior.webp", alt: "The product demo's Behavior tab in the BigCommerce control panel, with a Skills list where Brand search, Product category search, Order history, Add to cart, View cart and View checkout are all switched on" },
         embed: { src: "/embeds/shopping-agent-behavior.html", ratio: "530 / 522", poster: "/project-shopping-agent-behavior-poster.webp", title: "Animated Behavior settings: Brand search, Product category search, Order history, Add to cart and View cart switch on one after another" },
       },
       {
@@ -574,7 +576,9 @@ const allProjects: Project[] = [
       {
         type: "visualPair",
         title: "Impact",
+        beforeLabel: "Product demo",
         afterLabel: "On the page",
+        before: { src: "/project-shopping-agent-proto-dashboard.webp", alt: "The product demo's Shopping Agent dashboard: conversation totals, a purchase funnel, user sentiment, and agent impact on purchases with a 1.9x purchase conversion lift" },
         embed: { src: "/embeds/shopping-agent-impact.html", ratio: "530 / 522", poster: "/project-shopping-agent-impact-poster.webp", title: "Animated impact metrics: purchase rate bars of 10.5% with the agent and 5.4% without, then a 1.9× conversion lift, $105 average order value and $5,460 in agent-assisted revenue" },
       },
       {
@@ -582,8 +586,9 @@ const allProjects: Project[] = [
         title: "Sentiment",
         beforeLabel: "Product demo",
         afterLabel: "On the page",
-        before: { src: "/project-shopping-agent-proto-sentiment.webp", alt: "The user sentiment card from the product demo dashboard, with percentage badges and a cursor over the Positive row" },
-        embed: { src: "/embeds/shopping-agent-sentiment.html", ratio: "530 / 522", poster: "/project-shopping-agent-sentiment-poster.webp", title: "Animated sentiment dashboard: Positive 72%, Neutral 21% and Negative 7% bars fill in turn" },
+        hint: "Hover a row to switch sentiment",
+        before: { src: "/project-shopping-agent-proto-dashboard.webp", alt: "The product demo's Shopping Agent dashboard, with the user sentiment card showing Positive, Neutral and Negative rows and a cursor over Positive" },
+        embed: { src: "/embeds/shopping-agent-sentiment.html", ratio: "530 / 522", poster: "/project-shopping-agent-sentiment-poster.webp", title: "Animated sentiment dashboard: Positive 72%, Neutral 21% and Negative 7% bars fill in turn, then hovering a row moves the highlight to it" },
       },
       {
         type: "text",
