@@ -1,0 +1,323 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+
+// Working canvas for the unexpected detail podcast identity. Private share,
+// noindex, and kept out of the sitemap by the allowlist in astro.config.mjs.
+// The brief below is lifted from the client's Working Creative Guide deck.
+
+const brief = [
+  {
+    label: "The Mission",
+    lead: "To rescue human conversation from the résumé.",
+    body: "Uncovering the unspoken quirks, wild turns, and quiet fascinations that make people who they truly are.",
+  },
+  {
+    label: "Listener Promise",
+    lead: "A fresh, indelible view into a mind you thought you knew.",
+    body: "Leave every conversation with a surprising insight, an unprompted laugh, and proof that people are richer than their bios.",
+  },
+  {
+    label: "The North Star",
+    lead: "Break the talking-points loop. Uncover the eccentric truths.",
+    body: "Strip away canned press tours and rehearsed answers. Catch brilliant people off guard, mid-laugh, sharing the obsessions that actually ignite them.",
+  },
+];
+
+const taglines = [
+  { label: "Primary hook", line: "Curiosity flips the frame." },
+  { label: "Secondary invitation", line: "Everyone has one." },
+];
+
+const pillars = ["The Detour Over the Script", "Substance Without Pretense", "Generous Curiosity"];
+
+// Notes from the kickoff call that should steer the logo work.
+const direction = [
+  "Lowercase, minimal, soft serif. The deck's typeface is a placeholder, not the answer.",
+  "Explore stacking and alignment. Test the period, and whether it carries the color.",
+  "Keep the wordmark simple. Color, texture, pattern, or photography in the cover tile is what makes it stand out in a podcast feed.",
+  "Open to color and to an unconventional host photo. Two empty chairs came up as an abstract idea.",
+  "No tagline or description needed on the cover tile. Discovery happens in the show title and metadata.",
+  "Needs to read at thumbnail size in a square tile, even though “unexpected” is a long word.",
+];
+---
+
+<Layout
+  title="unexpected detail — Ryan Sheridan"
+  description="Working canvas for the unexpected detail podcast identity."
+  noindex={true}
+>
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap"
+  />
+  <Nav />
+  <main id="main" class="ud-page">
+    <div class="ud-inner">
+      <header class="ud-header">
+        <p class="eyebrow">Podcast identity · Working canvas</p>
+        <h1 class="ud-wordmark">unexpected detail<span class="dot">.</span></h1>
+        <p class="intro">
+          An unscripted conversation show hosted by Marcy. Every episode is a detour with someone
+          remarkable, past the résumé and into the left turns, half-baked ideas, and quiet
+          obsessions kept off camera.
+        </p>
+      </header>
+
+      <section class="ud-section" aria-labelledby="brief-heading">
+        <h2 id="brief-heading" class="section-label">Brief</h2>
+
+        <div class="taglines">
+          {
+            taglines.map((t) => (
+              <div class="tagline">
+                <p class="tag-label">{t.label}</p>
+                <p class="tag-line">“{t.line}”</p>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="brief-grid">
+          {
+            brief.map((item) => (
+              <article class="brief-card">
+                <p class="tag-label">{item.label}</p>
+                <p class="brief-lead">{item.lead}</p>
+                <p class="brief-body">{item.body}</p>
+              </article>
+            ))
+          }
+        </div>
+
+        <ul class="pillars" aria-label="Brand pillars">
+          {pillars.map((p) => <li>{p}</li>)}
+        </ul>
+      </section>
+
+      <section class="ud-section" aria-labelledby="direction-heading">
+        <h2 id="direction-heading" class="section-label">Direction from kickoff</h2>
+        <ul class="direction">
+          {direction.map((d) => <li>{d}</li>)}
+        </ul>
+      </section>
+
+      <section class="ud-section" aria-labelledby="start-heading">
+        <h2 id="start-heading" class="section-label">Starting point</h2>
+        <p class="section-note">
+          The two lockups from the client's deck, rebuilt with a stand-in soft serif.
+        </p>
+        <div class="logo-grid">
+          <figure class="logo-card">
+            <div class="logo-stage">
+              <p class="lockup">unexpected<br />detail</p>
+            </div>
+            <figcaption>
+              <span class="option">Option 01 · Pure black and white</span>
+              Clean stacked letterforms, unadorned terminal.
+            </figcaption>
+          </figure>
+          <figure class="logo-card">
+            <div class="logo-stage">
+              <p class="lockup">unexpected<br />detail<span class="dot">.</span></p>
+            </div>
+            <figcaption>
+              <span class="option">Option 02 · With accent period</span>
+              Warm focal accent, defined typographic cadence.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="ud-section" aria-labelledby="explore-heading">
+        <h2 id="explore-heading" class="section-label">Logo explorations</h2>
+        <p class="section-note">Options land here.</p>
+        <div class="empty-slot">Coming soon</div>
+      </section>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .ud-page {
+    --ud-ink: #141414;
+    --ud-peach: #f08a6c;
+    --ud-paper: #faf9f6;
+    --ud-serif: "Fraunces", Georgia, "Times New Roman", serif;
+    padding: 80px var(--page-padding) var(--space-8, 96px);
+  }
+
+  .ud-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .eyebrow,
+  .section-label,
+  .tag-label,
+  .option {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .ud-header {
+    margin-bottom: var(--space-7, 80px);
+  }
+
+  .ud-wordmark {
+    font-family: var(--ud-serif);
+    font-weight: 800;
+    font-size: clamp(44px, 2rem + 5vw, 104px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin: var(--space-3) 0 var(--space-4);
+  }
+
+  .dot {
+    color: var(--ud-peach);
+  }
+
+  .intro {
+    font-size: var(--text-base);
+    color: var(--color-text-muted);
+    max-width: 62ch;
+  }
+
+  .ud-section {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-4);
+    margin-bottom: var(--space-7, 80px);
+  }
+
+  .section-label {
+    margin-bottom: var(--space-4);
+  }
+
+  .section-note {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: calc(var(--space-2) * -1) 0 var(--space-4);
+  }
+
+  .taglines {
+    display: grid;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+
+  .tag-line {
+    font-family: var(--ud-serif);
+    font-weight: 600;
+    font-size: clamp(24px, 1.2rem + 1.2vw, 40px);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    margin-top: var(--space-1);
+  }
+
+  .brief-grid {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .brief-card {
+    border: 1px solid var(--color-border);
+    padding: var(--space-4);
+  }
+
+  .brief-lead {
+    font-weight: 500;
+    font-size: var(--text-base);
+    margin: var(--space-2) 0;
+  }
+
+  .brief-body {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .pillars {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .pillars li {
+    font-size: var(--text-sm);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 4px 12px;
+  }
+
+  .direction {
+    padding-left: 1.2em;
+    max-width: 70ch;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .logo-grid {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .logo-card figcaption {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--space-2);
+  }
+
+  .option {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--color-text);
+  }
+
+  /* Fixed paper and ink regardless of site theme: these are logo artboards. */
+  .logo-stage {
+    aspect-ratio: 1;
+    background: var(--ud-paper);
+    color: var(--ud-ink);
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--color-border);
+  }
+
+  .lockup {
+    font-family: var(--ud-serif);
+    font-weight: 800;
+    font-size: clamp(36px, 1rem + 5vw, 72px);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    text-align: center;
+  }
+
+  .empty-slot {
+    border: 1px dashed var(--color-border);
+    padding: var(--space-7, 80px) var(--space-4);
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 700px) {
+    .taglines,
+    .logo-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .brief-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>
