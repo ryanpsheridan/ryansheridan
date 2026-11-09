@@ -5,7 +5,9 @@
  * and each <script> runs as a function with root, host, gsap, ScrollTrigger,
  * onCleanup and listen in scope. The asset file is fetched (and GSAP loaded)
  * only as it nears the viewport. Until then, and without JavaScript, the
- * poster still shows in its place.
+ * poster still shows in its place. Embeds inside a [data-shadow-embed-group]
+ * load together as the group nears the viewport, so one kept hidden behind a
+ * tab is ready before it is shown.
  */
 interface Props {
   /** Asset file under public/embeds/. */
@@ -15,13 +17,15 @@ interface Props {
   /** Still of the asset's resting state. */
   poster: string;
   alt: string;
+  /** False skips the asset's own fade-in of its tile, for embeds revealed by a tab rather than by scrolling. */
+  fade?: boolean;
   class?: string;
 }
 
-const { src, ratio, poster, alt, class: className } = Astro.props;
+const { src, ratio, poster, alt, fade = true, class: className } = Astro.props;
 ---
 
-<div class:list={["shadow-embed", className]} data-shadow-embed={src} style={`aspect-ratio: ${ratio}`}>
+<div class:list={["shadow-embed", className]} data-shadow-embed={src} data-no-fade={fade ? undefined : ""} style={`aspect-ratio: ${ratio}`}>
   <img src={poster} alt={alt} loading="lazy" decoding="async" />
 </div>
 
@@ -89,17 +93,26 @@ const { src, ratio, poster, alt, class: className } = Astro.props;
   }
 
   if (hosts.length) {
+    // A host in a group is watched through its group, since a hidden host
+    // never reaches the viewport itself.
+    const members = new Map<Element, HTMLElement[]>();
+    hosts.forEach((host) => {
+      const target = host.closest("[data-shadow-embed-group]") ?? host;
+      members.set(target, [...(members.get(target) ?? []), host]);
+    });
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
           io.unobserve(entry.target);
-          // On failure the poster simply stays.
-          mount(entry.target as HTMLElement).catch((err) => console.error("Shadow embed failed", err));
+          for (const host of members.get(entry.target) ?? []) {
+            // On failure the poster simply stays.
+            mount(host).catch((err) => console.error("Shadow embed failed", err));
+          }
         }
       },
       { rootMargin: "300px 0px" },
     );
-    hosts.forEach((host) => io.observe(host));
+    members.forEach((_, target) => io.observe(target));
   }
 </script>

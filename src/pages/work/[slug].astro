@@ -411,7 +411,7 @@ const schema = [
 
               if (block.type === "motionExamples") {
                 return (
-                  <figure class="motion-examples" data-motion-examples>
+                  <figure class="motion-examples" data-motion-examples data-shadow-embed-group>
                     <div class="segmented" role="group" aria-label="Show example">
                       {block.items.map((item, i) => (
                         <button type="button" data-motion-tab={i} aria-pressed={String(i === 0)}>
@@ -426,7 +426,7 @@ const schema = [
                             class:list={["motion-asset", { "is-tiled": item.tile }]}
                             style={`--asset-ratio: ${item.ratio}${item.tile ? `; --motion-tile: ${item.tile}` : ""}`}
                           >
-                            <ShadowEmbed src={item.embed} ratio={item.ratio} poster={item.poster} alt={item.alt} />
+                            <ShadowEmbed src={item.embed} ratio={item.ratio} poster={item.poster} alt={item.alt} fade={false} />
                           </div>
                         </div>
                       ))}
@@ -1534,8 +1534,8 @@ const schema = [
   /* ---------- Copy beside a narrow image ---------- */
 
   /* One example at a time on a quiet stage, switched with a segmented
-     control. Hidden panes never reach the viewport, so each embed loads and
-     plays its entrance the first time its tab is picked. */
+     control. All the embeds load together as the block nears the viewport,
+     and each plays its entrance the first time its tab is picked. */
   .motion-examples {
     margin: 0 0 var(--space-6);
   }

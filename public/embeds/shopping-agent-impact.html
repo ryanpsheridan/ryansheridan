@@ -99,6 +99,8 @@
   (function () {
     var scope = typeof root !== "undefined" ? root : document;
     var anchor = typeof host !== "undefined" ? host : null;
+    // A tab reveals some embeds instead of scrolling: their tile shows at once, without the fade.
+    var fadeIn = !(anchor && anchor.hasAttribute("data-no-fade"));
     var addCleanup = typeof onCleanup === "function" ? onCleanup : function () {};
     var on = typeof listen === "function" ? listen : function (target, type, handler, opts) {
       target.addEventListener(type, handler, opts);
@@ -119,10 +121,10 @@
     var T = { fade: 0.7, rise: 0.9, lift: 18, delay: 0.1, ease: "power2.out" };
 
     // Entrance: the tile fades in and the glass UI floats up into it. Start states live here, not in the CSS.
-    gsap.set(stage, { opacity: 0 });
+    if (fadeIn) { gsap.set(stage, { opacity: 0 }); }
     gsap.set(ui, { y: T.lift });
     var entrance = gsap.timeline({ paused: true });
-    entrance.to(stage, { opacity: 1, duration: T.fade, ease: "power1.out" }, 0);
+    if (fadeIn) { entrance.to(stage, { opacity: 1, duration: T.fade, ease: "power1.out" }, 0); }
     entrance.to(ui, { y: 0, duration: T.rise, ease: T.ease }, T.delay);
 
     // Then the two bars grow up from the baseline and their figures land, while the metric cards slide in.
