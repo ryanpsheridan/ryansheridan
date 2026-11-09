@@ -158,15 +158,15 @@ const logos: Logo[] = [
   {
     name: "Climb",
     font: "Corben",
-    note: "“unexpected” runs up the left edge, “detail” sits across the bottom. Reads like a corner turned.",
+    note: "Both words horizontal now. A small “unexpected” sits on the shoulder of a large “detail”, one step up at the end of the word.",
     family: '"Corben", serif',
-    free: true,
     lines: [
-      { text: "unexpected", style: "left:8cqi;bottom:8cqi;transform:rotate(-90deg) translateY(100%);transform-origin:0 100%;font-size:.62em" },
-      { text: "detail", style: "left:24cqi;bottom:6cqi" },
+      { text: "unexpected", style: "font-size:.3em;letter-spacing:0;margin-bottom:.5em;padding-right:.5em" },
+      { text: "detail" },
     ],
     period: "peach",
-    style: "font-size:16cqi;font-weight:700;line-height:.9;letter-spacing:-.02em",
+    align: "right",
+    style: "font-size:19cqi;font-weight:700;line-height:.9;letter-spacing:-.02em",
   },
   {
     name: "Fat face",
@@ -178,17 +178,17 @@ const logos: Logo[] = [
     style: "font-size:13.5cqi;line-height:.94;letter-spacing:-.01em",
   },
   {
-    name: "Bleed",
+    name: "Full width",
     font: "Bree Serif",
-    note: "“detail” runs off the edge on purpose. Cropped type feels candid, like a photo caught mid-laugh.",
+    note: "“detail” set as large as the tile allows with even margins on both sides. Nothing cropped.",
     family: '"Bree Serif", serif',
-    free: true,
     lines: [
-      { text: "unexpected", style: "left:8cqi;top:22cqi;font-size:.2em;letter-spacing:0" },
-      { text: "detail", style: "left:5cqi;top:27cqi" },
+      { text: "unexpected", style: "font-size:.24em;letter-spacing:0;margin-bottom:.1em;padding-left:.2em" },
+      { text: "detail" },
     ],
     period: "peach",
-    style: "font-size:50cqi;line-height:1;letter-spacing:-.04em",
+    align: "left",
+    style: "font-size:27cqi;line-height:.9;letter-spacing:-.03em",
   },
   {
     name: "Rounded serif",
@@ -200,14 +200,14 @@ const logos: Logo[] = [
     style: "font-size:12.5cqi;line-height:.98;letter-spacing:-.02em",
   },
   {
-    name: "Broken word",
-    font: "Ultra",
-    note: "“unexpected” breaks across two lines so the name fills the square. Biggest type of any study.",
-    family: '"Ultra", serif',
-    lines: [{ text: "unex" }, { text: "pected" }, { text: "detail" }],
+    name: "Light stack",
+    font: "Fraunces Light",
+    note: "Both words whole, in a plain two-line stack. The light weight is the quietest voice of the twenty.",
+    family: '"Fraunces", serif',
+    lines: [{ text: "unexpected" }, { text: "detail" }],
     period: "peach",
     align: "left",
-    style: "font-size:18cqi;line-height:1.08;letter-spacing:-.03em",
+    style: "font-size:15cqi;font-weight:300;line-height:.98;letter-spacing:-.03em;font-variation-settings:'SOFT' 100",
   },
   {
     name: "Book italic line",
@@ -253,21 +253,18 @@ const logos: Logo[] = [
   },
   {
     name: "Echo",
-    font: "Fraunces Black",
-    note: "Faded repeats of “unexpected” build a texture, and one solid “detail” stands out of the noise.",
+    font: "Fraunces ExtraBold",
+    note: "Two very faint repeats fade up from a quiet “unexpected”, and one solid “detail” lands underneath.",
     family: '"Fraunces", serif',
     lines: [
-      { text: "unexpected", style: "opacity:.14" },
-      { text: "unexpected", style: "opacity:.14" },
-      { text: "unexpected", style: "opacity:.14" },
+      { text: "unexpected", style: "opacity:.07" },
+      { text: "unexpected", style: "opacity:.16" },
+      { text: "unexpected", style: "opacity:.5" },
       { text: "detail" },
-      { text: "unexpected", style: "opacity:.14" },
-      { text: "unexpected", style: "opacity:.14" },
     ],
     period: "peach",
-    periodOn: 3,
     align: "left",
-    style: "font-size:17cqi;font-weight:900;line-height:.92;letter-spacing:-.03em;margin-left:-3cqi;font-variation-settings:'SOFT' 100",
+    style: "font-size:14cqi;font-weight:800;line-height:.94;letter-spacing:-.025em;font-variation-settings:'SOFT' 100",
   },
   {
     name: "Corner lockup",
@@ -295,6 +292,158 @@ const logos: Logo[] = [
   },
 ];
 
+/*
+  Round 02: how the wordmark could live on a podcast tile. Each tile is an
+  HTML string with inline styles (still sized in cqi) so the same artwork can
+  be drawn twice: once large, once at 60px in the size test row. Photos are
+  gray placeholder blocks, labeled with `.ph`, which the size test hides.
+*/
+type Thumb = { name: string; source: string; note: string; bg: string; color: string; html: string };
+
+const peachDot = '<span style="color:var(--ud-peach)">.</span>';
+const ph = (text: string, style: string) => `<span class="ph" style="${style}">${text}</span>`;
+const art = (inner: string) =>
+  `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%" aria-hidden="true">${inner}</svg>`;
+const mark = (style: string, inner: string) =>
+  `<p style="margin:0;white-space:nowrap;font-kerning:normal;font-synthesis:none;${style}">${inner}</p>`;
+
+const dotGrid = [14, 28, 42, 56]
+  .flatMap((y, row) =>
+    [15, 29, 43, 57, 71, 85].map((x, col) => {
+      const odd = row === 1 && col === 4;
+      return `<circle cx="${x}" cy="${y}" r="3.6" fill="${odd ? "var(--ud-peach)" : "currentColor"}"/>`;
+    }),
+  )
+  .join("");
+
+const sprockets = Array.from({ length: 18 }, (_, i) => {
+  const x = 1.5 + i * 5.6;
+  return `<rect x="${x}" y="24.2" width="2.8" height="2.2" rx=".5"/><rect x="${x}" y="53.6" width="2.8" height="2.2" rx=".5"/>`;
+}).join("");
+
+const thumbs: Thumb[] = [
+  {
+    name: "Color field",
+    source: "Wordmark from study 01",
+    note: "One saturated field and nothing else. The peach period is the only accent.",
+    bg: "#2438c9",
+    color: "var(--ud-paper)",
+    html: mark(
+      "font-family:'Fraunces',serif;font-size:14cqi;font-weight:850;line-height:.88;letter-spacing:-.02em;font-variation-settings:'SOFT' 50;text-align:center",
+      `unexpected<br>detail${peachDot}`,
+    ),
+  },
+  {
+    name: "Detail crop",
+    source: "Wordmark from study 19",
+    note: "A portrait pushed so far to the edge that only half a face and an earring stay in frame. Wordmark pinned bottom left.",
+    bg: "#d2cfc9",
+    color: "var(--ud-ink)",
+    html:
+      art(
+        '<ellipse cx="104" cy="128" rx="62" ry="46" fill="#aaa69f"/>' +
+          '<rect x="88" y="66" width="20" height="26" fill="#b3afa8"/>' +
+          '<circle cx="102" cy="42" r="37" fill="#b3afa8"/>' +
+          '<ellipse cx="66" cy="47" rx="5" ry="9" fill="#aaa69f"/>' +
+          '<circle cx="65.5" cy="62" r="3.4" fill="none" stroke="var(--ud-paper)" stroke-width="1.3"/>',
+      ) +
+      ph("Placeholder photo", "left:8cqi;top:8cqi") +
+      mark(
+        "position:absolute;left:8cqi;bottom:8cqi;font-family:'EB Garamond',serif;font-size:11cqi;font-weight:500;line-height:.92;letter-spacing:-.02em",
+        `unexpected<br>detail${peachDot}`,
+      ),
+  },
+  {
+    name: "Contact sheet",
+    source: "Wordmark from study 04",
+    note: "A strip of frames running off both edges, one circled in peach grease pencil. Wordmark below.",
+    bg: "var(--ud-paper)",
+    color: "var(--ud-ink)",
+    html:
+      art(
+        '<rect x="-2" y="22" width="104" height="36" fill="#141414"/>' +
+          `<g fill="#faf9f6" opacity=".85">${sprockets}</g>` +
+          '<rect x="-10" y="29" width="24" height="22" fill="#8f8b85"/>' +
+          '<rect x="17" y="29" width="24" height="22" fill="#b7b3ad"/>' +
+          '<rect x="44" y="29" width="24" height="22" fill="#a39f98"/>' +
+          '<rect x="71" y="29" width="24" height="22" fill="#c4c1bb"/>' +
+          '<rect x="98" y="29" width="24" height="22" fill="#8f8b85"/>' +
+          '<path d="M41 41 C41 24 70 21 72 39 C74 56 47 60 41 45 C37 34 49 23 62 24" fill="none" stroke="var(--ud-peach)" stroke-width="1.7" stroke-linecap="round"/>',
+      ) +
+      ph("Placeholder frames", "left:8cqi;top:11cqi") +
+      mark(
+        "position:absolute;left:0;right:0;bottom:15cqi;text-align:center;font-family:'Instrument Serif',serif;font-size:10.5cqi;line-height:1;letter-spacing:-.015em",
+        `unexpected <i style="font-style:italic">detail</i>${peachDot}`,
+      ),
+  },
+  {
+    name: "Object macro",
+    source: "Wordmark from study 14",
+    note: "One object shot so close it stops reading as itself. The wordmark stays small and lets the crop carry the tile.",
+    bg: "#cbc8c2",
+    color: "var(--ud-ink)",
+    html:
+      art(
+        '<circle cx="72" cy="34" r="58" fill="#b9b5ae"/>' +
+          '<circle cx="72" cy="34" r="44" fill="#a8a49d"/>' +
+          '<circle cx="72" cy="34" r="39" fill="#b1ada6"/>' +
+          '<circle cx="72" cy="34" r="13" fill="#96928b"/>',
+      ) +
+      ph("Placeholder photo", "left:8cqi;top:8cqi") +
+      mark(
+        "position:absolute;left:8cqi;bottom:8cqi;font-family:'Source Serif 4',serif;font-style:italic;font-size:8.5cqi;font-weight:600;line-height:1;letter-spacing:-.015em",
+        `unexpected detail${peachDot}`,
+      ),
+  },
+  {
+    name: "Pattern with one break",
+    source: "Wordmark from study 03",
+    note: "A regular grid of dots where one turns peach. It stands in for the period, so the wordmark drops its own.",
+    bg: "var(--ud-paper)",
+    color: "var(--ud-ink)",
+    html:
+      art(dotGrid) +
+      mark(
+        "position:absolute;left:11.4cqi;bottom:8cqi;font-family:'Gloock',serif;font-size:13cqi;line-height:.95;letter-spacing:-.01em",
+        'unexpected<br><span style="padding-left:1.6em">detail</span>',
+      ),
+  },
+  {
+    name: "Flipped frame",
+    source: "Wordmark from study 02",
+    note: "An inner frame knocked a few degrees off square, inverted against the field, with the wordmark sitting inside it.",
+    bg: "var(--ud-ink)",
+    color: "var(--ud-ink)",
+    html:
+      '<div style="position:absolute;inset:15cqi;background:var(--ud-paper);transform:rotate(-7deg);display:grid;place-items:center">' +
+      mark(
+        "font-family:'Fraunces',serif;font-size:10.5cqi;font-weight:650;line-height:.9;letter-spacing:-.025em;font-variation-settings:'SOFT' 100,'WONK' 1;text-align:left",
+        `unexpected<br>detail${peachDot}`,
+      ) +
+      "</div>",
+  },
+  {
+    name: "Photo in the dot",
+    source: "Wordmark from study 17",
+    note: "The big dot becomes a window. A cropped photo sits inside it, on a flat peach field.",
+    bg: "var(--ud-peach)",
+    color: "var(--ud-ink)",
+    html:
+      '<div style="position:absolute;right:8cqi;top:8cqi;width:42cqi;height:42cqi;border-radius:50%;overflow:hidden;background:#d2cfc9">' +
+      art(
+        '<ellipse cx="78" cy="118" rx="60" ry="44" fill="#aaa69f"/>' +
+          '<rect x="62" y="64" width="24" height="24" fill="#b3afa8"/>' +
+          '<circle cx="74" cy="40" r="34" fill="#b3afa8"/>',
+      ) +
+      "</div>" +
+      ph("Placeholder photo", "left:8cqi;top:8cqi") +
+      mark(
+        "position:absolute;left:8cqi;bottom:8cqi;font-family:'Shrikhand',serif;font-size:13cqi;line-height:1.08;letter-spacing:-.01em",
+        "unexpected<br>detail",
+      ),
+  },
+];
+
 const periodLine = (logo: Logo) => logo.periodOn ?? logo.lines.length - 1;
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -313,7 +462,6 @@ const fontsHref =
     "&family=Playfair+Display:ital,wght@0,900;1,900" +
   "&family=Source+Serif+4:ital,opsz,wght@1,8..60,600" +
   "&family=Shrikhand" +
-  "&family=Ultra" +
   "&family=Yeseva+One" +
   "&family=Young+Serif" +
   "&display=swap";
@@ -329,7 +477,7 @@ const fontsHref =
   <main id="main" class="ud-page">
     <div class="ud-inner">
       <header class="ud-header">
-        <p class="label">Podcast identity · Working canvas</p>
+        <p class="label">Podcast identity · working canvas</p>
         <h1>unexpected detail</h1>
         <p class="intro">
           An unscripted conversation show hosted by Marcy. Every episode is a detour with someone
@@ -381,7 +529,7 @@ const fontsHref =
       </div>
 
       <section class="ud-section" aria-labelledby="explore-heading">
-        <h2 id="explore-heading" class="label">Logo explorations · Round 01</h2>
+        <h2 id="explore-heading" class="label">Logo explorations, round 01</h2>
         <p class="section-note">
           Twenty type and alignment studies, each shown light and dark. Color stays out of it for
           now apart from the peach period. Backgrounds, patterns, and photography come next.
@@ -429,6 +577,63 @@ const fontsHref =
           }
         </ol>
       </section>
+
+      <section class="ud-section" aria-labelledby="thumbs-heading">
+        <h2 id="thumbs-heading" class="label">Thumbnail directions, round 02</h2>
+        <p class="section-note">
+          How the wordmark could live on a podcast tile. Each direction has one thing that is off,
+          cropped, or out of place.
+        </p>
+
+        <ol class="thumb-list">
+          {
+            thumbs.map((t, i) => (
+              <li class="logo-item">
+                <div
+                  class="tile thumb"
+                  style={`background:${t.bg};color:${t.color}`}
+                  role="img"
+                  aria-label={`T${i + 1}, ${t.name}`}
+                >
+                  <Fragment set:html={t.html} />
+                </div>
+                <div class="logo-meta">
+                  <p class="logo-title">
+                    <span class="num">T{i + 1}</span>
+                    {t.name}
+                  </p>
+                  <p class="logo-font">{t.source}</p>
+                  <p class="logo-note">{t.note}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+
+        <div class="size-test">
+          <h3 class="label">Size test, 60px</h3>
+          <p class="size-note">
+            The same seven tiles at feed size. Placeholder labels are hidden here.
+          </p>
+          <ul class="size-row">
+            {
+              thumbs.map((t, i) => (
+                <li>
+                  <div
+                    class="tile thumb"
+                    style={`background:${t.bg};color:${t.color}`}
+                    role="img"
+                    aria-label={`T${i + 1}, ${t.name}, at 60 pixels`}
+                  >
+                    <Fragment set:html={t.html} />
+                  </div>
+                  <span class="num">T{i + 1}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </section>
     </div>
   </main>
   <Footer />
@@ -452,8 +657,7 @@ const fontsHref =
     font-family: var(--font-mono);
     font-size: 12px;
     font-weight: 400;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    letter-spacing: 0.02em;
     color: var(--color-text-muted);
   }
 
@@ -722,7 +926,66 @@ const fontsHref =
     max-width: 44ch;
   }
 
+  /* Thumbnail directions */
+
+  .thumb-list {
+    list-style: none;
+    display: grid;
+    gap: var(--space-8) var(--space-6);
+  }
+
+  .thumb {
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.06);
+  }
+
+  .thumb :global(.ph) {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: max(3cqi, 9px);
+    letter-spacing: 0.02em;
+    line-height: 1;
+    color: var(--ud-ink);
+    opacity: 0.6;
+  }
+
+  .size-test {
+    margin-top: var(--ud-gap);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .size-note {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: var(--space-3) 0 var(--space-6);
+  }
+
+  .size-row {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .size-row li {
+    display: grid;
+    gap: var(--space-2);
+    justify-items: start;
+  }
+
+  .size-row .tile {
+    width: 60px;
+  }
+
+  .size-row :global(.ph) {
+    display: none;
+  }
+
   @media (min-width: 700px) {
+    .thumb-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .taglines {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -733,6 +996,10 @@ const fontsHref =
   }
 
   @media (min-width: 1000px) {
+    .thumb-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
     .logo-list {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
