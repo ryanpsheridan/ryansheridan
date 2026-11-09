@@ -19,13 +19,15 @@ interface Props {
   alt: string;
   /** False skips the asset's own fade-in of its tile, for embeds revealed by a tab rather than by scrolling. */
   fade?: boolean;
+  /** False asks the asset to ignore the pointer and keyboard, for a spot where it should only play. */
+  interactive?: boolean;
   class?: string;
 }
 
-const { src, ratio, poster, alt, fade = true, class: className } = Astro.props;
+const { src, ratio, poster, alt, fade = true, interactive = true, class: className } = Astro.props;
 ---
 
-<div class:list={["shadow-embed", className]} data-shadow-embed={src} data-no-fade={fade ? undefined : ""} style={`aspect-ratio: ${ratio}`}>
+<div class:list={["shadow-embed", className]} data-shadow-embed={src} data-no-fade={fade ? undefined : ""} data-no-interact={interactive ? undefined : ""} style={`aspect-ratio: ${ratio}`}>
   <img src={poster} alt={alt} loading="lazy" decoding="async" />
 </div>
 

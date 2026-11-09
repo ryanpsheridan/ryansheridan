@@ -251,6 +251,8 @@ export interface MotionExample {
   credit?: string;
   /** Shows the asset small on a tile of this color, the way an icon sits on a page. */
   tile?: string;
+  /** False turns off the asset's pointer and keyboard response, for an example that should only play. */
+  interactive?: boolean;
 }
 
 export interface MotionExamplesBlock {
@@ -745,21 +747,22 @@ const allProjects: Project[] = [
             body: "Nothing moves until you do. Point at it or drag across it, and the handle follows.",
           },
           {
-            embed: "/embeds/language-switcher.html",
-            ratio: "364 / 420",
-            poster: "/project-shadow-embed-language-switcher-poster.webp",
-            alt: "A storefront product card for a leather armchair, with a language switcher above it set to English",
-            title: "Plays once",
-            body: "A short demo plays once as it comes into view, then hands over. Pick a language to take it from there.",
-            credit: "I edited and animated this illustration; I didn't draw it.",
-          },
-          {
             embed: "/embeds/shopping-agent-sentiment.html",
             ratio: "530 / 522",
             poster: "/project-shopping-agent-sentiment-poster.webp",
             alt: "A user sentiment card with Positive, Neutral and Negative rows",
+            title: "Plays once",
+            body: "The bars fill once when it appears. Then it stays still.",
+            interactive: false,
+          },
+          {
+            embed: "/embeds/language-switcher.html",
+            ratio: "364 / 420",
+            poster: "/project-shadow-embed-language-switcher-poster.webp",
+            alt: "A storefront product card for a leather armchair, with a language switcher above it set to English",
             title: "Plays, then waits",
-            body: "A short entrance plays once when it appears. Then it waits for you. Point at a row and the highlight follows.",
+            body: "A short demo plays once as it comes into view, then hands over. Pick a language to take it from there.",
+            credit: "I edited and animated this illustration; I didn't draw it.",
           },
         ],
       },

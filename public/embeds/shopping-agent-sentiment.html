@@ -242,9 +242,15 @@
       });
       on(rows[i], "blur", function () { if (focusIn) { focusIn = false; select(0); } });
     }
-    var r = 0;
-    while (r !== 3) { bindRow(r); r = r + 1; }
-    on(stage, "pointerleave", function (e) { if (ready && e.pointerType === "mouse" && !focusIn) { select(0); } });
+    // Some spots only play it: there the rows ignore the pointer and leave the tab order.
+    if (anchor && anchor.hasAttribute("data-no-interact")) {
+      var h = 0;
+      while (h !== 3) { rows[h].hidden = true; h = h + 1; }
+    } else {
+      var r = 0;
+      while (r !== 3) { bindRow(r); r = r + 1; }
+      on(stage, "pointerleave", function (e) { if (ready && e.pointerType === "mouse" && !focusIn) { select(0); } });
+    }
 
     // Play once, when the embed is a quarter on screen. Hold still while it is scrolled away mid-play.
     var io = new IntersectionObserver(function (entries) {

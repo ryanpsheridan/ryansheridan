@@ -426,7 +426,7 @@ const schema = [
                             class:list={["motion-asset", { "is-tiled": item.tile }]}
                             style={`--asset-ratio: ${item.ratio}${item.tile ? `; --motion-tile: ${item.tile}` : ""}`}
                           >
-                            <ShadowEmbed src={item.embed} ratio={item.ratio} poster={item.poster} alt={item.alt} fade={false} />
+                            <ShadowEmbed src={item.embed} ratio={item.ratio} poster={item.poster} alt={item.alt} fade={false} interactive={item.interactive ?? true} />
                           </div>
                         </div>
                       ))}
@@ -825,9 +825,18 @@ const schema = [
   }
 
   .compare-frame.is-fixed .compare-pane.is-after {
-    /* Same fade as the embeds' own backgrounds, so the side bands blend into the art. */
-    background: linear-gradient(#161c26, #8a94a7);
+    /* The square embed sits inset on the site's light gray, so art that runs
+       off its own edge reads as cropped on purpose. */
+    background: var(--color-surface);
+    box-sizing: border-box;
+    padding-block: var(--space-5);
     text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .compare-frame.is-fixed .compare-pane.is-after {
+      padding-block: var(--space-3);
+    }
   }
 
   .compare-frame.is-fixed .compare-pane :global(.zoomable) {
