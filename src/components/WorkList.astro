@@ -162,8 +162,12 @@ const schema = [
 
       {extra > 0 && (
         <div class="load-more" data-load-more hidden>
-          <button type="button" class="btn btn-secondary btn-lg">
-            Dig into the archive ({extra} more)
+          <button
+            type="button"
+            class="btn btn-secondary btn-lg"
+            aria-label={`Certified vintage: show ${extra} more ${extra === 1 ? "project" : "projects"}`}
+          >
+            Certified vintage
           </button>
         </div>
       )}
@@ -236,6 +240,21 @@ const schema = [
     text-align: right;
     background: var(--color-bg);
     border-top: 1px solid var(--color-border);
+    /* A bottom hairline only while stuck (the script toggles .is-stuck), so
+       the projects scrolling under it get a clean edge. At rest the row is
+       just a label on one line. */
+    border-bottom: 1px solid transparent;
+    transition: border-bottom-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .year-row.is-stuck {
+    border-bottom-color: var(--color-border);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .year-row {
+      transition: none;
+    }
   }
 
   .year-group + .year-group {
@@ -428,6 +447,29 @@ const schema = [
 </style>
 
 <script>
+  // Marks a year row as stuck while it sits right under the nav, which turns
+  // on its bottom hairline. A row being pushed out by the next year drops
+  // below that line and loses it.
+  const yearRows = [...document.querySelectorAll<HTMLElement>(".year-row")];
+  let ticking = false;
+  const markStuck = () => {
+    ticking = false;
+    const navHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-height")) || 0;
+    yearRows.forEach((row) => {
+      const top = row.getBoundingClientRect().top;
+      row.classList.toggle("is-stuck", Math.abs(top - navHeight) < 1 && window.scrollY > 0);
+    });
+  };
+  const onScroll = () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(markStuck);
+    }
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  markStuck();
+
   // Load more: hide everything past the first batch and show the button.
   // Without JavaScript none of this runs, so the full list stays visible.
   const more = document.querySelector<HTMLElement>("[data-load-more]");
