@@ -71,7 +71,7 @@ export interface ComponentTableBlock {
 
 /**
  * One idea shown two ways under a single title: the interactive piece as it
- * runs on the page (selected first) and the prototype frame it came from. The
+ * runs on the page (selected first) and the source frame it came from (optional). The
  * piece is a Shadow Embed asset, mounted into its own shadow root as it nears
  * the viewport, so it takes no part in scrolling.
  */
@@ -82,7 +82,8 @@ export interface VisualPairBlock {
   afterLabel?: string;
   /** Tells the viewer how to try the interactive side. */
   hint?: string;
-  before: { src: string; alt?: string };
+  /** The source frame to flip back to. Without one, only the embed shows, with no toggle. */
+  before?: { src: string; alt?: string };
   /** A Shadow Embed asset under public/embeds/, its aspect ratio, a still of its resting state, and its accessible name. */
   embed: { src: string; ratio: string; poster: string; title: string };
 }
@@ -554,48 +555,40 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Showing the idea, not the screen",
-        body: `<p>The prototype did its job, but it was dense and built for working, not for explaining. Each section of the page makes one point, so each visual keeps only what supports it: the sentiment panel drops the surrounding charts, and the order tracker shows a single order. Everything on the storefront side traces back to the product recordings. Each visual below is live, and you can flip it back to the prototype frame it came from.</p>`,
+        body: `<p>The product demos did their job, but they were dense and built for working, not for explaining. Each section of the page makes one point, so each visual keeps only what supports it: the sentiment panel drops the surrounding charts, and the product picks keep the conversation to one question and one answer. Everything on the storefront side traces back to the product recordings. Each visual below plays as it scrolls into view, and where there's a product demo behind it, you can flip back to the frame it came from.</p>`,
+      },
+      {
+        type: "visualPair",
+        title: "Behavior settings",
+        afterLabel: "On the page",
+        embed: { src: "/embeds/shopping-agent-behavior.html", ratio: "530 / 522", poster: "/project-shopping-agent-behavior-poster.webp", title: "Animated Behavior settings: Brand search, Product category search, Order history, Add to cart and View cart switch on one after another" },
       },
       {
         type: "visualPair",
         title: "Product picks",
-        beforeLabel: "In the prototype",
+        beforeLabel: "Product demo",
         afterLabel: "On the page",
-        hint: "Drag a card to reorder",
-        before: { src: "/project-shopping-agent-proto-picks.webp", alt: "The prototype storefront for a movie poster store, with the agent's chat open on the right showing poster recommendations" },
-        embed: { src: "/embeds/shopping-agent-picks.html", ratio: "530 / 522", poster: "/project-shopping-agent-product-picks.svg", title: "Interactive product picks: three sunglasses cards in a chat that can be reordered" },
+        before: { src: "/project-shopping-agent-proto-picks.webp", alt: "The product demo storefront for a movie poster store, with the agent's chat open on the right showing poster recommendations" },
+        embed: { src: "/embeds/shopping-agent-picks.html", ratio: "530 / 522", poster: "/project-shopping-agent-picks-poster.webp", title: "Animated product picks: a shopper asks for beach sunglasses and the agent answers with Daybreak, Eclipse and Halo polarized sunglasses" },
       },
       {
         type: "visualPair",
-        title: "Order status",
-        beforeLabel: "In the prototype",
+        title: "Impact",
         afterLabel: "On the page",
-        hint: "Move across the card to step through the order",
-        before: { src: "/project-shopping-agent-proto-order.webp", alt: "The prototype product page with the agent's chat listing a shopper's past orders and their shipping progress" },
-        embed: { src: "/embeds/shopping-agent-order.html", ratio: "530 / 522", poster: "/project-shopping-agent-order-status.svg", title: "Interactive order tracker: an order card that steps from Order Placed to Delivered" },
-      },
-      {
-        type: "visualPair",
-        title: "Brand colors",
-        beforeLabel: "In the prototype",
-        afterLabel: "On the page",
-        hint: "Move over the picker to try colors",
-        before: { src: "/project-shopping-agent-proto-colors.webp", alt: "The prototype's Colors settings with the color picker open over the Primary/accent swatch" },
-        embed: { src: "/embeds/shopping-agent-colors.html", ratio: "530 / 522", poster: "/project-shopping-agent-brand-colors.svg", title: "Interactive color picker in the agent's Colors settings" },
+        embed: { src: "/embeds/shopping-agent-impact.html", ratio: "530 / 522", poster: "/project-shopping-agent-impact-poster.webp", title: "Animated impact metrics: purchase rate bars of 10.5% with the agent and 5.4% without, then a 1.9× conversion lift, $105 average order value and $5,460 in agent-assisted revenue" },
       },
       {
         type: "visualPair",
         title: "Sentiment",
-        beforeLabel: "In the prototype",
+        beforeLabel: "Product demo",
         afterLabel: "On the page",
-        hint: "Hover a row to switch sentiment",
-        before: { src: "/project-shopping-agent-proto-sentiment.webp", alt: "The user sentiment card from the prototype dashboard, with percentage badges and a cursor over the Positive row" },
-        embed: { src: "/embeds/shopping-agent-sentiment.html", ratio: "530 / 522", poster: "/project-shopping-agent-sentiment.svg", title: "Interactive sentiment dashboard with Positive, Neutral and Negative rows" },
+        before: { src: "/project-shopping-agent-proto-sentiment.webp", alt: "The user sentiment card from the product demo dashboard, with percentage badges and a cursor over the Positive row" },
+        embed: { src: "/embeds/shopping-agent-sentiment.html", ratio: "530 / 522", poster: "/project-shopping-agent-sentiment-poster.webp", title: "Animated sentiment dashboard: Positive 72%, Neutral 21% and Negative 7% bars fill in turn" },
       },
       {
         type: "text",
         heading: "Drafting the images with a Claude skill",
-        body: `<p>Shopping Agent needed a family of images that looked like they belonged together and matched the rest of our site. I pointed a Claude skill at images already on bigcommerce.com so it could build new ones in Figma in the same style. I then tightened each draft by hand and art directed the rest by voice, so the time went into choices rather than pushing pixels. The interactive versions of the visuals are animated with Claude too.</p>`,
+        body: `<p>Shopping Agent needed a family of images that looked like they belonged together and matched the rest of our site. I pointed a Claude skill at images already on bigcommerce.com so it could build new ones in Figma in the same style. I then tightened each draft by hand and art directed the rest by voice, so the time went into choices rather than pushing pixels. The animations on the visuals are built with Claude too.</p>`,
       },
     ],
   },

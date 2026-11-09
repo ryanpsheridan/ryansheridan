@@ -3,10 +3,10 @@
   :host, .rpc-stage {
     --black: #000000;
     --blue-400: #2664FF;
-    --focus: #5492F7;
     --gray-100: #F2F4F7;
     --gray-200: #E4E7EC;
     --gray-600: #667085;
+    --gray-500: #8A94A7;
     --gray-800: #344054;
     --gray-900: #161C26;
     --mist: #CFDCFF;
@@ -23,18 +23,6 @@
   .rpc-stage { position: relative; margin: 0; background: var(--gray-900); border-radius: inherit; overflow: hidden; }
   .rpc-art { display: block; width: 100%; height: 100%; }
 
-  /* Real buttons laid over the art: pointer for mouse, touch and pen, arrow keys for keyboard. */
-  .rpc-btn {
-    position: absolute; margin: 0; padding: 0; border: 0; background: transparent;
-    appearance: none; -webkit-appearance: none; border-radius: 4px; touch-action: pan-y;
-  }
-  .rpc-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
-  .rpc-grab { top: 43.487%; width: 37.736%; height: 53.831%; cursor: grab; }
-  .rpc-grab:active { cursor: grabbing; }
-  .rpc-grab-0 { left: 12.453%; }
-  .rpc-grab-1 { left: 52.453%; }
-  .rpc-grab-2 { left: 92.453%; }
-  .rpc-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
   /* Artwork colors, bound to the tokens above */
   .rpc-f-black { fill: var(--black); }
@@ -47,7 +35,7 @@
   .rpc-f-white { fill: var(--white); }
   .rpc-s-gray-200 { stroke: var(--gray-200); }
   .rpc-s-white { stroke: var(--white); }
-  .rpc-st-gray-800 { stop-color: var(--gray-800); }
+  .rpc-st-gray-500 { stop-color: var(--gray-500); }
   .rpc-st-gray-900 { stop-color: var(--gray-900); }
 </style>
 
@@ -56,7 +44,7 @@
     <defs>
       <linearGradient id="rpc-bg" x1="265" y1="0" x2="265" y2="522" gradientUnits="userSpaceOnUse">
         <stop class="rpc-st-gray-900"/>
-        <stop offset="1" class="rpc-st-gray-800"/>
+        <stop offset="1" class="rpc-st-gray-500"/>
       </linearGradient>
       <clipPath id="rpc-cards"><rect x="50" y="227" width="496" height="281"/></clipPath>
       <clipPath id="rpc-pic-0"><rect x="77" y="238" width="178" height="124.6" rx="2"/></clipPath>
@@ -101,6 +89,7 @@
         c-.03-.56-.23-1-.62-1.34-.36-.33-.82-.49-1.36-.49-.39 0-.75 .09-1.08 .27s-.6 .42-.79 .77c-.21 .32-.31 .75-.31 1.27v.42c0 .5 .1 .93 .31 1.29 .19 .35 .45 .61 .78 .8 .32 .17 .69 .26 1.07 .26 .44 0 .81-.09 1.12-.29 .29-.21 .51-.47 .66-.82h1.66c-.13 .47-.35 .9-.67 1.28s-.71 .66-1.18 .88-.99 .32-1.59 .32z"/>
 
       <!-- Messages -->
+      <g class="rpc-msg">
       <rect x="254" y="107" width="276" height="58" rx="8" class="rpc-f-gray-100"/>
       <path class="rpc-f-gray-800" d="M267.93 131v-10.5h1.65l5.21 7.81v-7.81h1.65v10.5h-1.65l-5.21-7.8v7.8h-1.65z
         m13.76 .18c-.74 0-1.4-.16-1.99-.48s-1.06-.79-1.41-1.38-.51-1.27-.51-2.04 .17-1.46 .51-2.04 .82-1.05 1.41-1.36c.6-.33 1.26-.5 1.99-.5 .75 0 1.42 .17 2 .5 .59 .31 1.05 .77 1.39 1.36s.53 1.26 .53 2.04-.18 1.45-.53 2.04-.8 1.05-1.39 1.38-1.26 .48-2 .48z
@@ -184,6 +173,8 @@
         s-1.01-.8-1.34-1.38-.49-1.25-.49-1.98 .16-1.38 .49-1.97c.33-.57 .78-1.03 1.34-1.36s1.21-.51 1.92-.51c.61 0 1.14 .13 1.6 .39s.83 .58 1.08 .96v-1.17h1.65v6.99c0 .84-.17 1.55-.52 2.13s-.82 1.04-1.41 1.33c-.59 .31-1.25 .47-1.98 .47z
         m-.12-4.83c.46 0 .86-.11 1.21-.31 .35-.22 .63-.5 .83-.86s.31-.79 .31-1.24c0-.49-.1-.9-.31-1.27-.2-.35-.48-.63-.83-.84s-.75-.31-1.21-.31-.87 .11-1.23 .31-.63 .49-.84 .84c-.2 .37-.3 .78-.3 1.25s.1 .89 .3 1.26 .49 .64 .84 .86c.36 .2 .77 .31 1.23 .31z
         m5.4 1.35v-2.04h2.13v2.04h-2.13z"/>
+      </g>
+      <g class="rpc-msg">
       <rect x="66" y="177" width="226" height="38" rx="8" class="rpc-f-mist"/>
       <path class="rpc-f-gray-800" d="M86.58 201v-10.5h1.64v10.5h-1.64z
         m-6.68 0v-10.5h1.65v10.5h-1.65z
@@ -217,8 +208,9 @@
         m4.13-8.69v-1.99h2.13v1.99h-2.13z
         m6.33 8.69c-.46 0-.85-.06-1.17-.16-.32-.12-.56-.33-.72-.63s-.24-.77-.24-1.36v-3.89h-1.28v-1.4h1.28v-1.9h1.65v1.9h1.99v1.4h-1.99v3.67c0 .29 .02 .5 .07 .65 .06 .13 .16 .21 .3 .25s.37 .06 .65 .06h.9v1.41h-1.44z
         m2.42 0v-2.04h2.13v2.04h-2.13z"/>
+      </g>
 
-      <!-- Product cards: each can be lifted and dragged to a new place -->
+      <!-- Product cards -->
       <g clip-path="url(#rpc-cards)">
         <g class="rpc-card rpc-card-0">
           <rect x="66.5" y="227.5" width="199" height="279.6" rx="4" class="rpc-f-white rpc-s-gray-200"/>
@@ -823,10 +815,6 @@ IV1yU5WLIteXb6+ZcRugnQG9MPvQRII7QGz4r3jgiTu6XUNjVXaahn0q7VTORx+MpCU29tqpSTCuAqtd
 Nt8XjoE8WgXb8aClshPQReO6SfA8c0l9BCAdJp0dNUu5Z5xxqxMJFDDOewvrTYbjnkE8aVWGirP6o+MzXnnO5GJZ4SSuuuBosDZHta8wdjawZm
 dBegrtHVLlE4m6CXxr0LIdPoTgjjaNaSZozTHZ22TWz83dPnHZguCyI77pRXTP7pZQLNEJIbHAPp/HoGxhuAA" x="0" y="0" width="530" height="522" preserveAspectRatio="none" pointer-events="none"/>
   </svg>
-  <button type="button" class="rpc-btn rpc-grab rpc-grab-0" aria-label="Daybreak Polarized Mirrored Square Frame Sunglasses, position 1 of 3. Drag, or use the left and right arrow keys, to reorder."></button>
-  <button type="button" class="rpc-btn rpc-grab rpc-grab-1" aria-label="Eclipse Polarized Square Frame Sunglasses, position 2 of 3. Drag, or use the left and right arrow keys, to reorder."></button>
-  <button type="button" class="rpc-btn rpc-grab rpc-grab-2" aria-label="Halo Polarized Square Frame Sunglasses, position 3 of 3. Drag, or use the left and right arrow keys, to reorder."></button>
-  <span class="rpc-sr" aria-live="polite"></span>
 
 </figure>
 
@@ -847,16 +835,12 @@ dBegrtHVLlE4m6CXxr0LIdPoTgjjaNaSZozTHZ22TWz83dPnHZguCyI77pRXTP7pZQLNEJIbHAPp/HoG
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (reduce.matches) { return; }
 
-    var svg = scope.querySelector(".rpc-art");
-    var live = scope.querySelector(".rpc-sr");
-    var cardEls = scope.querySelectorAll(".rpc-card");
-    var btns = scope.querySelectorAll(".rpc-grab");
-    if (!svg || !live || cardEls.length !== 3 || btns.length !== 3) { return; }
+    var msgs = scope.querySelectorAll(".rpc-msg");
+    var cards = scope.querySelectorAll(".rpc-card");
+    if (msgs.length !== 2 || cards.length !== 3) { return; }
 
     // Shared timing block: identical in all four river embeds so they move as one family.
     var T = { fade: 0.7, rise: 0.9, lift: 18, delay: 0.1, ease: "power2.out" };
-    var settlers = []; // each puts its piece back in the finished state
-    var killers = [];  // each stops its own tweens
 
     // Entrance: the tile fades in and the glass UI floats up into it. Start states live here, not in the CSS.
     gsap.set(stage, { opacity: 0 });
@@ -865,133 +849,28 @@ dBegrtHVLlE4m6CXxr0LIdPoTgjjaNaSZozTHZ22TWz83dPnHZguCyI77pRXTP7pZQLNEJIbHAPp/HoG
     entrance.to(stage, { opacity: 1, duration: T.fade, ease: "power1.out" }, 0);
     entrance.to(ui, { y: 0, duration: T.rise, ease: T.ease }, T.delay);
 
-    // Hover (mouse) lifts a card to show it can be moved. Drag it, or use the arrow keys, and the others make room.
-    var PITCH = 212;   // distance between card slots, in artwork units
-    var CARD_W = 200;  // button width, in artwork units
-    var VIEW_W = 530;  // artwork width
-    var LAST = 2;      // index of the last slot
-    var GROW = 1.03;
-    var NAMES = [
-      "Daybreak Polarized Mirrored Square Frame Sunglasses",
-      "Eclipse Polarized Square Frame Sunglasses",
-      "Halo Polarized Square Frame Sunglasses"
-    ];
-    var cards = [];
-    var c0 = 0;
-    while (c0 !== 3) {
-      cards.push({ el: cardEls[c0], btn: btns[c0], natural: c0, slot: c0, name: NAMES[c0], dragging: false, hover: false, pointer: -1, startX: 0, startPos: 0, target: c0 });
-      c0 = c0 + 1;
-    }
-    gsap.set(cardEls, { transformOrigin: "50% 50%" });
+    // Then the conversation plays out: the shopper asks, the agent answers, and its picks arrive.
+    gsap.set(msgs, { opacity: 0, y: 10 });
+    gsap.set(cards, { opacity: 0, y: 16 });
+    entrance.to(msgs, { opacity: 1, y: 0, duration: 0.45, ease: T.ease, stagger: 0.35 }, 0.45);
+    entrance.to(cards, { opacity: 1, y: 0, duration: 0.55, ease: T.ease, stagger: 0.12 }, 1.2);
 
-    // x is the card's position measured from slot 0, in artwork units.
-    function place(c, x, grown, fast) {
-      var tx = x - c.natural * PITCH;
-      var d = fast ? 0.12 : 0.5;
-      gsap.to(c.el, { x: tx, scale: grown ? GROW : 1, duration: d, ease: "power3.out", overwrite: "auto" });
-      gsap.to(c.btn, { xPercent: tx / CARD_W * 100, duration: d, ease: "power3.out", overwrite: "auto" });
-    }
-    function describe() {
-      cards.forEach(function (c) {
-        c.btn.setAttribute("aria-label", c.name + ", position " + (c.slot + 1) + " of 3. Drag, or use the left and right arrow keys, to reorder.");
-      });
-    }
-    function toFront(c) { c.el.parentNode.appendChild(c.el); }
-
-    // Put the grabbed card at index "target"; every other card shifts to fill the gaps.
-    function relayout(c, target) {
-      var others = cards.filter(function (o) { return o !== c; }).sort(function (p, q) { return p.slot - q.slot; });
-      others.splice(target, 0, c);
-      others.forEach(function (o, i) {
-        if (o === c || o.slot === i) { return; }
-        o.slot = i;
-        place(o, i * PITCH, o.hover, false);
-      });
-    }
-    function begin(c, e) {
-      c.dragging = true;
-      c.pointer = e.pointerId;
-      c.startX = e.clientX;
-      c.startPos = c.slot * PITCH;
-      c.target = c.slot;
-      toFront(c);
-      c.btn.setPointerCapture(e.pointerId);
-      place(c, c.startPos, true, true);
-    }
-    function drag(c, e) {
-      if (!c.dragging || e.pointerId !== c.pointer) { return; }
-      var scale = VIEW_W / svg.getBoundingClientRect().width;
-      var x = Math.max(0, Math.min(LAST * PITCH, c.startPos + (e.clientX - c.startX) * scale));
-      place(c, x, true, true);
-      var target = Math.round(x / PITCH);
-      if (target !== c.target) {
-        c.target = target;
-        relayout(c, target);
-      }
-    }
-    function drop(c, e) {
-      if (!c.dragging || e.pointerId !== c.pointer) { return; }
-      c.dragging = false;
-      var before = c.slot;
-      c.slot = c.target;
-      place(c, c.slot * PITCH, c.hover, false);
-      describe();
-      if (before !== c.slot) { live.textContent = c.name + " moved to position " + (c.slot + 1) + " of 3"; }
-    }
-    function key(c, e) {
-      var step = e.key === "ArrowLeft" ? -1 : (e.key === "ArrowRight" ? 1 : 0);
-      if (step === 0) { return; }
-      e.preventDefault();
-      var slot = Math.max(0, Math.min(LAST, c.slot + step));
-      if (slot === c.slot) { return; }
-      toFront(c);
-      relayout(c, slot);
-      c.slot = slot;
-      c.target = slot;
-      place(c, slot * PITCH, true, false);
-      describe();
-      live.textContent = c.name + " moved to position " + (slot + 1) + " of 3";
-    }
-    cards.forEach(function (c) {
-      on(c.btn, "pointerenter", function (e) {
-        if (e.pointerType !== "mouse") { return; }
-        c.hover = true;
-        if (!c.dragging) { place(c, c.slot * PITCH, true, false); }
-      });
-      on(c.btn, "pointerleave", function () {
-        c.hover = false;
-        if (!c.dragging) { place(c, c.slot * PITCH, false, false); }
-      });
-      on(c.btn, "pointerdown", function (e) { begin(c, e); });
-      on(c.btn, "pointermove", function (e) { drag(c, e); });
-      on(c.btn, "pointerup", function (e) { drop(c, e); });
-      on(c.btn, "pointercancel", function (e) { drop(c, e); });
-      on(c.btn, "keydown", function (e) { key(c, e); });
-      on(c.btn, "focus", function () { if (c.btn.matches(":focus-visible")) { place(c, c.slot * PITCH, true, false); } });
-      on(c.btn, "blur", function () { if (!c.dragging) { place(c, c.slot * PITCH, false, false); } });
-    });
-    killers.push(function () { gsap.killTweensOf([cardEls, btns]); });
-    settlers.push(function () { gsap.set([cardEls, btns], { clearProps: "all" }); });
-
-    // Play the entrance once, when the embed is a quarter on screen.
-    var seen = false;
+    // Play once, when the embed is a quarter on screen. Hold still while it is scrolled away mid-play.
     var io = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting && !seen) { seen = true; entrance.play(); }
+      if (entries[0].isIntersecting) { entrance.play(); } else { entrance.pause(); }
     }, { threshold: 0.25 });
     io.observe(anchor || stage);
+    entrance.eventCallback("onComplete", function () { io.disconnect(); });
 
-    // Reduced motion switched on later: stop everything and show the finished state.
+    // Reduced motion switched on later: jump to the finished state.
     on(reduce, "change", function () {
       if (!reduce.matches) { return; }
-      entrance.kill();
-      killers.forEach(function (k) { k(); });
-      settlers.forEach(function (s) { s(); });
-      gsap.set([stage, ui], { clearProps: "all" });
+      io.disconnect();
+      entrance.progress(1).kill();
     });
     addCleanup(function () {
       io.disconnect();
       entrance.kill();
-      killers.forEach(function (k) { k(); });
     });
   })();
 </script>

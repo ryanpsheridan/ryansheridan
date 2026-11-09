@@ -132,21 +132,27 @@ const schema = [
                 return (
                   <div class="compare-block pair-block">
                     <h3 class="pair-title">{block.title}</h3>
-                    <div class="compare-controls">
-                      <div class="segmented" role="group" aria-label={`Show version of ${block.title}`}>
-                        <button type="button" class="compare-tab" data-tab="before" aria-pressed="false">
-                          {block.beforeLabel || "Before"}
-                        </button>
-                        <button type="button" class="compare-tab" data-tab="after" aria-pressed="true">
-                          {block.afterLabel || "After"}
-                        </button>
+                    {(block.before || block.hint) && (
+                      <div class="compare-controls">
+                        {block.before && (
+                          <div class="segmented" role="group" aria-label={`Show version of ${block.title}`}>
+                            <button type="button" class="compare-tab" data-tab="before" aria-pressed="false">
+                              {block.beforeLabel || "Before"}
+                            </button>
+                            <button type="button" class="compare-tab" data-tab="after" aria-pressed="true">
+                              {block.afterLabel || "After"}
+                            </button>
+                          </div>
+                        )}
+                        {block.hint && <p class="pair-hint">{block.hint}</p>}
                       </div>
-                      {block.hint && <p class="pair-hint">{block.hint}</p>}
-                    </div>
+                    )}
                     <div class="compare-frame is-fixed">
-                      <div class="compare-pane is-before" data-pane="before">
-                        <Zoomable src={block.before.src} alt={block.before.alt ?? block.title} />
-                      </div>
+                      {block.before && (
+                        <div class="compare-pane is-before" data-pane="before">
+                          <Zoomable src={block.before.src} alt={block.before.alt ?? block.title} />
+                        </div>
+                      )}
                       <div class="compare-pane is-after is-active" data-pane="after">
                         <div class="embed-frame" role="group" aria-label={block.embed.title}>
                           <ShadowEmbed src={block.embed.src} ratio={block.embed.ratio} poster={block.embed.poster} alt={block.embed.title} />
@@ -819,7 +825,8 @@ const schema = [
   }
 
   .compare-frame.is-fixed .compare-pane.is-after {
-    background: #161c26;
+    /* Same fade as the embeds' own backgrounds, so the side bands blend into the art. */
+    background: linear-gradient(#161c26, #8a94a7);
     text-align: center;
   }
 
