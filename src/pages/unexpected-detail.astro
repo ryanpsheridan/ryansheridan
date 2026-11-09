@@ -50,7 +50,8 @@ const direction = [
 
   font:   CSS font-family for the whole lockup.
   lines:  one entry per line; `style` adds per-line CSS.
-  period: "peach" | "ink" | undefined, appended to the last line.
+  period: "peach" | "ink" | undefined, appended to the last line (or periodOn).
+  free:   lines are placed absolutely in the tile, for corner and edge layouts.
   align:  text-align inside the lockup.
   place:  where the lockup sits in the tile (CSS place-items).
   style:  extra CSS on the lockup (size, weight, leading, tracking).
@@ -63,6 +64,10 @@ type Logo = {
   family: string;
   lines: Line[];
   period?: "peach" | "ink";
+  /** Which line carries the period. Defaults to the last. */
+  periodOn?: number;
+  /** Position each line absolutely in the tile through its own style. */
+  free?: boolean;
   align?: "left" | "center" | "right";
   place?: string;
   style?: string;
@@ -138,21 +143,30 @@ const logos: Logo[] = [
     style: "font-size:14cqi;line-height:.9;letter-spacing:-.015em",
   },
   {
-    name: "Fine italic",
-    font: "Cormorant Garamond Italic",
-    note: "Light and literary. Quiet confidence, closer to a book cover.",
-    family: '"Cormorant Garamond", serif',
-    lines: [{ text: "<i>unexpected</i>" }, { text: "<i>detail</i>" }],
-    style: "font-size:15cqi;font-weight:500;line-height:.92;letter-spacing:-.01em",
+    name: "Opposite corners",
+    font: "Yeseva One",
+    note: "The words split to opposite corners. The empty middle is the gap a good question opens.",
+    family: '"Yeseva One", serif',
+    free: true,
+    lines: [
+      { text: "unexpected", style: "left:8cqi;top:7cqi" },
+      { text: "detail", style: "right:8cqi;bottom:9cqi" },
+    ],
+    period: "peach",
+    style: "font-size:13cqi;line-height:1;letter-spacing:-.01em",
   },
   {
-    name: "Didone",
-    font: "Bodoni Moda Bold",
-    note: "Fashion-magazine contrast. A nod to the Vogue spark behind the name.",
-    family: '"Bodoni Moda", serif',
-    lines: [{ text: "unexpected" }, { text: "detail" }],
-    period: "ink",
-    style: "font-size:13cqi;font-weight:700;line-height:.95;letter-spacing:-.02em;font-optical-sizing:auto",
+    name: "Climb",
+    font: "Corben",
+    note: "“unexpected” runs up the left edge, “detail” sits across the bottom. Reads like a corner turned.",
+    family: '"Corben", serif',
+    free: true,
+    lines: [
+      { text: "unexpected", style: "left:8cqi;bottom:8cqi;transform:rotate(-90deg) translateY(100%);transform-origin:0 100%;font-size:.62em" },
+      { text: "detail", style: "left:24cqi;bottom:6cqi" },
+    ],
+    period: "peach",
+    style: "font-size:16cqi;font-weight:700;line-height:.9;letter-spacing:-.02em",
   },
   {
     name: "Fat face",
@@ -164,16 +178,17 @@ const logos: Logo[] = [
     style: "font-size:13.5cqi;line-height:.94;letter-spacing:-.01em",
   },
   {
-    name: "Ruled",
-    font: "Newsreader",
-    note: "A hairline between the words, like a byline. Newsy, thoughtful.",
-    family: '"Newsreader", serif',
+    name: "Bleed",
+    font: "Bree Serif",
+    note: "“detail” runs off the edge on purpose. Cropped type feels candid, like a photo caught mid-laugh.",
+    family: '"Bree Serif", serif',
+    free: true,
     lines: [
-      { text: "unexpected", style: "padding-bottom:.12em;border-bottom:.025em solid currentColor;margin-bottom:.1em" },
-      { text: "detail" },
+      { text: "unexpected", style: "left:8cqi;top:22cqi;font-size:.2em;letter-spacing:0" },
+      { text: "detail", style: "left:5cqi;top:27cqi" },
     ],
-    align: "left",
-    style: "font-size:14cqi;font-weight:600;line-height:1;letter-spacing:-.02em;display:inline-grid",
+    period: "peach",
+    style: "font-size:50cqi;line-height:1;letter-spacing:-.04em",
   },
   {
     name: "Rounded serif",
@@ -185,14 +200,14 @@ const logos: Logo[] = [
     style: "font-size:12.5cqi;line-height:.98;letter-spacing:-.02em",
   },
   {
-    name: "Caslon left",
-    font: "Libre Caslon Display",
-    note: "Old-style elegance, left aligned. Calm and classic.",
-    family: '"Libre Caslon Display", serif',
-    lines: [{ text: "unexpected" }, { text: "detail" }],
-    period: "ink",
+    name: "Broken word",
+    font: "Ultra",
+    note: "“unexpected” breaks across two lines so the name fills the square. Biggest type of any study.",
+    family: '"Ultra", serif',
+    lines: [{ text: "unex" }, { text: "pected" }, { text: "detail" }],
+    period: "peach",
     align: "left",
-    style: "font-size:15cqi;line-height:.92;letter-spacing:-.015em",
+    style: "font-size:18cqi;line-height:1.08;letter-spacing:-.03em",
   },
   {
     name: "Book italic line",
@@ -224,24 +239,35 @@ const logos: Logo[] = [
     style: "font-size:14cqi;font-weight:500;line-height:.92;letter-spacing:-.05em",
   },
   {
-    name: "Mixed pair",
-    font: "Instrument Serif + Geist",
-    note: "Italic serif meets plain sans. Two voices, one conversation.",
-    family: '"Instrument Serif", serif',
+    name: "Big dot",
+    font: "Shrikhand",
+    note: "The period grows into a full shape. It could hold a photo or pattern later.",
+    family: '"Shrikhand", serif',
+    free: true,
     lines: [
-      { text: "<i>unexpected</i>" },
-      { text: "detail", style: "font-family:'Geist',sans-serif;font-weight:500;font-size:.86em;letter-spacing:-.05em" },
+      { text: '<span style="display:block;width:30cqi;height:30cqi;border-radius:50%;background:var(--ud-peach)"></span>', style: "right:8cqi;top:8cqi" },
+      { text: "unexpected", style: "left:8cqi;bottom:24cqi" },
+      { text: "detail", style: "left:8cqi;bottom:8cqi" },
     ],
-    period: "peach",
-    style: "font-size:16cqi;line-height:.92;letter-spacing:-.02em",
+    style: "font-size:13cqi;line-height:1;letter-spacing:-.01em",
   },
   {
-    name: "Tracked light",
-    font: "Spectral Light",
-    note: "Wide tracking, light weight. Airy and premium, softer presence.",
-    family: '"Spectral", serif',
-    lines: [{ text: "unexpected" }, { text: "detail" }],
-    style: "font-size:7cqi;font-weight:300;line-height:1.5;letter-spacing:.22em;padding-left:.22em",
+    name: "Echo",
+    font: "Fraunces Black",
+    note: "Faded repeats of “unexpected” build a texture, and one solid “detail” stands out of the noise.",
+    family: '"Fraunces", serif',
+    lines: [
+      { text: "unexpected", style: "opacity:.14" },
+      { text: "unexpected", style: "opacity:.14" },
+      { text: "unexpected", style: "opacity:.14" },
+      { text: "detail" },
+      { text: "unexpected", style: "opacity:.14" },
+      { text: "unexpected", style: "opacity:.14" },
+    ],
+    period: "peach",
+    periodOn: 3,
+    align: "left",
+    style: "font-size:17cqi;font-weight:900;line-height:.92;letter-spacing:-.03em;margin-left:-3cqi;font-variation-settings:'SOFT' 100",
   },
   {
     name: "Corner lockup",
@@ -264,31 +290,31 @@ const logos: Logo[] = [
       { text: "unexpected detail", style: "font-family:'Geist',sans-serif;font-size:.11em;font-weight:500;letter-spacing:.02em;margin-top:.25em" },
     ],
     period: "peach",
+    periodOn: 0,
     style: "font-size:38cqi;font-weight:850;line-height:.8;letter-spacing:-.04em;font-variation-settings:'SOFT' 100",
   },
 ];
 
-// The monogram's period belongs on "ud", not on the small line below it.
-const periodLine = (logo: Logo) => (logo.name === "Monogram" ? 0 : logo.lines.length - 1);
+const periodLine = (logo: Logo) => logo.periodOn ?? logo.lines.length - 1;
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
 const fontsHref =
   "https://fonts.googleapis.com/css2" +
   "?family=Abril+Fatface" +
-  "&family=Bodoni+Moda:opsz,wght@6..96,700" +
-  "&family=Bricolage+Grotesque:opsz,wght@12..96,700" +
-  "&family=Cormorant+Garamond:ital,wght@1,500" +
+    "&family=Bricolage+Grotesque:opsz,wght@12..96,700" +
+  "&family=Bree+Serif" +
+  "&family=Corben:wght@700" +
   "&family=DM+Serif+Display" +
   "&family=EB+Garamond:wght@500" +
   "&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1" +
   "&family=Gloock" +
   "&family=Instrument+Serif:ital@0;1" +
-  "&family=Libre+Caslon+Display" +
-  "&family=Newsreader:opsz,wght@6..72,600" +
-  "&family=Playfair+Display:ital,wght@0,900;1,900" +
+    "&family=Playfair+Display:ital,wght@0,900;1,900" +
   "&family=Source+Serif+4:ital,opsz,wght@1,8..60,600" +
-  "&family=Spectral:wght@300" +
+  "&family=Shrikhand" +
+  "&family=Ultra" +
+  "&family=Yeseva+One" +
   "&family=Young+Serif" +
   "&display=swap";
 ---
@@ -312,43 +338,47 @@ const fontsHref =
         </p>
       </header>
 
-      <section class="ud-section" aria-labelledby="brief-heading">
-        <h2 id="brief-heading" class="label">Brief</h2>
+      <div class="ud-context">
+        <details class="acc">
+          <summary><span class="label">Brief</span><span class="acc-icon" aria-hidden="true"></span></summary>
+          <div class="acc-body">
+            <div class="taglines">
+              {
+                taglines.map((t) => (
+                  <div>
+                    <p class="label">{t.label}</p>
+                    <p class="tag-line">“{t.line}”</p>
+                  </div>
+                ))
+              }
+            </div>
 
-        <div class="taglines">
-          {
-            taglines.map((t) => (
-              <div>
-                <p class="label">{t.label}</p>
-                <p class="tag-line">“{t.line}”</p>
-              </div>
-            ))
-          }
-        </div>
+            <div class="brief-grid">
+              {
+                brief.map((item) => (
+                  <article>
+                    <p class="label">{item.label}</p>
+                    <p class="brief-lead">{item.lead}</p>
+                    <p class="brief-body">{item.body}</p>
+                  </article>
+                ))
+              }
+            </div>
 
-        <div class="brief-grid">
-          {
-            brief.map((item) => (
-              <article>
-                <p class="label">{item.label}</p>
-                <p class="brief-lead">{item.lead}</p>
-                <p class="brief-body">{item.body}</p>
-              </article>
-            ))
-          }
-        </div>
-
-        <ul class="pillars" aria-label="Brand pillars">
-          {pillars.map((p) => <li>{p}</li>)}
-        </ul>
-      </section>
-
-      <section class="ud-section" aria-labelledby="direction-heading">
-        <h2 id="direction-heading" class="label">Direction from kickoff</h2>
-        <ul class="direction">
-          {direction.map((d) => <li>{d}</li>)}
-        </ul>
-      </section>
+            <ul class="pillars" aria-label="Brand pillars">
+              {pillars.map((p) => <li>{p}</li>)}
+            </ul>
+          </div>
+        </details>
+        <details class="acc">
+          <summary><span class="label">Direction from kickoff</span><span class="acc-icon" aria-hidden="true"></span></summary>
+          <div class="acc-body">
+            <ul class="direction">
+              {direction.map((d) => <li>{d}</li>)}
+            </ul>
+          </div>
+        </details>
+      </div>
 
       <section class="ud-section" aria-labelledby="explore-heading">
         <h2 id="explore-heading" class="label">Logo explorations · Round 01</h2>
@@ -370,7 +400,7 @@ const fontsHref =
                       aria-label={theme === "light" ? `${logo.name}, light` : `${logo.name}, dark`}
                     >
                       <p
-                        class="lockup"
+                        class:list={["lockup", { "lockup--free": logo.free }]}
                         aria-hidden="true"
                         style={`font-family:${logo.family};text-align:${logo.align ?? "center"};${logo.style ?? ""}`}
                       >
@@ -428,7 +458,7 @@ const fontsHref =
   }
 
   .ud-header {
-    margin-bottom: var(--ud-gap);
+    margin-bottom: var(--space-8);
   }
 
   h1 {
@@ -443,6 +473,71 @@ const fontsHref =
     font-size: var(--text-base);
     color: var(--color-text-muted);
     max-width: 52ch;
+  }
+
+  /* Brief and kickoff notes, collapsed so the page opens on the designs. */
+  .ud-context {
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--ud-gap);
+  }
+
+  .acc {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .acc summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-4) 0;
+  }
+
+  .acc summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .acc summary:hover .label {
+    color: var(--color-text);
+  }
+
+  .acc-icon {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    color: var(--color-text-muted);
+  }
+
+  .acc-icon::before,
+  .acc-icon::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 12px;
+    height: 1px;
+    background: currentColor;
+    transition: transform 0.2s;
+  }
+
+  .acc-icon::after {
+    transform: rotate(90deg);
+  }
+
+  .acc[open] .acc-icon::after {
+    transform: rotate(0deg);
+  }
+
+  .acc-body {
+    padding: var(--space-5) 0 var(--space-8);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .acc-icon::before,
+    .acc-icon::after {
+      transition: none;
+    }
   }
 
   .ud-section {
@@ -546,6 +641,7 @@ const fontsHref =
 
   /* Fixed paper and ink regardless of site theme: these are artboards. */
   .tile {
+    position: relative;
     container-type: inline-size;
     aspect-ratio: 1;
     display: grid;
@@ -572,6 +668,15 @@ const fontsHref =
   .line {
     display: block;
     white-space: nowrap;
+  }
+
+  .lockup--free {
+    position: absolute;
+    inset: 0;
+  }
+
+  .lockup--free .line {
+    position: absolute;
   }
 
   .lockup :global(i) {
