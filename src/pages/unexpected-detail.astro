@@ -58,6 +58,10 @@ const direction = [
 */
 type Line = { text: string; style?: string };
 type Logo = {
+  /** Fixed study number. Defaults to position in the first twenty. */
+  no?: number;
+  /** Extra HTML drawn inside the lockup, positioned in em from its top left. */
+  extra?: string;
   name: string;
   font: string;
   note: string;
@@ -73,6 +77,18 @@ type Logo = {
   style?: string;
 };
 
+/*
+  Joins the p in "unexpected" to the l in "detail" as one straight stroke.
+  A patch in the tile color hides the p's foot serif and the l's flag, then a
+  bar the width of the stem bridges the two. All values are em from the
+  lockup's top left, measured from the glyphs at the exact font settings on
+  that study (optical size is pinned so the stem width holds at any tile size).
+*/
+type Join = { x: number; w: number; y1: number; y2: number; mx1: number; mx2: number; my1: number; my2: number };
+const join = (j: Join) =>
+  `<span style="position:absolute;left:${j.mx1}em;top:${j.my1}em;width:${(j.mx2 - j.mx1).toFixed(4)}em;height:${(j.my2 - j.my1).toFixed(4)}em;background:var(--tile-bg)"></span>` +
+  `<span style="position:absolute;left:${j.x}em;top:${j.y1}em;width:${j.w}em;height:${(j.y2 - j.y1).toFixed(4)}em;background:currentColor"></span>`;
+
 const logos: Logo[] = [
   {
     name: "Classic stack",
@@ -86,11 +102,12 @@ const logos: Logo[] = [
   {
     name: "Soft and wonky",
     font: "Fraunces Soft",
-    note: "Fully soft, wonky axis on. Friendlier, a little odd in the right way.",
+    note: "Fully soft, wonky axis on. The p and the l now share one axis and run together as a single straight stem.",
     family: '"Fraunces", serif',
-    lines: [{ text: "unexpected" }, { text: "detail" }],
+    lines: [{ text: "unexpected", style: "padding-left:.0405em" }, { text: "detail" }],
     align: "left",
-    style: "font-size:14.5cqi;font-weight:650;line-height:.9;letter-spacing:-.025em;font-variation-settings:'SOFT' 100,'WONK' 1",
+    extra: join({ x: 2.3794, w: 0.155, y1: 0.611, y2: 1.411, mx1: 2.31, mx2: 2.6, my1: 0.831, my2: 1.101 }),
+    style: "font-size:14.5cqi;font-weight:650;line-height:.9;letter-spacing:-.025em;font-variation-settings:'SOFT' 100,'WONK' 1,'opsz' 40",
   },
   {
     name: "Stagger",
@@ -144,16 +161,16 @@ const logos: Logo[] = [
   },
   {
     name: "Opposite corners",
-    font: "Yeseva One",
+    font: "DM Serif Display",
     note: "The words split to opposite corners. The empty middle is the gap a good question opens.",
-    family: '"Yeseva One", serif',
+    family: '"DM Serif Display", serif',
     free: true,
     lines: [
       { text: "unexpected", style: "left:8cqi;top:7cqi" },
       { text: "detail", style: "right:8cqi;bottom:9cqi" },
     ],
     period: "peach",
-    style: "font-size:13cqi;line-height:1;letter-spacing:-.01em",
+    style: "font-size:13.5cqi;line-height:1;letter-spacing:-.015em",
   },
   {
     name: "Climb",
@@ -179,16 +196,16 @@ const logos: Logo[] = [
   },
   {
     name: "Full width",
-    font: "Bree Serif",
+    font: "Playfair Display Black",
     note: "“detail” set as large as the tile allows with even margins on both sides. Nothing cropped.",
-    family: '"Bree Serif", serif',
+    family: '"Playfair Display", serif',
     lines: [
       { text: "unexpected", style: "font-size:.24em;letter-spacing:0;margin-bottom:.1em;padding-left:.2em" },
       { text: "detail" },
     ],
     period: "peach",
     align: "left",
-    style: "font-size:27cqi;line-height:.9;letter-spacing:-.03em",
+    style: "font-size:27cqi;font-weight:900;line-height:.9;letter-spacing:-.02em",
   },
   {
     name: "Rounded serif",
@@ -202,12 +219,13 @@ const logos: Logo[] = [
   {
     name: "Light stack",
     font: "Fraunces Light",
-    note: "Both words whole, in a plain two-line stack. The light weight is the quietest voice of the twenty.",
+    note: "A plain two-line stack in a light weight. The p drops straight into the l as one clean line, with the serifs taken off where they meet.",
     family: '"Fraunces", serif',
-    lines: [{ text: "unexpected" }, { text: "detail" }],
+    lines: [{ text: "unexpected", style: "padding-left:.0119em" }, { text: "detail" }],
+    extra: join({ x: 2.1498, w: 0.0675, y1: 0.651, y2: 1.531, mx1: 2.062, mx2: 2.31, my1: 0.871, my2: 1.185 }),
     period: "peach",
     align: "left",
-    style: "font-size:15cqi;font-weight:300;line-height:.98;letter-spacing:-.03em;font-variation-settings:'SOFT' 100",
+    style: "font-size:15cqi;font-weight:300;line-height:.98;letter-spacing:-.03em;font-variation-settings:'SOFT' 100,'opsz' 40",
   },
   {
     name: "Book italic line",
@@ -293,7 +311,7 @@ const logos: Logo[] = [
 ];
 
 /*
-  Round 03: ten studies that each hide one deliberate detail, after the
+  Studies that each hide one deliberate detail, after the
   accidental one in study 19 where the p's descender lands on the l. The em
   offsets below are measured glyph widths for the exact font, weight and
   tracking on that study, so retune them if any of those change.
@@ -302,16 +320,18 @@ const peach = (text: string) => `<span style="color:var(--ud-peach)">${text}</sp
 
 const details: Logo[] = [
   {
+    no: 21,
     name: "One stroke",
     font: "Geist Medium",
-    note: "Study 19's accident, made deliberate. The p's descender and the l are set on the same axis and fuse into one long stroke.",
+    note: "Study 19's accident, made deliberate. The p's descender and the l sit on exactly the same axis and fuse into one long stroke.",
     family: '"Geist", sans-serif',
-    lines: [{ text: "unexpected", style: "padding-left:.109em" }, { text: "detail" }],
+    lines: [{ text: "unexpected", style: "padding-left:.0594em" }, { text: "detail" }],
     period: "peach",
     align: "left",
-    style: "font-size:15cqi;font-weight:500;line-height:.86;letter-spacing:-.04em",
+    style: "font-size:15cqi;font-weight:500;line-height:.84;letter-spacing:-.04em",
   },
   {
+    no: 22,
     name: "Shared d",
     font: "Fraunces SemiBold",
     note: "“unexpected” ends on the letter “detail” starts with, so one d does both jobs. It carries the peach and the period steps aside.",
@@ -320,6 +340,7 @@ const details: Logo[] = [
     style: "font-size:11.5cqi;font-weight:600;line-height:1;letter-spacing:-.02em;font-variation-settings:'SOFT' 100",
   },
   {
+    no: 23,
     name: "Domino",
     font: "Gloock",
     note: "The second line starts exactly under the last letter of the first. d sits on d, like two tiles matched end to end.",
@@ -330,6 +351,7 @@ const details: Logo[] = [
     style: "font-size:11cqi;line-height:.95;letter-spacing:-.01em",
   },
   {
+    no: 24,
     name: "Stacked t",
     font: "DM Serif Display",
     note: "“detail” slides right until its t stands directly under the t in “unexpected”. One vertical runs through both words.",
@@ -340,6 +362,7 @@ const details: Logo[] = [
     style: "font-size:13cqi;line-height:.86;letter-spacing:-.015em",
   },
   {
+    no: 25,
     name: "Fallen dot",
     font: "Fraunces Soft",
     note: "The i has lost its dot. It dropped to the baseline, turned peach, and became the period.",
@@ -349,78 +372,53 @@ const details: Logo[] = [
     style: "font-size:14cqi;font-weight:650;line-height:.9;letter-spacing:-.02em;font-variation-settings:'SOFT' 100",
   },
   {
-    name: "Mirrored e",
-    font: "Bree Serif",
-    note: "One e faces the wrong way. Easy to miss at a glance, hard to unsee once found.",
-    family: '"Bree Serif", serif',
-    lines: [
-      { text: 'unexp<span style="display:inline-block;transform:scaleX(-1)">e</span>cted' },
-      { text: "detail" },
-    ],
-    period: "peach",
-    align: "left",
-    style: "font-size:14cqi;line-height:.95;letter-spacing:-.02em",
-  },
-  {
-    name: "Italic a",
-    font: "Instrument Serif",
-    note: "A single italic letter. The a changes shape from two stories to one, so it reads as a different character hiding in the word.",
-    family: '"Instrument Serif", serif',
-    lines: [{ text: "unexpected" }, { text: "det<i>a</i>il" }],
-    period: "peach",
-    style: "font-size:15.5cqi;line-height:.9;letter-spacing:-.02em",
-  },
-  {
+    no: 28,
     name: "Mirror hinge",
     font: "Young Serif",
-    note: "The name hides a mirror: “ted” closes one word and “det” opens the next. A peach dot marks the hinge.",
+    note: "The name hides a mirror: “ted” closes one word and “det” opens the next. The period lifts off the baseline to mark the hinge.",
     family: '"Young Serif", serif',
     lines: [
-      { text: `unexpected<span style="color:var(--ud-peach);margin:0 .08em">·</span>detail` },
+      { text: `unexpected<span style="color:var(--ud-peach);position:relative;top:-.2em;margin:0 .03em">.</span>detail` },
     ],
     style: "font-size:9.4cqi;line-height:1;letter-spacing:-.02em",
   },
   {
+    no: 29,
     name: "Runaway period",
-    font: "Yeseva One",
+    font: "Young Serif",
     note: "The wordmark sits bottom left with nothing after it. Its period has wandered to the opposite corner.",
-    family: '"Yeseva One", serif',
+    family: '"Young Serif", serif',
     free: true,
     lines: [
       { text: '<span style="display:block;width:.24em;height:.24em;border-radius:50%;background:var(--ud-peach)"></span>', style: "right:8cqi;top:8cqi" },
-      { text: "unexpected", style: "left:8cqi;bottom:21cqi" },
+      { text: "unexpected", style: "left:8cqi;bottom:20cqi" },
       { text: "detail", style: "left:8cqi;bottom:8cqi" },
     ],
-    style: "font-size:13cqi;line-height:1;letter-spacing:-.01em",
+    style: "font-size:12.5cqi;line-height:1;letter-spacing:-.02em",
   },
   {
-    name: "Even block",
-    font: "Playfair Display Black",
-    note: "“detail.” is scaled until it is exactly as wide as “unexpected”. Both edges line up, period included.",
-    family: '"Playfair Display", serif',
-    lines: [{ text: "unexpected" }, { text: "detail", style: "font-size:1.8037em" }],
-    period: "peach",
-    align: "left",
-    style: "font-size:13cqi;font-weight:900;line-height:.84;letter-spacing:-.02em",
+    no: 31,
+    name: "Shared d, peach detail",
+    font: "Fraunces SemiBold",
+    note: "Study 22 with the color pushed further. All of “detail” is peach, so the shared d belongs to the second word.",
+    family: '"Fraunces", serif',
+    lines: [{ text: `unexpecte${peach("detail")}` }],
+    style: "font-size:11.5cqi;font-weight:600;line-height:1;letter-spacing:-.02em;font-variation-settings:'SOFT' 100",
+  },
+  {
+    no: 32,
+    name: "Shared d, peach unexpected",
+    font: "Fraunces SemiBold",
+    note: "The reverse. “unexpected” takes the peach and keeps the d, and “etail” finishes the name in ink.",
+    family: '"Fraunces", serif',
+    lines: [{ text: `${peach("unexpected")}etail` }],
+    style: "font-size:11.5cqi;font-weight:600;line-height:1;letter-spacing:-.02em;font-variation-settings:'SOFT' 100",
   },
 ];
 
-const rounds = [
-  {
-    id: "explore-heading",
-    heading: "Logo explorations, round 01",
-    note: "Twenty type and alignment studies, each shown light and dark. Color stays out of it for now apart from the peach period. Backgrounds, patterns, and photography come next.",
-    logos,
-    start: 1,
-  },
-  {
-    id: "details-heading",
-    heading: "Hidden details, round 03",
-    note: "Ten more, each built around one deliberate detail in the letters themselves. They pick up from study 19, where the p in “unexpected” lands on the l in “detail”.",
-    logos: details,
-    start: logos.length + 1,
-  },
-];
+// One list. Numbers are fixed so feedback keeps pointing at the same study,
+// which leaves gaps where a study has been cut.
+const studies = [...logos.map((logo, i) => ({ ...logo, no: i + 1 })), ...details];
 
 /*
   Round 02: how the wordmark could live on a podcast tile. Each tile is an
@@ -428,7 +426,7 @@ const rounds = [
   be drawn twice: once large, once at 60px in the size test row. Photos are
   gray placeholder blocks, labeled with `.ph`, which the size test hides.
 */
-type Thumb = { name: string; source: string; note: string; bg: string; color: string; html: string };
+type Thumb = { id: string; name: string; source: string; note: string; bg: string; color: string; html: string };
 
 const peachDot = '<span style="color:var(--ud-peach)">.</span>';
 const ph = (text: string, style: string) => `<span class="ph" style="${style}">${text}</span>`;
@@ -437,14 +435,12 @@ const art = (inner: string) =>
 const mark = (style: string, inner: string) =>
   `<p style="margin:0;white-space:nowrap;font-kerning:normal;font-synthesis:none;${style}">${inner}</p>`;
 
-const dotGrid = [14, 28, 42, 56]
-  .flatMap((y, row) =>
-    [15, 29, 43, 57, 71, 85].map((x, col) => {
-      const odd = row === 1 && col === 4;
-      return `<circle cx="${x}" cy="${y}" r="3.6" fill="${odd ? "var(--ud-peach)" : "currentColor"}"/>`;
-    }),
-  )
-  .join("");
+const dots = (fill: (row: number, col: number) => string) =>
+  [14, 28, 42, 56]
+    .flatMap((y, row) =>
+      [15, 29, 43, 57, 71, 85].map((x, col) => `<circle cx="${x}" cy="${y}" r="3.6" fill="${fill(row, col)}"/>`),
+    )
+    .join("");
 
 const sprockets = Array.from({ length: 18 }, (_, i) => {
   const x = 1.5 + i * 5.6;
@@ -453,6 +449,7 @@ const sprockets = Array.from({ length: 18 }, (_, i) => {
 
 const thumbs: Thumb[] = [
   {
+    id: "T1",
     name: "Color field",
     source: "Wordmark from study 01",
     note: "One saturated field and nothing else. The peach period is the only accent.",
@@ -464,26 +461,7 @@ const thumbs: Thumb[] = [
     ),
   },
   {
-    name: "Detail crop",
-    source: "Wordmark from study 19",
-    note: "A portrait pushed so far to the edge that only half a face and an earring stay in frame. Wordmark pinned bottom left.",
-    bg: "#d2cfc9",
-    color: "var(--ud-ink)",
-    html:
-      art(
-        '<ellipse cx="104" cy="128" rx="62" ry="46" fill="#aaa69f"/>' +
-          '<rect x="88" y="66" width="20" height="26" fill="#b3afa8"/>' +
-          '<circle cx="102" cy="42" r="37" fill="#b3afa8"/>' +
-          '<ellipse cx="66" cy="47" rx="5" ry="9" fill="#aaa69f"/>' +
-          '<circle cx="65.5" cy="62" r="3.4" fill="none" stroke="var(--ud-paper)" stroke-width="1.3"/>',
-      ) +
-      ph("Placeholder photo", "left:8cqi;top:8cqi") +
-      mark(
-        "position:absolute;left:8cqi;bottom:8cqi;font-family:'EB Garamond',serif;font-size:11cqi;font-weight:500;line-height:.92;letter-spacing:-.02em",
-        `unexpected<br>detail${peachDot}`,
-      ),
-  },
-  {
+    id: "T3",
     name: "Contact sheet",
     source: "Wordmark from study 04",
     note: "A strip of frames running off both edges, one circled in peach grease pencil. Wordmark below.",
@@ -507,6 +485,7 @@ const thumbs: Thumb[] = [
       ),
   },
   {
+    id: "T4",
     name: "Object macro",
     source: "Wordmark from study 14",
     note: "One object shot so close it stops reading as itself. The wordmark stays small and lets the crop carry the tile.",
@@ -526,50 +505,90 @@ const thumbs: Thumb[] = [
       ),
   },
   {
+    id: "T5",
     name: "Pattern with one break",
-    source: "Wordmark from study 03",
+    source: "Wordmark from study 01",
     note: "A regular grid of dots where one turns peach. It stands in for the period, so the wordmark drops its own.",
     bg: "var(--ud-paper)",
     color: "var(--ud-ink)",
     html:
-      art(dotGrid) +
+      art(dots((row, col) => (row === 1 && col === 4 ? "var(--ud-peach)" : "currentColor"))) +
       mark(
-        "position:absolute;left:11.4cqi;bottom:8cqi;font-family:'Gloock',serif;font-size:13cqi;line-height:.95;letter-spacing:-.01em",
-        'unexpected<br><span style="padding-left:1.6em">detail</span>',
+        "position:absolute;left:11.4cqi;bottom:9cqi;font-family:'Fraunces',serif;font-size:12.5cqi;font-weight:850;line-height:.88;letter-spacing:-.02em;font-variation-settings:'SOFT' 50",
+        "unexpected<br>detail",
       ),
   },
   {
-    name: "Flipped frame",
-    source: "Wordmark from study 02",
-    note: "An inner frame knocked a few degrees off square, inverted against the field, with the wordmark sitting inside it.",
-    bg: "var(--ud-ink)",
+    id: "T8",
+    name: "Missing dot",
+    source: "Wordmark from study 12",
+    note: "The same grid with one dot gone. It turns up at the end of the wordmark as the period.",
+    bg: "var(--ud-paper)",
     color: "var(--ud-ink)",
     html:
-      '<div style="position:absolute;inset:15cqi;background:var(--ud-paper);transform:rotate(-7deg);display:grid;place-items:center">' +
+      art(dots((row, col) => (row === 2 && col === 1 ? "none" : "currentColor"))) +
       mark(
-        "font-family:'Fraunces',serif;font-size:10.5cqi;font-weight:650;line-height:.9;letter-spacing:-.025em;font-variation-settings:'SOFT' 100,'WONK' 1;text-align:left",
+        "position:absolute;left:11.4cqi;bottom:9cqi;font-family:'Young Serif',serif;font-size:12cqi;line-height:.98;letter-spacing:-.02em",
         `unexpected<br>detail${peachDot}`,
-      ) +
-      "</div>",
+      ),
   },
   {
-    name: "Photo in the dot",
-    source: "Wordmark from study 17",
-    note: "The big dot becomes a window. A cropped photo sits inside it, on a flat peach field.",
-    bg: "var(--ud-peach)",
+    id: "T9",
+    name: "Slipped stripe",
+    source: "Wordmark from study 07",
+    note: "Seven even stripes, one of them slid sideways and running off the edge. No extra color needed.",
+    bg: "var(--ud-paper)",
     color: "var(--ud-ink)",
     html:
-      '<div style="position:absolute;right:8cqi;top:8cqi;width:42cqi;height:42cqi;border-radius:50%;overflow:hidden;background:#d2cfc9">' +
       art(
-        '<ellipse cx="78" cy="118" rx="60" ry="44" fill="#aaa69f"/>' +
-          '<rect x="62" y="64" width="24" height="24" fill="#b3afa8"/>' +
-          '<circle cx="74" cy="40" r="34" fill="#b3afa8"/>',
+        [12, 19.5, 27, 34.5, 42, 49.5, 57]
+          .map((y, i) => `<rect x="${i === 4 ? 30 : 11.4}" y="${y}" width="77.2" height="3" fill="currentColor"/>`)
+          .join(""),
       ) +
-      "</div>" +
-      ph("Placeholder photo", "left:8cqi;top:8cqi") +
       mark(
-        "position:absolute;left:8cqi;bottom:8cqi;font-family:'Shrikhand',serif;font-size:13cqi;line-height:1.08;letter-spacing:-.01em",
-        "unexpected<br>detail",
+        "position:absolute;left:11.4cqi;bottom:9cqi;font-family:'DM Serif Display',serif;font-size:12.5cqi;line-height:.9;letter-spacing:-.015em",
+        `unexpected<br>detail${peachDot}`,
+      ),
+  },
+  {
+    id: "T10",
+    name: "Turned square",
+    source: "Wordmark from study 05",
+    note: "A grid of squares where one has turned on its corner. The break is in the shape, and the period keeps the peach.",
+    bg: "var(--ud-paper)",
+    color: "var(--ud-ink)",
+    html:
+      art(
+        [14, 31, 48]
+          .flatMap((y, row) =>
+            [11.4, 28.4, 45.4, 62.4, 79.4].map((x, col) =>
+              `<rect x="${x}" y="${y}" width="9.2" height="9.2" fill="currentColor"${row === 1 && col === 3 ? ` transform="rotate(45 ${x + 4.6} ${y + 4.6})"` : ""}/>`,
+            ),
+          )
+          .join(""),
+      ) +
+      mark(
+        "position:absolute;left:11.4cqi;bottom:9cqi;font-family:'Playfair Display',serif;font-size:12cqi;font-weight:900;line-height:.92;letter-spacing:-.02em",
+        `unexpected<br>detail${peachDot}`,
+      ),
+  },
+  {
+    id: "T11",
+    name: "Leaning line",
+    source: "Wordmark from study 14",
+    note: "A row of upright lines with one that leans. The quietest of the set, with the wordmark on a single italic line.",
+    bg: "var(--ud-paper)",
+    color: "var(--ud-ink)",
+    html:
+      art(
+        Array.from({ length: 14 }, (_, i) => {
+          const x = 11.4 + i * 5.83;
+          return `<rect x="${x}" y="14" width="1.4" height="46" fill="currentColor"${i === 9 ? ` transform="rotate(14 ${x + 0.7} 60)"` : ""}/>`;
+        }).join(""),
+      ) +
+      mark(
+        "position:absolute;left:11.4cqi;bottom:11cqi;font-family:'Source Serif 4',serif;font-style:italic;font-size:9cqi;font-weight:600;line-height:1;letter-spacing:-.015em",
+        `unexpected detail${peachDot}`,
       ),
   },
 ];
@@ -582,7 +601,6 @@ const fontsHref =
   "https://fonts.googleapis.com/css2" +
   "?family=Abril+Fatface" +
     "&family=Bricolage+Grotesque:opsz,wght@12..96,700" +
-  "&family=Bree+Serif" +
   "&family=Corben:wght@700" +
   "&family=DM+Serif+Display" +
   "&family=EB+Garamond:wght@500" +
@@ -592,7 +610,6 @@ const fontsHref =
     "&family=Playfair+Display:ital,wght@0,900;1,900" +
   "&family=Source+Serif+4:ital,opsz,wght@1,8..60,600" +
   "&family=Shrikhand" +
-  "&family=Yeseva+One" +
   "&family=Young+Serif" +
   "&display=swap";
 ---
@@ -658,15 +675,16 @@ const fontsHref =
         </details>
       </div>
 
-      {
-        rounds.map((round) => (
-      <section class="ud-section" aria-labelledby={round.id}>
-        <h2 id={round.id} class="label">{round.heading}</h2>
-        <p class="section-note">{round.note}</p>
+      <section class="ud-section" aria-labelledby="explore-heading">
+        <h2 id="explore-heading" class="label">Logo explorations</h2>
+        <p class="section-note">
+          Type, alignment, and small deliberate details in the letters, each shown light and dark.
+          Numbers stay fixed between rounds, so a gap is a study that was cut.
+        </p>
 
         <ol class="logo-list">
           {
-            round.logos.map((logo, i) => (
+            studies.map((logo) => (
               <li class="logo-item">
                 <div class="tiles">
                   {(["light", "dark"] as const).map((theme) => (
@@ -689,13 +707,14 @@ const fontsHref =
                             )}
                           </span>
                         ))}
+                        {logo.extra && <Fragment set:html={logo.extra} />}
                       </p>
                     </div>
                   ))}
                 </div>
                 <div class="logo-meta">
                   <p class="logo-title">
-                    <span class="num">{pad(round.start + i)}</span>
+                    <span class="num">{pad(logo.no)}</span>
                     {logo.name}
                   </p>
                   <p class="logo-font">{logo.font}</p>
@@ -706,8 +725,6 @@ const fontsHref =
           }
         </ol>
       </section>
-        ))
-      }
 
       <section class="ud-section" aria-labelledby="thumbs-heading">
         <h2 id="thumbs-heading" class="label">Thumbnail directions, round 02</h2>
@@ -718,19 +735,19 @@ const fontsHref =
 
         <ol class="thumb-list">
           {
-            thumbs.map((t, i) => (
+            thumbs.map((t) => (
               <li class="logo-item">
                 <div
                   class="tile thumb"
                   style={`background:${t.bg};color:${t.color}`}
                   role="img"
-                  aria-label={`T${i + 1}, ${t.name}`}
+                  aria-label={`${t.id}, ${t.name}`}
                 >
                   <Fragment set:html={t.html} />
                 </div>
                 <div class="logo-meta">
                   <p class="logo-title">
-                    <span class="num">T{i + 1}</span>
+                    <span class="num">{t.id}</span>
                     {t.name}
                   </p>
                   <p class="logo-font">{t.source}</p>
@@ -744,21 +761,21 @@ const fontsHref =
         <div class="size-test">
           <h3 class="label">Size test, 60px</h3>
           <p class="size-note">
-            The same seven tiles at feed size. Placeholder labels are hidden here.
+            The same tiles at feed size. Placeholder labels are hidden here.
           </p>
           <ul class="size-row">
             {
-              thumbs.map((t, i) => (
+              thumbs.map((t) => (
                 <li>
                   <div
                     class="tile thumb"
                     style={`background:${t.bg};color:${t.color}`}
                     role="img"
-                    aria-label={`T${i + 1}, ${t.name}, at 60 pixels`}
+                    aria-label={`${t.id}, ${t.name}, at 60 pixels`}
                   >
                     <Fragment set:html={t.html} />
                   </div>
-                  <span class="num">T{i + 1}</span>
+                  <span class="num">{t.id}</span>
                 </li>
               ))
             }
@@ -985,17 +1002,20 @@ const fontsHref =
   }
 
   .tile--light {
+    --tile-bg: var(--ud-paper);
     background: var(--ud-paper);
     color: var(--ud-ink);
     box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.06);
   }
 
   .tile--dark {
+    --tile-bg: var(--ud-ink);
     background: var(--ud-ink);
     color: var(--ud-paper);
   }
 
   .lockup {
+    position: relative;
     font-kerning: normal;
     font-synthesis: none;
   }
