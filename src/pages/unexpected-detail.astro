@@ -377,6 +377,14 @@ const art = (inner: string) =>
 const mark = (style: string, inner: string) =>
   `<p style="margin:0;white-space:nowrap;font-kerning:normal;font-synthesis:none;${style}">${inner}</p>`;
 
+// The primary hook, set small. Only on tiles with open space for it and a
+// visual that already says the same thing.
+const hook = (style: string) =>
+  mark(
+    `position:absolute;font-family:'Geist',sans-serif;font-size:3.4cqi;font-weight:400;line-height:1.2;letter-spacing:0;opacity:.75;${style}`,
+    taglines[0].line,
+  );
+
 const dots = (fill: (row: number, col: number) => string) =>
   [14, 28, 42, 56]
     .flatMap((y, row) =>
@@ -501,7 +509,7 @@ const thumbs: Thumb[] = [
     id: "T11",
     name: "Leaning line",
     source: "Wordmark in Source Serif 4 Italic",
-    note: "A row of upright lines with one that leans. The quietest of the set, with the wordmark on a single italic line.",
+    note: "A row of upright lines with one that leans. The wordmark sits on a single italic line with the primary hook beneath it, since the leaning line is the frame being flipped.",
     bg: "var(--ud-paper)",
     color: "var(--ud-ink)",
     html:
@@ -512,9 +520,10 @@ const thumbs: Thumb[] = [
         }).join(""),
       ) +
       mark(
-        "position:absolute;left:11.4cqi;bottom:11cqi;font-family:'Source Serif 4',serif;font-style:italic;font-size:9cqi;font-weight:600;line-height:1;letter-spacing:-.015em",
+        "position:absolute;left:11.4cqi;bottom:16cqi;font-family:'Source Serif 4',serif;font-style:italic;font-size:9cqi;font-weight:600;line-height:1;letter-spacing:-.015em",
         `unexpected detail${peachDot}`,
-      ),
+      ) +
+      hook("left:11.4cqi;bottom:9.5cqi"),
   },
   {
     id: "T12",
@@ -606,7 +615,7 @@ const thumbs: Thumb[] = [
     id: "T16",
     name: "Detour",
     source: "Wordmark from study 19",
-    note: "One thin line crosses the whole tile and takes a single detour on the way. The wordmark sits on the line.",
+    note: "One thin line crosses the whole tile and takes a single detour on the way. The wordmark sits on the line and the primary hook sits under it.",
     bg: "var(--ud-paper)",
     color: "var(--ud-ink)",
     html:
@@ -614,7 +623,8 @@ const thumbs: Thumb[] = [
       mark(
         "position:absolute;left:11.4cqi;bottom:43cqi;font-family:'EB Garamond',serif;font-size:12cqi;font-weight:500;line-height:.92;letter-spacing:-.02em",
         `unexpected<br>detail${peachDot}`,
-      ),
+      ) +
+      hook("left:11.4cqi;top:66cqi"),
   },
 ];
 
@@ -676,7 +686,7 @@ const colorThumbs: Thumb[] = [
     id: "C3",
     name: "Grain and a dot",
     source: "Reference: Fat Mascara, texture",
-    note: "Heavier grain on a slow indigo to plum fade. The wordmark sits light at the top and the period grows into a single peach dot below.",
+    note: "Heavier grain on a slow indigo to plum fade. The wordmark sits light at the top and the period grows into a single peach dot below, with the primary hook small beside it.",
     bg: `linear-gradient(155deg,${indigo} 0%,${plum} 60%,#a0238f 115%)`,
     color: "var(--ud-paper)",
     html:
@@ -685,7 +695,8 @@ const colorThumbs: Thumb[] = [
       mark(
         "position:absolute;left:11.4cqi;top:8cqi;font-family:'Fraunces',serif;font-size:13cqi;font-weight:300;line-height:.98;letter-spacing:-.03em;font-variation-settings:'SOFT' 100",
         "unexpected<br>detail",
-      ),
+      ) +
+      hook("left:11.4cqi;bottom:11.4cqi"),
   },
   {
     id: "C4",
@@ -755,7 +766,7 @@ const colorThumbs: Thumb[] = [
     id: "C7",
     name: "Slate and mint",
     source: "Reference: Design Matters, color scheme",
-    note: "Mint type on slate, set large at the top left. The peach period has left the wordmark for the opposite corner.",
+    note: "Mint type on slate, set large at the top left. The peach period has left the wordmark for the opposite corner, and the primary hook sits in paper across from it.",
     bg: slate,
     color: mint,
     html:
@@ -763,7 +774,8 @@ const colorThumbs: Thumb[] = [
       mark(
         "position:absolute;left:11.4cqi;top:8cqi;font-family:'Fraunces',serif;font-size:14.5cqi;font-weight:850;line-height:.88;letter-spacing:-.02em;font-variation-settings:'SOFT' 50",
         "unexpected<br>detail",
-      ),
+      ) +
+      `<span style="color:var(--ud-paper)">${hook("left:11.4cqi;bottom:11.4cqi")}</span>`,
   },
   {
     id: "C8",
