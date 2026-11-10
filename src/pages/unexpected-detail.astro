@@ -675,6 +675,225 @@ const thumbs: Thumb[] = [
   },
 ];
 
+/*
+  Color and atmosphere directions, after the five references Marcy sent:
+  gradient depth (Fat Mascara), deep indigo with rings (Twenty Thousand
+  Hertz), slate and mint (Design Matters), and diagonal pattern with legible
+  lettering (Articles of Interest). These are the only tiles that leave the
+  ink, paper and peach palette.
+*/
+const indigo = "#170d38";
+const plum = "#4a1a7a";
+const magenta = "#d6249f";
+const violet = "#8f6bff";
+const sky = "#5c9bff";
+const slate = "#47484b";
+const mint = "#a6e3d8";
+
+// Film grain for depth. Sized in px, so it stays fine at any tile size.
+const grain = (opacity: number) =>
+  `<svg style="position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:soft-light;opacity:${opacity}" aria-hidden="true"><filter id="ud-grain"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#ud-grain)"/></svg>`;
+
+const stack = (style: string, period = peachDot) => mark(style, `unexpected<br>detail${period}`);
+const bottomLeft = "position:absolute;left:11.4cqi;bottom:9cqi;";
+
+const colorThumbs: Thumb[] = [
+  {
+    id: "C1",
+    name: "Dusk gradient",
+    source: "Reference: Fat Mascara, background depth",
+    note: "A soft gradient with grain, peach glowing at the top and falling to indigo. The type stays a plain upright serif, nothing curvy.",
+    bg: `linear-gradient(190deg,var(--ud-peach) 0%,#c0268f 42%,${plum} 72%,${indigo} 100%)`,
+    color: "var(--ud-paper)",
+    html:
+      grain(0.55) +
+      stack(bottomLeft + "font-family:'Fraunces',serif;font-size:13cqi;font-weight:850;line-height:.88;letter-spacing:-.02em;font-variation-settings:'SOFT' 50"),
+  },
+  {
+    id: "C2",
+    name: "Dusk, leaning line",
+    source: "Reference: Fat Mascara, background depth",
+    note: "The leaning line on a glow that comes in from one corner. The one line that leans picks up the peach.",
+    bg: `radial-gradient(130% 100% at 15% 0%,${magenta} 0%,#6a1f96 40%,${indigo} 85%)`,
+    color: "var(--ud-paper)",
+    html:
+      grain(0.5) +
+      art(
+        Array.from({ length: 14 }, (_, i) => {
+          const x = 11.4 + i * 5.83;
+          return `<rect x="${x}" y="14" width="1" height="46" fill="${i === 9 ? "var(--ud-peach)" : "currentColor"}"${i === 9 ? ` transform="rotate(14 ${x + 0.5} 60)"` : ""}/>`;
+        }).join(""),
+      ) +
+      mark(
+        "position:absolute;left:11.4cqi;bottom:11cqi;font-family:'Source Serif 4',serif;font-style:italic;font-size:9cqi;font-weight:600;line-height:1;letter-spacing:-.015em",
+        `unexpected detail${peachDot}`,
+      ),
+  },
+  {
+    id: "C3",
+    name: "Grain and a dot",
+    source: "Reference: Fat Mascara, texture",
+    note: "Heavier grain on a slow indigo to plum fade. The wordmark sits light at the top and the period grows into a single peach dot below.",
+    bg: `linear-gradient(155deg,${indigo} 0%,${plum} 60%,#a0238f 115%)`,
+    color: "var(--ud-paper)",
+    html:
+      grain(0.8) +
+      '<span style="position:absolute;right:11.4cqi;bottom:11.4cqi;width:26cqi;height:26cqi;border-radius:50%;background:var(--ud-peach)"></span>' +
+      mark(
+        "position:absolute;left:11.4cqi;top:8cqi;font-family:'Fraunces',serif;font-size:13cqi;font-weight:300;line-height:.98;letter-spacing:-.03em;font-variation-settings:'SOFT' 100",
+        "unexpected<br>detail",
+      ),
+  },
+  {
+    id: "C4",
+    name: "Indigo rings",
+    source: "Reference: Twenty Thousand Hertz, atmosphere and palette",
+    note: "Broken rings in magenta, violet and blue on deep indigo. One ring has slipped off center and turned peach.",
+    bg: `radial-gradient(circle at 68% 28%,#3b1774 0%,${indigo} 62%)`,
+    color: "var(--ud-paper)",
+    html:
+      art(
+        `<g fill="none" stroke-width="1.3" stroke-linecap="round">` +
+          [
+            [6, magenta, "26 12", 20],
+            [11.5, violet, "50 22", 200],
+            [17, sky, "58 49", 80],
+            [22.5, "var(--ud-peach)", "96 45", 310],
+            [28, magenta, "120 56", 140],
+            [33.5, violet, "72 138", 250],
+            [39, sky, "160 85", 30],
+          ]
+            .map(([r, c, dash, rot], i) => {
+              const cx = i === 3 ? 72 : 68, cy = i === 3 ? 31 : 28;
+              return `<circle cx="${cx}" cy="${cy}" r="${r}" stroke="${c}" stroke-dasharray="${dash}" transform="rotate(${rot} ${cx} ${cy})"/>`;
+            })
+            .join("") +
+          "</g>",
+      ) +
+      stack(bottomLeft + "bottom:8cqi;font-family:'DM Serif Display',serif;font-size:12cqi;line-height:.9;letter-spacing:-.015em"),
+  },
+  {
+    id: "C5",
+    name: "Indigo, missing dot",
+    source: "Reference: Twenty Thousand Hertz, palette",
+    note: "The period-size dot grid in violet on indigo. One dot is missing from the grid and sits after “detail” in peach.",
+    bg: `linear-gradient(180deg,#24124f 0%,${indigo} 100%)`,
+    color: "var(--ud-paper)",
+    html:
+      art(
+        Array.from({ length: 7 }, (_, row) =>
+          Array.from({ length: 12 }, (_, col) =>
+            row === 3 && col === 8
+              ? ""
+              : `<circle cx="${(12.42 + col * 6.833).toFixed(2)}" cy="${(13 + row * 6.833).toFixed(2)}" r="1.02" fill="${violet}"/>`,
+          ).join(""),
+        ).join(""),
+      ) +
+      mark(
+        bottomLeft + "font-family:'Young Serif',serif;font-size:12cqi;line-height:.98;letter-spacing:-.02em",
+        'unexpected<br>detail<span style="display:inline-block;width:.17em;height:.17em;border-radius:50%;background:var(--ud-peach);margin-left:.05em"></span>',
+      ),
+  },
+  {
+    id: "C6",
+    name: "Indigo detour",
+    source: "Reference: Twenty Thousand Hertz, palette",
+    note: "One line crosses the tile and takes a detour, fading from magenta to blue as it goes. The wordmark sits on it.",
+    bg: `radial-gradient(120% 90% at 80% 100%,#3b1774 0%,${indigo} 60%)`,
+    color: "var(--ud-paper)",
+    html:
+      art(
+        `<defs><linearGradient id="ud-detour" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="${magenta}"/><stop offset="1" stop-color="${sky}"/></linearGradient></defs>` +
+          '<path d="M-2 60H58l5 -9h10l5 9H102" fill="none" stroke="url(#ud-detour)" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round"/>',
+      ) +
+      stack("position:absolute;left:11.4cqi;bottom:43cqi;font-family:'EB Garamond',serif;font-size:12cqi;font-weight:500;line-height:.92;letter-spacing:-.02em"),
+  },
+  {
+    id: "C7",
+    name: "Slate and mint",
+    source: "Reference: Design Matters, color scheme",
+    note: "Mint type on slate, set large at the top left. The peach period has left the wordmark for the opposite corner.",
+    bg: slate,
+    color: mint,
+    html:
+      '<span style="position:absolute;right:11.4cqi;bottom:11.4cqi;width:3.6cqi;height:3.6cqi;border-radius:50%;background:var(--ud-peach)"></span>' +
+      mark(
+        "position:absolute;left:11.4cqi;top:8cqi;font-family:'Fraunces',serif;font-size:14.5cqi;font-weight:850;line-height:.88;letter-spacing:-.02em;font-variation-settings:'SOFT' 50",
+        "unexpected<br>detail",
+      ),
+  },
+  {
+    id: "C8",
+    name: "Slate, slipped rule",
+    source: "Reference: Design Matters, color scheme",
+    note: "Thin mint rules on slate with one that has slid off the edge. Wordmark in paper, period in peach.",
+    bg: slate,
+    color: "var(--ud-paper)",
+    html:
+      art(
+        [12, 19.5, 27, 34.5, 42, 49.5, 57]
+          .map((y, i) => `<rect x="${i === 4 ? 30 : 11.4}" y="${y}" width="77.2" height=".8" fill="${mint}"/>`)
+          .join(""),
+      ) +
+      stack(bottomLeft + "font-family:'DM Serif Display',serif;font-size:12.5cqi;line-height:.9;letter-spacing:-.015em"),
+  },
+  {
+    id: "C9",
+    name: "Diagonal blocks",
+    source: "Reference: Articles of Interest, pattern concept",
+    note: "Blocks of diagonal stripes that change direction like fabric swatches, with one block in peach. The name gets its own solid panel so it stays easy to read.",
+    bg: "var(--ud-paper)",
+    color: "var(--ud-paper)",
+    html:
+      art(
+        `<defs>` +
+          `<pattern id="ud-diag-a" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="2" height="5" fill="${indigo}"/></pattern>` +
+          `<pattern id="ud-diag-b" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="2" height="5" fill="${indigo}"/></pattern>` +
+          `<pattern id="ud-diag-c" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="2" height="5" fill="var(--ud-peach)"/></pattern>` +
+          `</defs>` +
+          '<rect x="0" y="0" width="34" height="31" fill="url(#ud-diag-a)"/>' +
+          '<rect x="34" y="0" width="33" height="31" fill="url(#ud-diag-b)"/>' +
+          '<rect x="67" y="0" width="33" height="31" fill="url(#ud-diag-a)"/>' +
+          '<rect x="0" y="31" width="34" height="31" fill="url(#ud-diag-b)"/>' +
+          '<rect x="34" y="31" width="33" height="31" fill="url(#ud-diag-c)"/>' +
+          '<rect x="67" y="31" width="33" height="31" fill="url(#ud-diag-b)"/>' +
+          `<rect x="0" y="62" width="100" height="38" fill="${indigo}"/>`,
+      ) +
+      stack(bottomLeft + "bottom:7.5cqi;font-family:'Playfair Display',serif;font-size:12cqi;font-weight:900;line-height:.92;letter-spacing:-.02em"),
+  },
+  {
+    id: "C10",
+    name: "Diagonal, one thread",
+    source: "References: Articles of Interest pattern, Design Matters color",
+    note: "A full field of fine mint diagonals on slate with a single peach thread running through. The wordmark sits on a clear panel cut out of the pattern.",
+    bg: slate,
+    color: "var(--ud-paper)",
+    html:
+      art(
+        `<defs><pattern id="ud-diag-m" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width=".8" height="6" fill="${mint}"/></pattern></defs>` +
+          '<rect width="100" height="100" fill="url(#ud-diag-m)"/>' +
+          '<g transform="rotate(45)"><rect x="96" y="-100" width=".8" height="300" fill="var(--ud-peach)"/></g>' +
+          `<rect x="0" y="58" width="80" height="34" fill="${slate}"/>`,
+      ) +
+      stack("position:absolute;left:11.4cqi;bottom:12.5cqi;font-family:'Young Serif',serif;font-size:12cqi;line-height:.98;letter-spacing:-.02em"),
+  },
+];
+
+const tileSections = [
+  {
+    id: "thumbs-heading",
+    heading: "Thumbnail directions",
+    intro: "How the wordmark could live on a podcast tile. Each direction has one thing that is off, cropped, or out of place. Ink, paper, and peach only.",
+    items: thumbs,
+  },
+  {
+    id: "color-heading",
+    heading: "Color and atmosphere directions",
+    intro: "Concepts that follow Marcy's references: gradient depth and grain, deep indigo with rings, slate and mint, and diagonal pattern with lettering that stays legible. The idea underneath is the same, one thing off or out of place.",
+    items: colorThumbs,
+  },
+];
+
 const periodLine = (logo: Logo) => logo.periodOn ?? logo.lines.length - 1;
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -808,16 +1027,15 @@ const fontsHref =
         </ol>
       </section>
 
-      <section class="ud-section" aria-labelledby="thumbs-heading">
-        <h2 id="thumbs-heading" class="label">Thumbnail directions</h2>
-        <p class="section-note">
-          How the wordmark could live on a podcast tile. Each direction has one thing that is off,
-          cropped, or out of place.
-        </p>
+      {
+        tileSections.map((section) => (
+      <section class="ud-section" aria-labelledby={section.id}>
+        <h2 id={section.id} class="label">{section.heading}</h2>
+        <p class="section-note">{section.intro}</p>
 
         <ol class="thumb-list">
           {
-            thumbs.map((t) => (
+            section.items.map((t) => (
               <li class="logo-item">
                 <div
                   class="tile thumb"
@@ -847,7 +1065,7 @@ const fontsHref =
           </p>
           <ul class="size-row">
             {
-              thumbs.map((t) => (
+              section.items.map((t) => (
                 <li>
                   <div
                     class="tile thumb"
@@ -864,6 +1082,8 @@ const fontsHref =
           </ul>
         </div>
       </section>
+        ))
+      }
     </div>
   </main>
   <Footer />
