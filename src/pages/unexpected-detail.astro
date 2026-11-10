@@ -58,8 +58,8 @@ const direction = [
 */
 type Line = { text: string; style?: string };
 type Logo = {
-  /** Fixed study number. Defaults to position in the first twenty. */
-  no?: number;
+  /** Fixed study number, so feedback keeps pointing at the same study. */
+  no: number;
   /** Extra HTML drawn inside the lockup, positioned in em from its top left. */
   extra?: string;
   name: string;
@@ -91,6 +91,7 @@ const join = (j: Join) =>
 
 const logos: Logo[] = [
   {
+    no: 1,
     name: "Classic stack",
     font: "Fraunces Black",
     note: "Her deck's direction, tightened. Centered stack, peach period.",
@@ -100,16 +101,7 @@ const logos: Logo[] = [
     style: "font-size:14cqi;font-weight:850;line-height:.88;letter-spacing:-.02em;font-variation-settings:'SOFT' 50",
   },
   {
-    name: "Soft and wonky",
-    font: "Fraunces Soft",
-    note: "Fully soft, wonky axis on. The p and the l now share one axis and run together as a single straight stem.",
-    family: '"Fraunces", serif',
-    lines: [{ text: "unexpected", style: "padding-left:.0405em" }, { text: "detail" }],
-    align: "left",
-    extra: join({ x: 2.3794, w: 0.155, y1: 0.611, y2: 1.411, mx1: 2.31, mx2: 2.6, my1: 0.831, my2: 1.101 }),
-    style: "font-size:14.5cqi;font-weight:650;line-height:.9;letter-spacing:-.025em;font-variation-settings:'SOFT' 100,'WONK' 1,'opsz' 40",
-  },
-  {
+    no: 3,
     name: "Stagger",
     font: "Gloock",
     note: "Second line steps right, so the stack reads like a turn in the road.",
@@ -120,6 +112,7 @@ const logos: Logo[] = [
     style: "font-size:13cqi;line-height:.95;letter-spacing:-.01em",
   },
   {
+    no: 4,
     name: "Single line, italic turn",
     font: "Instrument Serif",
     note: "One line. The italic on “detail” is the unexpected moment.",
@@ -129,6 +122,7 @@ const logos: Logo[] = [
     style: "font-size:10.5cqi;line-height:1;letter-spacing:-.015em",
   },
   {
+    no: 5,
     name: "Heavy italic",
     font: "Playfair Display Black",
     note: "Upright over italic in the same weight. High contrast, editorial.",
@@ -137,6 +131,7 @@ const logos: Logo[] = [
     style: "font-size:13cqi;font-weight:900;line-height:.92;letter-spacing:-.02em",
   },
   {
+    no: 6,
     name: "Scale shift",
     font: "Fraunces",
     note: "“unexpected” whispers, “detail” shouts. Strongest at thumbnail size.",
@@ -150,6 +145,7 @@ const logos: Logo[] = [
     style: "font-size:24cqi;font-weight:850;line-height:.85;letter-spacing:-.03em;font-variation-settings:'SOFT' 50",
   },
   {
+    no: 7,
     name: "Right flush",
     font: "DM Serif Display",
     note: "Ragged left, flush right. Pulls the eye to the period.",
@@ -160,19 +156,7 @@ const logos: Logo[] = [
     style: "font-size:14cqi;line-height:.9;letter-spacing:-.015em",
   },
   {
-    name: "Opposite corners",
-    font: "DM Serif Display",
-    note: "The words split to opposite corners. The empty middle is the gap a good question opens.",
-    family: '"DM Serif Display", serif',
-    free: true,
-    lines: [
-      { text: "unexpected", style: "left:8cqi;top:7cqi" },
-      { text: "detail", style: "right:8cqi;bottom:9cqi" },
-    ],
-    period: "peach",
-    style: "font-size:13.5cqi;line-height:1;letter-spacing:-.015em",
-  },
-  {
+    no: 9,
     name: "Climb",
     font: "Corben",
     note: "Both words horizontal now. A small “unexpected” sits on the shoulder of a large “detail”, one step up at the end of the word.",
@@ -186,15 +170,7 @@ const logos: Logo[] = [
     style: "font-size:19cqi;font-weight:700;line-height:.9;letter-spacing:-.02em",
   },
   {
-    name: "Fat face",
-    font: "Abril Fatface",
-    note: "Tight leading, heavy ink. Loud in a crowded feed.",
-    family: '"Abril Fatface", serif',
-    lines: [{ text: "unexpected" }, { text: "detail" }],
-    period: "peach",
-    style: "font-size:13.5cqi;line-height:.94;letter-spacing:-.01em",
-  },
-  {
+    no: 11,
     name: "Full width",
     font: "Playfair Display Black",
     note: "“detail” set as large as the tile allows with even margins on both sides. Nothing cropped.",
@@ -208,6 +184,7 @@ const logos: Logo[] = [
     style: "font-size:27cqi;font-weight:900;line-height:.9;letter-spacing:-.02em",
   },
   {
+    no: 12,
     name: "Rounded serif",
     font: "Young Serif",
     note: "Soft, chunky, warm. The closest match to “soft serif.”",
@@ -217,6 +194,7 @@ const logos: Logo[] = [
     style: "font-size:12.5cqi;line-height:.98;letter-spacing:-.02em",
   },
   {
+    no: 13,
     name: "Light stack",
     font: "Fraunces Light",
     note: "A plain two-line stack in a light weight. The p drops straight into the l as one clean line, with the serifs taken off where they meet.",
@@ -228,15 +206,7 @@ const logos: Logo[] = [
     style: "font-size:15cqi;font-weight:300;line-height:.98;letter-spacing:-.03em;font-variation-settings:'SOFT' 100,'opsz' 40",
   },
   {
-    name: "Book italic line",
-    font: "Source Serif 4 Italic",
-    note: "One italic line, small in a big field. Lets the tile do the work.",
-    family: '"Source Serif 4", serif',
-    lines: [{ text: "<i>unexpected detail</i>" }],
-    period: "peach",
-    style: "font-size:8.5cqi;font-weight:600;line-height:1;letter-spacing:-.015em",
-  },
-  {
+    no: 15,
     name: "Grotesk counterpoint",
     font: "Bricolage Grotesque",
     note: "A sans for contrast. Quirky ink traps keep it from feeling corporate.",
@@ -247,6 +217,7 @@ const logos: Logo[] = [
     style: "font-size:14cqi;font-weight:700;line-height:.88;letter-spacing:-.045em;font-variation-settings:'opsz' 96",
   },
   {
+    no: 16,
     name: "Clean sans",
     font: "Geist",
     note: "Neutral and modern. Useful as a baseline to judge the serifs against.",
@@ -257,19 +228,7 @@ const logos: Logo[] = [
     style: "font-size:14cqi;font-weight:500;line-height:.92;letter-spacing:-.05em",
   },
   {
-    name: "Big dot",
-    font: "Shrikhand",
-    note: "The period grows into a full shape. It could hold a photo or pattern later.",
-    family: '"Shrikhand", serif',
-    free: true,
-    lines: [
-      { text: '<span style="display:block;width:30cqi;height:30cqi;border-radius:50%;background:var(--ud-peach)"></span>', style: "right:8cqi;top:8cqi" },
-      { text: "unexpected", style: "left:8cqi;bottom:24cqi" },
-      { text: "detail", style: "left:8cqi;bottom:8cqi" },
-    ],
-    style: "font-size:13cqi;line-height:1;letter-spacing:-.01em",
-  },
-  {
+    no: 18,
     name: "Echo",
     font: "Fraunces ExtraBold",
     note: "Two very faint repeats fade up from a quiet “unexpected”, and one solid “detail” lands underneath.",
@@ -285,6 +244,7 @@ const logos: Logo[] = [
     style: "font-size:14cqi;font-weight:800;line-height:.94;letter-spacing:-.025em;font-variation-settings:'SOFT' 100",
   },
   {
+    no: 19,
     name: "Corner lockup",
     font: "EB Garamond",
     note: "Pinned bottom left, leaving open field for a photo or pattern later.",
@@ -296,6 +256,7 @@ const logos: Logo[] = [
     style: "font-size:11cqi;font-weight:500;line-height:.92;letter-spacing:-.02em;margin:0 0 8cqi 8cqi",
   },
   {
+    no: 20,
     name: "Monogram",
     font: "Fraunces + Geist",
     note: "A “ud.” mark for the tile, with the full name small beneath.",
@@ -396,29 +357,11 @@ const details: Logo[] = [
     ],
     style: "font-size:12.5cqi;line-height:1;letter-spacing:-.02em",
   },
-  {
-    no: 31,
-    name: "Shared d, peach detail",
-    font: "Fraunces SemiBold",
-    note: "Study 22 with the color pushed further. All of “detail” is peach, so the shared d belongs to the second word.",
-    family: '"Fraunces", serif',
-    lines: [{ text: `unexpecte${peach("detail")}` }],
-    style: "font-size:11.5cqi;font-weight:600;line-height:1;letter-spacing:-.02em;font-variation-settings:'SOFT' 100",
-  },
-  {
-    no: 32,
-    name: "Shared d, peach unexpected",
-    font: "Fraunces SemiBold",
-    note: "The reverse. “unexpected” takes the peach and keeps the d, and “etail” finishes the name in ink.",
-    family: '"Fraunces", serif',
-    lines: [{ text: `${peach("unexpected")}etail` }],
-    style: "font-size:11.5cqi;font-weight:600;line-height:1;letter-spacing:-.02em;font-variation-settings:'SOFT' 100",
-  },
 ];
 
 // One list. Numbers are fixed so feedback keeps pointing at the same study,
 // which leaves gaps where a study has been cut.
-const studies = [...logos.map((logo, i) => ({ ...logo, no: i + 1 })), ...details];
+const studies = [...logos, ...details];
 
 /*
   How the wordmark could live on a podcast tile. Each tile is an HTML string
@@ -471,7 +414,7 @@ const thumbs: Thumb[] = [
   {
     id: "T4",
     name: "Rings, one off center",
-    source: "Wordmark from study 14",
+    source: "Wordmark in Source Serif 4 Italic",
     note: "Was the object macro. Now thin concentric rings cropped by the tile edge, with one ring that has slipped out of line.",
     bg: "var(--ud-paper)",
     color: "var(--ud-ink)",
@@ -524,7 +467,7 @@ const thumbs: Thumb[] = [
     html:
       art(
         [12, 19.5, 27, 34.5, 42, 49.5, 57]
-          .map((y, i) => `<rect x="${i === 4 ? 30 : 11.4}" y="${y}" width="77.2" height=".7" fill="currentColor"/>`)
+          .map((y, i) => `<rect x="${i === 4 ? 30 : 11.4}" y="${y}" width="77.2" height=".7" rx=".35" fill="currentColor"/>`)
           .join(""),
       ) +
       mark(
@@ -557,7 +500,7 @@ const thumbs: Thumb[] = [
   {
     id: "T11",
     name: "Leaning line",
-    source: "Wordmark from study 14",
+    source: "Wordmark in Source Serif 4 Italic",
     note: "A row of upright lines with one that leans. The quietest of the set, with the wordmark on a single italic line.",
     bg: "var(--ud-paper)",
     color: "var(--ud-ink)",
@@ -565,7 +508,7 @@ const thumbs: Thumb[] = [
       art(
         Array.from({ length: 14 }, (_, i) => {
           const x = 11.4 + i * 5.83;
-          return `<rect x="${x}" y="14" width="1.4" height="46" fill="currentColor"${i === 9 ? ` transform="rotate(14 ${x + 0.7} 60)"` : ""}/>`;
+          return `<rect x="${x}" y="14" width=".7" height="46" rx=".35" fill="currentColor"${i === 9 ? ` transform="rotate(14 ${x + 0.35} 60)"` : ""}/>`;
         }).join(""),
       ) +
       mark(
@@ -608,7 +551,7 @@ const thumbs: Thumb[] = [
       art(
         Array.from({ length: 8 }, (_, i) => {
           const y = 14 + i * 6;
-          return `<rect x="11.4" y="${y}" width="77.2" height=".7" fill="currentColor"${i === 4 ? ` transform="rotate(-5 11.4 ${y})"` : ""}/>`;
+          return `<rect x="11.4" y="${y}" width="77.2" height=".7" rx=".35" fill="currentColor"${i === 4 ? ` transform="rotate(-5 11.4 ${y})"` : ""}/>`;
         }).join(""),
       ) +
       mark(
@@ -619,7 +562,7 @@ const thumbs: Thumb[] = [
   {
     id: "T14",
     name: "Leaning line, opposite corners",
-    source: "Wordmark from study 08",
+    source: "Wordmark in Corben, split to opposite corners",
     note: "The leaning line on ink. The words split to opposite corners and the lines run through the gap between them.",
     bg: "var(--ud-ink)",
     color: "var(--ud-paper)",
@@ -627,7 +570,7 @@ const thumbs: Thumb[] = [
       art(
         Array.from({ length: 14 }, (_, i) => {
           const x = 11.4 + i * 5.83;
-          return `<rect x="${x}" y="33" width="1" height="34" fill="currentColor"${i === 4 ? ` transform="rotate(14 ${x + 0.5} 67)"` : ""}/>`;
+          return `<rect x="${x}" y="33" width=".7" height="34" rx=".35" fill="currentColor"${i === 4 ? ` transform="rotate(14 ${x + 0.35} 67)"` : ""}/>`;
         }).join(""),
       ) +
       mark(
@@ -721,7 +664,7 @@ const colorThumbs: Thumb[] = [
       art(
         Array.from({ length: 14 }, (_, i) => {
           const x = 11.4 + i * 5.83;
-          return `<rect x="${x}" y="14" width="1" height="46" fill="${i === 9 ? "var(--ud-peach)" : "currentColor"}"${i === 9 ? ` transform="rotate(14 ${x + 0.5} 60)"` : ""}/>`;
+          return `<rect x="${x}" y="14" width=".7" height="46" rx=".35" fill="${i === 9 ? "var(--ud-peach)" : "currentColor"}"${i === 9 ? ` transform="rotate(14 ${x + 0.35} 60)"` : ""}/>`;
         }).join(""),
       ) +
       mark(
@@ -832,7 +775,7 @@ const colorThumbs: Thumb[] = [
     html:
       art(
         [12, 19.5, 27, 34.5, 42, 49.5, 57]
-          .map((y, i) => `<rect x="${i === 4 ? 30 : 11.4}" y="${y}" width="77.2" height=".8" fill="${mint}"/>`)
+          .map((y, i) => `<rect x="${i === 4 ? 30 : 11.4}" y="${y}" width="77.2" height=".7" rx=".35" fill="${mint}"/>`)
           .join(""),
       ) +
       stack(bottomLeft + "font-family:'DM Serif Display',serif;font-size:12.5cqi;line-height:.9;letter-spacing:-.015em"),
@@ -894,14 +837,19 @@ const tileSections = [
   },
 ];
 
+const pageNav = [
+  { href: "#brief", label: "Brief and direction" },
+  { href: "#explore-heading", label: "Logo explorations", count: studies.length },
+  ...tileSections.map((t) => ({ href: `#${t.id}`, label: t.heading, count: t.items.length })),
+];
+
 const periodLine = (logo: Logo) => logo.periodOn ?? logo.lines.length - 1;
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
 const fontsHref =
   "https://fonts.googleapis.com/css2" +
-  "?family=Abril+Fatface" +
-    "&family=Bricolage+Grotesque:opsz,wght@12..96,700" +
+  "?family=Bricolage+Grotesque:opsz,wght@12..96,700" +
   "&family=Corben:wght@700" +
   "&family=DM+Serif+Display" +
   "&family=EB+Garamond:wght@500" +
@@ -910,7 +858,6 @@ const fontsHref =
   "&family=Instrument+Serif:ital@0;1" +
     "&family=Playfair+Display:ital,wght@0,900;1,900" +
   "&family=Source+Serif+4:ital,opsz,wght@1,8..60,600" +
-  "&family=Shrikhand" +
   "&family=Young+Serif" +
   "&display=swap";
 ---
@@ -934,47 +881,29 @@ const fontsHref =
         </p>
       </header>
 
-      <div class="ud-context">
-        <details class="acc">
-          <summary><span class="label">Brief</span><span class="acc-icon" aria-hidden="true"></span></summary>
-          <div class="acc-body">
-            <div class="taglines">
-              {
-                taglines.map((t) => (
-                  <div>
-                    <p class="label">{t.label}</p>
-                    <p class="tag-line">“{t.line}”</p>
-                  </div>
-                ))
-              }
-            </div>
-
-            <div class="brief-grid">
-              {
-                brief.map((item) => (
-                  <article>
-                    <p class="label">{item.label}</p>
-                    <p class="brief-lead">{item.lead}</p>
-                    <p class="brief-body">{item.body}</p>
-                  </article>
-                ))
-              }
-            </div>
-
-            <ul class="pillars" aria-label="Brand pillars">
-              {pillars.map((p) => <li>{p}</li>)}
-            </ul>
-          </div>
-        </details>
-        <details class="acc">
-          <summary><span class="label">Direction from kickoff</span><span class="acc-icon" aria-hidden="true"></span></summary>
-          <div class="acc-body">
-            <ul class="direction">
-              {direction.map((d) => <li>{d}</li>)}
-            </ul>
-          </div>
-        </details>
-      </div>
+      <div class="ud-layout">
+        <div class="ud-main">
+      <section class="ud-brief" id="brief" aria-label="Brief and direction">
+        <div>
+          <h2 class="label">Brief</h2>
+          <dl class="brief-list">
+            {
+              brief.map((item) => (
+                <div>
+                  <dt>{item.label}</dt>
+                  <dd>{item.lead}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+        <div>
+          <h2 class="label">Direction from kickoff</h2>
+          <ul class="direction">
+            {direction.map((d) => <li>{d}</li>)}
+          </ul>
+        </div>
+      </section>
 
       <section class="ud-section" aria-labelledby="explore-heading">
         <h2 id="explore-heading" class="label">Logo explorations</h2>
@@ -1084,6 +1013,42 @@ const fontsHref =
       </section>
         ))
       }
+        </div>
+
+        <aside class="ud-sidebar">
+          <div class="sidebar-inner">
+            <nav class="meta-group" aria-label="On this page">
+              <span class="label">On this page</span>
+              <ul class="page-nav">
+                {
+                  pageNav.map((item) => (
+                    <li>
+                      <a href={item.href}>
+                        {item.label}
+                        {item.count && <span class="count">{item.count}</span>}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </nav>
+            {
+              taglines.map((t) => (
+                <div class="meta-group">
+                  <span class="label">{t.label}</span>
+                  <p class="meta-value">{t.line}</p>
+                </div>
+              ))
+            }
+            <div class="meta-group">
+              <span class="label">Pillars</span>
+              <ul class="pillars">
+                {pillars.map((item) => <li>{item}</li>)}
+              </ul>
+            </div>
+          </div>
+        </aside>
+      </div>
     </div>
   </main>
   <Footer />
@@ -1112,7 +1077,7 @@ const fontsHref =
   }
 
   .ud-header {
-    margin-bottom: var(--space-8);
+    margin-bottom: var(--space-7);
   }
 
   h1 {
@@ -1129,69 +1094,116 @@ const fontsHref =
     max-width: 52ch;
   }
 
-  /* Brief and kickoff notes, collapsed so the page opens on the designs. */
-  .ud-context {
-    border-bottom: 1px solid var(--color-border);
-    margin-bottom: var(--ud-gap);
+  /* Same shape as a project page: main column plus a sticky right rail. */
+  .ud-layout {
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-8);
   }
 
-  .acc {
+  .ud-main {
+    flex: 3 1 0%;
+    min-width: 0;
+  }
+
+  .ud-sidebar {
+    flex: 1 1 0%;
+    min-width: 0;
+  }
+
+  .sidebar-inner {
+    position: sticky;
+    top: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .meta-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-top: var(--space-4);
     border-top: 1px solid var(--color-border);
   }
 
-  .acc summary {
+  .meta-group:first-child {
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .meta-value {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .page-nav,
+  .pillars {
     list-style: none;
-    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .pillars li {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .page-nav a {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: var(--space-4) 0;
+    gap: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
   }
 
-  .acc summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .acc summary:hover .label {
+  .page-nav a:hover,
+  .page-nav a[aria-current="true"] {
     color: var(--color-text);
   }
 
-  .acc-icon {
-    position: relative;
-    width: 12px;
-    height: 12px;
+  .page-nav .count {
+    font-size: 12px;
     color: var(--color-text-muted);
   }
 
-  .acc-icon::before,
-  .acc-icon::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 50%;
-    width: 12px;
-    height: 1px;
-    background: currentColor;
-    transition: transform 0.2s;
+  /* Brief and kickoff notes, kept short so the page opens on the designs. */
+  .ud-brief {
+    display: grid;
+    gap: var(--space-7);
+    padding-bottom: var(--space-8);
+    margin-bottom: var(--space-8);
+    border-bottom: 1px solid var(--color-border);
+    scroll-margin-top: var(--space-8);
   }
 
-  .acc-icon::after {
-    transform: rotate(90deg);
+  .ud-brief h2 {
+    margin-bottom: var(--space-4);
   }
 
-  .acc[open] .acc-icon::after {
-    transform: rotate(0deg);
+  .brief-list {
+    display: grid;
+    gap: var(--space-4);
   }
 
-  .acc-body {
-    padding: var(--space-5) 0 var(--space-8);
+  .brief-list dt {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-1);
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .acc-icon::before,
-    .acc-icon::after {
-      transition: none;
-    }
+  .brief-list dd {
+    font-size: var(--text-sm);
+    margin: 0;
+    max-width: 36ch;
   }
 
   .ud-section {
@@ -1199,6 +1211,7 @@ const fontsHref =
   }
 
   .ud-section > h2 {
+    scroll-margin-top: var(--space-8);
     margin-bottom: var(--space-7);
   }
 
@@ -1209,58 +1222,10 @@ const fontsHref =
     margin: calc(var(--space-7) * -1 + var(--space-4)) 0 var(--space-8);
   }
 
-  .taglines {
-    display: grid;
-    gap: var(--space-7);
-    margin-bottom: var(--space-8);
-  }
-
-  .tag-line {
-    font-size: clamp(24px, 1.1rem + 1.4vw, 40px);
-    font-weight: 300;
-    letter-spacing: -0.025em;
-    line-height: 1.15;
-    margin-top: var(--space-3);
-  }
-
-  .brief-grid {
-    display: grid;
-    gap: var(--space-7);
-  }
-
-  .brief-lead {
-    font-size: var(--text-base);
-    font-weight: 400;
-    margin: var(--space-3) 0 var(--space-2);
-  }
-
-  .brief-body {
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    max-width: 40ch;
-  }
-
-  .pillars {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin-top: var(--space-8);
-  }
-
-  .pillars li {
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    padding: 4px 14px;
-  }
-
   .direction {
     list-style: none;
-    max-width: 60ch;
     display: grid;
-    gap: var(--space-4);
+    gap: var(--space-2);
     counter-reset: dir;
   }
 
@@ -1268,15 +1233,16 @@ const fontsHref =
     counter-increment: dir;
     display: grid;
     grid-template-columns: 3ch 1fr;
-    gap: var(--space-3);
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
   }
 
   .direction li::before {
     content: counter(dir, decimal-leading-zero);
     font-family: var(--font-mono);
     font-size: 12px;
-    color: var(--color-text-muted);
-    padding-top: 0.35em;
+    padding-top: 0.2em;
   }
 
   /* Logo studies */
@@ -1425,12 +1391,34 @@ const fontsHref =
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .taglines {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .ud-brief {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .ud-layout {
+      flex-direction: column;
+      gap: var(--space-7);
     }
 
-    .brief-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+    .ud-sidebar {
+      order: -1;
+      width: 100%;
+    }
+
+    .sidebar-inner {
+      position: static;
+    }
+
+    .meta-group:not(nav) {
+      display: none;
+    }
+
+    .page-nav {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: var(--space-2) var(--space-5);
     }
   }
 
@@ -1444,3 +1432,27 @@ const fontsHref =
     }
   }
 </style>
+
+<script>
+  // Marks the section in view in the right rail.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>(".page-nav a")];
+  const targets = links
+    .map((a) => document.querySelector<HTMLElement>(a.getAttribute("href") ?? ""))
+    .filter((el): el is HTMLElement => !!el);
+
+  if (targets.length && "IntersectionObserver" in window) {
+    const setCurrent = () => {
+      const line = window.innerHeight * 0.3;
+      let current = targets[0];
+      for (const t of targets) if (t.getBoundingClientRect().top <= line) current = t;
+      links.forEach((a) => {
+        if (a.getAttribute("href") === `#${current.id}`) a.setAttribute("aria-current", "true");
+        else a.removeAttribute("aria-current");
+      });
+    };
+    new IntersectionObserver(setCurrent, { rootMargin: "-30% 0px -69% 0px" }).observe(document.body);
+    targets.forEach((t) => new IntersectionObserver(setCurrent, { rootMargin: "-30% 0px -69% 0px" }).observe(t));
+    addEventListener("scroll", setCurrent, { passive: true });
+    setCurrent();
+  }
+</script>
