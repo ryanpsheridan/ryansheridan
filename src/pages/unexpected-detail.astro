@@ -838,7 +838,8 @@ const tileSections = [
 ];
 
 const pageNav = [
-  { href: "#brief", label: "Brief and direction" },
+  { href: "#brief", label: "Brief" },
+  { href: "#direction", label: "Direction from kickoff" },
   { href: "#explore-heading", label: "Logo explorations", count: studies.length },
   ...tileSections.map((t) => ({ href: `#${t.id}`, label: t.heading, count: t.items.length })),
 ];
@@ -883,26 +884,25 @@ const fontsHref =
 
       <div class="ud-layout">
         <div class="ud-main">
-      <section class="ud-brief" id="brief" aria-label="Brief and direction">
-        <div>
-          <h2 class="label">Brief</h2>
-          <dl class="brief-list">
-            {
-              brief.map((item) => (
-                <div>
-                  <dt>{item.label}</dt>
-                  <dd>{item.lead}</dd>
-                </div>
-              ))
-            }
-          </dl>
-        </div>
-        <div>
-          <h2 class="label">Direction from kickoff</h2>
-          <ul class="direction">
-            {direction.map((d) => <li>{d}</li>)}
-          </ul>
-        </div>
+      <section class="ud-brief" id="brief" aria-labelledby="brief-heading">
+        <h2 id="brief-heading" class="label">Brief</h2>
+        <dl class="brief-list">
+          {
+            brief.map((item) => (
+              <div>
+                <dt>{item.label}</dt>
+                <dd>{item.lead}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </section>
+
+      <section class="ud-brief" id="direction" aria-labelledby="direction-heading">
+        <h2 id="direction-heading" class="label">Direction from kickoff</h2>
+        <ul class="direction">
+          {direction.map((d) => <li>{d}</li>)}
+        </ul>
       </section>
 
       <section class="ud-section" aria-labelledby="explore-heading">
@@ -1176,10 +1176,8 @@ const fontsHref =
 
   /* Brief and kickoff notes, kept short so the page opens on the designs. */
   .ud-brief {
-    display: grid;
-    gap: var(--space-7);
-    padding-bottom: var(--space-8);
-    margin-bottom: var(--space-8);
+    padding-bottom: var(--space-7);
+    margin-bottom: var(--space-7);
     border-bottom: 1px solid var(--color-border);
     scroll-margin-top: var(--space-8);
   }
@@ -1226,6 +1224,7 @@ const fontsHref =
     list-style: none;
     display: grid;
     gap: var(--space-2);
+    max-width: 64ch;
     counter-reset: dir;
   }
 
@@ -1391,8 +1390,9 @@ const fontsHref =
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .ud-brief {
-      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    .brief-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-6);
     }
   }
 
