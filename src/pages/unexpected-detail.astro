@@ -1427,10 +1427,17 @@ const fontsHref =
       display: none;
     }
 
+    /* One section per row, count flush right, hairlines between. */
     .page-nav {
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: var(--space-2) var(--space-5);
+      gap: 0;
+      margin-top: var(--space-2);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .page-nav a {
+      align-items: baseline;
+      padding: var(--space-3) 0;
+      border-top: 1px solid var(--color-border);
     }
   }
 
