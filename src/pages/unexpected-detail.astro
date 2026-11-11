@@ -586,7 +586,7 @@ const thumbs: Thumb[] = [
     html:
       art(
         Array.from({ length: 7 }, (_, row) =>
-          Array.from({ length: 12 }, (_, col) =>
+          Array.from({ length: 14 }, (_, col) =>
             row === 3 && col === 8
               ? ""
               : `<circle cx="${(12.42 + col * 6.833).toFixed(2)}" cy="${(13 + row * 6.833).toFixed(2)}" r="1.02" fill="currentColor"/>`,
@@ -787,7 +787,7 @@ const colorThumbs: Thumb[] = [
     html:
       art(
         Array.from({ length: 7 }, (_, row) =>
-          Array.from({ length: 12 }, (_, col) =>
+          Array.from({ length: 14 }, (_, col) =>
             row === 3 && col === 8
               ? ""
               : `<circle cx="${(12.42 + col * 6.833).toFixed(2)}" cy="${(13 + row * 6.833).toFixed(2)}" r="1.02" fill="${violet}"/>`,
@@ -899,6 +899,7 @@ const pickedTiles = ["T4", "T5", "T8", "T10", "T11"];
 const PICK = "Pick from round 1";
 const ALT = "Alternate";
 const DARK = "Dark version";
+const NEW = "New direction";
 
 const study = (no: number) => studies.find((l) => l.no === no)!;
 const tile = (id: string) => thumbs.find((t) => t.id === id)!;
@@ -966,6 +967,61 @@ const r2Logos: Logo[] = [
     note: "The same idea in a light serif. The p drops straight into the l as one clean line, with the serifs taken off where they meet.",
   },
 ].map((logo, i) => ({ ...logo, label: pad(i + 1) }));
+
+/*
+  Type pattern, after the hang tag Marcy sent: the name repeated in rows that
+  run off both edges, each row stepped sideways, with one word picked out in
+  peach. `rows` is one entry per line: how far it shifts left (em) and its
+  words. "@" marks the one word that turns peach and takes the period.
+*/
+const typePattern = (style: string, rows: { shift: number; words: string }[]) =>
+  mark(
+    `position:absolute;${style}`,
+    rows
+      .map(
+        (r) =>
+          `<span style="display:block;margin-left:${-r.shift}em">${r.words.replace(
+            /@(\w+)/,
+            `<span style="color:var(--ud-peach)">$1</span>${peachDot}`,
+          )}</span>`,
+      )
+      .join(""),
+  );
+const twice = (s: string, n = 4) => Array(n).fill(s).join(" ");
+
+const pair = "unexpected detail";
+const patternTile: Thumb = {
+  id: "",
+  tag: NEW,
+  name: "Type pattern",
+  source: "Reference: the repeated word hang tag",
+  note: "The name repeated in tilted rows that run off every edge. One “detail” is peach and takes the period.",
+  bg: "var(--ud-paper)",
+  color: "var(--ud-ink)",
+  html: typePattern(
+    "left:-34cqi;top:-16cqi;transform:rotate(-8deg);font-family:'Fraunces',serif;font-size:9cqi;font-weight:600;line-height:1.22;letter-spacing:-.01em;font-variation-settings:'SOFT' 100",
+    Array.from({ length: 14 }, (_, i) => ({
+      shift: i === 5 ? -2.6 : [0, 3.4, 1.2, 4.6, 2.3, 5.5][i % 6],
+      words: i === 5 ? `unexpected @detail ${twice(pair, 3)}` : twice(pair),
+    })),
+  ),
+};
+const patternAlt: Thumb = {
+  id: "",
+  tag: ALT,
+  name: "Type pattern, one detail",
+  source: "Reference: the repeated word hang tag",
+  note: "Straight rows of “unexpected” in a heavier serif. Only one word in the whole field says “detail”, in peach.",
+  bg: "var(--ud-paper)",
+  color: "var(--ud-ink)",
+  html: typePattern(
+    "left:0;top:-4cqi;font-family:'DM Serif Display',serif;font-size:11.5cqi;line-height:1.08;letter-spacing:-.015em",
+    Array.from({ length: 9 }, (_, i) => ({
+      shift: [0.9, 3.6, 2.1, 4.8, 1.4, 3.1, 0.5, 4.2, 2.6][i],
+      words: i === 4 ? "unexpected @detail unexpected unexpected" : twice("unexpected"),
+    })),
+  ),
+};
 
 const r2Rows: Thumb[][] = [
   [
@@ -1053,6 +1109,7 @@ const r2Rows: Thumb[][] = [
     },
     { ...tile("T11"), tag: DARK, name: "Leaning line, dark", bg: cocoa, color: "var(--ud-paper)" },
   ],
+  [patternTile, patternAlt, { ...patternTile, tag: DARK, name: "Type pattern, dark", bg: cocoa, color: "var(--ud-paper)" }],
 ];
 const r2Tiles: Thumb[] = r2Rows.flat().map((t, i) => ({
   ...t,
@@ -1082,7 +1139,7 @@ const rounds: Round[] = [
         kind: "tiles",
         id: "r2-tiles",
         heading: "Thumbnails",
-        intro: 'Each row is a pick, an alternate, and a dark version. Color takes are under <a href="#color-heading">Color and atmosphere directions</a>.',
+        intro: 'Each row is a pick or a new direction, an alternate, and a dark version. Color takes are under <a href="#color-heading">Color and atmosphere directions</a>.',
         items: r2Tiles,
       },
     ],
