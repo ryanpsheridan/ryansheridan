@@ -1350,6 +1350,13 @@ const r4Tiles: Thumb[] = [
     note: "Everything but one “unexpected detail” fades back. That line now sits on the middle of the tile.",
     html: typePattern(glPatternCentered, glRows, true),
   },
+  {
+    ...r3("14"),
+    prev: "14",
+    name: "Missing dot, stagger, dark",
+    note: "The large dots with one missing, on dark, with the staggered Gloock wordmark from 02. The missing dot turns up as the period.",
+    html: artOf(r3("14")) + staggerMark,
+  },
 ].map((t, i) => ({ ...t, tag: CONTENDER, id: pad(i + 1) }));
 
 type LogoSection = { kind: "logos"; id: string; heading: string; nav?: string; intro: string; items: Logo[] };
@@ -1391,7 +1398,7 @@ const rounds: Round[] = [
         heading: "Design elements",
         nav: "Elements",
         intro: "A set of shapes that can work together across social, thumbnails and marketing.",
-        items: r3Tiles.map((t) => (["10", "17", "19", "20", "23"].includes(t.id) ? { ...t, tag: PICKED4 } : t)),
+        items: r3Tiles.map((t) => (["10", "14", "17", "19", "20", "23"].includes(t.id) ? { ...t, tag: PICKED4 } : t)),
       },
     ],
   },
