@@ -313,15 +313,18 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
       return;
     }
     rows.forEach((row) => row.classList.remove("is-current"));
-    const mid = window.innerHeight / 2;
+    // On a phone the line sits at 70% of the screen, not the middle, so the
+    // next project starts as it scrolls up into view instead of waiting
+    // until it reaches the center.
+    const line = window.innerHeight * 0.7;
     let best: Thumb | null = null;
     let bestDistance = Infinity;
     for (const t of thumbs) {
       const box = t.row.querySelector(".cell-image")!.getBoundingClientRect();
-      // Only a thumbnail that is at least half on screen can take over.
+      // Only a thumbnail that is at least a third on screen can take over.
       const visible = Math.min(box.bottom, window.innerHeight) - Math.max(box.top, 0);
-      if (visible < box.height / 2) continue;
-      const distance = Math.abs(box.top + box.height / 2 - mid);
+      if (visible < box.height / 3) continue;
+      const distance = Math.abs(box.top + box.height / 2 - line);
       if (distance < bestDistance) { bestDistance = distance; best = t; }
     }
     thumbs.forEach((t) => (t === best ? play(t) : t.playing && rest(t)));
