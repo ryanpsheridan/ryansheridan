@@ -897,13 +897,18 @@ const pickedTiles = ["T4", "T5", "T8", "T10", "T11"];
 const PICK = "Pick from round 1";
 const ALT = "Alternate";
 const DARK = "Dark version";
-const NEW = "New direction";
+const NEW_DIRECTION = "New direction";
+const PICKED3 = "Picked for round 03";
 
 const study = (no: number) => studies.find((l) => l.no === no)!;
 const tile = (id: string) => thumbs.find((t) => t.id === id)!;
 // Everything a tile draws before its wordmark.
 // The typeface a tile sets its wordmark in.
-const fontOf = (t: Thumb) => /font-family:'([^']+)'/.exec(t.html.slice(t.html.indexOf("<p ")))?.[1] ?? "";
+const fontOf = (t: Thumb) => {
+  const p = t.html.slice(t.html.indexOf("<p "));
+  const family = /font-family:'([^']+)'/.exec(p)?.[1] ?? "";
+  return family === "Geist" && /font-weight:500/.test(p) ? "Geist Medium" : family;
+};
 const artOf = (t: Thumb) => t.html.slice(0, t.html.indexOf("<p "));
 // Warm near black: a dark chocolate pulled most of the way to black.
 const cocoa = "var(--ud-cocoa)";
@@ -972,25 +977,26 @@ const r2Logos: Logo[] = [
   peach. `rows` is one entry per line: how far it shifts left (em) and its
   words. "@{...}" marks the one phrase that turns peach and takes the period.
 */
-const typePattern = (style: string, rows: { shift: number; words: string }[]) =>
-  mark(
+const typePattern = (style: string, rows: { shift: number; words: string }[], fade = false) => {
+  const dim = (t: string) => (fade && t.trim() ? `<span style="opacity:.13">${t}</span>` : t);
+  const focus = fade ? "" : "color:var(--ud-peach)";
+  return mark(
     `position:absolute;${style}`,
     rows
-      .map(
-        (r) =>
-          `<span style="display:block;margin-left:${-r.shift}em">${r.words.replace(
-            /@\{([^}]+)\}/,
-            `<span style="color:var(--ud-peach)">$1</span>${peachDot}`,
-          )}</span>`,
-      )
+      .map((r) => {
+        const m = /^(.*?)@\{([^}]+)\}(.*)$/.exec(r.words);
+        const body = m ? `${dim(m[1])}<span data-focus style="${focus}">${m[2]}</span>${peachDot}${dim(m[3])}` : dim(r.words);
+        return `<span style="display:block;margin-left:${-r.shift}em">${body}</span>`;
+      })
       .join(""),
   );
+};
 const twice = (s: string, n = 4) => Array(n).fill(s).join(" ");
 
 const pair = "unexpected detail";
 const patternTile: Thumb = {
   id: "",
-  tag: NEW,
+  tag: NEW_DIRECTION,
   name: "Type pattern",
   source: "Reference: the repeated word hang tag",
   note: "The name repeated in tilted rows that run off every edge. One “unexpected detail” is peach and takes the period.",
@@ -1115,11 +1121,221 @@ const r2Tiles: Thumb[] = r2Rows.flat().map((t, i) => ({
   id: pad(r2Logos.length + i + 1),
 }));
 
+/*
+  Round 03, from the call after round 02. Every logo is flush right with a
+  hanging period, set only in the faces that landed: DM Serif Display, Gloock
+  and Geist Medium (never joined). The old 04 and 07 sit side by side as 01
+  and 02. The thumbnails are now design elements: a set of shapes that can
+  work together across social, thumbnails and marketing. Rings are out.
+*/
+const PICK2 = "Pick from round 2";
+const REVISED = "Revised";
+const NEW = "New";
+const hang = (css: string, extra = "") => `<span class="pd hang" style="${dotVars(css)};${extra}">.</span>`;
+const dmCss = "font-family:'DM Serif Display'";
+const glCss = "font-family:'Gloock'";
+const geCss = "font-family:'Geist';font-weight:500";
+const dmLogo = { font: "DM Serif Display", family: '"DM Serif Display", serif', style: "font-size:14cqi;line-height:.9;letter-spacing:-.015em" };
+const glLogo = { font: "Gloock", family: '"Gloock", serif', style: "font-size:13cqi;line-height:.94;letter-spacing:-.01em" };
+const geLogo = { font: "Geist Medium", family: '"Geist", sans-serif', style: "font-size:14cqi;font-weight:500;line-height:.9;letter-spacing:-.04em" };
+// "detail" with a dotless i: the dot has fallen to the end as the period.
+const fallen = "deta&#305;l";
+
+const r3Logos: Logo[] = [
+  { ...r2Logos[3], prev: "04", tag: PICK2 },
+  {
+    no: 0,
+    prev: "07",
+    tag: REVISED,
+    name: "Right flush, Geist Medium",
+    note: "The one stroke mark with the p and l pulled apart. Flush right beside 01, period hanging.",
+    ...geLogo,
+    lines: [{ text: "unexpected" }, { text: `detail${hang(geCss)}` }],
+    align: "right",
+  },
+  {
+    no: 0,
+    tag: NEW,
+    name: "Right flush, Gloock",
+    note: "The same setting in Gloock. Sharper serifs, a little more weight.",
+    ...glLogo,
+    lines: [{ text: "unexpected" }, { text: `detail${hang(glCss)}` }],
+    align: "right",
+  },
+  {
+    no: 0,
+    prev: "01",
+    tag: REVISED,
+    name: "Stagger, right",
+    note: "The stagger turned to the right edge. “detail” steps past “unexpected” and the period hangs off the end.",
+    ...glLogo,
+    style: "font-size:12cqi;line-height:.94;letter-spacing:-.01em",
+    lines: [{ text: "unexpected", style: "padding-right:1.2em" }, { text: `detail${hang(glCss)}` }],
+    align: "right",
+  },
+  {
+    no: 0,
+    tag: NEW,
+    name: "Fallen dot",
+    note: "The i in “detail” has lost its dot. It turns up at the end of the word as the peach period.",
+    ...dmLogo,
+    lines: [{ text: "unexpected" }, { text: `${fallen}${hang(dmCss)}` }],
+    align: "right",
+  },
+  {
+    no: 0,
+    tag: NEW,
+    name: "Fallen dot, Geist Medium",
+    note: "The same story in Geist Medium, where the missing dot is easier to spot.",
+    ...geLogo,
+    lines: [{ text: "unexpected" }, { text: `${fallen}${hang(geCss)}` }],
+    align: "right",
+  },
+  {
+    no: 0,
+    prev: "05",
+    tag: REVISED,
+    name: "Echo, right",
+    note: "Faint repeats of “unexpected” fade up to one solid “detail”, all flush right.",
+    ...dmLogo,
+    style: "font-size:12.5cqi;line-height:.92;letter-spacing:-.015em",
+    lines: [
+      { text: "unexpected", style: "opacity:.08" },
+      { text: "unexpected", style: "opacity:.18" },
+      { text: "unexpected", style: "opacity:.5" },
+      { text: `detail${hang(dmCss)}` },
+    ],
+    align: "right",
+  },
+  {
+    no: 0,
+    tag: NEW,
+    name: "Rolled period",
+    note: "The period has rolled away from the word and come to rest past the edge.",
+    ...glLogo,
+    lines: [{ text: "unexpected" }, { text: `detail${hang(glCss, "margin-left:.5em;margin-right:calc((var(--dd) + 2 * var(--dl) + .5em) * -1)")}` }],
+    align: "right",
+  },
+].map((logo, i) => ({ ...logo, label: pad(i + 1) }));
+
+const dmMark = "font-family:'DM Serif Display',serif;font-size:12.5cqi;line-height:.9;letter-spacing:-.015em";
+const glMark = "font-family:'Gloock',serif;font-size:12cqi;line-height:.92;letter-spacing:-.01em";
+const geMark = "font-family:'Geist',sans-serif;font-size:12.5cqi;font-weight:500;line-height:.9;letter-spacing:-.04em";
+const rightMark = (font: string, inner = `unexpected<br>detail${hangingDot}`) =>
+  mark(`position:absolute;right:11.4cqi;bottom:9cqi;text-align:right;${font}`, inner);
+const element = (art: string, name: string, note: string, font: string, inner?: string): Thumb => ({
+  id: "",
+  name,
+  source: "",
+  note,
+  bg: "var(--ud-paper)",
+  color: "var(--ud-ink)",
+  html: art + rightMark(font, inner),
+});
+const darkOf = (t: Thumb, name: string): Thumb => ({ ...t, prev: undefined, tag: DARK, name, bg: cocoa, color: "var(--ud-paper)" });
+
+// Missing dot at period size: the grid dots match Gloock's period at 12cqi.
+const periodGrid = art(
+  Array.from({ length: 7 }, (_, row) =>
+    Array.from({ length: 14 }, (_, col) =>
+      row === 3 && col === 8 ? "" : `<circle cx="${(12.42 + col * 6.833).toFixed(2)}" cy="${(13 + row * 6.833).toFixed(2)}" r="1.01" fill="currentColor"/>`,
+    ).join(""),
+  ).join(""),
+);
+
+const glPattern = "left:-34cqi;top:-16cqi;transform:rotate(-8deg);font-family:'Gloock',serif;font-size:9cqi;line-height:1.22;letter-spacing:-.005em";
+const glRows = Array.from({ length: 14 }, (_, i) => ({
+  shift: i === 5 ? -2.6 : [0, 3.4, 1.2, 4.6, 2.3, 5.5][i % 6],
+  words: i === 5 ? `detail @{unexpected detail} ${twice(pair, 3)}` : twice(pair),
+}));
+const fadedPattern: Thumb = {
+  id: "",
+  tag: ALT,
+  name: "Type pattern, faded",
+  source: "",
+  note: "Everything but one “unexpected detail” fades back, and that one comes forward in solid ink.",
+  bg: "var(--ud-paper)",
+  color: "var(--ud-ink)",
+  html: typePattern(glPattern, glRows, true),
+};
+
+const r3Rows: Thumb[][] = [
+  [
+    {
+      ...element(artOf(tile("T5")), "Dots", "One dot in the grid turns peach and stands in for the period. Wordmark flush right.", dmMark, "unexpected<br>detail"),
+      prev: "12",
+      tag: REVISED,
+    },
+    { ...element(artOf(tile("T5")), "Dots, Geist Medium", "The same grid with the wordmark in Geist Medium.", geMark, "unexpected<br>detail"), tag: ALT },
+  ],
+  [
+    {
+      ...element(artOf(tile("T8")), "Missing dot", "One dot is gone from the grid and turns up as the hanging period.", dmMark),
+      prev: "15",
+      tag: REVISED,
+    },
+    {
+      ...element(periodGrid, "Missing dot, period size", "Every dot is the size of the period, so the missing one is easy to place.", glMark),
+      prev: "16",
+      tag: ALT,
+    },
+  ],
+  [
+    {
+      ...element(artOf(tile("T10")), "Turned square", "One square in the grid has turned on its corner.", dmMark),
+      prev: "19",
+      tag: PICK2,
+    },
+    { ...element(artOf(tile("T10")), "Turned square, Gloock", "The same grid with the wordmark in Gloock.", glMark), tag: ALT },
+  ],
+  [
+    {
+      ...element(artOf(tile("T11")), "Leaning line", "One line in the row leans. The wordmark moves out of Source Serif 4 and the hook comes off.", dmMark),
+      prev: "21",
+      tag: REVISED,
+    },
+    { ...element(artOf(tile("T11")), "Leaning line, Geist Medium", "The same lines with the wordmark in Geist Medium.", geMark), tag: ALT },
+  ],
+].map(([a, b]) => [a, b, darkOf(a, `${a.name}, dark`)]);
+r3Rows.push([
+  { ...patternTile, prev: "24", tag: REVISED, note: "The name repeated in tilted rows, now in Gloock. One “unexpected detail” is peach.", html: typePattern(glPattern, glRows) },
+  fadedPattern,
+  darkOf(fadedPattern, "Type pattern, faded, dark"),
+]);
+const r3Tiles: Thumb[] = r3Rows.flat().map((t, i) => ({
+  ...t,
+  note: t.tag === DARK ? "" : t.note,
+  id: pad(r3Logos.length + i + 1),
+}));
+
 type LogoSection = { kind: "logos"; id: string; heading: string; nav?: string; intro: string; items: Logo[] };
 type TileSection = { kind: "tiles"; id: string; heading: string; nav?: string; intro: string; items: Thumb[] };
 type Round = { id: string; title: string; intro: string; r2?: boolean; sections: (LogoSection | TileSection)[] };
 
 const rounds: Round[] = [
+  {
+    id: "round-03",
+    title: "Round 03",
+    intro: "Built from the call: flush right, a hanging period, and three typefaces.",
+    r2: true,
+    sections: [
+      {
+        kind: "logos",
+        id: "r3-logos",
+        heading: "Logos",
+        intro: "All flush right with the period hanging. 01 and 02 sit side by side.",
+        items: r3Logos,
+      },
+      {
+        kind: "tiles",
+        id: "r3-tiles",
+        heading: "Design elements",
+        nav: "Elements",
+        intro: "A set of shapes that can work together across social, thumbnails and marketing.",
+        items: r3Tiles,
+      },
+    ],
+  },
   {
     id: "round-02",
     title: "Round 02",
@@ -1131,14 +1347,15 @@ const rounds: Round[] = [
         id: "r2-logos",
         heading: "Logos",
         intro: "Pick on the left, alternate on the right.",
-        items: r2Logos,
+        items: r2Logos.map((l) => (["01", "04", "05", "07"].includes(l.label!) ? { ...l, tag: PICKED3 } : l)),
       },
       {
         kind: "tiles",
         id: "r2-tiles",
-        heading: "Thumbnails",
+        heading: "Design elements",
+        nav: "Elements",
         intro: 'Each row is a pick or a new direction, an alternate, and a dark version. Color takes are under <a href="#color-heading">Color and atmosphere directions</a>.',
-        items: r2Tiles,
+        items: r2Tiles.map((t) => (["12", "15", "16", "19", "21", "24"].includes(t.id) ? { ...t, tag: PICKED3 } : t)),
       },
     ],
   },
@@ -1159,7 +1376,7 @@ const rounds: Round[] = [
         kind: "tiles",
         id: "thumbs-heading",
         heading: "Thumbnail directions",
-        nav: "Thumbnails",
+        nav: "Elements",
         intro: "How the wordmark could live on a podcast tile.",
         items: thumbs.map((t) => (pickedTiles.includes(t.id) ? { ...t, tag: "Picked for round 02" } : t)),
       },
@@ -1275,7 +1492,7 @@ const fontsHref =
                                 ))}
                               </div>
                               <div class="logo-meta">
-                                {logo.tag && <p class:list={["tag", { "tag--pick": logo.tag !== ALT }]}>{logo.tag}</p>}
+                                {logo.tag && <p class:list={["tag", { "tag--pick": logo.tag?.startsWith("Pick") }]}>{logo.tag}</p>}
                                 <p class="logo-title">
                                   <span class="num">{logo.label ?? pad(logo.no)}</span>
                                   <span>
@@ -1305,7 +1522,7 @@ const fontsHref =
                                   <Fragment set:html={t.html} />
                                 </div>
                                 <div class="logo-meta">
-                                  {t.tag && <p class:list={["tag", { "tag--pick": t.tag === PICK || t.tag.startsWith("Picked") }]}>{t.tag}</p>}
+                                  {t.tag && <p class:list={["tag", { "tag--pick": t.tag.startsWith("Pick") }]}>{t.tag}</p>}
                                   <p class="logo-title">
                                     <span class="num">{t.id}</span>
                                     <span>
