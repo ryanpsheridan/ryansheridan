@@ -1316,8 +1316,32 @@ const CONTENDER = "Contender";
 const PICKED4 = "Picked for round 04";
 const r3 = (id: string) => r3Tiles.find((t) => t.id === id)!;
 const staggerMark = rightMark(glMark, `<span style="display:block;padding-right:1.2em">unexpected</span>detail${hangingDot}`);
-// The pattern shifted up so the focused line sits on the tile's middle.
-const glPatternCentered = glPattern.replace("top:-16cqi", "top:-22.7cqi");
+/*
+  A faded pattern whose focused line is pinned to the tile's center, however
+  wide the type renders. The block is centered on the tile and turned about
+  its own middle, the focused line is the middle row, and inside that row a
+  three column grid keeps "unexpected detail" in the exact center with the
+  faded words running off either side. The period hangs, so the words alone
+  are what gets centered.
+*/
+const centeredPattern = (font: string, count = 13) => {
+  const dim = (t: string, extra = "") => `<span style="opacity:.13;min-width:0;${extra}">${t}</span>`;
+  const shifts = [0, 3.4, 1.2, 4.6, 2.3, 5.5];
+  const mid = Math.floor(count / 2);
+  const rows = Array.from({ length: count }, (_, i) =>
+    i === mid
+      ? `<span style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)">` +
+        dim(`${pair} ${pair} detail`, "text-align:right;padding-right:.25em;direction:rtl") +
+        `<span data-focus>unexpected detail${hangingDot}</span>` +
+        dim(`${pair} ${pair}`, "text-align:left;padding-left:.5em") +
+        "</span>"
+      : `<span style="display:block;position:relative;left:${shifts[i % 6] - 2.75}em">${dim(twice(pair))}</span>`,
+  );
+  return mark(
+    `position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-8deg);text-align:center;${font}`,
+    rows.join(""),
+  );
+};
 const r4Tiles: Thumb[] = [
   {
     ...r3("20"),
@@ -1348,7 +1372,7 @@ const r4Tiles: Thumb[] = [
     ...r3("23"),
     prev: "23",
     note: "Everything but one “unexpected detail” fades back. That line now sits on the middle of the tile.",
-    html: typePattern(glPatternCentered, glRows, true),
+    html: centeredPattern("font-family:'Gloock',serif;font-size:9cqi;line-height:1.22;letter-spacing:-.005em"),
   },
   {
     ...r3("14"),
