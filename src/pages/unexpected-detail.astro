@@ -56,6 +56,46 @@ const direction = [
   place:  where the lockup sits in the tile (CSS place-items).
   style:  extra CSS on the lockup (size, weight, leading, tracking).
 */
+/*
+  Every period is drawn as a circle. Typefaces disagree on the shape (Young
+  Serif's is a diamond, Geist's a square), so the glyph stays in place for
+  spacing but is not painted, and a circle is laid over it. Each entry is
+  [diameter, left, bottom] in em, measured from that face's own period so the
+  circle sits where the glyph did. Keys are "Family|weight".
+*/
+const dotGeom: Record<string, [number, number, number]> = {
+  "Fraunces|300": [0.115, 0.0462, 0.2487],
+  "Fraunces|600": [0.1762, 0.0444, 0.2456],
+  "Fraunces|650": [0.1925, 0.0437, 0.2437],
+  "Fraunces|800": [0.2238, 0.0419, 0.2406],
+  "Fraunces|850": [0.23, 0.0413, 0.2412],
+  "Gloock|400": [0.1688, 0.0406, 0.2119],
+  "Instrument Serif|400": [0.1037, 0.0556, 0.3019],
+  "Playfair Display|900": [0.185, 0.0488, 0.2288],
+  "DM Serif Display|400": [0.1713, 0.0644, 0.3206],
+  "Corben|700": [0.25, 0.0537, 0.4587],
+  "Young Serif|400": [0.16, 0.0763, 0.3638],
+  "Source Serif 4|600": [0.125, 0.0375, 0.325],
+  "Bricolage Grotesque|700": [0.1737, 0.0256, 0.2519],
+  "Geist|500": [0.14, 0.0363, 0.2888],
+  "EB Garamond|500": [0.1275, 0.055, 0.2775],
+};
+
+/** CSS variables that place the circle, read from a font-family and weight in `css`. */
+function dotVars(css: string) {
+  const family = /['"]([^'"]+)['"]/.exec(css)?.[1] ?? "";
+  const weight = Number(/font-weight:\s*(\d+)/.exec(css)?.[1] ?? 400);
+  const options = Object.keys(dotGeom).filter((k) => k.startsWith(`${family}|`));
+  const key = options.sort((a, b) => Math.abs(Number(a.split("|")[1]) - weight) - Math.abs(Number(b.split("|")[1]) - weight))[0];
+  const [d, l, b] = dotGeom[key] ?? [0.15, 0.05, 0.25];
+  return `--dd:${d}em;--dl:${l}em;--db:${b}em`;
+}
+
+/** A peach period for use inside a line's HTML. `extra` adds inline CSS. */
+function pd(css: string, extra = "") {
+  return `<span class="pd" style="${dotVars(css)};${extra}">.</span>`;
+}
+
 type Line = { text: string; style?: string };
 type Logo = {
   /** Fixed study number, so feedback keeps pointing at the same study. */
@@ -345,7 +385,7 @@ const details: Logo[] = [
     note: "The name hides a mirror: “ted” closes one word and “det” opens the next. The period lifts off the baseline to mark the hinge.",
     family: '"Young Serif", serif',
     lines: [
-      { text: `unexpected<span style="color:var(--ud-peach);position:relative;top:-.2em;margin:0 .03em">.</span>detail` },
+      { text: `unexpected${pd("font-family:'Young Serif'", "top:-.2em;margin:0 .03em")}detail` },
     ],
     style: "font-size:9.4cqi;line-height:1;letter-spacing:-.02em",
   },
@@ -377,11 +417,16 @@ const studies = [...logos, ...details];
 */
 type Thumb = { prev?: string; tag?: string; id: string; name: string; source: string; note: string; bg: string; color: string; html: string };
 
-const peachDot = '<span style="color:var(--ud-peach)">.</span>';
+// Period tokens for tile HTML. mark() fills in the geometry for its font.
+const peachDot = '<span class="pd">.</span>';
+const hangingDot = '<span class="pd hang">.</span>';
 const art = (inner: string) =>
   `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%" aria-hidden="true">${inner}</svg>`;
 const mark = (style: string, inner: string) =>
-  `<p style="margin:0;white-space:nowrap;font-kerning:normal;font-synthesis:none;${style}">${inner}</p>`;
+  `<p style="margin:0;white-space:nowrap;font-kerning:normal;font-synthesis:none;${style}">${inner.replace(
+    /<span class="pd( hang)?">/g,
+    (m) => `${m.slice(0, -1)} style="${dotVars(style)}">`,
+  )}</p>`;
 
 // The primary hook, set small. Only on tiles with open space for it and a
 // visual that already says the same thing.
@@ -851,7 +896,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 */
 const pickedLogos = [3, 7, 18, 21];
 const pickedTiles = ["T4", "T5", "T8", "T10", "T11"];
-const PICK = "Marcy's pick";
+const PICK = "Pick from round 1";
 const ALT = "Alternate";
 const DARK = "Dark version";
 
@@ -886,7 +931,7 @@ const r2Logos: Logo[] = [
     family: '"DM Serif Display", serif',
     lines: [
       { text: "unexpected" },
-      { text: 'detail<span style="position:absolute;color:var(--ud-peach)">.</span>' },
+      { text: `detail${pd("font-family:'DM Serif Display'", "margin-right:calc((var(--dd) + 2 * var(--dl)) * -1)")}` },
     ],
     align: "right",
     style: "font-size:14cqi;line-height:.9;letter-spacing:-.015em",
@@ -912,18 +957,11 @@ const r2Logos: Logo[] = [
   },
   { ...study(21), prev: "21", tag: PICK },
   {
-    no: 0,
+    ...study(13),
+    prev: "13",
     tag: ALT,
-    name: "One stroke, peach bridge",
-    font: "Geist Medium",
-    note: "The same fused stroke, with the stretch that links the two words picked out in peach. The period goes back to ink.",
-    family: '"Geist", sans-serif',
-    lines: [{ text: "unexpected", style: "padding-left:.0594em" }, { text: "detail" }],
-    period: "ink",
-    align: "left",
-    // Stem of the p and l, between the first baseline and the second x-height.
-    extra: '<span style="position:absolute;left:2.2255em;top:.79em;width:.105em;height:.285em;background:var(--ud-peach)"></span>',
-    style: "font-size:15cqi;font-weight:500;line-height:.84;letter-spacing:-.04em",
+    name: "One stroke, light serif",
+    note: "The same idea in a light serif. The p drops straight into the l as one clean line, with the serifs taken off where they meet.",
   },
 ].map((logo, i) => ({ ...logo, label: pad(i + 1) }));
 
@@ -934,8 +972,8 @@ const r2Rows: Thumb[][] = [
       id: "",
       tag: ALT,
       name: "Rings, right flush",
-      source: "Wordmark from pick 03 (prev. 07)",
-      note: "The rings move to the left and the wordmark takes the right flush setting from the logo picks.",
+      source: "Wordmark from 04, hanging period",
+      note: "The rings move to the left and the wordmark takes the right flush setting, with the period hanging outside the edge.",
       bg: "var(--ud-paper)",
       color: "var(--ud-ink)",
       html:
@@ -946,7 +984,7 @@ const r2Rows: Thumb[][] = [
         ) +
         mark(
           "position:absolute;right:11.4cqi;bottom:9cqi;text-align:right;font-family:'DM Serif Display',serif;font-size:12.5cqi;line-height:.9;letter-spacing:-.015em",
-          `unexpected<br>detail${peachDot}`,
+          `unexpected<br>detail${hangingDot}`,
         ),
     },
     { ...tile("T4"), tag: DARK, name: "Rings, dark", note: "The pick on warm near black.", bg: cocoa, color: "var(--ud-paper)" },
@@ -980,16 +1018,16 @@ const r2Rows: Thumb[][] = [
     {
       id: "",
       tag: ALT,
-      name: "Turned square, stagger wordmark",
-      source: "Wordmark from pick 01 (prev. 03)",
-      note: "The same grid with the stagger wordmark from the logo picks, so the type steps sideways the way the square turns.",
+      name: "Turned square, right flush",
+      source: "Wordmark from 04, hanging period",
+      note: "The same grid with the wordmark on two lines, flush right against the edge of the squares, and the period hanging outside it.",
       bg: "var(--ud-paper)",
       color: "var(--ud-ink)",
       html:
         artOf(tile("T10")) +
         mark(
-          "position:absolute;left:11.4cqi;bottom:9cqi;font-family:'Gloock',serif;font-size:12cqi;line-height:.95;letter-spacing:-.01em",
-          `unexpected<br><span style="padding-left:1.6em">detail${peachDot}</span>`,
+          "position:absolute;right:11.4cqi;bottom:9cqi;text-align:right;font-family:'DM Serif Display',serif;font-size:12.5cqi;line-height:.9;letter-spacing:-.015em",
+          `unexpected<br>detail${hangingDot}`,
         ),
     },
     { ...tile("T10"), tag: DARK, name: "Turned square, dark", note: "The pick on warm near black.", bg: cocoa, color: "var(--ud-paper)" },
@@ -1029,7 +1067,7 @@ const rounds: Round[] = [
   {
     id: "round-02",
     title: "Round 02",
-    intro: "Marcy's picks from round 01, each beside a close alternate. Numbers restart at 01 and run straight through, with the round 01 number in parentheses.",
+    intro: "The picks from round 1, each beside a close alternate. Numbers restart at 01 and run straight through, with the round 01 number in parentheses.",
     r2: true,
     sections: [
       {
@@ -1165,7 +1203,10 @@ const fontsHref =
                                         <span class="line" style={line.style}>
                                           <Fragment set:html={line.text} />
                                           {logo.period && j === periodLine(logo) && (
-                                            <span class={`dot dot--${logo.period}`}>.</span>
+                                            <span
+                                              class={`dot dot--${logo.period}`}
+                                              style={dotVars(`font-family:${logo.family};${logo.style ?? ""}`)}
+                                            >.</span>
                                           )}
                                         </span>
                                       ))}
@@ -1661,12 +1702,32 @@ const fontsHref =
     font-style: italic;
   }
 
-  .dot--peach {
-    color: var(--ud-peach);
+  /* Periods: the glyph keeps its space but is not painted; a circle is. */
+  .dot,
+  .tile :global(.pd) {
+    position: relative;
+    -webkit-text-fill-color: transparent;
   }
 
-  .dot--ink {
-    color: inherit;
+  /* A hanging period gives back its own width, so it sits outside the edge. */
+  .tile :global(.pd.hang) {
+    margin-right: calc((var(--dd) + 2 * var(--dl)) * -1);
+  }
+
+  .dot::after,
+  .tile :global(.pd)::after {
+    content: "";
+    position: absolute;
+    left: var(--dl);
+    bottom: var(--db);
+    width: var(--dd);
+    height: var(--dd);
+    border-radius: 50%;
+    background: var(--ud-peach);
+  }
+
+  .dot--ink::after {
+    background: currentColor;
   }
 
   .logo-meta {
