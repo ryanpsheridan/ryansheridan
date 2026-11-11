@@ -1117,8 +1117,8 @@ const r2Tiles: Thumb[] = r2Rows.flat().map((t, i) => ({
   id: pad(r2Logos.length + i + 1),
 }));
 
-type LogoSection = { kind: "logos"; id: string; heading: string; intro: string; items: Logo[] };
-type TileSection = { kind: "tiles"; id: string; heading: string; intro: string; items: Thumb[] };
+type LogoSection = { kind: "logos"; id: string; heading: string; nav?: string; intro: string; items: Logo[] };
+type TileSection = { kind: "tiles"; id: string; heading: string; nav?: string; intro: string; items: Thumb[] };
 type Round = { id: string; title: string; intro: string; r2?: boolean; sections: (LogoSection | TileSection)[] };
 
 const rounds: Round[] = [
@@ -1153,6 +1153,7 @@ const rounds: Round[] = [
         kind: "logos",
         id: "explore-heading",
         heading: "Logo explorations",
+        nav: "Logos",
         intro: "Type and alignment studies, shown light and dark.",
         items: studies.map((l) => (pickedLogos.includes(l.no) ? { ...l, tag: "Picked for round 02" } : l)),
       },
@@ -1160,6 +1161,7 @@ const rounds: Round[] = [
         kind: "tiles",
         id: "thumbs-heading",
         heading: "Thumbnail directions",
+        nav: "Thumbnails",
         intro: "How the wordmark could live on a podcast tile.",
         items: thumbs.map((t) => (pickedTiles.includes(t.id) ? { ...t, tag: "Picked for round 02" } : t)),
       },
@@ -1167,6 +1169,7 @@ const rounds: Round[] = [
         kind: "tiles",
         id: "color-heading",
         heading: "Color and atmosphere directions",
+        nav: "Color",
         intro: "Concepts based on Marcy's references.",
         items: colorThumbs,
       },
@@ -1177,13 +1180,13 @@ const rounds: Round[] = [
 const pageNav = [
   ...rounds.map((r) => ({
     title: r.title,
-    items: r.sections.map((sec) => ({ href: `#${sec.id}`, label: sec.heading, count: sec.items.length as number | undefined })),
+    items: r.sections.map((sec) => ({ href: `#${sec.id}`, label: sec.nav ?? sec.heading, count: sec.items.length as number | undefined })),
   })),
   {
     title: "Reference",
     items: [
       { href: "#brief", label: "Brief", count: undefined },
-      { href: "#direction", label: "Direction from kickoff", count: undefined },
+      { href: "#direction", label: "Kickoff", count: undefined },
     ],
   },
 ];
@@ -1902,21 +1905,47 @@ const fontsHref =
       display: none;
     }
 
-    /* One section per row, count flush right, hairlines between. */
+    /* Compact: one line per round, its sections inline beside it. */
+    .ud-sidebar nav {
+      gap: 0;
+    }
+
+    .nav-group {
+      display: grid;
+      grid-template-columns: 5.5rem 1fr;
+      align-items: baseline;
+      gap: var(--space-3);
+      margin-top: 0;
+      padding: var(--space-2) 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .ud-sidebar .label + .nav-group {
+      margin-top: var(--space-2);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .nav-title {
+      font-size: 13px;
+      color: var(--color-text);
+    }
+
     .nav-group .page-nav {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: var(--space-1) var(--space-4);
       padding-left: 0;
       border-left: none;
     }
 
-    .page-nav {
-      gap: 0;
-      border-bottom: 1px solid var(--color-border);
+    .page-nav a {
+      justify-content: flex-start;
+      gap: 0.35em;
+      font-size: 13px;
     }
 
-    .page-nav a {
-      align-items: baseline;
-      padding: var(--space-3) 0;
-      border-top: 1px solid var(--color-border);
+    .page-nav .count {
+      font-size: 11px;
     }
   }
 
