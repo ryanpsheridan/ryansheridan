@@ -31,8 +31,6 @@ const taglines = [
   { label: "Secondary invitation", line: "Everyone has one." },
 ];
 
-const pillars = ["The Detour Over the Script", "Substance Without Pretense", "Generous Curiosity"];
-
 // Notes from the kickoff call that should steer the logo work.
 const direction = [
   "Lowercase, minimal, soft serif. The deck's typeface is a placeholder, not the answer.",
@@ -1399,20 +1397,6 @@ const fontsHref =
                 ))
               }
             </nav>
-            {
-              taglines.map((t) => (
-                <div class="meta-group">
-                  <span class="label">{t.label}</span>
-                  <p class="meta-value">{t.line}</p>
-                </div>
-              ))
-            }
-            <div class="meta-group">
-              <span class="label">Pillars</span>
-              <ul class="pillars">
-                {pillars.map((item) => <li>{item}</li>)}
-              </ul>
-            </div>
           </div>
         </aside>
       </div>
@@ -1500,24 +1484,11 @@ const fontsHref =
     border-top: none;
   }
 
-  .meta-value {
-    font-family: var(--font-mono);
-    font-size: 14px;
-    line-height: 1.4;
-  }
-
-  .page-nav,
-  .pillars {
+  .page-nav {
     list-style: none;
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
-  }
-
-  .pillars li {
-    font-family: var(--font-mono);
-    font-size: 14px;
-    line-height: 1.4;
   }
 
   .page-nav a {
@@ -1899,10 +1870,6 @@ const fontsHref =
 
     .sidebar-inner {
       position: static;
-    }
-
-    .meta-group:not(nav) {
-      display: none;
     }
 
     /* Compact: one line per round, its sections inline beside it. */
