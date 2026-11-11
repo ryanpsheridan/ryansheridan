@@ -972,7 +972,7 @@ const r2Logos: Logo[] = [
   Type pattern, after the hang tag Marcy sent: the name repeated in rows that
   run off both edges, each row stepped sideways, with one word picked out in
   peach. `rows` is one entry per line: how far it shifts left (em) and its
-  words. "@" marks the one word that turns peach and takes the period.
+  words. "@{...}" marks the one phrase that turns peach and takes the period.
 */
 const typePattern = (style: string, rows: { shift: number; words: string }[]) =>
   mark(
@@ -981,7 +981,7 @@ const typePattern = (style: string, rows: { shift: number; words: string }[]) =>
       .map(
         (r) =>
           `<span style="display:block;margin-left:${-r.shift}em">${r.words.replace(
-            /@(\w+)/,
+            /@\{([^}]+)\}/,
             `<span style="color:var(--ud-peach)">$1</span>${peachDot}`,
           )}</span>`,
       )
@@ -995,14 +995,14 @@ const patternTile: Thumb = {
   tag: NEW,
   name: "Type pattern",
   source: "Reference: the repeated word hang tag",
-  note: "The name repeated in tilted rows that run off every edge. One “detail” is peach and takes the period.",
+  note: "The name repeated in tilted rows that run off every edge. One “unexpected detail” is peach and takes the period.",
   bg: "var(--ud-paper)",
   color: "var(--ud-ink)",
   html: typePattern(
     "left:-34cqi;top:-16cqi;transform:rotate(-8deg);font-family:'Fraunces',serif;font-size:9cqi;font-weight:600;line-height:1.22;letter-spacing:-.01em;font-variation-settings:'SOFT' 100",
     Array.from({ length: 14 }, (_, i) => ({
       shift: i === 5 ? -2.6 : [0, 3.4, 1.2, 4.6, 2.3, 5.5][i % 6],
-      words: i === 5 ? `unexpected @detail ${twice(pair, 3)}` : twice(pair),
+      words: i === 5 ? `detail @{unexpected detail} ${twice(pair, 3)}` : twice(pair),
     })),
   ),
 };
@@ -1011,14 +1011,14 @@ const patternAlt: Thumb = {
   tag: ALT,
   name: "Type pattern, one detail",
   source: "Reference: the repeated word hang tag",
-  note: "Straight rows of “unexpected” in a heavier serif. Only one word in the whole field says “detail”, in peach.",
+  note: "Straight rows of “unexpected” in a heavier serif. One line breaks the pattern with “unexpected detail” in peach.",
   bg: "var(--ud-paper)",
   color: "var(--ud-ink)",
   html: typePattern(
     "left:0;top:-4cqi;font-family:'DM Serif Display',serif;font-size:11.5cqi;line-height:1.08;letter-spacing:-.015em",
     Array.from({ length: 9 }, (_, i) => ({
-      shift: [0.9, 3.6, 2.1, 4.8, 1.4, 3.1, 0.5, 4.2, 2.6][i],
-      words: i === 4 ? "unexpected @detail unexpected unexpected" : twice("unexpected"),
+      shift: [0.9, 3.6, 2.1, 4.8, -0.4, 3.1, 0.5, 4.2, 2.6][i],
+      words: i === 4 ? "@{unexpected detail} unexpected unexpected" : twice("unexpected"),
     })),
   ),
 };
