@@ -472,7 +472,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Search and answer engines",
-        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. On 23 October 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs, holiday hours, and FAQ markup on the new lesson page to match the pages that already had it. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p><p>Treat this as a starting point. In the 12 days after the first push, the site averaged about 4.8 clicks and 240 impressions a day, against 0.5 clicks and 38 impressions a day in the 28 days before. It is an early read, and the rebuild itself is not live yet. I will add results here as the weeks come in.</p>`,
+        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. On 23 October 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs, holiday hours, and FAQ markup on the new lesson page to match the pages that already had it. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p><p>Treat this as a starting point. In the 18 days after the first push, the site averaged about 5.4 clicks and 228 impressions a day, against 0.5 clicks and 38 impressions a day in the 28 days before. It is an early read, and the rebuild itself is not live yet. I will add results here as the weeks come in.</p>`,
       },
       {
         type: "barChart",
@@ -480,7 +480,7 @@ const allProjects: Project[] = [
         unit: "clicks",
         points: ogcSearchConsole.map((d) => ({ date: d.date, value: d.clicks })),
         marker: { date: "2026-10-23", label: "First SEO push" },
-        caption: "Search Console, web search, 1 Sep to 3 Nov 2026. 14 clicks in the 28 days before the push, 57 in the 12 days from it.",
+        caption: "Search Console, web search, 1 Sep to 9 Nov 2026. 14 clicks in the 28 days before the push, 97 in the 18 days from it.",
       },
       {
         type: "barChart",
@@ -488,7 +488,7 @@ const allProjects: Project[] = [
         unit: "impressions",
         points: ogcSearchConsole.map((d) => ({ date: d.date, value: d.impressions })),
         marker: { date: "2026-10-23", label: "First SEO push" },
-        caption: "Search Console, web search, 1 Sep to 3 Nov 2026. 1,060 impressions in the 28 days before the push, 2,879 in the 12 days from it.",
+        caption: "Search Console, web search, 1 Sep to 9 Nov 2026. 1,060 impressions in the 28 days before the push, 4,104 in the 18 days from it.",
       },
       {
         type: "text",
@@ -505,7 +505,7 @@ const allProjects: Project[] = [
           { label: "Contact form", before: "Could lose inquiries without anyone knowing", after: "Fixed, and on a page of its own" },
           { label: "Opening hours", before: "Missing", after: "In the footer and on each location, with holidays and open now" },
           { label: "Content the staff edit themselves", before: "None", after: "Leagues, events, hours, prices, reviews and the team" },
-          { label: "Search clicks", before: "About 0.5 a day (28 days to 22 Oct 2026)", after: "About 4.8 a day in the first 12 days (to 3 Nov 2026), still measuring" },
+          { label: "Search clicks", before: "About 0.5 a day (28 days to 22 Oct 2026)", after: "About 5.4 a day in the first 18 days (to 9 Nov 2026), still measuring" },
         ],
       },
       {
