@@ -347,11 +347,12 @@ const allProjects: Project[] = [
     tags: ["Web Design", "Design System"],
     tools: ["Claude Code", "Next.js", "Pages CMS", "GitHub", "Vercel"],
     client: "Ohio Golf Club Indoor",
+    clientUrl: "https://www.ohiogolfclubindoor.com/",
     content: [
       {
         type: "text",
         heading: "The Project",
-        body: `<p>Ohio Golf Club Indoor is an indoor golf facility in Akron, Ohio, with nine TrackMan bays, a short game area, lessons, memberships and leagues. It is a real freelance client, outside my day job, and I am the only designer and developer on the site.</p><p>I designed and developed the rebuild with Claude Code built into my workflow. I set the direction and the design system, wrote the rules the code follows, and reviewed every change in the browser before pushing to the live site. The agent took on the repetitive building, which left my time for the decisions that shape the site. The rebuild is finished and launching soon.</p>`,
+        body: `<p><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">Ohio Golf Club Indoor</a> is an indoor golf facility in Akron, Ohio, with nine TrackMan bays, a short game area, lessons, memberships and leagues. It is a real freelance client, outside my day job, and I am the only designer and developer on the site.</p><p>I designed and developed the rebuild with Claude Code built into my workflow. I set the direction and the design system, wrote the rules the code follows, and reviewed every change in the browser before pushing to the live site. The agent took on the repetitive building, which left my time for the decisions that shape the site. The rebuilt site is <a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">live now</a>.</p>`,
       },
       {
         type: "compare",
@@ -481,7 +482,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Search and answer engines",
-        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. On 23 October 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs, holiday hours, and FAQ markup on the new lesson page to match the pages that already had it. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p><p>Treat this as a starting point. In the 18 days after the first push, the site averaged about 5.4 clicks and 228 impressions a day, against 0.5 clicks and 38 impressions a day in the 28 days before. It is an early read, and the rebuild itself launches soon. I will add results here as the weeks come in.</p>`,
+        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. On 23 October 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs, holiday hours, and FAQ markup on the new lesson page to match the pages that already had it. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p><p>Treat this as a starting point. In the 18 days after the first push, the site averaged about 5.4 clicks and 228 impressions a day, against 0.5 clicks and 38 impressions a day in the 28 days before. It is an early read, taken before the rebuild went live. I will add results here as the weeks come in.</p>`,
       },
       {
         type: "barChart",
