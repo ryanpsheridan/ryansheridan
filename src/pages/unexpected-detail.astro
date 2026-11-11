@@ -330,7 +330,7 @@ const details: Logo[] = [
     no: 21,
     name: "One stroke",
     font: "Geist Medium",
-    note: "Study 19's accident, made deliberate. The p's descender and the l sit on exactly the same axis and fuse into one long stroke.",
+    note: "The p's descender and the l sit on the same axis and fuse into one long stroke.",
     family: '"Geist", sans-serif',
     lines: [{ text: "unexpected", style: "padding-left:.0594em" }, { text: "detail" }],
     period: "peach",
@@ -474,7 +474,7 @@ const thumbs: Thumb[] = [
     id: "T4",
     name: "Rings, one off center",
     source: "Wordmark in Source Serif 4 Italic",
-    note: "Was the object macro. Now thin concentric rings cropped by the tile edge, with one ring that has slipped out of line.",
+    note: "Thin concentric rings cropped by the tile edge, with one ring slipped out of line.",
     bg: "var(--ud-paper)",
     color: "var(--ud-ink)",
     html:
@@ -560,7 +560,7 @@ const thumbs: Thumb[] = [
     id: "T11",
     name: "Leaning line",
     source: "Wordmark in Source Serif 4 Italic",
-    note: "A row of upright lines with one that leans. The wordmark sits on a single italic line with the primary hook beneath it, since the leaning line is the frame being flipped.",
+    note: "A row of upright lines with one that leans. The primary hook sits under the wordmark.",
     bg: "var(--ud-paper)",
     color: "var(--ud-ink)",
     html:
@@ -903,6 +903,8 @@ const DARK = "Dark version";
 const study = (no: number) => studies.find((l) => l.no === no)!;
 const tile = (id: string) => thumbs.find((t) => t.id === id)!;
 // Everything a tile draws before its wordmark.
+// The typeface a tile sets its wordmark in.
+const fontOf = (t: Thumb) => /font-family:'([^']+)'/.exec(t.html.slice(t.html.indexOf("<p ")))?.[1] ?? "";
 const artOf = (t: Thumb) => t.html.slice(0, t.html.indexOf("<p "));
 // Warm near black: a dark chocolate pulled most of the way to black.
 const cocoa = "var(--ud-cocoa)";
@@ -987,7 +989,7 @@ const r2Rows: Thumb[][] = [
           `unexpected<br>detail${hangingDot}`,
         ),
     },
-    { ...tile("T4"), tag: DARK, name: "Rings, dark", note: "The pick on warm near black.", bg: cocoa, color: "var(--ud-paper)" },
+    { ...tile("T4"), tag: DARK, name: "Rings, dark", bg: cocoa, color: "var(--ud-paper)" },
   ],
   [
     { ...tile("T5"), prev: "T5", tag: PICK },
@@ -1006,12 +1008,12 @@ const r2Rows: Thumb[][] = [
           '<span style="display:block;padding-left:.0594em">unexpected</span><span style="display:block">detail</span>',
         ),
     },
-    { ...tile("T5"), tag: DARK, name: "Dots, dark", note: "The pick on warm near black.", bg: cocoa, color: "var(--ud-paper)" },
+    { ...tile("T5"), tag: DARK, name: "Dots, dark", bg: cocoa, color: "var(--ud-paper)" },
   ],
   [
     { ...tile("T8"), prev: "T8", tag: PICK },
     { ...tile("T12"), prev: "T12", tag: ALT },
-    { ...tile("T8"), tag: DARK, name: "Missing dot, dark", note: "The pick on warm near black.", bg: cocoa, color: "var(--ud-paper)" },
+    { ...tile("T8"), tag: DARK, name: "Missing dot, dark", bg: cocoa, color: "var(--ud-paper)" },
   ],
   [
     { ...tile("T10"), prev: "T10", tag: PICK },
@@ -1030,7 +1032,7 @@ const r2Rows: Thumb[][] = [
           `unexpected<br>detail${hangingDot}`,
         ),
     },
-    { ...tile("T10"), tag: DARK, name: "Turned square, dark", note: "The pick on warm near black.", bg: cocoa, color: "var(--ud-paper)" },
+    { ...tile("T10"), tag: DARK, name: "Turned square, dark", bg: cocoa, color: "var(--ud-paper)" },
   ],
   [
     { ...tile("T11"), prev: "T11", tag: PICK },
@@ -1049,14 +1051,13 @@ const r2Rows: Thumb[][] = [
           `unexpected<br>detail${peachDot}`,
         ),
     },
-    { ...tile("T11"), tag: DARK, name: "Leaning line, dark", note: "The pick on warm near black.", bg: cocoa, color: "var(--ud-paper)" },
+    { ...tile("T11"), tag: DARK, name: "Leaning line, dark", bg: cocoa, color: "var(--ud-paper)" },
   ],
 ];
-// Round 01 study numbers in a source line would collide with the new numbering.
 const r2Tiles: Thumb[] = r2Rows.flat().map((t, i) => ({
   ...t,
+  note: t.tag === DARK ? "" : t.note,
   id: pad(r2Logos.length + i + 1),
-  source: t.source.replace("from study", "from round 01 study"),
 }));
 
 type LogoSection = { kind: "logos"; id: string; heading: string; intro: string; items: Logo[] };
@@ -1067,21 +1068,21 @@ const rounds: Round[] = [
   {
     id: "round-02",
     title: "Round 02",
-    intro: "The picks from round 1, each beside a close alternate. Numbers restart at 01 and run straight through, with the round 01 number in parentheses.",
+    intro: "Included are picks from round 1, each beside a close alternate.",
     r2: true,
     sections: [
       {
         kind: "logos",
         id: "r2-logos",
         heading: "Logos",
-        intro: "The four picked wordmarks on the left, and a small variation of each on the right. The dark tile is now a warm near black.",
+        intro: "Pick on the left, alternate on the right.",
         items: r2Logos,
       },
       {
         kind: "tiles",
         id: "r2-tiles",
         heading: "Thumbnails",
-        intro: 'Each row is one pick: the original, an alternate that borrows one of the picked wordmarks, and a dark version. Color takes on these same ideas are in round 01 under <a href="#color-heading">Color and atmosphere directions</a>.',
+        intro: 'Each row is a pick, an alternate, and a dark version. Color takes are under <a href="#color-heading">Color and atmosphere directions</a>.',
         items: r2Tiles,
       },
     ],
@@ -1089,27 +1090,27 @@ const rounds: Round[] = [
   {
     id: "round-01",
     title: "Round 01",
-    intro: "Everything from the first round, unchanged and with its original numbers. Picks are marked.",
+    intro: "Everything from the first round, with its original numbers.",
     sections: [
       {
         kind: "logos",
         id: "explore-heading",
         heading: "Logo explorations",
-        intro: "Type, alignment, and small deliberate details in the letters, each shown light and dark. A gap in the numbers is a study that was cut.",
+        intro: "Type and alignment studies, shown light and dark.",
         items: studies.map((l) => (pickedLogos.includes(l.no) ? { ...l, tag: "Picked for round 02" } : l)),
       },
       {
         kind: "tiles",
         id: "thumbs-heading",
         heading: "Thumbnail directions",
-        intro: "How the wordmark could live on a podcast tile. Each direction has one thing that is off, cropped, or out of place. Ink, paper, and peach only.",
+        intro: "How the wordmark could live on a podcast tile.",
         items: thumbs.map((t) => (pickedTiles.includes(t.id) ? { ...t, tag: "Picked for round 02" } : t)),
       },
       {
         kind: "tiles",
         id: "color-heading",
         heading: "Color and atmosphere directions",
-        intro: "Concepts that follow Marcy's references: gradient depth and grain, deep indigo with rings, slate and mint, and diagonal pattern with lettering that stays legible. The idea underneath is the same, one thing off or out of place.",
+        intro: "Concepts based on Marcy's references.",
         items: colorThumbs,
       },
     ],
@@ -1224,8 +1225,8 @@ const fontsHref =
                                     {logo.prev && <span class="prev">(prev. {logo.prev})</span>}
                                   </span>
                                 </p>
-                                <p class="logo-font">{logo.font}</p>
-                                <p class="logo-note">{logo.note}</p>
+                                {logo.note && <p class="logo-note">{logo.note}</p>}
+                                <p class="font-badge">{logo.font}</p>
                               </div>
                             </li>
                           ))}
@@ -1254,8 +1255,8 @@ const fontsHref =
                                       {t.prev && <span class="prev">(prev. {t.prev})</span>}
                                     </span>
                                   </p>
-                                  <p class="logo-font">{t.source}</p>
-                                  <p class="logo-note">{t.note}</p>
+                                  {t.note && <p class="logo-note">{t.note}</p>}
+                                  <p class="font-badge">{fontOf(t)}</p>
                                 </div>
                               </li>
                             ))}
@@ -1748,14 +1749,20 @@ const fontsHref =
     color: var(--color-text-muted);
   }
 
-  .logo-font {
+  .font-badge {
+    display: inline-block;
     font-family: var(--font-mono);
     font-size: 12px;
+    line-height: 1.4;
     color: var(--color-text-muted);
-    margin: var(--space-1) 0 var(--space-2);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 2px 10px;
+    margin-top: var(--space-3);
   }
 
   .logo-note {
+    margin-top: var(--space-2);
     font-size: var(--text-sm);
     color: var(--color-text-muted);
     max-width: 44ch;
