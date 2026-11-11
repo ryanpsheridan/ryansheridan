@@ -60,6 +60,12 @@ type Line = { text: string; style?: string };
 type Logo = {
   /** Fixed study number, so feedback keeps pointing at the same study. */
   no: number;
+  /** Shown in place of the padded study number (round 02 renumbers). */
+  label?: string;
+  /** The number this had in an earlier round. */
+  prev?: string;
+  /** Short status line: a pick, an alternate, a dark version. */
+  tag?: string;
   /** Extra HTML drawn inside the lockup, positioned in em from its top left. */
   extra?: string;
   name: string;
@@ -369,7 +375,7 @@ const studies = [...logos, ...details];
   twice: once large, once at 60px in the size test row. Only ink, paper and
   peach, and line work stays thin.
 */
-type Thumb = { id: string; name: string; source: string; note: string; bg: string; color: string; html: string };
+type Thumb = { prev?: string; tag?: string; id: string; name: string; source: string; note: string; bg: string; color: string; html: string };
 
 const peachDot = '<span style="color:var(--ud-peach)">.</span>';
 const art = (inner: string) =>
@@ -834,31 +840,260 @@ const colorThumbs: Thumb[] = [
   },
 ];
 
-const tileSections = [
+const pad = (n: number) => String(n).padStart(2, "0");
+
+/*
+  Round 02. Marcy picked logos 03, 07, 18 and 21 and tiles T4, T5, T8, T10
+  and T11. Each pick is shown again next to a close alternate, and the tiles
+  also get a dark version. Numbering restarts at 01 and runs straight through
+  both sections so no two items share a number; `prev` carries the round 01
+  number. Round 01 below keeps its original numbers so her email still maps.
+*/
+const pickedLogos = [3, 7, 18, 21];
+const pickedTiles = ["T4", "T5", "T8", "T10", "T11"];
+const PICK = "Marcy's pick";
+const ALT = "Alternate";
+const DARK = "Dark version";
+
+const study = (no: number) => studies.find((l) => l.no === no)!;
+const tile = (id: string) => thumbs.find((t) => t.id === id)!;
+// Everything a tile draws before its wordmark.
+const artOf = (t: Thumb) => t.html.slice(0, t.html.indexOf("<p "));
+// Warm near black: a dark chocolate pulled most of the way to black.
+const cocoa = "var(--ud-cocoa)";
+
+const r2Logos: Logo[] = [
+  { ...study(3), prev: "03", tag: PICK },
   {
-    id: "thumbs-heading",
-    heading: "Thumbnail directions",
-    intro: "How the wordmark could live on a podcast tile. Each direction has one thing that is off, cropped, or out of place. Ink, paper, and peach only.",
-    items: thumbs,
+    no: 0,
+    tag: ALT,
+    name: "Stagger, reversed",
+    font: "Gloock",
+    note: "The same step, taken the other way. “unexpected” sits inset and “detail” comes back to the left edge.",
+    family: '"Gloock", serif',
+    lines: [{ text: "unexpected", style: "padding-left:1.1em" }, { text: "detail" }],
+    period: "peach",
+    align: "left",
+    style: "font-size:12.5cqi;line-height:.95;letter-spacing:-.01em",
+  },
+  { ...study(7), prev: "07", tag: PICK },
+  {
+    no: 0,
+    tag: ALT,
+    name: "Right flush, hanging period",
+    font: "DM Serif Display",
+    note: "The period hangs outside the edge, so the d and the l line up exactly and the peach dot sits alone in the margin.",
+    family: '"DM Serif Display", serif',
+    lines: [
+      { text: "unexpected" },
+      { text: 'detail<span style="position:absolute;color:var(--ud-peach)">.</span>' },
+    ],
+    align: "right",
+    style: "font-size:14cqi;line-height:.9;letter-spacing:-.015em",
+  },
+  { ...study(18), prev: "18", tag: PICK },
+  {
+    no: 0,
+    tag: ALT,
+    name: "Echo, falling",
+    font: "Fraunces ExtraBold",
+    note: "The echo moves to the other side. A quiet “unexpected”, the solid “detail”, then two repeats fading out underneath.",
+    family: '"Fraunces", serif',
+    lines: [
+      { text: "unexpected", style: "opacity:.5" },
+      { text: "detail" },
+      { text: "detail", style: "opacity:.16" },
+      { text: "detail", style: "opacity:.07" },
+    ],
+    period: "peach",
+    periodOn: 1,
+    align: "left",
+    style: "font-size:14cqi;font-weight:800;line-height:.94;letter-spacing:-.025em;font-variation-settings:'SOFT' 100",
+  },
+  { ...study(21), prev: "21", tag: PICK },
+  {
+    no: 0,
+    tag: ALT,
+    name: "One stroke, peach bridge",
+    font: "Geist Medium",
+    note: "The same fused stroke, with the stretch that links the two words picked out in peach. The period goes back to ink.",
+    family: '"Geist", sans-serif',
+    lines: [{ text: "unexpected", style: "padding-left:.0594em" }, { text: "detail" }],
+    period: "ink",
+    align: "left",
+    // Stem of the p and l, between the first baseline and the second x-height.
+    extra: '<span style="position:absolute;left:2.2255em;top:.79em;width:.105em;height:.285em;background:var(--ud-peach)"></span>',
+    style: "font-size:15cqi;font-weight:500;line-height:.84;letter-spacing:-.04em",
+  },
+].map((logo, i) => ({ ...logo, label: pad(i + 1) }));
+
+const r2Rows: Thumb[][] = [
+  [
+    { ...tile("T4"), prev: "T4", tag: PICK },
+    {
+      id: "",
+      tag: ALT,
+      name: "Rings, right flush",
+      source: "Wordmark from pick 03 (prev. 07)",
+      note: "The rings move to the left and the wordmark takes the right flush setting from the logo picks.",
+      bg: "var(--ud-paper)",
+      color: "var(--ud-ink)",
+      html:
+        art(
+          `<g fill="none" stroke="currentColor" stroke-width=".6">` +
+            [7, 14, 21, 28, 35].map((r, i) => `<circle cx="${i === 2 ? 22 : 26}" cy="${i === 2 ? 32 : 29}" r="${r}"/>`).join("") +
+            "</g>",
+        ) +
+        mark(
+          "position:absolute;right:11.4cqi;bottom:9cqi;text-align:right;font-family:'DM Serif Display',serif;font-size:12.5cqi;line-height:.9;letter-spacing:-.015em",
+          `unexpected<br>detail${peachDot}`,
+        ),
+    },
+    { ...tile("T4"), tag: DARK, name: "Rings, dark", note: "The pick on warm near black.", bg: cocoa, color: "var(--ud-paper)" },
+  ],
+  [
+    { ...tile("T5"), prev: "T5", tag: PICK },
+    {
+      id: "",
+      tag: ALT,
+      name: "Dots, one stroke wordmark",
+      source: "Wordmark from pick 07 (prev. 21)",
+      note: "Same grid and the same peach dot, with the one stroke wordmark from the logo picks underneath.",
+      bg: "var(--ud-paper)",
+      color: "var(--ud-ink)",
+      html:
+        artOf(tile("T5")) +
+        mark(
+          "position:absolute;left:11.4cqi;bottom:9cqi;font-family:'Geist',sans-serif;font-size:13cqi;font-weight:500;line-height:.84;letter-spacing:-.04em",
+          '<span style="display:block;padding-left:.0594em">unexpected</span><span style="display:block">detail</span>',
+        ),
+    },
+    { ...tile("T5"), tag: DARK, name: "Dots, dark", note: "The pick on warm near black.", bg: cocoa, color: "var(--ud-paper)" },
+  ],
+  [
+    { ...tile("T8"), prev: "T8", tag: PICK },
+    { ...tile("T12"), prev: "T12", tag: ALT },
+    { ...tile("T8"), tag: DARK, name: "Missing dot, dark", note: "The pick on warm near black.", bg: cocoa, color: "var(--ud-paper)" },
+  ],
+  [
+    { ...tile("T10"), prev: "T10", tag: PICK },
+    {
+      id: "",
+      tag: ALT,
+      name: "Turned square, stagger wordmark",
+      source: "Wordmark from pick 01 (prev. 03)",
+      note: "The same grid with the stagger wordmark from the logo picks, so the type steps sideways the way the square turns.",
+      bg: "var(--ud-paper)",
+      color: "var(--ud-ink)",
+      html:
+        artOf(tile("T10")) +
+        mark(
+          "position:absolute;left:11.4cqi;bottom:9cqi;font-family:'Gloock',serif;font-size:12cqi;line-height:.95;letter-spacing:-.01em",
+          `unexpected<br><span style="padding-left:1.6em">detail${peachDot}</span>`,
+        ),
+    },
+    { ...tile("T10"), tag: DARK, name: "Turned square, dark", note: "The pick on warm near black.", bg: cocoa, color: "var(--ud-paper)" },
+  ],
+  [
+    { ...tile("T11"), prev: "T11", tag: PICK },
+    {
+      id: "",
+      tag: ALT,
+      name: "Leaning line, stacked",
+      source: "Wordmark in Fraunces, as pick 05 (prev. 18)",
+      note: "The same lines with a heavier two-line wordmark and no hook, for a tile that holds up better at small sizes.",
+      bg: "var(--ud-paper)",
+      color: "var(--ud-ink)",
+      html:
+        artOf(tile("T11")) +
+        mark(
+          "position:absolute;left:11.4cqi;bottom:9cqi;font-family:'Fraunces',serif;font-size:12.5cqi;font-weight:800;line-height:.9;letter-spacing:-.025em;font-variation-settings:'SOFT' 100",
+          `unexpected<br>detail${peachDot}`,
+        ),
+    },
+    { ...tile("T11"), tag: DARK, name: "Leaning line, dark", note: "The pick on warm near black.", bg: cocoa, color: "var(--ud-paper)" },
+  ],
+];
+// Round 01 study numbers in a source line would collide with the new numbering.
+const r2Tiles: Thumb[] = r2Rows.flat().map((t, i) => ({
+  ...t,
+  id: pad(r2Logos.length + i + 1),
+  source: t.source.replace("from study", "from round 01 study"),
+}));
+
+type LogoSection = { kind: "logos"; id: string; heading: string; intro: string; items: Logo[] };
+type TileSection = { kind: "tiles"; id: string; heading: string; intro: string; items: Thumb[] };
+type Round = { id: string; title: string; intro: string; r2?: boolean; sections: (LogoSection | TileSection)[] };
+
+const rounds: Round[] = [
+  {
+    id: "round-02",
+    title: "Round 02",
+    intro: "Marcy's picks from round 01, each beside a close alternate. Numbers restart at 01 and run straight through, with the round 01 number in parentheses.",
+    r2: true,
+    sections: [
+      {
+        kind: "logos",
+        id: "r2-logos",
+        heading: "Logos",
+        intro: "The four picked wordmarks on the left, and a small variation of each on the right. The dark tile is now a warm near black.",
+        items: r2Logos,
+      },
+      {
+        kind: "tiles",
+        id: "r2-tiles",
+        heading: "Thumbnails",
+        intro: 'Each row is one pick: the original, an alternate that borrows one of the picked wordmarks, and a dark version. Color takes on these same ideas are in round 01 under <a href="#color-heading">Color and atmosphere directions</a>.',
+        items: r2Tiles,
+      },
+    ],
   },
   {
-    id: "color-heading",
-    heading: "Color and atmosphere directions",
-    intro: "Concepts that follow Marcy's references: gradient depth and grain, deep indigo with rings, slate and mint, and diagonal pattern with lettering that stays legible. The idea underneath is the same, one thing off or out of place.",
-    items: colorThumbs,
+    id: "round-01",
+    title: "Round 01",
+    intro: "Everything from the first round, unchanged and with its original numbers. Picks are marked.",
+    sections: [
+      {
+        kind: "logos",
+        id: "explore-heading",
+        heading: "Logo explorations",
+        intro: "Type, alignment, and small deliberate details in the letters, each shown light and dark. A gap in the numbers is a study that was cut.",
+        items: studies.map((l) => (pickedLogos.includes(l.no) ? { ...l, tag: "Picked for round 02" } : l)),
+      },
+      {
+        kind: "tiles",
+        id: "thumbs-heading",
+        heading: "Thumbnail directions",
+        intro: "How the wordmark could live on a podcast tile. Each direction has one thing that is off, cropped, or out of place. Ink, paper, and peach only.",
+        items: thumbs.map((t) => (pickedTiles.includes(t.id) ? { ...t, tag: "Picked for round 02" } : t)),
+      },
+      {
+        kind: "tiles",
+        id: "color-heading",
+        heading: "Color and atmosphere directions",
+        intro: "Concepts that follow Marcy's references: gradient depth and grain, deep indigo with rings, slate and mint, and diagonal pattern with lettering that stays legible. The idea underneath is the same, one thing off or out of place.",
+        items: colorThumbs,
+      },
+    ],
   },
 ];
 
 const pageNav = [
-  { href: "#brief", label: "Brief" },
-  { href: "#direction", label: "Direction from kickoff" },
-  { href: "#explore-heading", label: "Logo explorations", count: studies.length },
-  ...tileSections.map((t) => ({ href: `#${t.id}`, label: t.heading, count: t.items.length })),
+  ...rounds.map((r) => ({
+    title: r.title,
+    items: r.sections.map((sec) => ({ href: `#${sec.id}`, label: sec.heading, count: sec.items.length as number | undefined })),
+  })),
+  {
+    title: "Reference",
+    items: [
+      { href: "#brief", label: "Brief", count: undefined },
+      { href: "#direction", label: "Direction from kickoff", count: undefined },
+    ],
+  },
 ];
 
 const periodLine = (logo: Logo) => logo.periodOn ?? logo.lines.length - 1;
 
-const pad = (n: number) => String(n).padStart(2, "0");
 
 const fontsHref =
   "https://fonts.googleapis.com/css2" +
@@ -896,153 +1131,171 @@ const fontsHref =
 
       <div class="ud-layout">
         <div class="ud-main">
-      <section class="ud-brief" id="brief" aria-labelledby="brief-heading">
-        <h2 id="brief-heading" class="label">Brief</h2>
-        <dl class="brief-list">
           {
-            brief.map((item) => (
-              <div>
-                <dt>{item.label}</dt>
-                <dd>{item.lead}</dd>
+            rounds.map((round) => (
+              <div class:list={["ud-round", { r2: round.r2 }]} id={round.id}>
+                <header class="round-head">
+                  <h2 class="round-title">{round.title}</h2>
+                  <p class="section-note">{round.intro}</p>
+                </header>
+                {
+                  round.sections.map((section) => (
+                    <section class="ud-section" aria-labelledby={section.id}>
+                      <h3 id={section.id} class="label">{section.heading}</h3>
+                      <p class="section-note" set:html={section.intro} />
+
+                      {section.kind === "logos" && (
+                        <ol class="logo-list">
+                          {section.items.map((logo) => (
+                            <li class="logo-item">
+                              <div class="tiles">
+                                {(["light", "dark"] as const).map((theme) => (
+                                  <div
+                                    class={`tile tile--${theme}`}
+                                    style={logo.place ? `place-items:${logo.place}` : undefined}
+                                    role="img"
+                                    aria-label={`${logo.name}, ${theme}`}
+                                  >
+                                    <p
+                                      class:list={["lockup", { "lockup--free": logo.free }]}
+                                      aria-hidden="true"
+                                      style={`font-family:${logo.family};text-align:${logo.align ?? "center"};${logo.style ?? ""}`}
+                                    >
+                                      {logo.lines.map((line, j) => (
+                                        <span class="line" style={line.style}>
+                                          <Fragment set:html={line.text} />
+                                          {logo.period && j === periodLine(logo) && (
+                                            <span class={`dot dot--${logo.period}`}>.</span>
+                                          )}
+                                        </span>
+                                      ))}
+                                      {logo.extra && <Fragment set:html={logo.extra} />}
+                                    </p>
+                                  </div>
+                                ))}
+                              </div>
+                              <div class="logo-meta">
+                                {logo.tag && <p class:list={["tag", { "tag--pick": logo.tag !== ALT }]}>{logo.tag}</p>}
+                                <p class="logo-title">
+                                  <span class="num">{logo.label ?? pad(logo.no)}</span>
+                                  <span>
+                                    {logo.name}
+                                    {logo.prev && <span class="prev">(prev. {logo.prev})</span>}
+                                  </span>
+                                </p>
+                                <p class="logo-font">{logo.font}</p>
+                                <p class="logo-note">{logo.note}</p>
+                              </div>
+                            </li>
+                          ))}
+                        </ol>
+                      )}
+
+                      {section.kind === "tiles" && (
+                        <>
+                          <ol class="thumb-list">
+                            {section.items.map((t) => (
+                              <li class="logo-item">
+                                <div
+                                  class="tile thumb"
+                                  style={`background:${t.bg};color:${t.color}`}
+                                  role="img"
+                                  aria-label={`${t.id}, ${t.name}`}
+                                >
+                                  <Fragment set:html={t.html} />
+                                </div>
+                                <div class="logo-meta">
+                                  {t.tag && <p class:list={["tag", { "tag--pick": t.tag === PICK || t.tag.startsWith("Picked") }]}>{t.tag}</p>}
+                                  <p class="logo-title">
+                                    <span class="num">{t.id}</span>
+                                    <span>
+                                      {t.name}
+                                      {t.prev && <span class="prev">(prev. {t.prev})</span>}
+                                    </span>
+                                  </p>
+                                  <p class="logo-font">{t.source}</p>
+                                  <p class="logo-note">{t.note}</p>
+                                </div>
+                              </li>
+                            ))}
+                          </ol>
+
+                          <div class="size-test">
+                            <h4 class="label">Size test, 60px</h4>
+                            <p class="size-note">The same tiles at feed size.</p>
+                            <ul class="size-row">
+                              {section.items.map((t) => (
+                                <li>
+                                  <div
+                                    class="tile thumb"
+                                    style={`background:${t.bg};color:${t.color}`}
+                                    role="img"
+                                    aria-label={`${t.id}, ${t.name}, at 60 pixels`}
+                                  >
+                                    <Fragment set:html={t.html} />
+                                  </div>
+                                  <span class="num">{t.id}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </>
+                      )}
+                    </section>
+                  ))
+                }
               </div>
             ))
           }
-        </dl>
-      </section>
 
-      <section class="ud-brief" id="direction" aria-labelledby="direction-heading">
-        <h2 id="direction-heading" class="label">Direction from kickoff</h2>
-        <ul class="direction">
-          {direction.map((d) => <li>{d}</li>)}
-        </ul>
-      </section>
-
-      <section class="ud-section" aria-labelledby="explore-heading">
-        <h2 id="explore-heading" class="label">Logo explorations</h2>
-        <p class="section-note">
-          Type, alignment, and small deliberate details in the letters, each shown light and dark.
-          Numbers stay fixed between rounds, so a gap is a study that was cut.
-        </p>
-
-        <ol class="logo-list">
-          {
-            studies.map((logo) => (
-              <li class="logo-item">
-                <div class="tiles">
-                  {(["light", "dark"] as const).map((theme) => (
-                    <div
-                      class={`tile tile--${theme}`}
-                      style={logo.place ? `place-items:${logo.place}` : undefined}
-                      role="img"
-                      aria-label={theme === "light" ? `${logo.name}, light` : `${logo.name}, dark`}
-                    >
-                      <p
-                        class:list={["lockup", { "lockup--free": logo.free }]}
-                        aria-hidden="true"
-                        style={`font-family:${logo.family};text-align:${logo.align ?? "center"};${logo.style ?? ""}`}
-                      >
-                        {logo.lines.map((line, j) => (
-                          <span class="line" style={line.style}>
-                            <Fragment set:html={line.text} />
-                            {logo.period && j === periodLine(logo) && (
-                              <span class={`dot dot--${logo.period}`}>.</span>
-                            )}
-                          </span>
-                        ))}
-                        {logo.extra && <Fragment set:html={logo.extra} />}
-                      </p>
+          <div class="ud-round" id="reference">
+            <header class="round-head">
+              <h2 class="round-title">Reference</h2>
+            </header>
+            <section class="ud-brief" id="brief" aria-labelledby="brief-heading">
+              <h3 id="brief-heading" class="label">Brief</h3>
+              <dl class="brief-list">
+                {
+                  brief.map((item) => (
+                    <div>
+                      <dt>{item.label}</dt>
+                      <dd>{item.lead}</dd>
                     </div>
-                  ))}
-                </div>
-                <div class="logo-meta">
-                  <p class="logo-title">
-                    <span class="num">{pad(logo.no)}</span>
-                    {logo.name}
-                  </p>
-                  <p class="logo-font">{logo.font}</p>
-                  <p class="logo-note">{logo.note}</p>
-                </div>
-              </li>
-            ))
-          }
-        </ol>
-      </section>
+                  ))
+                }
+              </dl>
+            </section>
 
-      {
-        tileSections.map((section) => (
-      <section class="ud-section" aria-labelledby={section.id}>
-        <h2 id={section.id} class="label">{section.heading}</h2>
-        <p class="section-note">{section.intro}</p>
-
-        <ol class="thumb-list">
-          {
-            section.items.map((t) => (
-              <li class="logo-item">
-                <div
-                  class="tile thumb"
-                  style={`background:${t.bg};color:${t.color}`}
-                  role="img"
-                  aria-label={`${t.id}, ${t.name}`}
-                >
-                  <Fragment set:html={t.html} />
-                </div>
-                <div class="logo-meta">
-                  <p class="logo-title">
-                    <span class="num">{t.id}</span>
-                    {t.name}
-                  </p>
-                  <p class="logo-font">{t.source}</p>
-                  <p class="logo-note">{t.note}</p>
-                </div>
-              </li>
-            ))
-          }
-        </ol>
-
-        <div class="size-test">
-          <h3 class="label">Size test, 60px</h3>
-          <p class="size-note">
-            The same tiles at feed size.
-          </p>
-          <ul class="size-row">
-            {
-              section.items.map((t) => (
-                <li>
-                  <div
-                    class="tile thumb"
-                    style={`background:${t.bg};color:${t.color}`}
-                    role="img"
-                    aria-label={`${t.id}, ${t.name}, at 60 pixels`}
-                  >
-                    <Fragment set:html={t.html} />
-                  </div>
-                  <span class="num">{t.id}</span>
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-      </section>
-        ))
-      }
+            <section class="ud-brief" id="direction" aria-labelledby="direction-heading">
+              <h3 id="direction-heading" class="label">Direction from kickoff</h3>
+              <ul class="direction">
+                {direction.map((d) => <li>{d}</li>)}
+              </ul>
+            </section>
+          </div>
         </div>
 
         <aside class="ud-sidebar">
           <div class="sidebar-inner">
             <nav class="meta-group" aria-label="On this page">
               <span class="label">On this page</span>
-              <ul class="page-nav">
-                {
-                  pageNav.map((item) => (
-                    <li>
-                      <a href={item.href}>
-                        {item.label}
-                        {item.count && <span class="count">{item.count}</span>}
-                      </a>
-                    </li>
-                  ))
-                }
-              </ul>
+              {
+                pageNav.map((group) => (
+                  <div class="nav-group">
+                    <span class="nav-title">{group.title}</span>
+                    <ul class="page-nav">
+                      {group.items.map((item) => (
+                        <li>
+                          <a href={item.href}>
+                            {item.label}
+                            {item.count && <span class="count">{item.count}</span>}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))
+              }
             </nav>
             {
               taglines.map((t) => (
@@ -1069,6 +1322,7 @@ const fontsHref =
 <style>
   .ud-page {
     --ud-ink: #141414;
+    --ud-cocoa: #15100d;
     --ud-paper: #faf9f6;
     --ud-peach: #f08a6c;
     --ud-gap: clamp(120px, 6rem + 6vw, 220px);
@@ -1194,7 +1448,7 @@ const fontsHref =
     scroll-margin-top: var(--space-8);
   }
 
-  .ud-brief h2 {
+  .ud-brief h3 {
     margin-bottom: var(--space-4);
   }
 
@@ -1220,9 +1474,99 @@ const fontsHref =
     margin-bottom: var(--ud-gap);
   }
 
-  .ud-section > h2 {
+  .ud-section > .label {
     scroll-margin-top: var(--space-8);
     margin-bottom: var(--space-7);
+  }
+
+  .ud-section:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Rounds: newest first, earlier rounds kept whole underneath. */
+  .ud-round {
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--color-border);
+    margin-bottom: var(--ud-gap);
+    scroll-margin-top: var(--space-8);
+  }
+
+  .ud-round:first-child {
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .round-head {
+    margin-bottom: var(--space-8);
+  }
+
+  .round-title {
+    font-size: clamp(26px, 1.2rem + 1.4vw, 44px);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: var(--space-4);
+  }
+
+  .round-head .section-note {
+    margin: 0;
+  }
+
+  .section-note :global(a) {
+    color: var(--color-text);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  /* Round 02 dark tiles: a dark chocolate pulled most of the way to black. */
+  .r2 .tile--dark {
+    --tile-bg: var(--ud-cocoa);
+    background: var(--ud-cocoa);
+  }
+
+  .tag {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  .tag--pick {
+    color: var(--color-text);
+  }
+
+  .tag--pick::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ud-peach);
+  }
+
+  .prev {
+    color: var(--color-text-muted);
+    margin-left: 0.4em;
+  }
+
+  .nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  .nav-title {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .nav-group .page-nav {
+    padding-left: var(--space-3);
+    border-left: 1px solid var(--color-border);
   }
 
   .section-note {
@@ -1402,6 +1746,12 @@ const fontsHref =
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    /* Round 02 rows are pick, alternate, dark, so keep three across. */
+    .r2 .thumb-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-8) var(--space-4);
+    }
+
     .brief-list {
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: var(--space-6);
@@ -1428,9 +1778,13 @@ const fontsHref =
     }
 
     /* One section per row, count flush right, hairlines between. */
+    .nav-group .page-nav {
+      padding-left: 0;
+      border-left: none;
+    }
+
     .page-nav {
       gap: 0;
-      margin-top: var(--space-2);
       border-bottom: 1px solid var(--color-border);
     }
 
