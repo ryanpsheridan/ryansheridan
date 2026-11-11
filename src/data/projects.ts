@@ -340,7 +340,8 @@ const allProjects: Project[] = [
     description: "Rebuilding the website for Ohio Golf Club Indoor in Akron with an agentic workflow: a new design system, a CMS the staff run themselves, and search work.",
     thumbnail: "/project-ogc-featured-animated.svg",
     ogImage: "/project-ogc-featured.jpg",
-    showOnHomepage: false,
+    showOnHomepage: true,
+    homepagePosition: 1,
     homepageStart: 2.1,
     homepageWord: "websites",
     tags: ["Web Design", "Design System"],
@@ -350,7 +351,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Project",
-        body: `<p>Ohio Golf Club Indoor is an indoor golf facility in Akron, Ohio, with nine TrackMan bays, a short game area, lessons, memberships and leagues. It is a real freelance client, outside my day job, and I am the only designer and developer on the site.</p><p>I designed and developed the rebuild with Claude Code built into my workflow. I set the direction and the design system, wrote the rules the code follows, and reviewed every change in the browser before it went anywhere near the live site. The agent took on the repetitive building, which left my time for the decisions that shape the site. The rebuild is finished and launching soon.</p>`,
+        body: `<p>Ohio Golf Club Indoor is an indoor golf facility in Akron, Ohio, with nine TrackMan bays, a short game area, lessons, memberships and leagues. It is a real freelance client, outside my day job, and I am the only designer and developer on the site.</p><p>I designed and developed the rebuild with Claude Code built into my workflow. I set the direction and the design system, wrote the rules the code follows, and reviewed every change in the browser before pushing to the live site. The agent took on the repetitive building, which left my time for the decisions that shape the site. The rebuild is finished and launching soon.</p>`,
       },
       {
         type: "compare",
