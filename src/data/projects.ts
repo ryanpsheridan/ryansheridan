@@ -337,7 +337,6 @@ const allProjects: Project[] = [
     slug: "ohio-golf-club",
     title: "Ohio Golf Club",
     year: 2026,
-    draft: true,
     description: "Rebuilding the website for Ohio Golf Club Indoor in Akron with an agentic workflow: a new design system, a CMS the staff run themselves, and search work.",
     thumbnail: "/project-ogc-featured-animated.svg",
     ogImage: "/project-ogc-featured.jpg",
@@ -347,12 +346,11 @@ const allProjects: Project[] = [
     tags: ["Web Design", "Design System"],
     tools: ["Claude Code", "Next.js", "Pages CMS", "GitHub", "Vercel"],
     client: "Ohio Golf Club Indoor",
-    clientUrl: "https://www.ohiogolfclubindoor.com/",
     content: [
       {
         type: "text",
         heading: "The Project",
-        body: `<p><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">Ohio Golf Club Indoor</a> is an indoor golf facility in Akron, Ohio, with nine TrackMan bays, a short game area, lessons, memberships and leagues. It is a real freelance client, outside my day job, and I am the only designer and developer on the site.</p><p>I rebuilt it with an agentic workflow. I set the direction, the rules and the bar, Claude Code wrote most of the code, and nothing reached the live site until I had checked it. The rebuilt site is on staging and goes live in the next release.</p>`,
+        body: `<p>Ohio Golf Club Indoor is an indoor golf facility in Akron, Ohio, with nine TrackMan bays, a short game area, lessons, memberships and leagues. It is a real freelance client, outside my day job, and I am the only designer and developer on the site.</p><p>I designed and developed the rebuild with Claude Code built into my workflow. I set the direction and the design system, wrote the rules the code follows, and reviewed every change in the browser before it went anywhere near the live site. The agent took on the repetitive building, which left my time for the decisions that shape the site. The rebuild is finished and launching soon.</p>`,
       },
       {
         type: "compare",
@@ -367,26 +365,36 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "How I worked",
-        body: `<p>Before changing anything, I had the agent audit the code and the live site, and I reviewed what it found: a contact form that could silently lose customer inquiries, outdated code with known security issues, and a Cancel button that was hard to read. Those were fixed first, in one small package.</p><p>Then I set the rules the agent works by. They live in an instructions file it reads at the start of every session, with a separate skill for how changes are released. Priorities come in a fixed order: accessibility, then page speed, then ease of use, then search. Build from small shared components. Name colors by what they do, not what they look like, so a future brand refresh changes values, not code. Keep prices, hours and FAQs in one place, never typed twice.</p>`,
+        body: `<p>Before changing anything, I had the agent audit the code and the live site, and I reviewed what it found: a contact form that could silently lose customer inquiries, outdated code with known security issues, and a Cancel button that was hard to read. Those were fixed first, in one small package.</p><p>Then I wrote the rules the agent works by, in an instructions file it reads at the start of every session. Build pages from small shared components, and reuse one before writing a new one. Name colors by their role, like surface-raised, never by their value, so a future brand refresh changes values, not code. Keep prices, hours and FAQs in one data file, never typed twice. When a shared component changes, update the internal style guide in the same change. And when two goals pull against each other, accessibility wins, then page speed, then ease of use, then search.</p><p>A second file, a skill, sets how every change ships. Each one starts by naming what kind it is. A tweak or a feature gets its own branch, built and checked locally at phone and desktop widths, then pushed to a preview link of its own. When it’s right, I send it to staging, a shared copy of the site where finished work waits together, and review the whole site before I release it to production. The agent never moves work to staging or production; I do. A hotfix, for something wrong on the live site right now, is the only change that skips staging, and it goes back into staging straight away so the two never drift apart.</p>`,
       },
       {
         type: "process",
         rows: [
           {
-            label: "Every change",
-            note: "Tweak, feature or fix",
+            label: "Tweak or feature",
+            note: "Most changes",
             steps: [
-              { label: "Brief" },
-              { label: "Preview branch" },
-              { label: "Staging" },
+              { label: "Branch, built locally" },
+              { label: "Preview link" },
+              { label: "Staging review" },
               { label: "Production", success: true },
+            ],
+          },
+          {
+            label: "Hotfix",
+            note: "Live site is wrong now",
+            steps: [
+              { label: "Branch from live" },
+              { label: "Preview link" },
+              { label: "Production", success: true },
+              { label: "Back into staging" },
             ],
           },
         ],
       },
       {
         type: "text",
-        heading: "A design system, not a reskin",
+        heading: "One design system behind every page",
         body: `<p>I explored three brand directions and five versions of the home page before settling on one dark system for every page: two typefaces, DM Sans and DM Mono, a small set of color, spacing and corner tokens, and a few subtle textures. Every token and shared component is documented on an internal style guide that changes whenever the site does, so the next person, or the next agent, builds from the same parts.</p>`,
       },
       {
@@ -472,7 +480,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Search and answer engines",
-        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. On 23 October 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs, holiday hours, and FAQ markup on the new lesson page to match the pages that already had it. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p><p>Treat this as a starting point. In the 18 days after the first push, the site averaged about 5.4 clicks and 228 impressions a day, against 0.5 clicks and 38 impressions a day in the 28 days before. It is an early read, and the rebuild itself is not live yet. I will add results here as the weeks come in.</p>`,
+        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. On 23 October 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs, holiday hours, and FAQ markup on the new lesson page to match the pages that already had it. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p><p>Treat this as a starting point. In the 18 days after the first push, the site averaged about 5.4 clicks and 228 impressions a day, against 0.5 clicks and 38 impressions a day in the 28 days before. It is an early read, and the rebuild itself launches soon. I will add results here as the weeks come in.</p>`,
       },
       {
         type: "barChart",
@@ -493,7 +501,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Scorecard",
-        body: `<p>Before is the site I started with. After is the rebuilt site on staging.</p>`,
+        body: `<p>Before is the site I started with. After is the rebuild.</p>`,
       },
       {
         type: "versus",
