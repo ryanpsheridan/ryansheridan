@@ -1308,11 +1308,70 @@ const r3Tiles: Thumb[] = r3Rows.flat().map((t, i) => ({
   id: pad(r3Logos.length + i + 1),
 }));
 
+/*
+  Round 04: logos and design elements together, narrowed to the contenders
+  from round 03. The stagger wordmark is the one from round 03 logo 04.
+*/
+const CONTENDER = "Contender";
+const PICKED4 = "Picked for round 04";
+const r3 = (id: string) => r3Tiles.find((t) => t.id === id)!;
+const staggerMark = rightMark(glMark, `<span style="display:block;padding-right:1.2em">unexpected</span>detail${hangingDot}`);
+// The pattern shifted up so the focused line sits on the tile's middle.
+const glPatternCentered = glPattern.replace("top:-16cqi", "top:-22.7cqi");
+const r4Tiles: Thumb[] = [
+  {
+    ...r3("20"),
+    prev: "20",
+    name: "Leaning line, dark",
+    note: "One line in the row leans. DM Serif Display, flush right, period hanging.",
+  },
+  {
+    ...r3("19"),
+    prev: "19",
+    name: "Leaning line, stagger",
+    note: "The leaning line with the staggered Gloock wordmark from round 3 logo 04.",
+    html: artOf(r3("19")) + staggerMark,
+  },
+  {
+    ...r3("10"),
+    prev: "10",
+    note: "One dot in the grid turns peach and stands in for the period. Geist Medium, flush right.",
+  },
+  {
+    ...r3("17"),
+    prev: "17",
+    name: "Turned square, stagger, dark",
+    note: "The turned square on dark with the staggered Gloock wordmark from round 3 logo 04.",
+    html: artOf(r3("17")) + staggerMark,
+  },
+  {
+    ...r3("23"),
+    prev: "23",
+    note: "Everything but one “unexpected detail” fades back. That line now sits on the middle of the tile.",
+    html: typePattern(glPatternCentered, glRows, true),
+  },
+].map((t, i) => ({ ...t, tag: CONTENDER, id: pad(i + 1) }));
+
 type LogoSection = { kind: "logos"; id: string; heading: string; nav?: string; intro: string; items: Logo[] };
 type TileSection = { kind: "tiles"; id: string; heading: string; nav?: string; intro: string; items: Thumb[] };
 type Round = { id: string; title: string; intro: string; r2?: boolean; sections: (LogoSection | TileSection)[] };
 
 const rounds: Round[] = [
+  {
+    id: "round-04",
+    title: "Round 04",
+    intro: "Logos and design elements together, narrowed to the contenders.",
+    r2: true,
+    sections: [
+      {
+        kind: "tiles",
+        id: "r4-contenders",
+        heading: "Contenders",
+        intro: "Each one is a logo and an element working as a single tile.",
+        items: r4Tiles,
+      },
+    ],
+  },
   {
     id: "round-03",
     title: "Round 03",
@@ -1324,7 +1383,7 @@ const rounds: Round[] = [
         id: "r3-logos",
         heading: "Logos",
         intro: "All flush right with the period hanging. 01 and 02 sit side by side.",
-        items: r3Logos,
+        items: r3Logos.map((l) => (l.label === "04" ? { ...l, tag: PICKED4 } : l)),
       },
       {
         kind: "tiles",
@@ -1332,7 +1391,7 @@ const rounds: Round[] = [
         heading: "Design elements",
         nav: "Elements",
         intro: "A set of shapes that can work together across social, thumbnails and marketing.",
-        items: r3Tiles,
+        items: r3Tiles.map((t) => (["10", "17", "19", "20", "23"].includes(t.id) ? { ...t, tag: PICKED4 } : t)),
       },
     ],
   },
