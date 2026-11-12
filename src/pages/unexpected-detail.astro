@@ -1444,8 +1444,6 @@ const lockupPattern = (font: string, stagger: boolean, count = 14) => {
 const glPatternFont = "font-family:'Gloock',serif;font-size:9cqi;line-height:1.22;letter-spacing:-.005em";
 const dmPatternFont = "font-family:'DM Serif Display',serif;font-size:9cqi;line-height:1.22;letter-spacing:-.01em";
 const dmRight = rightMark(dmMark);
-const staggerNoDot = rightMark(glMark, `<span style="display:block;padding-right:1.2em">unexpected</span>detail`);
-const dmRightNoDot = rightMark(dmMark, "unexpected<br>detail");
 
 type Pattern = { name: string; note: string; prev?: [string, string]; stagger: string; right: string };
 const patterns: Pattern[] = [
@@ -1458,9 +1456,9 @@ const patterns: Pattern[] = [
   },
   {
     name: "Dots",
-    note: "Three rows of five. The dot where the square turns is peach and stands in for the period.",
-    stagger: peachGrid + staggerNoDot,
-    right: peachGrid + dmRightNoDot,
+    note: "Three rows of five. The dot where the square turns is peach, and the period hangs.",
+    stagger: peachGrid + staggerMark,
+    right: peachGrid + dmRight,
   },
   {
     name: "Missing dot",
