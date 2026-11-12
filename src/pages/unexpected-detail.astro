@@ -1383,11 +1383,147 @@ const r4Tiles: Thumb[] = [
   },
 ].map((t, i) => ({ ...t, tag: CONTENDER, id: pad(i + 1) }));
 
+/*
+  Round 05. The dots move onto the turned square grid: three rows of five on
+  the same centers, with the odd one out in the same place the square turns
+  (second row, fourth column). Then every pattern is shown light and dark,
+  once with the staggered Gloock wordmark and once flush right in DM Serif
+  Display.
+*/
+const squareCenters = { x: [16, 33, 50, 67, 84], y: [18.6, 35.6, 52.6] };
+const gridDots = (odd: string) =>
+  art(
+    squareCenters.y
+      .flatMap((cy, row) =>
+        squareCenters.x.map((cx, col) =>
+          row === 1 && col === 3 ? odd.replace("CX", String(cx)).replace("CY", String(cy)) : `<circle cx="${cx}" cy="${cy}" r="4.2" fill="currentColor"/>`,
+        ),
+      )
+      .join(""),
+  );
+const peachGrid = gridDots('<circle cx="CX" cy="CY" r="4.2" fill="var(--ud-peach)"/>');
+const missingGrid = gridDots("");
+
+/*
+  The type pattern with the wordmark set into it as a two line lockup. Same
+  idea as centeredPattern: the block turns about its own middle and the two
+  focused rows sit either side of it, so the lockup lands on the tile's
+  center. One grid holds both rows so "unexpected" and "detail" share a
+  right edge; the faded words run off either side.
+*/
+const lockupPattern = (font: string, stagger: boolean, count = 14) => {
+  const dim = (t: string, extra = "") => `<span style="opacity:.13;min-width:0;${extra}">${t}</span>`;
+  const shifts = [0, 3.4, 1.2, 4.6, 2.3, 5.5];
+  const top = count / 2 - 1;
+  const left = "text-align:right;padding-right:.25em;direction:rtl";
+  const right = "text-align:left;padding-left:.5em";
+  const rows: string[] = [];
+  for (let i = 0; i < count; i++) {
+    if (i === top) {
+      rows.push(
+        `<span style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);text-align:right">` +
+          dim(`${pair} ${pair} detail`, left) +
+          `<span data-focus style="${stagger ? "padding-right:1.2em" : ""}">unexpected</span>` +
+          dim(`${pair} ${pair}`, stagger ? "text-align:left;margin-left:-1.2em;padding-left:.25em" : right) +
+          dim(`${pair} ${pair} unexpected`, left) +
+          `<span data-focus>detail${hangingDot}</span>` +
+          dim(`unexpected detail ${pair}`, right) +
+          "</span>",
+      );
+      i++;
+    } else {
+      rows.push(`<span style="display:block;position:relative;left:${shifts[i % 6] - 2.75}em">${dim(twice(pair))}</span>`);
+    }
+  }
+  return mark(
+    `position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-8deg);text-align:center;${font}`,
+    rows.join(""),
+  );
+};
+
+const glPatternFont = "font-family:'Gloock',serif;font-size:9cqi;line-height:1.22;letter-spacing:-.005em";
+const dmPatternFont = "font-family:'DM Serif Display',serif;font-size:9cqi;line-height:1.22;letter-spacing:-.01em";
+const dmRight = rightMark(dmMark);
+const staggerNoDot = rightMark(glMark, `<span style="display:block;padding-right:1.2em">unexpected</span>detail`);
+const dmRightNoDot = rightMark(dmMark, "unexpected<br>detail");
+
+type Pattern = { name: string; note: string; prev?: [string, string]; stagger: string; right: string };
+const patterns: Pattern[] = [
+  {
+    name: "Leaning line",
+    note: "One line in the row leans.",
+    prev: ["02", "01"],
+    stagger: artOf(tile("T11")) + staggerMark,
+    right: artOf(tile("T11")) + dmRight,
+  },
+  {
+    name: "Dots",
+    note: "Three rows of five. The dot where the square turns is peach and stands in for the period.",
+    stagger: peachGrid + staggerNoDot,
+    right: peachGrid + dmRightNoDot,
+  },
+  {
+    name: "Missing dot",
+    note: "Three rows of five, with the dot gone from where the square turns. It turns up as the period.",
+    stagger: missingGrid + staggerMark,
+    right: missingGrid + dmRight,
+  },
+  {
+    name: "Turned square",
+    note: "One square in the grid has turned on its corner.",
+    stagger: artOf(tile("T10")) + staggerMark,
+    right: artOf(tile("T10")) + dmRight,
+  },
+  {
+    name: "Type pattern",
+    note: "The wordmark set into the faded pattern, centered on the tile.",
+    stagger: lockupPattern(glPatternFont, true),
+    right: lockupPattern(dmPatternFont, false),
+  },
+];
+const r5Group = (layout: "stagger" | "right", start: number): Thumb[] =>
+  patterns
+    .flatMap((pt) => {
+      const base = { source: "", html: pt[layout] };
+      const prevLight = layout === "stagger" && pt.prev ? pt.prev[0] : undefined;
+      return [
+        { ...base, id: "", prev: prevLight, name: `${pt.name}, light`, note: pt.note, bg: "var(--ud-paper)", color: "var(--ud-ink)" },
+        { ...base, id: "", name: `${pt.name}, dark`, note: "", bg: cocoa, color: "var(--ud-paper)" },
+      ];
+    })
+    .map((t, i) => ({ ...t, id: pad(start + i) }));
+const r5Stagger = r5Group("stagger", 1);
+const r5Right = r5Group("right", r5Stagger.length + 1);
+
 type LogoSection = { kind: "logos"; id: string; heading: string; nav?: string; intro: string; items: Logo[] };
-type TileSection = { kind: "tiles"; id: string; heading: string; nav?: string; intro: string; items: Thumb[] };
+type TileSection = { kind: "tiles"; id: string; heading: string; nav?: string; intro: string; items: Thumb[]; pairs?: boolean };
 type Round = { id: string; title: string; intro: string; r2?: boolean; sections: (LogoSection | TileSection)[] };
 
 const rounds: Round[] = [
+  {
+    id: "round-05",
+    title: "Round 05",
+    intro: "Every pattern in light and dark, in both wordmark layouts.",
+    r2: true,
+    sections: [
+      {
+        kind: "tiles",
+        id: "r5-stagger",
+        heading: "Stagger",
+        intro: "The staggered wordmark in Gloock.",
+        items: r5Stagger,
+        pairs: true,
+      },
+      {
+        kind: "tiles",
+        id: "r5-right",
+        heading: "Right flush",
+        intro: "The flush right wordmark in DM Serif Display.",
+        items: r5Right,
+        pairs: true,
+      },
+    ],
+  },
   {
     id: "round-04",
     title: "Round 04",
@@ -1600,7 +1736,7 @@ const fontsHref =
 
                       {section.kind === "tiles" && (
                         <>
-                          <ol class="thumb-list">
+                          <ol class:list={["thumb-list", { "thumb-list--pairs": section.pairs }]}>
                             {section.items.map((t) => (
                               <li class="logo-item">
                                 <div
@@ -2156,6 +2292,11 @@ const fontsHref =
     .r2 .thumb-list {
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: var(--space-8) var(--space-4);
+    }
+
+    /* Round 05 shows each pattern as a light and dark pair. */
+    .r2 .thumb-list--pairs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .brief-list {
