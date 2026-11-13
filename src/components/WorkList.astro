@@ -6,9 +6,7 @@
  * project: thumbnail, title, type badges and summary, and "View project".
  * Projects are grouped under a thin year row, newest year first; years with
  * no projects are skipped. The year row sticks under the nav until the next
- * year pushes it out. Past the first FIRST_BATCH projects, the rest wait
- * behind a "load more" button (shown only once the script runs, so without
- * JavaScript the whole list is there).
+ * year pushes it out. Every project shows.
  * Documented at /ds/patterns/project-card.
  */
 import Layout from "../layouts/Layout.astro";
@@ -30,12 +28,6 @@ const { active } = Astro.props;
 const list = active
   ? workProjects.filter((p) => (active.kind === "type" ? p.tags : p.tools).includes(active.facet.name))
   : workProjects;
-
-/** How many projects show before the "load more" button. */
-const FIRST_BATCH = 10;
-const extra = Math.max(0, list.length - FIRST_BATCH);
-const indexOf = new Map(list.map((p, i) => [p.slug, i]));
-const isExtra = (p: (typeof list)[number]) => (indexOf.get(p.slug) ?? 0) >= FIRST_BATCH;
 
 // Group by year. The list is already newest first, so each year's projects
 // keep their order.
@@ -119,15 +111,11 @@ const schema = [
       </header>
 
       {years.map(({ year, projects }) => (
-        <section
-          class="year-group"
-          aria-labelledby={`year-${year}`}
-          data-more={projects.every(isExtra) ? "" : undefined}
-        >
+        <section class="year-group" aria-labelledby={`year-${year}`}>
           <h2 class="year-row overline" id={`year-${year}`}>{year}</h2>
           <ul class="project-list">
           {projects.map((project) => (
-            <li class="project-row" data-more={isExtra(project) ? "" : undefined}>
+            <li class="project-row">
               <a href={`/work/${project.slug}`} class="row-thumb" tabindex="-1" aria-hidden="true">
                 {project.thumbnail && <Media src={project.thumbnail} alt="" />}
               </a>
@@ -160,21 +148,6 @@ const schema = [
         </section>
       ))}
 
-      {extra > 0 && (
-        <div class="load-more" data-load-more hidden>
-          <button type="button" class="btn btn-secondary btn-lg">
-            Certified vintage ({extra} more)
-          </button>
-        </div>
-      )}
-
-      {/* Only shown once the vintage projects are open, when the list has
-          grown long enough to need a way back up. */}
-      {extra > 0 && (
-        <div class="load-more" data-back-to-top hidden>
-          <button type="button" class="btn btn-secondary btn-lg">Back to top</button>
-        </div>
-      )}
     </div>
   </main>
   <Footer />
@@ -261,30 +234,8 @@ const schema = [
     }
   }
 
-  /* Clears the sticky nav when "Back to top" scrolls here. */
-  .year-group {
-    scroll-margin-top: var(--nav-height);
-  }
-
   .year-group + .year-group {
     margin-top: var(--space-5);
-  }
-
-  /* Hidden until "load more" (the script adds the attribute). */
-  .year-group[hidden],
-  .project-row[hidden] {
-    display: none;
-  }
-
-  .load-more {
-    display: flex;
-    justify-content: center;
-    padding-top: var(--space-7);
-    border-top: 1px solid var(--color-border);
-  }
-
-  .load-more[hidden] {
-    display: none;
   }
 
   .year-row + .project-list > .project-row:first-child {
@@ -478,31 +429,6 @@ const schema = [
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll);
   markStuck();
-
-  // Load more: hide everything past the first batch and show the button.
-  // Without JavaScript none of this runs, so the full list stays visible.
-  const more = document.querySelector<HTMLElement>("[data-load-more]");
-  if (more) {
-    const extras = document.querySelectorAll<HTMLElement>(".work-page [data-more]");
-    extras.forEach((el) => (el.hidden = true));
-    more.hidden = false;
-    more.querySelector("button")?.addEventListener("click", () => {
-      extras.forEach((el) => (el.hidden = false));
-      more.remove();
-      // Send keyboard focus to the first project that just appeared.
-      document.querySelector<HTMLElement>(".project-row[data-more] .row-link")?.focus();
-      if (backToTop) backToTop.hidden = false;
-    });
-  }
-
-  // Back to top: scrolls to the first year and its first project, and moves
-  // keyboard focus there too.
-  const backToTop = document.querySelector<HTMLElement>("[data-back-to-top]");
-  backToTop?.querySelector("button")?.addEventListener("click", () => {
-    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    document.querySelector(".year-group")?.scrollIntoView({ behavior: still ? "auto" : "smooth", block: "start" });
-    document.querySelector<HTMLElement>(".project-row .row-link")?.focus({ preventScroll: true });
-  });
 
   // Choosing a type or tool goes to its page.
   const browse = document.querySelector<HTMLSelectElement>("[data-work-browse]");
