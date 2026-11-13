@@ -546,6 +546,7 @@ const allProjects: Project[] = [
   },
   {
     slug: "shopping-agent-launch-page",
+    draft: true,
     title: "Shopping Agent Launch Page",
     year: 2026,
     description: "Page design and product visuals for BigCommerce's Shopping Agent launch, built from pre-release screenshots with a Claude skill that drafts images in Figma.",
