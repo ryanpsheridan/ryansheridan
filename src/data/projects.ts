@@ -373,7 +373,7 @@ const allProjects: Project[] = [
         beforeTitle: "Before",
         afterTitle: "After",
         rows: [
-          { label: "Search clicks", before: "About 0.5 a day", after: "About 6 a day in the first 20 days, still measuring" },
+          { label: "Search clicks", before: "About 0.5 a day", after: "About 6 a day in the first 20 days" },
           { label: "Pages with their own title", before: "1 of 6", after: "Every page" },
           { label: "Contact form", before: "Could lose inquiries without anyone knowing", after: "Fixed, and on a page of its own" },
           { label: "Content the staff edit themselves", before: "None", after: "Leagues, events, hours, prices, reviews and the team" },
@@ -502,7 +502,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Search and answer engines",
-        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. On 23 October 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs, holiday hours, and FAQ markup on the new lesson page to match the pages that already had it. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p><p>Treat this as a starting point. In the 20 days from the first push, the site averaged about 6 clicks and 229 impressions a day, against 0.5 clicks and 38 impressions a day in the 28 days before, and the share of searchers who clicked doubled, from 1.3 to 2.6 percent. The figures are Google Search Console, web search. It is an early read that ends on the day the rebuild went live. I will add results here as the weeks come in.</p>`,
+        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. On October 23, 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild went further. Every league and event now spells out its dates, location and sign-up status in structured data, the labeled details Google and AI assistants read to answer questions about the club. The site also added breadcrumbs, holiday hours, and FAQ markup on the new lesson page.</p><p>After the October 23 push, search clicks went from about half a click a day to about six, and the share of searchers who clicked doubled. The daily figures from Google Search Console are below.</p>`,
       },
       {
         type: "barChart",
@@ -538,11 +538,6 @@ const allProjects: Project[] = [
           { src: "/project-ogc-after-team.webp", alt: "The new Team page, with photos, roles and contact details for the staff, edited in Pages CMS", caption: "Our team" },
           { src: "/project-ogc-after-carls-place.webp", alt: "The new Carl’s Place page for custom indoor golf simulators, with project photos, reasons to choose the team and a request form", caption: "Carl’s Place" },
         ],
-      },
-      {
-        type: "text",
-        heading: "Working with an agent",
-        body: `<p>The agent was fast and tireless at the parts that used to eat my time: building pages from the system, wiring up the CMS, running the checks before every handoff, and keeping the style guide in step with the site. Where it needed me was judgment: choosing the direction, deciding what not to build, catching the moments where the first answer was wrong, and holding every change to the same bar before the client saw it.</p>`,
       },
     ],
   },

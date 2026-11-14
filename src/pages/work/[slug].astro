@@ -25,7 +25,7 @@ const { project } = Astro.props;
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const shortDate = (iso: string) => {
   const d = new Date(`${iso}T00:00:00Z`);
-  return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}`;
+  return `${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}`;
 };
 
 /** Lays a bar chart out in a fixed viewBox so the SVG scales with its column. */

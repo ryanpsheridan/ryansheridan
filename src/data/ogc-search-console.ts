@@ -3,9 +3,9 @@
  * countries), pasted from the Chart.csv in a Performance export. To extend the
  * chart, append the new days in date order and keep one row per day.
  *
- * Milestones: first SEO push 23 Oct 2026 (the chart marker). The rebuilt site
+ * Milestones: first SEO push October 23, 2026 (the chart marker). The rebuilt site
  * went live, with indexing requested for every page and the sitemap
- * resubmitted, on 11 Nov 2026.
+ * resubmitted, on November 11, 2026.
  */
 export interface SearchConsoleDay {
   date: string;
