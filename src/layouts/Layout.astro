@@ -123,7 +123,7 @@ const jsonLd = noindex
         // stream of small wheel events reads as one continuous glide. A fixed
         // duration restarted its tween on every event, which felt jumpy.
         const lenis = new Lenis({
-          lerp: 0.12,
+          lerp: 0.15,
           smoothWheel: true,
         });
         const raf = (time: number) => {
