@@ -725,6 +725,8 @@ const schema = [
     width: 100%;
     display: block;
     border: var(--border-width) solid var(--color-border);
+    /* The border eats into the fixed aspect ratio; cover fills the last fraction of a pixel instead of letterboxing. */
+    object-fit: cover;
   }
 
   .content-section {

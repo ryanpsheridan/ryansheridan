@@ -356,7 +356,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Project",
-        body: `<p><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">Ohio Golf Club Indoor</a> is an indoor golf facility in Akron, Ohio, with nine TrackMan bays, a short game area, lessons, memberships and leagues. It is a freelance client, outside my day job, and I am the only designer and developer on the site.</p><p>It is also my first full site rebuild working agentically, with Claude Code as part of the workflow. I set the direction and the design system, wrote the rules the code follows, and reviewed every change in the browser before it reached the live site. The agent took on the repetitive building, which left my time for the decisions that shape the site. The rebuilt site is <a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">live now</a>.</p>`,
+        body: `<p><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">Ohio Golf Club Indoor</a> is an indoor golf facility in Akron, Ohio, with nine TrackMan bays, a short game area, lessons, memberships and leagues. I redesigned and rebuilt the website end to end, as the only designer and developer on the project.</p><p>I built it with Claude Code as part of my workflow. I set the direction and the design system, wrote the rules the code follows, and reviewed every change in the browser before it reached the live site. The agent took on the repetitive building, which left my time for the decisions that shape the site. The rebuilt site is <a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">live now</a>.</p>`,
       },
       {
         type: "compare",
@@ -382,7 +382,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Two kinds of users",
-        body: `<p>The obvious users are golfers: book a bay, find a league, check tonight’s hours, often on a phone. The less obvious ones are the client and the staff. Before, changing the hours or adding a league meant a message to a developer, and a site the client can’t update goes stale. So I designed for the staff as carefully as for the visitors, and every decision below serves one or both.</p>`,
+        body: `<p>The obvious users are golfers: book a bay, find a league, check tonight’s hours, often on a phone. The less obvious ones are the client and the staff. Before, changing the hours or adding a league meant emailing a developer and waiting, which is hard when something needs to change today. So I designed for the staff as carefully as for the visitors, and every decision below serves one or both.</p>`,
       },
       {
         type: "text",
@@ -475,7 +475,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Why a CMS",
-        body: `<p>Before, every update went through a developer. Now the staff make their own. I chose Pages CMS, a free editor that saves straight into the site’s code repository: no database, no monthly fee and nothing extra to host. Staff edit leagues, events, weekly hours, holidays, the announcement strip, bay rates, membership plans, Google reviews and the team in plain forms.</p><p>I built the forms to be hard to break. Every entry is checked when the site builds, and a broken one stops that build, so the live site stays as it was. Event dates write their own display text. Plans can be added or removed without copy edits, because no sentence on the site names a plan. And the structure is ready for a second location.</p>`,
+        body: `<p>Before, every update went through a developer. Now the staff make their own. I chose <a href="https://pagescms.org/" target="_blank" rel="noopener noreferrer">Pages CMS</a>, a free editor that saves straight into the site’s code repository: no database, no monthly fee and nothing extra to host. Staff edit leagues, events, weekly hours, holidays, the announcement strip, bay rates, membership plans, Google reviews and the team in plain forms.</p><p>I built the forms to be hard to break. Every entry is checked when the site builds, and a broken one stops that build, so the live site stays as it was. Event dates write their own display text. Plans can be added or removed without copy edits, because no sentence on the site names a plan. And the structure is ready for a second location.</p>`,
       },
       {
         type: "imageGrid",
