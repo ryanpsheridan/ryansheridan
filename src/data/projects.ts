@@ -377,7 +377,6 @@ const allProjects: Project[] = [
           { label: "Pages with their own title", before: "1 of 6", after: "Every page" },
           { label: "Contact form", before: "Could lose inquiries without anyone knowing", after: "Fixed, and on a page of its own" },
           { label: "Content the staff edit themselves", before: "None", after: "Leagues, events, hours, prices, reviews and the team" },
-          { label: "Known security issues in the code", before: "23", after: "2" },
         ],
       },
       {
