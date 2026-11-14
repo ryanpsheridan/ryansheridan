@@ -811,12 +811,12 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "A Shared Foundation, Built for Each Brand",
-        body: `<p>Rather than forcing the brands into a single visual language, I built the system around a shared foundation with distinct brand-specific styling, so each brand still looks the way it does on its live site.</p><p>The architecture separates foundational design decisions from brand-level styling, allowing colors, typography, and other visual properties to adapt based on the selected brand. Each brand also has a mobile mode, so the system stays consistent across screen sizes.</p><p>One of the more challenging parts was creating a token structure that could accommodate the differences between brands while remaining predictable and easy to maintain. Type was the hardest. Display, heading, body, quote, and eyebrow styles had to line up across brands so that a single text style could pull cleanly from tokens. The result is one system where designers can work across brands without managing separate libraries or manually translating styles.</p>`,
+        body: `<p>Rather than forcing the brands into a single visual language, I built the system around a shared foundation with distinct brand-specific styling, so each brand still looks the way it does on its live site.</p><p>The architecture separates foundational design decisions from brand-level styling, allowing colors, typography, and other visual properties to adapt based on the selected brand. Each brand also has a mobile mode, so the system stays consistent across screen sizes.</p>`,
       },
       {
         type: "text",
         heading: "One Token Name, a Value per Brand",
-        body: `<p>The foundation has two layers. <strong>Primitive variables</strong> hold the raw values: every brand's color ramps, the fonts, and shared number scales for frame widths, containers, padding, spacing, and motion. <strong>Brand variables</strong> are the semantic layer. They give those values a job, like text color, surface, or heading size, and each one carries a value for Commerce (CM), BigCommerce (BC), and Feedonomics (FDX).</p><p>Components only reference the semantic layer, and that's what lets one component serve every brand. <em>Display 1</em> is 101px for Commerce, 64 for BigCommerce, and 72 for Feedonomics. <em>Surface/Base</em> is Pearl, White, or Stone. Where the brands agree, like the spacing scale and motion timing, all three point at the same primitive, so a change lands everywhere at once.</p>`,
+        body: `<p>The foundation has two layers. <strong>Primitive variables</strong> hold the raw values: every brand's color ramps, the fonts, and shared number scales for frame widths, containers, padding, spacing, and motion. <strong>Brand variables</strong> are the semantic layer. They give those values a job, like text color, surface, or heading size, and each one carries a value for Commerce (CM), BigCommerce (BC), and Feedonomics (FDX).</p>`,
       },
       {
         type: "imageGrid",
@@ -832,7 +832,7 @@ const allProjects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          { src: "/multi-brand-sections.svg", alt: "The Multi-Brand section library in Figma, grouped into Hero, Section Header, Multi Column, Card, Metrics and Stats, and Logo Showcase, beside a six-card Multi Column section with the Mode menu set to CM" },
+          { src: "/multi-brand-sections-animated.svg", alt: "The Multi-Brand section library in Figma, grouped into Hero, Section Header, Multi Column, Card, Metrics and Stats, and Logo Showcase, beside a six-card Multi Column section that switches between the CM, BC and FDX modes as its colors, spacing and type change with the Mode menu" },
         ],
       },
       {
