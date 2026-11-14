@@ -777,23 +777,17 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "One System for Three Brands",
-        body: `<p>Commerce is the parent company behind <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a>, <a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a>, and <a href="https://www.makeswift.com/" target="_blank" rel="noopener noreferrer">Makeswift</a>, and each brand had its own Figma file, token library, and way of doing things. Over time, maintaining four separate systems became unsustainable. Designers were constantly using tokens from each file, mixing up color and type tokens per brand. They were inconsistently named, and there was no shared source of truth.</p><p>The goal was to consolidate all four into a single scalable design system that worked not just for designers, but for publishers, marketers, developers, and CRO specialists too. That mixed audience is what made this genuinely hard to get right.</p>`,
-      },
-      {
-        type: "imageGrid",
-        images: [
-          { src: "/multi-brand-sections.svg", alt: "The Multi-Brand section library in Figma, grouped into Hero, Section Header, Multi Column, Card, Metrics and Stats, and Logo Showcase, beside a six-card Multi Column section with the Mode menu set to CM" },
-        ],
+        body: `<p>Commerce is the parent company behind <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a>, <a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a>, and <a href="https://www.makeswift.com/" target="_blank" rel="noopener noreferrer">Makeswift</a>. Commerce and each of its brands had their own design system, with separate Figma files, token libraries, and component patterns. That added up to four systems. Over time, maintaining them independently became increasingly difficult. Designers mixed up color and type tokens between files, names didn't line up, and there was no reliable shared source of truth.</p><p>I led the effort to bring these systems together into one shared design system, and I made the architectural calls behind it: how the brands share a foundation, how the tokens are structured, and how different teams would use it day to day. The finished library supports three brand identities, Commerce, BigCommerce, and Feedonomics, without sacrificing what makes each one distinct.</p><p>The challenge went beyond consolidating design assets. The system needed to work for a diverse group of people, from web designers and developers to marketers, publishers, and CRO specialists, each with different needs and levels of design-system experience.</p>`,
       },
       {
         type: "text",
-        heading: "Built Around How People Actually Work",
-        body: `<p>Rather than normalizing everything into one watered-down middle ground, the system reflects how each brand actually exists on its live sites. The foundation is a four-collection variable architecture covering primitive, brand, and theme tokens across all three brands and their mobile counterparts. The hardest part of getting there was making color and type tokens work seamlessly across all of them. Matching display, heading, body, quote, and eyebrow styles across brands so that a single text style pulls cleanly from tokens sounds straightforward, but getting that to feel right and stay maintainable took real work.</p><p>With the token system solid, sections came together in a way that kept the whole thing accessible to everyone who touches it. The goal was always finding the balance between being as easy as possible for non-designers and as powerful as possible for web designers. Drop a hero section, set the brand on the outer frame, and typography, spacing, and surface colors all update automatically with no token knowledge required. The final file includes 131 primitive variables, 115 brand variables across 6 modes, and a full library of sections and components spanning heroes, carousels, accordions, CTAs, feature layouts, and more.</p>`,
+        heading: "A Shared Foundation, Built for Each Brand",
+        body: `<p>Rather than forcing the brands into a single visual language, I built the system around a shared foundation with distinct brand-specific styling, so each brand still looks the way it does on its live site.</p><p>The architecture separates foundational design decisions from brand-level styling, allowing colors, typography, and other visual properties to adapt based on the selected brand. Each brand also has a mobile mode, so the system stays consistent across screen sizes.</p>`,
       },
       {
         type: "text",
         heading: "One Token Name, a Value per Brand",
-        body: `<p>The variables split into two collections. <strong>Primitives</strong> hold the raw values: every brand's color ramps, the fonts, and shared number scales for frame widths, containers, padding, spacing, and motion. <strong>Brand</strong> tokens give those values a job, and each one carries a column for Commerce (CM), BigCommerce (BC), and Feedonomics (FDX).</p><p>That's what lets one component serve every brand. <em>Display 1</em> is 101px for Commerce, 64 for BigCommerce, and 72 for Feedonomics. <em>Surface/Base</em> is Pearl, White, or Stone. <em>Hyperlink</em> is Iris, Blue 400, or Cobalt. Where the brands agree, like the spacing scale and motion timing, all three columns point at the same primitive, so a change lands everywhere at once.</p>`,
+        body: `<p>The foundation has two layers. <strong>Primitive variables</strong> hold the raw values: every brand's color ramps, the fonts, and shared number scales for frame widths, containers, padding, spacing, and motion. <strong>Brand variables</strong> are the semantic layer. They give those values a job, like text color, surface, or heading size, and each one carries a value for Commerce (CM), BigCommerce (BC), and Feedonomics (FDX).</p>`,
       },
       {
         type: "imageGrid",
@@ -803,8 +797,19 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
+        heading: "Built Around How People Actually Work",
+        body: `<p>A shared design system is only useful if people can actually use it, so I designed the component and section library around how different teams work. Web designers needed the flexibility to build and customize layouts. Marketers, publishers, and CRO specialists needed a simpler way to create and update pages without having to understand the underlying design tokens.</p><p>Because components and sections are connected directly to the brand mode, much of the visual complexity happens automatically. Drop in a hero, set the brand on the outer frame, and typography, spacing, and surface colors update together, with no token knowledge required. The balance I kept aiming for was a system that's as easy as possible for people who don't work in Figma every day and as powerful as possible for web designers.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [
+          { src: "/multi-brand-sections-animated.svg", alt: "The Multi-Brand section library in Figma, grouped into Hero, Section Header, Multi Column, Card, Metrics and Stats, and Logo Showcase, beside a six-card Multi Column section that switches between the CM, BC and FDX modes as its colors, spacing and type change with the Mode menu" },
+        ],
+      },
+      {
+        type: "text",
         heading: "Set the Brand Once",
-        body: `<p>In practice, a designer sets the brand on the page and then only picks shared styles and tokens. On a Feedonomics page, the hero headline uses <em>Display 2</em> from the Multi-Brand text styles and resolves to 64/70.4. The hero section is filled with <em>Surface/Inverse</em>, which is Navy for Feedonomics. Neither one has a hex value or a brand-specific style attached.</p>`,
+        body: `<p>Here's what that looks like on a real page. A designer sets the brand once and then only picks shared styles and tokens. On a Feedonomics page, the hero headline uses <em>Display 2</em> from the Multi-Brand text styles and resolves to 64/70.4. The hero section is filled with <em>Surface/Inverse</em>, which is Navy for Feedonomics. Neither one has a hex value or a brand-specific style attached.</p>`,
       },
       {
         type: "imageGrid",
@@ -813,6 +818,11 @@ const allProjects: Project[] = [
           { src: "/multi-brand-applied-type.webp", alt: "Feedonomics product page in Figma with the hero headline selected and the Multi-Brand text styles menu showing Display 2 at 64/70.4", caption: "Type: Display 2 from the Multi-Brand library resolves to the Feedonomics size." },
           { src: "/multi-brand-applied-surface.webp", alt: "The same Feedonomics page in Figma with the hero section selected and its fill set to the Surface/Inverse token from the Multi-Brand library", caption: "Surface: the hero is filled with Surface/Inverse, not a brand color." },
         ],
+      },
+      {
+        type: "text",
+        heading: "A Scalable Foundation",
+        body: `<p>The consolidated system brings three distinct brand experiences into one shared library. The final architecture includes 131 primitive variables and 115 brand variables across six modes, supported by a reusable library of sections and components spanning heroes, carousels, accordions, CTAs, feature layouts, and more.</p><p>Beyond reducing duplication, the system gives teams a more consistent way to create and maintain web experiences across the organization. Instead of maintaining separate systems for each brand, they work from a common foundation that can evolve as the brands and their needs change.</p>`,
       },
     ],
   },
