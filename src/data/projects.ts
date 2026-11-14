@@ -341,7 +341,7 @@ const allProjects: Project[] = [
     slug: "ohio-golf-club",
     title: "Ohio Golf Club",
     year: 2026,
-    description: "Rebuilding the website for Ohio Golf Club Indoor in Akron with an agentic workflow: a new design system, a CMS the staff run themselves, and search work.",
+    description: "Redesigning and rebuilding the Ohio Golf Club Indoor website in Akron: a cohesive design system, a site the staff update themselves, and search fixes, built with Claude Code.",
     thumbnail: "/project-ogc-featured-animated.svg",
     ogImage: "/project-ogc-featured.jpg",
     showOnHomepage: true,
@@ -356,7 +356,12 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Project",
-        body: `<p><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">Ohio Golf Club Indoor</a> is an indoor golf facility in Akron, Ohio, with nine TrackMan bays, a short game area, lessons, memberships and leagues. I redesigned and rebuilt the website end to end, as the only designer and developer on the project.</p><p>I built it with Claude Code as part of my workflow. I set the direction and the design system, wrote the rules the code follows, and reviewed every change in the browser before it reached the live site. The agent took on the repetitive building, which left my time for the decisions that shape the site. The rebuilt site is <a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">live now</a>.</p>`,
+        body: `<p><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">Ohio Golf Club Indoor</a> is an indoor golf facility in Akron, Ohio, offering TrackMan simulators, lessons, memberships, leagues, and private events.</p><p>I redesigned and rebuilt the website from the ground up, creating a more cohesive experience for golfers while giving the business a better way to manage its growing content and offerings.</p><p>I used Claude Code throughout the build, directing the design, user experience, site architecture, and implementation. With AI handling much of the development work, I could spend more time on the decisions that mattered most: how the site should look, work, and grow with the business. The new site is <a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">live now</a>.</p>`,
+      },
+      {
+        type: "text",
+        heading: "Before and after",
+        body: `<p>The goal was to replace a site that felt dated and pieced together with one that’s modern, easy to move through, and clear about everything the club offers.</p>`,
       },
       {
         type: "compare",
@@ -365,59 +370,13 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        heading: "At a glance",
-        body: `<p>Before is the site I started with. After is the rebuild.</p>`,
-      },
-      {
-        type: "versus",
-        beforeTitle: "Before",
-        afterTitle: "After",
-        rows: [
-          { label: "Search clicks", before: "About 0.5 a day", after: "About 6 a day in the first 20 days" },
-          { label: "Pages with their own title", before: "1 of 6", after: "Every page" },
-          { label: "Contact form", before: "Could lose inquiries without anyone knowing", after: "Fixed, and on a page of its own" },
-          { label: "Content the staff edit themselves", before: "None", after: "Leagues, events, hours, prices, reviews and the team" },
-        ],
+        heading: "The challenge",
+        body: `<p>The club had outgrown its website. It offered lessons, memberships, leagues, and private events, with a second location on the way, but the site was six pages, five of them sharing one generic title, with contact tucked into a pop-up.</p><p>Golfers needed a clearer way to explore the facility, compare memberships and bay rates, find lessons, and see which leagues and events were coming up, often from a phone. The business needed a site that could keep up with it. Every update, from new hours to a new league, went through a developer, and the one detailed league page had been built by hand, so a second league meant building another page from scratch.</p><p>So the redesign had two jobs: make the club easier to understand and book, and make the site something the staff could keep current themselves.</p>`,
       },
       {
         type: "text",
-        heading: "Two kinds of users",
-        body: `<p>The obvious users are golfers: book a bay, find a league, check tonight’s hours, often on a phone. The less obvious ones are the client and the staff. Before, changing the hours or adding a league meant emailing a developer and waiting, which is hard when something needs to change today. So I designed for the staff as carefully as for the visitors, and every decision below serves one or both.</p>`,
-      },
-      {
-        type: "text",
-        heading: "How I worked",
-        body: `<p>I started with an audit of the code and the live site, and fixed what was broken before building anything new.</p><p>Then I wrote the rules the agent works by, in a CLAUDE.md file it reads at the start of every session: build from shared components, name colors by their role so a brand refresh changes values rather than code, keep prices, hours and FAQs in one place, and keep the style guide in step with the site. When goals conflict, accessibility comes first.</p><p>A second file sets how changes ship. Each one gets its own branch and preview link, then goes to staging, where I review the whole site before releasing it to production. Only urgent fixes to the live site skip staging. The agent never moves work forward on its own. I do.</p><p>That split held up. The agent was fast at building pages from the system, wiring up the CMS and running checks before every handoff. Where it needed me was judgment: choosing the direction, deciding what not to build, and catching the moments where the first answer was wrong, like the phone menu below.</p>`,
-      },
-      {
-        type: "process",
-        rows: [
-          {
-            label: "Tweak or feature",
-            note: "Most changes",
-            steps: [
-              { label: "Branch, built locally" },
-              { label: "Preview link" },
-              { label: "Staging review" },
-              { label: "Production", success: true },
-            ],
-          },
-          {
-            label: "Hotfix",
-            note: "Live site is wrong now",
-            steps: [
-              { label: "Branch from live" },
-              { label: "Preview link" },
-              { label: "Production", success: true },
-              { label: "Back into staging" },
-            ],
-          },
-        ],
-      },
-      {
-        type: "text",
-        heading: "One design system behind every page",
-        body: `<p>I explored three brand directions and five versions of the home page before settling on one dark system for every page: two typefaces, DM Sans and DM Mono, a small set of color, spacing and corner tokens, and a few subtle textures. Every token and shared component is documented on an internal style guide that changes whenever the site does, so the next person, or the next agent, builds from the same parts.</p>`,
+        heading: "A cohesive design system",
+        body: `<p>I explored three brand directions and five versions of the home page before settling on a darker, more refined look that better reflects the indoor golf experience.</p><p>From there, I built a shared design system to keep every page consistent: two typefaces, DM Sans and DM Mono, a small set of color, spacing, and corner tokens, and a library of reusable components. New pages come together from the same parts instead of introducing one-off styles, and an internal style guide documents all of it and changes whenever the site does.</p><p>The result is a more recognizable identity and a site that can keep evolving as the business grows.</p>`,
       },
       {
         type: "imageGrid",
@@ -428,8 +387,8 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        heading: "Leagues and events",
-        body: `<p>The Fall League page was the most detailed on the old site, and it was built by hand, so a second league would have meant a second hand-built page. Now every league and event uses one template. The staff fill in a form, and the page, its place on the leagues or events list, and the details Google reads all follow. When an entry ends, it leaves the lists on its own.</p>`,
+        heading: "A better experience",
+        body: `<p>With the system in place, I reorganized the site around what visitors come to do. The navigation groups the club’s offerings into a few clear paths, Book a Bay sits in the header on every page, and memberships and bay rates are laid out so plans and prices are easy to compare.</p><h3>Leagues and events</h3><p>The old Fall League page was the most detailed on the site, and it was built by hand. Now every league and event shares one template, so each gets the same clear layout: dates, format, how to sign up, and answers to common questions. Private events have a page of their own too, with the occasions the club hosts and a request form.</p>`,
       },
       {
         type: "compare",
@@ -438,18 +397,7 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        heading: "Private events",
-        body: `<p>The old events page was about private parties only. Now the events page lists the club’s own events, and private events have a page of their own, with the occasions the club hosts and the request form right on the page.</p>`,
-      },
-      {
-        type: "compare",
-        before: { src: "/project-ogc-before-events.webp", alt: "The old Ohio Golf Club events page, with five event types in cards and a Plan Your Event call to action", label: "Before" },
-        after: { src: "/project-ogc-after-events-host.webp", alt: "The new Host an Event page, with event types for groups, birthdays and corporate outings and a request form on the page", label: "After" },
-      },
-      {
-        type: "text",
-        heading: "Contact and lessons on real pages",
-        body: `<p>Contact used to be a pop-up on every page. It is now a page, with the form, hours and directions together, and lessons have a page of their own. A page can be found in search, linked to and bookmarked, which a pop-up can’t. The lesson page’s title, heading, copy and FAQ follow the searches Search Console showed people already making.</p>`,
+        body: `<h3>Contact and lessons on real pages</h3><p>Contact used to be a pop-up. Now it’s a page with the form, hours, and directions together, and lessons have a page of their own. Unlike a pop-up, a page can be found in search, linked to, and bookmarked.</p>`,
       },
       {
         type: "compare",
@@ -458,8 +406,7 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        heading: "Mobile first, in practice",
-        body: `<p>More than half of the people who reach the site from search are on a phone, so I gave the whole site a mobile pass: spacing, larger tap targets, and a scroll fade-in toned down and switched off for anyone whose device asks for reduced motion. The menu took four rounds. It began as one long list that scrolled on a small phone, so I folded the desktop dropdowns into sections that open in place. In testing, that build let only one section open at a time: opening one closed another above it, and the list jumped under your finger. Now each section opens on its own.</p>`,
+        body: `<h3>Designed for phones</h3><p>More than half of the people who find the site through search are on a phone, so I gave every page a mobile pass: tighter spacing, larger tap targets, and motion that turns off for anyone whose device asks for less. The menu needed the most care. One long list scrolled off small screens, so the desktop dropdowns now fold into sections that open in place, each on its own, so nothing jumps under your finger.</p>`,
       },
       {
         type: "imageGrid",
@@ -474,8 +421,8 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        heading: "Why a CMS",
-        body: `<p>Before, every update went through a developer. Now the staff make their own. I chose <a href="https://pagescms.org/" target="_blank" rel="noopener noreferrer">Pages CMS</a>, a free editor that saves straight into the site’s code repository: no database, no monthly fee and nothing extra to host. Staff edit leagues, events, weekly hours, holidays, the announcement strip, bay rates, membership plans, Google reviews and the team in plain forms.</p><p>I built the forms to be hard to break. Every entry is checked when the site builds, and a broken one stops that build, so the live site stays as it was. Event dates write their own display text. Plans can be added or removed without copy edits, because no sentence on the site names a plan. And the structure is ready for a second location.</p>`,
+        heading: "Built to grow with the business",
+        body: `<p>The old site relied on a developer for nearly every content update. I wanted to change that.</p><p>I designed the site architecture around reusable templates and set up <a href="https://pagescms.org/" target="_blank" rel="noopener noreferrer">Pages CMS</a>, a free editor that saves straight into the site’s code, with no database or monthly fee. Staff now manage leagues, events, weekly hours, holidays, the announcement strip, bay rates, membership plans, Google reviews, and the team through simple forms. Page layouts and the main page copy stay in the code.</p><p>Rather than a new page for every league or event, the content follows a consistent structure. Staff fill in a form, and the site handles the rest: the page, its place in the listings, and the details search engines read. Every entry is checked when the site builds, so a mistake stops the update instead of breaking the live site.</p><p>That gives the business day-to-day flexibility, and because hours, holidays, and rates are already organized by location, the structure is ready for the second club they’ve announced.</p>`,
       },
       {
         type: "imageGrid",
@@ -501,8 +448,8 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        heading: "Search and answer engines",
-        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. That was a quick win, so I shipped it to the old site before the rebuild was ready. On October 23, 2026, I gave every page its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild went further. Every league and event page now describes its dates, location and sign-up status in structured data, the labeled details Google and AI assistants read to answer questions about the club. I also added structured data for breadcrumbs and holiday hours, and FAQ markup on the new lesson page.</p><p>After the October 23 push, search clicks went from roughly half a click a day to about six, and the share of searchers who clicked doubled. The daily figures from Google Search Console are below.</p>`,
+        heading: "Search visibility",
+        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” while earning almost no clicks. Part of the problem was simple: five of the six pages shared one generic title.</p><p>That fix didn’t need to wait for the redesign. On October 23, 2026, I made technical SEO improvements to the existing site: a unique title and description for every page, one consistent address, a sitemap, and correct link previews.</p><p>The rebuild took it further. Lessons, contact, and private events each have their own page, with titles and copy shaped around what people were already searching for. Structured data describes the business, its hours, every league and event, breadcrumbs, and common questions, so search engines can read those details directly.</p><p>Early results from Google Search Console compare the 28 days before those first fixes (September 25 to October 22) with the 20 days after (October 23 to November 11). Clicks went from roughly half a click a day to about six on average, and impressions from about 38 a day to 229. Those gains came from the work on the old site, since the rebuild launched on November 11. They’re an encouraging start, not proof of long-term growth.</p>`,
       },
       {
         type: "barChart",
@@ -522,8 +469,28 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
+        heading: "A different approach to building",
+        body: `<p>I used Claude Code as an integral part of the development process, taking a hands-on approach to directing and reviewing the work. Rather than spending most of my time writing code, I focused on defining the experience, setting up the architecture, and deciding how the site should work. Claude helped turn those decisions into working components, pages, and CMS functionality, and helped me test, troubleshoot, and refine them along the way.</p><p>I started with an audit of the existing code and fixed what was broken before building anything new, including a contact form that was silently dropping inquiries. Then I wrote the ground rules Claude follows in every session, kept in a CLAUDE.md file: build from shared components, name colors by their role, keep prices, hours, and FAQs in one place, and put accessibility first when goals conflict.</p><p>Every change went through a structured GitHub workflow: its own branch, a Vercel preview link to review it, a final check on a staging site, and a production release only when I signed off. That let me take the project from design through implementation while keeping control of the details that shape the final product.</p>`,
+      },
+      {
+        type: "process",
+        rows: [
+          {
+            label: "Every change",
+            note: "Nothing ships without review",
+            steps: [
+              { label: "Its own branch" },
+              { label: "Preview link" },
+              { label: "Staging review" },
+              { label: "Production", success: true },
+            ],
+          },
+        ],
+      },
+      {
+        type: "text",
         heading: "More of the new site",
-        body: `<p>Memberships with plan cards and a comparison table, a lesson request page, the leagues list, bay rentals, the team and Carl’s Place, the club’s custom simulator business. Each slide shows the top of the page. Click an image to see the whole page.</p>`,
+        body: `<p>Memberships with plan cards and a comparison table, a lesson request page, the leagues list, bay rentals, private events, the team, and Carl’s Place, the club’s custom simulator business. Each slide shows the top of the page. Click an image to see the whole page.</p>`,
       },
       {
         type: "carousel",
@@ -535,6 +502,7 @@ const allProjects: Project[] = [
           { src: "/project-ogc-after-book-a-lesson.webp", alt: "The new Book a Lesson page, with a lesson request form and answers to common lesson questions", caption: "Book a lesson" },
           { src: "/project-ogc-after-leagues.webp", alt: "The new Leagues page, listing current and upcoming leagues", caption: "Leagues" },
           { src: "/project-ogc-after-bay-rentals.webp", alt: "The new Bay Rentals page, with bay rates by group size and frequently asked questions", caption: "Bay rentals" },
+          { src: "/project-ogc-after-events-host.webp", alt: "The new Host an Event page, with event types for groups, birthdays and corporate outings and a request form on the page", caption: "Host an event" },
           { src: "/project-ogc-after-team.webp", alt: "The new Team page, with photos, roles and contact details for the staff, edited in Pages CMS", caption: "Our team" },
           { src: "/project-ogc-after-carls-place.webp", alt: "The new Carl’s Place page for custom indoor golf simulators, with project photos, reasons to choose the team and a request form", caption: "Carl’s Place" },
         ],
