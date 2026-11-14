@@ -800,7 +800,8 @@ const schema = [
   /* Phone screens: four across, two by two when the column narrows. */
   .image-grid.is-four-up {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--space-5) var(--space-4);
+    /* Half the usual image grid gap, so the four phones read as one set. */
+    gap: var(--space-3) calc(var(--space-4) / 2);
     align-items: start;
   }
 
