@@ -156,23 +156,8 @@ export interface BarChartBlock {
   unit: string;
   points: BarChartPoint[];
   marker?: { date: string; label: string };
-  caption?: string;
-}
-
-export interface StatTile {
-  label: string;
-  /** The headline figure, kept short: "6.0", "2.6%". */
-  value: string;
-  /** One line of context under the figure, e.g. "Up from 0.5". */
-  detail?: string;
-}
-
-/** A row of large figures to scan before a chart or table. Two to four tiles. */
-export interface StatRowBlock {
-  type: "statRow";
-  /** Small label above the tiles, e.g. the period they cover. */
-  title?: string;
-  stats: StatTile[];
+  /** Average before and after the marker, shown beside the title: "0.5" → "6.0" a day. */
+  change?: { before: string; after: string; per: string };
   caption?: string;
 }
 
@@ -294,8 +279,7 @@ export type ContentBlock =
   | PathwayBlock
   | MotionExamplesBlock
   | TimelineBlock
-  | BarChartBlock
-  | StatRowBlock;
+  | BarChartBlock;
 
 export interface Project {
   slug: string;
@@ -502,17 +486,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Search and answer engines",
-        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. On 23 October 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs, holiday hours, and FAQ markup on the new lesson page to match the pages that already had it. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p><p>Treat this as a starting point. In the 20 days from the first push, the site averaged about 6 clicks and 229 impressions a day, against 0.5 clicks and 38 impressions a day in the 28 days before, and the share of searchers who clicked doubled. It is an early read that ends on the day the rebuild went live. I will add results here as the weeks come in.</p>`,
-      },
-      {
-        type: "statRow",
-        title: "20 days from the first push, against the 28 days before",
-        stats: [
-          { label: "Clicks a day", value: "6.0", detail: "Up from 0.5" },
-          { label: "Impressions a day", value: "229", detail: "Up from 38" },
-          { label: "Click-through rate", value: "2.6%", detail: "Up from 1.3%" },
-          { label: "Clicks since the push", value: "119", detail: "Against 14 before" },
-        ],
+        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. On 23 October 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs, holiday hours, and FAQ markup on the new lesson page to match the pages that already had it. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p><p>Treat this as a starting point. In the 20 days from the first push, the site averaged about 6 clicks and 229 impressions a day, against 0.5 clicks and 38 impressions a day in the 28 days before, and the share of searchers who clicked doubled, from 1.3 to 2.6 percent. The figures are Google Search Console, web search. It is an early read that ends on the day the rebuild went live. I will add results here as the weeks come in.</p>`,
       },
       {
         type: "barChart",
@@ -520,6 +494,7 @@ const allProjects: Project[] = [
         unit: "clicks",
         points: ogcSearchConsole.map((d) => ({ date: d.date, value: d.clicks })),
         marker: { date: "2026-10-23", label: "First SEO push" },
+        change: { before: "0.5", after: "6.0", per: "a day" },
       },
       {
         type: "barChart",
@@ -527,7 +502,7 @@ const allProjects: Project[] = [
         unit: "impressions",
         points: ogcSearchConsole.map((d) => ({ date: d.date, value: d.impressions })),
         marker: { date: "2026-10-23", label: "First SEO push" },
-        caption: "Google Search Console, web search, 1 Sep to 11 Nov 2026. Before is 25 Sep to 22 Oct; after is 23 Oct to 11 Nov.",
+        change: { before: "38", after: "229", per: "a day" },
       },
       {
         type: "text",

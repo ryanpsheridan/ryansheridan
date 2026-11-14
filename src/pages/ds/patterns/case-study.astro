@@ -5,7 +5,6 @@ import CodeBlock from "../../../components/ds/CodeBlock.astro";
 const blocks = [
   { type: "text", use: "A heading and HTML body. Rendered inside .prose.", code: `{ type: "text", heading: "Built around how people work", body: "<p>…</p>" }` },
   { type: "imageGrid", use: "One or more images, full width. framed adds space for UI screenshots; sideBySide makes two columns; fourUp sets phone screens four across, two by two on narrow screens.", code: `{ type: "imageGrid", framed: true, images: [{ src: "/shot.webp", alt: "…", caption: "01 · Tokens" }] }` },
-  { type: "statRow", use: "Two to four large figures to scan before a chart: a label, the figure, and a line of context such as the earlier value.", code: `{ type: "statRow", title: "20 days from launch", stats: [{ label: "Clicks a day", value: "6.0", detail: "Up from 0.5" }] }` },
   { type: "carousel", use: "A row of images you page through. perView sets how many show at once; contain letterboxes screenshots.", code: `{ type: "carousel", perView: 1, ratio: "16 / 10", contain: true, images: [/* … */] }` },
   { type: "compare", use: "Before and after, switched with a segmented control. Add liveUrl to link the shipped page.", code: `{ type: "compare", before: { src: "/old.webp", alt: "…" }, after: { src: "/new.webp", alt: "…" }, liveUrl: "https://…" }` },
   { type: "componentTable", use: "Groups of badges, for listing what a system contains.", code: `{ type: "componentTable", intro: "…", groups: [{ category: "Inputs", items: ["Button", "Field"] }] }` },

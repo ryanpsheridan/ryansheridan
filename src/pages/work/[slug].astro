@@ -264,29 +264,20 @@ const schema = [
                 );
               }
 
-              if (block.type === "statRow") {
-                return (
-                  <figure class="stat-row">
-                    {block.title && <p class="stat-row-title">{block.title}</p>}
-                    <dl class="stat-row-list">
-                      {block.stats.map((stat) => (
-                        <div class="stat-tile">
-                          <dt class="stat-tile-label">{stat.label}</dt>
-                          <dd class="stat-tile-value">{stat.value}</dd>
-                          {stat.detail && <dd class="stat-tile-detail">{stat.detail}</dd>}
-                        </div>
-                      ))}
-                    </dl>
-                    {block.caption && <figcaption class="bar-chart-caption">{block.caption}</figcaption>}
-                  </figure>
-                );
-              }
-
               if (block.type === "barChart") {
                 const g = barChartGeometry(block);
                 return (
                   <figure class="bar-chart">
-                    <p class="bar-chart-title">{block.title}</p>
+                    <div class="bar-chart-head">
+                      <p class="bar-chart-title">{block.title}</p>
+                      {block.change && (
+                        <p class="bar-chart-change">
+                          <span class="visually-hidden">Average before the marker </span>{block.change.before}
+                          <span aria-hidden="true"> → </span><span class="visually-hidden">, after </span>
+                          <strong>{block.change.after}</strong> {block.change.per}
+                        </p>
+                      )}
+                    </div>
                     <svg viewBox={`0 0 ${g.W} ${g.H}`} role="img" aria-label={g.summary}>
                       {g.ticks.map((t) => (
                         <g>
@@ -1096,56 +1087,6 @@ const schema = [
     color: var(--color-link);
   }
 
-  /* ---------- Stat row ---------- */
-
-  .stat-row {
-    margin: 0 0 var(--space-6);
-    max-width: 40rem;
-  }
-
-  .stat-row-title {
-    margin: 0 0 var(--space-3);
-    font-size: var(--text-s);
-    color: var(--color-text-muted);
-  }
-
-  .stat-row-list {
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
-    border-top: var(--border-width) solid var(--color-border);
-  }
-
-  .stat-tile {
-    padding: var(--space-3) var(--space-4) var(--space-3) 0;
-    border-bottom: var(--border-width) solid var(--color-border);
-  }
-
-  .stat-tile dd {
-    margin: 0;
-  }
-
-  .stat-tile-label {
-    font-size: var(--text-xs);
-    color: var(--color-text-muted);
-  }
-
-  .stat-tile-value {
-    margin-top: var(--space-1);
-    font-size: var(--text-h3);
-    font-weight: var(--weight-light);
-    line-height: 1.1;
-    letter-spacing: var(--tracking-snug);
-    font-variant-numeric: tabular-nums;
-    color: var(--color-text);
-  }
-
-  .stat-tile-detail {
-    margin-top: var(--space-1);
-    font-size: var(--text-xs);
-    color: var(--color-text-muted);
-  }
-
   /* ---------- Bar chart ---------- */
 
   .bar-chart {
@@ -1153,10 +1094,33 @@ const schema = [
     max-width: 40rem;
   }
 
-  .bar-chart-title {
+  .bar-chart-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-4);
     margin: 0 0 var(--space-3);
+  }
+
+  .bar-chart-title {
+    margin: 0;
     font-size: var(--text-s);
     color: var(--color-text-muted);
+  }
+
+  .bar-chart-change {
+    margin: 0;
+    font-size: var(--text-s);
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .bar-chart-change strong {
+    font-size: var(--text-h4);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-snug);
+    color: var(--color-link);
   }
 
   .bar-chart svg {
