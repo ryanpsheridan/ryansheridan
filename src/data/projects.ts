@@ -844,7 +844,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Project",
-        body: `<p><a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a> is one of three brands under <a href="https://www.commerce.com/" target="_blank" rel="noopener noreferrer">Commerce</a>, alongside <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> and <a href="https://www.makeswift.com/" target="_blank" rel="noopener noreferrer">Makeswift</a>. What started as a brand refresh turned into a full rebrand over six months. Everything but the logo changed. At the same time, the site moved to the setup BigCommerce already used: <strong>Makeswift</strong>, a visual page builder where publishers assemble pages from components our developers build, and <strong>Contentful</strong> for content.</p><p>That timing shaped the work. A new brand usually arrives as guidelines and mockups. Here it had to arrive as a working system: tokens, components, and templates that developers could build once in Makeswift and that publishers could use to make new pages long after launch, without a designer laying out each one. I led that system.</p>`,
+        body: `<p><a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a> is one of three brands under <a href="https://www.commerce.com/" target="_blank" rel="noopener noreferrer">Commerce</a>, alongside <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> and <a href="https://www.makeswift.com/" target="_blank" rel="noopener noreferrer">Makeswift</a>. What started as a brand refresh turned into a full rebrand over six months. Everything but the logo changed. At the same time, the site moved to the setup BigCommerce already used: <strong>Makeswift</strong>, a visual page builder where publishers assemble pages from components our developers build, and <strong>Contentful</strong> for content.</p><p>That timing shaped the work. A new brand usually arrives as guidelines and mockups. Here it had to arrive as a working system: tokens, components, and templates that could be built once in Makeswift and that publishers could use to make new pages long after launch, without a designer laying out each one. I led that system.</p>`,
       },
       {
         type: "compare",
@@ -920,41 +920,6 @@ const allProjects: Project[] = [
         type: "text",
         heading: "The Review Process",
         body: `<p>Once a component was built, it went through the <strong>FDX Component Review</strong>, the doc where we worked through all nearly 40 components and page templates with developers. Each one has a tab linked to its Makeswift test page and moved through the same statuses: not started, in review, in development, and approved. Approved meant design, web publishing, and SEO had all signed off.</p><p>I led design review, and more than 60 of the notes are mine. Many were about the publisher's side of a component, not just how it looked. On the Standard Card, I removed hover effects from cards without a link, cut three link settings that caused spacing problems, and set one default button. On the scroll-in container, I set an 800ms default transition, added a setting for when the animation starts, and grouped related settings into a folder so the panel is easier to use.</p><p>SEO and accessibility fixes went through the same process. Linked cards became real links, and accordion titles changed from H5 to H3 without looking any different. Because those fixes live in the components, every page gets them.</p>`,
-      },
-      {
-        type: "text",
-        heading: "A Closer Look: Quote Slides",
-        body: `<p>Quote Slides shows how the pieces come together. It's built from two parts already in the system, Pill Tabs with one pill per customer and a quote card, and the card adjusts to its content. A customer with stats gets up to two on the right. Without them, that column goes away instead of sitting empty.</p>`,
-      },
-      {
-        type: "imageGrid",
-        framed: true,
-        images: [
-          { src: "/project-feedonomics-quote-slides.mp4", alt: "Screen recording of the Quote Slides section: clicking through pill tabs for The Walking Company, Monwell, PUMA, City Beach, and Fox Racing swaps the quote card, and the stats rail disappears for customers without stats", caption: "Quote Slides: one pill per customer, and the stats rail only when there are stats" },
-        ],
-      },
-      {
-        type: "text",
-        body: `<p>A component like this is only as good as what publishers put in it, so I also set up a quote library in Makeswift: every approved quote on one page, one customer per row, with churned customers labeled so old quotes don't get used.</p>`,
-      },
-      {
-        type: "imageGrid",
-        framed: true,
-        images: [
-          { src: "/project-feedonomics-quote-library.webp", alt: "Makeswift library page listing customers in an accordion, with Dell expanded to show its quote card, logo, attribution, and two stats", caption: "The quote library in Makeswift, organized for publishers" },
-        ],
-      },
-      {
-        type: "text",
-        heading: "A Closer Look: Expanding CTA Banner",
-        body: `<p>The Expanding CTA Banner sits at the end of the page, right above the footer. As it scrolls into view, the gradient card grows to the full width of the screen and frames the headline and the Get a demo button. The motion follows the scroll, so it lands on the one action we want visitors to take.</p>`,
-      },
-      {
-        type: "imageGrid",
-        framed: true,
-        images: [
-          { src: "/feedonomics-cta-animated.svg", alt: "Animation of the Expanding CTA Banner: a blue to peach gradient card reading See what Feedonomics can do for your business grows to fill the frame, and two thin lines draw in to frame the headline and the Get a demo button", caption: "The Expanding CTA Banner, rebuilt as a loop from a recording of the live section" },
-        ],
       },
       {
         type: "text",
@@ -1344,7 +1309,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Cover Design",
-        body: `<p>I worked with our brand designer, <a href="https://www.linkedin.com/in/robrodriguezwork/" target="_blank" rel="noopener noreferrer"><strong>Rob Rodriguez</strong></a>, who I also partnered with on the <a href="/work/feedonomics-rebrand-design-system">Feedonomics rebrand</a>. Rob designed the cover and its illustration variants: three line patterns (plus signs, circles, and radiating lines) set on the BigCommerce system's pale tints, Mist, Rose, Mauve, and Lemon.</p><p>I set the cover up so every PDF picks two different patterns and two different tints at random. That makes 72 possible covers. Every one is slightly different, and every one is clearly part of the same family, so a stack of case studies looks like a series instead of copies.</p><p>The BigCommerce design system doesn't allow patterns in general, so the cover bands live inside this template and nowhere else. The randomness has limits, and those limits are what keep it on brand.</p>`,
+        body: `<p>I worked with our brand designer, <a href="https://www.linkedin.com/in/robrodriguezwork/" target="_blank" rel="noopener noreferrer">Rob Rodriguez</a>, who I also partnered with on the <a href="/work/feedonomics-rebrand-design-system">Feedonomics rebrand</a>. Rob designed the cover and its illustration variants: three line patterns (plus signs, circles, and radiating lines) set on the BigCommerce system's pale tints, Mist, Rose, Mauve, and Lemon.</p><p>I set the cover up so every PDF picks two different patterns and two different tints at random. That makes 72 possible covers. Every one is slightly different, and every one is clearly part of the same family, so a stack of case studies looks like a series instead of copies.</p><p>The BigCommerce design system doesn't allow patterns in general, so the cover bands live inside this template and nowhere else. The randomness has limits, and those limits are what keep it on brand.</p>`,
       },
       {
         type: "imageGrid",
@@ -1718,6 +1683,7 @@ const allProjects: Project[] = [
   },
   {
     slug: "bc-for-b2b-campaign",
+    draft: true,
     title: "BC for B2B Campaign",
     year: 2019,
     description: "A BigCommerce campaign aimed at B2B buyers, built on custom isometric illustrations carried across ebooks, social assets, and ad creative.",
