@@ -365,6 +365,23 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
+        heading: "At a glance",
+        body: `<p>Before is the site I started with. After is the rebuild.</p>`,
+      },
+      {
+        type: "versus",
+        beforeTitle: "Before",
+        afterTitle: "After",
+        rows: [
+          { label: "Search clicks", before: "About 0.5 a day", after: "About 6 a day in the first 20 days, still measuring" },
+          { label: "Pages with their own title", before: "1 of 6", after: "Every page" },
+          { label: "Contact form", before: "Could lose inquiries without anyone knowing", after: "Fixed, and on a page of its own" },
+          { label: "Content the staff edit themselves", before: "None", after: "Leagues, events, hours, prices, reviews and the team" },
+          { label: "Known security issues in the code", before: "23", after: "2" },
+        ],
+      },
+      {
+        type: "text",
         heading: "Two kinds of users",
         body: `<p>The obvious users are golfers: book a bay, find a league, check tonight’s hours, often on a phone. The less obvious ones are the client and the staff. Before, changing the hours or adding a league meant a message to a developer, and a site the client can’t update goes stale. So the staff got the same care as the visitors, and every decision below serves one or both.</p>`,
       },
@@ -503,24 +520,6 @@ const allProjects: Project[] = [
         points: ogcSearchConsole.map((d) => ({ date: d.date, value: d.impressions })),
         marker: { date: "2026-10-23", label: "First SEO push" },
         change: { before: "38", after: "229", per: "a day" },
-      },
-      {
-        type: "text",
-        heading: "Scorecard",
-        body: `<p>Before is the site I started with. After is the rebuild.</p>`,
-      },
-      {
-        type: "versus",
-        beforeTitle: "Before",
-        afterTitle: "After",
-        rows: [
-          { label: "Known security issues in the code", before: "23", after: "2" },
-          { label: "Pages with their own title", before: "1 of 6", after: "Every page" },
-          { label: "Contact form", before: "Could lose inquiries without anyone knowing", after: "Fixed, and on a page of its own" },
-          { label: "Opening hours", before: "Missing", after: "In the footer and on each location, with holidays and open now" },
-          { label: "Content the staff edit themselves", before: "None", after: "Leagues, events, hours, prices, reviews and the team" },
-          { label: "Search clicks", before: "About 0.5 a day (28 days to 22 Oct 2026)", after: "About 6 a day in the first 20 days (to 11 Nov 2026), still measuring" },
-        ],
       },
       {
         type: "text",
