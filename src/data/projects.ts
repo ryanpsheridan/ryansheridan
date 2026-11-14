@@ -844,7 +844,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Project",
-        body: `<p><a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a> is one of three brands under <a href="https://www.commerce.com/" target="_blank" rel="noopener noreferrer">Commerce</a>, alongside <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> and <a href="https://www.makeswift.com/" target="_blank" rel="noopener noreferrer">Makeswift</a>. What started as a brand refresh turned into a full rebrand over six months. Everything but the logo changed, and the site moved to <strong>Makeswift</strong> for page building and <strong>Contentful</strong> for content, the same setup BigCommerce already used.</p><p>I led the design system. That meant turning the new brand into tokens, type, spacing, and components that developers could build and publishers could use long after launch.</p>`,
+        body: `<p><a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a> is one of three brands under <a href="https://www.commerce.com/" target="_blank" rel="noopener noreferrer">Commerce</a>, alongside <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> and <a href="https://www.makeswift.com/" target="_blank" rel="noopener noreferrer">Makeswift</a>. What started as a brand refresh turned into a full rebrand over six months. Everything but the logo changed. At the same time, the site moved to the setup BigCommerce already used: <strong>Makeswift</strong>, a visual page builder where publishers assemble pages from components our developers build, and <strong>Contentful</strong> for content.</p><p>That timing shaped the work. A new brand usually arrives as guidelines and mockups. Here it had to arrive as a working system: tokens, components, and templates that developers could build once in Makeswift and that publishers could use to make new pages long after launch, without a designer laying out each one. I led that system.</p>`,
       },
       {
         type: "compare",
@@ -855,7 +855,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Team",
-        body: `<p>Four of us did this work. <a href="https://www.linkedin.com/in/robrodriguezwork/" target="_blank" rel="noopener noreferrer"><strong>Rob Rodriguez</strong></a> led brand and art direction: color, gradients, type pairing, and brand graphics. <a href="https://www.linkedin.com/in/sydneybonner-copywritingconsultant/" target="_blank" rel="noopener noreferrer"><strong>Sydney Bonner</strong></a>, our copywriter, was the brains behind the brand's tone and voice. She moved the homepage from "The market leader in product feed management" to "Go from invisible to everywhere," and her copy guidelines set the rules: lead with benefits instead of features, write for everyone from executives to engineers, and sound like clever, confident feed nerds. Lines like "Make your products work harder. No coffee required." came from her. <a href="https://www.linkedin.com/in/jc-roque/" target="_blank" rel="noopener noreferrer"><strong>Juan Roque</strong></a>, our senior web designer, designed and built most of the pages. I owned the design system: the Feedonomics tokens in our multi-brand Figma library, the component specs, and the build in Makeswift.</p><p>Rob's brand decisions became tokens I could name and hand to developers, and Juan's pages tested each component before it went to development.</p>`,
+        body: `<p>Four of us did this work. <a href="https://www.linkedin.com/in/robrodriguezwork/" target="_blank" rel="noopener noreferrer"><strong>Rob Rodriguez</strong></a> led brand and art direction: color, gradients, type pairing, and brand graphics. <a href="https://www.linkedin.com/in/sydneybonner-copywritingconsultant/" target="_blank" rel="noopener noreferrer"><strong>Sydney Bonner</strong></a>, our copywriter, was the brains behind the brand's tone and voice. She moved the homepage from "The market leader in product feed management" to "Go from invisible to everywhere," and her copy guidelines set the rules: lead with benefits instead of features, write for everyone from executives to engineers, and sound like clever, confident feed nerds. <a href="https://www.linkedin.com/in/jc-roque/" target="_blank" rel="noopener noreferrer"><strong>Juan Roque</strong></a>, our senior web designer, designed and built most of the pages. I owned the design system: the Feedonomics tokens in our multi-brand Figma library, the component specs, and the build in Makeswift.</p><p>Rob's brand decisions became tokens I could name and hand to developers, and Juan's pages tested each component before it went to development.</p>`,
       },
       {
         type: "text",
@@ -864,8 +864,8 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        heading: "Tokens First",
-        body: `<p>Rob's brand work came to me as colors, type, and art direction. I turned it into Figma variables in our <a href="/work/commerce-multi-brand-system">multi-brand library</a>, next to Commerce and BigCommerce, with the same names and structure, so a component built once works for all three brands.</p><p><strong>Primitives</strong> hold the raw values, including 26 Feedonomics colors. <strong>Brand tokens</strong> give those values a job, like text color, size, surface, and padding, with a value for each brand. Components only use brand tokens. A section uses <em>Surface/Inverse</em>, not Navy, so switching a component from BigCommerce to Feedonomics is one setting.</p>`,
+        heading: "From Brand to Tokens",
+        body: `<p>Rob's brand work came to me as colors, type, and art direction. My first job was giving those decisions names. I added Feedonomics to our <a href="/work/commerce-multi-brand-system">multi-brand Figma library</a>, next to Commerce and BigCommerce, with the same token names and structure, so a component built once works for all three brands.</p><p>Raw values, including 26 Feedonomics colors, sit underneath. Components only use tokens that describe a job, like text color, surface, or padding. A section is filled with <em>Surface/Inverse</em>, not Navy. Set a page file to Feedonomics once, and every component picks up the right colors, type, and spacing. Nobody types a hex value, and moving a component from BigCommerce to Feedonomics is one setting.</p>`,
       },
       {
         type: "imageGrid",
@@ -875,8 +875,8 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        heading: "Tokens Applied to the Page",
-        body: `<p>Each Feedonomics page file is set to the FDX brand once. After that, designers pick shared text styles and surface tokens, and the Feedonomics values fill in. A hero headline uses <em>Display 2</em>, which is 64/70.4 for Feedonomics. Sections use surface tokens, like Base (Stone) for light sections and Inverse for navy ones.</p><p>Makeswift doesn't connect to Figma, so I built the same color and type tokens by hand in both, with matching names. Designers and publishers can check either one and get the same values. The advertising page below shows them on a finished page.</p>`,
+        heading: "Keeping Figma and Makeswift in Step",
+        body: `<p>Figma is where the pages are designed. Makeswift is where they're built and published. The two don't connect, so I rebuilt the same color and type tokens by hand in Makeswift, with matching names. A designer choosing <em>Display 2</em> or the Stone surface in Figma and a publisher choosing the same thing in Makeswift get the same result, which is what keeps the live pages matching the designs. The advertising page below shows them on a finished page.</p>`,
       },
       {
         type: "imageGrid",
@@ -894,7 +894,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "A Kitchen Sink for Publishers",
-        body: `<p>In Makeswift I also built what we call the kitchen sink: about 50 ready-made sections on the same tokens as Figma, organized into folders for foundations, components, sections, motion, and full pages. Sections cover heroes, cards, carousels, FAQs, forms, rivers, and testimonials. Publishers pick a section, drop in their content, and don't need a designer to lay out the page.</p>`,
+        body: `<p>In Makeswift I also built what we call the kitchen sink: about 50 ready-made sections on the same tokens, organized into folders for foundations, components, sections, motion, and full pages. It's the publishers' starting point. They pick a hero, a card grid, a carousel, an FAQ, or a form, drop in their content, and get a page that's on brand without waiting on a designer to lay it out.</p>`,
       },
       {
         type: "imageGrid",
@@ -906,7 +906,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Documentation for Developers",
-        body: `<p>Every component and page template has a documentation frame in the Figma file, with its status in the label: Ready for Review, Ready for Dev, or approved. Developers could always tell what was safe to build.</p><p>Each spec covers content rules, states and motion with timing, four breakpoints, and the Makeswift settings publishers can change, with their names and defaults.</p>`,
+        body: `<p>Developers built the components, so every decision had to be written down. Every component and page template has a documentation frame in Figma covering content rules, states, motion timing, four breakpoints, and the Makeswift settings publishers can change, with their names and defaults. Each frame's label carries its status, Ready for Review, Ready for Dev, or approved, so developers could always tell what was safe to build.</p>`,
       },
       {
         type: "imageGrid",
@@ -919,12 +919,12 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Review Process",
-        body: `<p>The <strong>FDX Component Review</strong> is the doc where we worked through every component with developers. It has a tab for each of the nearly 40 components and page templates, and each one moved through the same statuses: not started, in review, in development, and approved. Approved meant design, web publishing, and SEO had all signed off.</p><p>Each tab links to the Makeswift test page and sorts feedback by topic, with a name on every note and a checkmark when it's fixed. I led design review, and more than 60 of the notes are mine. Two examples:</p><ul><li><strong>Standard Card.</strong> No hover effects when a card has no link. I also removed three link settings that caused spacing problems and set one default button.</li><li><strong>Scroll-in container.</strong> An 800ms default transition, a setting for when the animation starts, and related settings grouped into a folder so the panel is easier to use.</li></ul><p>SEO and accessibility fixes went through the same process. Linked cards became real links, and accordion titles changed from H5 to H3 without looking any different. Because those fixes live in the components, every page gets them.</p>`,
+        body: `<p>Once a component was built, it went through the <strong>FDX Component Review</strong>, the doc where we worked through all nearly 40 components and page templates with developers. Each one has a tab linked to its Makeswift test page and moved through the same statuses: not started, in review, in development, and approved. Approved meant design, web publishing, and SEO had all signed off.</p><p>I led design review, and more than 60 of the notes are mine. Many were about the publisher's side of a component, not just how it looked. On the Standard Card, I removed hover effects from cards without a link, cut three link settings that caused spacing problems, and set one default button. On the scroll-in container, I set an 800ms default transition, added a setting for when the animation starts, and grouped related settings into a folder so the panel is easier to use.</p><p>SEO and accessibility fixes went through the same process. Linked cards became real links, and accordion titles changed from H5 to H3 without looking any different. Because those fixes live in the components, every page gets them.</p>`,
       },
       {
         type: "text",
         heading: "A Closer Look: Quote Slides",
-        body: `<p>Quote Slides is built from two parts already in the system: Pill Tabs with one pill per customer, and a quote card with the logo, quote, name, a Read case study link, and an optional stats column.</p><p>The card adjusts to its content. If a customer has stats, up to two show on the right. If they don't, that column goes away instead of sitting empty.</p>`,
+        body: `<p>Quote Slides shows how the pieces come together. It's built from two parts already in the system, Pill Tabs with one pill per customer and a quote card, and the card adjusts to its content. A customer with stats gets up to two on the right. Without them, that column goes away instead of sitting empty.</p>`,
       },
       {
         type: "imageGrid",
@@ -935,7 +935,7 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        body: `<p>For publishers, I set up a quote library in Makeswift: every approved quote on one page, one customer per row, with churned customers labeled so old quotes don't get used.</p>`,
+        body: `<p>A component like this is only as good as what publishers put in it, so I also set up a quote library in Makeswift: every approved quote on one page, one customer per row, with churned customers labeled so old quotes don't get used.</p>`,
       },
       {
         type: "imageGrid",
@@ -947,7 +947,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "A Closer Look: Expanding CTA Banner",
-        body: `<p>The Expanding CTA Banner sits at the end of the page, right above the footer. It starts as a gradient card on the page background. As it scrolls into view, it grows to the full width of the screen, and two thin lines draw in from the top and bottom edges until they frame the headline and the Get a demo button. The motion follows the scroll, so it lands on the one action we want visitors to take.</p>`,
+        body: `<p>The Expanding CTA Banner sits at the end of the page, right above the footer. As it scrolls into view, the gradient card grows to the full width of the screen and frames the headline and the Get a demo button. The motion follows the scroll, so it lands on the one action we want visitors to take.</p>`,
       },
       {
         type: "imageGrid",
@@ -1010,7 +1010,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "A Resources System That Scales",
-        body: `<p>The biggest piece of the project was the resources section. <a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a> has a blog, success stories, webinars, and gated guides and whitepapers, and the old site built each one separately. I designed one layout system for the resources hub, plus child page templates that reuse as much of it as possible and only change what each content type needs.</p>`,
+        body: `<p>The biggest piece of the project was the resources section. Feedonomics has a blog, success stories, webinars, and gated guides and whitepapers, and the old site built each one separately. I designed one layout system for the resources hub, plus child page templates that reuse as much of it as possible and only change what each content type needs. For publishers, that means one way of working across every kind of resource.</p>`,
       },
       {
         type: "compare",
@@ -1051,7 +1051,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Opportunity",
-        body: `<p>Commerce is the parent company behind <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> and <a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a>: three brands, each with its own colors, type, and voice, and one design team supporting all of them.</p><p>A lot of what reaches that team is decks, built in Google Slides by people outside design. We had already given them a template deck with more than 100 slides, and from a brand standpoint it makes sense to ask people to stick to it. In reality, that's hard to do under deadline with no design background. Copy blew past the character counts, slides filled with text, and cleanup reached us very last minute, with fonts drifted and logos stretched. We had no way to manage how the template was used.</p><p>When <strong>Claude Design</strong> came out, I saw a way to meet them where they are: a system anyone at the company can open, so people can make on-brand work without a designer in the room.</p><p>Here is how the project breaks down:</p><ul><li><strong>Users and context.</strong> Everyone building decks, and the brand team absorbing last-minute cleanup.</li><li><strong>Process.</strong> Goals first, one system per brand, and a new rule after every deck that went wrong.</li><li><strong>Collaboration.</strong> The line between self-serve decks and designer-reviewed PDFs was drawn with our creative director.</li><li><strong>Technical.</strong> Each system builds from the same three inputs, and a preflight check enforces the rules.</li></ul>`,
+        body: `<p>Commerce is the parent company behind <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> and <a href="https://feedonomics.com/" target="_blank" rel="noopener noreferrer">Feedonomics</a>: three brands, each with its own colors, type, and voice, and one design team supporting all of them.</p><p>A lot of what reaches that team is decks, built in Google Slides by people outside design. We had already given them a template deck with more than 100 slides, but sticking to it is hard under deadline with no design background. Copy blew past the character counts, slides filled with text, and cleanup reached us at the last minute, with fonts drifted and logos stretched. We had no way to manage how the template was used.</p><p>When <strong>Claude Design</strong> came out, I saw a way to meet people where they are: a system anyone at the company can open to make on-brand work without a designer in the room. Making that reliable came down to one principle: the rules live in the system, not the prompt.</p>`,
       },
       {
         type: "imageGrid",
@@ -1067,12 +1067,12 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Who It's For",
-        body: `<p>This was built for everyone outside design: sales, marketing, product, content writers, and leadership, all the way up to our CEO. They had two kinds of need. Anyone building a deck wanted to get it done quickly without anything slowing them down. The brand team needed last-minute cleanup requests to stop and needed to trust that what went out under our brands was consistent. I learned what each group needed from the work itself: the requests landing in our queue, the decks that came back overloaded with copy, and the pressure last-minute cleanup put on the designers.</p><p>Most people opening this don't know what a token is or why a logo needs clear space, and shouldn't have to. So I set four goals before building anything:</p><ul><li><strong>On brand without a designer.</strong> Someone who has never opened a brand guide still gets colors, type, logos, and voice right.</li><li><strong>One system per brand.</strong> None of them borrow from the others.</li><li><strong>Rules live in the system, not the prompt.</strong> A rule in a prompt depends on someone typing it. A rule in the system applies to everyone.</li><li><strong>Get people 90% of the way there.</strong> The system handles layout, type, and brand, and people add their own images and final details.</li></ul>`,
+        body: `<p>This was built for everyone outside design: sales, marketing, product, content writers, and leadership, all the way up to our CEO. They wanted to get decks done quickly. The brand team needed the last-minute cleanup to stop and needed to trust what went out under our brands. I learned what each group needed from the work itself: the requests in our queue, the decks that came back overloaded with copy, and the pressure cleanup put on the designers.</p><p>Most of these people don't know what a token is or why a logo needs clear space, and shouldn't have to. So I set four goals before building anything:</p><ul><li><strong>On brand without a designer.</strong> Someone who has never opened a brand guide still gets colors, type, logos, and voice right.</li><li><strong>One system per brand.</strong> None of them borrow from the others.</li><li><strong>Rules live in the system, not the prompt.</strong> A rule in a prompt depends on someone remembering to type it. A rule in the system applies to everyone.</li><li><strong>Get people 90% of the way there.</strong> The system handles layout, type, and brand, and people add their own images and final details.</li></ul>`,
       },
       {
         type: "text",
-        heading: "Learning the Tool",
-        body: `<p>Every system started from the same three documents: the brand guidelines, a token spec exported from our <a href="/work/commerce-multi-brand-system">multi-brand Figma system</a>, and an output spec listing what the system should produce and at what size. From those, Claude Design built the tokens, type, logos, voice rules, a marketing UI kit, and a slide system for each brand, and the same process works for any brand we add later.</p><p>Getting from a first draft to something people could trust took a lot of iteration, and two habits made it faster. <strong>I talked to it like a designer</strong>, dictating feedback the way I would in a design review: "Cards across the deck feel too bubbly, tighten them up." <strong>I used a second Claude chat as a second opinion.</strong> I'd paste Claude Design's proposed fix into it to pressure-test it, then paste the answer back. That caught bugs faster than either one alone and kept every fix at the system level instead of on one slide.</p>`,
+        heading: "Building Each System",
+        body: `<p>Every system started from the same three documents: the brand guidelines, a token spec exported from our <a href="/work/commerce-multi-brand-system">multi-brand Figma system</a>, and an output spec listing what the system should produce and at what size. From those, Claude Design built the tokens, type, logos, voice rules, a marketing UI kit, and a slide system for each brand, and any brand we add later can start the same way.</p><p>Getting from a first draft to something people could trust took a lot of iteration. I gave feedback the way I would in a design review ("Cards across the deck feel too bubbly, tighten them up"), and I pressure-tested Claude Design's proposed fixes in a second Claude chat before accepting them. That caught bugs faster and kept every fix at the system level instead of on one slide.</p>`,
       },
       {
         type: "text",
@@ -1099,7 +1099,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Decks, the Biggest Time Saver",
-        body: `<p>Decks save the most time. They're the thing people outside design build most often, and the thing that drifts off brand fastest.</p><p>Each system has its own slide set at 1920×1080: covers, section dividers, content, stats, big quotes, card grids, tables, and closing slides. Someone picks a brand, describes what they need in plain language, and gets a deck that is already on brand, about 90% of the way there. They finish it with their own images and a few details.</p><p>The original template deck asked people to follow character counts, and most didn't. Instead of asking anyone to count characters, the system builds limits into the layouts. Headlines and quotes step down in size as they get longer, a feature-card slide holds two to four cards, only one phrase per slide can be highlighted, and nothing enters the footer zone. A preflight check flags text at risk of clipping.</p>`,
+        body: `<p>Decks are what people outside design build most often and what drifts off brand fastest, so that's where the systems save the most time.</p><p>Each system has its own slide set at 1920×1080: covers, section dividers, content, stats, big quotes, card grids, tables, and closing slides. Someone picks a brand, describes what they need in plain language, and gets a deck that's about 90% of the way there. They finish it with their own images and a few details.</p><p>The original template asked people to follow character counts, and most didn't. So instead of asking, the system builds limits into the layouts. Headlines and quotes step down in size as they get longer, a feature-card slide holds two to four cards, only one phrase per slide can be highlighted, and nothing enters the footer zone. A preflight check flags text at risk of clipping.</p>`,
       },
       {
         type: "text",
@@ -1125,7 +1125,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "From Sample Copy to a Finished Deck",
-        body: `<p>To test it, I wrote a sample copy doc the way a coworker would: plain notes with the copy for each slide, no design direction, and a line saying "keep it simple, most people watching aren't designers." I gave it to the Commerce system, named a few layouts like stats and a big quote, and the system handled the rest. The deck's content is just that sample copy, so it looks nothing like the template above, but every slide follows the same rules:</p><ul><li><strong>Chrome.</strong> On content slides the Commerce logo sits bottom left and the page number bottom right, and the legal line runs up the right edge of every slide.</li><li><strong>Type and spacing.</strong> Headlines, body copy, and cards share one type scale and the same margins from slide to slide.</li><li><strong>Color.</strong> Surfaces stay in the Commerce palette, and a row of stats shares one color.</li></ul><p>Anyone can write the notes. The system makes sure the result looks like Commerce.</p>`,
+        body: `<p>To test it, I wrote a sample copy doc the way a coworker would: plain notes with the copy for each slide, no design direction, and a line saying "keep it simple, most people watching aren't designers." I gave it to the Commerce system, named a few layouts like stats and a big quote, and let it handle the rest. The deck looks nothing like the template, but every slide follows the same rules: the logo, page number, and legal line in the same places, one type scale and set of margins, and surfaces that stay in the Commerce palette, with a row of stats sharing one color.</p><p>Anyone can write the notes. The system makes sure the result looks like Commerce.</p>`,
       },
       {
         type: "text",
@@ -1151,17 +1151,17 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Rules Written From Real Decks",
-        body: `<p>Most of the rules in the deck systems exist because a deck went wrong. A logo got a vertical line and a tagline next to it. A row of cards got a different accent color on each one. Three stats came back in three different colors. Each time, the fix went into the system, not into one deck, so it never happened again.</p><p>The Commerce system goes one step further. It runs a check on every deck and flags anything that breaks a brand rule: an accent color taking over too much of a slide, more than one highlighted phrase, text below the size floor, a hand-built footer, a paraphrased legal line. Problems get caught before anyone on the brand team has to review them.</p><p>That's the part of design systems work that rarely makes it into a portfolio: the patient job of writing rules in response to failure. It's most of the actual craft.</p>`,
+        body: `<p>Most of the rules in the deck systems exist because a deck went wrong. A logo got a vertical line and a tagline next to it. A row of cards got a different accent color on each one. Three stats came back in three different colors. Each time, the fix went into the system, not into one deck, so it never happened again.</p><p>The Commerce system goes a step further. It checks every deck and flags anything that breaks a brand rule: an accent color taking over too much of a slide, more than one highlighted phrase, text below the size floor, a hand-built footer, a paraphrased legal line. Problems get caught before anyone on the brand team has to review them.</p><p>That patient job of writing rules in response to failure rarely makes it into a portfolio, but it's most of the actual craft.</p>`,
       },
       {
         type: "text",
         heading: "Who Uses It for What",
-        body: `<p>Not every asset carries the same risk. A rough wireframe that's slightly off costs nothing. A deck that's off brand in front of a customer can't. I worked through where the lines should sit with our creative director, who brought the view of how requests actually move through the creative team day to day, and we decided based on stakes:</p><ul><li><strong>Decks are self-serve.</strong> The slide system has tight enough structure to hold the brand on its own.</li><li><strong>One-pagers and PDFs go through design.</strong> The system handles the layout, and a designer finishes and reviews it. The case study template grew into its own project, <a href="/work/claude-design-case-study-pdfs">a case study PDF system</a> that replaced hand-built InDesign files.</li><li><strong>Landing page wireframes start in Claude Design.</strong> The web team starts from a structure instead of a blank page.</li></ul>`,
+        body: `<p>Not everything should be self-serve. A rough wireframe that's slightly off costs nothing. A deck that's off brand in front of a customer does. I worked out where the lines should sit with our creative director, who knew how requests actually move through the creative team, and we decided based on stakes:</p><ul><li><strong>Decks are self-serve.</strong> The slide system has tight enough structure to hold the brand on its own.</li><li><strong>One-pagers and PDFs go through design.</strong> The system handles the layout, and a designer finishes and reviews it. The case study template grew into its own project, <a href="/work/claude-design-case-study-pdfs">a case study PDF system</a> that replaced hand-built InDesign files.</li><li><strong>Landing page wireframes start in Claude Design.</strong> The web team starts from a structure instead of a blank page.</li></ul>`,
       },
       {
         type: "text",
         heading: "Rolling It Out",
-        body: `<p>A system only helps if people know it exists and trust it. I recorded a five-minute Loom that walks through the steps and skips tokens and components, because most of the people it's for aren't designers: pick your brand, describe what you need, add your images, share. Commerce is set as the org default, so anyone starting a new project in Claude Design lands on the parent brand unless they choose BigCommerce or Feedonomics.</p>`,
+        body: `<p>A system only helps if people know it exists and trust it. I recorded a five-minute Loom that skips tokens and components and sticks to the steps: pick your brand, describe what you need, add your images, share. Commerce is the org default, so new projects in Claude Design start on the parent brand unless someone chooses BigCommerce or Feedonomics.</p>`,
       },
       {
         type: "text",
@@ -1171,7 +1171,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Build it for the people who aren't designers",
-        body: `<p>If you're building a design system in Claude Design, build it around the people who aren't designers. Start from real specs, not screenshots, so every system is built the same way. Give each brand its own system, because AI doesn't handle ambiguity well. Put every rule in the system instead of the prompt. And aim for 90%, not 100%. Letting people finish the last 10% themselves is what makes them want to use it.</p>`,
+        body: `<p>The interesting part of this project wasn't the AI. It was deciding where each rule should live and how much to leave to people. Start from real specs, not screenshots, so every system is built the same way. Give each brand its own system, because AI doesn't handle ambiguity well. Put the rules in the system, so they hold no matter who's typing. And aim for 90%, not 100%. The system handles structure and brand, people bring the content, images, and final details, and anything high stakes still goes through a designer.</p>`,
       },
     ],
   },
@@ -1193,11 +1193,11 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Design Philosophy",
-        body: `<p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">Rhow Coffee</a> is a specialty coffee shop in Massillon, Ohio, owned by David Hurley. The name is shorthand for his own philosophy, Rise Humbly Over Worry, control what you can control and let the rest go. That mindset shaped what he wanted the shop to be: less a place to grab a cup and go, more a room built for staying awhile, whether that's a business meeting, a first date, or old friends catching up.</p><p>The identity needed to hold that same restraint. The brand is built around a custom-traced logotype and a swan mark, anchored by a palette of shadow grey, parchment, steel blue, blue slate, and dark walnut. David specifically asked for a swan, a nod to black swan latte art, and a mark that carries some personal meaning for him. Geometric and architectural, but warm enough to feel like a place worth lingering in.</p>`,
+        body: `<p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">Rhow Coffee</a> is a specialty coffee shop in Massillon, Ohio, owned by David Hurley. The name is shorthand for his own philosophy, Rise Humbly Over Worry, control what you can control and let the rest go. That mindset shaped what he wanted the shop to be: less a place to grab a cup and go, more a room built for staying awhile, whether that's a business meeting, a first date, or old friends catching up.</p><p>The identity needed the same restraint. It's built around a custom-traced logotype and a swan mark. David asked for the swan specifically, as a nod to black swan latte art and a symbol with personal meaning for him. The mark is geometric and architectural, but warm enough to suit a place people want to stay awhile.</p>`,
       },
       {
         type: "text",
-        body: `<p>A single lockup was never going to cover everything. The identity had to hold up on a cup sleeve, a front window, and a sign read from across the lot, so the primary mark was drawn out into a small suite. The full badge keeps the circular RHOW COFFEE type when there is room for it. When there isn't, the swan steps out of the circle and sits beside the wordmark on its own. The same geometry sits underneath either version, and that is what keeps them reading as one brand instead of three loosely related ones.</p>`,
+        body: `<p>A single lockup was never going to cover everything. The identity had to work on a cup sleeve, a front window, and a sign read from across the lot, so I drew the primary mark out into a small suite. The full badge keeps the circular RHOW COFFEE type when there's room for it. When there isn't, the swan steps out of the circle and sits beside the wordmark. Every version is built on the same geometry, so the suite reads as one brand rather than a set of loosely related logos.</p>`,
       },
       {
         type: "imageGrid",
@@ -1205,7 +1205,7 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        body: `<p>Color carries the rest of it. The near black and the warm off white do most of the everyday work, one holding the mark and the other giving it room to breathe. The blues came in as a cooler counterweight, enough contrast to keep the system from going flat without ever competing with the swan. Dark walnut is the only genuinely warm note in the set, and it stays rare on purpose, which is what makes it register when it does show up.</p>`,
+        body: `<p>The palette follows the same thinking. Near black and a warm off white do the everyday work. Two blues add enough contrast to keep the system from going flat without competing with the swan, and dark walnut is the one warm accent, kept rare so it stands out when it's used.</p>`,
       },
       {
         type: "imageGrid",
@@ -1214,7 +1214,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "From the Door to the Cup",
-        body: `<p>The brand shows up everywhere in the shop, on signage, the front door, the menu display, and the retail shelving. That consistency was the goal from the start. Every piece of the identity was designed to hold up across physical touchpoints without losing the quiet, refined feel of the primary mark.</p><p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">You can follow RHOW Coffee Instagram here.</a></p>`,
+        body: `<p>The brand shows up across the shop: the signage, the front door, the menu display, and the retail shelving. Every piece was designed to work on those physical surfaces without losing the restraint of the primary mark.</p><p><a href="https://www.instagram.com/rhowcoffee?igsh=MTM5OHBjODF1dTlybQ%3D%3D" target="_blank" rel="noopener noreferrer">You can follow RHOW Coffee Instagram here.</a></p>`,
       },
       {
         type: "text",
@@ -1279,7 +1279,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Opportunity",
-        body: `<p>Case study PDFs are a steady request for our design team. The content almost always exists already, either as a live case study page on <a href="https://www.bigcommerce.com/case-study/" target="_blank" rel="noopener noreferrer">BigCommerce.com</a> or as a copy doc from marketing. Turning it into a PDF meant a designer laying it out in InDesign, every time.</p><p>The layout was never the hard part. The rework was. A copy update meant reflowing pages. A new image meant adjusting the layout around it. Another round of edits meant doing it all again, and every round cost time for the designer building it and for the marketers waiting on it.</p><p>So while these PDFs need to look sharp, this was a systems project. The goal was to take that repeated layout work off both teams' plates for good.</p><p>The opportunity was to let <strong>Claude Design</strong> handle the first 80%. Give it a URL or a copy doc, get back a PDF that is already on brand, with the layout, type, pagination, and cover done. Export it to Figma, and the design team finishes the last 20%: adding imagery and fixing small spacing issues.</p><p>Here is what this covers:</p><ul><li>The goals the system had to meet</li><li>The layout patterns everything is built on</li><li>The randomized cover, designed with <a href="https://www.linkedin.com/in/robrodriguezwork/" target="_blank" rel="noopener noreferrer"><strong>Rob Rodriguez</strong></a></li><li>The workflow from Claude Design to Figma</li><li>What I recommend</li></ul>`,
+        body: `<p>Case study PDFs are a steady request for our design team. The content almost always exists already, either as a live case study page on <a href="https://www.bigcommerce.com/case-study/" target="_blank" rel="noopener noreferrer">BigCommerce.com</a> or as a copy doc from marketing, but turning it into a PDF meant a designer laying it out in InDesign by hand, every time.</p><p>The layout was never the hard part. The rework was. Every copy update, new image, or round of edits meant reflowing pages and adjusting the layout around them, and each round cost time for the designer building it and the marketers waiting on it.</p><p>So this was a systems project more than a layout project. I set up <strong>Claude Design</strong> to handle the first 80%: give it a URL or a copy doc and get back a PDF that is already on brand, with the layout, type, pagination, and cover done. Designers take it into Figma and own the last 20%, choosing the imagery and catching the small spacing issues an import can introduce. The system does the setup. The design calls stay with designers.</p>`,
       },
       {
         type: "imageGrid",
@@ -1339,7 +1339,7 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        body: `<p>I spent the most time on the rules you only notice when they break. These are the ones that separate a real PDF from a long web page cut into pieces:</p><ul><li><strong>Footers stay at the bottom of every page.</strong> Brand, customer, and page number sit 0.5in from the edge whether the page is full or half empty.</li><li><strong>Page numbers are always right.</strong> They're set while the pages are built, so adding or removing a paragraph never leaves a stale number behind.</li><li><strong>Headings stay with their content.</strong> Section headers are kept with the next block, so a headline never ends up alone at the bottom of a page.</li><li><strong>Quotes stay in the rail.</strong> A pull quote that won't fit moves to the next page's rail and lines up with the top of its section. It never drops into the copy column.</li><li><strong>Pages break after the fonts load.</strong> Measuring with fallback fonts shifts every break, so the template waits for the real ones.</li><li><strong>Images get room.</strong> 24px of padding inside the gray frame and at least 28px above and below, so copy never sits tight against an image.</li></ul>`,
+        body: `<p>Most of my time went into the rules you only notice when they break, the ones that separate a real PDF from a long web page cut into pieces. Footers sit 0.5in from the bottom whether a page is full or half empty. Page numbers are set as the pages are built, so a new paragraph never leaves a stale one behind. Headings stay with the content that follows them, and a pull quote that won't fit moves to the next page's rail instead of dropping into the copy column. Images get consistent padding so copy never crowds them, and pages don't break until the real fonts have loaded, because measuring with fallback fonts shifts every break.</p><p>When those rules work, nobody notices them. That's the point. Every PDF comes out with the same structure no matter who runs it, and designers start from a file they're finishing, not fixing.</p>`,
       },
       {
         type: "text",
@@ -1359,7 +1359,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Workflow",
-        body: `<p>The template lives inside the BigCommerce design system I built in Claude Design, next to the tokens, type, components, slide system, and a one-pager and whitepaper template. Running it takes a few steps:</p><ol><li><strong>Start in Claude Design.</strong> Choose the BigCommerce design system, drop in a copy doc or case study URL, and ask for a case study PDF. Attach the customer logo and a couple of product or lifestyle images.</li><li><strong>Refine in the chat.</strong> If copy length, layout, or image placement is off, fix it in Claude Design first. It's faster to iterate there than after export.</li><li><strong>Export as standalone HTML.</strong> This bakes the fonts, logo, and every image into one file, so there are no linked assets left to break.</li><li><strong>Import with html.to.design.</strong> Auto layout, styles and variables, existing local styles, hyperlinks, and HTML layer names on, then ungroup in Figma.</li><li><strong>Finish in Figma.</strong> Designers add final imagery, clean up any spacing or type that shifted during import, and check the hyperlinks.</li></ol><p>To roll it out, I walked the design team through the whole flow in a working session with a live demo. The goal was simple: everyone runs a case study at least once and leaves knowing which route to use.</p>`,
+        body: `<p>The template lives inside the BigCommerce design system I built in Claude Design, next to the tokens, type, components, slide system, and a one-pager and whitepaper template. Running it takes a few steps:</p><ol><li><strong>Start in Claude Design.</strong> Choose the BigCommerce design system, drop in a copy doc or case study URL, and ask for a case study PDF. Attach the customer logo and a couple of product or lifestyle images.</li><li><strong>Refine in the chat.</strong> If copy length, layout, or image placement is off, fix it in Claude Design first. It's faster to iterate there than after export.</li><li><strong>Export as standalone HTML.</strong> This bakes the fonts, logo, and every image into one file, so there are no linked assets left to break.</li><li><strong>Import with html.to.design.</strong> Turn on auto layout, styles and variables, existing local styles, hyperlinks, and HTML layer names, then ungroup in Figma.</li><li><strong>Finish in Figma.</strong> Designers add final imagery, clean up any spacing or type that shifted during import, and check the hyperlinks.</li></ol><p>To roll it out, I walked the design team through the whole flow in a working session with a live demo, so everyone ran a case study at least once and left knowing which route to use.</p>`,
       },
       {
         type: "text",
@@ -1391,7 +1391,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Treat it as an 80/20 job",
-        body: `<p>Treat case study PDFs as an 80/20 job. Claude Design is very good at structure: layout, type, pagination, and staying on brand across seven pages. Designers are still the right people for the last 20%, choosing imagery and catching the small spacing issues an import can introduce. That matches how we tiered our <a href="/work/brand-systems-claude-design">brand systems in Claude Design</a>: PDFs go through design, and the system does the heavy lifting first.</p><p>In practice, that means three things. Keep the rules in the template, not in the prompt. Refine in Claude Design before exporting, while changes are cheap. And make standalone HTML with html.to.design the default route into Figma, so every file arrives with its fonts and images intact.</p>`,
+        body: `<p>Claude Design is very good at structure: layout, type, pagination, and staying on brand across seven pages. It's not the right judge of which image tells a customer's story, or whether a spacing shift after import looks off. Splitting the work that way was deliberate. The system takes the repetitive setup and reflow off designers' plates, and leaves them the decisions that need a designer. It's the same line we drew for our <a href="/work/brand-systems-claude-design">brand systems in Claude Design</a>: PDFs go through design, and the system does the heavy lifting first.</p><p>If you're building something similar, keep the rules in the template, not the prompt. Refine in Claude Design before exporting, while changes are cheap. And make standalone HTML with html.to.design the default route into Figma, so every file arrives with its fonts and images intact.</p>`,
       },
     ],
   },
@@ -1413,16 +1413,12 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Problem With Starting a File",
-        body: `<p>Every new ticket meant the same setup before any real design work could start:</p><ul><li>Duplicating the file starter template</li><li>Naming the file and typing the title onto the cover</li><li>Typing your initials onto the cover</li><li>Pasting the Asana link into the ticket widget</li><li>Moving the file into the right brand folder afterward</li><li>Coworkers not being able to find your file</li></ul><p>None of it was hard, but it was repetitive, easy to get slightly wrong, and it happened dozens of times a month across a team working in four brand folders at once. On top of that, every designer's file was structured a little differently, so there was no shared sense of where anything lived from file to file.</p><p>I built a Claude skill to remove that setup entirely and bring some consistency to it. Give it an Asana ticket, and it builds a fully structured Figma file: correct brand mode, the right folder, the cover filled in, ready to design in.</p>`,
+        body: `<p>Every new ticket started the same way. Before any design work, someone duplicated the starter template, named the file, typed the title and their initials onto the cover, pasted the Asana link into the ticket widget, and moved the file into the right brand folder. None of it was hard, but it happened dozens of times a month across a team working in four brand folders, and it was easy to get slightly wrong. Coworkers couldn't always find each other's files, and every designer structured theirs a little differently, so there was no shared sense of where anything lived.</p><p>I built a Claude skill that does that setup from an Asana ticket. The goal wasn't just to automate a checklist. It was to give every project the same starting point: a file that's already organized, on the right brand, and in the right folder, so a designer's time goes into the design.</p>`,
       },
       {
         type: "text",
         heading: "How It Works",
-        body: `<p>The skill runs on a simple structure: a four-page starter template (Working, a divider, Cover, Archive), Working first so the file opens straight into active work.</p>`,
-      },
-      {
-        type: "text",
-        body: `<p>Connect Figma and Asana once in Claude, then start a new chat and either type /figma-project-starter, drop in an Asana link, or just ask in plain language, something like "here's my ticket, can you set up a Figma file for this."</p>`,
+        body: `<p>The skill builds from a four-page starter template: Working, a divider, Cover, and Archive, with Working first so the file opens straight into active work. Connect Figma and Asana to Claude once, then start a new chat and type /figma-project-starter, drop in an Asana link, or just ask in plain language, something like "here's my ticket, can you set up a Figma file for this."</p>`,
       },
       {
         type: "imageGrid",
@@ -1447,7 +1443,7 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        body: `<p>What I like most about how it runs is that it doesn't just hand you a file. It shows its work. When the brand isn't obvious from the ticket alone, it says so and shows the judgment call it made rather than guessing silently, so nothing ships on-brand by accident.</p>`,
+        body: `<p>It also shows its work. When the brand isn't obvious from the ticket alone, it says so and explains the call it made instead of guessing silently, so the designer can catch a wrong guess before they start.</p>`,
       },
       {
         type: "imageGrid",
@@ -1459,12 +1455,12 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Rolling It Out",
-        body: `<p>I shipped this as a real tool, not a demo. I wrote the setup instructions, walked the team through the new process in Slack, recorded two short before/after clips showing the manual way next to the new one, and asked people to test it and flag anything broken. It's since become part of how the marketing design team actually starts projects, running across the Feedonomics, BigCommerce, Commerce, and Makeswift brand folders inside our shared Figma team.</p>`,
+        body: `<p>I shipped this as a real tool, not a demo. I wrote the setup instructions, walked the team through the new process in Slack, recorded two short before/after clips showing the manual way next to the new one, and asked people to test it and flag anything broken. It's since become part of how the marketing design team starts projects, across the Feedonomics, BigCommerce, Commerce, and Makeswift brand folders in our shared Figma team.</p>`,
       },
       {
         type: "text",
         heading: "Where It Landed",
-        body: `<p>This was built because five minutes of file setup and repeated constantly across a team, adds up to a lot of lost time and a lot of small inconsistencies. The measure of whether it worked isn't the AI part, it's whether a designer can open a ticket and get straight to designing without thinking about the file at all. That's what it does now.</p>`,
+        body: `<p>The measure of this was never the AI part. It's whether a designer can open a ticket and start designing without thinking about the file at all. Every file now starts the same way: in the right folder, on the right brand, with a cover that links back to its ticket, so anyone on the team can find it and knows where things live inside it.</p>`,
       },
       {
         type: "imageGrid",
@@ -1492,11 +1488,11 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "A Brand Built Around Getting Into the Zone",
-        body: `<p>Flow Stays is a retreat concept designed for teams and individuals who need space to do their best work. The idea is simple: get out of the office, into nature, and actually focus. The brand needed to feel calm and grounded without being too soft, so the identity leans on deep forest greens, natural textures, and a mark that nods to both shelter and the outdoors.</p><p>You can check out the live site at <a href="https://www.flowstays.com/" target="_blank" rel="noopener noreferrer">flowstays.com</a>.</p>`,
+        body: `<p>Flow Stays is a retreat concept for teams and individuals who need space to do their best work: get out of the office, into nature, and actually focus. The brand needed to feel calm and grounded without being too soft, so the identity is built on deep forest greens, natural textures, and a mark that nods to both shelter and the outdoors.</p><p>You can check out the live site at <a href="https://www.flowstays.com/" target="_blank" rel="noopener noreferrer">flowstays.com</a>.</p>`,
       },
       {
         type: "text",
-        body: `<p>One lockup was never going to cover it. The mark has to hold up on a welcome sign at the head of a gravel drive, on a key card, and on a square avatar, so the identity was drawn as a small suite instead. The primary badge keeps the whole scene, the tent roof, the ridgeline, the rising sun, and the tree line. When there isn't room for that, the cairn steps out on its own beside a stacked wordmark. When there's less room still, the wordmark runs flat and the cairn holds the space between FLOW and STAYS. The same geometry sits underneath all three, and that is what keeps them reading as one brand rather than three that happen to share a color.</p>`,
+        body: `<p>The mark has to work on a welcome sign at the head of a gravel drive, on a key card, and on a square avatar, so I drew it as a small suite. The primary badge holds the full scene. When there isn't room for that, the cairn steps out beside a stacked wordmark, and when there's less room still, the wordmark runs flat with the cairn between FLOW and STAYS. All three share the same geometry, which is what holds them together as one identity.</p>`,
       },
       {
         type: "imageGrid",
@@ -1504,11 +1500,11 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        body: `<p>The badge gets most of its calm from the space around it. Clearspace is measured off the lockup's own height, a third of it on every side, with nothing allowed to cross the line. Defining it as a ratio rather than a pixel value means the rule scales with the mark, so it still holds on a trailhead sign and on a favicon without anyone having to measure it twice.</p>`,
+        body: `<p>The badge gets most of its calm from the space around it. Clearspace is a third of the lockup's height on every side. Defining it as a ratio rather than a pixel value means the rule scales with the mark, so it holds on a trailhead sign and on a favicon without anyone having to measure twice.</p>`,
       },
       {
         type: "text",
-        body: `<p>Color carries the rest of it. The four greens run from a near black forest tone down to a pale sage, which gives the system somewhere to go without ever reaching for a second hue. Apricot is the only warm note in the set, and it stays rare on purpose, a sunrise rather than a highlight. Salt white does the quiet work of keeping everything else breathing.</p>`,
+        body: `<p>The four greens run from a near black forest tone to a pale sage, which gives the system range without reaching for a second hue. Apricot is the only warm color, and it stays rare on purpose, like the sunrise in the badge. Salt white keeps the rest from feeling heavy.</p>`,
       },
       {
         type: "imageGrid",
@@ -1555,6 +1551,10 @@ const allProjects: Project[] = [
     tools: ["Webflow"],
     client: "Bynum Golf",
     clientUrl: "https://www.bynumgolf.com/",
+    // Pulled from the public site. `archived` rather than `draft` because a
+    // draft still builds /work/bynum-golf in production; this keeps the
+    // content and assets here with no public page.
+    archived: true,
     content: [
       {
         type: "text",
@@ -1611,8 +1611,8 @@ const allProjects: Project[] = [
     content: [
       {
         type: "text",
-        heading: "A Full Site Overhaul, Built to Grow",
-        body: `<p>MC Salon Spa & Studio started out on Wix with a simple three-page site: a homepage, a shop page with a handful of products, and a contact page. It was hard for them to update, and once COVID hit they needed a lot more from it. They wanted to sell and ship hair products to their clients and offer curbside pickup, so the online shop had to become a real part of the business.</p><p>This was my first big technical project built around an in-depth CMS. I started with the homepage, filling it out with what the salon is about, where to book, a look at their stylists, and contact info at the bottom. From there I built out the service pages, covering everything on their menu: haircuts, color, extensions, hair treatments, styling, and men's grooming, plus their spa and lash services. Then came the bulk of the work, a custom ecommerce store built on the Webflow CMS. After months of designing and developing, the site launched in January 2021.</p>`,
+        heading: "The Whole Salon in One Place",
+        body: `<p>MC Salon Spa & Studio is a salon and spa with two locations, MC Salon & Spa and Studio MC. Their old site was a three-page Wix build: a homepage, a shop with a handful of products, and a contact page. It was hard for them to update, and once COVID hit they needed a lot more from it. They wanted to sell and ship hair products to clients and offer curbside pickup, so the online shop had to become a real part of the business.</p><p>I designed and built a new site in Webflow that brought the whole salon online: the full service menu, from haircuts, color, and extensions to men's grooming, spa, and lash services, the stylists and staff behind it, both locations, and a store for the professional hair products the salon carries. The pieces were meant to work as one experience. A client could read about a service, find a stylist, book, and shop the products their stylist recommends without the site feeling like separate parts bolted together. After months of design and development, it launched in January 2021.</p>`,
       },
       {
         type: "carousel",
@@ -1626,8 +1626,8 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        heading: "Every Page, Built in Webflow",
-        body: `<p>Most of the site ran on the Webflow CMS, so the salon could add a stylist, a product, or a brand without asking me to build a new page. Products, brands, and staff were each their own collection, and one template per collection laid out every item the same way. A brand page like R+Co pulled in only that brand's products, and each product page filled its "You may also like" row from the same collection.</p><p>These are full-page captures of the live site before it came down. Click any of them to scroll the whole page.</p>`,
+        heading: "A Structure Built to Grow",
+        body: `<p>The decision that shaped everything else was building most of the site on the Webflow CMS instead of as individual pages. A CMS stores content as structured entries, a bit like rows in a spreadsheet, and the site generates pages from templates. Products, brands, and staff each became their own collection, and each collection has one template that lays out every item the same way.</p><p>The collections are connected. Products are tied to their brand, so a brand page like R+Co pulls in only that brand's products, and each product page fills its "You may also like" row from the same catalog. Shoppers can filter the full catalog by brand and category.</p><p>That structure is what let the site keep up with the business. By the time of the captures below, the staff page alone held thirty stylists, estheticians, and artists. Adding a stylist, a product, or a brand meant filling in an entry, not asking me to build a new page, and the new entry showed up everywhere it belonged.</p><p>These are full-page captures of the live site before it came down. Click any of them to scroll the whole page.</p>`,
       },
       {
         type: "carousel",
@@ -1646,8 +1646,8 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        heading: "When the Payment Processor Pulls the Plug",
-        body: `<p>A couple weeks after launch, Stripe flagged the store for carrying CBD products and terminated the account. With so much work already built into the ecommerce pages, scrapping it wasn't an option. So I went headless, with Webflow on the front end and Shopify on the back end.</p>`,
+        heading: "Webflow for the Experience, Shopify for Checkout",
+        body: `<p>A couple of weeks after launch, Stripe, the store's payment processor, flagged it for carrying CBD products and terminated the account. The store could no longer take payments through Stripe, and with so much of the site built around the catalog, scrapping the ecommerce pages wasn't an option.</p><p>So I went headless, splitting the job between two platforms. Webflow stayed the front end: the design, the pages, and the CMS catalog with its brands, templates, and related products. Shopify became the back end, where the products, checkout, and orders lived.</p>`,
       },
       {
         type: "imageGrid",
@@ -1655,13 +1655,13 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        body: `<p>This part was technical and tedious. Every product was uploaded to Shopify, and each product item in the Webflow CMS got its own Shopify buy button embed with a unique code for that product. That way the site wasn't just showing one big embedded Shopify iframe. Each CMS item output its own product dynamically, so the storefront still looked and worked like the rest of the site while checkout ran through Shopify.</p><p>The best part was that the client never had to touch the ecommerce pages. They could manage the whole store in Shopify and the Shopify app, and the site kept up on its own.</p>`,
+        body: `<p>Connecting them was the technical, tedious part. Every product was uploaded to Shopify, and each product item in the Webflow CMS got its own Shopify Buy Button embed, with the unique code for that product saved on the item. The quicker route would have been one big embedded Shopify store in an iframe. Instead, each product page output its own product dynamically from its CMS item, so the brand pages, filters, and related products kept working, the store still looked like the rest of the site, and checkout ran through Shopify.</p><p>It also made the store easier for the salon to run. They managed it in Shopify and the Shopify app without touching the ecommerce pages, and the site kept up on its own.</p>`,
       },
       {
         type: "split",
         heading: "Where It Ended Up",
         image: { src: "/mc-salon-interior.webp", alt: "Inside MC Salon & Spa: black styling stations with lit mirrors and planters on top, salon chairs on floor mats, and a white kitchenette along the wall", caption: "The salon floor" },
-        body: `<p>The owners sold the business in 2024, and the site is now run by someone else on a different platform. This version doesn't exist anymore, but it was my first big CMS build and taught me a lot.</p>`,
+        body: `<p>What the salon got was more than a bigger website. Clients could explore services, meet the staff, find either location, and shop the products their stylists use, all in one place. Behind that, a CMS structure let the team and catalog grow without new pages, and a Webflow and Shopify setup kept the store selling after its payment processor dropped it. The salon ran it day to day themselves, in Webflow for their content and Shopify for the store.</p><p>The owners sold the business in 2024, and the site is now run by someone else on a different platform, so these captures are the record of this version.</p>`,
       },
     ],
   },
@@ -1681,7 +1681,12 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "A Luxury Rental Business That Needed to Look the Part",
-        body: `<p>Five Star Vacation Home Rentals manages high-end short-term rentals across Austin and the Texas Hill Country, but they didn't have a website. They needed one place to show every property they manage so guests could browse the full lineup.</p><p>They came with a big library of professional photography, which is always a great thing to have when designing. Properties are organized by region, and the brand leans into black and gold.</p>`,
+        body: `<p>Five Star Vacation Home Rentals manages high-end short-term rentals across Austin and the Texas Hill Country, but they didn't have a website. I designed and built their first one in Webflow.</p><p>The site had two audiences with different questions. Guests wanted to see the homes and get to a booking. Homeowners wanted to know whether Five Star should manage their property. I organized the site around the properties, since that's what most visitors came for, and gave owners a path of their own instead of mixing the two.</p>`,
+      },
+      {
+        type: "text",
+        heading: "Finding the Right Home",
+        body: `<p>Five Star came with a big library of professional photography, which is always a great thing to have when designing, so the properties lead with it. Homes are grouped by region, with tabs for Austin, the Texas Hill Country, San Antonio, and Lake Austin, so a guest can narrow the lineup to where they're headed and browse from there. The brand's black and gold carries through the whole site.</p>`,
       },
       {
         type: "imageGrid",
@@ -1689,7 +1694,7 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        body: `<p>The site doesn't handle booking itself. Each property links out to its listing on Airbnb or Vrbo, and the reservation happens there. That kept the site focused on one job: showing off the homes.</p>`,
+        body: `<p>Each home has its own page with a full photo gallery. The site doesn't handle booking itself. Every property page links out to its listing on Airbnb or Vrbo, and the reservation happens there. That kept the site focused on one job: helping guests find the right home and handing them off to book it.</p>`,
       },
       {
         type: "imageGrid",
@@ -1697,7 +1702,8 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        body: `<p>There's also a separate page for owners who want Five Star to manage their home.</p><p><a href="https://www.fivestarvhr.com/" target="_blank" rel="noopener noreferrer">www.fivestarvhr.com</a></p>`,
+        heading: "A Separate Path for Owners",
+        body: `<p>Homeowners have a page of their own that explains how Five Star manages properties and works to maximize returns for owners. Keeping it apart from the listings means guests don't have to wade through a management pitch, and owners have one clear place to land.</p>`,
       },
       {
         type: "imageGrid",
@@ -1706,7 +1712,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Built for Their Team to Run",
-        body: `<p>The site also had to be something the owner and his team could keep up on their own. I built it in Webflow and trained their staff on the Webflow CMS, so they can publish blog posts, update photos, and make everyday edits without waiting on me. They've been running the site on their own for a couple of years now and reach out when they need something more technical.</p>`,
+        body: `<p>The site also had to be something the owner and his team could keep up on their own. I set up the content in the Webflow CMS, with collections for properties, regions, blog posts, and team members, and trained their staff to use it. That let them publish blog posts, update photos, and make everyday edits without waiting on me. They ran the site themselves for a couple of years, reaching out when they needed something more technical.</p>`,
       },
     ],
   },
