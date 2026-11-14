@@ -492,7 +492,7 @@ a.badge[aria-current="page"] {
 
 .prose h3 {
   font-size: var(--text-h5);
-  font-weight: var(--weight-medium);
+  font-weight: var(--weight-light);
   letter-spacing: var(--tracking-snug);
   line-height: var(--leading-snug);
   margin-top: var(--space-5);
