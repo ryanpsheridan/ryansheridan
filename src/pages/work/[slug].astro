@@ -120,7 +120,9 @@ const schema = [
                       return (
                         <figure class="image-item">
                           {caption && <figcaption>{caption}</figcaption>}
-                          <Zoomable src={src} alt={alt ?? caption ?? ""} />
+                          {block.zoom === false
+                            ? <Media src={src} alt={alt ?? caption ?? ""} />
+                            : <Zoomable src={src} alt={alt ?? caption ?? ""} />}
                         </figure>
                       );
                     })}

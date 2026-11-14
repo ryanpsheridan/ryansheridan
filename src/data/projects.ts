@@ -28,6 +28,8 @@ export interface ImageGridBlock {
   sideBySide?: boolean;
   /** Four across on wide screens, two by two on narrow ones. For sets of phone screens. Overrides sideBySide. */
   fourUp?: boolean;
+  /** Set false for images already legible at their size, such as phone screens, so they don't open in the lightbox. */
+  zoom?: boolean;
 }
 
 export interface CarouselBlock {
@@ -412,11 +414,12 @@ const allProjects: Project[] = [
         type: "imageGrid",
         fourUp: true,
         framed: true,
+        zoom: false,
         images: [
-          { src: "/project-ogc-before-mobile-home.webp", alt: "The old Ohio Golf Club homepage on a phone, with a membership hero and two buttons", caption: "Before: home on a phone" },
-          { src: "/project-ogc-after-mobile-home.webp", alt: "The new Ohio Golf Club homepage on a phone, with a coming soon strip for the second location, a dark hero, Book a Bay and See Memberships buttons, and a band of key facts", caption: "After: home on a phone" },
-          { src: "/project-ogc-before-mobile-menu.webp", alt: "The old phone menu, a centered card of links over the homepage", caption: "Before: the phone menu" },
-          { src: "/project-ogc-after-mobile-menu.webp", alt: "The new phone menu, a full-screen list of seven rows, with Leagues and Events, Contact and Log in as sections that open in place", caption: "After: the phone menu" },
+          { src: "/project-ogc-before-mobile-home.webp", alt: "The old Ohio Golf Club homepage on a phone, with a membership hero and two buttons", caption: "Before: home" },
+          { src: "/project-ogc-after-mobile-home.webp", alt: "The new Ohio Golf Club homepage on a phone, with a coming soon strip for the second location, a dark hero, Book a Bay and See Memberships buttons, and a band of key facts", caption: "After: home" },
+          { src: "/project-ogc-before-mobile-menu.webp", alt: "The old phone menu, a centered card of links over the homepage", caption: "Before: menu" },
+          { src: "/project-ogc-after-mobile-menu.webp", alt: "The new phone menu, a full-screen list of seven rows, with Leagues and Events, Contact and Log in as sections that open in place", caption: "After: menu" },
         ],
       },
       {
