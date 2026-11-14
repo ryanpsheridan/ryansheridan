@@ -26,6 +26,8 @@ export interface ImageGridBlock {
   framed?: boolean;
   /** Opts into a two-column layout for this block instead of the single full-width column. */
   sideBySide?: boolean;
+  /** Four across on wide screens, two by two on narrow ones. For sets of phone screens. Overrides sideBySide. */
+  fourUp?: boolean;
 }
 
 export interface CarouselBlock {
@@ -157,6 +159,23 @@ export interface BarChartBlock {
   caption?: string;
 }
 
+export interface StatTile {
+  label: string;
+  /** The headline figure, kept short: "6.0", "2.6%". */
+  value: string;
+  /** One line of context under the figure, e.g. "Up from 0.5". */
+  detail?: string;
+}
+
+/** A row of large figures to scan before a chart or table. Two to four tiles. */
+export interface StatRowBlock {
+  type: "statRow";
+  /** Small label above the tiles, e.g. the period they cover. */
+  title?: string;
+  stats: StatTile[];
+  caption?: string;
+}
+
 export interface TimelineStatRow {
   label: string;
   value: string;
@@ -275,7 +294,8 @@ export type ContentBlock =
   | PathwayBlock
   | MotionExamplesBlock
   | TimelineBlock
-  | BarChartBlock;
+  | BarChartBlock
+  | StatRowBlock;
 
 export interface Project {
   slug: string;
@@ -443,7 +463,7 @@ const allProjects: Project[] = [
       },
       {
         type: "imageGrid",
-        sideBySide: true,
+        fourUp: true,
         framed: true,
         images: [
           { src: "/project-ogc-before-mobile-home.webp", alt: "The old Ohio Golf Club homepage on a phone, with a membership hero and two buttons", caption: "Before: home on a phone" },
@@ -482,7 +502,17 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Search and answer engines",
-        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. On 23 October 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs, holiday hours, and FAQ markup on the new lesson page to match the pages that already had it. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p><p>Treat this as a starting point. In the 18 days after the first push, the site averaged about 5.4 clicks and 228 impressions a day, against 0.5 clicks and 38 impressions a day in the 28 days before. It is an early read, taken before the rebuild went live. I will add results here as the weeks come in.</p>`,
+        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. On 23 October 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild goes further, for Google and for the AI tools that answer from the same signals. Every league and event describes its dates, place and sign-up status in structured data, alongside breadcrumbs, holiday hours, and FAQ markup on the new lesson page to match the pages that already had it. One thing I left out on purpose: star-rating markup for the club’s own reviews, which Google does not show for a business reviewing itself.</p><p>Treat this as a starting point. In the 20 days from the first push, the site averaged about 6 clicks and 229 impressions a day, against 0.5 clicks and 38 impressions a day in the 28 days before, and the share of searchers who clicked doubled. It is an early read that ends on the day the rebuild went live. I will add results here as the weeks come in.</p>`,
+      },
+      {
+        type: "statRow",
+        title: "20 days from the first push, against the 28 days before",
+        stats: [
+          { label: "Clicks a day", value: "6.0", detail: "Up from 0.5" },
+          { label: "Impressions a day", value: "229", detail: "Up from 38" },
+          { label: "Click-through rate", value: "2.6%", detail: "Up from 1.3%" },
+          { label: "Clicks since the push", value: "119", detail: "Against 14 before" },
+        ],
       },
       {
         type: "barChart",
@@ -490,7 +520,6 @@ const allProjects: Project[] = [
         unit: "clicks",
         points: ogcSearchConsole.map((d) => ({ date: d.date, value: d.clicks })),
         marker: { date: "2026-10-23", label: "First SEO push" },
-        caption: "Search Console, web search, 1 Sep to 9 Nov 2026. 14 clicks in the 28 days before the push, 97 in the 18 days from it.",
       },
       {
         type: "barChart",
@@ -498,7 +527,7 @@ const allProjects: Project[] = [
         unit: "impressions",
         points: ogcSearchConsole.map((d) => ({ date: d.date, value: d.impressions })),
         marker: { date: "2026-10-23", label: "First SEO push" },
-        caption: "Search Console, web search, 1 Sep to 9 Nov 2026. 1,060 impressions in the 28 days before the push, 4,104 in the 18 days from it.",
+        caption: "Google Search Console, web search, 1 Sep to 11 Nov 2026. Before is 25 Sep to 22 Oct; after is 23 Oct to 11 Nov.",
       },
       {
         type: "text",
@@ -515,7 +544,7 @@ const allProjects: Project[] = [
           { label: "Contact form", before: "Could lose inquiries without anyone knowing", after: "Fixed, and on a page of its own" },
           { label: "Opening hours", before: "Missing", after: "In the footer and on each location, with holidays and open now" },
           { label: "Content the staff edit themselves", before: "None", after: "Leagues, events, hours, prices, reviews and the team" },
-          { label: "Search clicks", before: "About 0.5 a day (28 days to 22 Oct 2026)", after: "About 5.4 a day in the first 18 days (to 9 Nov 2026), still measuring" },
+          { label: "Search clicks", before: "About 0.5 a day (28 days to 22 Oct 2026)", after: "About 6 a day in the first 20 days (to 11 Nov 2026), still measuring" },
         ],
       },
       {

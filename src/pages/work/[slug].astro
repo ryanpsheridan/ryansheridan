@@ -112,7 +112,7 @@ const schema = [
 
               if (block.type === "imageGrid") {
                 return (
-                  <div class:list={["image-grid", { "is-framed": block.framed, "is-side-by-side": block.sideBySide }]}>
+                  <div class:list={["image-grid", { "is-framed": block.framed, "is-side-by-side": block.sideBySide && !block.fourUp, "is-four-up": block.fourUp }]}>
                     {block.images.map((img) => {
                       const src = typeof img === "string" ? img : img.src;
                       const caption = typeof img === "string" ? undefined : img.caption;
@@ -261,6 +261,24 @@ const schema = [
                       ))}
                     </div>
                   </div>
+                );
+              }
+
+              if (block.type === "statRow") {
+                return (
+                  <figure class="stat-row">
+                    {block.title && <p class="stat-row-title">{block.title}</p>}
+                    <dl class="stat-row-list">
+                      {block.stats.map((stat) => (
+                        <div class="stat-tile">
+                          <dt class="stat-tile-label">{stat.label}</dt>
+                          <dd class="stat-tile-value">{stat.value}</dd>
+                          {stat.detail && <dd class="stat-tile-detail">{stat.detail}</dd>}
+                        </div>
+                      ))}
+                    </dl>
+                    {block.caption && <figcaption class="bar-chart-caption">{block.caption}</figcaption>}
+                  </figure>
                 );
               }
 
@@ -784,6 +802,19 @@ const schema = [
     }
   }
 
+  /* Phone screens: four across, two by two when the column narrows. */
+  .image-grid.is-four-up {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-5) var(--space-4);
+    align-items: start;
+  }
+
+  @media (max-width: 760px) {
+    .image-grid.is-four-up {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
   .pair-block {
     margin: 0 0 var(--space-7);
   }
@@ -1063,6 +1094,56 @@ const schema = [
 
   .section-eyebrow :global(.result-icon) {
     color: var(--color-link);
+  }
+
+  /* ---------- Stat row ---------- */
+
+  .stat-row {
+    margin: 0 0 var(--space-6);
+    max-width: 40rem;
+  }
+
+  .stat-row-title {
+    margin: 0 0 var(--space-3);
+    font-size: var(--text-s);
+    color: var(--color-text-muted);
+  }
+
+  .stat-row-list {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  .stat-tile {
+    padding: var(--space-3) var(--space-4) var(--space-3) 0;
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .stat-tile dd {
+    margin: 0;
+  }
+
+  .stat-tile-label {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .stat-tile-value {
+    margin-top: var(--space-1);
+    font-size: var(--text-h3);
+    font-weight: var(--weight-light);
+    line-height: 1.1;
+    letter-spacing: var(--tracking-snug);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text);
+  }
+
+  .stat-tile-detail {
+    margin-top: var(--space-1);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
   }
 
   /* ---------- Bar chart ---------- */
