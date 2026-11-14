@@ -356,7 +356,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Project",
-        body: `<p><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">Ohio Golf Club Indoor</a> is an indoor golf facility in Akron, Ohio, with nine TrackMan bays, a short game area, lessons, memberships and leagues. It is a real freelance client, outside my day job, and I am the only designer and developer on the site.</p><p>I designed and developed the rebuild with Claude Code built into my workflow. I set the direction and the design system, wrote the rules the code follows, and reviewed every change in the browser before pushing to the live site. The agent took on the repetitive building, which left my time for the decisions that shape the site. The rebuilt site is <a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">live now</a>.</p>`,
+        body: `<p><a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">Ohio Golf Club Indoor</a> is an indoor golf facility in Akron, Ohio, with nine TrackMan bays, a short game area, lessons, memberships and leagues. It is a freelance client, outside my day job, and I am the only designer and developer on the site.</p><p>It is also my first full site rebuild working agentically, with Claude Code as part of the workflow. I set the direction and the design system, wrote the rules the code follows, and reviewed every change in the browser before it reached the live site. The agent took on the repetitive building, which left my time for the decisions that shape the site. The rebuilt site is <a href="https://www.ohiogolfclubindoor.com/" target="_blank" rel="noopener noreferrer">live now</a>.</p>`,
       },
       {
         type: "compare",
@@ -382,12 +382,12 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Two kinds of users",
-        body: `<p>The obvious users are golfers: book a bay, find a league, check tonight’s hours, often on a phone. The less obvious ones are the client and the staff. Before, changing the hours or adding a league meant a message to a developer, and a site the client can’t update goes stale. So the staff got the same care as the visitors, and every decision below serves one or both.</p>`,
+        body: `<p>The obvious users are golfers: book a bay, find a league, check tonight’s hours, often on a phone. The less obvious ones are the client and the staff. Before, changing the hours or adding a league meant a message to a developer, and a site the client can’t update goes stale. So I designed for the staff as carefully as for the visitors, and every decision below serves one or both.</p>`,
       },
       {
         type: "text",
         heading: "How I worked",
-        body: `<p>I started with an audit of the code and the live site, and fixed what was broken before building anything new.</p><p>Then I wrote the rules the agent works by, in a file it reads at the start of every session: build from shared components, name colors by their role so a brand refresh changes values rather than code, keep prices, hours and FAQs in one place, and keep the style guide in step with the site. When goals conflict, accessibility comes first.</p><p>A second file sets how changes ship. Each one gets its own branch and preview link, then goes to staging, where I review the whole site before releasing it to production. Only urgent fixes to the live site skip staging. The agent never moves work forward on its own. I do.</p>`,
+        body: `<p>I started with an audit of the code and the live site, and fixed what was broken before building anything new.</p><p>Then I wrote the rules the agent works by, in a CLAUDE.md file it reads at the start of every session: build from shared components, name colors by their role so a brand refresh changes values rather than code, keep prices, hours and FAQs in one place, and keep the style guide in step with the site. When goals conflict, accessibility comes first.</p><p>A second file sets how changes ship. Each one gets its own branch and preview link, then goes to staging, where I review the whole site before releasing it to production. Only urgent fixes to the live site skip staging. The agent never moves work forward on its own. I do.</p><p>That split held up. The agent was fast at building pages from the system, wiring up the CMS and running checks before every handoff. Where it needed me was judgment: choosing the direction, deciding what not to build, and catching the moments where the first answer was wrong, like the phone menu below.</p>`,
       },
       {
         type: "process",
@@ -459,7 +459,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Mobile first, in practice",
-        body: `<p>About 60 percent of the people who reach the site from search are on a phone, so the whole site got a mobile pass: spacing, larger tap targets, and a scroll fade-in toned down and switched off for anyone whose device asks for reduced motion. The menu took four rounds. It began as one long list that scrolled on a small phone. Folding the desktop dropdowns into sections that open in place fixed that. In testing, the first build let only one section open at a time, so opening one closed another above it and the list jumped under your finger. Now each section opens on its own.</p>`,
+        body: `<p>More than half of the people who reach the site from search are on a phone, so I gave the whole site a mobile pass: spacing, larger tap targets, and a scroll fade-in toned down and switched off for anyone whose device asks for reduced motion. The menu took four rounds. It began as one long list that scrolled on a small phone, so I folded the desktop dropdowns into sections that open in place. In testing, that build let only one section open at a time: opening one closed another above it, and the list jumped under your finger. Now each section opens on its own.</p>`,
       },
       {
         type: "imageGrid",
@@ -475,7 +475,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Why a CMS",
-        body: `<p>Before, every update went through a developer. Now the staff make their own. I set up Pages CMS, a free editor that saves straight into the site’s code repository: no database, no monthly fee and nothing extra to host. Staff edit leagues, events, weekly hours, holidays, the announcement strip, bay rates, membership plans, Google reviews and the team in plain forms.</p><p>The forms are built to be hard to break. Every entry is checked when the site builds, and a broken one stops that build, so the live site stays as it was. Event dates write their own display text. Plans can be added or removed without copy edits, because no sentence on the site names a plan. And the structure is ready for a second location.</p>`,
+        body: `<p>Before, every update went through a developer. Now the staff make their own. I chose Pages CMS, a free editor that saves straight into the site’s code repository: no database, no monthly fee and nothing extra to host. Staff edit leagues, events, weekly hours, holidays, the announcement strip, bay rates, membership plans, Google reviews and the team in plain forms.</p><p>I built the forms to be hard to break. Every entry is checked when the site builds, and a broken one stops that build, so the live site stays as it was. Event dates write their own display text. Plans can be added or removed without copy edits, because no sentence on the site names a plan. And the structure is ready for a second location.</p>`,
       },
       {
         type: "imageGrid",
@@ -502,7 +502,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Search and answer engines",
-        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. On October 23, 2026 every page got its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild went further. Every league and event now spells out its dates, location and sign-up status in structured data, the labeled details Google and AI assistants read to answer questions about the club. The site also added breadcrumbs, holiday hours, and FAQ markup on the new lesson page.</p><p>After the October 23 push, search clicks went from about half a click a day to about six, and the share of searchers who clicked doubled. The daily figures from Google Search Console are below.</p>`,
+        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” and earning almost no clicks, while five of its six pages shared one generic title. That was a quick win, so I shipped it to the old site before the rebuild was ready. On October 23, 2026, I gave every page its own title and description, one official address, a sitemap and correct link previews.</p><p>The rebuild went further. Every league and event page now describes its dates, location and sign-up status in structured data, the labeled details Google and AI assistants read to answer questions about the club. I also added structured data for breadcrumbs and holiday hours, and FAQ markup on the new lesson page.</p><p>After the October 23 push, search clicks went from roughly half a click a day to about six, and the share of searchers who clicked doubled. The daily figures from Google Search Console are below.</p>`,
       },
       {
         type: "barChart",
