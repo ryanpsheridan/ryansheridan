@@ -115,12 +115,15 @@ const jsonLd = noindex
     <slot />
     <script>
       import Lenis from "lenis";
+      import "lenis/dist/lenis.css";
       // Smooth scrolling is motion the reader didn't ask for, so anyone who
       // has asked for less motion gets the browser's own scroll.
       if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        // lerp eases toward the target a little every frame, so a trackpad's
+        // stream of small wheel events reads as one continuous glide. A fixed
+        // duration restarted its tween on every event, which felt jumpy.
         const lenis = new Lenis({
-          duration: 0.72,
-          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          lerp: 0.12,
           smoothWheel: true,
         });
         const raf = (time: number) => {
