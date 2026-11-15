@@ -1446,9 +1446,9 @@ const allProjects: Project[] = [
   {
     slug: "bigcommerce-trial-signup",
     draft: true,
-    title: "Free Trial Signup Flow",
+    title: "BigCommerce Free Trial Experience",
     year: 2025,
-    description: "A concept for a shorter BigCommerce free trial signup: four short steps, a chat offer and tips while the store builds, and a clean landing in the dashboard. Not shipped.",
+    description: "A proposed redesign of the BigCommerce free trial, from the landing page through signup, four onboarding steps, store creation, and the dashboard handoff. Not shipped.",
     thumbnail: "/bc-trial-signup-account-animated.svg",
     ogImage: "/bc-trial-signup-og.jpg",
     showOnHomepage: false,
@@ -1460,12 +1460,12 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The Project",
-        body: `<p>The free trial is where a merchant first uses <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a>, and the signup flow sets the tone for everything after it. I redesigned that flow from the landing page through the first moments in the dashboard, with two goals: make it easier to start, and make better use of the time it takes to build a store.</p><p>This project never shipped. Leadership changes and shifting priorities took it off the roadmap before it was built, so there are no live results to show. I'm including it because it shows how I work through a flow from start to finish: what to ask, when to ask it, and what to do with time that would otherwise be dead.</p>`,
+        body: `<p>The free trial is often a merchant's first real experience with <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a>, and the way it starts sets the tone for everything after it. I redesigned that experience from the landing page through the first moments in the dashboard, with two goals: make it easier to get started, and make better use of the time it takes to build a store.</p><p>The redesign never made it into production. Leadership changes and shifting priorities took it off the roadmap, so there are no live results to share. I'm including it because it shows how I approach onboarding, from the first interaction through the moment someone reaches the product.</p>`,
       },
       {
         type: "text",
         heading: "The challenge",
-        body: `<p>I started from the existing trial page and signup flow and found three problems.</p><p><strong>The form asked for too much at once.</strong> The signup form had a long list of fields. A long form makes people hesitate before they type anything, and it asks for effort before the product has given them anything back.</p><p><strong>The form belonged after the pitch.</strong> On the existing page, the form sat lower down, after the content explaining what the trial included. That placement helped conversion, so I kept the idea: make the case first, then ask for something.</p><p><strong>The wait taught us nothing.</strong> After submitting, merchants landed on a small loading screen while their store was built. In that time the product learned nothing about them, and they had nothing to look at or do.</p><p>So the redesign had two jobs: ask for less up front, and use the wait.</p>`,
+        body: `<p>I started by going through the existing trial page and signup myself. Two things needed to change, and one was worth keeping.</p><p><strong>The signup asked for too much up front.</strong> The form was a long list of fields on one screen, all before the merchant had seen anything of the product. That's a lot of effort to ask for at the very start.</p><p><strong>The value proposition came first.</strong> The landing page explained what the trial included before asking anyone to sign up. I kept that order rather than moving the form to the top of the page. People should know what they're getting before they're asked for their information.</p><p><strong>The wait was a missed opportunity.</strong> After submitting the form, merchants landed on a loading screen while their store was created. The wait itself was necessary, but the screen did little to help them understand what they could do next.</p><p>So the redesign came down to three things: simplify the signup, gather information a little at a time, and make the store-building wait more useful.</p>`,
       },
       {
         type: "compare",
@@ -1475,7 +1475,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The flow",
-        body: `<p>The new flow is four short steps, with one idea per screen and a progress bar that says where you are. The first three steps ask a small number of questions. The fourth confirms your email, and the link in that email starts the store build.</p><h3>Start with an email</h3><p>The flow opens on a single question: an email, with Google, Apple, and Meta sign-up below it for anyone who would rather not type. That's the screen at the top of this page. It comes before the steps start, so it has no progress bar. One field and a button was the smallest first commitment I could ask for.</p><p>Anyone who signs up with an email then lands on step 1 of 4, which asks for their name and a password, with reCAPTCHA. Anyone who uses a social account skips it. Each field gets a check mark once it's filled in, so progress shows as it happens.</p>`,
+        body: `<p>The landing page leads into signup with a single button. The first screen asks for one thing: an email, with Google, Apple, and Meta below it for anyone who would rather not type. That's the screen at the top of this page.</p><h3>Four steps, not five</h3><p>I kept the onboarding to four steps rather than counting that first screen as a fifth. The email screen is the starting point, not really an onboarding step. Once someone chooses how to sign up, each of the remaining screens has one job: create the account, tell us about the merchant, set up the store, and verify the email. Numbering only those keeps the progress bar easy to follow, without adding a step just to count every screen.</p><p>The progress bar also follows the path someone actually takes. Signing up with Google, Apple, or Meta already covers the account details, so that path skips account creation and the bar counts three steps instead of four. Nobody sees a step they don't need to complete. The screens below follow the email path.</p><h3>Create an account</h3><p>Step 1 asks for a first name, last name, and password, with reCAPTCHA. Each field gets a check mark once it's filled in, so progress shows as it happens.</p>`,
       },
       {
         type: "imageGrid",
@@ -1485,33 +1485,38 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        body: `<h3>Ask about the person, then the store</h3><p>Step 2 asks for a few details about the merchant: name, the size of their business, and an optional phone number. Step 3 asks about the store: whether they already have a website, the store name, what they'll be selling, and how they sell today.</p><p>The store questions are skippable, and the screen says so ("you can add these details later"). The answers are there to give the trial some context: who this merchant is and what they're trying to build, so the first experience doesn't start from a blank store.</p>`,
+        body: `<h3>About you</h3><p>Step 2 is about the merchant. Their name carries over from step 1, so the only new questions are the size of the business and an optional phone number.</p>`,
       },
       {
         type: "imageGrid",
         images: [
-          { src: "/bc-trial-signup-about-you-animated.svg", alt: "Step 2 of 4, About you. First name, last name, business size, and phone number are filled in one at a time, then Continue is clicked.", caption: "Step 2: about you" },
-        ],
-      },
-      {
-        type: "imageGrid",
-        images: [
-          { src: "/bc-trial-signup-about-store-animated.svg", alt: "The About your store screen. The merchant answers that they have an existing website, a URL field appears, and the store name, product type, and sales channel are filled in.", caption: "Step 3: about your store" },
+          { src: "/bc-trial-signup-about-you-animated.svg", alt: "Step 2 of 4, About you. The name is already filled in from step 1, then a business size is chosen, a phone number is typed, and Continue is clicked." },
         ],
       },
       {
         type: "text",
-        body: `<h3>Confirm your email</h3><p>Step 4 asks the merchant to confirm their email. The email itself has one button, and clicking it opens the store build.</p>`,
+        body: `<h3>About your store</h3><p>Step 3 asks about the store: whether the merchant already has a website, the store name, what they'll be selling, and how they sell today. Every question is skippable, and the screen says the details can be added later. The answers give the trial a more relevant starting point, so a new merchant doesn't land in a completely blank store.</p>`,
       },
       {
         type: "imageGrid",
         images: [
-          { src: "/bc-trial-signup-confirm.svg", alt: "The Confirm your email screen, step 4 of 4, asking the merchant to verify their email and check spam if it doesn't arrive" },
+          { src: "/bc-trial-signup-about-store-animated.svg", alt: "Step 3 of 4, About your store. The merchant answers that they have an existing website, a URL field appears, and the store name, product type, and sales channel are filled in." },
         ],
       },
       {
         type: "text",
-        body: `<h3>Use the wait</h3><p>This is the part I like most. While the store builds, a chat window offers the merchant 15 minutes with someone from the team for a quick orientation: "Yes! Let me see your calendar" or "No thanks." The offer arrives at the moment when the merchant is waiting anyway, so taking it costs them nothing.</p><p>The loading screen itself changed too. The store builds in the background, and there's no reliable way to tell the merchant exactly how long it has left, so a progress bar would only be a guess. A build takes less than 30 seconds, so I went with a spinner and a set of short tips ("Pro tip" and "Did you know?"). Each time a new tip comes in, the blue quarter of the spinner moves one step around the circle, so the screen reads as progress and not as a stall. For a wait that short, that was the most usable option. The tips are concept copy, written for the mockups.</p>`,
+        body: `<h3>Verify your email</h3><p>Step 4 asks the merchant to confirm their email. The email itself has one button, and clicking it starts building the store.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [
+          { src: "/bc-trial-signup-confirm.svg", alt: "Step 4 of 4, Confirm your email, asking the merchant to verify their email and check spam if it doesn't arrive" },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Make the wait useful",
+        body: `<p>The store is created in the background, which usually takes less than 30 seconds. There's no reliable way to tell how much of that time is left, so a percentage progress bar would only be a guess, and a bar that stalls or jumps sets the wrong expectation.</p><p>Instead, the screen uses a simple spinner, with short tips that rotate while the store is built. Each one points to a BigCommerce feature or something the merchant can do to get started, so the wait gives them something useful to read. With each new tip, the blue quarter of the spinner moves one step around the circle. The tips are concept copy written for the mockups, not production content.</p>`,
       },
       {
         type: "imageGrid",
@@ -1522,12 +1527,12 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Land in the store",
-        body: `<p>Once the store is built, the merchant lands in their new dashboard, with a banner showing how long the trial has left and a welcome tour of the navigation.</p><p>This last part is the current BigCommerce product, shown as it was. I didn't design the dashboard or the welcome tour. It's here to show where my flow hands off: the store is built, the merchant knows where they are, and the next step is theirs.</p>`,
+        body: `<p>Once the store is ready, the merchant lands in their dashboard, with a banner showing how much of the trial is left and a welcome tour to help them get oriented.</p><p>The dashboard and welcome tour are the existing BigCommerce product, not part of this redesign. I've included them to show the handoff. The onboarding was designed through the moment the merchant reaches the product, so its last screen needed to lead somewhere that made sense.</p>`,
       },
       {
         type: "imageGrid",
         images: [
-          { src: "/bc-trial-signup-dashboard-tour.webp", alt: "The BigCommerce dashboard with a banner saying the trial ends in 15 days, then a welcome modal offering a tour of the new control panel navigation", embed: { src: "/embeds/bc-trial-signup-dashboard.html", ratio: "16 / 9" } },
+          { src: "/bc-trial-signup-dashboard-tour.webp", alt: "The BigCommerce dashboard with a banner saying the trial ends in 15 days, then a welcome tour offering to show the new control panel navigation", embed: { src: "/embeds/bc-trial-signup-dashboard.html", ratio: "16 / 9" } },
         ],
       },
     ],
