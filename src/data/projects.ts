@@ -1463,18 +1463,18 @@ const allProjects: Project[] = [
       },
       {
         type: "compare",
-        before: { src: "/bc-trial-signup-before.webp", alt: "The existing BigCommerce free trial page, with a long signup form lower on the page", label: "Before" },
-        after: { src: "/bc-trial-signup-after-entry.webp", alt: "The redesigned trial landing page with the headline Start building your dream store, three benefits, a Start free trial button and a preview of the store dashboard", label: "After" },
+        before: { src: "/bc-trial-signup-before.webp", alt: "The top of the existing BigCommerce free trial page: a centered headline, Your store, ready to go. 15 days free., with the signup form starting below the fold", label: "Before" },
+        after: { src: "/bc-trial-signup-after-entry.webp", alt: "The redesigned trial landing page with the headline Your store starts here., three benefits with check marks, a Start free trial button and a preview of the store dashboard", label: "After" },
       },
       {
         type: "text",
         heading: "The flow",
-        body: `<p>The new flow is four short steps, with one idea per screen and a progress bar that says where you are. The first three steps ask a small number of questions. The fourth confirms your email and takes you into the dashboard.</p><h3>Start with an email</h3><p>The first screen asks for one thing: an email. Google, Apple, and Meta sign-up sit below it for anyone who would rather not type. If someone uses an email, the next screen asks for their name and a password, with reCAPTCHA. If they use a social account, they skip that screen.</p><p>I wanted the first commitment to be as small as possible. One field and a button is easy to start, and the progress bar ("Step 1 of 4") sets expectations about how long this will take.</p>`,
+        body: `<p>The new flow is four short steps, with one idea per screen and a progress bar that says where you are. The first three steps ask a small number of questions. The fourth confirms your email and takes you into the dashboard.</p><h3>Start with an email</h3><p>The first screen asks for one thing: an email. Google, Apple, and Meta sign-up sit below it for anyone who would rather not type. If someone uses an email, the next screen asks for their name and a password, with reCAPTCHA. If they use a social account, they skip that screen.</p><p>I wanted the first commitment to be as small as possible. One field and a button is easy to start. Each field gets a check mark once it's filled in, so progress shows as it happens.</p>`,
       },
       {
         type: "imageGrid",
         images: [
-          { src: "/bc-trial-signup-step-account-animated.svg", alt: "The account screen. An email is entered and accepted, then name and password fields appear, reCAPTCHA is checked, and the form is complete." },
+          { src: "/bc-trial-signup-account-animated.svg", alt: "The account screen. An email is entered and accepted, then name and password fields appear, reCAPTCHA is checked, and the form is complete." },
         ],
       },
       {
@@ -1483,10 +1483,14 @@ const allProjects: Project[] = [
       },
       {
         type: "imageGrid",
-        sideBySide: true,
         images: [
-          { src: "/bc-trial-signup-about-you-animated.svg", alt: "The About you screen with name, business size, and phone number filled in, then a chat window offering a 15 minute orientation call", caption: "Step 2: about you" },
-          { src: "/bc-trial-signup-about-store-animated.svg", alt: "The About your store screen. The merchant answers that they have an existing website, a URL field appears, and the remaining fields are filled in.", caption: "Step 3: about your store" },
+          { src: "/bc-trial-signup-about-you-animated.svg", alt: "The About you screen. Name, business size, and phone number are filled in one at a time, then a chat window offers a 15 minute orientation call.", caption: "Step 2: about you" },
+        ],
+      },
+      {
+        type: "imageGrid",
+        images: [
+          { src: "/bc-trial-signup-about-store-animated.svg", alt: "The About your store screen. The merchant answers that they have an existing website, a URL field appears, and the store name, product type, and sales channel are filled in.", caption: "Step 3: about your store" },
         ],
       },
       {
@@ -1501,28 +1505,24 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        body: `<h3>Confirm and land</h3><p>Step 4 asks the merchant to confirm their email. The email has one button. Once confirmed, the merchant lands in the dashboard with a trial banner and a welcome tour that points out the new navigation.</p>`,
+        body: `<h3>Confirm your email</h3><p>Step 4 asks the merchant to confirm their email. The email itself has one button, so there's nothing else to decide.</p>`,
       },
       {
         type: "imageGrid",
         images: [
-          { src: "/bc-trial-signup-confirm-animated.svg", alt: "The Confirm your email screen, then the confirmation email with a single Confirm email button" },
+          { src: "/bc-trial-signup-confirm.svg", alt: "The Confirm your email screen, step 4 of 4, asking the merchant to verify their email and check spam if it doesn't arrive" },
         ],
       },
       {
         type: "text",
-        heading: "Beyond the main flow",
-        body: `<p>The main path is the happy path, but a flow isn't finished until the other cases are covered. I designed a small set of states for the moments where things go sideways:</p><ul><li>The email is already registered</li><li>The password isn't strong enough</li><li>Signing up with a social account</li><li>The confirmation email never arrives</li><li>The store build is taking longer than usual</li></ul>`,
+        heading: "Land in the store",
+        body: `<p>Confirming the email takes the merchant straight into their new store. The dashboard opens with a banner showing how long the trial has left, and a welcome tour offers to point out the new navigation.</p><p>This is where the flow hands off. The store is built, the merchant knows where they are, and the next step is theirs.</p>`,
       },
       {
-        type: "text",
-        heading: "What happened",
-        body: `<p>It didn't ship, so I can't tell you what it did to conversion. What I can tell you is what I would have measured:</p><ul><li>Completion rate at each step, to see where people drop off</li><li>How many people confirm their email, and how quickly</li><li>How many people accept the orientation call</li><li>Whether merchants who answered the store questions go on to set up their store faster</li></ul><p>I'd treat the first version as a set of bets to test, not a finished answer. The two I'd test first are whether splitting account creation across steps beats one short form, and whether the orientation offer works better before the build starts or during it.</p>`,
-      },
-      {
-        type: "text",
-        heading: "What I'd do differently",
-        body: `<ul><li><strong>Design mobile alongside desktop.</strong> Most of this flow is a single column and should translate well, but I'd want to see it on a phone.</li><li><strong>Show how the social path handles email confirmation.</strong> A social provider has already verified the email, so step 4 probably shouldn't apply there.</li><li><strong>Test the tips with real merchants.</strong> The copy on the build screen is a concept, and I'd want to find out which tips are actually useful.</li></ul>`,
+        type: "imageGrid",
+        images: [
+          { src: "/bc-trial-signup-dashboard-animated.svg", alt: "The BigCommerce dashboard with a banner saying the trial ends in 15 days, then a welcome modal offering a tour of the new control panel navigation" },
+        ],
       },
     ],
   },
