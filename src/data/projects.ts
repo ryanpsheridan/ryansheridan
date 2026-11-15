@@ -1445,10 +1445,9 @@ const allProjects: Project[] = [
   },
   {
     slug: "bigcommerce-trial-signup",
-    draft: true,
     title: "BigCommerce Free Trial Experience",
     year: 2025,
-    description: "A proposed redesign of the BigCommerce free trial, from the landing page through signup, four onboarding steps, store creation, and the dashboard handoff. Not shipped.",
+    description: "A proposed redesign of the BigCommerce free trial signup and onboarding, focused on reducing upfront friction and a more useful transition into the product.",
     thumbnail: "/bc-trial-signup-account-animated.svg",
     ogImage: "/bc-trial-signup-og.jpg",
     showOnHomepage: false,
