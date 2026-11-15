@@ -1,4 +1,4 @@
-import { projects, type Project } from "./projects";
+import { projects, projectsWithDrafts, type Project } from "./projects";
 
 /** URL-safe form of a type or tool name: "html.to.design" becomes "html-to-design". */
 export const toSlug = (s: string) =>
@@ -10,6 +10,9 @@ export const toolHref = (name: string) => `/work/tool/${toSlug(name)}`;
 
 /** Newest first. Array sort is stable, so same-year projects keep their order from projects.ts. */
 export const workProjects: Project[] = [...projects].sort((a, b) => b.year - a.year);
+
+/** Same order, drafts included in every environment. Only the private /all page uses it. */
+export const allWorkProjects: Project[] = [...projectsWithDrafts].sort((a, b) => b.year - a.year);
 
 export interface Facet {
   name: string;

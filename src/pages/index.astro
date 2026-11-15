@@ -74,7 +74,6 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
         {/* A sign-off after the last project, so anyone who scrolls this far
             gets a next step without hunting back up for the headline button. */}
         <p class="list-signoff">
-          <span class="signoff-lead">That's the highlights.</span>
           <a href="/work" class="signoff-link">
             See all {workProjects.length} projects
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1154,7 +1153,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     height: 0;
   }
 
-  /* The end-of-list sign-off: a muted line and a link out, on the same
+  /* The end-of-list sign-off: a link out to the full list, on the same
      hairline the work page uses between rows. */
   .list-signoff {
     display: flex;
@@ -1166,10 +1165,6 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     padding: var(--space-5) 0 var(--space-7);
     border-top: 1px solid var(--color-border);
     font-size: var(--text-l);
-  }
-
-  .signoff-lead {
-    color: var(--color-text-muted);
   }
 
   .signoff-link {

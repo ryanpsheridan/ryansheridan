@@ -7,6 +7,9 @@
  * Projects are grouped under a thin year row, newest year first; years with
  * no projects are skipped. The year row sticks under the nav until the next
  * year pushes it out. Every project shows.
+ * With `everything`, it is the private /all page: drafts are listed in
+ * production too, each marked with a Draft badge, and the dropdown is left
+ * out because the type and tool pages only list published work.
  * Documented at /ds/patterns/project-card.
  */
 import Layout from "../layouts/Layout.astro";
@@ -15,19 +18,23 @@ import Footer from "./Footer.astro";
 import Media from "./Media.astro";
 import Breadcrumbs from "./ui/Breadcrumbs.astro";
 import Select from "./ui/Select.astro";
-import { workProjects, projectTypes, projectTools, typeHref, toolHref, type Facet } from "../data/work";
+import { workProjects, allWorkProjects, projectTypes, projectTools, typeHref, toolHref, type Facet } from "../data/work";
 import { SITE_URL, WEBSITE_ID, breadcrumbSchema } from "../data/schema";
 
 interface Props {
   /** The type or tool this page lists. Leave out for all work. */
   active?: { kind: "type" | "tool"; facet: Facet };
+  /** List drafts too, in production as well. Only for the private /all page. */
+  everything?: boolean;
 }
 
-const { active } = Astro.props;
+const { active, everything = false } = Astro.props;
 
 const list = active
   ? workProjects.filter((p) => (active.kind === "type" ? p.tags : p.tools).includes(active.facet.name))
-  : workProjects;
+  : everything
+    ? allWorkProjects
+    : workProjects;
 
 // Group by year. The list is already newest first, so each year's projects
 // keep their order.
@@ -38,11 +45,13 @@ for (const project of list) {
   else years.push({ year: project.year, projects: [project] });
 }
 
-const title = active ? active.facet.name : "All work";
-const path = active ? (active.kind === "type" ? typeHref : toolHref)(active.facet.name) : "/work";
+const title = active ? active.facet.name : everything ? "All projects" : "All work";
+const path = active ? (active.kind === "type" ? typeHref : toolHref)(active.facet.name) : everything ? "/all" : "/work";
 const crumbs = active
   ? [{ label: "Home", href: "/" }, { label: "Work", href: "/work" }, { label: active.facet.name }]
-  : [{ label: "Home", href: "/" }, { label: "Work" }];
+  : everything
+    ? [{ label: "Home", href: "/" }, { label: "All projects" }]
+    : [{ label: "Home", href: "/" }, { label: "Work" }];
 
 const schema = [
   {
@@ -65,13 +74,13 @@ const schema = [
           { name: "Work", path: "/work" },
           { name: active.facet.name, path },
         ]
-      : [{ name: "Work", path: "/work" }],
+      : [{ name: everything ? "All projects" : "Work", path }],
   ),
 ];
 ---
 
 <Layout
-  title={`${active ? `${active.facet.name} work` : "Work"} — Ryan Sheridan`}
+  title={`${active ? `${active.facet.name} work` : everything ? "All projects" : "Work"} — Ryan Sheridan`}
   description={active
     ? `${active.facet.name} work by Ryan Sheridan.`
     : "Case studies by Ryan Sheridan: multi-brand design systems, brand identities, Webflow and Makeswift websites, illustration, and AI design workflows."}
@@ -88,7 +97,7 @@ const schema = [
           <Breadcrumbs items={crumbs} />
           <h1>{title}</h1>
         </div>
-        <div class="work-filter">
+        {!everything && <div class="work-filter">
           <label for="work-browse" class="visually-hidden">Browse by project type or tool</label>
           <Select id="work-browse" data-work-browse>
             <option value="/work" selected={!active}>All projects ({workProjects.length})</option>
@@ -107,7 +116,7 @@ const schema = [
               ))}
             </optgroup>
           </Select>
-        </div>
+        </div>}
       </header>
 
       {years.map(({ year, projects }) => (
@@ -124,6 +133,7 @@ const schema = [
                   <a href={`/work/${project.slug}`} class="row-link">{project.title}</a>
                 </h3>
                 <div class="badge-list">
+                  {project.draft && <span class="badge badge-draft">Draft</span>}
                   {project.tags.map((tag) => (
                     <a
                       href={typeHref(tag)}
@@ -274,6 +284,10 @@ const schema = [
 
   .row-body h3 + .badge-list {
     margin-top: var(--space-3);
+  }
+
+  .badge-draft {
+    border-style: dashed;
   }
 
   .row-link {
