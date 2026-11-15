@@ -1,0 +1,112 @@
+---
+/**
+ * Layout option A for /all: a text-only ledger. One line per project with
+ * year, title, client, type and status in fixed columns, so the whole body
+ * of work fits on a screen or two and scans top to bottom. Private, noindex.
+ */
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import Breadcrumbs from "../../components/ui/Breadcrumbs.astro";
+import { allWorkProjects } from "../../data/work";
+
+const drafts = allWorkProjects.filter((p) => p.draft).length;
+---
+
+<Layout title="All projects — Ryan Sheridan" noindex>
+  <Nav />
+  <main id="main" class="ledger-page">
+    <div class="inner">
+      <header class="head">
+        <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "All projects" }]} />
+        <h1>All projects</h1>
+        <p class="count">{allWorkProjects.length} projects · {allWorkProjects.length - drafts} live · {drafts} draft</p>
+      </header>
+
+      <div class="ledger" role="table" aria-label="All projects">
+        <div class="ledger-row ledger-head" role="row">
+          <span role="columnheader">Year</span>
+          <span role="columnheader">Project</span>
+          <span role="columnheader">Client</span>
+          <span role="columnheader">Type</span>
+          <span role="columnheader" class="col-status">Status</span>
+        </div>
+        {allWorkProjects.map((p) => (
+          <a href={`/work/${p.slug}`} class="ledger-row" role="row">
+            <span role="cell" class="col-year">{p.year}</span>
+            <span role="cell" class="col-title">
+              <span class="title">{p.title}</span>
+              <span class="desc">{p.description}</span>
+            </span>
+            <span role="cell" class="col-client" data-year={p.year}>{p.client}</span>
+            <span role="cell" class="col-type">{p.tags.slice(0, 2).join(", ")}</span>
+            <span role="cell" class="col-status">
+              <span class:list={["status", p.draft ? "is-draft" : "is-live"]}>{p.draft ? "Draft" : "Live"}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .ledger-page { padding: var(--page-top) var(--page-padding) 0; }
+  .inner { max-width: var(--max-width); margin: 0 auto; padding-bottom: 80px; }
+  .head { margin-bottom: var(--space-6); }
+  h1 {
+    font-size: var(--text-h2); font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-tight); line-height: var(--leading-tight); margin: 0;
+  }
+  .count { margin: var(--space-2) 0 0; font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-muted); }
+
+  .ledger-row {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 2.4fr) minmax(0, 1fr) minmax(0, 1.2fr) 72px;
+    gap: var(--space-4);
+    align-items: baseline;
+    padding: var(--space-4) 0;
+    border-bottom: var(--border-width) solid var(--color-border);
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  .ledger-head {
+    padding: var(--space-2) 0;
+    font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-muted);
+    border-bottom-color: var(--color-border-strong);
+  }
+  a.ledger-row { transition: background-color var(--duration-fast) var(--ease-standard); }
+  a.ledger-row:hover { background: var(--color-surface); }
+  a.ledger-row:focus-visible { outline: var(--focus-width) solid var(--color-focus); outline-offset: 2px; }
+
+  .col-year, .col-client, .col-type { font-size: var(--text-s); color: var(--color-text-muted); }
+  .col-year { font-family: var(--font-mono); font-size: var(--text-xs); }
+  .title { display: block; font-size: var(--text-m); line-height: var(--leading-snug); }
+  .desc {
+    display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+    margin-top: 2px; font-size: var(--text-s); color: var(--color-text-muted);
+  }
+  .col-status { text-align: right; }
+  .status { font-family: var(--font-mono); font-size: var(--text-xs); }
+  .status.is-live { color: var(--color-text-muted); }
+  .status.is-draft {
+    padding: 2px 8px; border: var(--border-width) dashed var(--color-border-strong);
+    border-radius: var(--radius-sm); color: var(--color-text);
+  }
+
+  @media (max-width: 760px) {
+    .ledger-head { display: none; }
+    .ledger-row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: "title status" "meta meta";
+      gap: var(--space-1) var(--space-3);
+    }
+    .col-title { grid-area: title; }
+    .col-status { grid-area: status; }
+    .col-year, .col-type { display: none; }
+    .col-client { grid-area: meta; }
+    .col-client::after { content: " · " attr(data-year); }
+    .desc { -webkit-line-clamp: 2; }
+  }
+</style>
