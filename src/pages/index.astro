@@ -47,10 +47,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
             Principal Designer at Commerce, leading design systems, websites, and AI&nbsp;workflows.
           </p>
           <div class="cta-row">
-            {/* Starts as the quiet ghost button while the featured projects
-                scroll by, then fills to primary once the last one is in view:
-                the natural "seen these, see the rest" moment. */}
-            <Button href="/work" variant="secondary" data-work-cta>View all work</Button>
+            <Button href="/work">View all work</Button>
           </div>
           <div class="blueprint-tags" aria-hidden="true"></div>
         </div>
@@ -111,22 +108,6 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
   const firstProject = document.querySelector<HTMLElement>('.project-row[data-index="0"]');
 
   requestAnimationFrame(() => firstProject?.classList.add("visible"));
-
-  // "View all work" fills to primary once the last featured project is at
-  // least half in view, and goes back to the ghost style if you scroll up.
-  // The button's own color transition handles the change.
-  const workCta = document.querySelector<HTMLElement>("[data-work-cta]");
-  const lastProject = rows[rows.length - 1];
-  if (workCta && lastProject) {
-    new IntersectionObserver(
-      ([entry]) => {
-        const reached = entry.isIntersecting || entry.boundingClientRect.top < 0;
-        workCta.classList.toggle("btn-primary", reached);
-        workCta.classList.toggle("btn-secondary", !reached);
-      },
-      { threshold: 0.5 }
-    ).observe(lastProject);
-  }
 
   // Line the first project's image up with the headline block. Centering the
   // whole row would count its caption too and leave the image sitting high,
