@@ -35,7 +35,7 @@ import DoDont from "../../../components/ds/DoDont.astro";
 
     <Example
       title="Linked, from data"
-      description="Wherever a project's types or tools appear, each badge links to its page. Looks the same at rest; the text and edge darken on hover. The badge for the page you're on is filled."
+      description="Wherever a project's types or tools appear, each badge links to its page. Looks the same at rest; the text and edge darken on hover. The badge for the page you're on keeps the outline, with dark text and edge on a faint surface fill."
       lang="astro"
       code={`import { typeHref } from "../data/work";
 
@@ -55,7 +55,7 @@ import DoDont from "../../../components/ds/DoDont.astro";
         { name: ".badge-list", description: "Wrapping flex row, 8px gap." },
         { name: ".badge", description: "24px tall, 12px mono, muted text, hairline border, 4px radius." },
         { name: "a.badge", description: "A linked badge. Darkens on hover and sits above a card-wide link so it takes its own clicks." },
-        { name: "a.badge[aria-current=\"page\"]", description: "The badge for the page you're on: filled dark." },
+        { name: "a.badge[aria-current=\"page\"]", description: "The badge for the page you're on: dark text and edge on a <code>--color-surface</code> fill." },
       ]}
     />
   </section>

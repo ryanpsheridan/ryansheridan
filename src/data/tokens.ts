@@ -215,8 +215,9 @@ export const shapeTokens: TokenGroup[] = [
   {
     id: "radius",
     title: "Radius",
-    description: "Images and rules stay square. Things you can press are round; things you type into are softly rounded.",
+    description: "Images and rules stay square, except project thumbnails, which get a hint of a corner. Things you can press are round; things you type into are softly rounded.",
     tokens: [
+      { name: "radius-xs", value: "2px", description: "Project thumbnails." },
       { name: "radius-sm", value: "4px", description: "Badges and keyboard keys." },
       { name: "radius-md", value: "8px", description: "Text fields, text areas, and selects." },
       { name: "radius-lg", value: "12px", description: "Choice cards." },

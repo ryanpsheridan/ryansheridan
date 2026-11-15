@@ -4,8 +4,8 @@
  * (/work/type/…, /work/tool/…) and the private /all page. Breadcrumbs and
  * title on the left, a dropdown on the right that jumps between the public
  * pages, then a three-column grid of cards, newest first: the 16:10
- * thumbnail with the year badged in its bottom-right corner (and a Draft
- * badge top-left on drafts), then the title and up to two type badges.
+ * thumbnail (with a Draft badge top-left on drafts), then the title and up
+ * to two type badges.
  * With `everything`, it is the private /all page: drafts are listed in
  * production too, and the dropdown is left out because the type and tool
  * pages only list published work.
@@ -34,6 +34,14 @@ const list = active
   : everything
     ? allWorkProjects
     : workProjects;
+
+// Up to two type badges. On a type page, that type leads so the badge
+// matching the page always shows, even if it's third in the project's list.
+const shownTags = (tags: string[]) =>
+  (active?.kind === "type" && tags.includes(active.facet.name)
+    ? [active.facet.name, ...tags.filter((t) => t !== active.facet.name)]
+    : tags
+  ).slice(0, 2);
 
 const title = active ? active.facet.name : everything ? "All projects" : "All work";
 const path = active ? (active.kind === "type" ? typeHref : toolHref)(active.facet.name) : everything ? "/all" : "/work";
@@ -115,15 +123,14 @@ const schema = [
             <div class="card-thumb">
               {project.thumbnail && <Media src={project.thumbnail} alt="" />}
               {project.draft && <span class="badge thumb-badge badge-draft" aria-hidden="true">Draft</span>}
-              <span class="badge thumb-badge badge-year" aria-hidden="true">{project.year}</span>
             </div>
             <h2 class="card-title">
               <a href={`/work/${project.slug}`} class="card-link">
-                {project.title}<span class="visually-hidden">, {project.year}{project.draft ? ", draft" : ""}</span>
+                {project.title}{project.draft && <span class="visually-hidden">, draft</span>}
               </a>
             </h2>
             <div class="badge-list">
-              {project.tags.slice(0, 2).map((tag) => (
+              {shownTags(project.tags).map((tag) => (
                 <a
                   href={typeHref(tag)}
                   class="badge"
@@ -203,6 +210,7 @@ const schema = [
     position: relative;
     aspect-ratio: 16 / 10;
     overflow: hidden;
+    border-radius: var(--radius-xs);
     background: var(--color-surface);
   }
 
@@ -215,8 +223,8 @@ const schema = [
     transition: transform var(--duration-slow) var(--ease-standard);
   }
 
-  /* Badges pinned to the image: Draft top-left, year bottom-right. A solid
-     page-colored fill keeps them legible over any artwork. */
+  /* The Draft badge pinned to the image's top-left. A solid page-colored
+     fill keeps it legible over any artwork. */
   .thumb-badge {
     position: absolute;
     z-index: 1;
@@ -228,11 +236,6 @@ const schema = [
     left: var(--space-3);
     border-style: dashed;
     color: var(--color-text);
-  }
-
-  .badge-year {
-    right: var(--space-3);
-    bottom: var(--space-3);
   }
 
   .card-title {

@@ -26,7 +26,7 @@ const sample = getHomepageProjects()[0];
       <table class="ds-table">
         <thead><tr><th scope="col">Part</th><th scope="col">Spec</th></tr></thead>
         <tbody>
-          <tr><td>Frame</td><td>16:10, cropped to fill, <code>--color-surface</code> behind it while it loads. Scales to 103% on hover over <code>--duration-slow</code>; still under reduced motion.</td></tr>
+          <tr><td>Frame</td><td>16:10, cropped to fill, <code>--radius-xs</code> corners, <code>--color-surface</code> behind it while it loads. Scales to 103% on hover over <code>--duration-slow</code>; still under reduced motion.</td></tr>
           <tr><td>Title</td><td><code>--text-h5</code>, light, 24px below the frame.</td></tr>
           <tr><td>Badges</td><td>Project tags, 16px below the title.</td></tr>
           <tr><td>Rhythm</td><td>96px between cards on desktop, 32 on phones.</td></tr>
@@ -39,10 +39,9 @@ const sample = getHomepageProjects()[0];
     <h2 id="grid">/work grid card</h2>
     <p class="ds-text">
       Three across on desktop, two on tablet, one on a phone, newest first. Each card is the 16:10 frame, the
-      title, and up to two type badges. The year sits on the frame as a badge in the bottom-right corner, and a
-      draft gets a dashed Draft badge in the top-left. Both use a solid <code>--color-bg</code> fill so they read
-      over any artwork, and both are hidden from screen readers since the title link carries the year and draft
-      state as visually hidden text. The title link stretches over the whole card; each type badge sits above it
+      title, and up to two type badges. The frame has <code>--radius-xs</code> corners. A draft gets a dashed Draft
+      badge in the frame's top-left, with a solid <code>--color-bg</code> fill so it reads over any artwork; it is
+      hidden from screen readers since the title link carries "draft" as visually hidden text. The title link stretches over the whole card; each type badge sits above it
       and links to its type's page.
     </p>
     <p class="ds-text">
@@ -104,6 +103,7 @@ const sample = getHomepageProjects()[0];
   .card-image {
     aspect-ratio: 16 / 10;
     overflow: hidden;
+    border-radius: var(--radius-xs);
     background: var(--color-surface);
     margin-bottom: var(--space-4);
   }
