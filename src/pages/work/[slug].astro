@@ -117,10 +117,13 @@ const schema = [
                       const src = typeof img === "string" ? img : img.src;
                       const caption = typeof img === "string" ? undefined : img.caption;
                       const alt = typeof img === "string" ? undefined : img.alt;
+                      const embed = typeof img === "string" ? undefined : img.embed;
                       return (
                         <figure class="image-item">
                           {caption && <figcaption>{caption}</figcaption>}
-                          {block.zoom === false
+                          {embed
+                            ? <ShadowEmbed class="image-embed" src={embed.src} ratio={embed.ratio} poster={src} alt={alt ?? caption ?? ""} fade={false} />
+                            : block.zoom === false
                             ? <Media src={src} alt={alt ?? caption ?? ""} />
                             : <Zoomable src={src} alt={alt ?? caption ?? ""} />}
                         </figure>
@@ -773,6 +776,15 @@ const schema = [
     width: 100%;
     display: block;
     border: var(--border-width) solid var(--color-border);
+  }
+
+  /* A live embed takes the image's border on its box, so the poster inside it doesn't add a second one. */
+  .image-grid :global(.image-embed) {
+    border: var(--border-width) solid var(--color-border);
+  }
+
+  .image-grid :global(.image-embed img) {
+    border: 0;
   }
 
   .image-grid :global(video) {

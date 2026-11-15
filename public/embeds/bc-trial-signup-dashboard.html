@@ -1,0 +1,49 @@
+<style>
+  /* Height: the component reads --embed-aspect-ratio (plain numbers) from here. Both stills are 16:9. */
+  :host, .dash-stage { --embed-aspect-ratio: 16 / 9; aspect-ratio: var(--embed-aspect-ratio); display: block; }
+  .dash-stage { position: relative; margin: 0; overflow: hidden; background: #f6f7f9; border-radius: inherit; }
+  .dash-stage img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+</style>
+
+<figure class="dash-stage" aria-label="The BigCommerce dashboard with a banner saying the trial ends in 15 days, then a welcome modal offering a tour of the new control panel navigation">
+  <img src="/bc-trial-signup-dashboard.webp" alt="" />
+  <img class="dash-tour" src="/bc-trial-signup-dashboard-tour.webp" alt="" />
+</figure>
+
+<script>
+  // Works in Shadow Embed (root, host, onCleanup, listen, gsap supplied by the wrapper)
+  // and in a plain page (none of those exist: show the finished state, tour open).
+  (function () {
+    var scope = typeof root !== "undefined" ? root : document;
+    var anchor = typeof host !== "undefined" ? host : null;
+    var addCleanup = typeof onCleanup === "function" ? onCleanup : function () {};
+    var on = typeof listen === "function" ? listen : function (target, type, handler, opts) {
+      target.addEventListener(type, handler, opts);
+    };
+    var stage = scope.querySelector(".dash-stage");
+    var tour = scope.querySelector(".dash-tour");
+    if (!stage || !tour || typeof gsap === "undefined") { return; }
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reduce.matches) { return; }
+    // Plays once: the dashboard holds long enough to read the trial banner, then the
+    // welcome tour fades in and stays. It rests on the tour, which is the poster too.
+    gsap.set(tour, { opacity: 0 });
+    var play = gsap.timeline({ paused: true });
+    play.to(tour, { opacity: 1, duration: 0.6, ease: "power1.out" }, 4.8);
+    // Starts once half the embed is on screen. Holds still while scrolled away mid-play.
+    var io = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { play.play(); } else { play.pause(); }
+    }, { threshold: 0.5 });
+    io.observe(anchor || stage);
+    play.eventCallback("onComplete", function () { io.disconnect(); });
+    on(reduce, "change", function () {
+      if (!reduce.matches) { return; }
+      io.disconnect();
+      play.progress(1).kill();
+    });
+    addCleanup(function () {
+      io.disconnect();
+      play.kill();
+    });
+  })();
+</script>

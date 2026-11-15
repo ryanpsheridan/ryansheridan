@@ -17,6 +17,12 @@ export interface ImageGridImage {
    */
   alt?: string;
   caption?: string;
+  /**
+   * Runs a Shadow Embed asset under public/embeds/ in place of the image, for
+   * a piece that should play once as it scrolls into view rather than loop.
+   * `src` is then its poster: a still of the state it rests in.
+   */
+  embed?: { src: string; ratio: string };
 }
 
 export interface ImageGridBlock {
@@ -1469,12 +1475,12 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The flow",
-        body: `<p>The new flow is four short steps, with one idea per screen and a progress bar that says where you are. The first three steps ask a small number of questions. The fourth confirms your email and takes you into the dashboard.</p><h3>Start with an email</h3><p>The first screen asks for one thing: an email. Google, Apple, and Meta sign-up sit below it for anyone who would rather not type. If someone uses an email, the next screen asks for their name and a password, with reCAPTCHA. If they use a social account, they skip that screen.</p><p>I wanted the first commitment to be as small as possible. One field and a button is easy to start. Each field gets a check mark once it's filled in, so progress shows as it happens.</p>`,
+        body: `<p>The new flow is four short steps, with one idea per screen and a progress bar that says where you are. The first three steps ask a small number of questions. The fourth confirms your email, and the link in that email starts the store build.</p><h3>Start with an email</h3><p>The flow opens on a single question: an email, with Google, Apple, and Meta sign-up below it for anyone who would rather not type. That's the screen at the top of this page. It comes before the steps start, so it has no progress bar. One field and a button was the smallest first commitment I could ask for.</p><p>Anyone who signs up with an email then lands on step 1 of 4, which asks for their name and a password, with reCAPTCHA. Anyone who uses a social account skips it. Each field gets a check mark once it's filled in, so progress shows as it happens.</p>`,
       },
       {
         type: "imageGrid",
         images: [
-          { src: "/bc-trial-signup-account-animated.svg", alt: "The account screen. An email is entered and accepted, then name and password fields appear, reCAPTCHA is checked, and the form is complete." },
+          { src: "/bc-trial-signup-name-password-animated.svg", alt: "Step 1 of 4, Create an account. First name, last name, and password are typed in one at a time, each gets a check mark, reCAPTCHA is ticked, and Create account is clicked." },
         ],
       },
       {
@@ -1484,13 +1490,23 @@ const allProjects: Project[] = [
       {
         type: "imageGrid",
         images: [
-          { src: "/bc-trial-signup-about-you-animated.svg", alt: "The About you screen. Name, business size, and phone number are filled in one at a time, then a chat window offers a 15 minute orientation call.", caption: "Step 2: about you" },
+          { src: "/bc-trial-signup-about-you-animated.svg", alt: "Step 2 of 4, About you. First name, last name, business size, and phone number are filled in one at a time, then Continue is clicked.", caption: "Step 2: about you" },
         ],
       },
       {
         type: "imageGrid",
         images: [
           { src: "/bc-trial-signup-about-store-animated.svg", alt: "The About your store screen. The merchant answers that they have an existing website, a URL field appears, and the store name, product type, and sales channel are filled in.", caption: "Step 3: about your store" },
+        ],
+      },
+      {
+        type: "text",
+        body: `<h3>Confirm your email</h3><p>Step 4 asks the merchant to confirm their email. The email itself has one button, and clicking it opens the store build.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [
+          { src: "/bc-trial-signup-confirm.svg", alt: "The Confirm your email screen, step 4 of 4, asking the merchant to verify their email and check spam if it doesn't arrive" },
         ],
       },
       {
@@ -1505,23 +1521,13 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        body: `<h3>Confirm your email</h3><p>Step 4 asks the merchant to confirm their email. The email itself has one button, so there's nothing else to decide.</p>`,
-      },
-      {
-        type: "imageGrid",
-        images: [
-          { src: "/bc-trial-signup-confirm.svg", alt: "The Confirm your email screen, step 4 of 4, asking the merchant to verify their email and check spam if it doesn't arrive" },
-        ],
-      },
-      {
-        type: "text",
         heading: "Land in the store",
-        body: `<p>Confirming the email takes the merchant straight into their new store. The dashboard opens with a banner showing how long the trial has left, and a welcome tour offers to point out the new navigation.</p><p>This is where the flow hands off. The store is built, the merchant knows where they are, and the next step is theirs.</p>`,
+        body: `<p>Once the store is built, the merchant lands in their new dashboard, with a banner showing how long the trial has left and a welcome tour of the navigation.</p><p>This last part is the current BigCommerce product, shown as it was. I didn't design the dashboard or the welcome tour. It's here to show where my flow hands off: the store is built, the merchant knows where they are, and the next step is theirs.</p>`,
       },
       {
         type: "imageGrid",
         images: [
-          { src: "/bc-trial-signup-dashboard-animated.svg", alt: "The BigCommerce dashboard with a banner saying the trial ends in 15 days, then a welcome modal offering a tour of the new control panel navigation" },
+          { src: "/bc-trial-signup-dashboard-tour.webp", alt: "The BigCommerce dashboard with a banner saying the trial ends in 15 days, then a welcome modal offering a tour of the new control panel navigation", embed: { src: "/embeds/bc-trial-signup-dashboard.html", ratio: "16 / 9" } },
         ],
       },
     ],
