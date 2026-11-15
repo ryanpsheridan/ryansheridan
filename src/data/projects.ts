@@ -1465,7 +1465,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "The challenge",
-        body: `<p>I started from the existing trial page and signup flow and found three problems.</p><p><strong>The form asked for too much at once.</strong> The signup form had a long list of fields. A long form makes people hesitate before they type anything, and it asks for effort before the product has given them anything back.</p><p><strong>The form belonged after the pitch.</strong> On the existing page, the form sat lower down, after the content explaining what the trial included. That placement helped conversion, so I kept the idea: make the case first, then ask for something.</p><p><strong>The wait taught us nothing.</strong> After submitting, merchants landed on a small loading screen for about a minute while their store was built. In that time the product learned nothing about them, and they had nothing to look at or do.</p><p>So the redesign had two jobs: ask for less up front, and use the wait.</p>`,
+        body: `<p>I started from the existing trial page and signup flow and found three problems.</p><p><strong>The form asked for too much at once.</strong> The signup form had a long list of fields. A long form makes people hesitate before they type anything, and it asks for effort before the product has given them anything back.</p><p><strong>The form belonged after the pitch.</strong> On the existing page, the form sat lower down, after the content explaining what the trial included. That placement helped conversion, so I kept the idea: make the case first, then ask for something.</p><p><strong>The wait taught us nothing.</strong> After submitting, merchants landed on a small loading screen while their store was built. In that time the product learned nothing about them, and they had nothing to look at or do.</p><p>So the redesign had two jobs: ask for less up front, and use the wait.</p>`,
       },
       {
         type: "compare",
@@ -1511,12 +1511,12 @@ const allProjects: Project[] = [
       },
       {
         type: "text",
-        body: `<h3>Use the wait</h3><p>This is the part I like most. While the store builds, a chat window offers the merchant 15 minutes with someone from the team for a quick orientation: "Yes! Let me see your calendar" or "No thanks." The offer arrives at the moment when the merchant is waiting anyway, so taking it costs them nothing.</p><p>The loading screen itself changed too. A static spinner became a spinner with rotating tips ("Pro tip" and "Did you know?"), so the screen reads as progress and not as a stall. The tips are concept copy, written for the mockups.</p>`,
+        body: `<h3>Use the wait</h3><p>This is the part I like most. While the store builds, a chat window offers the merchant 15 minutes with someone from the team for a quick orientation: "Yes! Let me see your calendar" or "No thanks." The offer arrives at the moment when the merchant is waiting anyway, so taking it costs them nothing.</p><p>The loading screen itself changed too. The store builds in the background, and there's no reliable way to tell the merchant exactly how long it has left, so a progress bar would only be a guess. A build takes less than 30 seconds, so I went with a spinner and a set of short tips ("Pro tip" and "Did you know?"). Each time a new tip comes in, the blue quarter of the spinner moves one step around the circle, so the screen reads as progress and not as a stall. For a wait that short, that was the most usable option. The tips are concept copy, written for the mockups.</p>`,
       },
       {
         type: "imageGrid",
         images: [
-          { src: "/bc-trial-signup-build-animated.svg", alt: "The Your store is being built screen with a spinner and a tip that changes from one to the next" },
+          { src: "/bc-trial-signup-build-animated.svg", alt: "The Your store is being built screen. Four tips change one after another, and the blue quarter of the spinner moves one step clockwise with each." },
         ],
       },
       {
