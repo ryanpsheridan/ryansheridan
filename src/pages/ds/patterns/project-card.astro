@@ -10,7 +10,7 @@ const sample = getHomepageProjects()[0];
 <DsLayout
   section="Patterns"
   title="Project card"
-  lead="How a project appears before you open it. Two layouts, both built from the same project data: a stacked card on the homepage and a row on /work."
+  lead="How a project appears before you open it. Two layouts, both built from the same project data: a stacked card on the homepage and a grid card on /work."
 >
   <section aria-labelledby="preview">
     <h2 id="preview">Homepage card</h2>
@@ -35,20 +35,20 @@ const sample = getHomepageProjects()[0];
     </div>
   </section>
 
-  <section aria-labelledby="row">
-    <h2 id="row">/work row</h2>
+  <section aria-labelledby="grid">
+    <h2 id="grid">/work grid card</h2>
     <p class="ds-text">
-      Thumbnail, then title, badges, and summary, then "View project" at the far right. 64px padding, a hairline
-      between rows. The title link stretches over the whole row, so everything is clickable without nesting
-      links, and the thumbnail is hidden from screen readers since the title already names the project. Each
-      badge links to its type's page.
+      Three across on desktop, two on tablet, one on a phone, newest first. Each card is the 16:10 frame, the
+      title, and up to two type badges. The year sits on the frame as a badge in the bottom-right corner, and a
+      draft gets a dashed Draft badge in the top-left. Both use a solid <code>--color-bg</code> fill so they read
+      over any artwork, and both are hidden from screen readers since the title link carries the year and draft
+      state as visually hidden text. The title link stretches over the whole card; each type badge sits above it
+      and links to its type's page.
     </p>
     <p class="ds-text">
-      The same list runs /work and every type and tool page (<code>/work/type/…</code>, <code>/work/tool/…</code>),
-      newest first, grouped under a thin year row: the mono overline, right aligned on the rows' hairline, as an
-      <code>h2</code> with project titles as <code>h3</code>. It sticks under the nav until the next year pushes it
-      out, and gains a bottom hairline only while stuck. Years with no projects are skipped, and every project shows. The page title names the type or tool, and a dropdown on the title's
-      baseline jumps between them.
+      The same grid runs /work, every type and tool page (<code>/work/type/…</code>, <code>/work/tool/…</code>),
+      and the private /all page, which also lists drafts in production. The page title names the type or tool,
+      and a dropdown on the title's baseline jumps between them; /all leaves the dropdown out.
     </p>
   </section>
 

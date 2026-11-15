@@ -1,15 +1,14 @@
 ---
 /**
- * The /work list, shared by /work and every project type and tool page
- * (/work/type/…, /work/tool/…). Breadcrumbs and title on the left, a
- * dropdown on the right that jumps between those pages, then one row per
- * project: thumbnail, title, type badges and summary, and "View project".
- * Projects are grouped under a thin year row, newest year first; years with
- * no projects are skipped. The year row sticks under the nav until the next
- * year pushes it out. Every project shows.
+ * The /work grid, shared by /work, every project type and tool page
+ * (/work/type/…, /work/tool/…) and the private /all page. Breadcrumbs and
+ * title on the left, a dropdown on the right that jumps between the public
+ * pages, then a three-column grid of cards, newest first: the 16:10
+ * thumbnail with the year badged in its bottom-right corner (and a Draft
+ * badge top-left on drafts), then the title and up to two type badges.
  * With `everything`, it is the private /all page: drafts are listed in
- * production too, each marked with a Draft badge, and the dropdown is left
- * out because the type and tool pages only list published work.
+ * production too, and the dropdown is left out because the type and tool
+ * pages only list published work.
  * Documented at /ds/patterns/project-card.
  */
 import Layout from "../layouts/Layout.astro";
@@ -35,15 +34,6 @@ const list = active
   : everything
     ? allWorkProjects
     : workProjects;
-
-// Group by year. The list is already newest first, so each year's projects
-// keep their order.
-const years: { year: number; projects: typeof list }[] = [];
-for (const project of list) {
-  const last = years[years.length - 1];
-  if (last && last.year === project.year) last.projects.push(project);
-  else years.push({ year: project.year, projects: [project] });
-}
 
 const title = active ? active.facet.name : everything ? "All projects" : "All work";
 const path = active ? (active.kind === "type" ? typeHref : toolHref)(active.facet.name) : everything ? "/all" : "/work";
@@ -119,45 +109,33 @@ const schema = [
         </div>}
       </header>
 
-      {years.map(({ year, projects }) => (
-        <section class="year-group" aria-labelledby={`year-${year}`}>
-          <h2 class="year-row overline" id={`year-${year}`}>{year}</h2>
-          <ul class="project-list">
-          {projects.map((project) => (
-            <li class="project-row">
-              <a href={`/work/${project.slug}`} class="row-thumb" tabindex="-1" aria-hidden="true">
-                {project.thumbnail && <Media src={project.thumbnail} alt="" />}
+      <ul class="project-grid">
+        {list.map((project) => (
+          <li class="project-card">
+            <div class="card-thumb">
+              {project.thumbnail && <Media src={project.thumbnail} alt="" />}
+              {project.draft && <span class="badge thumb-badge badge-draft" aria-hidden="true">Draft</span>}
+              <span class="badge thumb-badge badge-year" aria-hidden="true">{project.year}</span>
+            </div>
+            <h2 class="card-title">
+              <a href={`/work/${project.slug}`} class="card-link">
+                {project.title}<span class="visually-hidden">, {project.year}{project.draft ? ", draft" : ""}</span>
               </a>
-              <div class="row-body">
-                <h3>
-                  <a href={`/work/${project.slug}`} class="row-link">{project.title}</a>
-                </h3>
-                <div class="badge-list">
-                  {project.draft && <span class="badge badge-draft">Draft</span>}
-                  {project.tags.map((tag) => (
-                    <a
-                      href={typeHref(tag)}
-                      class="badge"
-                      aria-current={active?.kind === "type" && active.facet.name === tag ? "page" : undefined}
-                    >
-                      {tag}
-                    </a>
-                  ))}
-                </div>
-                <p class="row-description">{project.description}</p>
-              </div>
-              <span class="row-cta" aria-hidden="true">
-                View project
-                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 10h12M11 5l5 5-5 5" />
-                </svg>
-              </span>
-            </li>
-          ))}
-          </ul>
-        </section>
-      ))}
-
+            </h2>
+            <div class="badge-list">
+              {project.tags.slice(0, 2).map((tag) => (
+                <a
+                  href={typeHref(tag)}
+                  class="badge"
+                  aria-current={active?.kind === "type" && active.facet.name === tag ? "page" : undefined}
+                >
+                  {tag}
+                </a>
+              ))}
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   </main>
   <Footer />
@@ -206,129 +184,30 @@ const schema = [
     border-color: var(--color-border-strong);
   }
 
-  .project-list {
+  /* Three across on desktop, two on tablet, one on a phone. */
+  .project-grid {
     list-style: none;
     margin: 0;
     padding: 0;
-  }
-
-  /* A thin year row above each year's projects: the mono overline on a
-     hairline. It takes the place of the first row's own rule. */
-  /* A thin year row above each year's projects: the mono overline, right
-     aligned, on the same hairline as the rows. It sticks just under the nav
-     while its year scrolls by; the next year's row, at the end of this
-     section, pushes it out. */
-  .year-row {
-    position: sticky;
-    top: var(--nav-height);
-    z-index: 2;
-    margin: 0;
-    padding: var(--space-3) 0;
-    text-align: right;
-    background: var(--color-bg);
-    border-top: 1px solid var(--color-border);
-    /* A bottom hairline only while stuck (the script toggles .is-stuck), so
-       the projects scrolling under it get a clean edge. At rest the row is
-       just a label on one line. */
-    border-bottom: 1px solid transparent;
-    transition: border-bottom-color var(--duration-fast) var(--ease-standard);
-  }
-
-  .year-row.is-stuck {
-    border-bottom-color: var(--color-border);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .year-row {
-      transition: none;
-    }
-  }
-
-  .year-group + .year-group {
-    margin-top: var(--space-5);
-  }
-
-  .year-row + .project-list > .project-row:first-child {
-    border-top: none;
-    padding-top: var(--space-5);
-  }
-
-  /* One project per row, split by a hairline: thumbnail on the left, then
-     the name, tags and summary as one column, then the link out on its own at
-     the far right. Generous gutters and padding keep each row breathing. */
-  .project-row {
-    position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) auto;
-    grid-template-areas: "thumb body cta";
-    column-gap: var(--space-7);
-    align-items: start;
-    padding: var(--space-7) 0;
-    border-top: 1px solid var(--color-border);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-7) var(--space-5);
   }
 
-  .row-body {
-    grid-area: body;
-    /* Keeps the summary to a comfortable measure on wide screens, leaving
-       open space between the text and the link. */
-    max-width: 52ch;
-  }
-
-  .row-body h3 {
-    font-size: var(--text-h5);
-    font-weight: var(--weight-regular);
-    letter-spacing: var(--tracking-snug);
-    line-height: var(--leading-snug);
-    margin: 0 0 var(--space-1);
-  }
-
-  .row-body h3 + .badge-list {
-    margin-top: var(--space-3);
-  }
-
-  .badge-draft {
-    border-style: dashed;
-  }
-
-  .row-link {
-    color: var(--color-text);
-    text-decoration: none;
-  }
-
-  /* The title link covers the whole row, so the thumbnail and the CTA are
-     click targets too, without nesting everything inside one long link. The
-     badges sit above it as links of their own. */
-  .row-link::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-  }
-
-  .row-link:focus-visible {
-    outline: none;
-  }
-
-  .row-link:focus-visible::after {
-    outline: 2px solid var(--color-text);
-    outline-offset: 4px;
-  }
-
-  /* Same frame as the homepage cards: 16:10, cropped to fill. The thumbnail is
-     its own link (hidden from assistive tech, since the title link already
-     names the project) so a click on the image always lands, even while the
-     hover zoom lifts it above the row-wide title link. */
-  .row-thumb {
-    grid-area: thumb;
-    display: block;
+  .project-card {
     position: relative;
-    z-index: 1;
+  }
+
+  /* Same frame as the homepage cards: 16:10, cropped to fill. */
+  .card-thumb {
+    position: relative;
     aspect-ratio: 16 / 10;
     overflow: hidden;
     background: var(--color-surface);
   }
 
-  .row-thumb :global(img),
-  .row-thumb :global(video) {
+  .card-thumb :global(img),
+  .card-thumb :global(video) {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -336,65 +215,82 @@ const schema = [
     transition: transform var(--duration-slow) var(--ease-standard);
   }
 
-  .row-description {
-    margin-top: var(--space-4);
-    font-size: var(--text-m);
-    line-height: 1.6;
-    color: var(--color-text-muted);
-    margin-bottom: 0;
+  /* Badges pinned to the image: Draft top-left, year bottom-right. A solid
+     page-colored fill keeps them legible over any artwork. */
+  .thumb-badge {
+    position: absolute;
+    z-index: 1;
+    background: var(--color-bg);
   }
 
-  .row-cta {
-    grid-area: cta;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: var(--text-l);
+  .badge-draft {
+    top: var(--space-3);
+    left: var(--space-3);
+    border-style: dashed;
     color: var(--color-text);
-    white-space: nowrap;
   }
 
-  .row-cta svg {
-    width: 18px;
-    height: 18px;
-    transition: transform var(--duration-fast) var(--ease-standard);
+  .badge-year {
+    right: var(--space-3);
+    bottom: var(--space-3);
+  }
+
+  .card-title {
+    margin: var(--space-4) 0 0;
+    font-size: var(--text-l);
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--tracking-snug);
+    line-height: var(--leading-snug);
+  }
+
+  .card-title + .badge-list {
+    margin-top: var(--space-3);
+  }
+
+  .card-link {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  /* The title link covers the whole card, so the thumbnail is a click
+     target too. The type badges sit above it as links of their own. */
+  .card-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .card-link:focus-visible {
+    outline: none;
+  }
+
+  .card-link:focus-visible::after {
+    outline: 2px solid var(--color-text);
+    outline-offset: 4px;
   }
 
   @media (hover: hover) {
-    .project-row:hover .row-cta svg {
-      transform: translateX(4px);
-    }
-
-    .project-row:hover .row-thumb :global(img),
-    .project-row:hover .row-thumb :global(video) {
+    .project-card:hover .card-thumb :global(img),
+    .project-card:hover .card-thumb :global(video) {
       transform: scale(1.02);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .row-cta svg,
-    .row-thumb :global(img),
-    .row-thumb :global(video) {
+    .card-thumb :global(img),
+    .card-thumb :global(video) {
       transition: none;
     }
   }
 
-  /* Tablet: the link drops under the summary so the image and text keep room. */
   @media (max-width: 1024px) {
-    .project-row {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      grid-template-areas:
-        "thumb body"
-        "thumb cta";
-      grid-template-rows: auto 1fr;
-      column-gap: var(--space-5);
-      row-gap: var(--space-4);
-      padding: var(--space-6) 0;
+    .project-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  /* Phone: the dropdown drops under the title at full width, and each row
-     stacks thumbnail, name and summary, link. */
+  /* Phone: the dropdown drops under the title at full width, and the grid
+     goes to one column. */
   @media (max-width: 768px) {
     .work-header {
       flex-direction: column;
@@ -405,45 +301,14 @@ const schema = [
       width: 100%;
     }
 
-    .project-row {
+    .project-grid {
       grid-template-columns: minmax(0, 1fr);
-      grid-template-areas:
-        "thumb"
-        "body"
-        "cta";
-      grid-template-rows: none;
-      gap: var(--space-4);
-      padding: var(--space-5) 0;
-      /* Stacked rows read as separate cards on their own, so no rules. */
-      border-top: none;
+      gap: var(--space-6);
     }
   }
 </style>
 
 <script>
-  // Marks a year row as stuck while it sits right under the nav, which turns
-  // on its bottom hairline. A row being pushed out by the next year drops
-  // below that line and loses it.
-  const yearRows = [...document.querySelectorAll<HTMLElement>(".year-row")];
-  let ticking = false;
-  const markStuck = () => {
-    ticking = false;
-    const navHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-height")) || 0;
-    yearRows.forEach((row) => {
-      const top = row.getBoundingClientRect().top;
-      row.classList.toggle("is-stuck", Math.abs(top - navHeight) < 1 && window.scrollY > 0);
-    });
-  };
-  const onScroll = () => {
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(markStuck);
-    }
-  };
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll);
-  markStuck();
-
   // Choosing a type or tool goes to its page.
   const browse = document.querySelector<HTMLSelectElement>("[data-work-browse]");
   browse?.addEventListener("change", () => {
