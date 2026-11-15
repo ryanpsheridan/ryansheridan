@@ -1438,6 +1438,95 @@ const allProjects: Project[] = [
     ],
   },
   {
+    slug: "bigcommerce-trial-signup",
+    draft: true,
+    title: "Free Trial Signup Flow",
+    year: 2025,
+    description: "A concept for a shorter BigCommerce free trial signup: four short steps, a chat offer and tips while the store builds, and a clean landing in the dashboard. Not shipped.",
+    thumbnail: "/bc-trial-signup-account-animated.svg",
+    ogImage: "/bc-trial-signup-og.jpg",
+    showOnHomepage: false,
+    tags: ["Web Design", "UX Design"],
+    tools: ["Figma"],
+    client: "BigCommerce",
+    clientUrl: "https://www.bigcommerce.com/",
+    content: [
+      {
+        type: "text",
+        heading: "The Project",
+        body: `<p>The free trial is where a merchant first uses <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a>, and the signup flow sets the tone for everything after it. I redesigned that flow from the landing page through the first moments in the dashboard, with two goals: make it easier to start, and make better use of the time it takes to build a store.</p><p>This project never shipped. Leadership changes and shifting priorities took it off the roadmap before it was built, so there are no live results to show. I'm including it because it shows how I work through a flow from start to finish: what to ask, when to ask it, and what to do with time that would otherwise be dead.</p>`,
+      },
+      {
+        type: "text",
+        heading: "The challenge",
+        body: `<p>I started from the existing trial page and signup flow and found three problems.</p><p><strong>The form asked for too much at once.</strong> The signup form had a long list of fields. A long form makes people hesitate before they type anything, and it asks for effort before the product has given them anything back.</p><p><strong>The form belonged after the pitch.</strong> On the existing page, the form sat lower down, after the content explaining what the trial included. That placement helped conversion, so I kept the idea: make the case first, then ask for something.</p><p><strong>The wait taught us nothing.</strong> After submitting, merchants landed on a small loading screen for about a minute while their store was built. In that time the product learned nothing about them, and they had nothing to look at or do.</p><p>So the redesign had two jobs: ask for less up front, and use the wait.</p>`,
+      },
+      {
+        type: "compare",
+        before: { src: "/bc-trial-signup-before.webp", alt: "The existing BigCommerce free trial page, with a long signup form lower on the page", label: "Before" },
+        after: { src: "/bc-trial-signup-after-entry.webp", alt: "The redesigned trial landing page with the headline Start building your dream store, three benefits, a Start free trial button and a preview of the store dashboard", label: "After" },
+      },
+      {
+        type: "text",
+        heading: "The flow",
+        body: `<p>The new flow is four short steps, with one idea per screen and a progress bar that says where you are. The first three steps ask a small number of questions. The fourth confirms your email and takes you into the dashboard.</p><h3>Start with an email</h3><p>The first screen asks for one thing: an email. Google, Apple, and Meta sign-up sit below it for anyone who would rather not type. If someone uses an email, the next screen asks for their name and a password, with reCAPTCHA. If they use a social account, they skip that screen.</p><p>I wanted the first commitment to be as small as possible. One field and a button is easy to start, and the progress bar ("Step 1 of 4") sets expectations about how long this will take.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [
+          { src: "/bc-trial-signup-step-account-animated.svg", alt: "The account screen. An email is entered and accepted, then name and password fields appear, reCAPTCHA is checked, and the form is complete." },
+        ],
+      },
+      {
+        type: "text",
+        body: `<h3>Ask about the person, then the store</h3><p>Step 2 asks for a few details about the merchant: name, the size of their business, and an optional phone number. Step 3 asks about the store: whether they already have a website, the store name, what they'll be selling, and how they sell today.</p><p>The store questions are skippable, and the screen says so ("you can add these details later"). The answers are there to give the trial some context: who this merchant is and what they're trying to build, so the first experience doesn't start from a blank store.</p>`,
+      },
+      {
+        type: "imageGrid",
+        sideBySide: true,
+        images: [
+          { src: "/bc-trial-signup-about-you-animated.svg", alt: "The About you screen with name, business size, and phone number filled in, then a chat window offering a 15 minute orientation call", caption: "Step 2: about you" },
+          { src: "/bc-trial-signup-about-store-animated.svg", alt: "The About your store screen. The merchant answers that they have an existing website, a URL field appears, and the remaining fields are filled in.", caption: "Step 3: about your store" },
+        ],
+      },
+      {
+        type: "text",
+        body: `<h3>Use the wait</h3><p>This is the part I like most. While the store builds, a chat window offers the merchant 15 minutes with someone from the team for a quick orientation: "Yes! Let me see your calendar" or "No thanks." The offer arrives at the moment when the merchant is waiting anyway, so taking it costs them nothing.</p><p>The loading screen itself changed too. A static spinner became a spinner with rotating tips ("Pro tip" and "Did you know?"), so the screen reads as progress and not as a stall. The tips are concept copy, written for the mockups.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [
+          { src: "/bc-trial-signup-build-animated.svg", alt: "The Your store is being built screen with a spinner and a tip that changes from one to the next" },
+        ],
+      },
+      {
+        type: "text",
+        body: `<h3>Confirm and land</h3><p>Step 4 asks the merchant to confirm their email. The email has one button. Once confirmed, the merchant lands in the dashboard with a trial banner and a welcome tour that points out the new navigation.</p>`,
+      },
+      {
+        type: "imageGrid",
+        images: [
+          { src: "/bc-trial-signup-confirm-animated.svg", alt: "The Confirm your email screen, then the confirmation email with a single Confirm email button" },
+        ],
+      },
+      {
+        type: "text",
+        heading: "Beyond the main flow",
+        body: `<p>The main path is the happy path, but a flow isn't finished until the other cases are covered. I designed a small set of states for the moments where things go sideways:</p><ul><li>The email is already registered</li><li>The password isn't strong enough</li><li>Signing up with a social account</li><li>The confirmation email never arrives</li><li>The store build is taking longer than usual</li></ul>`,
+      },
+      {
+        type: "text",
+        heading: "What happened",
+        body: `<p>It didn't ship, so I can't tell you what it did to conversion. What I can tell you is what I would have measured:</p><ul><li>Completion rate at each step, to see where people drop off</li><li>How many people confirm their email, and how quickly</li><li>How many people accept the orientation call</li><li>Whether merchants who answered the store questions go on to set up their store faster</li></ul><p>I'd treat the first version as a set of bets to test, not a finished answer. The two I'd test first are whether splitting account creation across steps beats one short form, and whether the orientation offer works better before the build starts or during it.</p>`,
+      },
+      {
+        type: "text",
+        heading: "What I'd do differently",
+        body: `<ul><li><strong>Design mobile alongside desktop.</strong> Most of this flow is a single column and should translate well, but I'd want to see it on a phone.</li><li><strong>Show how the social path handles email confirmation.</strong> A social provider has already verified the email, so step 4 probably shouldn't apply there.</li><li><strong>Test the tips with real merchants.</strong> The copy on the build screen is a concept, and I'd want to find out which tips are actually useful.</li></ul>`,
+      },
+    ],
+  },
+  {
     slug: "flow-stays",
     title: "Flow Stays",
     year: 2023,
