@@ -1,11 +1,19 @@
 /**
  * Daily Search Console totals for ohiogolfclubindoor.com (web search, all
- * countries), pasted from the Chart.csv in a Performance export. To extend the
- * chart, append the new days in date order and keep one row per day.
+ * countries), pasted from the Chart.csv in a Performance export. The case
+ * study's charts, averages and dates are all worked out from this file.
  *
- * Milestones: first SEO push October 23, 2026 (the chart marker). The rebuilt site
- * went live, with indexing requested for every page and the sitemap
- * resubmitted, on November 11, 2026.
+ * To update with a new export:
+ * 1. Append the new days to ogcSearchConsole in date order, one row per day.
+ * 2. Set ogcLatestPeriod to the export's date range and its average position
+ *    (the one figure the daily rows can't give). Clicks, impressions and CTR
+ *    for that period are summed from the rows.
+ * 3. Reread the "Search visibility" copy in projects.ts. The numbers fill in
+ *    on their own, but the sentences around them may need a tweak.
+ *
+ * Milestones: first SEO update to the old site on October 23, 2026 (the chart
+ * marker). The rebuilt site went live, with indexing requested for every page
+ * and the sitemap resubmitted, on November 11, 2026.
  */
 export interface SearchConsoleDay {
   date: string;
@@ -91,3 +99,57 @@ export const ogcSearchConsole: SearchConsoleDay[] = [
   { date: "2026-11-14", clicks: 11, impressions: 321 },
   { date: "2026-11-15", clicks: 13, impressions: 336 },
 ];
+
+export const ogcMilestones = {
+  firstSeoUpdate: "2026-10-23",
+  rebuildLaunch: "2026-11-11",
+};
+
+/** The 28 days before the first SEO update, the "before" side of every comparison. */
+export const ogcBaseline = { from: "2026-09-25", to: "2026-10-22" };
+
+/** The most recent Search Console export. */
+export const ogcLatestPeriod = { from: "2026-10-19", to: "2026-11-15", averagePosition: 10.82 };
+
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const parts = (iso: string) => {
+  const d = new Date(`${iso}T00:00:00Z`);
+  return { month: MONTHS[d.getUTCMonth()], day: d.getUTCDate() };
+};
+/** "November 15" */
+export const longDate = (iso: string) => `${parts(iso).month} ${parts(iso).day}`;
+/** "Nov 15" */
+export const shortDate = (iso: string) => `${parts(iso).month.slice(0, 3)} ${parts(iso).day}`;
+
+const dayBefore = (iso: string) => new Date(Date.parse(`${iso}T00:00:00Z`) - 864e5).toISOString().slice(0, 10);
+
+export function ogcWindow(from: string, to: string) {
+  const days = ogcSearchConsole.filter((d) => d.date >= from && d.date <= to);
+  const clicks = days.reduce((sum, d) => sum + d.clicks, 0);
+  const impressions = days.reduce((sum, d) => sum + d.impressions, 0);
+  return {
+    from,
+    to,
+    days: days.length,
+    clicks,
+    impressions,
+    clicksPerDay: clicks / days.length,
+    impressionsPerDay: impressions / days.length,
+    ctr: impressions ? clicks / impressions : 0,
+  };
+}
+
+const lastDay = ogcSearchConsole[ogcSearchConsole.length - 1].date;
+
+export const ogcStats = {
+  firstDay: ogcSearchConsole[0].date,
+  lastDay,
+  before: ogcWindow(ogcBaseline.from, ogcBaseline.to),
+  after: ogcWindow(ogcMilestones.firstSeoUpdate, lastDay),
+  latest: {
+    ...ogcWindow(ogcLatestPeriod.from, ogcLatestPeriod.to),
+    averagePosition: ogcLatestPeriod.averagePosition,
+    /** Days of the latest period that came before the first SEO update. */
+    daysBeforeUpdate: ogcWindow(ogcLatestPeriod.from, dayBefore(ogcMilestones.firstSeoUpdate)).days,
+  },
+};

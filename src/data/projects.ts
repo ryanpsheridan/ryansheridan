@@ -1,5 +1,18 @@
 import { IS_PREVIEW } from "./environment";
-import { ogcSearchConsole } from "./ogc-search-console";
+import { ogcSearchConsole, ogcStats, ogcMilestones, longDate, shortDate } from "./ogc-search-console";
+
+/** Ohio Golf Club search figures, formatted for the case study copy and charts. */
+const ogc = (() => {
+  const { before, after, latest, firstDay, lastDay } = ogcStats;
+  const perDay = (n: number) => n.toFixed(1);
+  const whole = (n: number) => Math.round(n).toLocaleString("en-US");
+  return {
+    before, after, latest,
+    perDay, whole,
+    count: (n: number) => ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"][n] ?? String(n),
+    chartCaption: `Google Search Console, web search, ${shortDate(firstDay)} to ${shortDate(lastDay)}, 2026. Averages compare the ${before.days} days before the first SEO update (${shortDate(before.from)} to ${shortDate(before.to)}) with the ${after.days} days since (${shortDate(after.from)} to ${shortDate(after.to)}).`,
+  };
+})();
 
 export interface TextBlock {
   type: "text";
@@ -460,23 +473,28 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Search visibility",
-        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” while earning few clicks. One clear opportunity: five of the six pages shared the same title.</p><p>That fix didn’t need to wait for the redesign. On October 23, 2026, I made technical SEO improvements to the existing site: a unique title and description for every page, one consistent address, a sitemap, and correct link previews.</p><p>The rebuild took it further. Lessons, contact, and private events each have their own page, with titles and copy shaped around what people were already searching for. Structured data describes the business, its hours, every league and event, breadcrumbs, and common questions, so search engines can read those details directly.</p><p>Early results from Google Search Console compare the 28 days before those first fixes (September 25 to October 22) with the 24 days after (October 23 to November 15). Clicks went from roughly half a click a day to about seven on average, and impressions from about 38 a day to 239. Most of that came from the work on the old site, since the rebuild only launched on November 11. In the four days since, the site has averaged about 11 clicks and 290 impressions a day, too short a window to read much into. These numbers are an encouraging start, not proof of long-term growth.</p>`,
+        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” while earning few clicks. One clear opportunity: five of the six pages shared the same title.</p><p>That fix didn’t need to wait for the redesign. On ${longDate(ogcMilestones.firstSeoUpdate)}, 2026, I made a first round of technical SEO improvements to the existing site to give it a sounder foundation: a unique title and description for every page, one consistent address, a sitemap, and correct link previews.</p><p>The rebuild took it further, and search was part of the plan from the start, not a checklist item at the end. Lessons, contact, and private events each have their own page, with titles, descriptions, and copy shaped around what people were already searching for, and related pages link to each other. Structured data describes the business, its hours, every league and event, breadcrumbs, and common questions, so search engines can read those details directly.</p><p>The same groundwork is meant to help answer engines, AI tools like ChatGPT, Perplexity, and Google’s AI Overviews that respond to a question with a direct answer. Clear page structure, FAQs, and structured data make the club’s details easier for them to understand. That’s a foundation rather than a result: I haven’t measured how often the club appears in AI answers.</p><p>Google Search Console results compare the ${ogc.before.days} days before the first update (${longDate(ogc.before.from)} to ${longDate(ogc.before.to)}) with the ${ogc.after.days} days since (${longDate(ogc.after.from)} to ${longDate(ogc.after.to)}). Clicks went from ${ogc.perDay(ogc.before.clicksPerDay)} a day to ${ogc.perDay(ogc.after.clicksPerDay)} on average, and impressions from ${ogc.whole(ogc.before.impressionsPerDay)} a day to ${ogc.whole(ogc.after.impressionsPerDay)}. The rebuild only launched on ${longDate(ogcMilestones.rebuildLaunch)}, so most of that period reflects the work on the old site.</p>`,
       },
       {
         type: "barChart",
         title: "Daily search clicks",
         unit: "clicks",
         points: ogcSearchConsole.map((d) => ({ date: d.date, value: d.clicks })),
-        marker: { date: "2026-10-23", label: "First SEO push" },
-        change: { before: "0.5", after: "6.9", per: "a day" },
+        marker: { date: ogcMilestones.firstSeoUpdate, label: "First SEO update" },
+        change: { before: ogc.perDay(ogc.before.clicksPerDay), after: ogc.perDay(ogc.after.clicksPerDay), per: "a day" },
       },
       {
         type: "barChart",
         title: "Daily search impressions",
         unit: "impressions",
         points: ogcSearchConsole.map((d) => ({ date: d.date, value: d.impressions })),
-        marker: { date: "2026-10-23", label: "First SEO push" },
-        change: { before: "38", after: "239", per: "a day" },
+        marker: { date: ogcMilestones.firstSeoUpdate, label: "First SEO update" },
+        change: { before: ogc.whole(ogc.before.impressionsPerDay), after: ogc.whole(ogc.after.impressionsPerDay), per: "a day" },
+        caption: ogc.chartCaption,
+      },
+      {
+        type: "text",
+        body: `<p>The gains have continued past the first few weeks. In the latest ${ogc.latest.days}-day Search Console period, ${longDate(ogc.latest.from)} to ${longDate(ogc.latest.to)}, the site earned ${ogc.whole(ogc.latest.clicks)} clicks from ${ogc.whole(ogc.latest.impressions)} impressions, a ${(ogc.latest.ctr * 100).toFixed(2)}% click-through rate, at an average position of ${ogc.latest.averagePosition.toFixed(1)}. The first ${ogc.count(ogc.latest.daysBeforeUpdate)} days of that period came before the first update.</p><p>The site is also beginning to appear more often for searches that don’t include the club’s name, such as “indoor golf near me,” “golf simulator near me,” “indoor driving range near me,” and golf lessons in the Akron area. That suggests it’s reaching people who weren’t already looking for the club by name. It’s still early, and these numbers aren’t proof of long-term growth.</p><p>The next step is measuring what that visibility leads to. I’m adding tracking to the actions that matter most to the business, including Book a Bay, contact, and inquiries about memberships, lessons, and events, so future updates can show how search turns into real inquiries rather than visits alone.</p>`,
       },
       {
         type: "text",
