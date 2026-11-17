@@ -573,6 +573,20 @@ const schema = [
               {project.tools.map((tool) => <a href={toolHref(tool)} class="badge badge-tool"><ToolIcon name={tool} />{tool}</a>)}
             </div>
           </div>
+          {project.links?.length ? (
+            <div class="meta-group">
+              <span class="overline">Links</span>
+              <ul class="meta-links">
+                {project.links.map((link) => (
+                  <li>
+                    <a href={link.href} target="_blank" rel="noopener noreferrer" class="link-underline">
+                      {link.label}<span class="client-link-arrow" aria-hidden="true">&#8599;</span><span class="visually-hidden">(opens in a new tab)</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
         </div>
       </aside>
     </div>
@@ -719,6 +733,18 @@ const schema = [
   .client-link-arrow {
     font-size: var(--text-s);
     margin-left: var(--space-1);
+  }
+
+  /* Sidebar links: same type as the client name, one per line. */
+  .meta-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-m);
+    line-height: 1.4;
   }
 
   .hero-image {

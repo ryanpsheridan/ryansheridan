@@ -341,6 +341,8 @@ export interface Project {
   client: string;
   /** Client's website; when set, the sidebar client name links out to it. */
   clientUrl?: string;
+  /** Outside links listed in the sidebar under "Links", e.g. the live page or a launch post. */
+  links?: { label: string; href: string }[];
   content: ContentBlock[];
 }
 
@@ -532,11 +534,15 @@ const allProjects: Project[] = [
     tools: ["Figma", "Claude", "Makeswift"],
     client: "BigCommerce",
     clientUrl: "https://www.bigcommerce.com/",
+    links: [
+      { label: "Live page", href: "https://www.bigcommerce.com/product/shopping-agent/" },
+      { label: "Launch announcement", href: "https://www.linkedin.com/posts/poweredbycommerce_meet-shopping-agent-our-new-ai-powered-activity-7528121144281985025-Kc4c" },
+    ],
     content: [
       {
         type: "text",
         heading: "Making a new AI feature easy to picture",
-        body: `<p>Shopping Agent is a new <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> feature that answers shoppers' questions on a merchant's storefront and helps them find the right product. Product gave us the idea, a few screen recordings, and screenshots of the prototype before it shipped. My job was to turn that into a <a href="https://www.bigcommerce.com/product/shopping-agent/" target="_blank" rel="noopener noreferrer">landing page</a> people would understand at a glance.</p><p>I started from the copywriter's first draft, read the project brief, and ran a kickoff to agree on what the feature does, how it helps merchants, and how to make that clear on the page. Then I designed the page and every image on it.</p>`,
+        body: `<p>Shopping Agent is a new <a href="https://www.bigcommerce.com/" target="_blank" rel="noopener noreferrer">BigCommerce</a> feature that answers shoppers' questions on a merchant's storefront and helps them find the right product. Product gave us the idea, a few screen recordings, and screenshots of the prototype before it shipped. My job was to turn that into a <a href="https://www.bigcommerce.com/product/shopping-agent/" target="_blank" rel="noopener noreferrer">landing page</a> people would understand at a glance.</p><p>I started from the copywriter's first draft, read the project brief, and ran a kickoff to agree on what the feature does, how it helps merchants, and how to make that clear on the page. Then I designed the page and every image on it. Shopping Agent launched in November 2026, and Commerce's <a href="https://www.linkedin.com/posts/poweredbycommerce_meet-shopping-agent-our-new-ai-powered-activity-7528121144281985025-Kc4c" target="_blank" rel="noopener noreferrer">launch announcement</a> leads with the page's hero visual.</p>`,
       },
       {
         type: "text",
