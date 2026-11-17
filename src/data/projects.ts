@@ -587,6 +587,18 @@ const allProjects: Project[] = [
         heading: "Teaching Claude how we make images",
         body: `<p>Shopping Agent needed a family of images that looked like they belonged together and matched the rest of our site. I didn't prompt each one from scratch. I pointed a Claude skill at the images already on bigcommerce.com so it learned our style, brand tokens and a short set of motion rules. Give it a section of copy and it drafts the visual in Figma. I tighten each draft by hand and dictate notes on the rest, so my time goes into choices instead of pushing pixels.</p><p>The skill is a living file. When a review turns up a gap, I fix the skill instead of the one image. Our animations play once and stay short. When one invites a click, it now shows a quiet hover cue, because I added that rule after the first draft missed it. Every image after that gets it for free. Claude built the animations too, so they follow the same rules.</p>`,
       },
+      {
+        type: "text",
+        heading: "Carried into the launch",
+        body: `<p>The same visual system held up outside the page. When Shopping Agent launched, Commerce's <a href="https://www.linkedin.com/posts/poweredbycommerce_meet-shopping-agent-our-new-ai-powered-activity-7528121144281985025-Kc4c" target="_blank" rel="noopener noreferrer">LinkedIn announcement</a> reused the hero visual, recut for a portrait social post.</p>`,
+      },
+      {
+        type: "imageGrid",
+        sideBySide: true,
+        images: [
+          { src: "/project-shopping-agent-launch-post.webp", alt: "Commerce and BigCommerce launch post: a New Feature label, the headline Build, train, and deploy your very own AI-powered Shopping Agent for your BigCommerce storefront, and a storefront where a shopper asks for polarized sunglasses and the Shopping Agent answers Found two that fit with the Dune and Eclipse frames", caption: "The launch post on LinkedIn, built from the page's hero visual" },
+        ],
+      },
     ],
   },
   {
