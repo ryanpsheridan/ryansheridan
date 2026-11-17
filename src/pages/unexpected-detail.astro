@@ -5,24 +5,25 @@ import Lines from "../components/unexpected-detail/Lines.astro";
 import Wordmark from "../components/unexpected-detail/Wordmark.astro";
 
 /*
-  Brand book for the unexpected detail podcast. Private share: noindex, and
-  kept out of the sitemap by the allowlist in astro.config.mjs. Rounds 01 to
-  05 of the exploration live on at /unexpected-detail/round-1.
+  unexpected detail: identity presentation. Private share, noindex, and kept
+  out of the sitemap by the allowlist in astro.config.mjs. Rounds 01 to 05
+  of the exploration live on at /unexpected-detail/round-1.
 
-  The direction is the pair Marcy picked from round 05: the falling line with
-  the staggered wordmark (01 light, 02 dark). Everything open after that call
-  is a control at the top of the page: where the dot sits (the period, or the
-  dot of the i), the wordmark typeface (Gloock or DM Serif Display), and the
-  primary and secondary colors. The settings live in the URL so a link keeps
-  them. Every example on the page draws from the same custom properties, so a
-  change reaches all of it at once.
+  The logo is live type, not an image: the staggered Gloock lockup from
+  round 05 (tiles 01 and 02), drawn by components/unexpected-detail. That is
+  what lets the explorer at the end switch the dot and the typeface without
+  approximating the artwork.
+
+  Everything above the explorer is fixed to the recommended direction
+  (RECOMMENDED below). Only the explorer changes, and its state lives in the
+  URL so a copied link reopens the same version.
 */
 
-const DEFAULTS = { font: "gloock", dot: "period", primary: "#F08A6C", secondary: "#15100D" } as const;
+const RECOMMENDED = { font: "gloock", dot: "i", palette: "02" } as const;
 const INK = "#141414";
 const PAPER = "#FAF9F6";
 
-// Relative luminance and contrast, WCAG 2. The script below has a copy.
+// WCAG 2 contrast. The explorer script carries a copy.
 const lum = (hex: string) => {
   const n = parseInt(hex.slice(1), 16);
   const c = [n >> 16, (n >> 8) & 255, n & 255].map((v) => {
@@ -35,445 +36,309 @@ const contrast = (a: string, b: string) => {
   const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m);
   return (x + 0.05) / (y + 0.05);
 };
-// Ink or paper, whichever reads better on a color.
 const onColor = (hex: string) => (contrast(hex, INK) >= contrast(hex, PAPER) ? INK : PAPER);
 const vars = (p: string, s: string) =>
   `--ud-primary:${p};--ud-secondary:${s};--ud-on-secondary:${onColor(s)};--ud-on-primary:${onColor(p)}`;
 
-const brief = [
-  { label: "the mission", lead: "To rescue human conversation from the résumé.", body: "Uncovering the unspoken quirks, wild turns, and quiet fascinations that make people who they truly are." },
-  { label: "the promise", lead: "A fresh, indelible view into a mind you thought you knew.", body: "Leave every conversation with a surprising insight, an unprompted laugh, and proof that people are richer than their bios." },
-  { label: "the north star", lead: "Break the talking-points loop. Uncover the eccentric truths.", body: "Strip away canned press tours and rehearsed answers. Catch brilliant people off guard, mid-laugh, sharing the obsessions that actually ignite them." },
-];
+/*
+  Twenty directions, from the brief. Six were retuned so the dot holds at
+  least 3:1 on its own field (09, 12, 13, 14, 16, 18); the rest are as given.
+*/
+const palettes = [
+  { name: "Peach & Cocoa", p: "#E9A58D", s: "#49352F", mood: "Warm, approachable" },
+  { name: "Tomato & Ink", p: "#E6533F", s: "#252A38", mood: "Bold, confident" },
+  { name: "Marigold & Forest", p: "#E9BC48", s: "#294A3B", mood: "Curious, distinctive" },
+  { name: "Cobalt & Bone", p: "#3158C8", s: "#F0EDE3", mood: "Modern, editorial" },
+  { name: "Pink & Oxblood", p: "#E7A0B5", s: "#642E43", mood: "Expressive, sophisticated" },
+  { name: "Mint & Plum", p: "#A9D4BD", s: "#593B62", mood: "Playful, unconventional" },
+  { name: "Tangerine & Aubergine", p: "#E98242", s: "#493149", mood: "Energetic, artistic" },
+  { name: "Butter & Charcoal", p: "#F0D98B", s: "#333330", mood: "Quiet, confident" },
+  { name: "Sky & Rust", p: "#A9CBE0", s: "#8E3F29", mood: "Unexpected, balanced" },
+  { name: "Lavender & Espresso", p: "#B8A5D0", s: "#493A36", mood: "Creative, thoughtful" },
+  { name: "Lime & Navy", p: "#B9CB58", s: "#283C58", mood: "Contemporary, bold" },
+  { name: "Coral & Teal", p: "#EE8B7E", s: "#1F5452", mood: "Vibrant, approachable" },
+  { name: "Lilac & Tomato", p: "#D9CCF0", s: "#B33A2C", mood: "Artistic, energetic" },
+  { name: "Olive & Cream", p: "#6B6A3A", s: "#F2EBDD", mood: "Organic, understated" },
+  { name: "Electric Blue & Sand", p: "#4169D8", s: "#E6D8BD", mood: "Distinctive, modern" },
+  { name: "Dusty Rose & Moss", p: "#DFA19D", s: "#3E4934", mood: "Natural, warm" },
+  { name: "Lemon & Burgundy", p: "#E8D65C", s: "#713C49", mood: "Unexpected, expressive" },
+  { name: "Periwinkle & Brick", p: "#B9C2EC", s: "#8A3B2D", mood: "Contemporary, creative" },
+  { name: "Sage & Ink", p: "#A8B8A0", s: "#293B38", mood: "Restrained, timeless" },
+  { name: "Fuchsia & Chocolate", p: "#D66BA3", s: "#49332F", mood: "Playful, distinctive" },
+].map((c, i) => ({ ...c, no: String(i + 1).padStart(2, "0") }));
+
+const rec = palettes.find((p) => p.no === RECOMMENDED.palette)!;
+const recVars = vars(rec.p, rec.s);
 
 const fonts = [
   { id: "gloock", name: "Gloock" },
   { id: "dm", name: "DM Serif Display" },
 ] as const;
-const dots = [
-  { id: "period", name: "Period", hint: "detail." },
-  { id: "i", name: "Dot of the i", hint: "detail" },
-] as const;
 
-// Sixteen pairs to react to. Primary is the dot; secondary is the field.
-const combos = [
-  { name: "Peach and cocoa", p: "#F08A6C", s: "#15100D" },
-  { name: "Tomato and navy", p: "#FF5A36", s: "#13213C" },
-  { name: "Marigold and forest", p: "#F2B134", s: "#1E3B2F" },
-  { name: "Chartreuse and ink", p: "#C6E04A", s: "#161616" },
-  { name: "Coral and deep teal", p: "#FF7B6B", s: "#0E4744" },
-  { name: "Cobalt and bone", p: "#2F55F0", s: "#EFE8DA" },
-  { name: "Pink and oxblood", p: "#FF9EC4", s: "#4A1020" },
-  { name: "Oxblood and blush", p: "#8A1E2E", s: "#F6D5CC" },
-  { name: "Vermilion and sand", p: "#E8432A", s: "#E7DAC2" },
-  { name: "Mint and plum", p: "#9FE3C9", s: "#3B1F4A" },
-  { name: "Lilac and espresso", p: "#B9A6FF", s: "#2A1C14" },
-  { name: "Saffron and aubergine", p: "#FFB000", s: "#2E1533" },
-  { name: "Sky and rust", p: "#A9D0FF", s: "#8A3A1E" },
-  { name: "Magenta and midnight", p: "#E6338C", s: "#0E1230" },
-  { name: "Olive and cream", p: "#6E7D23", s: "#F3EBD8" },
-  { name: "Persimmon and sage", p: "#F26B3A", s: "#C5D1B8" },
-].map((c, i) => ({ ...c, no: String(i + 1).padStart(2, "0") }));
-
-const matrix = fonts.flatMap((f) => dots.map((d) => ({ font: f, dot: d })));
-
-const feedSizes = [160, 96, 64, 48, 40];
-const episodes = [
-  { no: 14, guest: "Guest Name", title: "The spreadsheet she keeps of every dog she has met", time: "52 min" },
-  { no: 13, guest: "Guest Name", title: "Why he still writes letters to his high school band", time: "47 min" },
-  { no: 12, guest: "Guest Name", title: "A cartographer of places that never existed", time: "61 min" },
-];
+// The opening's falling line, as HTML so the row stretches to any width
+// without skewing the angle. Every other line drops out on phones; the
+// fallen one is odd, so it stays.
+const heroLines = 37;
+const heroFall = 25;
 
 const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Gloock&display=swap";
 ---
 
 <Layout
-  title="unexpected detail brand book | Ryan Sheridan"
-  description="Brand book for the unexpected detail podcast: wordmark, color, type, and the identity in use."
+  title="unexpected detail, identity | Ryan Sheridan"
+  description="Identity presentation for the unexpected detail podcast."
   noindex={true}
 >
   <link rel="stylesheet" href={fontsHref} />
-  <div
-    class="ub"
-    id="ub"
-    data-font={DEFAULTS.font}
-    data-dot={DEFAULTS.dot}
-    data-defaults={JSON.stringify(DEFAULTS)}
-    style={vars(DEFAULTS.primary, DEFAULTS.secondary)}
-  >
-    <header class="ub-top">
-      <div class="ub-wrap ub-top-row">
-        <p class="ub-top-name">unexpected detail<span class="ub-top-sep" aria-hidden="true"></span>brand book</p>
-        <p class="ub-top-meta">
-          <span>Draft 01 · November 2026</span>
-          <a href="/unexpected-detail/round-1">Rounds 01 to 05</a>
-        </p>
-      </div>
-    </header>
-
-    <form class="ub-controls" id="ub-controls" aria-label="Brand settings" onsubmit="return false">
-      <div class="ub-wrap ub-controls-row">
-        <fieldset class="ctl">
-          <legend>The dot</legend>
-          <div class="seg">
-            {dots.map((d) => (
-              <button type="button" data-set-dot={d.id} aria-pressed={d.id === DEFAULTS.dot ? "true" : "false"}>{d.name}</button>
-            ))}
-          </div>
-        </fieldset>
-        <fieldset class="ctl">
-          <legend>Typeface</legend>
-          <div class="seg">
-            {fonts.map((f) => (
-              <button type="button" data-set-font={f.id} aria-pressed={f.id === DEFAULTS.font ? "true" : "false"}>{f.name}</button>
-            ))}
-          </div>
-        </fieldset>
-        <div class="ctl">
-          <label class="ctl-label" for="ub-primary-hex">Primary</label>
-          <div class="hex">
-            <input type="color" id="ub-primary-pick" value={DEFAULTS.primary.toLowerCase()} aria-label="Pick the primary color" />
-            <input type="text" id="ub-primary-hex" value={DEFAULTS.primary} spellcheck="false" autocomplete="off" maxlength="7" />
-          </div>
-        </div>
-        <div class="ctl">
-          <label class="ctl-label" for="ub-secondary-hex">Secondary</label>
-          <div class="hex">
-            <input type="color" id="ub-secondary-pick" value={DEFAULTS.secondary.toLowerCase()} aria-label="Pick the secondary color" />
-            <input type="text" id="ub-secondary-hex" value={DEFAULTS.secondary} spellcheck="false" autocomplete="off" maxlength="7" />
-          </div>
-        </div>
-        <div class="ctl ctl-actions">
-          <button type="button" class="act" id="ub-swap" title="Swap primary and secondary">Swap</button>
-          <button type="button" class="act" id="ub-reset">Reset</button>
-          <button type="button" class="act act--solid" id="ub-copy">Copy link</button>
-        </div>
-      </div>
-    </form>
-
+  <div class="ub" id="ub" data-font={RECOMMENDED.font} data-dot={RECOMMENDED.dot} style={recVars}>
     <main id="main">
-      <section class="hero tone-field" aria-label="unexpected detail">
-        <Lines class="hero-lines hero-lines--wide" vw={200} vh={100} count={30} fall={19} x={8} y={11} len={36} w={0.55} animate />
-        <Lines class="hero-lines hero-lines--tall" vw={100} vh={125} count={14} fall={9} x={11.4} y={12} len={62} animate />
-        <Wordmark class="hero-wm" size="var(--hero-wm)" />
+      <!-- 01 Introduction -->
+      <section class="intro tone-field" aria-label="unexpected detail, identity presentation">
+        <a class="intro-skip" href="#explore">Skip to the explorer</a>
+        <header class="intro-meta">
+          <p class="intro-name">unexpected detail</p>
+          <ul class="intro-tags">
+            <li>Brand identity</li>
+            <li>Podcast</li>
+            <li>2026</li>
+          </ul>
+          <p class="intro-draft">Identity exploration, draft 02</p>
+        </header>
+        <div class="intro-lines" aria-hidden="true">
+          {Array.from({ length: heroLines }, (_, i) => <span class:list={{ fall: i + 1 === heroFall }} />)}
+        </div>
+        <div class="intro-foot">
+          <p class="intro-desc">
+            An identity for an unscripted conversation show about the things people leave off their
+            résumé. Quiet type, one line out of step, and a single dot of color in a place you have
+            to look for.
+          </p>
+          <Wordmark class="intro-wm" size="13.6cqi" />
+        </div>
       </section>
 
-      <div class="ub-wrap">
-        <section class="intro">
-          <p class="intro-lead">
-            An unscripted conversation show hosted by Marcy. Every episode is a detour with someone
-            remarkable, past the résumé and into the left turns, half-baked ideas, and quiet
-            obsessions kept off camera.
-          </p>
-          <p class="intro-how">
-            Use the bar above to move the dot, switch the typeface, or try your own colors with hex
-            values. Everything on this page follows along. <strong>Copy link</strong> keeps your
-            settings, so you can send back exactly what you are looking at.
-          </p>
-        </section>
+      <!-- 02 Identity -->
+      <section class="spread s-id" aria-labelledby="id-h">
+        <div class="wrap">
+          <div class="slabel reveal"><span>02</span><h2 id="id-h">Identity</h2></div>
+          <div class="id-primary reveal">
+            <div class="construct">
+              <Wordmark size="1em" />
+              <span class="g g-edge" aria-hidden="true"><em>flush right</em></span>
+              <span class="g g-step" aria-hidden="true"><em>steps in 1.2 em</em></span>
+              <span class="g g-base" aria-hidden="true"></span>
+            </div>
+            <p class="id-cap">
+              <strong>The primary logo.</strong> Lowercase Gloock in two lines, set flush right.
+              “unexpected” steps in from the edge, so the name turns like a conversation that went
+              somewhere nobody planned.
+            </p>
+          </div>
+        </div>
+        <div class="split">
+          <figure class="split-half tone-field">
+            <div class="split-art"><Wordmark size="6.4cqi" line /></div>
+            <figcaption><strong>Alternate.</strong> One line, for web headers, video and anywhere height is short.</figcaption>
+          </figure>
+          <figure class="split-half split-half--mark">
+            <div class="split-art"><span class="wm mark" role="img" aria-label="The i mark"><span class="wm-i">i</span></span></div>
+            <figcaption><strong>Mark.</strong> The i on its own, for app icons and favicons. The whole idea in one letter.</figcaption>
+          </figure>
+        </div>
+      </section>
 
-        <!-- 01 -->
-        <section class="chapter" id="show" aria-labelledby="show-h">
-          <header class="ch-head">
-            <p class="ch-no">01</p>
-            <h2 id="show-h">the show</h2>
-          </header>
-          <div class="brief">
-            {brief.map((b) => (
-              <article class="brief-item">
-                <h3 class="eyebrow">{b.label}</h3>
-                <p class="brief-lead">{b.lead}</p>
-                <p class="brief-body">{b.body}</p>
+      <!-- 03 The unexpected detail -->
+      <section class="detail tone-field" aria-labelledby="detail-h">
+        <div class="wrap">
+          <div class="slabel reveal"><span>03</span><h2 id="detail-h">The unexpected detail</h2></div>
+          <div class="detail-head reveal">
+            <p class="detail-say">Everyone has one.</p>
+            <p class="detail-copy">
+              The show goes looking for the one thing about a guest that doesn’t behave the way you
+              expect. The identity has one too: a single dot, in color, sitting where the i keeps it.
+            </p>
+          </div>
+        </div>
+        <div class="detail-word" aria-hidden="true"><Wordmark size="31cqi" line class="detail-wm" /></div>
+      </section>
+
+      <section class="ab" aria-label="Two places for the dot">
+        <figure class="ab-half" data-dot="period">
+          <p class="ab-tag"><span>A</span>The period</p>
+          <div class="ab-art"><Wordmark size="9.4cqi" /></div>
+          <figcaption>
+            A full stop that won’t stop: it hangs past the edge of the type. Clear and familiar, and
+            it reads as a statement.
+          </figcaption>
+          <div class="ab-small"><Cover tone="field" style="width:64px" /><Cover tone="paper" style="width:40px" /><span>64 and 40 px</span></div>
+        </figure>
+        <figure class="ab-half" data-dot="i">
+          <p class="ab-tag"><span>B</span>The dot of the i <b>Recommended</b></p>
+          <div class="ab-art"><Wordmark size="9.4cqi" /></div>
+          <figcaption>
+            Hidden inside the word. Nothing is added to the name, so you find the detail rather
+            than being shown it. The closest to what the show does.
+          </figcaption>
+          <div class="ab-small"><Cover tone="field" style="width:64px" /><Cover tone="paper" style="width:40px" /><span>64 and 40 px</span></div>
+        </figure>
+      </section>
+
+      <!-- 04 Typography -->
+      <section class="spread s-type" aria-labelledby="type-h">
+        <div class="wrap">
+          <div class="slabel reveal"><span>04</span><h2 id="type-h">Typography</h2></div>
+          <div class="faces">
+            {fonts.map((f) => (
+              <article class="face reveal" data-font={f.id}>
+                <header class="face-head">
+                  <h3 class="face-name">{f.name}</h3>
+                  <p class="face-role">{f.id === "gloock" ? "Display · recommended" : "Display · alternate"}</p>
+                </header>
+                <div class="face-wm"><Wordmark size="1em" /></div>
+                <p class="face-title">a cartographer of places that never existed</p>
+                <p class="face-say">Curiosity flips the frame.</p>
+                <p class="face-note">
+                  {f.id === "gloock"
+                    ? "Sharp, high contrast, a little severe. It reads as editorial, and keeps its edge at thumbnail size."
+                    : "Rounder and softer, with a friendlier ball on the i. Warmer, and closer to what other shows already use."}
+                </p>
               </article>
             ))}
           </div>
-          <div class="hooks">
-            <div class="hook tone-paper">
-              <p class="eyebrow">primary hook</p>
-              <p class="hook-line">Curiosity flips the frame<span class="tdot">.</span></p>
+          <div class="sans reveal">
+            <header class="face-head">
+              <h3 class="sans-name">Geist</h3>
+              <p class="face-role">Supporting sans</p>
+            </header>
+            <div class="sans-body">
+              <p class="sans-meta">ep. 12 · 61 min · with Guest Name</p>
+              <p class="sans-copy">
+                She has drawn more than four hundred maps of towns, coastlines and train lines that
+                were only ever proposed. We talk about the one she will never finish, and why the
+                blank parts are her favorite.
+              </p>
             </div>
-            <div class="hook tone-field">
-              <p class="eyebrow">secondary invitation</p>
-              <p class="hook-line">Everyone has one<span class="tdot">.</span></p>
-            </div>
-          </div>
-        </section>
-
-        <!-- 02 -->
-        <section class="chapter" id="wordmark" aria-labelledby="wordmark-h">
-          <header class="ch-head">
-            <p class="ch-no">02</p>
-            <h2 id="wordmark-h">the wordmark</h2>
-            <p class="ch-note">
-              Lowercase, two lines, flush right. “unexpected” steps in from the edge, so the stack
-              turns like a road. The dot is the only thing in color.
+            <p class="sans-pair">
+              <strong>Recommended pairing.</strong> Gloock is the voice of the show. Geist does the
+              quiet work around it: show notes, guest details, captions, small print.
             </p>
-          </header>
-          <div class="wm-pair">
-            <figure class="panel tone-paper">
-              <Wordmark size="13cqi" />
-              <figcaption>On paper</figcaption>
-            </figure>
-            <figure class="panel tone-field">
-              <Wordmark size="13cqi" />
-              <figcaption>On secondary</figcaption>
-            </figure>
           </div>
-          <div class="wm-rules">
-            <figure class="rule-card">
-              <div class="clear tone-paper">
-                <span class="clear-box"><Wordmark size="8cqi" /></span>
-              </div>
-              <figcaption>
-                <strong>Clear space.</strong> Keep a margin the height of the “x” in “unexpected” on
-                every side. Nothing else enters the dashed line.
-              </figcaption>
-            </figure>
-            <figure class="rule-card">
-              <div class="clear tone-paper clear--line">
-                <Wordmark size="7cqi" line />
-              </div>
-              <figcaption>
-                <strong>One line.</strong> For narrow spaces like a web header or the footer of a
-                video, the same words run on one line. The stack stays the main mark.
-              </figcaption>
-            </figure>
-          </div>
-        </section>
+        </div>
+      </section>
 
-        <!-- 03 -->
-        <section class="chapter" id="detail" aria-labelledby="detail-h">
-          <header class="ch-head">
-            <p class="ch-no">03</p>
-            <h2 id="detail-h">the detail</h2>
-            <p class="ch-note">
-              From the last call: what if the unexpected detail is the dot of the i, in color, with
-              no period? And does the stagger hold up in DM Serif Display as well as Gloock? All
-              four, side by side. Choose one to set it for the whole page.
-            </p>
-          </header>
-          <div class="matrix">
-            {matrix.map((m) => (
-              <figure class="mx" data-font={m.font.id} data-dot={m.dot.id}>
-                <div class="mx-tiles">
-                  <Cover tone="paper" label={`${m.font.name}, ${m.dot.name.toLowerCase()}, on paper`} />
-                  <Cover tone="field" label={`${m.font.name}, ${m.dot.name.toLowerCase()}, on secondary`} />
-                </div>
-                <figcaption class="mx-cap">
-                  <span><strong>{m.font.name}</strong> · {m.dot.name.toLowerCase()}</span>
-                  <button type="button" class="act" data-apply-font={m.font.id} data-apply-dot={m.dot.id}>Use this</button>
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </section>
-
-        <!-- 04 -->
-        <section class="chapter" id="color" aria-labelledby="color-h">
-          <header class="ch-head">
-            <p class="ch-no">04</p>
-            <h2 id="color-h">color</h2>
-            <p class="ch-note">
-              Two brand colors and two neutrals. The primary is used sparingly, mostly as the dot,
-              so it lands as the one surprise in the frame. The secondary is the field the dark
-              versions sit on. Change either in the bar above.
-            </p>
-          </header>
-          <div class="swatches">
-            <div class="sw sw--primary">
-              <p class="sw-role">primary · the dot</p>
-              <p class="sw-hex" data-bind="primary">{DEFAULTS.primary}</p>
-            </div>
-            <div class="sw sw--secondary">
-              <p class="sw-role">secondary · the field</p>
-              <p class="sw-hex" data-bind="secondary">{DEFAULTS.secondary}</p>
-            </div>
-            <div class="sw sw--ink">
-              <p class="sw-role">ink · type and lines</p>
-              <p class="sw-hex">{INK}</p>
-            </div>
-            <div class="sw sw--paper">
-              <p class="sw-role">paper · the light ground</p>
-              <p class="sw-hex">{PAPER}</p>
-            </div>
-          </div>
-          <dl class="contrast" aria-live="polite">
-            <div>
-              <dt>Dot on paper</dt>
-              <dd><span data-bind="c-paper"></span><span class="flag" data-flag="c-paper"></span></dd>
-            </div>
-            <div>
-              <dt>Dot on secondary</dt>
-              <dd><span data-bind="c-field"></span><span class="flag" data-flag="c-field"></span></dd>
-            </div>
-            <div>
-              <dt>Wordmark on secondary</dt>
-              <dd><span data-bind="c-type"></span><span class="flag" data-flag="c-type"></span></dd>
-            </div>
-          </dl>
-          <p class="fine">
-            Contrast ratios. The dot is a graphic, so 3:1 is the floor for it to hold its own; the
-            wordmark is type, so it wants 4.5:1. Type on the secondary switches between ink and paper
-            on its own.
+      <!-- 05 Visual language -->
+      <section class="spread s-lang" aria-labelledby="lang-h">
+        <div class="divider" aria-hidden="true">
+          <Lines vw={300} vh={16} count={60} fall={38} x={4} gap={4.9} y={3} len={10} w={0.32} />
+        </div>
+        <div class="wrap">
+          <div class="slabel reveal"><span>05</span><h2 id="lang-h">The falling line</h2></div>
+          <p class="lang-lead reveal">
+            A row of upright lines with one that has tipped over. It supports the logo and never
+            replaces it. One falls, always the same way, and color stays with the dot.
           </p>
-        </section>
+          <div class="lang-grid">
+            <figure class="lang-page reveal">
+              <div class="page">
+                <div class="page-rule"><Lines vw={100} vh={8} count={22} fall={15} x={0.4} gap={4.73} y={0.5} len={6} w={0.22} /></div>
+                <p class="page-kicker">Show notes · ep. 12</p>
+                <p class="page-title">a cartographer of places that never existed</p>
+                <div class="page-cols">
+                  <p>She has drawn more than four hundred maps of towns, coastlines and train lines that were only ever proposed. Some were planned by city councils, some by children, one by a man who wanted a canal past his house.</p>
+                  <p>We talk about the one she will never finish, why the blank parts are her favorite, and the strangest thing anyone has asked her to draw.</p>
+                </div>
+              </div>
+              <figcaption><strong>Editorial.</strong> As a header rule on show notes and newsletters.</figcaption>
+            </figure>
+            <figure class="lang-graphic reveal">
+              <div class="frame frame--1 tone-field">
+                <Lines count={14} fall={9} x={11.4} y={10} len={66} />
+                <p class="lg-ep">ep. 12</p>
+              </div>
+              <figcaption><strong>Graphic.</strong> On its own, it carries an episode graphic without the logo.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
 
-        <!-- 05 -->
-        <section class="chapter" id="combos" aria-labelledby="combos-h">
-          <header class="ch-head">
-            <p class="ch-no">05</p>
-            <h2 id="combos-h">sixteen pairs</h2>
-            <p class="ch-note">
-              Starting points for the primary and secondary. Each one shows the cover on its field
-              and the wordmark on paper. Choose one to try it across the page, then fine tune the hex
-              values in the bar.
-            </p>
-          </header>
-          <ol class="combos">
-            {combos.map((c) => (
+      <!-- 06 Color -->
+      <section class="spread s-color" aria-labelledby="color-h">
+        <div class="wrap">
+          <div class="slabel reveal"><span>06</span><h2 id="color-h">Color directions</h2></div>
+          <div class="color-head reveal">
+            <p class="color-say">Twenty directions.</p>
+            <div>
+              <p class="color-copy">
+                Each pairs a primary, used only for the dot, with a secondary for the ground. Choose
+                one to load it into the explorer at the end of the page.
+              </p>
+              <p class="color-status" id="color-status" aria-live="polite"></p>
+            </div>
+          </div>
+          <ol class="pals">
+            {palettes.map((c) => (
               <li>
-                <button type="button" class="combo" style={vars(c.p, c.s)} data-p={c.p} data-s={c.s} aria-pressed="false">
+                <button
+                  type="button"
+                  class="pal"
+                  style={vars(c.p, c.s)}
+                  data-palette={c.no}
+                  data-p={c.p}
+                  data-s={c.s}
+                  data-name={c.name}
+                  aria-pressed="false"
+                >
                   <Cover tone="field" />
-                  <span class="combo-paper tone-paper">
-                    <Wordmark size="12cqi" />
-                  </span>
-                  <span class="combo-meta">
-                    <span class="combo-no">{c.no}</span>
-                    <span class="combo-name">{c.name}</span>
-                    <span class="combo-hex">
-                      <i style={`background:${c.p}`}></i>{c.p}
-                      <i style={`background:${c.s}`}></i>{c.s}
+                  <span class="pal-meta">
+                    <span class="pal-no">{c.no}</span>
+                    <span class="pal-name">{c.name}</span>
+                    <span class="pal-chips" aria-hidden="true">
+                      <i style={`background:${c.p}`}></i><i style={`background:${c.s}`}></i>
                     </span>
+                    <span class="pal-mood">{c.mood}</span>
+                    {c.no === RECOMMENDED.palette && <span class="pal-rec">Starting direction</span>}
                   </span>
                 </button>
               </li>
             ))}
           </ol>
-        </section>
+        </div>
+      </section>
 
-        <!-- 06 -->
-        <section class="chapter" id="type" aria-labelledby="type-h">
-          <header class="ch-head">
-            <p class="ch-no">06</p>
-            <h2 id="type-h">typography</h2>
-            <p class="ch-note">
-              A soft, high contrast serif for the voice of the show, and a plain sans to do the
-              quiet work around it.
-            </p>
-          </header>
-          <div class="type-grid">
-            <article class="type-card tone-paper">
-              <p class="eyebrow">display · <span data-bind="font-name">Gloock</span></p>
-              <p class="type-aa display">Aa</p>
-              <p class="type-set display">abcdefghijklmnopqrstuvwxyz<br />ABCDEFGHIJKLMNOPQRSTUVWXYZ<br />0123456789 &amp; ? ! “ ”</p>
-              <p class="type-use">The wordmark, episode titles, guest names, and pull quotes. Set it lowercase where it can be.</p>
-            </article>
-            <article class="type-card tone-paper">
-              <p class="eyebrow">text · Geist</p>
-              <p class="type-aa sans">Aa</p>
-              <p class="type-set sans">abcdefghijklmnopqrstuvwxyz<br />ABCDEFGHIJKLMNOPQRSTUVWXYZ<br />0123456789 &amp; ? ! “ ”</p>
-              <p class="type-use">Show notes, metadata, captions, and small print. Never for the wordmark.</p>
-            </article>
-          </div>
-          <article class="hier tone-field">
-            <p class="hier-meta">ep. 12 · 61 min</p>
-            <h3 class="hier-title">a cartographer of places that never existed</h3>
-            <p class="hier-guest">with Guest Name</p>
-            <p class="hier-body">
-              She has drawn more than four hundred maps of towns, coastlines, and train lines that
-              were only ever proposed. We talk about the one she will never finish, and why the
-              blank parts are her favorite.
-            </p>
-          </article>
-        </section>
+      <!-- 07 Applications -->
+      <section class="spread s-apps" aria-labelledby="apps-h">
+        <div class="wrap">
+          <div class="slabel reveal"><span>07</span><h2 id="apps-h">In use</h2></div>
 
-        <!-- 07 -->
-        <section class="chapter" id="line" aria-labelledby="line-h">
-          <header class="ch-head">
-            <p class="ch-no">07</p>
-            <h2 id="line-h">the falling line</h2>
-            <p class="ch-note">
-              A row of upright lines with one that has tipped over. It is the conversation that goes
-              somewhere nobody planned, and it gives every surface the same signature without
-              repeating the logo.
-            </p>
-          </header>
-          <div class="band tone-paper">
-            <Lines vw={300} vh={60} count={48} fall={31} x={6} y={10} len={40} w={0.55} />
-          </div>
-          <div class="band band--field tone-field">
-            <Lines vw={300} vh={60} count={48} fall={12} x={6} y={10} len={40} w={0.55} />
-          </div>
-          <ul class="principles">
-            <li><strong>One falls.</strong> Never two, and always the same way, pivoting on its foot.</li>
-            <li><strong>Hairline and quiet.</strong> The lines take the color of the type. Color belongs to the dot.</li>
-            <li><strong>Any length.</strong> The row runs as long as the format needs, from a cover to a banner.</li>
-          </ul>
-        </section>
-
-        <!-- 08 -->
-        <section class="chapter" id="use" aria-labelledby="use-h">
-          <header class="ch-head">
-            <p class="ch-no">08</p>
-            <h2 id="use-h">in use</h2>
-            <p class="ch-note">
-              The identity across the places the show will live. Names, episodes, and contact details
-              are placeholders.
-            </p>
-          </header>
-
-          <div class="apps">
-            <figure class="app app--cover">
-              <div class="pair">
-                <Cover tone="paper" label="Podcast cover on paper" />
-                <Cover tone="field" label="Podcast cover on secondary" />
-              </div>
-              <figcaption><strong>Podcast cover.</strong> 3000 × 3000 px for Apple Podcasts, Spotify, and YouTube Music. Light and dark.</figcaption>
+          <div class="apps-cover">
+            <figure class="ac-main reveal">
+              <Cover tone="field" label="Podcast cover, dark" />
             </figure>
+            <div class="ac-side reveal">
+              <Cover tone="paper" label="Podcast cover, light" />
+              <p class="cap"><strong>Podcast cover.</strong> 3000 px square for Apple Podcasts, Spotify and YouTube. Dark leads; light is for press and partners.</p>
+            </div>
+          </div>
 
-            <figure class="app app--feed">
-              <div class="feed">
-                {(["paper", "field"] as const).map((tone) => (
-                  <div class="feed-row">
-                    {feedSizes.map((s) => (
-                      <div class="feed-cell">
-                        <Cover tone={tone} style={`width:${s}px`} />
-                        <span>{s}</span>
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
-              <figcaption><strong>In the feed.</strong> The cover has to hold up at the size people actually see it: a 40 to 160 px square next to a dozen other shows.</figcaption>
-            </figure>
+          <figure class="apps-small reveal">
+            <div class="sizes">
+              {[120, 80, 56, 40].map((s) => (
+                <span class="size"><Cover tone="field" style={`width:${s}px`} /><span>{s}</span></span>
+              ))}
+              {[32, 16].map((s) => (
+                <span class="size">
+                  <span class="fav tone-field" style={`width:${s}px;height:${s}px`} aria-hidden="true">
+                    <span class="wm mark"><span class="wm-i">i</span></span>
+                  </span>
+                  <span>{s}</span>
+                </span>
+              ))}
+            </div>
+            <figcaption class="cap"><strong>Small sizes.</strong> The cover down to 40 px in a feed, then the i mark for app icons and favicons.</figcaption>
+          </figure>
 
-            <figure class="app app--player">
-              <div class="player">
-                <div class="player-show">
-                  <Cover tone="field" style="width:104px" />
-                  <div>
-                    <p class="player-title">unexpected detail</p>
-                    <p class="player-sub">Marcy</p>
-                    <p class="player-sub">Society &amp; Culture · Weekly</p>
-                    <span class="player-follow">Follow</span>
-                  </div>
-                </div>
-                <ol class="player-eps">
-                  {episodes.map((e) => (
-                    <li>
-                      <Cover tone="field" style="width:44px" />
-                      <div>
-                        <p class="player-ep">{e.title}</p>
-                        <p class="player-sub">ep. {e.no} · {e.guest} · {e.time}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-              <figcaption><strong>Show page.</strong> A generic podcast app, to see the cover among real interface.</figcaption>
-            </figure>
-
-            <figure class="app app--wide">
+          <div class="apps-row">
+            <figure class="app-wide reveal">
               <div class="frame frame--169 tone-field">
                 <Lines vw={178} vh={100} count={13} fall={9} x={8} y={14} len={62} w={0.6} />
                 <div class="ep-text">
@@ -483,111 +348,146 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
                 </div>
                 <Wordmark class="ep-wm" size="5.4cqi" />
               </div>
-              <figcaption><strong>Episode thumbnail.</strong> 1280 × 720 px for YouTube and video clips.</figcaption>
+              <figcaption class="cap"><strong>Episode thumbnail.</strong> 1280 × 720 for YouTube and clips.</figcaption>
             </figure>
-
-            <figure class="app app--avatar">
-              <div class="avatar tone-field">
-                <Wordmark size="13cqi" />
-              </div>
-              <figcaption><strong>Profile picture.</strong> Social accounts crop to a circle, so the wordmark centers and the lines step back.</figcaption>
+            <figure class="app-avatar reveal">
+              <div class="avatar tone-field"><Wordmark size="13cqi" /></div>
+              <figcaption class="cap"><strong>Profile.</strong> Social platforms crop to a circle, so the wordmark centers.</figcaption>
             </figure>
+          </div>
 
-            <figure class="app app--post">
+          <div class="apps-social">
+            <figure class="app-post reveal">
               <div class="frame frame--45 tone-paper">
                 <Lines vw={100} vh={125} count={9} fall={6} x={8} gap={2.4} y={8} len={12} w={0.45} />
                 <blockquote class="post-quote">“I have never told anyone this, but I alphabetize my spices by mood.”</blockquote>
                 <p class="post-cite">Guest Name, ep. 12</p>
                 <Wordmark class="post-wm" size="6.6cqi" />
               </div>
-              <figcaption><strong>Quote post.</strong> 1080 × 1350 px for Instagram and LinkedIn.</figcaption>
+              <figcaption class="cap"><strong>Quote post.</strong> 1080 × 1350.</figcaption>
             </figure>
-
-            <figure class="app app--story">
+            <figure class="app-story reveal">
               <div class="frame frame--916 tone-field">
                 <Wordmark class="story-wm" size="9cqi" />
                 <Lines vw={100} vh={178} count={10} fall={6} x={10} gap={8.9} y={52} len={64} w={0.8} />
                 <div class="story-text">
-                  <p class="story-new">new episode</p>
+                  <p class="story-new">New episode</p>
                   <p class="story-guest">Guest Name</p>
                   <p class="story-topic">a cartographer of places that never existed</p>
                 </div>
               </div>
-              <figcaption><strong>Story.</strong> 1080 × 1920 px.</figcaption>
-            </figure>
-
-            <figure class="app app--sticker">
-              <div class="sticker-wrap">
-                <div class="sticker">
-                  <p>everyone<br />has one.</p>
-                </div>
-              </div>
-              <figcaption><strong>Sticker.</strong> The secondary invitation on the primary color. A small giveaway for guests.</figcaption>
-            </figure>
-
-            <figure class="app app--cards">
-              <div class="cards">
-                <div class="card card--front tone-field">
-                  <Lines vw={175} vh={100} count={12} fall={8} x={8} y={12} len={44} w={0.6} />
-                  <Wordmark class="card-wm" size="7.4cqi" />
-                </div>
-                <div class="card card--back tone-paper">
-                  <span class="card-dot" aria-hidden="true"></span>
-                  <p class="card-name">Marcy</p>
-                  <p class="card-role">host</p>
-                  <p class="card-contact">hello@unexpecteddetail.fm<br />unexpecteddetail.fm</p>
-                </div>
-              </div>
-              <figcaption><strong>Business card.</strong> 3.5 × 2 in. The front is the cover; the back has a single dot in the primary.</figcaption>
-            </figure>
-
-            <figure class="app app--mic">
-              <div class="mic-scene" aria-hidden="true">
-                <div class="mic-head"></div>
-                <div class="cube">
-                  <div class="face face--front tone-field"><Wordmark size="11.5cqi" /></div>
-                  <div class="face face--side tone-paper"><Lines count={8} fall={5} x={14} gap={10} y={18} len={64} w={1} /></div>
-                  <div class="face face--top"></div>
-                </div>
-                <div class="mic-stem"></div>
-              </div>
-              <figcaption><strong>Mic flag.</strong> For filmed episodes, so the show is in every clip.</figcaption>
-            </figure>
-
-            <figure class="app app--tote">
-              <div class="tote" aria-hidden="true">
-                <div class="tote-handle"></div>
-                <div class="tote-bag">
-                  <Lines vw={100} vh={110} count={10} fall={6} x={16} gap={7.6} y={14} len={40} w={0.7} />
-                  <Wordmark class="tote-wm" size="11cqi" />
-                </div>
-              </div>
-              <figcaption><strong>Tote.</strong> Natural canvas, one color print in ink with the dot in the primary.</figcaption>
-            </figure>
-
-            <figure class="app app--lower">
-              <div class="frame frame--169 video">
-                <div class="video-person" aria-hidden="true"></div>
-                <Wordmark class="video-bug" size="3.2cqi" line />
-                <div class="lower tone-paper">
-                  <p class="lower-name">Guest Name</p>
-                  <p class="lower-line">collects maps of places that never existed</p>
-                </div>
-              </div>
-              <figcaption><strong>Lower third.</strong> The guest's name on the video version, with the one line wordmark in the corner.</figcaption>
+              <figcaption class="cap"><strong>Story.</strong> 1080 × 1920.</figcaption>
             </figure>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
 
-      <footer class="ub-end tone-field">
-        <div class="ub-wrap ub-end-row">
-          <Wordmark size="clamp(40px, 7vw, 88px)" />
-          <div class="ub-end-meta">
-            <p>Prepared by Ryan Sheridan for Marcy.</p>
-            <p>Draft 01 · November 2026</p>
-            <p><a href="/unexpected-detail/round-1">See rounds 01 to 05</a></p>
+      <!-- 08 Explorer -->
+      <section class="xp-intro tone-field" id="explore" aria-labelledby="xp-h">
+        <div class="wrap">
+          <div class="slabel"><span>08</span><p>Explorer</p></div>
+          <h2 id="xp-h" class="xp-say">Make it your own.</h2>
+          <p class="xp-copy">
+            Explore a few different expressions of the identity. Change the unexpected detail,
+            experiment with typography, and find a color direction that feels right.
+          </p>
+        </div>
+      </section>
+
+      <section class="xp" id="xp" aria-label="Identity explorer" data-font={RECOMMENDED.font} data-dot={RECOMMENDED.dot} style={recVars}>
+        <div class="wrap xp-grid">
+          <div class="xp-main tone-field" role="img" aria-label="Live preview of the logo">
+            <Lines vw={100} vh={75} count={14} fall={9} x={11.4} y={9} len={30} />
+            <Wordmark class="xp-wm" size="13cqi" />
           </div>
+
+          <form class="xp-ctl" onsubmit="return false" aria-label="Explorer settings">
+            <fieldset class="opt">
+              <legend><span>A</span>The unexpected detail</legend>
+              <div class="choice">
+                <button type="button" data-set-dot="period" aria-pressed="false">
+                  <span class="choice-art" data-dot="period"><Wordmark size="1em" line /></span>
+                  <span class="choice-label">Period</span>
+                </button>
+                <button type="button" data-set-dot="i" aria-pressed="true">
+                  <span class="choice-art" data-dot="i"><Wordmark size="1em" line /></span>
+                  <span class="choice-label">Dot above the i</span>
+                </button>
+              </div>
+            </fieldset>
+
+            <fieldset class="opt">
+              <legend><span>B</span>Typeface</legend>
+              <div class="choice">
+                {fonts.map((f) => (
+                  <button type="button" data-set-font={f.id} aria-pressed={f.id === RECOMMENDED.font ? "true" : "false"}>
+                    <span class="choice-aa" data-font={f.id}>Aa</span>
+                    <span class="choice-label">{f.name}</span>
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+
+            <fieldset class="opt">
+              <legend><span>C</span>Color <em id="xp-pal-name">{rec.no} {rec.name}</em></legend>
+              <div class="dots" role="group" aria-label="Color directions">
+                {palettes.map((c) => (
+                  <button
+                    type="button"
+                    class="dotsw"
+                    style={`--sp:${c.p};--ss:${c.s}`}
+                    data-palette={c.no}
+                    data-p={c.p}
+                    data-s={c.s}
+                    data-name={c.name}
+                    aria-pressed={c.no === RECOMMENDED.palette ? "true" : "false"}
+                    aria-label={`${c.no} ${c.name}`}
+                    title={`${c.no} ${c.name}`}
+                  />
+                ))}
+              </div>
+              <div class="hexes">
+                <label class="hex">
+                  <span class="hex-label">Primary</span>
+                  <span class="hex-field">
+                    <input type="color" id="xp-primary-pick" value={rec.p.toLowerCase()} aria-label="Pick the primary color" />
+                    <input type="text" id="xp-primary" value={rec.p} spellcheck="false" autocomplete="off" maxlength="7" aria-describedby="xp-hex-msg" />
+                  </span>
+                </label>
+                <label class="hex">
+                  <span class="hex-label">Secondary</span>
+                  <span class="hex-field">
+                    <input type="color" id="xp-secondary-pick" value={rec.s.toLowerCase()} aria-label="Pick the secondary color" />
+                    <input type="text" id="xp-secondary" value={rec.s} spellcheck="false" autocomplete="off" maxlength="7" aria-describedby="xp-hex-msg" />
+                  </span>
+                </label>
+              </div>
+              <p class="hex-msg" id="xp-hex-msg" aria-live="polite"></p>
+            </fieldset>
+
+            <div class="xp-actions">
+              <button type="button" class="btn" id="xp-copy">Copy link to this version</button>
+              <button type="button" class="link" id="xp-reset">Reset to recommended</button>
+              <p class="xp-status" id="xp-status" aria-live="polite"></p>
+            </div>
+          </form>
+
+          <div class="xp-sub">
+            <div class="xp-paper tone-paper">
+              <p class="xp-kicker">ep. 12 · with Guest Name</p>
+              <p class="xp-title">a cartographer of places that never existed</p>
+              <p class="xp-line">Curiosity flips the frame.</p>
+              <Wordmark class="xp-paper-wm" size="5.2cqi" />
+            </div>
+            <div class="xp-cover"><Cover tone="field" /></div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="end tone-field">
+        <div class="wrap end-row">
+          <p>Prepared by Ryan Sheridan for Marcy · November 2026</p>
+          <p><a href="/unexpected-detail/round-1">Rounds 01 to 05</a></p>
         </div>
       </footer>
     </main>
@@ -599,11 +499,16 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   type Dot = "period" | "i";
   type State = { font: Font; dot: Dot; primary: string; secondary: string };
 
-  const root = document.getElementById("ub")!;
-  const DEFAULTS: State = JSON.parse(root.dataset.defaults!);
   const INK = "#141414";
   const PAPER = "#FAF9F6";
-  const FONT_NAMES: Record<Font, string> = { gloock: "Gloock", dm: "DM Serif Display" };
+  const root = document.getElementById("ub")!;
+  const xp = document.getElementById("xp")!;
+  const $ = <T extends Element = HTMLElement>(s: string) => document.querySelector<T>(s)!;
+  const $$ = (s: string) => Array.from(document.querySelectorAll<HTMLElement>(s));
+
+  const palBtns = $$("[data-palette]");
+  const recBtn = palBtns.find((b) => b.dataset.palette === "02")!;
+  const RECOMMENDED: State = { font: "gloock", dot: "i", primary: recBtn.dataset.p!, secondary: recBtn.dataset.s! };
 
   const normalize = (v: string): string | null => {
     let h = v.trim().replace(/^#/, "");
@@ -624,88 +529,82 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   };
   const onColor = (hex: string) => (contrast(hex, INK) >= contrast(hex, PAPER) ? INK : PAPER);
 
-  // Start from the URL, so a copied link opens on the same settings.
+  // A shared link opens on its own settings, in any browser.
   const q = new URLSearchParams(location.search);
   const state: State = {
-    font: q.get("font") === "dm" ? "dm" : q.get("font") === "gloock" ? "gloock" : DEFAULTS.font,
-    dot: q.get("dot") === "i" ? "i" : q.get("dot") === "period" ? "period" : DEFAULTS.dot,
-    primary: normalize(q.get("primary") ?? "") ?? DEFAULTS.primary,
-    secondary: normalize(q.get("secondary") ?? "") ?? DEFAULTS.secondary,
+    font: q.get("font") === "dm" ? "dm" : q.get("font") === "gloock" ? "gloock" : RECOMMENDED.font,
+    dot: q.get("dot") === "period" ? "period" : q.get("dot") === "i" ? "i" : RECOMMENDED.dot,
+    primary: normalize(q.get("primary") ?? "") ?? RECOMMENDED.primary,
+    secondary: normalize(q.get("secondary") ?? "") ?? RECOMMENDED.secondary,
   };
 
-  const $ = <T extends Element>(sel: string) => document.querySelector<T>(sel)!;
-  const $$ = (sel: string) => Array.from(document.querySelectorAll<HTMLElement>(sel));
   const fields = {
-    primary: { pick: $<HTMLInputElement>("#ub-primary-pick"), hex: $<HTMLInputElement>("#ub-primary-hex") },
-    secondary: { pick: $<HTMLInputElement>("#ub-secondary-pick"), hex: $<HTMLInputElement>("#ub-secondary-hex") },
+    primary: { pick: $<HTMLInputElement>("#xp-primary-pick"), hex: $<HTMLInputElement>("#xp-primary") },
+    secondary: { pick: $<HTMLInputElement>("#xp-secondary-pick"), hex: $<HTMLInputElement>("#xp-secondary") },
   };
+  const hexMsg = $("#xp-hex-msg");
+  const status = $("#xp-status");
+  const palName = $("#xp-pal-name");
+  const colorStatus = $("#color-status");
 
-  const bind = (key: string, text: string) => $$(`[data-bind="${key}"]`).forEach((el) => (el.textContent = text));
-  const flag = (key: string, ratio: number, floor: number) => {
-    bind(key, `${ratio.toFixed(1)}:1`);
-    $$(`[data-flag="${key}"]`).forEach((el) => {
-      el.textContent = ratio >= floor ? "holds" : "low";
-      el.dataset.ok = String(ratio >= floor);
+  const isRecommended = () =>
+    state.font === RECOMMENDED.font &&
+    state.dot === RECOMMENDED.dot &&
+    state.primary === RECOMMENDED.primary &&
+    state.secondary === RECOMMENDED.secondary;
+
+  const query = () => {
+    if (isRecommended()) return "";
+    const p = new URLSearchParams({
+      dot: state.dot,
+      font: state.font,
+      primary: state.primary.slice(1),
+      secondary: state.secondary.slice(1),
     });
+    return `?${p}`;
   };
+  const shareUrl = () => `${location.origin}${location.pathname}${query()}#explore`;
 
-  function render(opts: { url?: boolean; skip?: HTMLInputElement } = {}) {
-    root.dataset.font = state.font;
-    root.dataset.dot = state.dot;
-    const onSecondary = onColor(state.secondary);
-    root.style.setProperty("--ud-primary", state.primary);
-    root.style.setProperty("--ud-secondary", state.secondary);
-    root.style.setProperty("--ud-on-secondary", onSecondary);
-    root.style.setProperty("--ud-on-primary", onColor(state.primary));
+  function render(opts: { skip?: HTMLInputElement; url?: boolean } = {}) {
+    xp.dataset.font = state.font;
+    xp.dataset.dot = state.dot;
+    xp.style.setProperty("--ud-primary", state.primary);
+    xp.style.setProperty("--ud-secondary", state.secondary);
+    xp.style.setProperty("--ud-on-secondary", onColor(state.secondary));
+    xp.style.setProperty("--ud-on-primary", onColor(state.primary));
 
-    $$("[data-set-font]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.setFont === state.font)));
     $$("[data-set-dot]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.setDot === state.dot)));
-    $$("[data-apply-font]").forEach((b) => {
-      const on = b.dataset.applyFont === state.font && b.dataset.applyDot === state.dot;
-      b.setAttribute("aria-pressed", String(on));
-      b.textContent = on ? "In use" : "Use this";
-    });
-    $$(".combo").forEach((b) =>
-      b.setAttribute("aria-pressed", String(b.dataset.p === state.primary && b.dataset.s === state.secondary)),
-    );
+    $$("[data-set-font]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.setFont === state.font)));
+
+    const match = palBtns.find((b) => b.dataset.p === state.primary && b.dataset.s === state.secondary);
+    palBtns.forEach((b) => b.setAttribute("aria-pressed", String(!!match && b.dataset.palette === match.dataset.palette)));
+    palName.textContent = match ? `${match.dataset.palette} ${match.dataset.name}` : "Custom";
 
     for (const key of ["primary", "secondary"] as const) {
       const f = fields[key];
-      if (f.hex !== opts.skip) f.hex.value = state[key];
-      f.hex.removeAttribute("aria-invalid");
+      if (f.hex !== opts.skip) {
+        f.hex.value = state[key];
+        f.hex.removeAttribute("aria-invalid");
+      }
       if (f.pick !== opts.skip) f.pick.value = state[key].toLowerCase();
-      bind(key, state[key]);
     }
-    bind("font-name", FONT_NAMES[state.font]);
-    flag("c-paper", contrast(state.primary, PAPER), 3);
-    flag("c-field", contrast(state.primary, state.secondary), 3);
-    flag("c-type", contrast(onSecondary, state.secondary), 4.5);
+    if (!opts.skip) hexMsg.textContent = "";
 
-    if (opts.url !== false) {
-      const p = new URLSearchParams();
-      if (state.font !== DEFAULTS.font) p.set("font", state.font);
-      if (state.dot !== DEFAULTS.dot) p.set("dot", state.dot);
-      if (state.primary !== DEFAULTS.primary) p.set("primary", state.primary.slice(1));
-      if (state.secondary !== DEFAULTS.secondary) p.set("secondary", state.secondary.slice(1));
-      const s = p.toString();
-      history.replaceState(null, "", s ? `?${s}${location.hash}` : location.pathname + location.hash);
-    }
+    if (opts.url !== false) history.replaceState(null, "", `${location.pathname}${query()}${location.hash}`);
+    status.textContent = "";
   }
 
-  $$("[data-set-font]").forEach((b) => b.addEventListener("click", () => ((state.font = b.dataset.setFont as Font), render())));
   $$("[data-set-dot]").forEach((b) => b.addEventListener("click", () => ((state.dot = b.dataset.setDot as Dot), render())));
-  $$("[data-apply-font]").forEach((b) =>
-    b.addEventListener("click", () => {
-      state.font = b.dataset.applyFont as Font;
-      state.dot = b.dataset.applyDot as Dot;
-      render();
-    }),
-  );
-  $$(".combo").forEach((b) =>
+  $$("[data-set-font]").forEach((b) => b.addEventListener("click", () => ((state.font = b.dataset.setFont as Font), render())));
+
+  palBtns.forEach((b) =>
     b.addEventListener("click", () => {
       state.primary = b.dataset.p!;
       state.secondary = b.dataset.s!;
       render();
+      if (b.classList.contains("pal")) {
+        colorStatus.innerHTML = `${b.dataset.palette} ${b.dataset.name} is loaded in the explorer. <a href="#explore">See it there</a>`;
+      }
     }),
   );
 
@@ -719,52 +618,86 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
       const v = normalize(f.hex.value);
       if (v) {
         state[key] = v;
+        f.hex.removeAttribute("aria-invalid");
+        hexMsg.textContent = "";
         render({ skip: f.hex });
-      } else f.hex.setAttribute("aria-invalid", "true");
+      } else {
+        f.hex.setAttribute("aria-invalid", "true");
+        hexMsg.textContent = "Use a hex value like #E6533F.";
+      }
     });
     f.hex.addEventListener("blur", () => render());
   }
 
-  $("#ub-swap").addEventListener("click", () => {
-    [state.primary, state.secondary] = [state.secondary, state.primary];
+  $("#xp-reset").addEventListener("click", () => {
+    Object.assign(state, RECOMMENDED);
     render();
+    status.textContent = "Back to the recommended version.";
   });
-  $("#ub-reset").addEventListener("click", () => {
-    Object.assign(state, DEFAULTS);
-    render();
-  });
-  const copy = $<HTMLButtonElement>("#ub-copy");
-  copy.addEventListener("click", async () => {
+
+  $("#xp-copy").addEventListener("click", async () => {
+    const url = shareUrl();
     try {
-      await navigator.clipboard.writeText(location.href);
-      copy.textContent = "Copied";
+      await navigator.clipboard.writeText(url);
+      status.textContent = "Link copied. It opens on this exact version.";
     } catch {
-      copy.textContent = "Copy from the address bar";
+      status.textContent = `Copy this link: ${url}`;
     }
-    setTimeout(() => (copy.textContent = "Copy link"), 1800);
   });
 
   render({ url: false });
+
+  // Gentle entrances, once each, and only when motion is welcome.
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window) {
+    root.classList.add("motion");
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-in");
+            io.unobserve(e.target);
+          }
+        }),
+      { rootMargin: "0px 0px -8% 0px" },
+    );
+    $$(".reveal").forEach((el) => io.observe(el));
+  }
 </script>
 
 <style is:global>
-  /* Everything is scoped under .ub; the components are markup only. */
+  /* 0 or 1: how much of the i's dot takes the primary. A number, not a
+     color, so each element mixes its own --ud-primary (the palette tiles
+     each carry their own) and the switch can still animate. */
+  @property --i-on {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 0;
+  }
+
   .ub {
     --ud-ink: #141414;
     --ud-paper: #faf9f6;
-    --ud-line: rgb(20 20 20 / 0.12);
-    --ud-muted: rgb(20 20 20 / 0.6);
-    --ud-canvas: #e7dfcf;
-    --ud-wrap: 1240px;
-    --ud-gutter: clamp(16px, 4vw, 48px);
+    --ud-stone: #eeebe4;
+    --ud-line: rgb(20 20 20 / 0.14);
+    --ud-muted: rgb(20 20 20 / 0.64);
+    --gutter: clamp(16px, 4.4vw, 64px);
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
     background: var(--ud-paper);
     color: var(--ud-ink);
     font-family: var(--font-sans);
-    min-height: 100vh;
+    overflow-x: clip;
+  }
+  .ub *,
+  .ub *::before,
+  .ub *::after {
+    box-sizing: border-box;
+  }
+  /* Zero specificity, so every class below can set its own margins. */
+  :where(.ub) :where(p, h2, h3, figure, blockquote) {
+    margin: 0;
   }
 
-  /* Typeface settings for the wordmark and display type. Each value is
-     inherited, so a section with its own data-font overrides the page. */
+  /* Typeface settings. Inherited, so the nearest data-font wins. */
   .ub [data-font="gloock"],
   .ub[data-font="gloock"] {
     --ud-display: "Gloock", Georgia, serif;
@@ -789,31 +722,31 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   }
   .ub [data-dot="period"],
   .ub[data-dot="period"] {
-    --pd-display: inline;
-    --i-top: currentColor;
+    --pd-on: 1;
+    --i-on: 0;
   }
   .ub [data-dot="i"],
   .ub[data-dot="i"] {
-    --pd-display: none;
-    --i-top: var(--ud-primary);
+    --pd-on: 0;
+    --i-on: 1;
   }
 
   .ub .tone-paper {
-    background: var(--ud-paper);
+    background-color: var(--ud-paper);
     color: var(--ud-ink);
   }
   .ub .tone-field {
-    background: var(--ud-secondary);
+    background-color: var(--ud-secondary);
     color: var(--ud-on-secondary);
   }
 
-  .ub-wrap {
-    max-width: var(--ud-wrap);
+  .ub .wrap {
+    max-width: 1440px;
     margin: 0 auto;
-    padding: 0 var(--ud-gutter);
+    padding: 0 var(--gutter);
   }
 
-  /* ---------- wordmark ---------- */
+  /* ---------- the wordmark ---------- */
   .ub .wm {
     display: inline-block;
     font-family: var(--ud-display);
@@ -840,20 +773,25 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   .ub .wm--line .wm-a::after {
     content: " ";
   }
-  /* The i keeps its own glyph. Above the gap between dot and stem it is
-     painted in --i-top, which is the primary in "i" mode. */
+  /* The i keeps its own glyph; above the gap between dot and stem it is
+     painted the primary when the detail is the dot of the i. The box is an
+     inline-block at the lockup's line-height, which --isplit is measured
+     against, whatever line-height the surrounding text uses. */
   .ub .wm-i {
-    /* An inline-block at the lockup's own line-height, so the split is
-       measured from a box that doesn't depend on the font's ascent. */
     display: inline-block;
-    background: linear-gradient(to bottom, var(--i-top) 0 var(--isplit), currentColor var(--isplit));
+    line-height: var(--wm-lh);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--ud-primary) calc(var(--i-on) * 100%), currentColor) 0 var(--isplit),
+      currentColor var(--isplit)
+    );
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    transition: --i-on 0.45s var(--ease);
   }
-  /* The period hangs: it gives back its own width, so the words align. */
+  /* The period hangs past the edge, so showing or hiding it moves nothing. */
   .ub .wm-pd {
-    display: var(--pd-display);
     position: relative;
     -webkit-text-fill-color: transparent;
     margin-right: calc((var(--dd) + 2 * var(--dl)) * -1);
@@ -867,12 +805,18 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     height: var(--dd);
     border-radius: 50%;
     background: var(--ud-primary);
+    opacity: var(--pd-on);
+    transform: scale(var(--pd-on));
+    transition:
+      opacity 0.35s var(--ease),
+      transform 0.45s var(--ease),
+      background-color 0.45s var(--ease);
   }
-  .ub .wm--line .wm-pd {
-    margin-right: 0;
+  .ub .mark {
+    line-height: var(--wm-lh);
   }
 
-  /* ---------- the falling line ---------- */
+  /* ---------- the falling line (SVG) ---------- */
   .ub .ud-lines {
     position: absolute;
     inset: 0;
@@ -885,33 +829,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     transform-origin: 50% 100%;
     transform: rotate(var(--fall));
   }
-  .ub .is-animated .ud-fall {
-    animation: ud-fall 1.5s 0.5s both;
-  }
-  @keyframes ud-fall {
-    0% {
-      transform: rotate(0deg);
-      animation-timing-function: cubic-bezier(0.55, 0, 0.9, 0.4);
-    }
-    62% {
-      transform: rotate(var(--fall));
-      animation-timing-function: ease-out;
-    }
-    78% {
-      transform: rotate(calc(var(--fall) - 2.2deg));
-      animation-timing-function: ease-in;
-    }
-    100% {
-      transform: rotate(var(--fall));
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .ub .is-animated .ud-fall {
-      animation: none;
-    }
-  }
 
-  /* ---------- cover ---------- */
   .ub .cover {
     position: relative;
     aspect-ratio: 1;
@@ -925,37 +843,47 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     bottom: 9cqi;
   }
 
-  /* ---------- top bar and controls ---------- */
-  .ub-top {
-    border-bottom: 1px solid var(--ud-line);
-  }
-  .ub-top-row {
+  /* ---------- shared editorial pieces ---------- */
+  .ub .slabel {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px 24px;
-    justify-content: space-between;
     align-items: baseline;
-    padding-block: 14px;
+    gap: 14px;
+    padding-top: 14px;
+    border-top: 1px solid currentColor;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .ub .slabel span {
+    font-family: var(--font-mono);
+    letter-spacing: 0;
+    opacity: 0.6;
+  }
+  .ub .slabel h2,
+  .ub .slabel p {
+    font: inherit;
+    letter-spacing: inherit;
+  }
+  .ub .tone-field .slabel {
+    border-top-color: color-mix(in srgb, currentColor 40%, transparent);
+  }
+  .ub .spread {
+    padding-block: clamp(80px, 11vw, 168px);
+  }
+  .ub .cap {
+    margin-top: 14px;
     font-size: 13px;
-  }
-  .ub-top-name {
-    font-family: var(--ud-display);
-    font-size: 19px;
-    letter-spacing: -0.01em;
-  }
-  .ub-top-sep {
-    display: inline-block;
-    width: 0.24em;
-    height: 0.24em;
-    border-radius: 50%;
-    background: var(--ud-primary);
-    margin: 0 0.45em;
-    vertical-align: 0.18em;
-  }
-  .ub-top-meta {
-    display: flex;
-    gap: 20px;
+    line-height: 1.55;
     color: var(--ud-muted);
+    max-width: 44ch;
+  }
+  .ub .cap strong,
+  .ub figcaption strong {
+    color: var(--ud-ink);
+    font-weight: 500;
+  }
+  .ub .tone-field figcaption strong {
+    color: inherit;
   }
   .ub a {
     color: inherit;
@@ -963,865 +891,570 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     text-decoration-thickness: 1px;
     text-underline-offset: 0.22em;
   }
+  .ub :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
 
-  .ub-controls {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    background: rgb(250 249 246 / 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--ud-line);
+  .ub.motion .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.9s var(--ease),
+      transform 0.9s var(--ease);
   }
-  .ub-controls-row {
+  .ub.motion .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ---------- 01 introduction ---------- */
+  .intro {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 28px var(--gutter) clamp(28px, 5vw, 64px);
+    container-type: inline-size;
+    overflow: hidden;
+  }
+  .intro-meta {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: baseline;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+  .intro-name {
+    font-family: var(--ud-display);
+    font-size: 17px;
+    letter-spacing: -0.005em;
+  }
+  .intro-tags {
     display: flex;
-    flex-wrap: wrap;
-    align-items: end;
-    gap: 12px 24px;
-    padding-block: 12px;
-  }
-  .ctl {
-    border: 0;
+    gap: 28px;
     margin: 0;
     padding: 0;
-    min-width: 0;
+    list-style: none;
+    opacity: 0.7;
   }
-  .ctl legend,
-  .ctl-label {
-    display: block;
-    padding: 0;
-    margin-bottom: 6px;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--ud-muted);
+  .intro-draft {
+    justify-self: end;
+    opacity: 0.7;
   }
-  .seg {
+  .intro-lines {
+    align-self: start;
     display: flex;
-    padding: 3px;
-    border-radius: 999px;
-    background: rgb(20 20 20 / 0.06);
+    justify-content: space-between;
+    height: clamp(140px, 27svh, 300px);
+    margin-top: clamp(48px, 10svh, 120px);
   }
-  .seg button,
-  .ub .act {
-    font: inherit;
-    font-size: 13px;
-    line-height: 1;
-    padding: 9px 14px;
-    border: 0;
-    border-radius: 999px;
-    background: transparent;
-    color: var(--ud-ink);
-    cursor: pointer;
-    white-space: nowrap;
+  .intro-lines span {
+    width: 1px;
+    background: currentColor;
+    transform-origin: 50% 100%;
   }
-  .seg button[aria-pressed="true"] {
-    background: var(--ud-ink);
-    color: var(--ud-paper);
+  .intro-lines .fall {
+    transform: rotate(14deg);
   }
-  .seg button:not([aria-pressed="true"]):hover {
-    background: rgb(20 20 20 / 0.08);
-  }
-  .hex {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 3px 12px 3px 3px;
-    border-radius: 999px;
-    background: rgb(20 20 20 / 0.06);
-  }
-  .hex input[type="color"] {
-    width: 31px;
-    height: 31px;
-    padding: 0;
-    border: 1px solid rgb(20 20 20 / 0.15);
-    border-radius: 50%;
-    background: none;
-    cursor: pointer;
-    overflow: hidden;
-  }
-  .hex input[type="color"]::-webkit-color-swatch-wrapper {
-    padding: 0;
-  }
-  .hex input[type="color"]::-webkit-color-swatch {
-    border: 0;
-    border-radius: 50%;
-  }
-  .hex input[type="color"]::-moz-color-swatch {
-    border: 0;
-    border-radius: 50%;
-  }
-  .hex input[type="text"] {
-    width: 7.5ch;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    border: 0;
-    background: transparent;
-    color: var(--ud-ink);
-    text-transform: uppercase;
-  }
-  .hex input[type="text"]:focus {
-    outline: none;
-  }
-  .hex:focus-within {
-    box-shadow: 0 0 0 2px var(--ud-ink);
-  }
-  .hex input[aria-invalid="true"] {
-    color: #b3261e;
-  }
-  .ctl-actions {
-    display: flex;
-    gap: 6px;
-    margin-left: auto;
-  }
-  .ub .act {
-    border: 1px solid rgb(20 20 20 / 0.18);
-  }
-  .ub .act:hover {
-    border-color: var(--ud-ink);
-  }
-  .ub .act--solid,
-  .ub .act[aria-pressed="true"] {
-    background: var(--ud-ink);
-    border-color: var(--ud-ink);
-    color: var(--ud-paper);
-  }
-  .ub button:focus-visible,
-  .ub a:focus-visible,
-  .hex input[type="color"]:focus-visible {
-    outline: 2px solid var(--ud-ink);
-    outline-offset: 2px;
-  }
-
-  @media (max-width: 760px) {
-    .ub-controls-row {
-      gap: 10px 12px;
-      padding-block: 10px;
-    }
-    .ctl legend,
-    .ctl-label {
-      margin-bottom: 4px;
-    }
-    .seg button {
-      padding: 8px 11px;
-    }
-    .ctl-actions {
-      margin-left: 0;
-    }
-    .ctl-actions .act {
-      padding: 8px 11px;
+  @media (prefers-reduced-motion: no-preference) {
+    .intro-lines .fall {
+      animation: ud-tip 1.3s cubic-bezier(0.6, 0, 0.4, 1) 0.7s both;
     }
   }
-
-  /* ---------- hero ---------- */
-  .hero {
-    --hero-wm: 8cqi;
+  @keyframes ud-tip {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(14deg);
+    }
+  }
+  .intro-foot {
     position: relative;
-    container-type: inline-size;
-    aspect-ratio: 2 / 1;
-    max-height: 86vh;
-    min-height: 420px;
-    overflow: hidden;
+    display: flex;
+    justify-content: flex-end;
+    align-items: end;
+    margin-top: 40px;
   }
-  .hero-wm {
+  .intro-desc {
     position: absolute;
-    right: 6cqi;
-    bottom: 5.5cqi;
+    left: 0;
+    bottom: 0.4em;
+    max-width: 30ch;
+    font-size: clamp(13px, 1.05vw, 15px);
+    line-height: 1.55;
+    opacity: 0.75;
   }
-  .hero-lines--tall {
-    display: none;
+  .intro-skip {
+    position: absolute;
+    left: var(--gutter);
+    top: 4px;
+    z-index: 2;
+    font-size: 12px;
+    transform: translateY(-300%);
+  }
+  .intro-skip:focus {
+    transform: none;
   }
   @media (max-width: 760px) {
-    .hero {
-      --hero-wm: 13cqi;
-      aspect-ratio: 4 / 5;
-      min-height: 0;
-      max-height: none;
+    .intro {
+      min-height: 92svh;
     }
-    .hero-lines--wide {
+    .intro-meta {
+      grid-template-columns: 1fr auto;
+    }
+    .intro-tags {
       display: none;
     }
-    .hero-lines--tall {
-      display: block;
+    .intro-lines span:nth-child(even) {
+      display: none;
     }
-    .hero-wm {
-      right: 11.4cqi;
-      bottom: 11cqi;
+    .intro-foot {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 32px;
+    }
+    .intro-desc {
+      position: static;
+    }
+    .intro-wm {
+      align-self: flex-end;
     }
   }
 
-  /* ---------- page type ---------- */
-  .intro {
+  /* ---------- 02 identity ---------- */
+  .id-primary {
     display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: 24px 64px;
-    padding-block: clamp(56px, 8vw, 112px);
-    border-bottom: 1px solid var(--ud-line);
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+    gap: 48px;
+    align-items: end;
+    padding-block: clamp(96px, 14vw, 200px) clamp(64px, 8vw, 120px);
   }
-  .intro-lead {
-    font-family: var(--ud-display);
-    font-size: clamp(24px, 1rem + 1.6vw, 38px);
-    line-height: 1.2;
-    letter-spacing: -0.01em;
+  .construct {
+    position: relative;
+    justify-self: center;
+    font-size: clamp(50px, 8.6vw, 132px);
   }
-  .intro-how {
-    font-size: 15px;
+  .construct .g {
+    position: absolute;
+    pointer-events: none;
+    color: var(--ud-muted);
+  }
+  .construct .g em {
+    position: absolute;
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .g-edge {
+    right: 0;
+    top: -0.35em;
+    bottom: -0.3em;
+    border-right: 1px dashed currentColor;
+  }
+  .g-edge em {
+    right: 8px;
+    top: -2px;
+  }
+  .g-step {
+    right: 0;
+    top: 0.12em;
+    width: 1.2em;
+    height: 0.62em;
+    border: 1px dashed currentColor;
+    border-right: 0;
+  }
+  .g-step em {
+    left: 0;
+    bottom: calc(100% + 6px);
+  }
+  .g-base {
+    left: -0.2em;
+    right: -0.4em;
+    top: calc(var(--wm-lh) * 2em - 0.085em);
+    border-top: 1px dashed currentColor;
+    opacity: 0.7;
+  }
+  .id-cap {
+    font-size: 14px;
     line-height: 1.6;
     color: var(--ud-muted);
-    align-self: end;
   }
-  .intro-how strong {
+  .id-cap strong {
     color: var(--ud-ink);
     font-weight: 500;
   }
-
-  .chapter {
-    padding-block: clamp(64px, 9vw, 128px);
-    border-bottom: 1px solid var(--ud-line);
-  }
-  .chapter:last-child {
-    border-bottom: 0;
-  }
-  .ch-head {
+  .split {
     display: grid;
-    grid-template-columns: 80px minmax(0, 1fr) minmax(0, 1.1fr);
-    gap: 12px 32px;
-    align-items: baseline;
-    margin-bottom: clamp(32px, 4vw, 56px);
+    grid-template-columns: 1.35fr 1fr;
   }
-  .ch-no {
-    font-family: var(--font-mono);
+  .split-half {
+    position: relative;
+    min-height: clamp(380px, 46vw, 620px);
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: clamp(24px, 3.4vw, 48px);
+    container-type: inline-size;
+  }
+  .split-half--mark {
+    background: var(--ud-stone);
+  }
+  .split-art {
+    display: grid;
+    place-items: center;
+  }
+  .split-half figcaption {
     font-size: 13px;
-    color: var(--ud-muted);
+    line-height: 1.55;
+    max-width: 40ch;
+    opacity: 0.8;
   }
-  .ch-head h2 {
+  .split-half--mark .mark {
+    font-size: 46cqi;
+  }
+  @media (max-width: 860px) {
+    .id-primary {
+      grid-template-columns: 1fr;
+    }
+    .construct {
+      justify-self: end;
+      margin-right: 6px;
+    }
+    .construct .g em {
+      display: none;
+    }
+    .split {
+      grid-template-columns: 1fr;
+    }
+    .split-half {
+      min-height: 340px;
+    }
+    .split-half .wm--line {
+      font-size: calc(var(--wm-scale) * 8.4cqi) !important;
+    }
+  }
+
+  /* ---------- 03 the unexpected detail ---------- */
+  .detail {
+    padding-top: clamp(80px, 11vw, 168px);
+    overflow: hidden;
+  }
+  .detail-head {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 32px 64px;
+    align-items: end;
+    margin-top: clamp(48px, 7vw, 96px);
+  }
+  .detail-say {
     font-family: var(--ud-display);
-    font-weight: 400;
-    font-size: clamp(40px, 1.6rem + 3.4vw, 80px);
+    font-size: clamp(44px, 6.4vw, 104px);
     line-height: 0.95;
     letter-spacing: -0.02em;
   }
-  .ch-note {
+  .detail-copy {
     font-size: 15px;
     line-height: 1.6;
-    color: var(--ud-muted);
-    max-width: 52ch;
+    max-width: 40ch;
+    opacity: 0.78;
   }
-  .eyebrow {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    opacity: 0.6;
-  }
-  .fine {
-    margin-top: 16px;
-    font-size: 13px;
-    line-height: 1.55;
-    color: var(--ud-muted);
-    max-width: 70ch;
-  }
-  /* A period in display type, drawn in the primary. */
-  .ub .tdot {
-    color: var(--ud-primary);
-  }
-
-  @media (max-width: 860px) {
-    .intro {
-      grid-template-columns: 1fr;
-    }
-    .ch-head {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* ---------- 01 the show ---------- */
-  .brief {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 32px;
-  }
-  .brief-item {
-    border-top: 1px solid var(--ud-ink);
-    padding-top: 16px;
-  }
-  .brief-lead {
-    margin-top: 16px;
-    font-family: var(--ud-display);
-    font-size: 24px;
-    line-height: 1.2;
-  }
-  .brief-body {
-    margin-top: 12px;
-    font-size: 15px;
-    line-height: 1.6;
-    color: var(--ud-muted);
-  }
-  .hooks {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 56px;
-  }
-  .hook {
-    padding: clamp(24px, 4vw, 48px);
-    min-height: 260px;
+  /* The word sits on the bottom edge of the spread: its baseline is the
+     section's last pixel, and "detail" has no descenders to lose. */
+  .detail-word {
+    container-type: inline-size;
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 40px;
+    justify-content: center;
+    align-items: flex-end;
+    margin-top: clamp(40px, 6vw, 88px);
   }
-  .hook.tone-paper {
-    box-shadow: inset 0 0 0 1px var(--ud-line);
+  .detail-wm {
+    margin-bottom: -0.085em;
+    letter-spacing: -0.03em !important;
   }
-  .hook-line {
-    font-family: var(--ud-display);
-    font-size: clamp(32px, 1rem + 3vw, 60px);
-    line-height: 1;
-    letter-spacing: -0.02em;
+  .detail-wm .wm-a {
+    display: none !important;
   }
   @media (max-width: 760px) {
-    .brief,
-    .hooks {
+    .detail-head {
       grid-template-columns: 1fr;
     }
   }
 
-  /* ---------- 02 the wordmark ---------- */
-  .wm-pair {
+  .ab {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    border-bottom: 1px solid var(--ud-line);
   }
-  .panel {
-    position: relative;
-    margin: 0;
-    aspect-ratio: 4 / 3;
+  .ab-half {
     container-type: inline-size;
     display: grid;
-    place-items: center;
+    grid-template-rows: auto 1fr auto auto;
+    gap: 24px;
+    min-height: clamp(460px, 48vw, 680px);
+    padding: clamp(28px, 4vw, 56px);
   }
-  .panel.tone-paper,
-  .clear,
-  .rule-card .clear {
-    box-shadow: inset 0 0 0 1px var(--ud-line);
+  .ab-half + .ab-half {
+    border-left: 1px solid var(--ud-line);
   }
-  .panel figcaption {
-    position: absolute;
-    left: 20px;
-    bottom: 16px;
-    font-size: 12px;
-    opacity: 0.6;
-  }
-  .wm-rules {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 16px;
-  }
-  .rule-card {
-    margin: 0;
-  }
-  .rule-card figcaption {
-    margin-top: 14px;
-    font-size: 14px;
-    line-height: 1.55;
-    color: var(--ud-muted);
-    max-width: 48ch;
-  }
-  .rule-card strong {
-    color: var(--ud-ink);
-    font-weight: 500;
-  }
-  .clear {
-    aspect-ratio: 2 / 1;
-    container-type: inline-size;
-    display: grid;
-    place-items: center;
-  }
-  .clear-box {
-    display: inline-block;
-    padding: 0.42em 0.42em 0.38em;
-    font-size: calc(var(--wm-scale) * 8cqi);
-    outline: 1px dashed var(--ud-primary);
-    outline-offset: 0;
-    background:
-      linear-gradient(var(--ud-paper), var(--ud-paper)) content-box,
-      repeating-linear-gradient(45deg, transparent 0 4px, color-mix(in srgb, var(--ud-primary) 22%, transparent) 4px 5px);
-  }
-  .clear-box .wm {
-    font-size: 1em !important;
-    vertical-align: top;
-  }
-  @media (max-width: 760px) {
-    .wm-pair,
-    .wm-rules {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* ---------- 03 the detail ---------- */
-  .matrix {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px 24px;
-  }
-  .mx {
-    margin: 0;
-  }
-  .mx-tiles {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  .mx-tiles .tone-paper {
-    box-shadow: inset 0 0 0 1px var(--ud-line);
-  }
-  .mx-cap {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-top: 12px;
-    font-size: 14px;
-  }
-  .mx-cap strong {
-    font-weight: 500;
-  }
-  @media (max-width: 860px) {
-    .matrix {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* ---------- 04 color ---------- */
-  .swatches {
-    display: grid;
-    grid-template-columns: 1.4fr 1.4fr 1fr 1fr;
-    gap: 8px;
-  }
-  .sw {
-    min-height: 260px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  .sw--primary {
-    background: var(--ud-primary);
-    color: var(--ud-on-primary, var(--ud-ink));
-  }
-  .sw--secondary {
-    background: var(--ud-secondary);
-    color: var(--ud-on-secondary);
-  }
-  .sw--ink {
-    background: var(--ud-ink);
-    color: var(--ud-paper);
-  }
-  .sw--paper {
-    background: var(--ud-paper);
-    box-shadow: inset 0 0 0 1px var(--ud-line);
-  }
-  .sw-role {
-    font-size: 13px;
-    opacity: 0.8;
-  }
-  .sw-hex {
-    font-family: var(--font-mono);
-    font-size: 15px;
-  }
-  .contrast {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
-    margin: 24px 0 0;
-  }
-  .contrast > div {
-    border-top: 1px solid var(--ud-line);
-    padding-top: 12px;
-  }
-  .contrast dt {
-    font-size: 13px;
-    color: var(--ud-muted);
-  }
-  .contrast dd {
-    margin: 4px 0 0;
+  .ab-tag {
     display: flex;
     align-items: baseline;
-    gap: 10px;
-    font-family: var(--ud-display);
-    font-size: 32px;
-  }
-  .flag {
-    font-family: var(--font-sans);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.04em;
+    gap: 12px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding: 3px 8px;
-    border-radius: 999px;
-    background: rgb(20 20 20 / 0.06);
   }
-  .flag[data-ok="false"] {
-    background: #fbe3df;
-    color: #8c1d12;
+  .ab-tag span {
+    font-family: var(--font-mono);
+    opacity: 0.6;
   }
-  @media (max-width: 860px) {
-    .swatches {
-      grid-template-columns: 1fr 1fr;
-    }
-    .sw {
-      min-height: 160px;
-    }
-    .contrast {
-      grid-template-columns: 1fr;
-    }
+  .ab-tag b {
+    margin-left: auto;
+    font-weight: 500;
   }
-
-  /* ---------- 05 combos ---------- */
-  .combos {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 32px 16px;
+  .ab-tag b::before {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: var(--ud-primary);
+    vertical-align: 1px;
   }
-  .combo {
-    display: block;
-    width: 100%;
-    padding: 0;
-    border: 0;
-    background: none;
-    color: inherit;
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-  }
-  .combo .cover {
-    width: 100%;
-  }
-  .combo-paper {
+  .ab-art {
     display: grid;
     place-items: center;
-    aspect-ratio: 2.4 / 1;
-    container-type: inline-size;
-    box-shadow: inset 0 0 0 1px var(--ud-line);
   }
-  .combo-meta {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 2px 10px;
-    margin-top: 12px;
+  .ab-half figcaption {
     font-size: 14px;
-  }
-  .combo-no {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--ud-muted);
-    padding-top: 2px;
-  }
-  .combo-name {
-    font-weight: 500;
-  }
-  .combo-hex {
-    grid-column: 2;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--ud-muted);
-  }
-  .combo-hex i {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 1px rgb(20 20 20 / 0.15);
-  }
-  .combo-hex i + i,
-  .combo-hex i:nth-of-type(2) {
-    margin-left: 6px;
-  }
-  .combo:hover .cover,
-  .combo:focus-visible .cover {
-    outline: 1px solid var(--ud-ink);
-    outline-offset: 3px;
-  }
-  .combo[aria-pressed="true"] .cover {
-    outline: 2px solid var(--ud-ink);
-    outline-offset: 3px;
-  }
-  .combo[aria-pressed="true"] .combo-name::after {
-    content: "In use";
-    margin-left: 8px;
-    font-size: 10px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    padding: 2px 7px;
-    border-radius: 999px;
-    background: var(--ud-ink);
-    color: var(--ud-paper);
-    vertical-align: 2px;
-  }
-  @media (max-width: 1000px) {
-    .combos {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-  @media (max-width: 700px) {
-    .combos {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  /* ---------- 06 type ---------- */
-  .type-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-  .type-card {
-    padding: clamp(24px, 3vw, 40px);
-    box-shadow: inset 0 0 0 1px var(--ud-line);
-  }
-  .type-aa {
-    font-size: clamp(96px, 12vw, 180px);
-    line-height: 1;
-    margin: 24px 0 16px;
-    letter-spacing: -0.02em;
-  }
-  .display {
-    font-family: var(--ud-display);
-  }
-  .sans {
-    font-family: var(--font-sans);
-    font-weight: 400;
-  }
-  .type-set {
-    font-size: clamp(16px, 1.6vw, 22px);
-    line-height: 1.35;
-    word-break: break-all;
-  }
-  .type-use {
-    margin-top: 24px;
-    font-size: 14px;
-    line-height: 1.55;
-    color: var(--ud-muted);
-  }
-  .hier {
-    margin-top: 16px;
-    padding: clamp(28px, 5vw, 72px);
-  }
-  .hier-meta {
-    font-size: 13px;
-    opacity: 0.65;
-  }
-  .hier-title {
-    margin-top: 16px;
-    font-family: var(--ud-display);
-    font-weight: 400;
-    font-size: clamp(36px, 1rem + 4vw, 72px);
-    line-height: 1;
-    letter-spacing: -0.02em;
-    max-width: 16ch;
-  }
-  .hier-guest {
-    margin-top: 20px;
-    font-size: 18px;
-    font-weight: 500;
-  }
-  .hier-body {
-    margin-top: 12px;
-    font-size: 16px;
     line-height: 1.6;
-    max-width: 58ch;
-    opacity: 0.75;
-  }
-  @media (max-width: 760px) {
-    .type-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* ---------- 07 the falling line ---------- */
-  .band {
-    position: relative;
-    aspect-ratio: 5 / 1;
-    box-shadow: inset 0 0 0 1px var(--ud-line);
-    overflow: hidden;
-  }
-  .band--field {
-    margin-top: 8px;
-    box-shadow: none;
-  }
-  .principles {
-    list-style: none;
-    margin: 32px 0 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px 32px;
-  }
-  .principles li {
-    font-size: 15px;
-    line-height: 1.55;
     color: var(--ud-muted);
-    border-top: 1px solid var(--ud-ink);
-    padding-top: 14px;
+    max-width: 42ch;
   }
-  .principles strong {
-    display: block;
-    margin-bottom: 4px;
-    font-family: var(--ud-display);
-    font-weight: 400;
-    font-size: 22px;
-    color: var(--ud-ink);
-  }
-  @media (max-width: 760px) {
-    .band {
-      aspect-ratio: 3 / 1;
-    }
-    .principles {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* ---------- 08 in use ---------- */
-  .apps {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: 56px 24px;
-    align-items: start;
-  }
-  .app {
-    margin: 0;
-    grid-column: span 6;
-    min-width: 0;
-  }
-  .app figcaption {
-    margin-top: 14px;
-    font-size: 14px;
-    line-height: 1.55;
-    color: var(--ud-muted);
-    max-width: 56ch;
-  }
-  .app figcaption strong {
-    color: var(--ud-ink);
-    font-weight: 500;
-  }
-  .app--cover {
-    grid-column: 1 / -1;
-  }
-  .pair {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-  .pair .tone-paper,
-  .feed .tone-paper,
-  .frame.tone-paper {
-    box-shadow: inset 0 0 0 1px var(--ud-line);
-  }
-  .app--feed {
-    grid-column: span 7;
-  }
-  .app--player {
-    grid-column: span 5;
-  }
-  .feed {
-    display: grid;
-    gap: 20px;
-    padding: 24px;
-    background: #f0eee9;
-  }
-  .feed-row {
+  .ab-small {
     display: flex;
     align-items: flex-end;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  .feed-cell {
-    display: grid;
-    justify-items: start;
-    gap: 6px;
-    font-family: var(--font-mono);
+    gap: 10px;
     font-size: 11px;
     color: var(--ud-muted);
   }
-  .feed-cell .cover {
-    border-radius: 6px;
+  .ab-small .tone-paper {
+    box-shadow: inset 0 0 0 1px var(--ud-line);
+  }
+  .ab-small > span {
+    margin-left: 6px;
+  }
+  @media (max-width: 760px) {
+    .ab {
+      grid-template-columns: 1fr;
+    }
+    .ab-half {
+      min-height: 0;
+    }
+    .ab-half + .ab-half {
+      border-left: 0;
+      border-top: 1px solid var(--ud-line);
+    }
+    .ab-art .wm {
+      font-size: calc(var(--wm-scale) * 15cqi) !important;
+      padding-block: 24px;
+    }
   }
 
-  .player {
-    background: #fff;
-    border-radius: 18px;
-    padding: 20px;
-    box-shadow:
-      0 1px 2px rgb(0 0 0 / 0.06),
-      0 12px 32px rgb(0 0 0 / 0.08);
-    font-family: -apple-system, system-ui, sans-serif;
+  /* ---------- 04 typography ---------- */
+  .faces {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: clamp(48px, 6vw, 88px);
+    border-bottom: 1px solid var(--ud-line);
   }
-  .player .cover {
-    border-radius: 8px;
+  .face {
+    padding: 0 clamp(20px, 3.4vw, 56px) clamp(48px, 6vw, 80px) 0;
   }
-  .player-show {
+  .face + .face {
+    padding-left: clamp(20px, 3.4vw, 56px);
+    padding-right: 0;
+    border-left: 1px solid var(--ud-line);
+  }
+  .face-head {
     display: flex;
+    justify-content: space-between;
+    align-items: baseline;
     gap: 16px;
-    align-items: center;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #eee;
   }
-  .player-title {
-    font-size: 18px;
-    font-weight: 600;
+  .face-name {
+    font-family: var(--ud-display);
+    font-weight: 400;
+    font-size: clamp(34px, 3.8vw, 60px);
+    line-height: 1;
+    letter-spacing: -0.02em;
   }
-  .player-sub {
+  .face-role {
     font-size: 12px;
-    color: #777;
-    margin-top: 2px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ud-muted);
+    white-space: nowrap;
   }
-  .player-follow {
-    display: inline-block;
-    margin-top: 10px;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 6px 14px;
-    border-radius: 999px;
-    background: #141414;
-    color: #fff;
+  .face-wm {
+    margin-top: clamp(40px, 5vw, 72px);
+    font-size: clamp(44px, 5.6vw, 88px);
+    text-align: right;
   }
-  .player-eps {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  .face-title {
+    margin-top: clamp(40px, 5vw, 64px);
+    font-family: var(--ud-display);
+    font-size: clamp(26px, 2.6vw, 40px);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    max-width: 16ch;
   }
-  .player-eps li {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid #f1f1f1;
+  .face-say {
+    margin-top: 20px;
+    font-family: var(--ud-display);
+    font-size: clamp(18px, 1.5vw, 22px);
+    color: var(--ud-muted);
   }
-  .player-eps li:last-child {
-    border-bottom: 0;
-    padding-bottom: 0;
-  }
-  .player-eps .cover {
-    border-radius: 5px;
-  }
-  .player-ep {
+  .face-note {
+    margin-top: 28px;
     font-size: 14px;
+    line-height: 1.6;
+    color: var(--ud-muted);
+    max-width: 44ch;
+  }
+  .sans {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr 1fr;
+    gap: 32px 56px;
+    padding-top: clamp(40px, 5vw, 72px);
+    align-items: start;
+  }
+  .sans .face-head {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .sans-name {
+    font-family: var(--font-sans);
     font-weight: 500;
-    line-height: 1.3;
+    font-size: clamp(36px, 4vw, 64px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .sans-meta {
+    font-size: 13px;
+    color: var(--ud-muted);
+  }
+  .sans-copy {
+    margin-top: 12px;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  .sans-pair {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ud-muted);
+  }
+  .sans-pair strong {
+    color: var(--ud-ink);
+    font-weight: 500;
+  }
+  @media (max-width: 860px) {
+    .faces,
+    .sans {
+      grid-template-columns: 1fr;
+    }
+    .face,
+    .face + .face {
+      padding: 40px 0;
+      border-left: 0;
+    }
+    .face + .face {
+      border-top: 1px solid var(--ud-line);
+    }
   }
 
+  /* ---------- 05 the falling line ---------- */
+  .s-lang {
+    padding-top: 0;
+  }
+  .divider {
+    position: relative;
+    height: clamp(40px, 5.4vw, 80px);
+    margin-bottom: clamp(80px, 10vw, 152px);
+  }
+  .lang-lead {
+    margin-top: clamp(40px, 5vw, 72px);
+    font-family: var(--ud-display);
+    font-size: clamp(26px, 2.8vw, 44px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    max-width: 28ch;
+  }
+  .lang-grid {
+    display: grid;
+    grid-template-columns: 7fr 4fr;
+    gap: 32px clamp(24px, 4vw, 64px);
+    margin-top: clamp(56px, 7vw, 104px);
+    align-items: end;
+  }
+  .lang-page {
+    background: var(--ud-stone);
+    padding: clamp(20px, 5vw, 72px);
+  }
+  .page {
+    background: var(--ud-paper);
+    padding: clamp(20px, 4vw, 56px);
+    container-type: inline-size;
+  }
+  .page-rule {
+    position: relative;
+    height: 6.6cqi;
+  }
+  .page-kicker {
+    margin-top: 4cqi;
+    font-size: max(11px, 1.6cqi);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ud-muted);
+  }
+  .page-title {
+    margin-top: 2cqi;
+    font-family: var(--ud-display);
+    font-size: 6.4cqi;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    max-width: 14ch;
+  }
+  .page-cols {
+    margin-top: 5cqi;
+    columns: 2;
+    column-gap: 4cqi;
+    font-size: max(12px, 1.9cqi);
+    line-height: 1.6;
+    color: var(--ud-muted);
+  }
+  .page-cols p + p {
+    margin-top: 1em;
+  }
+  .lang-page figcaption,
+  .lang-graphic figcaption {
+    margin-top: 16px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ud-muted);
+  }
   .frame {
     position: relative;
     overflow: hidden;
     container-type: inline-size;
+  }
+  .frame--1 {
+    aspect-ratio: 1;
   }
   .frame--169 {
     aspect-ratio: 16 / 9;
@@ -1832,12 +1465,206 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   .frame--916 {
     aspect-ratio: 9 / 16;
   }
-
-  .app--wide {
-    grid-column: span 8;
+  .lg-ep {
+    position: absolute;
+    left: 11.4cqi;
+    bottom: 9cqi;
+    font-family: var(--ud-display);
+    font-size: 9cqi;
+    line-height: 1;
   }
-  .app--avatar {
-    grid-column: span 4;
+  @media (max-width: 860px) {
+    .lang-grid {
+      grid-template-columns: 1fr;
+    }
+    .page-cols {
+      columns: 1;
+    }
+  }
+
+  /* ---------- 06 color ---------- */
+  .s-color {
+    border-top: 1px solid var(--ud-line);
+  }
+  .color-head {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 24px 64px;
+    align-items: end;
+    margin-top: clamp(48px, 7vw, 96px);
+  }
+  .color-say {
+    font-family: var(--ud-display);
+    font-size: clamp(44px, 6.4vw, 104px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+  }
+  .color-copy {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ud-muted);
+    max-width: 42ch;
+  }
+  .color-status {
+    margin-top: 12px;
+    min-height: 1.5em;
+    font-size: 14px;
+  }
+  .pals {
+    list-style: none;
+    margin: clamp(48px, 6vw, 88px) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(36px, 4vw, 56px) clamp(14px, 1.6vw, 24px);
+  }
+  .pal {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .pal .cover {
+    width: 100%;
+    transition: transform 0.5s var(--ease);
+  }
+  .pal:hover .cover {
+    transform: translateY(-4px);
+  }
+  .pal[aria-pressed="true"] .cover {
+    outline: 2px solid var(--ud-ink);
+    outline-offset: 5px;
+  }
+  .pal-meta {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    column-gap: 10px;
+    row-gap: 2px;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid var(--ud-line);
+  }
+  .pal-no {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ud-muted);
+    padding-top: 3px;
+  }
+  .pal-name {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .pal-chips {
+    display: flex;
+    gap: 3px;
+    padding-top: 3px;
+  }
+  .pal-chips i {
+    width: 12px;
+    height: 12px;
+    box-shadow: inset 0 0 0 1px rgb(20 20 20 / 0.12);
+  }
+  .pal-mood {
+    grid-column: 2 / 4;
+    font-size: 13px;
+    color: var(--ud-muted);
+  }
+  .pal-rec {
+    grid-column: 2 / 4;
+    margin-top: 6px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .pal-rec::before {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+    border-radius: 50%;
+    background: var(--ud-primary);
+    vertical-align: 1px;
+  }
+  @media (max-width: 1000px) {
+    .pals {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 680px) {
+    .color-head {
+      grid-template-columns: 1fr;
+    }
+    .pals {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .pal-meta {
+      grid-template-columns: auto 1fr;
+    }
+    .pal-chips {
+      display: none;
+    }
+    .pal-mood,
+    .pal-rec {
+      grid-column: 2;
+    }
+  }
+
+  /* ---------- 07 in use ---------- */
+  .s-apps {
+    background: var(--ud-stone);
+  }
+  .apps-cover {
+    display: grid;
+    grid-template-columns: 7fr 4fr;
+    gap: clamp(24px, 4vw, 64px);
+    align-items: end;
+    margin-top: clamp(48px, 7vw, 96px);
+  }
+  .ac-side .tone-paper,
+  .app-post .tone-paper {
+    box-shadow: inset 0 0 0 1px var(--ud-line);
+  }
+  .apps-small {
+    margin-top: clamp(72px, 9vw, 136px);
+    padding-top: 28px;
+    border-top: 1px solid var(--ud-line);
+  }
+  .sizes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 24px clamp(20px, 3vw, 40px);
+  }
+  .size {
+    display: grid;
+    gap: 8px;
+    justify-items: start;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ud-muted);
+  }
+  .fav {
+    display: grid;
+    place-items: center;
+    container-type: inline-size;
+    overflow: hidden;
+  }
+  .fav .mark {
+    font-size: 86cqi;
+    margin-top: 6cqi;
+  }
+  .apps-row {
+    display: grid;
+    grid-template-columns: 8fr 4fr;
+    gap: clamp(24px, 4vw, 64px);
+    align-items: end;
+    margin-top: clamp(72px, 9vw, 136px);
   }
   .ep-text {
     position: absolute;
@@ -1868,28 +1695,28 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     right: 5cqi;
     bottom: 6cqi;
   }
-
   .avatar {
-    width: min(100%, 320px);
-    margin-inline: auto;
     aspect-ratio: 1;
     border-radius: 50%;
     container-type: inline-size;
     display: grid;
     place-items: center;
   }
-
-  .app--post,
-  .app--story,
-  .app--sticker {
-    grid-column: span 4;
+  .apps-social {
+    display: grid;
+    grid-template-columns: 5fr 3fr 3fr;
+    gap: clamp(24px, 4vw, 64px);
+    align-items: start;
+    margin-top: clamp(72px, 9vw, 136px);
+  }
+  .app-story {
+    margin-top: clamp(40px, 8vw, 120px);
   }
   .post-quote {
     position: absolute;
     left: 8cqi;
     right: 8cqi;
     top: 30cqi;
-    margin: 0;
     font-family: var(--ud-display);
     font-size: 8.4cqi;
     line-height: 1.08;
@@ -1907,9 +1734,6 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     right: 8cqi;
     bottom: 8cqi;
   }
-  .app--story .frame {
-    width: min(100%, 300px);
-  }
   .story-wm {
     position: absolute;
     right: 9cqi;
@@ -1922,18 +1746,22 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     bottom: 12cqi;
   }
   .story-new {
-    display: inline-block;
     font-size: 3.6cqi;
     font-weight: 500;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding: 1.6cqi 3.4cqi;
-    border-radius: 999px;
+  }
+  .story-new::before {
+    content: "";
+    display: inline-block;
+    width: 2.4cqi;
+    height: 2.4cqi;
+    margin-right: 2cqi;
+    border-radius: 50%;
     background: var(--ud-primary);
-    color: var(--ud-on-primary, var(--ud-ink));
   }
   .story-guest {
-    margin-top: 5cqi;
+    margin-top: 4cqi;
     font-family: var(--ud-display);
     font-size: 12cqi;
     line-height: 1;
@@ -1945,298 +1773,402 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     line-height: 1.35;
     opacity: 0.8;
   }
-
-  .sticker-wrap {
-    display: grid;
-    place-items: center;
-    aspect-ratio: 1;
-    background: #f0eee9;
-  }
-  .sticker {
-    width: 62%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: var(--ud-primary);
-    color: var(--ud-on-primary, var(--ud-ink));
-    container-type: inline-size;
-    display: grid;
-    place-items: center;
-    box-shadow:
-      0 0 0 8px #fff,
-      0 10px 24px rgb(0 0 0 / 0.14);
-    transform: rotate(-8deg);
-  }
-  .sticker p {
-    font-family: var(--ud-display);
-    font-size: 16cqi;
-    line-height: 0.95;
-    letter-spacing: -0.02em;
-    text-align: center;
-  }
-
-  .app--cards {
-    grid-column: span 7;
-  }
-  .app--mic {
-    grid-column: span 5;
-  }
-  .cards {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    padding: clamp(24px, 4vw, 48px);
-    background: #e9e6df;
-  }
-  .card {
-    position: relative;
-    aspect-ratio: 3.5 / 2;
-    container-type: inline-size;
-    overflow: hidden;
-    border-radius: 3px;
-    box-shadow:
-      0 1px 1px rgb(0 0 0 / 0.08),
-      0 8px 20px rgb(0 0 0 / 0.12);
-  }
-  .card-wm {
-    position: absolute;
-    right: 7cqi;
-    bottom: 8cqi;
-  }
-  .card-dot {
-    position: absolute;
-    right: 8cqi;
-    top: 9cqi;
-    width: 3.4cqi;
-    height: 3.4cqi;
-    border-radius: 50%;
-    background: var(--ud-primary);
-  }
-  .card-name {
-    position: absolute;
-    left: 8cqi;
-    top: 8cqi;
-    font-family: var(--ud-display);
-    font-size: 8cqi;
-    line-height: 1;
-  }
-  .card-role {
-    position: absolute;
-    left: 8cqi;
-    top: 18.5cqi;
-    font-size: 3.2cqi;
-    opacity: 0.65;
-  }
-  .card-contact {
-    position: absolute;
-    left: 8cqi;
-    bottom: 8cqi;
-    font-size: 3.2cqi;
-    line-height: 1.5;
-  }
-
-  .mic-scene {
-    --cube: 150px;
-    position: relative;
-    display: grid;
-    justify-items: center;
-    padding: 40px 0 0;
-    background: #e9e6df;
-    height: 420px;
-    overflow: hidden;
-    perspective: 900px;
-  }
-  .mic-head {
-    width: calc(var(--cube) * 0.62);
-    height: calc(var(--cube) * 0.95);
-    border-radius: 999px 999px 18px 18px;
-    background:
-      radial-gradient(circle, rgb(255 255 255 / 0.22) 1.2px, transparent 1.8px) 0 0 / 7px 7px,
-      linear-gradient(90deg, #2a2a2a, #4a4a4a 45%, #222);
-    position: relative;
-    z-index: 1;
-    margin-bottom: -8px;
-  }
-  .cube {
-    position: relative;
-    width: var(--cube);
-    height: var(--cube);
-    transform-style: preserve-3d;
-    transform: rotateX(-14deg) rotateY(-32deg);
-    z-index: 2;
-  }
-  .face {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    container-type: inline-size;
-    overflow: hidden;
-    backface-visibility: hidden;
-  }
-  .face--front {
-    transform: translateZ(calc(var(--cube) / 2));
-  }
-  .face--side {
-    transform: rotateY(90deg) translateZ(calc(var(--cube) / 2));
-    filter: brightness(0.9);
-  }
-  .face--top {
-    transform: rotateX(90deg) translateZ(calc(var(--cube) / 2));
-    background: radial-gradient(circle, #111 0 22%, var(--ud-secondary) 23%);
-    filter: brightness(0.75);
-  }
-  .face--front .wm {
-    margin-top: 4cqi;
-  }
-  .mic-stem {
-    width: 38px;
-    flex: 1;
-    height: 200px;
-    background: linear-gradient(90deg, #222, #444 50%, #1c1c1c);
-    border-radius: 0 0 14px 14px;
-    margin-top: -6px;
-    clip-path: polygon(8% 0, 92% 0, 80% 100%, 20% 100%);
-  }
-
-  .app--tote {
-    grid-column: span 5;
-  }
-  .app--lower {
-    grid-column: span 7;
-  }
-  .tote {
-    display: grid;
-    justify-items: center;
-    padding: 56px 0 40px;
-    background: #e9e6df;
-  }
-  .tote-handle {
-    width: 46%;
-    max-width: 150px;
-    aspect-ratio: 1 / 1.1;
-    border: 14px solid #d9cfba;
-    border-bottom: 0;
-    border-radius: 999px 999px 0 0;
-    margin-bottom: -40px;
-  }
-  .tote-bag {
-    position: relative;
-    width: 76%;
-    max-width: 320px;
-    aspect-ratio: 1 / 1.1;
-    background: var(--ud-canvas);
-    color: var(--ud-ink);
-    container-type: inline-size;
-    overflow: hidden;
-    box-shadow: 0 14px 30px rgb(0 0 0 / 0.12);
-    background-image: repeating-linear-gradient(0deg, rgb(0 0 0 / 0.025) 0 1px, transparent 1px 3px),
-      repeating-linear-gradient(90deg, rgb(0 0 0 / 0.02) 0 1px, transparent 1px 3px);
-  }
-  .tote-wm {
-    position: absolute;
-    right: 14cqi;
-    bottom: 14cqi;
-  }
-
-  .video {
-    background:
-      radial-gradient(ellipse 60% 70% at 70% 30%, #6b5a4a 0%, transparent 70%),
-      radial-gradient(ellipse 50% 60% at 15% 80%, #3a2d26 0%, transparent 70%),
-      linear-gradient(#2a221e, #1a1512);
-    color: var(--ud-paper);
-  }
-  .video-person {
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-    width: 44cqi;
-    height: 46cqi;
-    transform: translateX(-30%);
-    background:
-      radial-gradient(circle at 50% 24%, #4b3d33 0 11cqi, transparent 11.2cqi),
-      radial-gradient(ellipse 50% 46% at 50% 100%, #3b2f28 0 99%, transparent 100%);
-    filter: blur(0.6px);
-  }
-  .video-bug {
-    position: absolute;
-    right: 4cqi;
-    top: 4cqi;
-    opacity: 0.85;
-  }
-  .lower {
-    position: absolute;
-    left: 5cqi;
-    bottom: 7cqi;
-    padding: 2cqi 3cqi 2.2cqi;
-    border-left: 0.8cqi solid var(--ud-primary);
-  }
-  .lower-name {
-    font-family: var(--ud-display);
-    font-size: 4cqi;
-    line-height: 1;
-  }
-  .lower-line {
-    margin-top: 0.8cqi;
-    font-size: 1.8cqi;
-    opacity: 0.7;
-  }
-
   @media (max-width: 860px) {
-    .apps {
-      gap: 48px 16px;
-    }
-    .app,
-    .app--feed,
-    .app--player,
-    .app--wide,
-    .app--avatar,
-    .app--cards,
-    .app--mic,
-    .app--tote,
-    .app--lower {
-      grid-column: 1 / -1;
-    }
-    .app--post,
-    .app--story,
-    .app--sticker {
-      grid-column: span 6;
-    }
-    .app--sticker {
-      grid-column: 1 / -1;
-    }
-    .sticker-wrap {
-      aspect-ratio: 2 / 1;
-    }
-    .sticker {
-      width: 34%;
-    }
-  }
-  @media (max-width: 560px) {
-    .pair,
-    .cards {
+    .apps-cover,
+    .apps-row {
       grid-template-columns: 1fr;
     }
-    .app--post,
-    .app--story {
+    .ac-side {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: end;
+    }
+    .ac-side .cap {
+      margin: 0;
+    }
+    .app-avatar {
+      width: min(100%, 300px);
+    }
+    .apps-social {
+      grid-template-columns: 1fr 1fr;
+    }
+    .app-post {
       grid-column: 1 / -1;
+    }
+    .app-story {
+      margin-top: 0;
+    }
+  }
+
+  /* ---------- 08 explorer ---------- */
+  .xp-intro {
+    padding-block: clamp(80px, 11vw, 168px) clamp(64px, 8vw, 120px);
+  }
+  .xp-say {
+    margin-top: clamp(48px, 7vw, 104px);
+    font-family: var(--ud-display);
+    font-weight: 400;
+    font-size: clamp(56px, 11vw, 184px);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+  .xp-copy {
+    margin-top: clamp(28px, 3vw, 44px);
+    margin-left: auto;
+    max-width: 44ch;
+    font-size: 16px;
+    line-height: 1.6;
+    opacity: 0.78;
+  }
+  .xp {
+    padding-block: clamp(48px, 6vw, 96px) clamp(80px, 10vw, 152px);
+  }
+  .xp .tone-field,
+  .xp .tone-paper {
+    transition:
+      background-color 0.45s var(--ease),
+      color 0.45s var(--ease);
+  }
+  .xp-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    grid-template-areas:
+      "main ctl"
+      "sub ctl";
+    gap: 16px clamp(28px, 4vw, 64px);
+    align-items: start;
+  }
+  .xp-main {
+    grid-area: main;
+    position: relative;
+    aspect-ratio: 4 / 3;
+    container-type: inline-size;
+    overflow: hidden;
+  }
+  .xp-wm {
+    position: absolute;
+    right: 9cqi;
+    bottom: 8cqi;
+  }
+  .xp-sub {
+    grid-area: sub;
+    display: grid;
+    grid-template-columns: 1fr minmax(0, 0.62fr);
+    gap: 16px;
+  }
+  .xp-paper {
+    position: relative;
+    container-type: inline-size;
+    padding: clamp(22px, 3vw, 44px);
+    box-shadow: inset 0 0 0 1px var(--ud-line);
+  }
+  .xp-kicker {
+    font-size: max(11px, 2.4cqi);
+    color: var(--ud-muted);
+  }
+  .xp-title {
+    margin-top: 3cqi;
+    font-family: var(--ud-display);
+    font-size: 8cqi;
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+    max-width: 13ch;
+  }
+  .xp-line {
+    margin-top: 4cqi;
+    margin-bottom: 18cqi;
+    font-family: var(--ud-display);
+    font-size: 4.4cqi;
+    color: var(--ud-muted);
+  }
+  .xp-paper-wm {
+    position: absolute;
+    right: clamp(22px, 3vw, 44px);
+    bottom: clamp(22px, 3vw, 44px);
+  }
+  .xp-cover .cover {
+    width: 100%;
+  }
+
+  .xp-ctl {
+    grid-area: ctl;
+    position: sticky;
+    top: 24px;
+    display: grid;
+    gap: 36px;
+  }
+  .opt {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  .opt legend {
+    display: flex;
+    width: 100%;
+    align-items: baseline;
+    gap: 12px;
+    padding: 12px 0 0;
+    margin-bottom: 14px;
+    border-top: 1px solid var(--ud-ink);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .opt legend span {
+    font-family: var(--font-mono);
+    letter-spacing: 0;
+    opacity: 0.6;
+  }
+  .opt legend em {
+    margin-left: auto;
+    font-style: normal;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ud-muted);
+  }
+  .choice {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .choice button {
+    display: grid;
+    gap: 10px;
+    justify-items: start;
+    padding: 18px 16px 14px;
+    border: 1px solid var(--ud-line);
+    border-radius: 0;
+    background: var(--ud-paper);
+    color: var(--ud-ink);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.25s var(--ease);
+  }
+  .choice button:hover {
+    border-color: rgb(20 20 20 / 0.4);
+  }
+  .choice button[aria-pressed="true"] {
+    border-color: var(--ud-ink);
+    box-shadow: inset 0 0 0 1px var(--ud-ink);
+  }
+  .choice-art {
+    font-size: clamp(26px, 2.5vw, 36px);
+    line-height: 1;
+  }
+  .choice-art .wm-a {
+    display: none !important;
+  }
+  .choice-aa {
+    font-family: var(--ud-display);
+    font-size: clamp(32px, 3vw, 44px);
+    line-height: 1;
+  }
+  .choice-label {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 13px;
+  }
+  .choice button[aria-pressed="true"] .choice-label::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ud-ink);
+  }
+  .dots {
+    display: grid;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .dotsw {
+    position: relative;
+    aspect-ratio: 1;
+    padding: 0;
+    border: 0;
+    background: var(--ss);
+    box-shadow: inset 0 0 0 1px rgb(20 20 20 / 0.08);
+    cursor: pointer;
+    transition: transform 0.25s var(--ease);
+  }
+  .dotsw::after {
+    content: "";
+    position: absolute;
+    inset: 32%;
+    border-radius: 50%;
+    background: var(--sp);
+  }
+  .dotsw:hover {
+    transform: translateY(-2px);
+  }
+  .dotsw[aria-pressed="true"] {
+    outline: 2px solid var(--ud-ink);
+    outline-offset: 2px;
+  }
+  .hexes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .hex {
+    display: grid;
+    gap: 6px;
+  }
+  .hex-label {
+    font-size: 12px;
+    color: var(--ud-muted);
+  }
+  .hex-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px 6px 6px;
+    border: 1px solid var(--ud-line);
+    background: var(--ud-paper);
+  }
+  .hex-field:focus-within {
+    border-color: var(--ud-ink);
+  }
+  .hex-field input[type="color"] {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    flex: none;
+  }
+  .hex-field input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+  .hex-field input[type="color"]::-webkit-color-swatch {
+    border: 1px solid rgb(20 20 20 / 0.12);
+    border-radius: 0;
+  }
+  .hex-field input[type="color"]::-moz-color-swatch {
+    border: 1px solid rgb(20 20 20 / 0.12);
+    border-radius: 0;
+  }
+  .hex-field input[type="text"] {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ud-ink);
+    font-family: var(--font-mono);
+    font-size: 16px;
+    text-transform: uppercase;
+  }
+  .hex-field input[type="text"]:focus {
+    outline: none;
+  }
+  .hex-field:has(input[aria-invalid="true"]) {
+    border-color: #b3261e;
+  }
+  .hex-msg {
+    min-height: 1.4em;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #9c2318;
+  }
+  .xp-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--ud-line);
+  }
+  .btn {
+    padding: 14px 20px;
+    border: 0;
+    border-radius: 0;
+    background: var(--ud-ink);
+    color: var(--ud-paper);
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .btn:hover {
+    background: #2c2c2c;
+  }
+  .link {
+    padding: 4px 0;
+    border: 0;
+    background: none;
+    color: var(--ud-ink);
+    font: inherit;
+    font-size: 14px;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+    cursor: pointer;
+  }
+  .xp-status {
+    flex-basis: 100%;
+    min-height: 1.5em;
+    font-size: 13px;
+    color: var(--ud-muted);
+    overflow-wrap: anywhere;
+  }
+  @media (max-width: 900px) {
+    .xp-grid {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        "main"
+        "ctl"
+        "sub";
+      gap: 28px;
+    }
+    /* The preview stays in view while the controls scroll under it. */
+    .xp-main {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      aspect-ratio: 16 / 10;
+      margin-inline: calc(var(--gutter) * -1);
+    }
+    .xp-main .xp-wm {
+      font-size: calc(var(--wm-scale) * 11.5cqi) !important;
+      right: 8cqi;
+    }
+    .xp-ctl {
+      position: static;
+    }
+    .xp-sub {
+      grid-template-columns: 1fr;
+    }
+    .xp-cover {
+      width: min(100%, 320px);
+    }
+  }
+  @media (max-width: 420px) {
+    .hexes {
+      grid-template-columns: 1fr;
     }
   }
 
   /* ---------- end ---------- */
-  .ub-end {
-    padding-block: clamp(64px, 10vw, 140px);
+  .end {
+    padding-block: 32px;
+    font-size: 13px;
   }
-  .ub-end-row {
+  .end-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 40px;
     justify-content: space-between;
-    align-items: end;
+    gap: 12px;
+    opacity: 0.78;
   }
-  .ub-end-meta {
-    font-size: 14px;
-    line-height: 1.7;
-    opacity: 0.75;
+
+  @media (prefers-reduced-motion: reduce) {
+    .ub *,
+    .ub *::after {
+      transition: none !important;
+    }
   }
 </style>
