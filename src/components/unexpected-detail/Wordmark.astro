@@ -1,0 +1,33 @@
+---
+/*
+  The unexpected detail wordmark: the staggered two line lockup, flush right,
+  with "unexpected" stepped in from the edge. Markup only; the brand book's
+  global styles draw it, and every setting comes from the nearest ancestor
+  through custom properties, so a section can pin its own font or dot:
+
+    --ud-display, --wm-scale, --wm-lh, --wm-track   typeface (data-font)
+    --dd, --dl, --db                               period geometry
+    --isplit                                       where the i's dot ends
+    --pd-display, --i-top                          dot mode (data-dot)
+
+  Both dots are drawn in every mode and switched by those properties, so a
+  toggle never reflows the lockup: the period hangs past the edge and the i
+  keeps its own glyph, only recolored above its stem.
+*/
+interface Props {
+  /** Font size before the typeface's scale, in any CSS length (cqi in tiles). */
+  size?: string;
+  /** Lowercase centered single line, for tight horizontal spaces. */
+  line?: boolean;
+  class?: string;
+  style?: string;
+}
+const { size = "12cqi", line = false, class: cls, style = "" } = Astro.props;
+---
+
+<span
+  class:list={["wm", { "wm--line": line }, cls]}
+  style={`font-size:calc(var(--wm-scale, 1) * ${size});${style}`}
+  role="img"
+  aria-label="unexpected detail"
+><span class="wm-a" aria-hidden="true">unexpected</span><span class="wm-b" aria-hidden="true">deta<span class="wm-i">i</span>l<span class="wm-pd">.</span></span></span>

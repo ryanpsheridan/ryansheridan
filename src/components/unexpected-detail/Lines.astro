@@ -1,0 +1,51 @@
+---
+/*
+  The falling line: a row of thin upright strokes with one that has tipped
+  over. Defaults reproduce the round 05 cover (tiles 01 and 02) in a 100 by
+  100 box; other formats pass their own box and row. The leaning stroke
+  pivots on its foot, so it reads as fallen rather than slanted.
+*/
+interface Props {
+  vw?: number;
+  vh?: number;
+  count?: number;
+  /** Index of the stroke that falls. */
+  fall?: number;
+  x?: number;
+  gap?: number;
+  y?: number;
+  len?: number;
+  w?: number;
+  angle?: number;
+  /** Tip the stroke over once on load (the cover at the top of the page). */
+  animate?: boolean;
+  class?: string;
+  style?: string;
+}
+const {
+  vw = 100,
+  vh = 100,
+  count = 14,
+  fall = 9,
+  x = 11.4,
+  gap = 5.83,
+  y = 14,
+  len = 46,
+  w = 0.7,
+  angle = 14,
+  animate = false,
+  class: cls,
+  style = "",
+} = Astro.props;
+const xs = Array.from({ length: count }, (_, i) => +(x + i * gap).toFixed(3));
+---
+
+<svg
+  class:list={["ud-lines", { "is-animated": animate }, cls]}
+  viewBox={`0 0 ${vw} ${vh}`}
+  preserveAspectRatio="xMidYMid slice"
+  aria-hidden="true"
+  style={`--fall:${angle}deg;${style}`}
+>
+  {xs.map((lx, i) => <rect x={lx} y={y} width={w} height={len} rx={w / 2} fill="currentColor" class={i === fall ? "ud-fall" : undefined} />)}
+</svg>

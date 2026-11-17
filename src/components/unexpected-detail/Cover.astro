@@ -1,0 +1,26 @@
+---
+/*
+  The square podcast cover: the falling line with the wordmark bottom right,
+  as picked from round 05 (01 light, 02 dark). Sized entirely in cqi, so the
+  same markup works at 3000px or 40px.
+
+  tone: "paper" sets ink on paper; "field" sets the secondary color with
+  whichever of ink or paper reads on it.
+*/
+import Lines from "./Lines.astro";
+import Wordmark from "./Wordmark.astro";
+
+interface Props {
+  tone?: "paper" | "field";
+  animate?: boolean;
+  label?: string;
+  class?: string;
+  style?: string;
+}
+const { tone = "paper", animate = false, label, class: cls, style } = Astro.props;
+---
+
+<div class:list={["cover", `tone-${tone}`, cls]} style={style} role={label ? "img" : undefined} aria-label={label}>
+  <Lines animate={animate} />
+  <Wordmark class="cover-wm" />
+</div>
