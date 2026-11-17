@@ -460,7 +460,7 @@ const allProjects: Project[] = [
       {
         type: "text",
         heading: "Search visibility",
-        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” while earning few clicks. One clear opportunity: five of the six pages shared the same title.</p><p>That fix didn’t need to wait for the redesign. On October 23, 2026, I made technical SEO improvements to the existing site: a unique title and description for every page, one consistent address, a sitemap, and correct link previews.</p><p>The rebuild took it further. Lessons, contact, and private events each have their own page, with titles and copy shaped around what people were already searching for. Structured data describes the business, its hours, every league and event, breadcrumbs, and common questions, so search engines can read those details directly.</p><p>Early results from Google Search Console compare the 28 days before those first fixes (September 25 to October 22) with the 20 days after (October 23 to November 11). Clicks went from roughly half a click a day to about six on average, and impressions from about 38 a day to 229. Those gains came from the work on the old site, since the rebuild launched on November 11. They’re an encouraging start, not proof of long-term growth.</p>`,
+        body: `<p>Search Console showed the club’s pages appearing more than a hundred times each for searches like “indoor golf” and “golf simulator near me” while earning few clicks. One clear opportunity: five of the six pages shared the same title.</p><p>That fix didn’t need to wait for the redesign. On October 23, 2026, I made technical SEO improvements to the existing site: a unique title and description for every page, one consistent address, a sitemap, and correct link previews.</p><p>The rebuild took it further. Lessons, contact, and private events each have their own page, with titles and copy shaped around what people were already searching for. Structured data describes the business, its hours, every league and event, breadcrumbs, and common questions, so search engines can read those details directly.</p><p>Early results from Google Search Console compare the 28 days before those first fixes (September 25 to October 22) with the 24 days after (October 23 to November 15). Clicks went from roughly half a click a day to about seven on average, and impressions from about 38 a day to 239. Most of that came from the work on the old site, since the rebuild only launched on November 11. In the four days since, the site has averaged about 11 clicks and 290 impressions a day, too short a window to read much into. These numbers are an encouraging start, not proof of long-term growth.</p>`,
       },
       {
         type: "barChart",
@@ -468,7 +468,7 @@ const allProjects: Project[] = [
         unit: "clicks",
         points: ogcSearchConsole.map((d) => ({ date: d.date, value: d.clicks })),
         marker: { date: "2026-10-23", label: "First SEO push" },
-        change: { before: "0.5", after: "6.0", per: "a day" },
+        change: { before: "0.5", after: "6.9", per: "a day" },
       },
       {
         type: "barChart",
@@ -476,7 +476,7 @@ const allProjects: Project[] = [
         unit: "impressions",
         points: ogcSearchConsole.map((d) => ({ date: d.date, value: d.impressions })),
         marker: { date: "2026-10-23", label: "First SEO push" },
-        change: { before: "38", after: "229", per: "a day" },
+        change: { before: "38", after: "239", per: "a day" },
       },
       {
         type: "text",
