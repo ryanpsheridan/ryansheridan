@@ -155,7 +155,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
             <figcaption><b>One line.</b> The same logo on a single line, for web headers, video and anywhere height is short.</figcaption>
           </figure>
           <figure class="split-half split-half--mark">
-            <div class="split-art"><span class="wm mark" role="img" aria-label="The i mark"><span class="wm-i">i</span></span></div>
+            <div class="split-art split-art--mark drop is-in"><span class="wm mark" role="img" aria-label="The i mark"><span class="wm-i">i</span></span></div>
             <figcaption><b>Mark.</b> The i on its own, for app icons and favicons. The whole idea in one letter.</figcaption>
           </figure>
         </div>
@@ -867,6 +867,33 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   }
   .ub.motion .tip:not(.is-in) .ud-fall {
     transform: rotate(0deg);
+  }
+
+  /*
+    Two hover moments, for pointers that can hover and only when motion is
+    welcome. Neither changes anything or looks clickable; they just answer.
+
+    The dot never quite sits still: over the logo it lifts a little and
+    settles back when the pointer leaves. It uses translate, which the drop
+    animation (transform) leaves alone, so the two never fight.
+
+    The fallen line tries to stand: over the band it rises most of the way
+    upright, then gives up and falls back after a beat.
+  */
+  @media (hover: hover) {
+    .ub.motion .drop .wm-i::before {
+      transition: translate 0.6s cubic-bezier(0.3, 0.7, 0.4, 1);
+    }
+    .ub.motion .intro-wm:hover .wm-i::before,
+    .ub.motion .detail-word:hover .wm-i::before,
+    .ub.motion .split-art--mark:hover .wm-i::before,
+    .ub.motion .xp-main:hover .wm-i::before {
+      translate: 0 -0.08em;
+    }
+    .ub.motion .tip.is-in:hover .ud-fall {
+      transform: rotate(calc(var(--fall) * 0.2));
+      transition: transform 0.9s cubic-bezier(0.3, 0.7, 0.4, 1);
+    }
   }
 
   .ub .cover {
@@ -1845,11 +1872,11 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   }
   /* A font change gives the preview a brief breath rather than a jump. */
   .xp-stage.swap {
-    animation: ud-swap 0.5s var(--ease);
+    animation: ud-swap 0.45s var(--ease);
   }
   @keyframes ud-swap {
     from {
-      opacity: 0.25;
+      opacity: 0.55;
     }
   }
   .xp-ctl {
