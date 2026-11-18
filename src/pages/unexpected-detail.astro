@@ -346,29 +346,6 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
             </figure>
           </div>
 
-          <figure class="video reveal">
-            <p class="ctx">Video episode</p>
-            <div class="vplayer">
-              <div class="frame frame--169 tone-dark">
-                <Lines vw={178} vh={100} count={13} fall={9} x={8} y={14} len={62} w={0.6} />
-                <div class="ep-text">
-                  <p class="ep-no">ep. 12</p>
-                  <p class="ep-guest">Guest Name</p>
-                  <p class="ep-topic">a cartographer of places that never existed</p>
-                </div>
-                <Wordmark class="ep-wm" size="5.4cqi" />
-              </div>
-              <div class="scrub scrub--video" aria-hidden="true"><span></span></div>
-              <div class="vmeta">
-                <div class="vavatar tone-dark"><Wordmark size="13cqi" /></div>
-                <div>
-                  <p class="vtitle">A cartographer of places that never existed, with Guest Name</p>
-                  <p class="vsub">unexpected detail · Episode 12</p>
-                </div>
-              </div>
-            </div>
-            <figcaption class="cap">The episode thumbnail, 1280 × 720, where it is seen: in a player, with a title under it.</figcaption>
-          </figure>
         </div>
       </section>
 
@@ -933,14 +910,6 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     position: absolute;
     right: 11.4cqi;
     bottom: 9cqi;
-  }
-  .ub .frame {
-    position: relative;
-    overflow: hidden;
-    container-type: inline-size;
-  }
-  .ub .frame--169 {
-    aspect-ratio: 16 / 9;
   }
   /* A light ground beside page paper needs an edge. */
   .ub .cover.tone-light,
@@ -1789,81 +1758,6 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     line-height: 1.35;
     opacity: 0.8;
   }
-  .video {
-    margin-top: clamp(72px, 9vw, 136px);
-    padding-top: clamp(40px, 5vw, 72px);
-    border-top: 1px solid var(--ud-line);
-  }
-  .vplayer {
-    max-width: 960px;
-    padding: 14px;
-    border: 1px solid rgb(20 20 20 / 0.3);
-    border-radius: 14px;
-  }
-  .vplayer .frame {
-    border-radius: 4px;
-  }
-  .scrub--video {
-    margin-top: 0;
-  }
-  .scrub--video span {
-    width: 22%;
-  }
-  .vmeta {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-top: 18px;
-    padding: 0 2px 4px;
-  }
-  .vavatar {
-    flex: none;
-    width: 40px;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    container-type: inline-size;
-  }
-  .vtitle {
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 1.35;
-  }
-  .vsub {
-    margin-top: 2px;
-    font-size: 13px;
-    color: var(--ud-muted);
-  }
-  .ep-text {
-    position: absolute;
-    left: 56cqi;
-    top: 8.5cqi;
-    right: 5cqi;
-  }
-  .ep-no {
-    font-size: 2cqi;
-    opacity: 0.7;
-  }
-  .ep-guest {
-    margin-top: 1.4cqi;
-    font-family: var(--ud-display);
-    font-size: 6.4cqi;
-    line-height: 1;
-    letter-spacing: -0.02em;
-  }
-  .ep-topic {
-    margin-top: 1.6cqi;
-    font-size: 2.2cqi;
-    line-height: 1.35;
-    opacity: 0.8;
-    max-width: 30ch;
-  }
-  .ep-wm {
-    position: absolute;
-    right: 5cqi;
-    bottom: 6cqi;
-  }
   @media (max-width: 960px) {
     .phones {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1890,13 +1784,6 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     }
     .ph {
       width: min(100%, 300px);
-    }
-    .vplayer {
-      padding: 8px;
-      border-radius: 10px;
-    }
-    .vtitle {
-      font-size: 14px;
     }
   }
 
