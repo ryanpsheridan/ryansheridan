@@ -10,7 +10,7 @@ import Wordmark from "../components/unexpected-detail/Wordmark.astro";
   of the exploration live on at /unexpected-detail/round-1.
 
   The presentation is fixed to the recommended identity: Gloock with Geist,
-  the dot above the i, Black & Paper. The editor at the end is the one place
+  the dot above the i, Charcoal & Butter. The editor at the end is the one place
   that changes, and its state lives in the URL so a copied link reopens the
   same version.
 
@@ -66,17 +66,19 @@ const vars = (p: string, s: string) =>
 
 /*
   Eight directions, each its own color family, so no two read as small
-  variations of each other. Black & Paper stays the recommendation. The
-  rest pair a deep field with a quiet accent for the dot (or, for Forest &
-  Ivory, a light field with a dark dot), and every field holds at least
-  8:1 against its type and 5.7:1 against its dot.
+  variations of each other. Charcoal & Butter is the recommendation, so it
+  comes first: a charcoal field with the dot in butter, which falls back to
+  charcoal on light grounds where butter would not read. Most pair a deep
+  field with a quiet accent for the dot (Black & Paper and Forest & Ivory
+  are light fields with a dark dot), and every field holds at least 8:1
+  against its type and 5.7:1 against its dot.
 */
 const palettes = [
-  { name: "Black & Paper", p: "#171717", s: "#F5F4EF", mood: "Timeless, minimal. The recommended direction." },
+  { name: "Charcoal & Butter", p: "#E8CB6A", s: "#2A2A28", mood: "Charcoal with a restrained yellow. The recommended direction." },
+  { name: "Black & Paper", p: "#171717", s: "#F5F4EF", mood: "Black on warm paper. Timeless, minimal." },
   { name: "Ink & Bone", p: "#CDBB99", s: "#161514", mood: "Near black, with a warm bone dot." },
   { name: "Midnight & Cream", p: "#E6D3A8", s: "#1B2436", mood: "Deep navy, soft cream. Quiet and nocturnal." },
   { name: "Forest & Ivory", p: "#2F4A3A", s: "#F1ECDF", mood: "Warm ivory with a forest green dot. Light and organic." },
-  { name: "Charcoal & Butter", p: "#E8CB6A", s: "#2A2A28", mood: "Charcoal with a restrained yellow. The most optimistic." },
   { name: "Espresso & Sand", p: "#D2B48A", s: "#3A2B23", mood: "Rich brown and warm sand. Grounded." },
   { name: "Burgundy & Blush", p: "#E5B3AD", s: "#4A1C25", mood: "Deep burgundy, muted blush. The most expressive." },
   { name: "Slate & Mist", p: "#C3CFD8", s: "#3E4A55", mood: "Blue gray and pale mist. Cool and editorial." },
