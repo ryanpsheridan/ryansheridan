@@ -294,6 +294,15 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
                     <div class="t tone-dark t-pattern"><Lines count={26} fall={17} x={2} gap={3.84} y={0} len={100} w={0.35} /><p><b>New episode</b>every Thursday</p></div>
                     <div class="t tone-light t-guest"><small>ep. 12</small><p>Guest Name</p></div>
                     <div class="t tone-dark t-q t-q--end"><p>“The blank parts are my favorite.”</p></div>
+                    <div class="t tone-dark t-dot"><span></span></div>
+                    <div class="t t-say"><p>Everyone has one.</p></div>
+                    <Cover tone="paper" class="tone-light" />
+                    <div class="t tone-light t-num"><small>Guest Name</small><p>13</p></div>
+                    <div class="t tone-dark t-ask"><p>What’s your unexpected detail?</p><span></span></div>
+                    <div class="t tone-light t-pattern t-season"><Lines count={26} fall={9} x={2} gap={3.84} y={0} len={100} w={0.35} /><p><b>Season two</b>this spring</p></div>
+                    <div class="t tone-dark t-line"><Wordmark size="8.4cqi" line /></div>
+                    <div class="t tone-light t-q t-q--low"><p>“I keep every grocery list I’ve ever found.”</p></div>
+                    <div class="t tone-dark t-play"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" /><path d="M10 8v8l6-4z" /></svg><small>ep. 14</small></div>
                   </div>
                 </div>
               </div>
@@ -1717,6 +1726,98 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     font-size: 19cqi;
     line-height: 0.92;
     letter-spacing: -0.02em;
+  }
+  /* The rest of the grid, so the profile scrolls off the screen like a real
+     one: a lone dot, a line of brand voice, an episode number, a question
+     to listeners, a season teaser, the one-line logo, a quote tucked low,
+     and a play prompt. */
+  .t-dot {
+    display: grid;
+    place-items: center;
+  }
+  .t-dot span {
+    width: 22cqi;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--dot);
+  }
+  .t-say {
+    background: var(--ud-stone);
+  }
+  .t-say p {
+    position: absolute;
+    left: 9cqi;
+    right: 9cqi;
+    bottom: 9cqi;
+    font-family: var(--ud-display);
+    font-size: 15cqi;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+  }
+  .t-num small {
+    position: absolute;
+    left: 9cqi;
+    top: 9cqi;
+    font-size: 6.4cqi;
+    opacity: 0.6;
+  }
+  .t-num p {
+    position: absolute;
+    left: 7cqi;
+    bottom: -4cqi;
+    font-family: var(--ud-display);
+    font-size: 62cqi;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .t-ask p {
+    position: absolute;
+    left: 9cqi;
+    right: 12cqi;
+    top: 9cqi;
+    font-size: 9.4cqi;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .t-ask span {
+    position: absolute;
+    left: 9cqi;
+    bottom: 10cqi;
+    width: 7cqi;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--dot);
+  }
+  .t-season .ud-lines {
+    opacity: 0.22;
+  }
+  .t-line {
+    display: grid;
+    place-items: center;
+  }
+  .t-q--low p {
+    left: 9cqi;
+    right: 22cqi;
+    bottom: 9cqi;
+  }
+  .t-play svg {
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    width: 30cqi;
+    translate: -50% -50%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 0.7;
+    stroke-linejoin: round;
+  }
+  .t-play small {
+    position: absolute;
+    left: 9cqi;
+    bottom: 9cqi;
+    font-size: 6.4cqi;
+    opacity: 0.6;
   }
   .grid .tone-light {
     box-shadow: inset 0 0 0 1px var(--ud-line);
