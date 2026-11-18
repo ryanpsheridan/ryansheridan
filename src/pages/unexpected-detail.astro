@@ -65,32 +65,21 @@ const vars = (p: string, s: string) =>
     .join(";");
 
 /*
-  Twenty directions, weighted toward what the client wears: black and
-  white, warm neutrals, then yellow, and a few quiet greens and blues. No
-  reds or oranges. 12 and 19 were deepened so their dot holds on their own
-  light field.
+  Eight directions, each its own color family, so no two read as small
+  variations of each other. Black & Paper stays the recommendation. The
+  rest pair a deep field with a quiet accent for the dot (or, for Forest &
+  Ivory, a light field with a dark dot), and every field holds at least
+  8:1 against its type and 5.7:1 against its dot.
 */
 const palettes = [
-  { name: "Black & Paper", p: "#171717", s: "#F5F4EF", mood: "Timeless, minimal" },
-  { name: "Soft Charcoal", p: "#555555", s: "#E9E8E2", mood: "Understated, modern" },
-  { name: "Ink & Chalk", p: "#22282A", s: "#F1F0EA", mood: "Editorial, sophisticated" },
-  { name: "Graphite & White", p: "#343434", s: "#FFFFFF", mood: "Clean, confident" },
-  { name: "Sand & Espresso", p: "#D8C9B4", s: "#40362F", mood: "Warm, grounded" },
-  { name: "Stone & Ink", p: "#B8B5AA", s: "#30312E", mood: "Minimal, architectural" },
-  { name: "Oat & Charcoal", p: "#E4DAC8", s: "#383732", mood: "Soft, approachable" },
-  { name: "Mushroom & Cocoa", p: "#B7AA9B", s: "#4A4039", mood: "Quiet, refined" },
-  { name: "Bone & Slate", p: "#EAE5D9", s: "#50545A", mood: "Contemporary, neutral" },
-  { name: "Butter & Ink", p: "#F1D879", s: "#292929", mood: "Warm, optimistic" },
-  { name: "Pale Butter & Charcoal", p: "#F5E9AA", s: "#353532", mood: "Subtle, understated" },
-  { name: "Mustard & Cream", p: "#B8953A", s: "#F4F0E6", mood: "Distinctive, mature" },
-  { name: "Golden Yellow & Ink", p: "#D6B52F", s: "#222222", mood: "Confident, expressive" },
-  { name: "Lemon & Graphite", p: "#E9E4A5", s: "#393A35", mood: "Fresh, contemporary" },
-  { name: "Sage & Forest", p: "#B0BDA7", s: "#34443A", mood: "Organic, calm" },
-  { name: "Olive & Bone", p: "#969477", s: "#F1EBDD", mood: "Natural, understated" },
-  { name: "Eucalyptus & Charcoal", p: "#A9BDB4", s: "#343D39", mood: "Soft, modern" },
-  { name: "Slate & Cloud", p: "#AAB6C2", s: "#353F4A", mood: "Cool, editorial" },
-  { name: "Dusty Blue & Bone", p: "#8497AC", s: "#F0ECE3", mood: "Quiet, sophisticated" },
-  { name: "Lavender & Ink", p: "#B6AFC7", s: "#34313C", mood: "Subtle, distinctive" },
+  { name: "Black & Paper", p: "#171717", s: "#F5F4EF", mood: "Timeless, minimal. The recommended direction." },
+  { name: "Ink & Bone", p: "#CDBB99", s: "#161514", mood: "Near black, with a warm bone dot." },
+  { name: "Midnight & Cream", p: "#E6D3A8", s: "#1B2436", mood: "Deep navy, soft cream. Quiet and nocturnal." },
+  { name: "Forest & Ivory", p: "#2F4A3A", s: "#F1ECDF", mood: "Warm ivory with a forest green dot. Light and organic." },
+  { name: "Charcoal & Butter", p: "#E8CB6A", s: "#2A2A28", mood: "Charcoal with a restrained yellow. The most optimistic." },
+  { name: "Espresso & Sand", p: "#D2B48A", s: "#3A2B23", mood: "Rich brown and warm sand. Grounded." },
+  { name: "Burgundy & Blush", p: "#E5B3AD", s: "#4A1C25", mood: "Deep burgundy, muted blush. The most expressive." },
+  { name: "Slate & Mist", p: "#C3CFD8", s: "#3E4A55", mood: "Blue gray and pale mist. Cool and editorial." },
 ].map((c, i) => ({ ...c, no: String(i + 1).padStart(2, "0") }));
 const rec = palettes.find((p) => p.no === RECOMMENDED.palette)!;
 const recVars = vars(rec.p, rec.s);
@@ -349,7 +338,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
                 <Wordmark class="xp-wm" size="12cqi" />
               </div>
               <div class="xp-sub">
-                <div class="xp-paper tone-light">
+                <div class="xp-paper tone-field">
                   <p class="xp-kicker">Episode 12 · with Guest Name</p>
                   <p class="xp-title">a cartographer of places that never existed</p>
                   <Wordmark class="xp-paper-wm" size="4.6cqi" />
@@ -387,21 +376,22 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
 
               <fieldset class="opt">
                 <legend><span>C</span>Color <em><span data-bind="pal-name">{rec.no} {rec.name}</span></em></legend>
-                <div class="dots" role="group" aria-label="Twenty color directions">
+                <div class="pals" role="group" aria-label="Color directions">
                   {palettes.map((c) => (
                     <button
                       type="button"
-                      class="sw"
-                      style={`--sp:${c.p};--ss:${c.s}`}
+                      class="pal"
                       data-palette={c.no}
                       data-p={c.p}
                       data-s={c.s}
                       data-name={c.name}
                       data-mood={c.mood}
                       aria-pressed={c.no === RECOMMENDED.palette ? "true" : "false"}
-                      aria-label={`${c.no} ${c.name}, ${c.mood}${c.no === RECOMMENDED.palette ? ", recommended" : ""}`}
-                      title={`${c.no} ${c.name}`}
-                    />
+                    >
+                      <span class="sw" style={`--sp:${c.p};--ss:${c.s}`} aria-hidden="true"></span>
+                      <span class="pal-name">{c.name}</span>
+                      {c.no === RECOMMENDED.palette && <b class="rec">Recommended</b>}
+                    </button>
                   ))}
                 </div>
                 <p class="pal-mood" data-bind="pal-mood">{rec.mood}</p>
@@ -952,6 +942,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   /* The recommendation marker: a small dot and a quiet word, used in the
      editor wherever the recommended option sits beside an alternative. */
   .ub .rec {
+    white-space: nowrap;
     font-size: 12px;
     font-weight: 400;
     letter-spacing: 0;
@@ -1942,44 +1933,71 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   .choice-label {
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     gap: 7px;
     align-items: center;
     font-size: 12px;
   }
-  .dots {
+  /* Eight named presets: a swatch, its name, and the recommendation marker
+     on the first. */
+  .pals {
     display: grid;
-    grid-template-columns: repeat(10, minmax(0, 1fr));
-    gap: 5px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px 8px;
+  }
+  .pal {
+    display: grid;
+    align-content: start;
+    gap: 6px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ud-ink);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .pal-name {
+    font-size: 11px;
+    line-height: 1.3;
+  }
+  .pal .rec {
+    font-size: 10px;
+    margin-top: -3px;
   }
   /* A palette swatch: the field with the dot at its center. */
   .ub .sw {
     position: relative;
     display: block;
-    aspect-ratio: 1;
-    padding: 0;
-    border: 0;
+    aspect-ratio: 3 / 2;
     background: var(--ss);
     box-shadow: inset 0 0 0 1px rgb(20 20 20 / 0.1);
-    cursor: pointer;
     transition: transform 0.25s var(--ease);
   }
   .ub .sw::after {
     content: "";
     position: absolute;
-    inset: 33%;
+    left: 50%;
+    top: 50%;
+    width: 30%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
     border-radius: 50%;
     background: var(--sp);
     transition: transform 0.3s var(--ease);
   }
-  .ub .sw:hover {
+  .pal:hover .sw {
     transform: translateY(-2px);
   }
-  .ub .sw:hover::after {
+  .pal:hover .sw::after {
     transform: scale(1.18);
   }
-  .ub .sw[aria-pressed="true"] {
+  .pal[aria-pressed="true"] .sw {
     outline: 2px solid var(--ud-ink);
     outline-offset: 2px;
+  }
+  .pal[aria-pressed="true"] .pal-name {
+    font-weight: 500;
   }
   .pal-mood {
     margin-top: 8px;
@@ -2148,10 +2166,6 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     }
     .xp-cover {
       width: 60%;
-    }
-    .dots {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 8px;
     }
     .choice-art {
       font-size: 22px;
