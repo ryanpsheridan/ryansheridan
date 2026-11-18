@@ -835,8 +835,10 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   .ub.motion .drop.is-in .wm-i::before {
     animation: ud-drop 0.95s cubic-bezier(0.55, 0, 0.35, 1) 0.35s both;
   }
+  /* The opening keeps its one movement, the falling line. Its dot sits
+     still from the start (it still lifts on hover). */
   .ub.motion .intro-wm.drop .wm-i::before {
-    animation-delay: 1.9s;
+    animation: none;
   }
   @keyframes ud-drop {
     from {
