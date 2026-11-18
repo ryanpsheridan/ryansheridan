@@ -46,35 +46,36 @@ const onColor = (hex: string) => (contrast(hex, INK) >= contrast(hex, PAPER) ? I
   palette gets a light and a dark ground: a dark field pairs with paper; a
   light field pairs with the primary when it is near black (the black and
   white palettes), or ink. The dot on each ground is the primary where it
-  reads, then the secondary, then the type color.
+  reads, then the secondary, then the type color. A palette marked keep
+  holds its primary dot on every ground, light ones included.
 */
-const system = (p: string, s: string) => {
+const system = (p: string, s: string, keep = false) => {
   const fFg = onColor(s);
   const fieldDark = fFg === PAPER;
   const c = fieldDark ? PAPER : lum(p) < 0.045 ? p : INK;
   const cFg = onColor(c);
-  const dotOn = (g: string, fg: string) => [p, s].find((x) => contrast(x, g) >= DOT_MIN) ?? fg;
+  const dotOn = (g: string, fg: string) => (keep ? p : [p, s].find((x) => contrast(x, g) >= DOT_MIN) ?? fg);
   const f = { bg: s, fg: fFg, dot: dotOn(s, fFg) };
   const k = { bg: c, fg: cFg, dot: dotOn(c, cFg) };
   const [d, l] = fieldDark ? [f, k] : [k, f];
   return { f, c: k, d, l };
 };
-const vars = (p: string, s: string) =>
-  Object.entries(system(p, s))
+const vars = (p: string, s: string, keep = false) =>
+  Object.entries(system(p, s, keep))
     .flatMap(([n, t]) => [`--${n}-bg:${t.bg}`, `--${n}-fg:${t.fg}`, `--${n}-dot:${t.dot}`])
     .join(";");
 
 /*
   Eight directions, each its own color family, so no two read as small
   variations of each other. Charcoal & Butter is the recommendation, so it
-  comes first: a charcoal field with the dot in butter, which falls back to
-  charcoal on light grounds where butter would not read. Most pair a deep
+  comes first: a charcoal field with the dot in butter, kept in butter on
+  light grounds too, so every example carries the same yellow. Most pair a deep
   field with a quiet accent for the dot (Black & Paper and Forest & Ivory
   are light fields with a dark dot), and every field holds at least 8:1
   against its type and 5.7:1 against its dot.
 */
 const palettes = [
-  { name: "Charcoal & Butter", p: "#E8CB6A", s: "#2A2A28", mood: "Charcoal with a restrained yellow. The recommended direction." },
+  { name: "Charcoal & Butter", p: "#E8CB6A", s: "#2A2A28", mood: "Charcoal with a restrained yellow. The recommended direction.", keep: true },
   { name: "Black & Paper", p: "#171717", s: "#F5F4EF", mood: "Black on warm paper. Timeless, minimal." },
   { name: "Ink & Bone", p: "#CDBB99", s: "#161514", mood: "Near black, with a warm bone dot." },
   { name: "Midnight & Cream", p: "#E6D3A8", s: "#1B2436", mood: "Deep navy, soft cream. Quiet and nocturnal." },
@@ -82,9 +83,9 @@ const palettes = [
   { name: "Espresso & Sand", p: "#D2B48A", s: "#3A2B23", mood: "Rich brown and warm sand. Grounded." },
   { name: "Burgundy & Blush", p: "#E5B3AD", s: "#4A1C25", mood: "Deep burgundy, muted blush. The most expressive." },
   { name: "Slate & Mist", p: "#C3CFD8", s: "#3E4A55", mood: "Blue gray and pale mist. Cool and editorial." },
-].map((c, i) => ({ ...c, no: String(i + 1).padStart(2, "0") }));
+].map((c, i) => ({ keep: false, ...c, no: String(i + 1).padStart(2, "0") }));
 const rec = palettes.find((p) => p.no === RECOMMENDED.palette)!;
-const recVars = vars(rec.p, rec.s);
+const recVars = vars(rec.p, rec.s, rec.keep);
 
 // Recommended first, on the left, wherever two options sit side by side.
 const fonts = [
@@ -388,6 +389,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
                       data-s={c.s}
                       data-name={c.name}
                       data-mood={c.mood}
+                      data-keep={c.keep ? "true" : undefined}
                       aria-pressed={c.no === RECOMMENDED.palette ? "true" : "false"}
                     >
                       <span class="sw" style={`--sp:${c.p};--ss:${c.s}`} aria-hidden="true"></span>
@@ -476,12 +478,12 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   };
   const onColor = (hex: string) => (contrast(hex, INK) >= contrast(hex, PAPER) ? INK : PAPER);
   // Same derivation as the frontmatter's system().
-  const system = (p: string, s: string) => {
+  const system = (p: string, s: string, keep = false) => {
     const fFg = onColor(s);
     const fieldDark = fFg === PAPER;
     const c = fieldDark ? PAPER : lum(p) < 0.045 ? p : INK;
     const cFg = onColor(c);
-    const dotOn = (g: string, fg: string) => [p, s].find((x) => contrast(x, g) >= DOT_MIN) ?? fg;
+    const dotOn = (g: string, fg: string) => (keep ? p : [p, s].find((x) => contrast(x, g) >= DOT_MIN) ?? fg);
     const f = { bg: s, fg: fFg, dot: dotOn(s, fFg) };
     const k = { bg: c, fg: cFg, dot: dotOn(c, cFg) };
     const [d, l] = fieldDark ? [f, k] : [k, f];
@@ -528,7 +530,8 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   function render(opts: { skip?: HTMLInputElement; url?: boolean } = {}) {
     xp.dataset.font = state.font;
     xp.dataset.dot = state.dot;
-    for (const [k, t] of Object.entries(system(state.primary, state.secondary))) {
+    const match = swatches.find((b) => b.dataset.p === state.primary && b.dataset.s === state.secondary);
+    for (const [k, t] of Object.entries(system(state.primary, state.secondary, match?.dataset.keep === "true"))) {
       xp.style.setProperty(`--${k}-bg`, t.bg);
       xp.style.setProperty(`--${k}-fg`, t.fg);
       xp.style.setProperty(`--${k}-dot`, t.dot);
@@ -537,7 +540,6 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     $$("[data-set-dot]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.setDot === state.dot)));
     $$("[data-set-font]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.setFont === state.font)));
 
-    const match = swatches.find((b) => b.dataset.p === state.primary && b.dataset.s === state.secondary);
     swatches.forEach((b) => b.setAttribute("aria-pressed", String(b === match)));
     bind("pal-name", match ? `${match.dataset.palette} ${match.dataset.name}` : "Custom");
     bind("pal-mood", match ? match.dataset.mood! : `${state.primary} dot on ${state.secondary}`);
