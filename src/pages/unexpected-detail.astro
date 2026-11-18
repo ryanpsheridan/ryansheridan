@@ -9,10 +9,12 @@ import Wordmark from "../components/unexpected-detail/Wordmark.astro";
   out of the sitemap by the allowlist in astro.config.mjs. Rounds 01 to 05
   of the exploration live on at /unexpected-detail/round-1.
 
-  The presentation is fixed to the recommended identity: Gloock with Geist,
-  the dot above the i, Charcoal & Butter. The editor at the end is the one place
-  that changes, and its state lives in the URL so a copied link reopens the
-  same version.
+  The presentation shows the recommended identity: Gloock with Geist, the
+  dot above the i, Charcoal & Butter. The editor at the end changes it. Its
+  colors carry across the whole page; its detail and typeface stay in the
+  editor's preview, so the presentation only ever shows the recommended
+  logo. The state lives in the URL, so a copied link reopens the same
+  version, colors applied before the first paint.
 
   The logo is live type (the staggered Gloock lockup from round 05), drawn
   by components/unexpected-detail, which is what lets the editor switch the
@@ -70,7 +72,8 @@ const vars = (p: string, s: string, keep = false) =>
   cover in the podcast app). Type and lines take the field color; the dot
   turns paper, so the detail still stands apart.
 */
-const accentVars = (p: string, s: string) => `--a-bg:${p};--a-fg:${s};--a-dot:${PAPER}`;
+const accentVars = (p: string, s: string) =>
+  `--a-bg:${p};--a-fg:${contrast(s, p) >= 4.5 ? s : onColor(p)};--a-dot:${PAPER}`;
 
 /*
   Eight directions, each its own color family, so no two read as small
@@ -93,6 +96,8 @@ const palettes = [
 ].map((c, i) => ({ keep: false, ...c, no: String(i + 1).padStart(2, "0") }));
 const rec = palettes.find((p) => p.no === RECOMMENDED.palette)!;
 const recVars = `${vars(rec.p, rec.s, rec.keep)};${accentVars(rec.p, rec.s)}`;
+// Presets whose dot keeps its color on every ground, as primary + secondary.
+const keepPairs = palettes.filter((c) => c.keep).map((c) => c.p + c.s);
 
 // Recommended first, on the left, wherever two options sit side by side.
 const fonts = [
@@ -116,6 +121,54 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
 >
   <link rel="stylesheet" href={fontsHref} />
   <div class="ub" id="ub" data-font={RECOMMENDED.font} data-dot={RECOMMENDED.dot} style={recVars}>
+    <script is:inline define:vars={{ INK, PAPER, DOT_MIN, keepPairs }}>
+      // The color system for the browser, the same derivation as system()
+      // and accentVars() in the frontmatter. Shared with the editor script
+      // through window.udColor; applied here first so a link with colors
+      // never flashes the default palette.
+      const lum = (hex) => {
+        const n = parseInt(hex.slice(1), 16);
+        const c = [n >> 16, (n >> 8) & 255, n & 255].map((v) => {
+          const x = v / 255;
+          return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
+        });
+        return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+      };
+      const contrast = (a, b) => {
+        const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m);
+        return (x + 0.05) / (y + 0.05);
+      };
+      const onColor = (hex) => (contrast(hex, INK) >= contrast(hex, PAPER) ? INK : PAPER);
+      const system = (p, s, keep) => {
+        const fFg = onColor(s);
+        const fieldDark = fFg === PAPER;
+        const c = fieldDark ? PAPER : lum(p) < 0.045 ? p : INK;
+        const cFg = onColor(c);
+        const dotOn = (g, fg) => (keep ? p : [p, s].find((x) => contrast(x, g) >= DOT_MIN) ?? fg);
+        const f = { bg: s, fg: fFg, dot: dotOn(s, fFg) };
+        const k = { bg: c, fg: cFg, dot: dotOn(c, cFg) };
+        const [d, l] = fieldDark ? [f, k] : [k, f];
+        return { f, c: k, d, l, a: { bg: p, fg: contrast(s, p) >= 4.5 ? s : onColor(p), dot: PAPER } };
+      };
+      const apply = (el, p, s) => {
+        const keep = keepPairs.includes(p + s);
+        for (const [k, t] of Object.entries(system(p, s, keep))) {
+          el.style.setProperty(`--${k}-bg`, t.bg);
+          el.style.setProperty(`--${k}-fg`, t.fg);
+          el.style.setProperty(`--${k}-dot`, t.dot);
+        }
+      };
+      window.udColor = { apply };
+      const hex = (v) => {
+        let h = (v || "").trim().replace(/^#/, "");
+        if (/^[0-9a-f]{3}$/i.test(h)) h = h.replace(/./g, (x) => x + x);
+        return /^[0-9a-f]{6}$/i.test(h) ? `#${h.toUpperCase()}` : null;
+      };
+      const q = new URLSearchParams(location.search);
+      const p = hex(q.get("primary"));
+      const s = hex(q.get("secondary"));
+      if (p && s) apply(document.getElementById("ub"), p, s);
+    </script>
     <main id="main">
       <!-- Opening -->
       <section class="intro tone-dark" aria-label="unexpected detail, identity presentation">
@@ -338,15 +391,15 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
       </section>
 
       <!-- 06 Make it your own -->
-      <section class="xp" id="explore" aria-labelledby="xp-h" data-font={RECOMMENDED.font} data-dot={RECOMMENDED.dot} style={recVars}>
+      <section class="xp" id="explore" aria-labelledby="xp-h" data-font={RECOMMENDED.font} data-dot={RECOMMENDED.dot}>
         <div class="wrap">
           <div class="slabel"><span>06</span><p>Editor</p></div>
           <div class="xp-head">
             <h2 id="xp-h" class="xp-say">Make it your own.</h2>
             <p class="xp-copy">
               Explore a few expressions of the identity. Move the unexpected detail, try the alternate
-              typeface, and find a color direction that feels right. Your choices update the preview as
-              you go, and a link keeps them.
+              typeface, and find a color direction that feels right. Colors carry across the whole page;
+              the detail and typeface change in the preview. A link keeps it all.
             </p>
           </div>
 
@@ -405,7 +458,6 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
                       data-s={c.s}
                       data-name={c.name}
                       data-mood={c.mood}
-                      data-keep={c.keep ? "true" : undefined}
                       aria-pressed={c.no === RECOMMENDED.palette ? "true" : "false"}
                     >
                       <span class="sw" style={`--sp:${c.p};--ss:${c.s}`} aria-hidden="true"></span>
@@ -462,10 +514,8 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   type Dot = "period" | "i";
   type State = { font: Font; dot: Dot; primary: string; secondary: string };
 
-  const INK = "#141414";
-  const PAPER = "#FAF9F6";
-  const DOT_MIN = 2.25;
   const root = document.getElementById("ub")!;
+  const udColor = (window as unknown as { udColor: { apply: (el: HTMLElement, p: string, s: string) => void } }).udColor;
   const xp = document.getElementById("explore")!;
   const $ = <T extends Element = HTMLElement>(s: string) => document.querySelector<T>(s)!;
   const $$ = (s: string) => Array.from(document.querySelectorAll<HTMLElement>(s));
@@ -480,32 +530,6 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     if (/^[0-9a-f]{3}$/i.test(h)) h = h.replace(/./g, (c) => c + c);
     return /^[0-9a-f]{6}$/i.test(h) ? `#${h.toUpperCase()}` : null;
   };
-  const lum = (hex: string) => {
-    const n = parseInt(hex.slice(1), 16);
-    const c = [n >> 16, (n >> 8) & 255, n & 255].map((v) => {
-      const s = v / 255;
-      return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-    });
-    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
-  };
-  const contrast = (a: string, b: string) => {
-    const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m);
-    return (x + 0.05) / (y + 0.05);
-  };
-  const onColor = (hex: string) => (contrast(hex, INK) >= contrast(hex, PAPER) ? INK : PAPER);
-  // Same derivation as the frontmatter's system().
-  const system = (p: string, s: string, keep = false) => {
-    const fFg = onColor(s);
-    const fieldDark = fFg === PAPER;
-    const c = fieldDark ? PAPER : lum(p) < 0.045 ? p : INK;
-    const cFg = onColor(c);
-    const dotOn = (g: string, fg: string) => (keep ? p : [p, s].find((x) => contrast(x, g) >= DOT_MIN) ?? fg);
-    const f = { bg: s, fg: fFg, dot: dotOn(s, fFg) };
-    const k = { bg: c, fg: cFg, dot: dotOn(c, cFg) };
-    const [d, l] = fieldDark ? [f, k] : [k, f];
-    return { f, c: k, d, l };
-  };
-
   // A shared link opens on its own settings, in any browser.
   const q = new URLSearchParams(location.search);
   const state: State = {
@@ -546,12 +570,9 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   function render(opts: { skip?: HTMLInputElement; url?: boolean } = {}) {
     xp.dataset.font = state.font;
     xp.dataset.dot = state.dot;
+    // Colors go to the whole page; the detail and typeface stay above.
+    udColor.apply(root, state.primary, state.secondary);
     const match = swatches.find((b) => b.dataset.p === state.primary && b.dataset.s === state.secondary);
-    for (const [k, t] of Object.entries(system(state.primary, state.secondary, match?.dataset.keep === "true"))) {
-      xp.style.setProperty(`--${k}-bg`, t.bg);
-      xp.style.setProperty(`--${k}-fg`, t.fg);
-      xp.style.setProperty(`--${k}-dot`, t.dot);
-    }
 
     $$("[data-set-dot]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.setDot === state.dot)));
     $$("[data-set-font]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.setFont === state.font)));
@@ -1936,10 +1957,11 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     align-items: start;
     margin-top: clamp(48px, 6vw, 88px);
   }
-  .xp .tone-field,
-  .xp .tone-counter,
-  .xp .tone-light,
-  .xp .tone-dark {
+  .ub .tone-field,
+  .ub .tone-counter,
+  .ub .tone-light,
+  .ub .tone-dark,
+  .ub .tone-accent {
     transition:
       background-color 0.5s var(--ease),
       color 0.5s var(--ease);
