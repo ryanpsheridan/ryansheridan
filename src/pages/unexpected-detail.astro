@@ -163,7 +163,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
         <div class="split">
           <figure class="split-half tone-dark">
             <div class="split-art"><Wordmark size="6.4cqi" line /></div>
-            <figcaption><b>Alternate.</b> One line, for web headers, video and anywhere height is short.</figcaption>
+            <figcaption><b>One line.</b> The same logo on a single line, for web headers, video and anywhere height is short.</figcaption>
           </figure>
           <figure class="split-half split-half--mark">
             <div class="split-art"><span class="wm mark" role="img" aria-label="The i mark"><span class="wm-i">i</span></span></div>
@@ -187,24 +187,6 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
         <div class="detail-word drop" aria-hidden="true"><Wordmark size="31cqi" line class="detail-wm" /></div>
       </section>
 
-      <section class="ab" aria-label="Two places for the dot">
-        <figure class="ab-half" data-dot="i">
-          <p class="ab-tag"><span>A</span>The dot of the i <b class="rec">Recommended</b></p>
-          <div class="ab-art drop"><Wordmark size="9.4cqi" /></div>
-          <figcaption>
-            Hidden inside the word. Nothing is added to the name, so you find the detail rather than
-            being shown it. The closest to what the show does.
-          </figcaption>
-        </figure>
-        <figure class="ab-half ab-half--accent" data-dot="period">
-          <p class="ab-tag"><span>B</span>The period <b class="alt">Alternative</b></p>
-          <div class="ab-art"><Wordmark size="9.4cqi" /></div>
-          <figcaption>
-            A full stop that won’t stop: it hangs past the edge of the type. Clearer at a glance, and
-            it reads as a statement.
-          </figcaption>
-        </figure>
-      </section>
 
       <!-- 03 Typography -->
       <section class="spread" aria-labelledby="type-h">
@@ -967,10 +949,9 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   .ub .tone-dark figcaption b {
     color: inherit;
   }
-  /* The recommendation marker: a small dot and a quiet word, the same
-     everywhere a recommended and an alternative option sit side by side. */
-  .ub .rec,
-  .ub .alt {
+  /* The recommendation marker: a small dot and a quiet word, used in the
+     editor wherever the recommended option sits beside an alternative. */
+  .ub .rec {
     font-size: 12px;
     font-weight: 400;
     letter-spacing: 0;
@@ -1246,11 +1227,6 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   .ub .spread--id {
     padding-bottom: 0;
   }
-  /* The alternative is shown with its period in color, so the detail reads
-     as a detail rather than as punctuation. Muted gold, from the palette. */
-  .ab-half--accent {
-    --dot: #b8953a;
-  }
   .detail-head {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
@@ -1280,62 +1256,9 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   .detail-wm .wm-a {
     display: none !important;
   }
-  .ab {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border-bottom: 1px solid var(--ud-line);
-  }
-  .ab-half {
-    container-type: inline-size;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    gap: 24px;
-    min-height: clamp(420px, 44vw, 620px);
-    padding: clamp(28px, 4vw, 56px);
-  }
-  .ab-half + .ab-half {
-    border-left: 1px solid var(--ud-line);
-  }
-  .ab-tag {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    font-size: 13px;
-    font-weight: 500;
-  }
-  .ab-tag > span {
-    font-family: var(--font-mono);
-    font-weight: 400;
-    opacity: 0.6;
-  }
-  .ab-tag b {
-    margin-left: auto;
-  }
-  .ab-art {
-    display: grid;
-    place-items: center;
-  }
-  .ab-half figcaption {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--ud-muted);
-    max-width: 46ch;
-  }
   @media (max-width: 760px) {
-    .detail-head,
-    .ab {
+    .detail-head {
       grid-template-columns: 1fr;
-    }
-    .ab-half {
-      min-height: 0;
-    }
-    .ab-half + .ab-half {
-      border-left: 0;
-      border-top: 1px solid var(--ud-line);
-    }
-    .ab-art .wm {
-      font-size: calc(var(--wm-scale) * 15cqi) !important;
-      padding-block: 28px;
     }
   }
 
