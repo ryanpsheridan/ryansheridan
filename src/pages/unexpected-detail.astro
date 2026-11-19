@@ -986,7 +986,9 @@ const fontsHref =
     DM Sans draws its own i stem: the glyph's stem is hidden (--stem-ink)
     and redrawn as a box at the same place, measured from the glyph, with
     the top left and bottom right corners fully rounded. Where the dot
-    drops, the stem starts square and the corners round in as it lands.
+    drops (the opening included, for this face), it falls to its seat,
+    never past it, and hops once; the stem starts square and the landing
+    rounds its corners.
   */
   .ub [data-font="dmsans"] .wm-i::after,
   .ub[data-font="dmsans"] .wm-i::after {
@@ -1003,14 +1005,37 @@ const fontsHref =
     border-radius: 0;
   }
   .ub.motion .drop.is-in .wm-i::after {
-    animation: ud-round 0.7s var(--ease) 1.15s both;
-  }
-  .ub.motion .intro-wm.drop .wm-i::after {
-    animation: none;
+    animation: ud-round 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) 1.15s both;
   }
   @keyframes ud-round {
     from {
       border-radius: 0;
+    }
+  }
+  .ub.motion[data-font="dmsans"] .drop.is-in .wm-i::before {
+    animation: ud-bounce 1.3s linear 0.35s both;
+  }
+  /* Lands at 62% (0.35s + 0.81s, when the corners round), then a small hop. */
+  @keyframes ud-bounce {
+    from {
+      transform: translateY(-1.4em);
+      opacity: 0;
+      animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.55);
+    }
+    25% {
+      opacity: 1;
+    }
+    62% {
+      transform: none;
+      animation-timing-function: cubic-bezier(0.2, 0.6, 0.35, 1);
+    }
+    80% {
+      transform: translateY(-0.09em);
+      animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.45);
+    }
+    to {
+      transform: none;
+      opacity: 1;
     }
   }
 
