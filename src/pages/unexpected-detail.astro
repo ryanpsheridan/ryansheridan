@@ -252,7 +252,7 @@ const fontsHref =
             </p>
           </div>
         </div>
-        <div class="detail-word drop" aria-hidden="true"><Wordmark size="31cqi" line class="detail-wm" /></div>
+        <div class="detail-word lag" id="detail-word" aria-hidden="true"><Wordmark size="31cqi" line class="detail-wm" /></div>
       </section>
 
 
@@ -308,7 +308,7 @@ const fontsHref =
             <p class="line-lead">A row of upright lines with one that has tipped over. It supports the logo, never replaces it.</p>
             <ul class="rules">
               <li><b>One falls.</b> Never two, and always the same way, pivoting on its foot.</li>
-              <li><b>Hairline and quiet.</b> The lines take the color of the type; the one that fell takes the accent.</li>
+              <li><b>Hairline and quiet.</b> The lines take the color of the type.</li>
               <li><b>Any length.</b> A cover, a banner, or a divider between notes.</li>
             </ul>
           </div>
@@ -696,6 +696,48 @@ const fontsHref =
       { rootMargin: "0px 0px -12% 0px" },
     );
     $$(".reveal, .drop:not(.is-in), .tip").forEach((el) => io.observe(el));
+
+    // The detail spread's dot trails the scroll. Its lag follows the scroll
+    // speed, saturating so a fling never pulls it far (never into the
+    // stem below), and eases home when the page stops. It only runs while
+    // the spread is on screen and something is still moving.
+    const word = $("#detail-word");
+    const DOWN = 0.05; // em; less than the smallest gap above an i's stem
+    const UP = 0.09;
+    let onScreen = false;
+    let frame = 0;
+    let lastY = scrollY;
+    let lastT = performance.now();
+    let speed = 0; // px per ms, positive scrolling down
+    let lag = 0; // em, positive is lower
+    const tick = (t: number) => {
+      const dt = Math.max(t - lastT, 1);
+      const raw = (scrollY - lastY) / dt;
+      lastY = scrollY;
+      lastT = t;
+      speed += (raw - speed) * 0.35;
+      const max = speed > 0 ? DOWN : UP;
+      const target = max * Math.tanh(speed * 0.5);
+      lag += (target - lag) * 0.12;
+      word.style.setProperty("--lag", `${lag.toFixed(4)}em`);
+      if (Math.abs(lag) > 0.0005 || Math.abs(speed) > 0.002) frame = requestAnimationFrame(tick);
+      else {
+        lag = speed = 0;
+        word.style.setProperty("--lag", "0em");
+        frame = 0;
+      }
+    };
+    const wake = () => {
+      if (!onScreen || frame) return;
+      lastY = scrollY;
+      lastT = performance.now();
+      frame = requestAnimationFrame(tick);
+    };
+    new IntersectionObserver(([e]) => {
+      onScreen = e.isIntersecting;
+      wake();
+    }).observe(word);
+    addEventListener("scroll", wake, { passive: true });
   }
 </script>
 
@@ -943,12 +985,12 @@ const fontsHref =
     the real letterform falls the last stretch into its seat. It is static
     without .motion (no script, reduced motion) and once it has landed.
   */
-  .ub .drop .wm-i {
+  .ub :is(.drop, .lag) .wm-i {
     background: linear-gradient(to bottom, transparent 0 var(--isplit), var(--stem-ink, currentColor) var(--isplit));
     -webkit-background-clip: text;
     background-clip: text;
   }
-  .ub .drop .wm-i::before {
+  .ub :is(.drop, .lag) .wm-i::before {
     content: "i";
     position: absolute;
     left: 0;
@@ -987,8 +1029,8 @@ const fontsHref =
     and redrawn as a box at the same place, measured from the glyph, with
     the top left and bottom right corners fully rounded. Where the dot
     drops (the opening included, for this face), it falls to its seat,
-    never past it, and hops once; the stem starts square and the landing
-    rounds its corners.
+    never past it, and hops once; the stem starts square, the first landing
+    rounds its top corner and the last one its bottom corner.
   */
   .ub [data-font="dmsans"] .wm-i::after,
   .ub[data-font="dmsans"] .wm-i::after {
@@ -1005,17 +1047,33 @@ const fontsHref =
     border-radius: 0;
   }
   .ub.motion .drop.is-in .wm-i::after {
-    animation: ud-round 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) 1.15s both;
+    animation:
+      ud-round-top 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) 1.15s both,
+      ud-round-bottom 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) 1.65s both;
   }
-  @keyframes ud-round {
+  @keyframes ud-round-top {
     from {
-      border-radius: 0;
+      border-top-left-radius: 0;
+    }
+  }
+  @keyframes ud-round-bottom {
+    from {
+      border-bottom-right-radius: 0;
     }
   }
   .ub.motion[data-font="dmsans"] .drop.is-in .wm-i::before {
     animation: ud-bounce 1.3s linear 0.35s both;
   }
-  /* Lands at 62% (0.35s + 0.81s, when the corners round), then a small hop. */
+  /* In the opening the falling line goes first (it lands at 2s), then the
+     dot drops: the same moves, 1.75s later. */
+  .ub.motion[data-font="dmsans"] .intro-wm.drop.is-in .wm-i::before {
+    animation-delay: 2.1s;
+  }
+  .ub.motion .intro-wm.drop.is-in .wm-i::after {
+    animation-delay: 2.9s, 3.4s;
+  }
+  /* Lands at 62% (0.35s + 0.81s, the top corner rounds), hops, and lands
+     again at the end (1.65s, the bottom corner). */
   @keyframes ud-bounce {
     from {
       transform: translateY(-1.4em);
@@ -1039,6 +1097,16 @@ const fontsHref =
     }
   }
 
+  /*
+    In the detail spread the dot never drops: it sits in its seat and
+    trails the scroll a little, by --lag, which the script sets from the
+    scroll speed (a fast scroll leaves it further behind, a slow one barely
+    moves it) and eases back to zero when the page stops.
+  */
+  .ub .lag .wm-i::before {
+    transform: translateY(var(--lag, 0em));
+  }
+
   /* ---------- the falling line (SVG) ---------- */
   .ub .ud-lines {
     position: absolute;
@@ -1060,29 +1128,21 @@ const fontsHref =
   }
 
   /*
-    Two hover moments, for pointers that can hover and only when motion is
-    welcome. Neither changes anything or looks clickable; they just answer.
+    One hover moment, for pointers that can hover and only when motion is
+    welcome. It changes nothing and doesn't look clickable; it just answers.
 
     The dot never quite sits still: over the logo it lifts a little and
     settles back when the pointer leaves. It uses translate, which the drop
     animation (transform) leaves alone, so the two never fight.
-
-    The fallen line tries to stand: over the band it rises most of the way
-    upright, then gives up and falls back after a beat.
   */
   @media (hover: hover) {
     .ub.motion .drop .wm-i::before {
       transition: translate 0.6s cubic-bezier(0.3, 0.7, 0.4, 1);
     }
     .ub.motion .intro-wm:hover .wm-i::before,
-    .ub.motion .detail-word:hover .wm-i::before,
     .ub.motion .split-art--mark:hover .wm-i::before,
     .ub.motion .xp-main:hover .wm-i::before {
       translate: 0 -0.08em;
-    }
-    .ub.motion .tip.is-in:hover .ud-fall {
-      transform: rotate(calc(var(--fall) * 0.2));
-      transition: transform 0.9s cubic-bezier(0.3, 0.7, 0.4, 1);
     }
   }
 
@@ -1616,10 +1676,6 @@ const fontsHref =
     position: relative;
     aspect-ratio: 5 / 1;
     margin-block: clamp(40px, 5vw, 72px);
-  }
-  /* The one that fell takes the accent, the palette's dot on this ground. */
-  .band .ud-fall {
-    fill: var(--dot);
   }
   .line-text {
     display: grid;
