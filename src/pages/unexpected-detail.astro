@@ -422,8 +422,8 @@ const fontsHref =
           <div class="xp-grid">
             <div class="xp-stage">
               <div class="xp-main tone-field drop is-in" role="img" aria-label="Live preview of the logo">
-                <Lines vw={100} vh={66} count={14} fall={9} x={11.4} y={4} len={28} hair />
-                <Wordmark class="xp-wm" size="12cqi" />
+                <Lines />
+                <Wordmark class="xp-wm" />
               </div>
               <div class="xp-sub">
                 <div class="xp-paper tone-field">
@@ -2183,17 +2183,19 @@ const fontsHref =
       background-color 0.5s var(--ease),
       color 0.5s var(--ease);
   }
+  /* The preview is the square cover at full size: the same line, wordmark
+     and proportions as the cover thumbnails. */
   .xp-main {
     position: relative;
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 1;
     container-type: inline-size;
     overflow: hidden;
     box-shadow: inset 0 0 0 1px var(--ud-line);
   }
   .xp-wm {
     position: absolute;
-    right: 9cqi;
-    bottom: 8cqi;
+    right: 11.4cqi;
+    bottom: 9cqi;
   }
   .xp-sub {
     display: grid;
