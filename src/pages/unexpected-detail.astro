@@ -109,9 +109,6 @@ const fonts = [
   { id: "fraunces", name: "Fraunces", rec: false },
   { id: "lora", name: "Lora", rec: false },
   { id: "newsreader", name: "Newsreader", rec: false },
-  { id: "cormorant", name: "Cormorant Garamond", rec: false },
-  { id: "bodoni", name: "Bodoni Moda", rec: false },
-  { id: "playfair", name: "Playfair Display", rec: false },
   { id: "dmsans", name: "DM Sans", rec: false },
 ] as const;
 const recFont = fonts.find((f) => f.id === RECOMMENDED.font)!;
@@ -123,12 +120,11 @@ const fontIds = fonts.map((f) => f.id);
 const heroLines = 37;
 const heroFall = 25;
 
-// Fraunces, Newsreader, Bodoni Moda and DM Sans are variable; they load as
-// static cuts at a display optical size, so the glyphs (and the dot metrics
-// measured from them) stay the same at every size on the page. Bodoni takes
-// a middle size: its largest loses the hairlines on screen.
+// Fraunces, Newsreader and DM Sans are variable; they load as static cuts
+// at a display optical size, so the glyphs (and the dot metrics measured
+// from them) stay the same at every size on the page.
 const fontsHref =
-  "https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@28,400&family=Cormorant+Garamond&family=DM+Sans:opsz,wght@40,400&family=DM+Serif+Display&family=Fraunces:opsz,wght@144,400&family=Gloock&family=Lora&family=Newsreader:opsz,wght@72,400&family=Playfair+Display&display=swap";
+  "https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@40,400&family=DM+Serif+Display&family=Fraunces:opsz,wght@144,400&family=Gloock&family=Lora&family=Newsreader:opsz,wght@72,400&display=swap";
 ---
 
 <Layout
@@ -530,7 +526,7 @@ const fontsHref =
 </Layout>
 
 <script>
-  type Font = "gloock" | "dm" | "fraunces" | "lora" | "newsreader" | "cormorant" | "bodoni" | "playfair" | "dmsans";
+  type Font = "gloock" | "dm" | "fraunces" | "lora" | "newsreader" | "dmsans";
   type Dot = "period" | "i";
   type State = { font: Font; dot: Dot; primary: string; secondary: string };
 
@@ -633,6 +629,8 @@ const fontsHref =
       state.font = b.dataset.setFont as Font;
       render();
       replay($(".xp-stage"), "swap");
+      // DM Sans rounds its i as the dot lands, so the preview replays it.
+      if (state.font === "dmsans") replay($(".xp-main"), "is-in");
     }),
   );
   swatches.forEach((b) =>
@@ -804,55 +802,20 @@ const fontsHref =
     --i-pad: 0.1em;
     --wm-base: 0.215em;
   }
-  .ub [data-font="cormorant"],
-  .ub[data-font="cormorant"] {
-    --ud-display: "Cormorant Garamond", Georgia, serif;
-    --wm-scale: 1.2;
-    --wm-lh: 0.9;
-    --wm-track: -0.01em;
-    --dd: 0.0858em;
-    --dl: 0.055em;
-    --db: 0.275em;
-    --isplit: 0.315em;
-    --wm-base: 0.1315em;
-    --pg-fit: 0.7;
-  }
-  .ub [data-font="bodoni"],
-  .ub[data-font="bodoni"] {
-    --ud-display: "Bodoni Moda", Georgia, serif;
-    --wm-scale: 1.04;
-    --wm-lh: 0.9;
-    --wm-track: -0.01em;
-    --dd: 0.12em;
-    --dl: 0.04em;
-    --db: 0.39em;
-    --isplit: 0.2625em;
-    --wm-base: 0.0875em;
-  }
-  .ub [data-font="playfair"],
-  .ub[data-font="playfair"] {
-    --ud-display: "Playfair Display", Georgia, serif;
-    --wm-scale: 1;
-    --wm-lh: 0.9;
-    --wm-track: -0.015em;
-    --dd: 0.1275em;
-    --dl: 0.0617em;
-    --db: 0.2383em;
-    --isplit: 0.2842em;
-    --wm-base: 0.0345em;
-    --pg-fit: 0.82;
-  }
   .ub [data-font="dmsans"],
   .ub[data-font="dmsans"] {
     --ud-display: "DM Sans", system-ui, sans-serif;
     --wm-scale: 1;
     --wm-lh: 0.9;
-    --wm-track: -0.03em;
+    /* Tracking for the logo only (0.25px at the editor preview's size);
+       everything else set in DM Sans keeps the page's own spacing. */
+    --wm-track: 0.003em;
     --dd: 0.1108em;
     --dl: 0.035em;
     --db: 0.305em;
     --isplit: 0.2442em;
     --wm-base: 0.109em;
+    --stem-ink: transparent;
   }
   .ub [data-dot="period"],
   .ub[data-dot="period"] {
@@ -941,7 +904,7 @@ const fontsHref =
     background: linear-gradient(
       to bottom,
       color-mix(in srgb, var(--dot) calc(var(--i-on) * 100%), currentColor) 0 var(--isplit),
-      currentColor var(--isplit)
+      var(--stem-ink, currentColor) var(--isplit)
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -981,7 +944,7 @@ const fontsHref =
     without .motion (no script, reduced motion) and once it has landed.
   */
   .ub .drop .wm-i {
-    background: linear-gradient(to bottom, transparent 0 var(--isplit), currentColor var(--isplit));
+    background: linear-gradient(to bottom, transparent 0 var(--isplit), var(--stem-ink, currentColor) var(--isplit));
     -webkit-background-clip: text;
     background-clip: text;
   }
@@ -1016,6 +979,38 @@ const fontsHref =
     }
     to {
       transform: none;
+    }
+  }
+
+  /*
+    DM Sans draws its own i stem: the glyph's stem is hidden (--stem-ink)
+    and redrawn as a box at the same place, measured from the glyph, with
+    the top left and bottom right corners fully rounded. Where the dot
+    drops, the stem starts square and the corners round in as it lands.
+  */
+  .ub [data-font="dmsans"] .wm-i::after,
+  .ub[data-font="dmsans"] .wm-i::after {
+    content: "";
+    position: absolute;
+    left: 0.057em;
+    width: 0.084em;
+    top: calc(var(--i-pad, 0em) + 0.295em);
+    bottom: 0.109em;
+    background: currentColor;
+    border-radius: 0.084em 0 0.084em 0;
+  }
+  .ub.motion .drop:not(.is-in) .wm-i::after {
+    border-radius: 0;
+  }
+  .ub.motion .drop.is-in .wm-i::after {
+    animation: ud-round 0.7s var(--ease) 1.15s both;
+  }
+  .ub.motion .intro-wm.drop .wm-i::after {
+    animation: none;
+  }
+  @keyframes ud-round {
+    from {
+      border-radius: 0;
     }
   }
 
