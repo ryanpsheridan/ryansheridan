@@ -17,6 +17,8 @@ interface Props {
   len?: number;
   w?: number;
   angle?: number;
+  /** Draw 1px hairlines at any size, like the opening, instead of strokes w wide. */
+  hair?: boolean;
   /** Tip the stroke over once on load (the cover at the top of the page). */
   animate?: boolean;
   class?: string;
@@ -33,6 +35,7 @@ const {
   len = 46,
   w = 0.7,
   angle = 14,
+  hair = false,
   animate = false,
   class: cls,
   style = "",
@@ -47,5 +50,13 @@ const xs = Array.from({ length: count }, (_, i) => +(x + i * gap).toFixed(3));
   aria-hidden="true"
   style={`--fall:${angle}deg;${style}`}
 >
-  {xs.map((lx, i) => <rect x={lx} y={y} width={w} height={len} rx={w / 2} fill="currentColor" class={i === fall ? "ud-fall" : undefined} />)}
+  {
+    xs.map((lx, i) =>
+      hair ? (
+        <line x1={lx} y1={y} x2={lx} y2={y + len} stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke" class={i === fall ? "ud-fall" : undefined} />
+      ) : (
+        <rect x={lx} y={y} width={w} height={len} rx={w / 2} fill="currentColor" class={i === fall ? "ud-fall" : undefined} />
+      ),
+    )
+  }
 </svg>
