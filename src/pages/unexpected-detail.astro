@@ -308,7 +308,7 @@ const fontsHref =
             <p class="line-lead">A row of upright lines with one that has tipped over. It supports the logo, never replaces it.</p>
             <ul class="rules">
               <li><b>One falls.</b> Never two, and always the same way, pivoting on its foot.</li>
-              <li><b>Hairline and quiet.</b> The lines take the color of the type.</li>
+              <li><b>Hairline and quiet.</b> The lines take the color of the type; the one that fell takes the accent.</li>
               <li><b>Any length.</b> A cover, a banner, or a divider between notes.</li>
             </ul>
           </div>
@@ -1195,6 +1195,14 @@ const fontsHref =
     outline: 2px solid currentColor;
     outline-offset: 3px;
   }
+  /* Selected text takes a wash of the accent, on light and dark grounds. */
+  .ub ::selection {
+    background: color-mix(in srgb, var(--dot) 42%, transparent);
+  }
+  /* Running copy never leaves a word alone on its last line. */
+  .ub :where(.intro-desc, .id-cap, .detail-copy, .line-lead, .rules li, .face-note, .notes-body, .xp-copy, .pal-mood) {
+    text-wrap: pretty;
+  }
   .ub.motion .reveal {
     opacity: 0;
     transform: translateY(18px);
@@ -1608,6 +1616,10 @@ const fontsHref =
     position: relative;
     aspect-ratio: 5 / 1;
     margin-block: clamp(40px, 5vw, 72px);
+  }
+  /* The one that fell takes the accent, the palette's dot on this ground. */
+  .band .ud-fall {
+    fill: var(--dot);
   }
   .line-text {
     display: grid;
@@ -2326,6 +2338,9 @@ const fontsHref =
   }
   .custom summary {
     width: max-content;
+    /* A taller hit area without moving anything. */
+    padding-block: 5px;
+    margin-block: -5px;
     font-size: 12px;
     color: var(--ud-muted);
     cursor: pointer;
