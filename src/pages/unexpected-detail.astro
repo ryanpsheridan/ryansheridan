@@ -11,10 +11,12 @@ import Wordmark from "../components/unexpected-detail/Wordmark.astro";
 
   The presentation shows the recommended identity: Gloock with Geist, the
   dot above the i, Charcoal & Butter. The editor at the end changes it. Its
-  colors carry across the whole page; its detail and typeface stay in the
+  colors carry across the whole page; its detail stays in the
   editor's preview, so the presentation only ever shows the recommended
-  logo. The state lives in the URL, so a copied link reopens the same
-  version, colors applied before the first paint.
+  dot. The typeface is the exception: it sets the whole page, logo
+  included, so each option can be judged everywhere it would appear. The
+  state lives in the URL, so a copied link reopens the same version, colors
+  and typeface applied before the first paint.
 
   The logo is live type (the staggered Gloock lockup from round 05), drawn
   by components/unexpected-detail, which is what lets the editor switch the
@@ -99,11 +101,18 @@ const recVars = `${vars(rec.p, rec.s, rec.keep)};${accentVars(rec.p, rec.s)}`;
 // Presets whose dot keeps its color on every ground, as primary + secondary.
 const keepPairs = palettes.filter((c) => c.keep).map((c) => c.p + c.s);
 
-// Recommended first, on the left, wherever two options sit side by side.
+// Recommended first, on the left, wherever options sit side by side. The
+// metrics for each live in the typeface settings in the styles below.
 const fonts = [
   { id: "gloock", name: "Gloock", rec: true },
   { id: "dm", name: "DM Serif Display", rec: false },
+  { id: "fraunces", name: "Fraunces", rec: false },
+  { id: "instrument", name: "Instrument Serif", rec: false },
+  { id: "lora", name: "Lora", rec: false },
+  { id: "newsreader", name: "Newsreader", rec: false },
 ] as const;
+const recFont = fonts.find((f) => f.id === RECOMMENDED.font)!;
+const fontIds = fonts.map((f) => f.id);
 
 // The opening's falling line, as HTML so the row stretches to any width
 // without skewing the angle. Every other line drops out on phones; the
@@ -111,7 +120,11 @@ const fonts = [
 const heroLines = 37;
 const heroFall = 25;
 
-const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Gloock&display=swap";
+// Fraunces and Newsreader are variable; they load as static cuts at their
+// display optical size, so the glyphs (and the dot metrics measured from
+// them) stay the same at every size on the page.
+const fontsHref =
+  "https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Fraunces:opsz,wght@144,400&family=Gloock&family=Instrument+Serif&family=Lora&family=Newsreader:opsz,wght@72,400&display=swap";
 ---
 
 <Layout
@@ -121,7 +134,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
 >
   <link rel="stylesheet" href={fontsHref} />
   <div class="ub" id="ub" data-font={RECOMMENDED.font} data-dot={RECOMMENDED.dot} style={recVars}>
-    <script is:inline define:vars={{ INK, PAPER, DOT_MIN, keepPairs }}>
+    <script is:inline define:vars={{ INK, PAPER, DOT_MIN, keepPairs, fontIds }}>
       // The color system for the browser, the same derivation as system()
       // and accentVars() in the frontmatter. Shared with the editor script
       // through window.udColor; applied here first so a link with colors
@@ -168,6 +181,9 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
       const p = hex(q.get("primary"));
       const s = hex(q.get("secondary"));
       if (p && s) apply(document.getElementById("ub"), p, s);
+      // The typeface too, so a link never flashes the default face.
+      const f = q.get("font");
+      if (fontIds.includes(f)) document.getElementById("ub").dataset.font = f;
     </script>
     <main id="main">
       <!-- Opening -->
@@ -206,7 +222,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
               <span class="g g-base" aria-hidden="true"></span>
             </div>
             <p class="id-cap">
-              <b>The primary logo.</b> Lowercase Gloock in two lines, set flush right. “unexpected”
+              <b>The primary logo.</b> Lowercase <span data-bind="font-name">{recFont.name}</span> in two lines, set flush right. “unexpected”
               steps in from the edge, so the name turns like a conversation that went somewhere nobody
               planned.
             </p>
@@ -244,13 +260,13 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
       <section class="spread" aria-labelledby="type-h">
         <div class="wrap">
           <div class="slabel reveal"><span>03</span><h2 id="type-h">Typography</h2></div>
-          <p class="pairing reveal" aria-label="Gloock and Geist">
-            <span class="pg-serif" data-font="gloock">Gloock</span><span class="pg-amp">&amp;</span><span class="pg-sans">Geist</span>
+          <p class="pairing reveal" id="pairing" aria-label={`${recFont.name} and Geist`}>
+            <span class="pg-serif" data-bind="font-name">{recFont.name}</span><span class="pg-amp">&amp;</span><span class="pg-sans">Geist</span>
           </p>
           <div class="faces">
-            <article class="face reveal" data-font="gloock">
+            <article class="face reveal">
               <header class="face-head">
-                <h3>Gloock speaks for the show</h3>
+                <h3><span data-bind="font-name">{recFont.name}</span> speaks for the show</h3>
                 <p>Display</p>
               </header>
               <div class="face-wm"><Wordmark size="1em" /></div>
@@ -391,15 +407,15 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
       </section>
 
       <!-- 06 Make it your own -->
-      <section class="xp" id="explore" aria-labelledby="xp-h" data-font={RECOMMENDED.font} data-dot={RECOMMENDED.dot}>
+      <section class="xp" id="explore" aria-labelledby="xp-h" data-dot={RECOMMENDED.dot}>
         <div class="wrap">
           <div class="slabel"><span>06</span><p>Editor</p></div>
           <div class="xp-head">
             <h2 id="xp-h" class="xp-say">Make it your own.</h2>
             <p class="xp-copy">
-              Explore a few expressions of the identity. Move the unexpected detail, try the alternate
-              typeface, and find a color direction that feels right. Colors carry across the whole page;
-              the detail and typeface change in the preview. A link keeps it all.
+              Explore a few expressions of the identity. Move the unexpected detail, try other
+              typefaces, and find a color direction that feels right. Typeface and colors carry across the
+              whole page; the detail changes in the preview. A link keeps it all.
             </p>
           </div>
 
@@ -435,10 +451,10 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
               </fieldset>
 
               <fieldset class="opt">
-                <legend><span>B</span>Typeface <em>Geist supports both</em></legend>
+                <legend><span>B</span>Typeface <em>Geist pairs with each</em></legend>
                 <div class="choice">
                   {fonts.map((f) => (
-                    <button type="button" data-set-font={f.id} aria-pressed={f.id === RECOMMENDED.font ? "true" : "false"}>
+                    <button type="button" data-set-font={f.id} data-name={f.name} aria-pressed={f.id === RECOMMENDED.font ? "true" : "false"}>
                       <span class="choice-aa" data-font={f.id}>Aa</span>
                       <span class="choice-label">{f.name} {f.rec && <b class="rec">Recommended</b>}</span>
                     </button>
@@ -510,7 +526,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
 </Layout>
 
 <script>
-  type Font = "gloock" | "dm";
+  type Font = "gloock" | "dm" | "fraunces" | "instrument" | "lora" | "newsreader";
   type Dot = "period" | "i";
   type State = { font: Font; dot: Dot; primary: string; secondary: string };
 
@@ -522,6 +538,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const swatches = $$("[data-palette]");
+  const fontBtns = $$("[data-set-font]");
   const recBtn = swatches.find((b) => b.dataset.palette === "01")!;
   const RECOMMENDED: State = { font: "gloock", dot: "i", primary: recBtn.dataset.p!, secondary: recBtn.dataset.s! };
 
@@ -533,7 +550,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   // A shared link opens on its own settings, in any browser.
   const q = new URLSearchParams(location.search);
   const state: State = {
-    font: q.get("font") === "dm" ? "dm" : q.get("font") === "gloock" ? "gloock" : RECOMMENDED.font,
+    font: (fontBtns.find((b) => b.dataset.setFont === q.get("font"))?.dataset.setFont as Font | undefined) ?? RECOMMENDED.font,
     dot: q.get("dot") === "period" ? "period" : q.get("dot") === "i" ? "i" : RECOMMENDED.dot,
     primary: normalize(q.get("primary") ?? "") ?? RECOMMENDED.primary,
     secondary: normalize(q.get("secondary") ?? "") ?? RECOMMENDED.secondary,
@@ -568,9 +585,12 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   };
 
   function render(opts: { skip?: HTMLInputElement; url?: boolean } = {}) {
-    xp.dataset.font = state.font;
+    // Typeface and colors go to the whole page; the detail stays above.
+    root.dataset.font = state.font;
     xp.dataset.dot = state.dot;
-    // Colors go to the whole page; the detail and typeface stay above.
+    const fontName = fontBtns.find((b) => b.dataset.setFont === state.font)!.dataset.name!;
+    bind("font-name", fontName);
+    $("#pairing").setAttribute("aria-label", `${fontName} and Geist`);
     udColor.apply(root, state.primary, state.secondary);
     const match = swatches.find((b) => b.dataset.p === state.primary && b.dataset.s === state.secondary);
 
@@ -725,6 +745,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     --dl: 0.0406em;
     --db: 0.2119em;
     --isplit: 0.257em;
+    --wm-base: 0.085em;
   }
   .ub [data-font="dm"],
   .ub[data-font="dm"] {
@@ -736,6 +757,60 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     --dl: 0.0644em;
     --db: 0.3206em;
     --isplit: 0.2775em;
+    --wm-base: 0.0995em;
+    --pg-fit: 0.76;
+  }
+  /* The four below were measured from the rendered glyphs the same way as
+     the two above: the period's diameter, side bearing and lift; where the
+     i's dot ends; and the baseline's height in the lockup's line box. */
+  .ub [data-font="fraunces"],
+  .ub[data-font="fraunces"] {
+    --ud-display: "Fraunces", Georgia, serif;
+    --wm-scale: 1.14;
+    --wm-lh: 0.9;
+    --wm-track: -0.015em;
+    --dd: 0.115em;
+    --dl: 0.0317em;
+    --db: 0.2467em;
+    --isplit: 0.3292em;
+    --wm-base: 0.0885em;
+  }
+  .ub [data-font="instrument"],
+  .ub[data-font="instrument"] {
+    --ud-display: "Instrument Serif", Georgia, serif;
+    --wm-scale: 1.1;
+    --wm-lh: 0.9;
+    --wm-track: -0.005em;
+    --dd: 0.105em;
+    --dl: 0.0533em;
+    --db: 0.3017em;
+    --isplit: 0.2308em;
+    --wm-base: 0.11em;
+  }
+  .ub [data-font="lora"],
+  .ub[data-font="lora"] {
+    --ud-display: "Lora", Georgia, serif;
+    --wm-scale: 1;
+    --wm-lh: 0.93;
+    --wm-track: -0.015em;
+    --dd: 0.1242em;
+    --dl: 0.0633em;
+    --db: 0.2567em;
+    --isplit: 0.2575em;
+    --wm-base: 0.099em;
+  }
+  .ub [data-font="newsreader"],
+  .ub[data-font="newsreader"] {
+    --ud-display: "Newsreader", Georgia, serif;
+    --wm-scale: 1.02;
+    --wm-lh: 0.9;
+    --wm-track: -0.015em;
+    --dd: 0.14em;
+    --dl: 0.0467em;
+    --db: 0.255em;
+    --isplit: 0.2208em;
+    --i-pad: 0.1em;
+    --wm-base: 0.215em;
   }
   .ub [data-dot="period"],
   .ub[data-dot="period"] {
@@ -817,6 +892,10 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     position: relative;
     display: inline-block;
     line-height: var(--wm-lh);
+    /* For a face whose i rises above the line box: room for the whole dot,
+       taken back by the margin so the lockup doesn't move. */
+    padding-top: var(--i-pad, 0);
+    margin-top: calc(var(--i-pad, 0) * -1);
     background: linear-gradient(
       to bottom,
       color-mix(in srgb, var(--dot) calc(var(--i-on) * 100%), currentColor) 0 var(--isplit),
@@ -869,6 +948,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     position: absolute;
     left: 0;
     top: 0;
+    padding-top: var(--i-pad, 0);
     -webkit-text-fill-color: color-mix(in srgb, var(--dot) calc(var(--i-on) * 100%), currentColor);
     clip-path: inset(0 0 calc(100% - var(--isplit)) 0);
   }
@@ -1215,7 +1295,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   .g-step {
     right: 0;
     top: 0.12em;
-    width: 1.2em;
+    width: calc(var(--wm-scale) * 1.2em);
     height: 0.62em;
     border: 1px dashed currentColor;
     border-right: 0;
@@ -1227,7 +1307,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
   .g-base {
     left: -0.2em;
     right: -0.4em;
-    top: calc(var(--wm-lh) * 2em - 0.085em);
+    top: calc(var(--wm-scale) * (var(--wm-lh) * 2em - var(--wm-base)));
     border-top: 1px dashed currentColor;
     opacity: 0.7;
   }
@@ -1335,10 +1415,11 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=DM+Serif+Display&fam
     align-items: baseline;
     gap: 0 0.28em;
     margin-top: clamp(48px, 7vw, 96px);
-    font-size: clamp(56px, 9.4vw, 152px);
+    font-size: calc(var(--pg-fit, 1) * clamp(56px, 9.4vw, 152px));
     line-height: 1;
   }
   .pg-serif {
+    white-space: nowrap;
     font-family: var(--ud-display);
     letter-spacing: -0.02em;
   }
