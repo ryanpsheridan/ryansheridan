@@ -1,0 +1,2592 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Cover from "../../components/unexpected-detail/Cover.astro";
+import Lines from "../../components/unexpected-detail/Lines.astro";
+import Wordmark from "../../components/unexpected-detail/Wordmark.astro";
+
+/*
+  unexpected detail, round 06: the identity presentation with its editor,
+  as shown while the typeface and color were still open. The client chose
+  Gloock with the dot of the i and Charcoal & Butter; that final identity
+  is at /unexpected-detail. Kept as it was, live editor included.
+
+  unexpected detail: identity presentation. Private share, noindex, and kept
+  out of the sitemap by the allowlist in astro.config.mjs. Rounds 01 to 05
+  of the exploration live on at /unexpected-detail/round-1.
+
+  The presentation shows the recommended identity: Gloock with Geist, the
+  dot above the i, Charcoal & Butter. The editor at the end changes it. Its
+  colors carry across the whole page; its detail stays in the
+  editor's preview, so the presentation only ever shows the recommended
+  dot. The typeface is the exception: it sets the whole page, logo
+  included, so each option can be judged everywhere it would appear. The
+  state lives in the URL, so a copied link reopens the same version, colors
+  and typeface applied before the first paint.
+
+  The logo is live type (the staggered Gloock lockup from round 05), drawn
+  by components/unexpected-detail, which is what lets the editor switch the
+  dot and the typeface without approximating the artwork.
+*/
+
+const RECOMMENDED = { font: "gloock", dot: "i", palette: "01" } as const;
+const INK = "#141414";
+const PAPER = "#FAF9F6";
+// Below this contrast a dot stops reading on its ground, and the palette's
+// other color (or the type color) takes its place there.
+const DOT_MIN = 2.25;
+
+// WCAG 2 contrast. The editor script carries a copy of all of this.
+const lum = (hex: string) => {
+  const n = parseInt(hex.slice(1), 16);
+  const c = [n >> 16, (n >> 8) & 255, n & 255].map((v) => {
+    const s = v / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+};
+const contrast = (a: string, b: string) => {
+  const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m);
+  return (x + 0.05) / (y + 0.05);
+};
+const onColor = (hex: string) => (contrast(hex, INK) >= contrast(hex, PAPER) ? INK : PAPER);
+
+/*
+  A palette is a primary (the dot) and a secondary (the field). Every
+  palette gets a light and a dark ground: a dark field pairs with paper; a
+  light field pairs with the primary when it is near black (the black and
+  white palettes), or ink. The dot on each ground is the primary where it
+  reads, then the secondary, then the type color. A palette marked keep
+  holds its primary dot on every ground, light ones included.
+*/
+const system = (p: string, s: string, keep = false) => {
+  const fFg = onColor(s);
+  const fieldDark = fFg === PAPER;
+  const c = fieldDark ? PAPER : lum(p) < 0.045 ? p : INK;
+  const cFg = onColor(c);
+  const dotOn = (g: string, fg: string) => (keep ? p : [p, s].find((x) => contrast(x, g) >= DOT_MIN) ?? fg);
+  const f = { bg: s, fg: fFg, dot: dotOn(s, fFg) };
+  const k = { bg: c, fg: cFg, dot: dotOn(c, cFg) };
+  const [d, l] = fieldDark ? [f, k] : [k, f];
+  return { f, c: k, d, l };
+};
+const vars = (p: string, s: string, keep = false) =>
+  Object.entries(system(p, s, keep))
+    .flatMap(([n, t]) => [`--${n}-bg:${t.bg}`, `--${n}-fg:${t.fg}`, `--${n}-dot:${t.dot}`])
+    .join(";");
+/*
+  The accent ground: the palette's dot color used as a whole surface, for
+  the one place the presentation wants the color at full strength (the
+  cover in the podcast app). Type and lines take the field color; the dot
+  turns paper, so the detail still stands apart.
+*/
+const accentVars = (p: string, s: string) =>
+  `--a-bg:${p};--a-fg:${contrast(s, p) >= 4.5 ? s : onColor(p)};--a-dot:${PAPER}`;
+
+/*
+  Eight directions, each its own color family, so no two read as small
+  variations of each other. Charcoal & Butter is the recommendation, so it
+  comes first: a charcoal field with the dot in butter, kept in butter on
+  light grounds too, so every example carries the same yellow. Most pair a deep
+  field with a quiet accent for the dot (Black & Paper and Forest & Ivory
+  are light fields with a dark dot), and every field holds at least 8:1
+  against its type and 5.7:1 against its dot.
+*/
+const palettes = [
+  { name: "Charcoal & Butter", p: "#E8CB6A", s: "#2A2A28", mood: "Charcoal with a restrained yellow. The recommended direction.", keep: true },
+  { name: "Black & Paper", p: "#171717", s: "#F5F4EF", mood: "Black on warm paper. Timeless, minimal." },
+  { name: "Ink & Bone", p: "#CDBB99", s: "#161514", mood: "Near black, with a warm bone dot." },
+  { name: "Midnight & Cream", p: "#E6D3A8", s: "#1B2436", mood: "Deep navy, soft cream. Quiet and nocturnal." },
+  { name: "Forest & Ivory", p: "#2F4A3A", s: "#F1ECDF", mood: "Warm ivory with a forest green dot. Light and organic." },
+  { name: "Espresso & Sand", p: "#D2B48A", s: "#3A2B23", mood: "Rich brown and warm sand. Grounded." },
+  { name: "Burgundy & Blush", p: "#E5B3AD", s: "#4A1C25", mood: "Deep burgundy, muted blush. The most expressive." },
+  { name: "Slate & Mist", p: "#C3CFD8", s: "#3E4A55", mood: "Blue gray and pale mist. Cool and editorial." },
+].map((c, i) => ({ keep: false, ...c, no: String(i + 1).padStart(2, "0") }));
+const rec = palettes.find((p) => p.no === RECOMMENDED.palette)!;
+const recVars = `${vars(rec.p, rec.s, rec.keep)};${accentVars(rec.p, rec.s)}`;
+// Presets whose dot keeps its color on every ground, as primary + secondary.
+const keepPairs = palettes.filter((c) => c.keep).map((c) => c.p + c.s);
+
+// Recommended first, on the left, wherever options sit side by side. The
+// metrics for each live in the typeface settings in the styles below.
+const fonts = [
+  { id: "gloock", name: "Gloock", rec: true },
+  { id: "dm", name: "DM Serif Display", rec: false },
+  { id: "fraunces", name: "Fraunces", rec: false },
+  { id: "lora", name: "Lora", rec: false },
+  { id: "newsreader", name: "Newsreader", rec: false },
+  { id: "dmsans", name: "DM Sans", rec: false },
+] as const;
+const recFont = fonts.find((f) => f.id === RECOMMENDED.font)!;
+const fontIds = fonts.map((f) => f.id);
+
+// The opening's falling line, as HTML so the row stretches to any width
+// without skewing the angle. Every other line drops out on phones; the
+// fallen one is odd, so it stays.
+const heroLines = 37;
+const heroFall = 25;
+
+// Fraunces, Newsreader and DM Sans are variable; they load as static cuts
+// at a display optical size, so the glyphs (and the dot metrics measured
+// from them) stay the same at every size on the page.
+const fontsHref =
+  "https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@40,400&family=DM+Serif+Display&family=Fraunces:opsz,wght@144,400&family=Gloock&family=Lora&family=Newsreader:opsz,wght@72,400&display=swap";
+---
+
+<Layout
+  title="unexpected detail, identity round 06 | Ryan Sheridan"
+  description="Identity presentation for the unexpected detail podcast."
+  noindex={true}
+>
+  <link rel="stylesheet" href={fontsHref} />
+  <div class="ub" id="ub" data-font={RECOMMENDED.font} data-dot={RECOMMENDED.dot} style={recVars}>
+    <script is:inline define:vars={{ INK, PAPER, DOT_MIN, keepPairs, fontIds }}>
+      // The color system for the browser, the same derivation as system()
+      // and accentVars() in the frontmatter. Shared with the editor script
+      // through window.udColor; applied here first so a link with colors
+      // never flashes the default palette.
+      const lum = (hex) => {
+        const n = parseInt(hex.slice(1), 16);
+        const c = [n >> 16, (n >> 8) & 255, n & 255].map((v) => {
+          const x = v / 255;
+          return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
+        });
+        return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+      };
+      const contrast = (a, b) => {
+        const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m);
+        return (x + 0.05) / (y + 0.05);
+      };
+      const onColor = (hex) => (contrast(hex, INK) >= contrast(hex, PAPER) ? INK : PAPER);
+      const system = (p, s, keep) => {
+        const fFg = onColor(s);
+        const fieldDark = fFg === PAPER;
+        const c = fieldDark ? PAPER : lum(p) < 0.045 ? p : INK;
+        const cFg = onColor(c);
+        const dotOn = (g, fg) => (keep ? p : [p, s].find((x) => contrast(x, g) >= DOT_MIN) ?? fg);
+        const f = { bg: s, fg: fFg, dot: dotOn(s, fFg) };
+        const k = { bg: c, fg: cFg, dot: dotOn(c, cFg) };
+        const [d, l] = fieldDark ? [f, k] : [k, f];
+        return { f, c: k, d, l, a: { bg: p, fg: contrast(s, p) >= 4.5 ? s : onColor(p), dot: PAPER } };
+      };
+      const apply = (el, p, s) => {
+        const keep = keepPairs.includes(p + s);
+        for (const [k, t] of Object.entries(system(p, s, keep))) {
+          el.style.setProperty(`--${k}-bg`, t.bg);
+          el.style.setProperty(`--${k}-fg`, t.fg);
+          el.style.setProperty(`--${k}-dot`, t.dot);
+        }
+      };
+      window.udColor = { apply };
+      const hex = (v) => {
+        let h = (v || "").trim().replace(/^#/, "");
+        if (/^[0-9a-f]{3}$/i.test(h)) h = h.replace(/./g, (x) => x + x);
+        return /^[0-9a-f]{6}$/i.test(h) ? `#${h.toUpperCase()}` : null;
+      };
+      const q = new URLSearchParams(location.search);
+      const p = hex(q.get("primary"));
+      const s = hex(q.get("secondary"));
+      if (p && s) apply(document.getElementById("ub"), p, s);
+      // The typeface too, so a link never flashes the default face.
+      const f = q.get("font");
+      if (fontIds.includes(f)) document.getElementById("ub").dataset.font = f;
+    </script>
+    <main id="main">
+      <!-- Opening -->
+      <section class="intro tone-dark" aria-label="unexpected detail, identity presentation">
+        <a class="intro-skip" href="#explore">Skip to the editor</a>
+        <header class="intro-meta">
+          <p class="intro-name">unexpected detail</p>
+          <ul class="intro-tags">
+            <li>Brand identity</li>
+            <li>Podcast</li>
+            <li>2026</li>
+          </ul>
+          <p class="intro-draft">Identity exploration</p>
+        </header>
+        <div class="intro-lines" aria-hidden="true">
+          {Array.from({ length: heroLines }, (_, i) => <span class:list={{ fall: i + 1 === heroFall }} />)}
+        </div>
+        <div class="intro-foot">
+          <p class="intro-desc">
+            An identity for an unscripted conversation show about the things people leave off their
+            résumé. Quiet type, one line out of step, and one small detail you have to look for.
+          </p>
+          <Wordmark class="intro-wm drop is-in" size="13.6cqi" />
+        </div>
+      </section>
+
+      <!-- 01 Identity -->
+      <section class="spread spread--id" aria-labelledby="id-h">
+        <div class="wrap">
+          <div class="slabel reveal"><span>01</span><h2 id="id-h">Identity</h2></div>
+          <div class="id-primary reveal">
+            <div class="construct">
+              <Wordmark size="1em" />
+              <span class="g g-edge" aria-hidden="true"><em>flush right</em></span>
+              <span class="g g-step" aria-hidden="true"><em>steps in 1.2 em</em></span>
+              <span class="g g-base" aria-hidden="true"></span>
+            </div>
+            <p class="id-cap">
+              <b>The primary logo.</b> Lowercase <span data-bind="font-name">{recFont.name}</span> in two lines, set flush right. “unexpected”
+              steps in from the edge, so the name turns like a conversation that went somewhere nobody
+              planned.
+            </p>
+          </div>
+        </div>
+        <div class="split">
+          <figure class="split-half tone-dark">
+            <div class="split-art"><Wordmark size="6.4cqi" line /></div>
+            <figcaption><b>One line.</b> The same logo on a single line, for web headers, video and anywhere height is short.</figcaption>
+          </figure>
+          <figure class="split-half split-half--mark">
+            <div class="split-art split-art--mark drop is-in"><span class="wm mark" role="img" aria-label="The i mark"><span class="wm-i">i</span></span></div>
+            <figcaption><b>Mark.</b> The i on its own, for app icons and favicons. The whole idea in one letter.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- 02 The unexpected detail -->
+      <section class="detail tone-dark" aria-labelledby="detail-h">
+        <div class="wrap">
+          <div class="slabel reveal"><span>02</span><h2 id="detail-h">The unexpected detail</h2></div>
+          <div class="detail-head reveal">
+            <p class="statement">Everyone has one.</p>
+            <p class="detail-copy">
+              The show goes looking for the one thing about a guest that doesn’t behave the way you
+              expect. The identity has one too: the dot of the i, which never quite sits still.
+            </p>
+          </div>
+        </div>
+        <div class="detail-word lag" id="detail-word" aria-hidden="true"><Wordmark size="31cqi" line class="detail-wm" /></div>
+      </section>
+
+
+      <!-- 03 Typography -->
+      <section class="spread" aria-labelledby="type-h">
+        <div class="wrap">
+          <div class="slabel reveal"><span>03</span><h2 id="type-h">Typography</h2></div>
+          <p class="pairing reveal" id="pairing" aria-label={`${recFont.name} and Geist`}>
+            <span class="pg-serif" data-bind="font-name">{recFont.name}</span><span class="pg-amp">&amp;</span><span class="pg-sans">Geist</span>
+          </p>
+          <div class="faces">
+            <article class="face reveal">
+              <header class="face-head">
+                <h3><span data-bind="font-name">{recFont.name}</span> speaks for the show</h3>
+                <p>Display</p>
+              </header>
+              <div class="face-wm"><Wordmark size="1em" /></div>
+              <p class="face-title">a cartographer of places that never existed</p>
+              <p class="face-say">Curiosity flips the frame.</p>
+              <p class="face-note">The wordmark, statements and episode titles. Expressive and a little severe, so it is used sparingly.</p>
+            </article>
+            <article class="face face--sans reveal">
+              <header class="face-head">
+                <h3>Geist does the explaining</h3>
+                <p>Supporting</p>
+              </header>
+              <div class="notes">
+                <p class="notes-meta">Episode 12 · 61 min · with Guest Name</p>
+                <p class="notes-h">About this episode</p>
+                <p class="notes-body">
+                  She has drawn more than four hundred maps of towns, coastlines and train lines that
+                  were only ever proposed. We talk about the one she will never finish, and why the
+                  blank parts are her favorite.
+                </p>
+                <p class="notes-links"><span>Listen</span><span>Follow</span><span>Share</span></p>
+              </div>
+              <p class="face-note">Headings, show notes, guest details, captions and interface. Clean and quiet, so the serif stands out.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 The falling line -->
+      <section class="spread spread--line" aria-labelledby="line-h">
+        <div class="wrap">
+          <div class="slabel reveal"><span>04</span><h2 id="line-h">The falling line</h2></div>
+        </div>
+        <div class="band tip" aria-hidden="true">
+          <Lines vw={300} vh={60} count={48} fall={31} x={6} y={8} len={44} w={0.4} />
+        </div>
+        <div class="wrap">
+          <div class="line-text reveal">
+            <p class="line-lead">A row of upright lines with one that has tipped over. It supports the logo, never replaces it.</p>
+            <ul class="rules">
+              <li><b>One falls.</b> Never two, and always the same way, pivoting on its foot.</li>
+              <li><b>Hairline and quiet.</b> The lines take the color of the type.</li>
+              <li><b>Any length.</b> A cover, a banner, or a divider between notes.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 05 In use -->
+      <section class="spread s-apps" aria-labelledby="apps-h">
+        <div class="wrap">
+          <div class="slabel reveal"><span>05</span><h2 id="apps-h">In use</h2></div>
+
+          <figure class="apps-cover reveal">
+            <p class="ctx">Podcast cover</p>
+            <div class="ac-pair">
+              <Cover tone="field" class="tone-dark" label="Podcast cover, dark" />
+              <Cover tone="paper" class="tone-light" label="Podcast cover, light" />
+            </div>
+            <figcaption class="cap"><b>3000 px square</b> for Apple Podcasts, Spotify and YouTube Music. Dark leads; light is for press and partners.</figcaption>
+          </figure>
+
+          <div class="phones">
+            <figure class="ph reveal">
+              <p class="ctx">Podcast app</p>
+              <div class="phone">
+                <div class="screen tone-light now">
+                  <p class="now-top">Now playing</p>
+                  <Cover tone="field" class="tone-accent now-cover" />
+                  <p class="now-title">a cartographer of places that never existed</p>
+                  <p class="now-show">unexpected detail · Episode 12</p>
+                  <div class="scrub" aria-hidden="true"><span></span></div>
+                  <p class="now-times" aria-hidden="true"><span>23:14</span><span>-37:52</span></p>
+                  <div class="now-ctl" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M19 6 11 12l8 6zM11 6 3 12l8 6z" /></svg>
+                    <svg viewBox="0 0 24 24" class="play"><circle cx="12" cy="12" r="11" /><path d="M10 8v8l6-4z" /></svg>
+                    <svg viewBox="0 0 24 24"><path d="M5 6l8 6-8 6zM13 6l8 6-8 6z" /></svg>
+                  </div>
+                </div>
+              </div>
+              <figcaption class="cap">The cover at the size people see it, among real interface.</figcaption>
+            </figure>
+
+            <figure class="ph reveal">
+              <p class="ctx">Social profile</p>
+              <div class="phone">
+                <div class="screen tone-light prof">
+                  <p class="prof-handle">unexpecteddetail</p>
+                  <div class="prof-head">
+                    <div class="prof-avatar tone-dark"><Wordmark size="13cqi" /></div>
+                    <div>
+                      <p class="prof-name">unexpected detail</p>
+                      <p class="prof-bio">Podcast · Curiosity flips the frame.</p>
+                    </div>
+                  </div>
+                  <p class="prof-follow">Follow</p>
+                  <div class="grid" aria-hidden="true">
+                    <div class="t tone-light t-q t-q--top"><p>“I alphabetize my spices by mood.”</p><small>Guest Name, ep. 12</small></div>
+                    <Cover tone="field" class="tone-dark" />
+                    <div class="t t-mark"><span class="wm mark"><span class="wm-i">i</span></span></div>
+                    <div class="t tone-dark t-pattern"><Lines count={26} fall={17} x={2} gap={3.84} y={0} len={100} w={0.35} /><p><b>New episode</b>every Thursday</p></div>
+                    <div class="t tone-light t-guest"><small>ep. 12</small><p>Guest Name</p></div>
+                    <div class="t tone-dark t-q t-q--end"><p>“The blank parts are my favorite.”</p></div>
+                    <div class="t tone-dark t-dot"><span></span></div>
+                    <div class="t t-say"><p>Everyone has one.</p></div>
+                    <Cover tone="paper" class="tone-light" />
+                    <div class="t tone-light t-num"><small>Guest Name</small><p>13</p></div>
+                    <div class="t tone-dark t-ask"><p>What’s your unexpected detail?</p><span></span></div>
+                    <div class="t tone-light t-pattern t-season"><Lines count={26} fall={9} x={2} gap={3.84} y={0} len={100} w={0.35} /><p><b>Season two</b>this spring</p></div>
+                    <div class="t tone-dark t-line"><Wordmark size="8.4cqi" line /></div>
+                    <div class="t tone-light t-q t-q--low"><p>“I keep every grocery list I’ve ever found.”</p></div>
+                    <div class="t tone-dark t-play"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" /><path d="M10 8v8l6-4z" /></svg><small>ep. 14</small></div>
+                  </div>
+                </div>
+              </div>
+              <figcaption class="cap">Profile picture and the grid: covers, quotes and episode graphics.</figcaption>
+            </figure>
+
+            <figure class="ph reveal">
+              <p class="ctx">Social story</p>
+              <div class="phone">
+                <div class="screen tone-dark story">
+                  <div class="story-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+                  <Wordmark class="story-wm" size="12cqi" />
+                  <Lines vw={100} vh={217} count={10} fall={6} x={10} gap={8.8} y={60} len={82} w={0.8} />
+                  <div class="story-text">
+                    <p class="story-new">New episode</p>
+                    <p class="story-guest">Guest Name</p>
+                    <p class="story-topic">a cartographer of places that never existed</p>
+                  </div>
+                </div>
+              </div>
+              <figcaption class="cap">Announcing an episode, 1080 × 1920.</figcaption>
+            </figure>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 06 Make it your own -->
+      <section class="xp" id="explore" aria-labelledby="xp-h" data-dot={RECOMMENDED.dot}>
+        <div class="wrap">
+          <div class="slabel"><span>06</span><p>Editor</p></div>
+          <div class="xp-head">
+            <h2 id="xp-h" class="xp-say">Make it your own.</h2>
+            <p class="xp-copy">
+              Explore a few expressions of the identity. Move the unexpected detail, try other
+              typefaces, and find a color direction that feels right. Typeface and colors carry across the
+              whole page; the detail changes in the preview. A link keeps it all.
+            </p>
+          </div>
+
+          <div class="xp-grid">
+            <div class="xp-stage">
+              <div class="xp-main tone-field drop is-in" role="img" aria-label="Live preview of the logo">
+                <Lines />
+                <Wordmark class="xp-wm" />
+              </div>
+              <div class="xp-sub">
+                <div class="xp-paper tone-field">
+                  <p class="xp-kicker">Episode 12 · with Guest Name</p>
+                  <p class="xp-title">a cartographer of places that never existed</p>
+                  <Wordmark class="xp-paper-wm" size="4.6cqi" />
+                </div>
+                <Cover tone="paper" class="tone-counter xp-cover" />
+              </div>
+            </div>
+
+            <form class="xp-ctl" onsubmit="return false" aria-label="Editor settings">
+              <fieldset class="opt">
+                <legend><span>A</span>Unexpected detail</legend>
+                <div class="choice">
+                  <button type="button" data-set-dot="i" aria-pressed="true">
+                    <span class="choice-art" data-dot="i"><Wordmark size="1em" line /></span>
+                    <span class="choice-label">Dot above the i <b class="rec">Recommended</b></span>
+                  </button>
+                  <button type="button" data-set-dot="period" aria-pressed="false">
+                    <span class="choice-art" data-dot="period"><Wordmark size="1em" line /></span>
+                    <span class="choice-label">Period</span>
+                  </button>
+                </div>
+              </fieldset>
+
+              <fieldset class="opt">
+                <legend><span>B</span>Typeface <em>Geist pairs with each</em></legend>
+                <div class="choice">
+                  {fonts.map((f) => (
+                    <button type="button" data-set-font={f.id} data-name={f.name} aria-pressed={f.id === RECOMMENDED.font ? "true" : "false"}>
+                      <span class="choice-aa" data-font={f.id}>Aa</span>
+                      <span class="choice-label">{f.name} {f.rec && <b class="rec">Recommended</b>}</span>
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
+
+              <fieldset class="opt">
+                <legend><span>C</span>Color <em><span data-bind="pal-name">{rec.no} {rec.name}</span></em></legend>
+                <div class="pals" role="group" aria-label="Color directions">
+                  {palettes.map((c) => (
+                    <button
+                      type="button"
+                      class="pal"
+                      data-palette={c.no}
+                      data-p={c.p}
+                      data-s={c.s}
+                      data-name={c.name}
+                      data-mood={c.mood}
+                      aria-pressed={c.no === RECOMMENDED.palette ? "true" : "false"}
+                    >
+                      <span class="sw" style={`--sp:${c.p};--ss:${c.s}`} aria-hidden="true"></span>
+                      <span class="pal-name">{c.name}</span>
+                      {c.no === RECOMMENDED.palette && <b class="rec">Recommended</b>}
+                    </button>
+                  ))}
+                </div>
+                <p class="pal-mood" data-bind="pal-mood">{rec.mood}</p>
+                <details class="custom" id="xp-custom">
+                  <summary>Custom colors</summary>
+                  <div class="hexes">
+                    <label class="hex">
+                      <span class="hex-label">Dot</span>
+                      <span class="hex-field">
+                        <input type="color" id="xp-primary-pick" value={rec.p.toLowerCase()} aria-label="Pick the primary color" />
+                        <input type="text" id="xp-primary" value={rec.p} spellcheck="false" autocomplete="off" maxlength="7" aria-label="Primary color, hex" aria-describedby="xp-hex-msg" />
+                      </span>
+                    </label>
+                    <label class="hex">
+                      <span class="hex-label">Field</span>
+                      <span class="hex-field">
+                        <input type="color" id="xp-secondary-pick" value={rec.s.toLowerCase()} aria-label="Pick the secondary color" />
+                        <input type="text" id="xp-secondary" value={rec.s} spellcheck="false" autocomplete="off" maxlength="7" aria-label="Secondary color, hex" aria-describedby="xp-hex-msg" />
+                      </span>
+                    </label>
+                  </div>
+                  <p class="hex-msg" id="xp-hex-msg" aria-live="polite"></p>
+                </details>
+              </fieldset>
+
+              <div class="xp-actions">
+                <button type="button" class="btn" id="xp-copy">Copy link to this version</button>
+                <button type="button" class="link" id="xp-reset">Reset to recommended</button>
+                <p class="xp-status" id="xp-status" aria-live="polite"></p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <footer class="end">
+        <div class="wrap end-row">
+          <p>Prepared by Ryan Sheridan for Marcy · November 2026</p>
+          <p><a href="/unexpected-detail">Final identity</a> · <a href="/unexpected-detail/round-1">Rounds 01 to 05</a></p>
+        </div>
+      </footer>
+    </main>
+  </div>
+</Layout>
+
+<script>
+  type Font = "gloock" | "dm" | "fraunces" | "lora" | "newsreader" | "dmsans";
+  type Dot = "period" | "i";
+  type State = { font: Font; dot: Dot; primary: string; secondary: string };
+
+  const root = document.getElementById("ub")!;
+  const udColor = (window as unknown as { udColor: { apply: (el: HTMLElement, p: string, s: string) => void } }).udColor;
+  const xp = document.getElementById("explore")!;
+  const $ = <T extends Element = HTMLElement>(s: string) => document.querySelector<T>(s)!;
+  const $$ = (s: string) => Array.from(document.querySelectorAll<HTMLElement>(s));
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const swatches = $$("[data-palette]");
+  const fontBtns = $$("[data-set-font]");
+  const recBtn = swatches.find((b) => b.dataset.palette === "01")!;
+  const RECOMMENDED: State = { font: "gloock", dot: "i", primary: recBtn.dataset.p!, secondary: recBtn.dataset.s! };
+
+  const normalize = (v: string): string | null => {
+    let h = v.trim().replace(/^#/, "");
+    if (/^[0-9a-f]{3}$/i.test(h)) h = h.replace(/./g, (c) => c + c);
+    return /^[0-9a-f]{6}$/i.test(h) ? `#${h.toUpperCase()}` : null;
+  };
+  // A shared link opens on its own settings, in any browser.
+  const q = new URLSearchParams(location.search);
+  const state: State = {
+    font: (fontBtns.find((b) => b.dataset.setFont === q.get("font"))?.dataset.setFont as Font | undefined) ?? RECOMMENDED.font,
+    dot: q.get("dot") === "period" ? "period" : q.get("dot") === "i" ? "i" : RECOMMENDED.dot,
+    primary: normalize(q.get("primary") ?? "") ?? RECOMMENDED.primary,
+    secondary: normalize(q.get("secondary") ?? "") ?? RECOMMENDED.secondary,
+  };
+
+  const fields = {
+    primary: { pick: $<HTMLInputElement>("#xp-primary-pick"), hex: $<HTMLInputElement>("#xp-primary") },
+    secondary: { pick: $<HTMLInputElement>("#xp-secondary-pick"), hex: $<HTMLInputElement>("#xp-secondary") },
+  };
+  const custom = $<HTMLDetailsElement>("#xp-custom");
+  const hexMsg = $("#xp-hex-msg");
+  const status = $("#xp-status");
+  const bind = (key: string, text: string) => $$(`[data-bind="${key}"]`).forEach((el) => (el.textContent = text));
+
+  const isRecommended = () =>
+    state.font === RECOMMENDED.font &&
+    state.dot === RECOMMENDED.dot &&
+    state.primary === RECOMMENDED.primary &&
+    state.secondary === RECOMMENDED.secondary;
+  const query = () =>
+    isRecommended()
+      ? ""
+      : `?${new URLSearchParams({ dot: state.dot, font: state.font, primary: state.primary.slice(1), secondary: state.secondary.slice(1) })}`;
+  const shareUrl = () => `${location.origin}${location.pathname}${query()}#explore`;
+
+  // Replays a one-off CSS animation on an element.
+  const replay = (el: Element | null, cls: string) => {
+    if (!el || reduced) return;
+    el.classList.remove(cls);
+    void (el as HTMLElement).offsetWidth;
+    el.classList.add(cls);
+  };
+
+  function render(opts: { skip?: HTMLInputElement; url?: boolean } = {}) {
+    // Typeface and colors go to the whole page; the detail stays above.
+    root.dataset.font = state.font;
+    xp.dataset.dot = state.dot;
+    const fontName = fontBtns.find((b) => b.dataset.setFont === state.font)!.dataset.name!;
+    bind("font-name", fontName);
+    $("#pairing").setAttribute("aria-label", `${fontName} and Geist`);
+    udColor.apply(root, state.primary, state.secondary);
+    const match = swatches.find((b) => b.dataset.p === state.primary && b.dataset.s === state.secondary);
+
+    $$("[data-set-dot]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.setDot === state.dot)));
+    $$("[data-set-font]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.setFont === state.font)));
+
+    swatches.forEach((b) => b.setAttribute("aria-pressed", String(b === match)));
+    bind("pal-name", match ? `${match.dataset.palette} ${match.dataset.name}` : "Custom");
+    bind("pal-mood", match ? match.dataset.mood! : `${state.primary} dot on ${state.secondary}`);
+
+    for (const key of ["primary", "secondary"] as const) {
+      const f = fields[key];
+      if (f.hex !== opts.skip) {
+        f.hex.value = state[key];
+        f.hex.removeAttribute("aria-invalid");
+      }
+      if (f.pick !== opts.skip) f.pick.value = state[key].toLowerCase();
+    }
+    if (!opts.skip) hexMsg.textContent = "";
+
+    if (opts.url !== false) history.replaceState(null, "", `${location.pathname}${query()}${location.hash}`);
+    status.textContent = "";
+  }
+
+  $$("[data-set-dot]").forEach((b) =>
+    b.addEventListener("click", () => {
+      if (state.dot === b.dataset.setDot) return;
+      state.dot = b.dataset.setDot as Dot;
+      render();
+      if (state.dot === "i") replay($(".xp-main"), "is-in");
+    }),
+  );
+  $$("[data-set-font]").forEach((b) =>
+    b.addEventListener("click", () => {
+      if (state.font === b.dataset.setFont) return;
+      state.font = b.dataset.setFont as Font;
+      render();
+      replay($(".xp-stage"), "swap");
+      // DM Sans rounds its i as the dot lands, so the preview replays it.
+      if (state.font === "dmsans") replay($(".xp-main"), "is-in");
+    }),
+  );
+  swatches.forEach((b) =>
+    b.addEventListener("click", () => {
+      state.primary = b.dataset.p!;
+      state.secondary = b.dataset.s!;
+      render();
+    }),
+  );
+
+  for (const key of ["primary", "secondary"] as const) {
+    const f = fields[key];
+    f.pick.addEventListener("input", () => {
+      state[key] = normalize(f.pick.value)!;
+      render({ skip: f.pick });
+    });
+    f.hex.addEventListener("input", () => {
+      const v = normalize(f.hex.value);
+      if (v) {
+        state[key] = v;
+        f.hex.removeAttribute("aria-invalid");
+        hexMsg.textContent = "";
+        render({ skip: f.hex });
+      } else {
+        f.hex.setAttribute("aria-invalid", "true");
+        hexMsg.textContent = "Use a hex value like #F1D879.";
+      }
+    });
+    f.hex.addEventListener("blur", () => render());
+  }
+
+  $("#xp-reset").addEventListener("click", () => {
+    Object.assign(state, RECOMMENDED);
+    render();
+    status.textContent = "Back to the recommended version.";
+  });
+  $("#xp-copy").addEventListener("click", async () => {
+    const url = shareUrl();
+    try {
+      await navigator.clipboard.writeText(url);
+      status.textContent = "Link copied. It opens on this exact version.";
+    } catch {
+      status.textContent = `Copy this link: ${url}`;
+    }
+  });
+
+  render({ url: false });
+  // A link with custom colors opens with the custom fields showing.
+  if (!swatches.some((b) => b.dataset.p === state.primary && b.dataset.s === state.secondary)) custom.open = true;
+
+  // Entrances: content fades up once; the falling line tips over and the
+  // dot of the i drops into place as they come into view.
+  if (!reduced && "IntersectionObserver" in window) {
+    root.classList.add("motion");
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-in");
+            io.unobserve(e.target);
+          }
+        }),
+      { rootMargin: "0px 0px -12% 0px" },
+    );
+    $$(".reveal, .drop:not(.is-in), .tip").forEach((el) => io.observe(el));
+
+    // The detail spread's dot trails the scroll. Its lag follows the scroll
+    // speed, saturating so a fling never pulls it far (never into the
+    // stem below), and eases home when the page stops. It only runs while
+    // the spread is on screen and something is still moving.
+    const word = $("#detail-word");
+    const DOWN = 0.05; // em; less than the smallest gap above an i's stem
+    const UP = 0.09;
+    let onScreen = false;
+    let frame = 0;
+    let lastY = scrollY;
+    let lastT = performance.now();
+    let speed = 0; // px per ms, positive scrolling down
+    let lag = 0; // em, positive is lower
+    const tick = (t: number) => {
+      const dt = Math.max(t - lastT, 1);
+      const raw = (scrollY - lastY) / dt;
+      lastY = scrollY;
+      lastT = t;
+      speed += (raw - speed) * 0.35;
+      const max = speed > 0 ? DOWN : UP;
+      const target = max * Math.tanh(speed * 0.5);
+      lag += (target - lag) * 0.12;
+      word.style.setProperty("--lag", `${lag.toFixed(4)}em`);
+      if (Math.abs(lag) > 0.0005 || Math.abs(speed) > 0.002) frame = requestAnimationFrame(tick);
+      else {
+        lag = speed = 0;
+        word.style.setProperty("--lag", "0em");
+        frame = 0;
+      }
+    };
+    const wake = () => {
+      if (!onScreen || frame) return;
+      lastY = scrollY;
+      lastT = performance.now();
+      frame = requestAnimationFrame(tick);
+    };
+    new IntersectionObserver(([e]) => {
+      onScreen = e.isIntersecting;
+      wake();
+    }).observe(word);
+    addEventListener("scroll", wake, { passive: true });
+  }
+</script>
+
+<style is:global>
+  /* 0 or 1: how much of the i's dot takes the dot color. A number, so the
+     switch animates and each element mixes its own --dot. */
+  @property --i-on {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 0;
+  }
+
+  .ub {
+    --ud-ink: #141414;
+    --ud-paper: #faf9f6;
+    --ud-stone: #eeece6;
+    --ud-line: rgb(20 20 20 / 0.14);
+    --ud-muted: rgb(20 20 20 / 0.64);
+    --gutter: clamp(16px, 4.4vw, 64px);
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+    --dot: var(--l-dot);
+    background: var(--ud-paper);
+    color: var(--ud-ink);
+    font-family: var(--font-sans);
+    overflow-x: clip;
+  }
+  .ub *,
+  .ub *::before,
+  .ub *::after {
+    box-sizing: border-box;
+  }
+  /* Zero specificity, so every class below can set its own margins. */
+  :where(.ub) :where(p, h2, h3, figure, blockquote, ul) {
+    margin: 0;
+  }
+  :where(.ub) :where(ul) {
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Typeface settings. Inherited, so the nearest data-font wins. */
+  .ub [data-font="gloock"],
+  .ub[data-font="gloock"] {
+    --ud-display: "Gloock", Georgia, serif;
+    --wm-scale: 1;
+    --wm-lh: 0.92;
+    --wm-track: -0.01em;
+    --dd: 0.1688em;
+    --dl: 0.0406em;
+    --db: 0.2119em;
+    --isplit: 0.257em;
+    --wm-base: 0.085em;
+  }
+  .ub [data-font="dm"],
+  .ub[data-font="dm"] {
+    --ud-display: "DM Serif Display", Georgia, serif;
+    --wm-scale: 1.04;
+    --wm-lh: 0.9;
+    --wm-track: -0.015em;
+    --dd: 0.1713em;
+    --dl: 0.0644em;
+    --db: 0.3206em;
+    --isplit: 0.2775em;
+    --wm-base: 0.0995em;
+    --pg-fit: 0.76;
+  }
+  /* The ones below were measured from the rendered glyphs the same way as
+     the two above: the period's diameter, side bearing and lift; where the
+     i's dot ends; and the baseline's height in the lockup's line box. */
+  .ub [data-font="fraunces"],
+  .ub[data-font="fraunces"] {
+    --ud-display: "Fraunces", Georgia, serif;
+    --wm-scale: 1.14;
+    --wm-lh: 0.9;
+    --wm-track: -0.015em;
+    --dd: 0.115em;
+    --dl: 0.0317em;
+    --db: 0.2467em;
+    --isplit: 0.3292em;
+    --wm-base: 0.0885em;
+  }
+  .ub [data-font="lora"],
+  .ub[data-font="lora"] {
+    --ud-display: "Lora", Georgia, serif;
+    --wm-scale: 1;
+    --wm-lh: 0.93;
+    --wm-track: -0.015em;
+    --dd: 0.1242em;
+    --dl: 0.0633em;
+    --db: 0.2567em;
+    --isplit: 0.2725em;
+    --wm-base: 0.099em;
+  }
+  .ub [data-font="newsreader"],
+  .ub[data-font="newsreader"] {
+    --ud-display: "Newsreader", Georgia, serif;
+    --wm-scale: 1.02;
+    --wm-lh: 0.9;
+    --wm-track: -0.015em;
+    --dd: 0.14em;
+    --dl: 0.0467em;
+    --db: 0.255em;
+    --isplit: 0.2208em;
+    --i-pad: 0.1em;
+    --wm-base: 0.215em;
+  }
+  .ub [data-font="dmsans"],
+  .ub[data-font="dmsans"] {
+    --ud-display: "DM Sans", system-ui, sans-serif;
+    --wm-scale: 1;
+    --wm-lh: 0.9;
+    /* Tracking for the logo only (0.25px at the editor preview's size);
+       everything else set in DM Sans keeps the page's own spacing. */
+    --wm-track: 0.003em;
+    --dd: 0.1108em;
+    --dl: 0.035em;
+    --db: 0.305em;
+    --isplit: 0.2442em;
+    --wm-base: 0.109em;
+    --stem-ink: transparent;
+  }
+  .ub [data-dot="period"],
+  .ub[data-dot="period"] {
+    --pd-on: 1;
+    --i-on: 0;
+  }
+  .ub [data-dot="i"],
+  .ub[data-dot="i"] {
+    --pd-on: 0;
+    --i-on: 1;
+  }
+
+  /* Grounds: each palette resolves to a field, a counter, and which of the
+     two is dark and which is light (see system() above). */
+  .ub .tone-field {
+    background-color: var(--f-bg);
+    color: var(--f-fg);
+    --dot: var(--f-dot);
+  }
+  .ub .tone-counter {
+    background-color: var(--c-bg);
+    color: var(--c-fg);
+    --dot: var(--c-dot);
+  }
+  .ub .tone-dark {
+    background-color: var(--d-bg);
+    color: var(--d-fg);
+    --dot: var(--d-dot);
+  }
+  .ub .tone-light {
+    background-color: var(--l-bg);
+    color: var(--l-fg);
+    --dot: var(--l-dot);
+  }
+  .ub .tone-accent {
+    background-color: var(--a-bg);
+    color: var(--a-fg);
+    --dot: var(--a-dot);
+  }
+
+  .ub .wrap {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+
+  /* ---------- the wordmark ---------- */
+  .ub .wm {
+    display: inline-block;
+    font-family: var(--ud-display);
+    font-weight: 400;
+    line-height: var(--wm-lh);
+    letter-spacing: var(--wm-track);
+    text-align: right;
+    white-space: nowrap;
+    font-kerning: normal;
+    font-synthesis: none;
+  }
+  .ub .wm-a {
+    display: block;
+    padding-right: 1.2em;
+  }
+  .ub .wm-b {
+    display: block;
+  }
+  .ub .wm--line .wm-a,
+  .ub .wm--line .wm-b {
+    display: inline;
+    padding: 0;
+  }
+  .ub .wm--line .wm-a::after {
+    content: " ";
+  }
+  /* The i keeps its own glyph; above the gap between dot and stem it takes
+     the dot color when the detail is the dot of the i. The box is an
+     inline-block at the lockup's line-height, which --isplit is measured
+     against. */
+  .ub .wm-i {
+    position: relative;
+    display: inline-block;
+    line-height: var(--wm-lh);
+    /* For a face whose i rises above the line box: room for the whole dot,
+       taken back by the margin so the lockup doesn't move. */
+    padding-top: var(--i-pad, 0);
+    margin-top: calc(var(--i-pad, 0) * -1);
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--dot) calc(var(--i-on) * 100%), currentColor) 0 var(--isplit),
+      var(--stem-ink, currentColor) var(--isplit)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: --i-on 0.45s var(--ease);
+  }
+  /* The period hangs past the edge, so showing or hiding it moves nothing. */
+  .ub .wm-pd {
+    position: relative;
+    -webkit-text-fill-color: transparent;
+    margin-right: calc((var(--dd) + 2 * var(--dl)) * -1);
+  }
+  .ub .wm-pd::after {
+    content: "";
+    position: absolute;
+    left: var(--dl);
+    bottom: var(--db);
+    width: var(--dd);
+    height: var(--dd);
+    border-radius: 50%;
+    background: var(--dot);
+    opacity: var(--pd-on);
+    transform: scale(var(--pd-on));
+    transition:
+      opacity 0.35s var(--ease),
+      transform 0.45s var(--ease),
+      background-color 0.5s var(--ease);
+  }
+  .ub .mark {
+    line-height: var(--wm-lh);
+  }
+
+  /*
+    The dot drops into place. Inside .drop, the i's own dot is left out of
+    the gradient and redrawn by a copy of the glyph clipped to the dot, so
+    the real letterform falls the last stretch into its seat. It is static
+    without .motion (no script, reduced motion) and once it has landed.
+  */
+  .ub :is(.drop, .lag) .wm-i {
+    background: linear-gradient(to bottom, transparent 0 var(--isplit), var(--stem-ink, currentColor) var(--isplit));
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  .ub :is(.drop, .lag) .wm-i::before {
+    content: "i";
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding-top: var(--i-pad, 0);
+    -webkit-text-fill-color: color-mix(in srgb, var(--dot) calc(var(--i-on) * 100%), currentColor);
+    clip-path: inset(0 0 calc(100% - var(--isplit)) 0);
+  }
+  .ub.motion .drop:not(.is-in) .wm-i::before {
+    transform: translateY(-1.4em);
+    opacity: 0;
+  }
+  .ub.motion .drop.is-in .wm-i::before {
+    animation: ud-drop 0.95s cubic-bezier(0.55, 0, 0.35, 1) 0.35s both;
+  }
+  /* The opening keeps its one movement, the falling line. Its dot sits
+     still from the start (it still lifts on hover). */
+  .ub.motion .intro-wm.drop .wm-i::before {
+    animation: none;
+  }
+  @keyframes ud-drop {
+    from {
+      transform: translateY(-1.4em);
+      opacity: 0;
+    }
+    30% {
+      opacity: 1;
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  /*
+    DM Sans draws its own i stem: the glyph's stem is hidden (--stem-ink)
+    and redrawn as a box at the same place, measured from the glyph, with
+    the top left and bottom right corners fully rounded. Where the dot
+    drops (the opening included, for this face), it falls to its seat,
+    never past it, and hops once; the stem starts square, the first landing
+    rounds its top corner and the last one its bottom corner.
+  */
+  .ub [data-font="dmsans"] .wm-i::after,
+  .ub[data-font="dmsans"] .wm-i::after {
+    content: "";
+    position: absolute;
+    left: 0.057em;
+    width: 0.084em;
+    top: calc(var(--i-pad, 0em) + 0.295em);
+    bottom: 0.109em;
+    background: currentColor;
+    border-radius: 0.084em 0 0.084em 0;
+  }
+  .ub.motion .drop:not(.is-in) .wm-i::after {
+    border-radius: 0;
+  }
+  .ub.motion .drop.is-in .wm-i::after {
+    animation:
+      ud-round-top 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) 1.15s both,
+      ud-round-bottom 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) 1.65s both;
+  }
+  @keyframes ud-round-top {
+    from {
+      border-top-left-radius: 0;
+    }
+  }
+  @keyframes ud-round-bottom {
+    from {
+      border-bottom-right-radius: 0;
+    }
+  }
+  .ub.motion[data-font="dmsans"] .drop.is-in .wm-i::before {
+    animation: ud-bounce 1.3s linear 0.35s both;
+  }
+  /* In the opening the falling line goes first (it lands at 2s), then the
+     dot drops: the same moves, 1.75s later. */
+  .ub.motion[data-font="dmsans"] .intro-wm.drop.is-in .wm-i::before {
+    animation-delay: 2.1s;
+  }
+  .ub.motion .intro-wm.drop.is-in .wm-i::after {
+    animation-delay: 2.9s, 3.4s;
+  }
+  /* Lands at 62% (0.35s + 0.81s, the top corner rounds), hops, and lands
+     again at the end (1.65s, the bottom corner). */
+  @keyframes ud-bounce {
+    from {
+      transform: translateY(-1.4em);
+      opacity: 0;
+      animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.55);
+    }
+    25% {
+      opacity: 1;
+    }
+    62% {
+      transform: none;
+      animation-timing-function: cubic-bezier(0.2, 0.6, 0.35, 1);
+    }
+    80% {
+      transform: translateY(-0.09em);
+      animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.45);
+    }
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  /*
+    In the detail spread the dot never drops: it sits in its seat and
+    trails the scroll a little, by --lag, which the script sets from the
+    scroll speed (a fast scroll leaves it further behind, a slow one barely
+    moves it) and eases back to zero when the page stops.
+  */
+  .ub .lag .wm-i::before {
+    transform: translateY(var(--lag, 0em));
+  }
+
+  /* ---------- the falling line (SVG) ---------- */
+  .ub .ud-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .ub .ud-fall {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    transform: rotate(var(--fall));
+  }
+  .ub.motion .tip .ud-fall {
+    transition: transform 1.4s cubic-bezier(0.6, 0, 0.4, 1) 0.4s;
+  }
+  .ub.motion .tip:not(.is-in) .ud-fall {
+    transform: rotate(0deg);
+  }
+
+  /*
+    One hover moment, for pointers that can hover and only when motion is
+    welcome. It changes nothing and doesn't look clickable; it just answers.
+
+    The dot never quite sits still: over the logo it lifts a little and
+    settles back when the pointer leaves. It uses translate, which the drop
+    animation (transform) leaves alone, so the two never fight.
+  */
+  @media (hover: hover) {
+    .ub.motion .drop .wm-i::before {
+      transition: translate 0.6s cubic-bezier(0.3, 0.7, 0.4, 1);
+    }
+    .ub.motion .intro-wm:hover .wm-i::before,
+    .ub.motion .split-art--mark:hover .wm-i::before,
+    .ub.motion .xp-main:hover .wm-i::before {
+      translate: 0 -0.08em;
+    }
+  }
+
+  .ub .cover {
+    position: relative;
+    aspect-ratio: 1;
+    container-type: inline-size;
+    overflow: hidden;
+    flex: none;
+  }
+  .ub .cover-wm {
+    position: absolute;
+    right: 11.4cqi;
+    bottom: 9cqi;
+  }
+  /* A light ground beside page paper needs an edge. */
+  .ub .cover.tone-light,
+  .ub .split-half--mark {
+    box-shadow: inset 0 0 0 1px var(--ud-line);
+  }
+
+  /* ---------- editorial pieces ---------- */
+  .ub .slabel {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding-top: 14px;
+    border-top: 1px solid currentColor;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .ub .slabel span {
+    font-family: var(--font-mono);
+    letter-spacing: 0;
+    opacity: 0.6;
+  }
+  .ub .slabel h2,
+  .ub .slabel p {
+    font: inherit;
+    letter-spacing: inherit;
+  }
+  .ub .tone-dark .slabel {
+    border-top-color: color-mix(in srgb, currentColor 40%, transparent);
+  }
+  .ub .spread {
+    padding-block: clamp(80px, 10vw, 152px);
+  }
+  .ub .statement {
+    font-family: var(--ud-display);
+    font-size: clamp(44px, 6.4vw, 104px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+  }
+  .ub .cap,
+  .ub figcaption {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .ub .cap {
+    margin-top: 14px;
+    color: var(--ud-muted);
+    max-width: 44ch;
+  }
+  .ub .cap b,
+  .ub figcaption b,
+  .ub .id-cap b {
+    color: var(--ud-ink);
+    font-weight: 500;
+  }
+  .ub .tone-dark figcaption b {
+    color: inherit;
+  }
+  /* The recommendation marker: a small dot and a quiet word, used in the
+     editor wherever the recommended option sits beside an alternative. */
+  .ub .rec {
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ud-muted);
+  }
+  .ub .rec::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ud-ink);
+    vertical-align: 1px;
+  }
+  .ub .rec::before {
+    margin-right: 7px;
+  }
+  .ub .ctx {
+    margin-bottom: 14px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ud-muted);
+  }
+  .ub a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+  }
+  .ub :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+  /* Selected text takes a wash of the accent, on light and dark grounds. */
+  .ub ::selection {
+    background: color-mix(in srgb, var(--dot) 42%, transparent);
+  }
+  /* Running copy never leaves a word alone on its last line. */
+  .ub :where(.intro-desc, .id-cap, .detail-copy, .line-lead, .rules li, .face-note, .notes-body, .xp-copy, .pal-mood) {
+    text-wrap: pretty;
+  }
+  .ub.motion .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.9s var(--ease),
+      transform 0.9s var(--ease);
+  }
+  .ub.motion .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ---------- opening ---------- */
+  .intro {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 28px var(--gutter) clamp(28px, 5vw, 64px);
+    container-type: inline-size;
+    overflow: hidden;
+  }
+  .intro-meta {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: baseline;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+  }
+  .intro-name {
+    font-weight: 500;
+    font-size: 13px;
+  }
+  .intro-tags {
+    display: flex;
+    gap: 28px;
+    opacity: 0.7;
+  }
+  .intro-draft {
+    justify-self: end;
+    opacity: 0.7;
+  }
+  .intro-lines {
+    align-self: start;
+    display: flex;
+    justify-content: space-between;
+    height: clamp(140px, 27svh, 300px);
+    margin-top: clamp(48px, 10svh, 120px);
+  }
+  .intro-lines span {
+    width: 1px;
+    background: currentColor;
+    transform-origin: 50% 100%;
+  }
+  .intro-lines .fall {
+    transform: rotate(14deg);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .intro-lines .fall {
+      animation: ud-tip 1.3s cubic-bezier(0.6, 0, 0.4, 1) 0.7s both;
+    }
+  }
+  @keyframes ud-tip {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(14deg);
+    }
+  }
+  .intro-foot {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    align-items: end;
+    margin-top: 40px;
+  }
+  .intro-desc {
+    position: absolute;
+    left: 0;
+    bottom: 0.4em;
+    max-width: 32ch;
+    font-size: clamp(13px, 1.05vw, 15px);
+    line-height: 1.55;
+    opacity: 0.75;
+  }
+  .intro-skip {
+    position: absolute;
+    left: var(--gutter);
+    top: 4px;
+    z-index: 2;
+    font-size: 12px;
+    transform: translateY(-300%);
+  }
+  .intro-skip:focus {
+    transform: none;
+  }
+  @media (max-width: 760px) {
+    .intro {
+      min-height: 92svh;
+    }
+    .intro-meta {
+      grid-template-columns: 1fr auto;
+    }
+    .intro-tags {
+      display: none;
+    }
+    .intro-lines span:nth-child(even) {
+      display: none;
+    }
+    .intro-foot {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 32px;
+    }
+    .intro-desc {
+      position: static;
+    }
+    .intro-wm {
+      align-self: flex-end;
+    }
+  }
+
+  /* ---------- 01 identity ---------- */
+  .id-primary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+    gap: 48px;
+    align-items: end;
+    padding-block: clamp(96px, 13vw, 190px) clamp(24px, 4vw, 56px);
+  }
+  .construct {
+    position: relative;
+    justify-self: center;
+    font-size: clamp(50px, 8.6vw, 132px);
+  }
+  .construct .g {
+    position: absolute;
+    pointer-events: none;
+    color: var(--ud-muted);
+  }
+  .construct .g em {
+    position: absolute;
+    font-style: normal;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .g-edge {
+    right: 0;
+    top: -0.35em;
+    bottom: -0.3em;
+    border-right: 1px dashed currentColor;
+  }
+  .g-edge em {
+    right: 8px;
+    top: -2px;
+  }
+  .g-step {
+    right: 0;
+    top: 0.12em;
+    width: calc(var(--wm-scale) * 1.2em);
+    height: 0.62em;
+    border: 1px dashed currentColor;
+    border-right: 0;
+  }
+  .g-step em {
+    left: 0;
+    bottom: calc(100% + 6px);
+  }
+  .g-base {
+    left: -0.2em;
+    right: -0.4em;
+    top: calc(var(--wm-scale) * (var(--wm-lh) * 2em - var(--wm-base)));
+    border-top: 1px dashed currentColor;
+    opacity: 0.7;
+  }
+  .id-cap {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ud-muted);
+  }
+  .split {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    margin-top: clamp(64px, 8vw, 120px);
+  }
+  .split-half {
+    position: relative;
+    min-height: clamp(360px, 42vw, 600px);
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: clamp(24px, 3.4vw, 48px);
+    container-type: inline-size;
+  }
+  .split-half--mark {
+    background: var(--ud-stone);
+  }
+  .split-art {
+    display: grid;
+    place-items: center;
+  }
+  .split-half figcaption {
+    max-width: 40ch;
+    opacity: 0.8;
+  }
+  .split-half--mark .mark {
+    font-size: 46cqi;
+  }
+  @media (max-width: 860px) {
+    .id-primary,
+    .split {
+      grid-template-columns: 1fr;
+    }
+    .construct {
+      justify-self: end;
+      margin-right: 6px;
+    }
+    .construct .g em {
+      display: none;
+    }
+    .split-half {
+      min-height: 320px;
+    }
+    .split-half .wm--line {
+      font-size: calc(var(--wm-scale) * 8.4cqi) !important;
+    }
+  }
+
+  /* ---------- 02 the unexpected detail ---------- */
+  .detail {
+    padding-top: clamp(80px, 10vw, 152px);
+    overflow: hidden;
+    border-top: 1px solid color-mix(in srgb, var(--d-fg) 22%, transparent);
+  }
+  /* The identity split runs straight into the detail spread. */
+  .ub .spread--id {
+    padding-bottom: 0;
+  }
+  .detail-head {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 32px 64px;
+    align-items: end;
+    margin-top: clamp(48px, 7vw, 96px);
+  }
+  .detail-copy {
+    font-size: 15px;
+    line-height: 1.6;
+    max-width: 40ch;
+    opacity: 0.78;
+  }
+  /* The word sits on the bottom edge of the band: its baseline is the last
+     pixel, and "detail" has no descenders to lose. */
+  .detail-word {
+    container-type: inline-size;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin-top: clamp(40px, 6vw, 88px);
+  }
+  .detail-wm {
+    margin-bottom: -0.085em;
+    letter-spacing: -0.03em !important;
+  }
+  .detail-wm .wm-a {
+    display: none !important;
+  }
+  @media (max-width: 760px) {
+    .detail-head {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------- 03 typography ---------- */
+  .pairing {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.28em;
+    margin-top: clamp(48px, 7vw, 96px);
+    font-size: calc(var(--pg-fit, 1) * clamp(56px, 9.4vw, 152px));
+    line-height: 1;
+  }
+  /* Below about 380px a longer name would run past the edge, so the other
+     faces scale down with the screen. Gloock, the recommendation, keeps
+     its size. */
+  .ub:not([data-font="gloock"]) .pairing {
+    font-size: calc(var(--pg-fit, 1) * clamp(min(56px, 14.5vw), 9.4vw, 152px));
+  }
+  .pg-serif {
+    white-space: nowrap;
+    font-family: var(--ud-display);
+    letter-spacing: -0.02em;
+  }
+  .pg-amp {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: 0.5em;
+    color: var(--ud-muted);
+  }
+  .pg-sans {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+  }
+  .faces {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: clamp(40px, 5vw, 72px);
+    border-top: 1px solid var(--ud-ink);
+  }
+  .face {
+    padding: 20px clamp(20px, 3.4vw, 56px) 8px 0;
+  }
+  .face + .face {
+    padding-left: clamp(20px, 3.4vw, 56px);
+    padding-right: 0;
+    border-left: 1px solid var(--ud-line);
+  }
+  .face-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .face-head h3 {
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .face-head p {
+    font-size: 12px;
+    color: var(--ud-muted);
+  }
+  .face-wm {
+    margin-top: clamp(40px, 5vw, 72px);
+    font-size: clamp(44px, 5.2vw, 84px);
+    text-align: right;
+  }
+  .face-title {
+    margin-top: clamp(36px, 4vw, 56px);
+    font-family: var(--ud-display);
+    font-size: clamp(26px, 2.6vw, 40px);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    max-width: 16ch;
+  }
+  .face-say {
+    margin-top: 16px;
+    font-family: var(--ud-display);
+    font-size: clamp(18px, 1.5vw, 22px);
+    color: var(--ud-muted);
+  }
+  .face-note {
+    margin-top: 28px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ud-muted);
+    max-width: 44ch;
+  }
+  .notes {
+    margin-top: clamp(40px, 5vw, 72px);
+  }
+  .notes-meta {
+    font-size: 13px;
+    color: var(--ud-muted);
+  }
+  .notes-h {
+    margin-top: 16px;
+    font-size: clamp(22px, 2vw, 30px);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+  }
+  .notes-body {
+    margin-top: 12px;
+    font-size: 16px;
+    line-height: 1.65;
+    max-width: 50ch;
+  }
+  .notes-links {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .notes-links span {
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+  }
+  @media (max-width: 860px) {
+    .faces {
+      grid-template-columns: 1fr;
+    }
+    .face,
+    .face + .face {
+      padding: 20px 0 40px;
+      border-left: 0;
+    }
+    .face + .face {
+      border-top: 1px solid var(--ud-line);
+    }
+  }
+
+  /* ---------- 04 the falling line ---------- */
+  .spread--line {
+    padding-top: 0;
+  }
+  .band {
+    position: relative;
+    aspect-ratio: 5 / 1;
+    margin-block: clamp(40px, 5vw, 72px);
+  }
+  .line-text {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 24px 64px;
+    align-items: start;
+  }
+  .line-lead {
+    font-family: var(--ud-display);
+    font-size: clamp(26px, 2.6vw, 40px);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    max-width: 22ch;
+  }
+  .rules {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .rules li {
+    padding-top: 12px;
+    border-top: 1px solid var(--ud-ink);
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ud-muted);
+  }
+  .rules b {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
+    color: var(--ud-ink);
+  }
+  @media (max-width: 860px) {
+    .band {
+      aspect-ratio: 3 / 1;
+    }
+    .line-text,
+    .rules {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------- 05 in use ---------- */
+  .s-apps {
+    background: var(--ud-stone);
+  }
+  .apps-cover {
+    margin-top: clamp(48px, 7vw, 96px);
+  }
+  /* Two covers, one size, on a shared top and bottom edge. */
+  .ac-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(16px, 2.4vw, 32px);
+  }
+  .apps-cover .cap {
+    margin-left: calc(50% + clamp(16px, 2.4vw, 32px) / 2);
+  }
+  .phones {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(24px, 4vw, 64px);
+    margin-top: clamp(72px, 9vw, 136px);
+    padding-top: clamp(40px, 5vw, 72px);
+    border-top: 1px solid var(--ud-line);
+  }
+  .ph:nth-child(2) {
+    transition-delay: 0.12s;
+  }
+  .ph:nth-child(3) {
+    transition-delay: 0.24s;
+  }
+  .ph .cap {
+    max-width: 30ch;
+  }
+  /* A phone in a single hairline, so it reads as context, not a product
+     shot. Screens are containers, so everything inside is sized in cqi. */
+  .phone {
+    position: relative;
+    width: min(100%, 300px);
+    aspect-ratio: 9 / 19;
+    padding: 8px;
+    border: 1px solid rgb(20 20 20 / 0.3);
+    border-radius: 44px;
+  }
+  .phone::after {
+    content: "";
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    width: 24%;
+    height: 7px;
+    transform: translateX(-50%);
+    border: 1px solid rgb(20 20 20 / 0.2);
+    border-radius: 999px;
+    z-index: 2;
+  }
+  .screen {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 36px;
+    container-type: inline-size;
+  }
+  /* Padding on a screen resolves against the phone, not the screen's own
+     container, so it is set in percent of the phone's width. */
+  .now {
+    padding: 22% 9% 0;
+  }
+  .now-top {
+    font-size: 3.8cqi;
+    text-align: center;
+    opacity: 0.6;
+  }
+  .now .now-cover {
+    width: 100%;
+    margin-top: 7cqi;
+  }
+  .now-title {
+    margin-top: 8cqi;
+    font-size: 5cqi;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  .now-show {
+    margin-top: 1.4cqi;
+    font-size: 4cqi;
+    opacity: 0.6;
+  }
+  .scrub {
+    position: relative;
+    height: 1px;
+    margin-top: 7cqi;
+    background: rgb(20 20 20 / 0.2);
+  }
+  .scrub span {
+    position: absolute;
+    left: 0;
+    top: -0.5px;
+    width: 38%;
+    height: 2px;
+    background: currentColor;
+  }
+  .scrub span::after {
+    content: "";
+    position: absolute;
+    right: -4px;
+    top: -3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .now-times {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2.6cqi;
+    font-family: var(--font-mono);
+    font-size: 3cqi;
+    opacity: 0.55;
+  }
+  .now-ctl {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12cqi;
+    margin-top: 7cqi;
+  }
+  .now-ctl svg {
+    width: 8cqi;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.2;
+    stroke-linejoin: round;
+  }
+  .now-ctl .play {
+    width: 16cqi;
+    stroke-width: 0.8;
+  }
+  .prof {
+    padding: 19% 6% 0;
+  }
+  .prof-handle {
+    font-size: 4.2cqi;
+    font-weight: 500;
+    text-align: center;
+  }
+  .prof-head {
+    display: flex;
+    align-items: center;
+    gap: 5cqi;
+    margin-top: 7cqi;
+  }
+  .prof-avatar {
+    flex: none;
+    width: 24cqi;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    container-type: inline-size;
+  }
+  .prof-name {
+    font-size: 4.6cqi;
+    font-weight: 500;
+  }
+  .prof-bio {
+    margin-top: 1cqi;
+    font-size: 3.6cqi;
+    line-height: 1.35;
+    opacity: 0.65;
+  }
+  .prof-follow {
+    margin-top: 6cqi;
+    padding: 2.6cqi 0;
+    border: 1px solid rgb(20 20 20 / 0.25);
+    border-radius: 2.4cqi;
+    font-size: 3.8cqi;
+    font-weight: 500;
+    text-align: center;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    margin: 6cqi -6cqi 0;
+  }
+  .grid > * {
+    aspect-ratio: 1;
+    position: relative;
+    overflow: hidden;
+    container-type: inline-size;
+  }
+  /* Six tiles, six ideas: a quote that leaves most of the tile empty, the
+     cover, the i mark cropped big, the lines as a texture behind type, a
+     guest feature, and a second quote tucked into the opposite corner. */
+  .t-q p {
+    position: absolute;
+    font-family: var(--ud-display);
+    font-size: 9cqi;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+  }
+  .t-q--top p {
+    left: 9cqi;
+    top: 9cqi;
+    right: 30cqi;
+  }
+  .t-q small {
+    position: absolute;
+    left: 9cqi;
+    bottom: 9cqi;
+    font-size: 5.6cqi;
+    opacity: 0.6;
+  }
+  .t-q--end p {
+    right: 9cqi;
+    bottom: 9cqi;
+    left: 34cqi;
+    text-align: right;
+  }
+  .t-mark {
+    background: var(--ud-stone);
+    display: grid;
+    place-items: end center;
+  }
+  .t-mark .mark {
+    font-size: 118cqi;
+    margin-bottom: -16cqi;
+  }
+  .t-pattern .ud-lines {
+    opacity: 0.32;
+  }
+  .t-pattern p {
+    position: absolute;
+    inset: auto 9cqi 9cqi;
+    font-size: 6.4cqi;
+    line-height: 1.3;
+  }
+  .t-pattern b {
+    display: block;
+    font-weight: 500;
+  }
+  .t-guest small {
+    position: absolute;
+    left: 9cqi;
+    top: 9cqi;
+    font-size: 6.4cqi;
+    opacity: 0.6;
+  }
+  .t-guest p {
+    position: absolute;
+    left: 9cqi;
+    right: 9cqi;
+    bottom: 8cqi;
+    font-family: var(--ud-display);
+    font-size: 19cqi;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+  }
+  /* The rest of the grid, so the profile scrolls off the screen like a real
+     one: a lone dot, a line of brand voice, an episode number, a question
+     to listeners, a season teaser, the one-line logo, a quote tucked low,
+     and a play prompt. */
+  .t-dot {
+    display: grid;
+    place-items: center;
+  }
+  .t-dot span {
+    width: 22cqi;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--dot);
+  }
+  .t-say {
+    background: var(--ud-stone);
+  }
+  .t-say p {
+    position: absolute;
+    left: 9cqi;
+    right: 9cqi;
+    bottom: 9cqi;
+    font-family: var(--ud-display);
+    font-size: 15cqi;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+  }
+  .t-num small {
+    position: absolute;
+    left: 9cqi;
+    top: 9cqi;
+    font-size: 6.4cqi;
+    opacity: 0.6;
+  }
+  .t-num p {
+    position: absolute;
+    left: 7cqi;
+    bottom: -4cqi;
+    font-family: var(--ud-display);
+    font-size: 62cqi;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .t-ask p {
+    position: absolute;
+    left: 9cqi;
+    right: 12cqi;
+    top: 9cqi;
+    font-size: 9.4cqi;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .t-ask span {
+    position: absolute;
+    left: 9cqi;
+    bottom: 10cqi;
+    width: 7cqi;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--dot);
+  }
+  .t-season .ud-lines {
+    opacity: 0.22;
+  }
+  .t-line {
+    display: grid;
+    place-items: center;
+  }
+  .t-q--low p {
+    left: 9cqi;
+    right: 22cqi;
+    bottom: 9cqi;
+  }
+  .t-play svg {
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    width: 30cqi;
+    translate: -50% -50%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 0.7;
+    stroke-linejoin: round;
+  }
+  .t-play small {
+    position: absolute;
+    left: 9cqi;
+    bottom: 9cqi;
+    font-size: 6.4cqi;
+    opacity: 0.6;
+  }
+  .grid .tone-light {
+    box-shadow: inset 0 0 0 1px var(--ud-line);
+  }
+  .story-bar {
+    position: absolute;
+    top: 15cqi;
+    left: 6cqi;
+    right: 6cqi;
+    display: flex;
+    gap: 1.6cqi;
+  }
+  .story-bar span {
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.35;
+  }
+  .story-bar span:first-child {
+    opacity: 1;
+  }
+  /* The wordmark, the lines and the type share one pair of edges, 10cqi in
+     from each side. */
+  .story-wm {
+    position: absolute;
+    right: 10cqi;
+    top: 24cqi;
+  }
+  .story-text {
+    position: absolute;
+    left: 10cqi;
+    right: 10cqi;
+    bottom: 14cqi;
+  }
+  .story-new {
+    font-size: 3.4cqi;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .story-guest {
+    margin-top: 3cqi;
+    font-family: var(--ud-display);
+    font-size: 11cqi;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .story-topic {
+    margin-top: 2.6cqi;
+    font-size: 4cqi;
+    line-height: 1.35;
+    opacity: 0.8;
+  }
+  @media (max-width: 960px) {
+    .phones {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 860px) {
+    .apps-cover .cap {
+      margin-left: 0;
+    }
+  }
+  @media (max-width: 600px) {
+    .phones {
+      grid-template-columns: 1fr;
+      justify-items: center;
+    }
+    .ph {
+      width: min(100%, 300px);
+    }
+  }
+
+  /* ---------- 06 editor ---------- */
+  .xp {
+    padding-block: clamp(80px, 10vw, 152px);
+    background: var(--ud-paper);
+    border-top: 1px solid var(--ud-line);
+  }
+  .xp-head {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 24px 64px;
+    align-items: end;
+    margin-top: clamp(48px, 7vw, 96px);
+  }
+  .xp-say {
+    font-family: var(--ud-display);
+    font-weight: 400;
+    font-size: clamp(52px, 8.6vw, 144px);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+  }
+  .xp-copy {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ud-muted);
+    max-width: 42ch;
+  }
+  .xp-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(320px, 1fr);
+    gap: clamp(28px, 4vw, 56px);
+    align-items: start;
+    margin-top: clamp(48px, 6vw, 88px);
+  }
+  .ub .tone-field,
+  .ub .tone-counter,
+  .ub .tone-light,
+  .ub .tone-dark,
+  .ub .tone-accent {
+    transition:
+      background-color 0.5s var(--ease),
+      color 0.5s var(--ease);
+  }
+  /* The preview is the square cover at full size: the same line, wordmark
+     and proportions as the cover thumbnails. */
+  .xp-main {
+    position: relative;
+    aspect-ratio: 1;
+    container-type: inline-size;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px var(--ud-line);
+  }
+  .xp-wm {
+    position: absolute;
+    right: 11.4cqi;
+    bottom: 9cqi;
+  }
+  .xp-sub {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.42fr);
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .xp-paper {
+    position: relative;
+    container-type: inline-size;
+    padding: clamp(18px, 2.4vw, 32px);
+    box-shadow: inset 0 0 0 1px var(--ud-line);
+  }
+  .xp-kicker {
+    font-size: 12px;
+    opacity: 0.64;
+  }
+  .xp-title {
+    margin-top: 10px;
+    font-family: var(--ud-display);
+    font-size: 7cqi;
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+    max-width: 14ch;
+  }
+  .xp-paper-wm {
+    position: absolute;
+    right: clamp(18px, 2.4vw, 32px);
+    bottom: clamp(18px, 2.4vw, 32px);
+  }
+  .xp-cover {
+    width: 100%;
+    box-shadow: inset 0 0 0 1px var(--ud-line);
+  }
+  /* A font change gives the preview a brief breath rather than a jump. */
+  .xp-stage.swap {
+    animation: ud-swap 0.45s var(--ease);
+  }
+  @keyframes ud-swap {
+    from {
+      opacity: 0.55;
+    }
+  }
+  .xp-ctl {
+    position: sticky;
+    top: 24px;
+    display: grid;
+    gap: 22px;
+  }
+  .opt {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  .opt legend {
+    display: flex;
+    width: 100%;
+    align-items: baseline;
+    gap: 10px;
+    padding: 10px 0 0;
+    margin-bottom: 10px;
+    border-top: 1px solid var(--ud-ink);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .opt legend > span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--ud-muted);
+  }
+  .opt legend em {
+    margin-left: auto;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--ud-muted);
+  }
+  .choice {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .choice button {
+    display: grid;
+    gap: 6px;
+    justify-items: start;
+    padding: 12px 12px 10px;
+    border: 1px solid var(--ud-line);
+    border-radius: 0;
+    background: var(--ud-paper);
+    color: var(--ud-ink);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.25s var(--ease);
+  }
+  .choice button:hover {
+    border-color: rgb(20 20 20 / 0.45);
+  }
+  .choice button[aria-pressed="true"] {
+    border-color: var(--ud-ink);
+    box-shadow: inset 0 0 0 1px var(--ud-ink);
+  }
+  .choice-art {
+    font-size: 26px;
+    line-height: 1;
+  }
+  .choice-art .wm-a {
+    display: none !important;
+  }
+  .choice-aa {
+    font-family: var(--ud-display);
+    font-size: 28px;
+    line-height: 1;
+  }
+  .choice-label .rec {
+    margin-left: auto;
+    font-size: 11px;
+  }
+  .choice-label {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    align-items: center;
+    font-size: 12px;
+  }
+  /* Eight named presets: a swatch, its name, and the recommendation marker
+     on the first. */
+  .pals {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px 8px;
+  }
+  .pal {
+    display: grid;
+    align-content: start;
+    gap: 6px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ud-ink);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .pal-name {
+    font-size: 11px;
+    line-height: 1.3;
+  }
+  .pal .rec {
+    font-size: 10px;
+    margin-top: -3px;
+  }
+  /* A palette swatch: the field with the dot at its center. */
+  .ub .sw {
+    position: relative;
+    display: block;
+    aspect-ratio: 3 / 2;
+    background: var(--ss);
+    box-shadow: inset 0 0 0 1px rgb(20 20 20 / 0.1);
+    transition: transform 0.25s var(--ease);
+  }
+  .ub .sw::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 30%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background: var(--sp);
+    transition: transform 0.3s var(--ease);
+  }
+  .pal:hover .sw {
+    transform: translateY(-2px);
+  }
+  .pal:hover .sw::after {
+    transform: scale(1.18);
+  }
+  .pal[aria-pressed="true"] .sw {
+    outline: 2px solid var(--ud-ink);
+    outline-offset: 2px;
+  }
+  .pal[aria-pressed="true"] .pal-name {
+    font-weight: 500;
+  }
+  .pal-mood {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--ud-muted);
+  }
+  .custom {
+    margin-top: 12px;
+  }
+  .custom summary {
+    width: max-content;
+    /* A taller hit area without moving anything. */
+    padding-block: 5px;
+    margin-block: -5px;
+    font-size: 12px;
+    color: var(--ud-muted);
+    cursor: pointer;
+    list-style: none;
+  }
+  .custom summary::-webkit-details-marker {
+    display: none;
+  }
+  .custom summary::before {
+    content: "+";
+    display: inline-block;
+    width: 1em;
+    font-family: var(--font-mono);
+  }
+  .custom[open] summary::before {
+    content: "−";
+  }
+  .custom summary:hover {
+    color: var(--ud-ink);
+  }
+  .hexes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .hex {
+    display: grid;
+    gap: 4px;
+  }
+  .hex-label {
+    font-size: 11px;
+    color: var(--ud-muted);
+  }
+  .hex-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px 4px 4px;
+    border: 1px solid var(--ud-line);
+    background: var(--ud-paper);
+  }
+  .hex-field:focus-within {
+    border-color: var(--ud-ink);
+  }
+  .hex-field input[type="color"] {
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    flex: none;
+  }
+  .hex-field input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+  .hex-field input[type="color"]::-webkit-color-swatch {
+    border: 1px solid rgb(20 20 20 / 0.12);
+    border-radius: 0;
+  }
+  .hex-field input[type="color"]::-moz-color-swatch {
+    border: 1px solid rgb(20 20 20 / 0.12);
+    border-radius: 0;
+  }
+  .hex-field input[type="text"] {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ud-ink);
+    font-family: var(--font-mono);
+    font-size: 16px;
+    text-transform: uppercase;
+  }
+  .hex-field input[type="text"]:focus {
+    outline: none;
+  }
+  .hex-field:has(input[aria-invalid="true"]) {
+    border-color: #b3261e;
+  }
+  .hex-msg {
+    min-height: 1.3em;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #9c2318;
+  }
+  .xp-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 20px;
+    padding-top: 14px;
+    border-top: 1px solid var(--ud-line);
+  }
+  .btn {
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 0;
+    background: var(--ud-ink);
+    color: var(--ud-paper);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.25s var(--ease);
+  }
+  .btn:hover {
+    background: #333;
+  }
+  .link {
+    padding: 4px 0;
+    border: 0;
+    background: none;
+    color: var(--ud-ink);
+    font: inherit;
+    font-size: 13px;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+    cursor: pointer;
+  }
+  .xp-status {
+    flex-basis: 100%;
+    min-height: 1.4em;
+    font-size: 12px;
+    color: var(--ud-muted);
+    overflow-wrap: anywhere;
+  }
+  @media (max-width: 960px) {
+    .xp-head,
+    .xp-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    /* One column: the preview, then the controls right under it, then the
+       smaller examples, so a change is never far from what it changes. */
+    .xp-stage {
+      display: contents;
+    }
+    .xp-main {
+      order: 1;
+    }
+    .xp-ctl {
+      order: 2;
+      position: static;
+    }
+    .xp-sub {
+      order: 3;
+      margin-top: 0;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.5fr);
+    }
+  }
+  @media (max-width: 560px) {
+    .xp-sub {
+      grid-template-columns: 1fr;
+    }
+    .xp-cover {
+      width: 60%;
+    }
+    .choice-art {
+      font-size: 22px;
+    }
+  }
+
+  /* ---------- end ---------- */
+  .end {
+    padding-block: 28px;
+    font-size: 13px;
+    border-top: 1px solid var(--ud-line);
+  }
+  .end-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--ud-muted);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ub *,
+    .ub *::before,
+    .ub *::after {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+</style>

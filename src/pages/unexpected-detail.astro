@@ -5,25 +5,17 @@ import Lines from "../components/unexpected-detail/Lines.astro";
 import Wordmark from "../components/unexpected-detail/Wordmark.astro";
 
 /*
-  unexpected detail: identity presentation. Private share, noindex, and kept
-  out of the sitemap by the allowlist in astro.config.mjs. Rounds 01 to 05
-  of the exploration live on at /unexpected-detail/round-1.
-
-  The presentation shows the recommended identity: Gloock with Geist, the
-  dot above the i, Charcoal & Butter. The editor at the end changes it. Its
-  colors carry across the whole page; its detail stays in the
-  editor's preview, so the presentation only ever shows the recommended
-  dot. The typeface is the exception: it sets the whole page, logo
-  included, so each option can be judged everywhere it would appear. The
-  state lives in the URL, so a copied link reopens the same version, colors
-  and typeface applied before the first paint.
+  unexpected detail: the final identity. Gloock with Geist, the dot above
+  the i as the detail, Charcoal & Butter. Private share, noindex, and kept
+  out of the sitemap by the allowlist in astro.config.mjs. The exploration
+  lives on: round 06 (this presentation with its live editor) at
+  /unexpected-detail/round-2, rounds 01 to 05 at /unexpected-detail/round-1.
 
   The logo is live type (the staggered Gloock lockup from round 05), drawn
-  by components/unexpected-detail, which is what lets the editor switch the
-  dot and the typeface without approximating the artwork.
+  by components/unexpected-detail.
 */
 
-const RECOMMENDED = { font: "gloock", dot: "i", palette: "01" } as const;
+const FINAL = { font: "gloock", dot: "i" } as const;
 const INK = "#141414";
 const PAPER = "#FAF9F6";
 // Below this contrast a dot stops reading on its ground, and the palette's
@@ -77,42 +69,10 @@ const vars = (p: string, s: string, keep = false) =>
 const accentVars = (p: string, s: string) =>
   `--a-bg:${p};--a-fg:${contrast(s, p) >= 4.5 ? s : onColor(p)};--a-dot:${PAPER}`;
 
-/*
-  Eight directions, each its own color family, so no two read as small
-  variations of each other. Charcoal & Butter is the recommendation, so it
-  comes first: a charcoal field with the dot in butter, kept in butter on
-  light grounds too, so every example carries the same yellow. Most pair a deep
-  field with a quiet accent for the dot (Black & Paper and Forest & Ivory
-  are light fields with a dark dot), and every field holds at least 8:1
-  against its type and 5.7:1 against its dot.
-*/
-const palettes = [
-  { name: "Charcoal & Butter", p: "#E8CB6A", s: "#2A2A28", mood: "Charcoal with a restrained yellow. The recommended direction.", keep: true },
-  { name: "Black & Paper", p: "#171717", s: "#F5F4EF", mood: "Black on warm paper. Timeless, minimal." },
-  { name: "Ink & Bone", p: "#CDBB99", s: "#161514", mood: "Near black, with a warm bone dot." },
-  { name: "Midnight & Cream", p: "#E6D3A8", s: "#1B2436", mood: "Deep navy, soft cream. Quiet and nocturnal." },
-  { name: "Forest & Ivory", p: "#2F4A3A", s: "#F1ECDF", mood: "Warm ivory with a forest green dot. Light and organic." },
-  { name: "Espresso & Sand", p: "#D2B48A", s: "#3A2B23", mood: "Rich brown and warm sand. Grounded." },
-  { name: "Burgundy & Blush", p: "#E5B3AD", s: "#4A1C25", mood: "Deep burgundy, muted blush. The most expressive." },
-  { name: "Slate & Mist", p: "#C3CFD8", s: "#3E4A55", mood: "Blue gray and pale mist. Cool and editorial." },
-].map((c, i) => ({ keep: false, ...c, no: String(i + 1).padStart(2, "0") }));
-const rec = palettes.find((p) => p.no === RECOMMENDED.palette)!;
+// Charcoal & Butter: a charcoal field with the dot in butter, kept in
+// butter on light grounds too, so every example carries the same yellow.
+const rec = { p: "#E8CB6A", s: "#2A2A28", keep: true };
 const recVars = `${vars(rec.p, rec.s, rec.keep)};${accentVars(rec.p, rec.s)}`;
-// Presets whose dot keeps its color on every ground, as primary + secondary.
-const keepPairs = palettes.filter((c) => c.keep).map((c) => c.p + c.s);
-
-// Recommended first, on the left, wherever options sit side by side. The
-// metrics for each live in the typeface settings in the styles below.
-const fonts = [
-  { id: "gloock", name: "Gloock", rec: true },
-  { id: "dm", name: "DM Serif Display", rec: false },
-  { id: "fraunces", name: "Fraunces", rec: false },
-  { id: "lora", name: "Lora", rec: false },
-  { id: "newsreader", name: "Newsreader", rec: false },
-  { id: "dmsans", name: "DM Sans", rec: false },
-] as const;
-const recFont = fonts.find((f) => f.id === RECOMMENDED.font)!;
-const fontIds = fonts.map((f) => f.id);
 
 // The opening's falling line, as HTML so the row stretches to any width
 // without skewing the angle. Every other line drops out on phones; the
@@ -120,75 +80,19 @@ const fontIds = fonts.map((f) => f.id);
 const heroLines = 37;
 const heroFall = 25;
 
-// Fraunces, Newsreader and DM Sans are variable; they load as static cuts
-// at a display optical size, so the glyphs (and the dot metrics measured
-// from them) stay the same at every size on the page.
-const fontsHref =
-  "https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@40,400&family=DM+Serif+Display&family=Fraunces:opsz,wght@144,400&family=Gloock&family=Lora&family=Newsreader:opsz,wght@72,400&display=swap";
+const fontsHref = "https://fonts.googleapis.com/css2?family=Gloock&display=swap";
 ---
 
 <Layout
-  title="unexpected detail, identity | Ryan Sheridan"
-  description="Identity presentation for the unexpected detail podcast."
+  title="unexpected detail, brand identity | Ryan Sheridan"
+  description="The brand identity for the unexpected detail podcast."
   noindex={true}
 >
   <link rel="stylesheet" href={fontsHref} />
-  <div class="ub" id="ub" data-font={RECOMMENDED.font} data-dot={RECOMMENDED.dot} style={recVars}>
-    <script is:inline define:vars={{ INK, PAPER, DOT_MIN, keepPairs, fontIds }}>
-      // The color system for the browser, the same derivation as system()
-      // and accentVars() in the frontmatter. Shared with the editor script
-      // through window.udColor; applied here first so a link with colors
-      // never flashes the default palette.
-      const lum = (hex) => {
-        const n = parseInt(hex.slice(1), 16);
-        const c = [n >> 16, (n >> 8) & 255, n & 255].map((v) => {
-          const x = v / 255;
-          return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
-        });
-        return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
-      };
-      const contrast = (a, b) => {
-        const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m);
-        return (x + 0.05) / (y + 0.05);
-      };
-      const onColor = (hex) => (contrast(hex, INK) >= contrast(hex, PAPER) ? INK : PAPER);
-      const system = (p, s, keep) => {
-        const fFg = onColor(s);
-        const fieldDark = fFg === PAPER;
-        const c = fieldDark ? PAPER : lum(p) < 0.045 ? p : INK;
-        const cFg = onColor(c);
-        const dotOn = (g, fg) => (keep ? p : [p, s].find((x) => contrast(x, g) >= DOT_MIN) ?? fg);
-        const f = { bg: s, fg: fFg, dot: dotOn(s, fFg) };
-        const k = { bg: c, fg: cFg, dot: dotOn(c, cFg) };
-        const [d, l] = fieldDark ? [f, k] : [k, f];
-        return { f, c: k, d, l, a: { bg: p, fg: contrast(s, p) >= 4.5 ? s : onColor(p), dot: PAPER } };
-      };
-      const apply = (el, p, s) => {
-        const keep = keepPairs.includes(p + s);
-        for (const [k, t] of Object.entries(system(p, s, keep))) {
-          el.style.setProperty(`--${k}-bg`, t.bg);
-          el.style.setProperty(`--${k}-fg`, t.fg);
-          el.style.setProperty(`--${k}-dot`, t.dot);
-        }
-      };
-      window.udColor = { apply };
-      const hex = (v) => {
-        let h = (v || "").trim().replace(/^#/, "");
-        if (/^[0-9a-f]{3}$/i.test(h)) h = h.replace(/./g, (x) => x + x);
-        return /^[0-9a-f]{6}$/i.test(h) ? `#${h.toUpperCase()}` : null;
-      };
-      const q = new URLSearchParams(location.search);
-      const p = hex(q.get("primary"));
-      const s = hex(q.get("secondary"));
-      if (p && s) apply(document.getElementById("ub"), p, s);
-      // The typeface too, so a link never flashes the default face.
-      const f = q.get("font");
-      if (fontIds.includes(f)) document.getElementById("ub").dataset.font = f;
-    </script>
+  <div class="ub" id="ub" data-font={FINAL.font} data-dot={FINAL.dot} style={recVars}>
     <main id="main">
       <!-- Opening -->
       <section class="intro tone-dark" aria-label="unexpected detail, identity presentation">
-        <a class="intro-skip" href="#explore">Skip to the editor</a>
         <header class="intro-meta">
           <p class="intro-name">unexpected detail</p>
           <ul class="intro-tags">
@@ -196,7 +100,7 @@ const fontsHref =
             <li>Podcast</li>
             <li>2026</li>
           </ul>
-          <p class="intro-draft">Identity exploration</p>
+          <p class="intro-draft">Final identity</p>
         </header>
         <div class="intro-lines" aria-hidden="true">
           {Array.from({ length: heroLines }, (_, i) => <span class:list={{ fall: i + 1 === heroFall }} />)}
@@ -222,7 +126,7 @@ const fontsHref =
               <span class="g g-base" aria-hidden="true"></span>
             </div>
             <p class="id-cap">
-              <b>The primary logo.</b> Lowercase <span data-bind="font-name">{recFont.name}</span> in two lines, set flush right. “unexpected”
+              <b>The primary logo.</b> Lowercase Gloock in two lines, set flush right. “unexpected”
               steps in from the edge, so the name turns like a conversation that went somewhere nobody
               planned.
             </p>
@@ -260,13 +164,13 @@ const fontsHref =
       <section class="spread" aria-labelledby="type-h">
         <div class="wrap">
           <div class="slabel reveal"><span>03</span><h2 id="type-h">Typography</h2></div>
-          <p class="pairing reveal" id="pairing" aria-label={`${recFont.name} and Geist`}>
-            <span class="pg-serif" data-bind="font-name">{recFont.name}</span><span class="pg-amp">&amp;</span><span class="pg-sans">Geist</span>
+          <p class="pairing reveal" aria-label="Gloock and Geist">
+            <span class="pg-serif">Gloock</span><span class="pg-amp">&amp;</span><span class="pg-sans">Geist</span>
           </p>
           <div class="faces">
             <article class="face reveal">
               <header class="face-head">
-                <h3><span data-bind="font-name">{recFont.name}</span> speaks for the show</h3>
+                <h3>Gloock speaks for the show</h3>
                 <p>Display</p>
               </header>
               <div class="face-wm"><Wordmark size="1em" /></div>
@@ -406,119 +310,10 @@ const fontsHref =
         </div>
       </section>
 
-      <!-- 06 Make it your own -->
-      <section class="xp" id="explore" aria-labelledby="xp-h" data-dot={RECOMMENDED.dot}>
-        <div class="wrap">
-          <div class="slabel"><span>06</span><p>Editor</p></div>
-          <div class="xp-head">
-            <h2 id="xp-h" class="xp-say">Make it your own.</h2>
-            <p class="xp-copy">
-              Explore a few expressions of the identity. Move the unexpected detail, try other
-              typefaces, and find a color direction that feels right. Typeface and colors carry across the
-              whole page; the detail changes in the preview. A link keeps it all.
-            </p>
-          </div>
-
-          <div class="xp-grid">
-            <div class="xp-stage">
-              <div class="xp-main tone-field drop is-in" role="img" aria-label="Live preview of the logo">
-                <Lines />
-                <Wordmark class="xp-wm" />
-              </div>
-              <div class="xp-sub">
-                <div class="xp-paper tone-field">
-                  <p class="xp-kicker">Episode 12 · with Guest Name</p>
-                  <p class="xp-title">a cartographer of places that never existed</p>
-                  <Wordmark class="xp-paper-wm" size="4.6cqi" />
-                </div>
-                <Cover tone="paper" class="tone-counter xp-cover" />
-              </div>
-            </div>
-
-            <form class="xp-ctl" onsubmit="return false" aria-label="Editor settings">
-              <fieldset class="opt">
-                <legend><span>A</span>Unexpected detail</legend>
-                <div class="choice">
-                  <button type="button" data-set-dot="i" aria-pressed="true">
-                    <span class="choice-art" data-dot="i"><Wordmark size="1em" line /></span>
-                    <span class="choice-label">Dot above the i <b class="rec">Recommended</b></span>
-                  </button>
-                  <button type="button" data-set-dot="period" aria-pressed="false">
-                    <span class="choice-art" data-dot="period"><Wordmark size="1em" line /></span>
-                    <span class="choice-label">Period</span>
-                  </button>
-                </div>
-              </fieldset>
-
-              <fieldset class="opt">
-                <legend><span>B</span>Typeface <em>Geist pairs with each</em></legend>
-                <div class="choice">
-                  {fonts.map((f) => (
-                    <button type="button" data-set-font={f.id} data-name={f.name} aria-pressed={f.id === RECOMMENDED.font ? "true" : "false"}>
-                      <span class="choice-aa" data-font={f.id}>Aa</span>
-                      <span class="choice-label">{f.name} {f.rec && <b class="rec">Recommended</b>}</span>
-                    </button>
-                  ))}
-                </div>
-              </fieldset>
-
-              <fieldset class="opt">
-                <legend><span>C</span>Color <em><span data-bind="pal-name">{rec.no} {rec.name}</span></em></legend>
-                <div class="pals" role="group" aria-label="Color directions">
-                  {palettes.map((c) => (
-                    <button
-                      type="button"
-                      class="pal"
-                      data-palette={c.no}
-                      data-p={c.p}
-                      data-s={c.s}
-                      data-name={c.name}
-                      data-mood={c.mood}
-                      aria-pressed={c.no === RECOMMENDED.palette ? "true" : "false"}
-                    >
-                      <span class="sw" style={`--sp:${c.p};--ss:${c.s}`} aria-hidden="true"></span>
-                      <span class="pal-name">{c.name}</span>
-                      {c.no === RECOMMENDED.palette && <b class="rec">Recommended</b>}
-                    </button>
-                  ))}
-                </div>
-                <p class="pal-mood" data-bind="pal-mood">{rec.mood}</p>
-                <details class="custom" id="xp-custom">
-                  <summary>Custom colors</summary>
-                  <div class="hexes">
-                    <label class="hex">
-                      <span class="hex-label">Dot</span>
-                      <span class="hex-field">
-                        <input type="color" id="xp-primary-pick" value={rec.p.toLowerCase()} aria-label="Pick the primary color" />
-                        <input type="text" id="xp-primary" value={rec.p} spellcheck="false" autocomplete="off" maxlength="7" aria-label="Primary color, hex" aria-describedby="xp-hex-msg" />
-                      </span>
-                    </label>
-                    <label class="hex">
-                      <span class="hex-label">Field</span>
-                      <span class="hex-field">
-                        <input type="color" id="xp-secondary-pick" value={rec.s.toLowerCase()} aria-label="Pick the secondary color" />
-                        <input type="text" id="xp-secondary" value={rec.s} spellcheck="false" autocomplete="off" maxlength="7" aria-label="Secondary color, hex" aria-describedby="xp-hex-msg" />
-                      </span>
-                    </label>
-                  </div>
-                  <p class="hex-msg" id="xp-hex-msg" aria-live="polite"></p>
-                </details>
-              </fieldset>
-
-              <div class="xp-actions">
-                <button type="button" class="btn" id="xp-copy">Copy link to this version</button>
-                <button type="button" class="link" id="xp-reset">Reset to recommended</button>
-                <p class="xp-status" id="xp-status" aria-live="polite"></p>
-              </div>
-            </form>
-          </div>
-        </div>
-      </section>
-
       <footer class="end">
         <div class="wrap end-row">
           <p>Prepared by Ryan Sheridan for Marcy · November 2026</p>
-          <p><a href="/unexpected-detail/round-1">Rounds 01 to 05</a></p>
+          <p><a href="/unexpected-detail/round-2">Round 06</a> · <a href="/unexpected-detail/round-1">Rounds 01 to 05</a></p>
         </div>
       </footer>
     </main>
@@ -526,160 +321,10 @@ const fontsHref =
 </Layout>
 
 <script>
-  type Font = "gloock" | "dm" | "fraunces" | "lora" | "newsreader" | "dmsans";
-  type Dot = "period" | "i";
-  type State = { font: Font; dot: Dot; primary: string; secondary: string };
-
   const root = document.getElementById("ub")!;
-  const udColor = (window as unknown as { udColor: { apply: (el: HTMLElement, p: string, s: string) => void } }).udColor;
-  const xp = document.getElementById("explore")!;
   const $ = <T extends Element = HTMLElement>(s: string) => document.querySelector<T>(s)!;
   const $$ = (s: string) => Array.from(document.querySelectorAll<HTMLElement>(s));
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  const swatches = $$("[data-palette]");
-  const fontBtns = $$("[data-set-font]");
-  const recBtn = swatches.find((b) => b.dataset.palette === "01")!;
-  const RECOMMENDED: State = { font: "gloock", dot: "i", primary: recBtn.dataset.p!, secondary: recBtn.dataset.s! };
-
-  const normalize = (v: string): string | null => {
-    let h = v.trim().replace(/^#/, "");
-    if (/^[0-9a-f]{3}$/i.test(h)) h = h.replace(/./g, (c) => c + c);
-    return /^[0-9a-f]{6}$/i.test(h) ? `#${h.toUpperCase()}` : null;
-  };
-  // A shared link opens on its own settings, in any browser.
-  const q = new URLSearchParams(location.search);
-  const state: State = {
-    font: (fontBtns.find((b) => b.dataset.setFont === q.get("font"))?.dataset.setFont as Font | undefined) ?? RECOMMENDED.font,
-    dot: q.get("dot") === "period" ? "period" : q.get("dot") === "i" ? "i" : RECOMMENDED.dot,
-    primary: normalize(q.get("primary") ?? "") ?? RECOMMENDED.primary,
-    secondary: normalize(q.get("secondary") ?? "") ?? RECOMMENDED.secondary,
-  };
-
-  const fields = {
-    primary: { pick: $<HTMLInputElement>("#xp-primary-pick"), hex: $<HTMLInputElement>("#xp-primary") },
-    secondary: { pick: $<HTMLInputElement>("#xp-secondary-pick"), hex: $<HTMLInputElement>("#xp-secondary") },
-  };
-  const custom = $<HTMLDetailsElement>("#xp-custom");
-  const hexMsg = $("#xp-hex-msg");
-  const status = $("#xp-status");
-  const bind = (key: string, text: string) => $$(`[data-bind="${key}"]`).forEach((el) => (el.textContent = text));
-
-  const isRecommended = () =>
-    state.font === RECOMMENDED.font &&
-    state.dot === RECOMMENDED.dot &&
-    state.primary === RECOMMENDED.primary &&
-    state.secondary === RECOMMENDED.secondary;
-  const query = () =>
-    isRecommended()
-      ? ""
-      : `?${new URLSearchParams({ dot: state.dot, font: state.font, primary: state.primary.slice(1), secondary: state.secondary.slice(1) })}`;
-  const shareUrl = () => `${location.origin}${location.pathname}${query()}#explore`;
-
-  // Replays a one-off CSS animation on an element.
-  const replay = (el: Element | null, cls: string) => {
-    if (!el || reduced) return;
-    el.classList.remove(cls);
-    void (el as HTMLElement).offsetWidth;
-    el.classList.add(cls);
-  };
-
-  function render(opts: { skip?: HTMLInputElement; url?: boolean } = {}) {
-    // Typeface and colors go to the whole page; the detail stays above.
-    root.dataset.font = state.font;
-    xp.dataset.dot = state.dot;
-    const fontName = fontBtns.find((b) => b.dataset.setFont === state.font)!.dataset.name!;
-    bind("font-name", fontName);
-    $("#pairing").setAttribute("aria-label", `${fontName} and Geist`);
-    udColor.apply(root, state.primary, state.secondary);
-    const match = swatches.find((b) => b.dataset.p === state.primary && b.dataset.s === state.secondary);
-
-    $$("[data-set-dot]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.setDot === state.dot)));
-    $$("[data-set-font]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.setFont === state.font)));
-
-    swatches.forEach((b) => b.setAttribute("aria-pressed", String(b === match)));
-    bind("pal-name", match ? `${match.dataset.palette} ${match.dataset.name}` : "Custom");
-    bind("pal-mood", match ? match.dataset.mood! : `${state.primary} dot on ${state.secondary}`);
-
-    for (const key of ["primary", "secondary"] as const) {
-      const f = fields[key];
-      if (f.hex !== opts.skip) {
-        f.hex.value = state[key];
-        f.hex.removeAttribute("aria-invalid");
-      }
-      if (f.pick !== opts.skip) f.pick.value = state[key].toLowerCase();
-    }
-    if (!opts.skip) hexMsg.textContent = "";
-
-    if (opts.url !== false) history.replaceState(null, "", `${location.pathname}${query()}${location.hash}`);
-    status.textContent = "";
-  }
-
-  $$("[data-set-dot]").forEach((b) =>
-    b.addEventListener("click", () => {
-      if (state.dot === b.dataset.setDot) return;
-      state.dot = b.dataset.setDot as Dot;
-      render();
-      if (state.dot === "i") replay($(".xp-main"), "is-in");
-    }),
-  );
-  $$("[data-set-font]").forEach((b) =>
-    b.addEventListener("click", () => {
-      if (state.font === b.dataset.setFont) return;
-      state.font = b.dataset.setFont as Font;
-      render();
-      replay($(".xp-stage"), "swap");
-      // DM Sans rounds its i as the dot lands, so the preview replays it.
-      if (state.font === "dmsans") replay($(".xp-main"), "is-in");
-    }),
-  );
-  swatches.forEach((b) =>
-    b.addEventListener("click", () => {
-      state.primary = b.dataset.p!;
-      state.secondary = b.dataset.s!;
-      render();
-    }),
-  );
-
-  for (const key of ["primary", "secondary"] as const) {
-    const f = fields[key];
-    f.pick.addEventListener("input", () => {
-      state[key] = normalize(f.pick.value)!;
-      render({ skip: f.pick });
-    });
-    f.hex.addEventListener("input", () => {
-      const v = normalize(f.hex.value);
-      if (v) {
-        state[key] = v;
-        f.hex.removeAttribute("aria-invalid");
-        hexMsg.textContent = "";
-        render({ skip: f.hex });
-      } else {
-        f.hex.setAttribute("aria-invalid", "true");
-        hexMsg.textContent = "Use a hex value like #F1D879.";
-      }
-    });
-    f.hex.addEventListener("blur", () => render());
-  }
-
-  $("#xp-reset").addEventListener("click", () => {
-    Object.assign(state, RECOMMENDED);
-    render();
-    status.textContent = "Back to the recommended version.";
-  });
-  $("#xp-copy").addEventListener("click", async () => {
-    const url = shareUrl();
-    try {
-      await navigator.clipboard.writeText(url);
-      status.textContent = "Link copied. It opens on this exact version.";
-    } catch {
-      status.textContent = `Copy this link: ${url}`;
-    }
-  });
-
-  render({ url: false });
-  // A link with custom colors opens with the custom fields showing.
-  if (!swatches.some((b) => b.dataset.p === state.primary && b.dataset.s === state.secondary)) custom.open = true;
 
   // Entrances: content fades up once; the falling line tips over and the
   // dot of the i drops into place as they come into view.
@@ -791,74 +436,6 @@ const fontsHref =
     --isplit: 0.257em;
     --wm-base: 0.085em;
   }
-  .ub [data-font="dm"],
-  .ub[data-font="dm"] {
-    --ud-display: "DM Serif Display", Georgia, serif;
-    --wm-scale: 1.04;
-    --wm-lh: 0.9;
-    --wm-track: -0.015em;
-    --dd: 0.1713em;
-    --dl: 0.0644em;
-    --db: 0.3206em;
-    --isplit: 0.2775em;
-    --wm-base: 0.0995em;
-    --pg-fit: 0.76;
-  }
-  /* The ones below were measured from the rendered glyphs the same way as
-     the two above: the period's diameter, side bearing and lift; where the
-     i's dot ends; and the baseline's height in the lockup's line box. */
-  .ub [data-font="fraunces"],
-  .ub[data-font="fraunces"] {
-    --ud-display: "Fraunces", Georgia, serif;
-    --wm-scale: 1.14;
-    --wm-lh: 0.9;
-    --wm-track: -0.015em;
-    --dd: 0.115em;
-    --dl: 0.0317em;
-    --db: 0.2467em;
-    --isplit: 0.3292em;
-    --wm-base: 0.0885em;
-  }
-  .ub [data-font="lora"],
-  .ub[data-font="lora"] {
-    --ud-display: "Lora", Georgia, serif;
-    --wm-scale: 1;
-    --wm-lh: 0.93;
-    --wm-track: -0.015em;
-    --dd: 0.1242em;
-    --dl: 0.0633em;
-    --db: 0.2567em;
-    --isplit: 0.2725em;
-    --wm-base: 0.099em;
-  }
-  .ub [data-font="newsreader"],
-  .ub[data-font="newsreader"] {
-    --ud-display: "Newsreader", Georgia, serif;
-    --wm-scale: 1.02;
-    --wm-lh: 0.9;
-    --wm-track: -0.015em;
-    --dd: 0.14em;
-    --dl: 0.0467em;
-    --db: 0.255em;
-    --isplit: 0.2208em;
-    --i-pad: 0.1em;
-    --wm-base: 0.215em;
-  }
-  .ub [data-font="dmsans"],
-  .ub[data-font="dmsans"] {
-    --ud-display: "DM Sans", system-ui, sans-serif;
-    --wm-scale: 1;
-    --wm-lh: 0.9;
-    /* Tracking for the logo only (0.25px at the editor preview's size);
-       everything else set in DM Sans keeps the page's own spacing. */
-    --wm-track: 0.003em;
-    --dd: 0.1108em;
-    --dl: 0.035em;
-    --db: 0.305em;
-    --isplit: 0.2442em;
-    --wm-base: 0.109em;
-    --stem-ink: transparent;
-  }
   .ub [data-dot="period"],
   .ub[data-dot="period"] {
     --pd-on: 1;
@@ -939,14 +516,10 @@ const fontsHref =
     position: relative;
     display: inline-block;
     line-height: var(--wm-lh);
-    /* For a face whose i rises above the line box: room for the whole dot,
-       taken back by the margin so the lockup doesn't move. */
-    padding-top: var(--i-pad, 0);
-    margin-top: calc(var(--i-pad, 0) * -1);
     background: linear-gradient(
       to bottom,
       color-mix(in srgb, var(--dot) calc(var(--i-on) * 100%), currentColor) 0 var(--isplit),
-      var(--stem-ink, currentColor) var(--isplit)
+      currentColor var(--isplit)
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -986,7 +559,7 @@ const fontsHref =
     without .motion (no script, reduced motion) and once it has landed.
   */
   .ub :is(.drop, .lag) .wm-i {
-    background: linear-gradient(to bottom, transparent 0 var(--isplit), var(--stem-ink, currentColor) var(--isplit));
+    background: linear-gradient(to bottom, transparent 0 var(--isplit), currentColor var(--isplit));
     -webkit-background-clip: text;
     background-clip: text;
   }
@@ -995,7 +568,6 @@ const fontsHref =
     position: absolute;
     left: 0;
     top: 0;
-    padding-top: var(--i-pad, 0);
     -webkit-text-fill-color: color-mix(in srgb, var(--dot) calc(var(--i-on) * 100%), currentColor);
     clip-path: inset(0 0 calc(100% - var(--isplit)) 0);
   }
@@ -1021,79 +593,6 @@ const fontsHref =
     }
     to {
       transform: none;
-    }
-  }
-
-  /*
-    DM Sans draws its own i stem: the glyph's stem is hidden (--stem-ink)
-    and redrawn as a box at the same place, measured from the glyph, with
-    the top left and bottom right corners fully rounded. Where the dot
-    drops (the opening included, for this face), it falls to its seat,
-    never past it, and hops once; the stem starts square, the first landing
-    rounds its top corner and the last one its bottom corner.
-  */
-  .ub [data-font="dmsans"] .wm-i::after,
-  .ub[data-font="dmsans"] .wm-i::after {
-    content: "";
-    position: absolute;
-    left: 0.057em;
-    width: 0.084em;
-    top: calc(var(--i-pad, 0em) + 0.295em);
-    bottom: 0.109em;
-    background: currentColor;
-    border-radius: 0.084em 0 0.084em 0;
-  }
-  .ub.motion .drop:not(.is-in) .wm-i::after {
-    border-radius: 0;
-  }
-  .ub.motion .drop.is-in .wm-i::after {
-    animation:
-      ud-round-top 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) 1.15s both,
-      ud-round-bottom 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) 1.65s both;
-  }
-  @keyframes ud-round-top {
-    from {
-      border-top-left-radius: 0;
-    }
-  }
-  @keyframes ud-round-bottom {
-    from {
-      border-bottom-right-radius: 0;
-    }
-  }
-  .ub.motion[data-font="dmsans"] .drop.is-in .wm-i::before {
-    animation: ud-bounce 1.3s linear 0.35s both;
-  }
-  /* In the opening the falling line goes first (it lands at 2s), then the
-     dot drops: the same moves, 1.75s later. */
-  .ub.motion[data-font="dmsans"] .intro-wm.drop.is-in .wm-i::before {
-    animation-delay: 2.1s;
-  }
-  .ub.motion .intro-wm.drop.is-in .wm-i::after {
-    animation-delay: 2.9s, 3.4s;
-  }
-  /* Lands at 62% (0.35s + 0.81s, the top corner rounds), hops, and lands
-     again at the end (1.65s, the bottom corner). */
-  @keyframes ud-bounce {
-    from {
-      transform: translateY(-1.4em);
-      opacity: 0;
-      animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.55);
-    }
-    25% {
-      opacity: 1;
-    }
-    62% {
-      transform: none;
-      animation-timing-function: cubic-bezier(0.2, 0.6, 0.35, 1);
-    }
-    80% {
-      transform: translateY(-0.09em);
-      animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.45);
-    }
-    to {
-      transform: none;
-      opacity: 1;
     }
   }
 
@@ -1140,8 +639,7 @@ const fontsHref =
       transition: translate 0.6s cubic-bezier(0.3, 0.7, 0.4, 1);
     }
     .ub.motion .intro-wm:hover .wm-i::before,
-    .ub.motion .split-art--mark:hover .wm-i::before,
-    .ub.motion .xp-main:hover .wm-i::before {
+    .ub.motion .split-art--mark:hover .wm-i::before {
       translate: 0 -0.08em;
     }
   }
@@ -1260,7 +758,7 @@ const fontsHref =
     background: color-mix(in srgb, var(--dot) 42%, transparent);
   }
   /* Running copy never leaves a word alone on its last line. */
-  .ub :where(.intro-desc, .id-cap, .detail-copy, .line-lead, .rules li, .face-note, .notes-body, .xp-copy, .pal-mood) {
+  .ub :where(.intro-desc, .id-cap, .detail-copy, .line-lead, .rules li, .face-note, .notes-body) {
     text-wrap: pretty;
   }
   .ub.motion .reveal {
@@ -1545,14 +1043,8 @@ const fontsHref =
     align-items: baseline;
     gap: 0 0.28em;
     margin-top: clamp(48px, 7vw, 96px);
-    font-size: calc(var(--pg-fit, 1) * clamp(56px, 9.4vw, 152px));
+    font-size: clamp(56px, 9.4vw, 152px);
     line-height: 1;
-  }
-  /* Below about 380px a longer name would run past the edge, so the other
-     faces scale down with the screen. Gloock, the recommendation, keeps
-     its size. */
-  .ub:not([data-font="gloock"]) .pairing {
-    font-size: calc(var(--pg-fit, 1) * clamp(min(56px, 14.5vw), 9.4vw, 152px));
   }
   .pg-serif {
     white-space: nowrap;
@@ -2138,427 +1630,6 @@ const fontsHref =
     }
     .ph {
       width: min(100%, 300px);
-    }
-  }
-
-  /* ---------- 06 editor ---------- */
-  .xp {
-    padding-block: clamp(80px, 10vw, 152px);
-    background: var(--ud-paper);
-    border-top: 1px solid var(--ud-line);
-  }
-  .xp-head {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 24px 64px;
-    align-items: end;
-    margin-top: clamp(48px, 7vw, 96px);
-  }
-  .xp-say {
-    font-family: var(--ud-display);
-    font-weight: 400;
-    font-size: clamp(52px, 8.6vw, 144px);
-    line-height: 0.92;
-    letter-spacing: -0.03em;
-  }
-  .xp-copy {
-    font-size: 16px;
-    line-height: 1.6;
-    color: var(--ud-muted);
-    max-width: 42ch;
-  }
-  .xp-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.7fr) minmax(320px, 1fr);
-    gap: clamp(28px, 4vw, 56px);
-    align-items: start;
-    margin-top: clamp(48px, 6vw, 88px);
-  }
-  .ub .tone-field,
-  .ub .tone-counter,
-  .ub .tone-light,
-  .ub .tone-dark,
-  .ub .tone-accent {
-    transition:
-      background-color 0.5s var(--ease),
-      color 0.5s var(--ease);
-  }
-  /* The preview is the square cover at full size: the same line, wordmark
-     and proportions as the cover thumbnails. */
-  .xp-main {
-    position: relative;
-    aspect-ratio: 1;
-    container-type: inline-size;
-    overflow: hidden;
-    box-shadow: inset 0 0 0 1px var(--ud-line);
-  }
-  .xp-wm {
-    position: absolute;
-    right: 11.4cqi;
-    bottom: 9cqi;
-  }
-  .xp-sub {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.42fr);
-    gap: 12px;
-    margin-top: 12px;
-  }
-  .xp-paper {
-    position: relative;
-    container-type: inline-size;
-    padding: clamp(18px, 2.4vw, 32px);
-    box-shadow: inset 0 0 0 1px var(--ud-line);
-  }
-  .xp-kicker {
-    font-size: 12px;
-    opacity: 0.64;
-  }
-  .xp-title {
-    margin-top: 10px;
-    font-family: var(--ud-display);
-    font-size: 7cqi;
-    line-height: 1.04;
-    letter-spacing: -0.015em;
-    max-width: 14ch;
-  }
-  .xp-paper-wm {
-    position: absolute;
-    right: clamp(18px, 2.4vw, 32px);
-    bottom: clamp(18px, 2.4vw, 32px);
-  }
-  .xp-cover {
-    width: 100%;
-    box-shadow: inset 0 0 0 1px var(--ud-line);
-  }
-  /* A font change gives the preview a brief breath rather than a jump. */
-  .xp-stage.swap {
-    animation: ud-swap 0.45s var(--ease);
-  }
-  @keyframes ud-swap {
-    from {
-      opacity: 0.55;
-    }
-  }
-  .xp-ctl {
-    position: sticky;
-    top: 24px;
-    display: grid;
-    gap: 22px;
-  }
-  .opt {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    min-width: 0;
-  }
-  .opt legend {
-    display: flex;
-    width: 100%;
-    align-items: baseline;
-    gap: 10px;
-    padding: 10px 0 0;
-    margin-bottom: 10px;
-    border-top: 1px solid var(--ud-ink);
-    font-size: 13px;
-    font-weight: 500;
-  }
-  .opt legend > span {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 400;
-    color: var(--ud-muted);
-  }
-  .opt legend em {
-    margin-left: auto;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
-    color: var(--ud-muted);
-  }
-  .choice {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-  }
-  .choice button {
-    display: grid;
-    gap: 6px;
-    justify-items: start;
-    padding: 12px 12px 10px;
-    border: 1px solid var(--ud-line);
-    border-radius: 0;
-    background: var(--ud-paper);
-    color: var(--ud-ink);
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-    transition: border-color 0.25s var(--ease);
-  }
-  .choice button:hover {
-    border-color: rgb(20 20 20 / 0.45);
-  }
-  .choice button[aria-pressed="true"] {
-    border-color: var(--ud-ink);
-    box-shadow: inset 0 0 0 1px var(--ud-ink);
-  }
-  .choice-art {
-    font-size: 26px;
-    line-height: 1;
-  }
-  .choice-art .wm-a {
-    display: none !important;
-  }
-  .choice-aa {
-    font-family: var(--ud-display);
-    font-size: 28px;
-    line-height: 1;
-  }
-  .choice-label .rec {
-    margin-left: auto;
-    font-size: 11px;
-  }
-  .choice-label {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-    align-items: center;
-    font-size: 12px;
-  }
-  /* Eight named presets: a swatch, its name, and the recommendation marker
-     on the first. */
-  .pals {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px 8px;
-  }
-  .pal {
-    display: grid;
-    align-content: start;
-    gap: 6px;
-    padding: 0;
-    border: 0;
-    background: none;
-    color: var(--ud-ink);
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-  }
-  .pal-name {
-    font-size: 11px;
-    line-height: 1.3;
-  }
-  .pal .rec {
-    font-size: 10px;
-    margin-top: -3px;
-  }
-  /* A palette swatch: the field with the dot at its center. */
-  .ub .sw {
-    position: relative;
-    display: block;
-    aspect-ratio: 3 / 2;
-    background: var(--ss);
-    box-shadow: inset 0 0 0 1px rgb(20 20 20 / 0.1);
-    transition: transform 0.25s var(--ease);
-  }
-  .ub .sw::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 30%;
-    aspect-ratio: 1;
-    translate: -50% -50%;
-    border-radius: 50%;
-    background: var(--sp);
-    transition: transform 0.3s var(--ease);
-  }
-  .pal:hover .sw {
-    transform: translateY(-2px);
-  }
-  .pal:hover .sw::after {
-    transform: scale(1.18);
-  }
-  .pal[aria-pressed="true"] .sw {
-    outline: 2px solid var(--ud-ink);
-    outline-offset: 2px;
-  }
-  .pal[aria-pressed="true"] .pal-name {
-    font-weight: 500;
-  }
-  .pal-mood {
-    margin-top: 8px;
-    font-size: 12px;
-    color: var(--ud-muted);
-  }
-  .custom {
-    margin-top: 12px;
-  }
-  .custom summary {
-    width: max-content;
-    /* A taller hit area without moving anything. */
-    padding-block: 5px;
-    margin-block: -5px;
-    font-size: 12px;
-    color: var(--ud-muted);
-    cursor: pointer;
-    list-style: none;
-  }
-  .custom summary::-webkit-details-marker {
-    display: none;
-  }
-  .custom summary::before {
-    content: "+";
-    display: inline-block;
-    width: 1em;
-    font-family: var(--font-mono);
-  }
-  .custom[open] summary::before {
-    content: "−";
-  }
-  .custom summary:hover {
-    color: var(--ud-ink);
-  }
-  .hexes {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    margin-top: 10px;
-  }
-  .hex {
-    display: grid;
-    gap: 4px;
-  }
-  .hex-label {
-    font-size: 11px;
-    color: var(--ud-muted);
-  }
-  .hex-field {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 8px 4px 4px;
-    border: 1px solid var(--ud-line);
-    background: var(--ud-paper);
-  }
-  .hex-field:focus-within {
-    border-color: var(--ud-ink);
-  }
-  .hex-field input[type="color"] {
-    width: 26px;
-    height: 26px;
-    padding: 0;
-    border: 0;
-    background: none;
-    cursor: pointer;
-    flex: none;
-  }
-  .hex-field input[type="color"]::-webkit-color-swatch-wrapper {
-    padding: 0;
-  }
-  .hex-field input[type="color"]::-webkit-color-swatch {
-    border: 1px solid rgb(20 20 20 / 0.12);
-    border-radius: 0;
-  }
-  .hex-field input[type="color"]::-moz-color-swatch {
-    border: 1px solid rgb(20 20 20 / 0.12);
-    border-radius: 0;
-  }
-  .hex-field input[type="text"] {
-    width: 100%;
-    min-width: 0;
-    border: 0;
-    background: transparent;
-    color: var(--ud-ink);
-    font-family: var(--font-mono);
-    font-size: 16px;
-    text-transform: uppercase;
-  }
-  .hex-field input[type="text"]:focus {
-    outline: none;
-  }
-  .hex-field:has(input[aria-invalid="true"]) {
-    border-color: #b3261e;
-  }
-  .hex-msg {
-    min-height: 1.3em;
-    margin-top: 6px;
-    font-size: 12px;
-    color: #9c2318;
-  }
-  .xp-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px 20px;
-    padding-top: 14px;
-    border-top: 1px solid var(--ud-line);
-  }
-  .btn {
-    padding: 12px 18px;
-    border: 0;
-    border-radius: 0;
-    background: var(--ud-ink);
-    color: var(--ud-paper);
-    font: inherit;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background-color 0.25s var(--ease);
-  }
-  .btn:hover {
-    background: #333;
-  }
-  .link {
-    padding: 4px 0;
-    border: 0;
-    background: none;
-    color: var(--ud-ink);
-    font: inherit;
-    font-size: 13px;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.25em;
-    cursor: pointer;
-  }
-  .xp-status {
-    flex-basis: 100%;
-    min-height: 1.4em;
-    font-size: 12px;
-    color: var(--ud-muted);
-    overflow-wrap: anywhere;
-  }
-  @media (max-width: 960px) {
-    .xp-head,
-    .xp-grid {
-      grid-template-columns: minmax(0, 1fr);
-    }
-    /* One column: the preview, then the controls right under it, then the
-       smaller examples, so a change is never far from what it changes. */
-    .xp-stage {
-      display: contents;
-    }
-    .xp-main {
-      order: 1;
-    }
-    .xp-ctl {
-      order: 2;
-      position: static;
-    }
-    .xp-sub {
-      order: 3;
-      margin-top: 0;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 0.5fr);
-    }
-  }
-  @media (max-width: 560px) {
-    .xp-sub {
-      grid-template-columns: 1fr;
-    }
-    .xp-cover {
-      width: 60%;
-    }
-    .choice-art {
-      font-size: 22px;
     }
   }
 
