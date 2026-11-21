@@ -60,19 +60,11 @@ const vars = (p: string, s: string, keep = false) =>
   Object.entries(system(p, s, keep))
     .flatMap(([n, t]) => [`--${n}-bg:${t.bg}`, `--${n}-fg:${t.fg}`, `--${n}-dot:${t.dot}`])
     .join(";");
-/*
-  The accent ground: the palette's dot color used as a whole surface, for
-  the one place the presentation wants the color at full strength (the
-  cover in the podcast app). Type and lines take the field color; the dot
-  turns paper, so the detail still stands apart.
-*/
-const accentVars = (p: string, s: string) =>
-  `--a-bg:${p};--a-fg:${contrast(s, p) >= 4.5 ? s : onColor(p)};--a-dot:${PAPER}`;
 
 // Charcoal & Butter: a charcoal field with the dot in butter, kept in
 // butter on light grounds too, so every example carries the same yellow.
 const rec = { p: "#E8CB6A", s: "#2A2A28", keep: true };
-const recVars = `${vars(rec.p, rec.s, rec.keep)};${accentVars(rec.p, rec.s)}`;
+const recVars = vars(rec.p, rec.s, rec.keep);
 
 // The opening's falling line, as HTML so the row stretches to any width
 // without skewing the angle. Every other line drops out on phones; the
@@ -239,7 +231,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=Gloock&display=swap"
               <div class="phone">
                 <div class="screen tone-light now">
                   <p class="now-top">Now playing</p>
-                  <Cover tone="field" class="tone-accent now-cover" />
+                  <Cover tone="field" class="tone-dark now-cover" />
                   <p class="now-title">a cartographer of places that never existed</p>
                   <p class="now-show">unexpected detail · Episode 12</p>
                   <div class="scrub" aria-hidden="true"><span></span></div>
@@ -468,11 +460,6 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=Gloock&display=swap"
     background-color: var(--l-bg);
     color: var(--l-fg);
     --dot: var(--l-dot);
-  }
-  .ub .tone-accent {
-    background-color: var(--a-bg);
-    color: var(--a-fg);
-    --dot: var(--a-dot);
   }
 
   .ub .wrap {
