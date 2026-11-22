@@ -104,13 +104,18 @@ img {
   transition: none !important;
 }
 
-/* The theme switch: theme.ts grows the new page out of the button as a
-   circle over a still snapshot of the old one. Turn off the browser's
-   default crossfade so only the circle moves. */
+/* The theme switch (theme.ts): to dark, the new page grows out of the
+   button as a circle over a still of the old one; to light, the old dark
+   page shrinks back into the button over the new one. The browser's own
+   crossfade is off so only the circle moves. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
+}
+
+.theme-to-light::view-transition-old(root) {
+  z-index: 1;
 }
 
 /* The work keeps its own colors on the dark theme. Most screenshots are of

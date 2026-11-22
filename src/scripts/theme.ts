@@ -33,9 +33,11 @@ function applyTheme(theme: Theme) {
 }
 
 /**
- * Switch the theme. Given the control that was pressed, the new theme grows
- * out of it as a circle over the old one (View Transitions API). Anyone who
- * asks for less motion, or a browser without the API, gets an instant swap.
+ * Switch the theme. Given the control that was pressed, the change plays as a
+ * circle on that control (View Transitions API): dark grows out of it over
+ * the light page, and going back, the dark page shrinks into it to uncover
+ * light. Anyone who asks for less motion, or a browser without the API,
+ * gets an instant swap.
  */
 export function setTheme(theme: Theme, from?: Element) {
   try {
@@ -56,20 +58,28 @@ export function setTheme(theme: Theme, from?: Element) {
   const y = box.top + box.height / 2;
   // Far enough to cover the corner of the screen furthest from the button.
   const r = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+  const small = `circle(0px at ${x}px ${y}px)`;
+  const full = `circle(${r}px at ${x}px ${y}px)`;
+  const toDark = theme === "dark";
 
+  // Going to light, the old (dark) snapshot has to sit on top so it can
+  // shrink away; global.css reads this class to restack the two.
+  root.classList.toggle("theme-to-light", !toDark);
   const transition = document.startViewTransition(() => applyTheme(theme));
   transition.ready
     .then(() => {
-      document.documentElement.animate(
-        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
+      root.animate(
+        { clipPath: toDark ? [small, full] : [full, small] },
         {
           duration: 500,
-          easing: "cubic-bezier(0.2, 0.7, 0.2, 1)",
-          pseudoElement: "::view-transition-new(root)",
+          easing: toDark ? "cubic-bezier(0.2, 0.7, 0.2, 1)" : "cubic-bezier(0.8, 0, 0.8, 0.3)",
+          fill: "forwards",
+          pseudoElement: toDark ? "::view-transition-new(root)" : "::view-transition-old(root)",
         },
       );
     })
     .catch(() => {});
+  transition.finished.finally(() => root.classList.remove("theme-to-light"));
 }
 
 export const toggleTheme = (from?: Element) => setTheme(currentTheme() === "dark" ? "light" : "dark", from);
