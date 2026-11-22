@@ -35,7 +35,7 @@ import Footer from "../components/Footer.astro";
         <tbody>
           <tr><td>Bar</td><td>Sticky, <code>--nav-height</code> (64px): 8px padding around a 48px menu button. <code>--color-bg</code>, on <code>--z-nav</code>.</td></tr>
           <tr><td>Logo</td><td>"ryan sheridan design," lowercase mono, <code>--text-s</code>. Links home.</td></tr>
-          <tr><td>Theme button</td><td>48px target left of the menu button, a 20px line icon. A moon on light, a sun on dark. Labeled "Dark mode," with <code>aria-pressed</code> for its state.</td></tr>
+          <tr><td>Theme button</td><td><code>ThemeToggle.astro</code>. 48px target left of the menu button, a 20px line icon. A moon on light, a sun on dark. Labeled "Dark mode," with <code>aria-pressed</code> for its state.</td></tr>
           <tr><td>Menu button</td><td>48px target, two 20px bars that cross into an X when open. Labeled "Menu," then "Close menu."</td></tr>
           <tr><td>Menu</td><td>Full screen, centered links at <code>--text-h3</code>, 16px apart. Fades over <code>--duration-moderate</code>.</td></tr>
         </tbody>
@@ -49,8 +49,8 @@ import Footer from "../components/Footer.astro";
     </ul>
     <h3>Theme</h3>
     <ul class="ds-list">
-      <li>A first visit follows the system setting, and keeps following it if it changes.</li>
-      <li>The nav button and the footer switch set the same thing and stay in step. A pick is saved for the next visit; picking what the system already asks for clears it, so the site follows the system again.</li>
+      <li>Light is the default for every first visit, whatever the system setting.</li>
+      <li>The nav and footer carry the same button, set the same thing, and stay in step. A dark pick is saved for the next visit; switching back to light clears it.</li>
       <li>A script in the head sets <code>&lt;html data-theme&gt;</code> before first paint, so there's no flash of the wrong theme.</li>
       <li>Pages pinned with <code>&lt;Layout theme="light"&gt;</code> hide both controls.</li>
     </ul>
@@ -64,7 +64,7 @@ import Footer from "../components/Footer.astro";
         <tbody>
           <tr><td>Frame</td><td>Hairline on top. 64px padding above, 48 below, 120 from the page above it (80 on phones).</td></tr>
           <tr><td>Top row</td><td>Logo left, links right in 13px mono, 32px apart. Stacks under 640px.</td></tr>
-          <tr><td>Bottom row</td><td>Copyright in 13px mono, muted. The year updates at build. On the right, a "Dark mode" switch (<code>role="switch"</code>), after the specs toggle on pages that have one.</td></tr>
+          <tr><td>Bottom row</td><td>Copyright in 13px mono, muted. The year updates at build. On the right, the same theme button as the nav, after the specs toggle on pages that have one.</td></tr>
         </tbody>
       </table>
     </div>

@@ -300,12 +300,10 @@ export const breakpoints = [
 /**
  * The `:root` block every page loads.
  *
- * Light is the base. The dark values apply when the visitor's system asks for
- * dark and they haven't picked light on the site, or when they've picked dark.
- * The head script in Layout.astro resolves that choice into
- * `<html data-theme>` before first paint; the media query covers a visitor
- * with scripts off. Both sit inside `screen`, so printing always comes out
- * black on white.
+ * Light is the base and the default. The dark values apply once a visitor
+ * picks dark with a theme toggle; the head script in Layout.astro reads that
+ * pick into `<html data-theme>` before first paint. They sit inside `screen`,
+ * so printing always comes out black on white.
  */
 export function tokensToCss(): string {
   const decl = (tokens: Record<string, string>) =>
@@ -320,7 +318,6 @@ export function tokensToCss(): string {
     .join("");
   return (
     `:root{color-scheme:light;${decl(base)}}` +
-    `@media screen and (prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;${dark}}}` +
     `@media screen{:root[data-theme=dark]{color-scheme:dark;${dark}}}` +
     overrides
   );

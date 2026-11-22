@@ -5,15 +5,13 @@
  * keeps `<html data-theme>` current. This module only records a pick and lets
  * each control mirror the result.
  *
- * Picking the theme the system already asks for clears the saved pick, so a
- * visitor who toggles back ends up following their system again rather than
- * being stuck on a manual setting they can't see.
+ * Light is the default, so only a dark pick is stored. Toggling back to
+ * light clears it.
  */
 
 export type Theme = "light" | "dark";
 
 const root = document.documentElement;
-const system = matchMedia("(prefers-color-scheme: dark)");
 
 declare global {
   interface Window {
@@ -26,9 +24,8 @@ export const isPinned = () => root.hasAttribute("data-theme-pinned");
 export const currentTheme = (): Theme => (root.dataset.theme === "dark" ? "dark" : "light");
 
 export function setTheme(theme: Theme) {
-  const systemTheme: Theme = system.matches ? "dark" : "light";
   try {
-    if (theme === systemTheme) localStorage.removeItem("theme");
+    if (theme === "light") localStorage.removeItem("theme");
     else localStorage.setItem("theme", theme);
   } catch {
     // Storage blocked (private mode, site data off): the switch still works for this page.

@@ -70,31 +70,24 @@ const jsonLd = noindex
     <meta charset="utf-8" />
     <meta name="theme-color" content="#ffffff" />
     <!--
-      Resolve the theme before anything paints, so a dark-mode visitor never
-      sees a white flash. A saved pick wins; otherwise follow the system, and
-      keep following it if it changes while the page is open. The toggles in
-      Nav.astro and Footer.astro write the pick (src/scripts/theme.ts).
+      Light unless the visitor has picked dark on the site. Set before
+      anything paints, so a returning dark-mode visitor never sees a white
+      flash. The toggles (ThemeToggle.astro) write the pick through
+      src/scripts/theme.ts.
     -->
     <script is:inline>
       (() => {
         const root = document.documentElement;
         if (root.hasAttribute("data-theme-pinned")) return;
-        const system = matchMedia("(prefers-color-scheme: dark)");
-        const saved = () => {
-          try {
-            const v = localStorage.getItem("theme");
-            return v === "light" || v === "dark" ? v : null;
-          } catch {
-            return null;
-          }
-        };
         const apply = () => {
-          const theme = saved() || (system.matches ? "dark" : "light");
+          let theme = "light";
+          try {
+            if (localStorage.getItem("theme") === "dark") theme = "dark";
+          } catch {}
           root.dataset.theme = theme;
           document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#0b0b0b" : "#ffffff");
         };
         apply();
-        system.addEventListener("change", apply);
         addEventListener("storage", (e) => e.key === "theme" && apply());
         window.__applyTheme = apply;
       })();
