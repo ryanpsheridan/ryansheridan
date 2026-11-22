@@ -40,9 +40,20 @@ body {
   font-family: var(--font-sans);
   font-weight: var(--weight-light);
   background: var(--color-bg);
-  color: var(--color-text);
+  color: var(--color-text-body);
   line-height: var(--leading-normal);
   font-size: var(--text-m);
+}
+
+/* Headings take the full ink; everything else inherits the body ink from
+   <body>. On light the two match; on dark, headings are white over grey copy. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-text);
 }
 
 a {
@@ -482,7 +493,7 @@ a.badge[aria-current="page"] {
 .prose {
   font-size: var(--text-m);
   line-height: var(--leading-relaxed);
-  color: var(--color-text);
+  color: var(--color-text-body);
 }
 
 .prose p,
@@ -512,6 +523,7 @@ a.badge[aria-current="page"] {
 
 .prose strong {
   font-weight: var(--weight-medium);
+  color: var(--color-text);
 }
 
 .prose em {
@@ -762,6 +774,7 @@ textarea.input {
 }
 
 .choice-card-title {
+  color: var(--color-text);
   font-size: var(--text-m);
   font-weight: var(--weight-medium);
 }

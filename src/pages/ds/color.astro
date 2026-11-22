@@ -14,7 +14,8 @@ const value = (name: string, theme: "light" | "dark") => {
 
 // Every pairing the site actually uses, scored against WCAG 2.2.
 const pairings = [
-  { fg: "color-text", bg: "color-bg", use: "Body copy and headlines", kind: "text" },
+  { fg: "color-text", bg: "color-bg", use: "Headlines and primary text", kind: "text" },
+  { fg: "color-text-body", bg: "color-bg", use: "Body copy", kind: "text" },
   { fg: "color-text-muted", bg: "color-bg", use: "Secondary copy, metadata", kind: "text" },
   { fg: "color-text-muted", bg: "color-surface", use: "Muted text on a surface", kind: "text" },
   { fg: "color-text-quiet", bg: "color-bg", use: "Fixed words in the homepage headline (display size)", kind: "text" },

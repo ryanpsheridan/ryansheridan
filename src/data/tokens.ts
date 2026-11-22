@@ -39,7 +39,8 @@ export const colorTokens: TokenGroup[] = [
     tokens: [
       { name: "color-bg", value: "#ffffff", dark: "#0b0b0b", description: "Page background, and text set on a solid --color-text fill." },
       { name: "color-surface", value: "#f9f9f9", dark: "#171717", description: "Quiet fill behind thumbnails while they load, and the selected choice card." },
-      { name: "color-text", value: "#111111", dark: "#ededed", description: "Primary text, icons, and the fill of primary buttons." },
+      { name: "color-text", value: "#111111", dark: "#ffffff", description: "Headings, primary text, icons, and the fill of primary buttons. Pure white on dark, so headings stand above the copy under them." },
+      { name: "color-text-body", value: "#111111", dark: "#c4c4c8", description: "Running copy: paragraphs and lists. The same ink as --color-text on light; a step down on dark, where full white across a long passage glares and flattens the hierarchy." },
       { name: "color-text-muted", value: "#5c5c60", dark: "#a3a3a8", description: "Secondary copy, metadata, and resting quiet links. Safe for long passages." },
       { name: "color-text-quiet", value: "#75757b", dark: "#7a7a80", description: "The words in a large headline that hold still while another word changes. Clears AA against the page and still reads as different from --color-text. For display sizes only; use --color-text-muted for body copy." },
       { name: "color-placeholder", value: "#75757b", dark: "#7a7a80", description: "Placeholder text in fields. Readable without passing for a typed answer." },
@@ -59,7 +60,7 @@ export const colorTokens: TokenGroup[] = [
       { name: "color-link", value: "#1c4ed8", dark: "#7ea2ff", description: "Links inside running text." },
       { name: "color-link-hover", value: "#14379b", dark: "#a9c0ff", description: "Link hover and active." },
       { name: "color-link-subtle", value: "#a8bcf1", dark: "#33477a", description: "Resting underline under inline links. Decorative; the link is also told apart by its underline." },
-      { name: "color-focus", value: "#111111", dark: "#ededed", description: "Focus ring on every interactive element." },
+      { name: "color-focus", value: "#111111", dark: "#ffffff", description: "Focus ring on every interactive element." },
       { name: "color-blueprint", value: "#1c4ed8", dark: "#2f5fe0", description: "The blueprint overlay: spec lines, tags, and its floating bar. A saturated blue in both themes so white type holds on it." },
       { name: "color-on-blueprint", value: "#ffffff", dark: "#ffffff", description: "Text and icons set on a --color-blueprint fill." },
     ],
