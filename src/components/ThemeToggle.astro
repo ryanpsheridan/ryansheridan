@@ -1,7 +1,8 @@
 ---
 /**
  * The light/dark button, used in the nav and the footer. A moon on light and
- * a sun on dark: the icon shows where a press goes. Every copy on the page
+ * a sun on dark: the icon shows where a press goes. The new theme spreads
+ * out from the button as a circle (src/scripts/theme.ts). Every copy on the page
  * drives the same setting (src/scripts/theme.ts) and stays in step.
  */
 interface Props {
@@ -76,6 +77,6 @@ const { class: className } = Astro.props;
   import { onThemeChange, toggleTheme } from "../scripts/theme";
 
   const buttons = document.querySelectorAll<HTMLButtonElement>(".theme-btn");
-  buttons.forEach((btn) => btn.addEventListener("click", toggleTheme));
+  buttons.forEach((btn) => btn.addEventListener("click", () => toggleTheme(btn)));
   onThemeChange((theme) => buttons.forEach((btn) => btn.setAttribute("aria-pressed", String(theme === "dark"))));
 </script>

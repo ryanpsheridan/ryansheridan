@@ -104,6 +104,15 @@ img {
   transition: none !important;
 }
 
+/* The theme switch: theme.ts grows the new page out of the button as a
+   circle over a still snapshot of the old one. Turn off the browser's
+   default crossfade so only the circle moves. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
 /* The work keeps its own colors on the dark theme. Most screenshots are of
    light interfaces, so each image and live embed gets a hairline drawn just
    inside its edge, and reads as a framed piece on the page rather than a
