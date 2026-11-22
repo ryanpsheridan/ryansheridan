@@ -843,7 +843,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     on it is 6.7:1.
   */
   .split-layout {
-    --blueprint: var(--color-link);
+    --blueprint: var(--color-blueprint);
   }
 
   .headline-block {
@@ -892,7 +892,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     padding: 3px 6px;
     border-radius: 3px;
     background: var(--blueprint);
-    color: #ffffff;
+    color: var(--color-on-blueprint);
     font-family: var(--font-mono);
     font-size: 10.5px;
     font-weight: 400;
@@ -930,7 +930,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
   /* The canvas beyond main: the layers for the gutters, nav, and footer,
      hung off the body above the sticky nav (see the script). */
   :global(html.blueprint-on) {
-    --blueprint: var(--color-link);
+    --blueprint: var(--color-blueprint);
   }
 
   :global(div.blueprint-tags.bp-screen) {
@@ -1027,7 +1027,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     white-space: nowrap;
     padding: 6px 6px 6px 16px;
     font-size: var(--text-s);
-    color: #ffffff;
+    color: var(--color-on-blueprint);
     background: var(--blueprint);
     border-radius: 999px;
     box-shadow: var(--shadow-overlay);
@@ -1052,7 +1052,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
     font: inherit;
     font-weight: 500;
     color: var(--blueprint);
-    background: #ffffff;
+    background: var(--color-on-blueprint);
     border: 0;
     border-radius: 999px;
     padding: 5px 14px;
@@ -1060,7 +1060,7 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
   }
 
   .blueprint-bar-hide:focus-visible {
-    outline: 2px solid #ffffff;
+    outline: 2px solid var(--color-on-blueprint);
     outline-offset: 2px;
   }
 
@@ -1084,9 +1084,9 @@ const words = projects.map((p) => p.homepageWord ?? p.tags[0].toLowerCase());
   }
 
   .blueprint-bar kbd {
-    color: #ffffff;
+    color: var(--color-on-blueprint);
     background: transparent;
-    border-color: rgba(255, 255, 255, 0.5);
+    border-color: color-mix(in srgb, var(--color-on-blueprint) 50%, transparent);
   }
 
   /* The left column arrives in reading order: headline, intro, then the

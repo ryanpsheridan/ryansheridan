@@ -17,6 +17,12 @@ interface Props {
    * a page opts out only if it is a demo, a private share, or an error page.
    */
   noindex?: boolean;
+  /**
+   * Pin the page to the light theme. For pages with their own art direction
+   * (proposals, field experiments, one-off client pages) that were never
+   * drawn for dark. The theme toggles hide themselves on a pinned page.
+   */
+  theme?: "light";
 }
 
 import { SITE_URL, personSchema, websiteSchema } from "../data/schema";
@@ -41,6 +47,7 @@ const {
   ogType = "website",
   schema = [],
   noindex: noindexProp = false,
+  theme: pinnedTheme,
 } = Astro.props;
 // Staging and branch previews never belong in search, whatever the page says.
 const noindex = noindexProp || IS_PREVIEW;
@@ -58,9 +65,40 @@ const jsonLd = noindex
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme={pinnedTheme} data-theme-pinned={pinnedTheme ? "" : undefined}>
   <head>
     <meta charset="utf-8" />
+    <meta name="theme-color" content="#ffffff" />
+    <!--
+      Resolve the theme before anything paints, so a dark-mode visitor never
+      sees a white flash. A saved pick wins; otherwise follow the system, and
+      keep following it if it changes while the page is open. The toggles in
+      Nav.astro and Footer.astro write the pick (src/scripts/theme.ts).
+    -->
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        if (root.hasAttribute("data-theme-pinned")) return;
+        const system = matchMedia("(prefers-color-scheme: dark)");
+        const saved = () => {
+          try {
+            const v = localStorage.getItem("theme");
+            return v === "light" || v === "dark" ? v : null;
+          } catch {
+            return null;
+          }
+        };
+        const apply = () => {
+          const theme = saved() || (system.matches ? "dark" : "light");
+          root.dataset.theme = theme;
+          document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#0b0b0b" : "#ffffff");
+        };
+        apply();
+        system.addEventListener("change", apply);
+        addEventListener("storage", (e) => e.key === "theme" && apply());
+        window.__applyTheme = apply;
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />

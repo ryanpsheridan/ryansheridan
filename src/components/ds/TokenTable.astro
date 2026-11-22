@@ -13,6 +13,10 @@ interface Props {
 
 const { group, preview = "none" } = Astro.props;
 const isHex = (v: string) => /^#[0-9a-f]{6}$/i.test(v);
+// Each swatch is painted with its literal value and scored against the page
+// of its own theme, so both columns read correctly whichever theme is on.
+const LIGHT_BG = "#ffffff";
+const DARK_BG = "#0b0b0b";
 ---
 
 <section class="ds-tokens" id={group.id} aria-labelledby={`${group.id}-title`}>
@@ -39,8 +43,15 @@ const isHex = (v: string) => /^#[0-9a-f]{6}$/i.test(v);
             {preview !== "none" && (
               <td class="preview-cell">
                 {preview === "color" && (
-                  <span class="swatch" style={`background: var(--${t.name})`}>
-                    {isHex(t.value) && <span class="ratio">{contrast(t.value, "#ffffff").toFixed(1)}</span>}
+                  <span class="swatches">
+                    <span class="swatch is-light" style={`background: ${t.value}`} title="Light">
+                      {isHex(t.value) && <span class="ratio">{contrast(t.value, LIGHT_BG).toFixed(1)}</span>}
+                    </span>
+                    {t.dark && (
+                      <span class="swatch is-dark" style={`background: ${t.dark}`} title="Dark">
+                        {isHex(t.dark) && <span class="ratio">{contrast(t.dark, DARK_BG).toFixed(1)}</span>}
+                      </span>
+                    )}
                   </span>
                 )}
                 {preview === "size" && <span class="sample" style={`font-size: var(--${t.name})`}>Ag</span>}
@@ -54,7 +65,10 @@ const isHex = (v: string) => /^#[0-9a-f]{6}$/i.test(v);
                 {preview === "duration" && <span class="sample mono-sample">{t.value}</span>}
               </td>
             )}
-            <td class="mono muted value">{t.value}</td>
+            <td class="mono muted value">
+              {t.value}
+              {t.dark && t.dark !== t.value && <><br /><span class="dark-value">Dark: {t.dark}</span></>}
+            </td>
             <td>
               {t.description}
               {t.deprecated && <span class="deprecated"> Use <code>--{t.deprecated}</code>.</span>}
@@ -102,6 +116,11 @@ const isHex = (v: string) => /^#[0-9a-f]{6}$/i.test(v);
     max-width: 220px;
   }
 
+  .swatches {
+    display: flex;
+    gap: var(--space-1);
+  }
+
   .swatch {
     position: relative;
     display: block;
@@ -111,16 +130,29 @@ const isHex = (v: string) => /^#[0-9a-f]{6}$/i.test(v);
     border-radius: var(--radius-sm);
   }
 
+  /* The ratio badge sits on the page color of the swatch's own theme. */
   .ratio {
     position: absolute;
     right: 4px;
     bottom: 2px;
     font-family: var(--font-mono);
     font-size: 10px;
-    color: var(--color-text);
-    background: var(--color-bg);
     padding: 0 2px;
     border-radius: 2px;
+  }
+
+  .is-light .ratio {
+    color: #111111;
+    background: #ffffff;
+  }
+
+  .is-dark .ratio {
+    color: #ededed;
+    background: #0b0b0b;
+  }
+
+  .dark-value {
+    white-space: nowrap;
   }
 
   .sample {

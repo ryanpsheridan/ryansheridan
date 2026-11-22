@@ -29,7 +29,7 @@
 
 <style is:global>
   :root {
-    --blueprint: var(--color-link);
+    --blueprint: var(--color-blueprint);
   }
 
   .blueprint-columns {
@@ -79,7 +79,7 @@
     padding: 3px 6px;
     border-radius: 3px;
     background: var(--blueprint);
-    color: #ffffff;
+    color: var(--color-on-blueprint);
     font-family: var(--font-mono);
     font-size: 10.5px;
     font-weight: 400;
@@ -176,7 +176,7 @@
     white-space: nowrap;
     padding: 6px 6px 6px 16px;
     font-size: var(--text-s);
-    color: #ffffff;
+    color: var(--color-on-blueprint);
     background: var(--blueprint);
     border-radius: 999px;
     box-shadow: var(--shadow-overlay);
@@ -201,7 +201,7 @@
     font: inherit;
     font-weight: 500;
     color: var(--blueprint);
-    background: #ffffff;
+    background: var(--color-on-blueprint);
     border: 0;
     border-radius: 999px;
     padding: 5px 14px;
@@ -209,7 +209,7 @@
   }
 
   .blueprint-bar-hide:focus-visible {
-    outline: 2px solid #ffffff;
+    outline: 2px solid var(--color-on-blueprint);
     outline-offset: 2px;
   }
 
@@ -240,9 +240,9 @@
     font-size: 0.9em;
     line-height: 1.5;
     text-align: center;
-    color: #ffffff;
+    color: var(--color-on-blueprint);
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid color-mix(in srgb, var(--color-on-blueprint) 50%, transparent);
     border-bottom-width: 2px;
     border-radius: var(--radius-sm);
   }
@@ -277,7 +277,7 @@
   }
 
   .kbd-toggle[aria-pressed="true"] {
-    color: #ffffff;
+    color: var(--color-on-blueprint);
     background: var(--blueprint);
   }
 

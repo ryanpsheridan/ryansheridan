@@ -12,7 +12,7 @@ const projects = getHomepageProjects();
 
 {/* The original homepage, kept at its own URL for reference and out of
     search: noindex here and filtered from the sitemap in astro.config.mjs. */}
-<Layout title="Ryan Sheridan — Designing systems, sites and brands." description="Portfolio of Ryan Sheridan, Principal Designer specializing in design systems, marketing sites, and brand infrastructure." noindex>
+<Layout theme="light" title="Ryan Sheridan — Designing systems, sites and brands." description="Portfolio of Ryan Sheridan, Principal Designer specializing in design systems, marketing sites, and brand infrastructure." noindex>
   {/* First in the document on purpose: the intro's blocking inline script
       stamps the page before the nav below it can paint, otherwise the nav
       flashes for a frame before the scrim covers it. */}
@@ -285,8 +285,8 @@ const projects = getHomepageProjects();
   }
 
   .view-all-link:hover {
-    background: #333333;
-    border-color: #333333;
+    background: var(--color-inverse-hover);
+    border-color: var(--color-inverse-hover);
   }
 
   .view-all-link.visible {
@@ -496,7 +496,7 @@ const projects = getHomepageProjects();
     aspect-ratio: 16 / 10;
     overflow: hidden;
     border-radius: var(--radius-xs);
-    background: var(--color-tag-bg);
+    background: var(--color-surface);
     margin-bottom: var(--space-4);
   }
 

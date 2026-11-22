@@ -82,6 +82,35 @@ img {
   }
 }
 
+/* ---------- Theme ---------- */
+
+/* Set for a frame while the theme flips (src/scripts/theme.ts), so every
+   button and link changes color at once instead of each at its own speed. */
+.theme-switching,
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
+}
+
+/* The work keeps its own colors on the dark theme. Most screenshots are of
+   light interfaces, so each image and live embed gets a hairline drawn just
+   inside its edge, and reads as a framed piece on the page rather than a
+   bright hole in it. The token is transparent on light. An inset outline
+   takes no space and survives a parent that clips with overflow: hidden. */
+main img,
+main video,
+main object,
+main .shadow-embed {
+  outline: var(--border-width) solid var(--color-media-edge);
+  outline-offset: calc(var(--border-width) * -1);
+}
+
+/* A pinned page (Layout's theme prop) has only one theme to show. */
+[data-theme-pinned] [data-theme-toggle] {
+  display: none;
+}
+
 @media print {
   .skip-link {
     display: none;

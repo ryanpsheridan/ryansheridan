@@ -6,7 +6,11 @@ import CodeBlock from "../../components/ds/CodeBlock.astro";
 import { colorTokens, allTokenGroups } from "../../data/tokens";
 import { contrast } from "../../data/ds";
 
-const value = (name: string) => allTokenGroups.flatMap((g) => g.tokens).find((t) => t.name === name)!.value;
+const token = (name: string) => allTokenGroups.flatMap((g) => g.tokens).find((t) => t.name === name)!;
+const value = (name: string, theme: "light" | "dark") => {
+  const t = token(name);
+  return theme === "dark" ? (t.dark ?? t.value) : t.value;
+};
 
 // Every pairing the site actually uses, scored against WCAG 2.2.
 const pairings = [
@@ -25,36 +29,43 @@ const pairings = [
   { fg: "color-critical", bg: "color-critical-bg", use: "Error message on its tint", kind: "text" },
   { fg: "color-border-strong", bg: "color-bg", use: "Field and control outlines", kind: "ui" },
   { fg: "color-focus", bg: "color-bg", use: "Focus ring", kind: "ui" },
+  { fg: "color-on-blueprint", bg: "color-blueprint", use: "Blueprint tags and bar", kind: "text" },
   { fg: "color-border", bg: "color-bg", use: "Dividers and card edges (decorative)", kind: "decorative" },
 ].map((p) => {
-  const ratio = contrast(value(p.fg), value(p.bg));
   const need = p.kind === "text" ? 4.5 : p.kind === "ui" ? 3 : 0;
-  return { ...p, ratio, pass: ratio >= need, need };
+  const score = (theme: "light" | "dark") => {
+    const ratio = contrast(value(p.fg, theme), value(p.bg, theme));
+    return { ratio, pass: ratio >= need };
+  };
+  return { ...p, need, light: score("light"), dark: score("dark") };
 });
-
-const preview = { "color-neutral": "color", "color-link": "color", "color-status": "color", "color-deprecated": "color" } as const;
 ---
 
 <DsLayout
   section="Foundations"
   title="Color"
-  lead="Black on white, with blue for links and three status colors for feedback. The work brings the color; the interface stays neutral."
+  lead="Black on white, or near-white on near-black, with blue for links and three status colors for feedback. The work brings the color; the interface stays neutral."
 >
   <section aria-labelledby="principles">
     <h2 id="principles">How color is used</h2>
     <ul class="ds-list">
       <li><strong>Neutral first.</strong> Nearly every pixel of chrome is <code>--color-text</code>, <code>--color-text-muted</code>, or a border. Project imagery carries the color.</li>
-      <li><strong>Blue means link.</strong> <code>--color-link</code> appears only on links in running text and in the homepage blueprint. Don't use it for decoration, headings, or buttons.</li>
+      <li><strong>Blue means link.</strong> <code>--color-link</code> appears only on links in running text. The blueprint has its own, <code>--color-blueprint</code>, which stays saturated on dark so white tags hold on it. Don't use it for decoration, headings, or buttons.</li>
       <li><strong>Status needs words.</strong> Green, amber, and red always come with a message or an icon that says the same thing. About 1 in 12 men can't reliably tell red from green.</li>
+      <li><strong>Every color has a dark twin.</strong> Use the token, never a hex, and the dark theme comes for free. Pages with their own art direction opt out with <code>&lt;Layout theme="light"&gt;</code>.</li>
+      <li><strong>The work stays as it was made.</strong> Screenshots and embeds keep their own colors on dark. <code>--color-media-edge</code> draws a hairline inside each one, so a light capture reads as a framed piece rather than a bright hole.</li>
       <li><strong>Hairlines divide, strong lines invite.</strong> <code>--color-border</code> is for decoration. Anything you can type into or press gets <code>--color-border-strong</code>, which is dark enough to find.</li>
     </ul>
   </section>
 
   <section aria-labelledby="tokens">
     <h2 id="tokens">Tokens</h2>
-    <p class="ds-text">The number on each swatch is its contrast against white. Click a token to copy it.</p>
+    <p class="ds-text">
+      Each token shows its light swatch, then its dark one. The number on a swatch is its contrast against the
+      page of that theme: white, or <code>#0b0b0b</code>. Click a token to copy it.
+    </p>
     {colorTokens.map((group) => (
-      <TokenTable group={group} preview={preview[group.id as keyof typeof preview] ?? "color"} />
+      <TokenTable group={group} preview="color" />
     ))}
   </section>
 
@@ -62,8 +73,8 @@ const preview = { "color-neutral": "color", "color-link": "color", "color-status
     <h2 id="pairings">Approved pairings</h2>
     <p class="ds-text">
       Text needs 4.5:1 against what it sits on (WCAG 1.4.3). Outlines that identify a control, and focus
-      rings, need 3:1 (WCAG 1.4.11). These are calculated from the token values at build time, so the table
-      can't go stale.
+      rings, need 3:1 (WCAG 1.4.11). Every pairing is scored in both themes, calculated from the token values
+      at build time, so the table can't go stale.
     </p>
     <div class="ds-table-wrap">
       <table class="ds-table">
@@ -72,8 +83,8 @@ const preview = { "color-neutral": "color", "color-link": "color", "color-status
             <th scope="col">Sample</th>
             <th scope="col">Foreground / background</th>
             <th scope="col">Used for</th>
-            <th scope="col">Ratio</th>
-            <th scope="col">Result</th>
+            <th scope="col">Light</th>
+            <th scope="col">Dark</th>
           </tr>
         </thead>
         <tbody>
@@ -88,16 +99,18 @@ const preview = { "color-neutral": "color", "color-link": "color", "color-status
               </td>
               <td class="mono">--{p.fg}<br /><span class="muted">--{p.bg}</span></td>
               <td>{p.use}</td>
-              <td class="mono">{p.ratio.toFixed(2)}:1</td>
-              <td class="mono">
-                {p.kind === "decorative" ? (
-                  <span class="muted">Exempt</span>
-                ) : p.pass ? (
-                  <span class="pass">Pass {p.kind === "ui" ? "3:1" : "AA"}</span>
-                ) : (
-                  <span class="fail">Fail</span>
-                )}
-              </td>
+              {[p.light, p.dark].map((r) => (
+                <td class="mono">
+                  {r.ratio.toFixed(2)}:1<br />
+                  {p.kind === "decorative" ? (
+                    <span class="muted">Exempt</span>
+                  ) : r.pass ? (
+                    <span class="pass">Pass {p.kind === "ui" ? "3:1" : "AA"}</span>
+                  ) : (
+                    <span class="fail">Fail</span>
+                  )}
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>

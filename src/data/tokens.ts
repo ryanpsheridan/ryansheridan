@@ -15,6 +15,8 @@ export interface Token {
   /** Custom property name, without the leading dashes. */
   name: string;
   value: string;
+  /** Value on the dark theme, for tokens that change with it. */
+  dark?: string;
   /** What the token is for, written for designers, developers, and writers alike. */
   description: string;
   /** Kept only so older pages keep working. Points at the token to use instead. */
@@ -33,30 +35,33 @@ export const colorTokens: TokenGroup[] = [
     id: "color-neutral",
     title: "Neutrals",
     description:
-      "The site is almost entirely black on white. Neutrals carry text, surfaces, and every boundary between them.",
+      "Black on white by day, near-white on near-black by night. Neutrals carry text, surfaces, and every boundary between them.",
     tokens: [
-      { name: "color-bg", value: "#ffffff", description: "Page background, and text set on a solid --color-text fill." },
-      { name: "color-surface", value: "#f9f9f9", description: "Quiet fill behind thumbnails while they load, and the selected choice card." },
-      { name: "color-text", value: "#111111", description: "Primary text, icons, and the fill of primary buttons. 18.9:1 on white." },
-      { name: "color-text-muted", value: "#5c5c60", description: "Secondary copy, metadata, and resting quiet links. 6.7:1 on white, so it is safe for long passages." },
-      { name: "color-text-quiet", value: "#75757b", description: "The words in a large headline that hold still while another word changes. 4.6:1 on white, so it clears AA for any text and AAA for large type, and 4.2:1 against --color-text so the two read as different. For display sizes only; use --color-text-muted for body copy." },
-      { name: "color-placeholder", value: "#75757b", description: "Placeholder text in fields. 4.6:1 on white, readable without passing for a typed answer." },
-      { name: "color-border", value: "#e5e5e5", description: "Hairlines that divide content: rules, card edges, badge outlines. Decorative only." },
-      { name: "color-border-strong", value: "#8a8a8f", description: "The edge of anything you can type into or press. 3.4:1 on white, which WCAG asks of control boundaries." },
-      { name: "color-inverse-hover", value: "#333333", description: "Hover fill for primary buttons. White on it is 12.6:1." },
-      { name: "color-scrim", value: "rgba(0, 0, 0, 0.9)", description: "Backdrop behind the lightbox." },
+      { name: "color-bg", value: "#ffffff", dark: "#0b0b0b", description: "Page background, and text set on a solid --color-text fill." },
+      { name: "color-surface", value: "#f9f9f9", dark: "#171717", description: "Quiet fill behind thumbnails while they load, and the selected choice card." },
+      { name: "color-text", value: "#111111", dark: "#ededed", description: "Primary text, icons, and the fill of primary buttons." },
+      { name: "color-text-muted", value: "#5c5c60", dark: "#a3a3a8", description: "Secondary copy, metadata, and resting quiet links. Safe for long passages." },
+      { name: "color-text-quiet", value: "#75757b", dark: "#7a7a80", description: "The words in a large headline that hold still while another word changes. Clears AA against the page and still reads as different from --color-text. For display sizes only; use --color-text-muted for body copy." },
+      { name: "color-placeholder", value: "#75757b", dark: "#7a7a80", description: "Placeholder text in fields. Readable without passing for a typed answer." },
+      { name: "color-border", value: "#e5e5e5", dark: "#262626", description: "Hairlines that divide content: rules, card edges, badge outlines. Decorative only." },
+      { name: "color-border-strong", value: "#8a8a8f", dark: "#6f6f75", description: "The edge of anything you can type into or press. Holds the 3:1 WCAG asks of control boundaries." },
+      { name: "color-inverse-hover", value: "#333333", dark: "#c4c4c4", description: "Hover fill for primary buttons." },
+      { name: "color-media-edge", value: "transparent", dark: "#2a2a2a", description: "Hairline drawn inside images and embeds on the dark theme, so a light screenshot reads as a framed object rather than a hole in the page. Invisible on light." },
+      { name: "color-scrim", value: "rgba(0, 0, 0, 0.9)", dark: "rgba(0, 0, 0, 0.92)", description: "Backdrop behind the lightbox." },
     ],
   },
   {
     id: "color-link",
     title: "Links and focus",
     description:
-      "Blue is reserved for links in running text and for the homepage blueprint. Chrome such as the nav, footer, and buttons stays neutral.",
+      "Blue is reserved for links in running text and for the blueprint. Chrome such as the nav, footer, and buttons stays neutral.",
     tokens: [
-      { name: "color-link", value: "#1c4ed8", description: "Links inside running text. 6.7:1 on white." },
-      { name: "color-link-hover", value: "#14379b", description: "Link hover and active." },
-      { name: "color-link-subtle", value: "#a8bcf1", description: "Resting underline under inline links. Decorative; the link is also told apart by its underline." },
-      { name: "color-focus", value: "#111111", description: "Focus ring on every interactive element." },
+      { name: "color-link", value: "#1c4ed8", dark: "#7ea2ff", description: "Links inside running text." },
+      { name: "color-link-hover", value: "#14379b", dark: "#a9c0ff", description: "Link hover and active." },
+      { name: "color-link-subtle", value: "#a8bcf1", dark: "#33477a", description: "Resting underline under inline links. Decorative; the link is also told apart by its underline." },
+      { name: "color-focus", value: "#111111", dark: "#ededed", description: "Focus ring on every interactive element." },
+      { name: "color-blueprint", value: "#1c4ed8", dark: "#2f5fe0", description: "The blueprint overlay: spec lines, tags, and its floating bar. A saturated blue in both themes so white type holds on it." },
+      { name: "color-on-blueprint", value: "#ffffff", dark: "#ffffff", description: "Text and icons set on a --color-blueprint fill." },
     ],
   },
   {
@@ -65,26 +70,17 @@ export const colorTokens: TokenGroup[] = [
     description:
       "Each status pairs a text-safe foreground with a tint and a border for fills. The meaning always comes from words or shape as well, never from hue alone.",
     tokens: [
-      { name: "color-positive", value: "#17663f", description: "Success text and icons. 6.2:1 on its tint." },
-      { name: "color-positive-bg", value: "#eaf4ee", description: "Success fill." },
-      { name: "color-positive-border", value: "#bcdcc9", description: "Success outline." },
-      { name: "color-caution", value: "#8a5000", description: "Warning text and icons. 5.9:1 on its tint." },
-      { name: "color-caution-bg", value: "#fcf3e6", description: "Warning fill." },
-      { name: "color-caution-border", value: "#ecd5ad", description: "Warning outline." },
-      { name: "color-critical", value: "#a3302a", description: "Error text, icons, and invalid field borders. 7.0:1 on white." },
-      { name: "color-critical-bg", value: "#fbeeed", description: "Error fill." },
-      { name: "color-critical-border", value: "#eec9c6", description: "Error outline." },
-      { name: "color-accent-bg", value: "#eef2fe", description: "Informational fill, in the link blue family." },
-      { name: "color-accent-border", value: "#c3d0f6", description: "Informational outline." },
-    ],
-  },
-  {
-    id: "color-deprecated",
-    title: "Deprecated",
-    description: "Older names kept so existing pages keep rendering. Don't use them in new work.",
-    tokens: [
-      { name: "color-tag-bg", value: "var(--color-surface)", description: "Old name for the surface fill.", deprecated: "color-surface" },
-      { name: "color-tag-text", value: "var(--color-text-muted)", description: "Old name for muted text.", deprecated: "color-text-muted" },
+      { name: "color-positive", value: "#17663f", dark: "#6dd39b", description: "Success text and icons." },
+      { name: "color-positive-bg", value: "#eaf4ee", dark: "#0e2218", description: "Success fill." },
+      { name: "color-positive-border", value: "#bcdcc9", dark: "#1f4a33", description: "Success outline." },
+      { name: "color-caution", value: "#8a5000", dark: "#f2b45c", description: "Warning text and icons." },
+      { name: "color-caution-bg", value: "#fcf3e6", dark: "#291d0a", description: "Warning fill." },
+      { name: "color-caution-border", value: "#ecd5ad", dark: "#5a4014", description: "Warning outline." },
+      { name: "color-critical", value: "#a3302a", dark: "#ff8f85", description: "Error text, icons, and invalid field borders." },
+      { name: "color-critical-bg", value: "#fbeeed", dark: "#2d1211", description: "Error fill." },
+      { name: "color-critical-border", value: "#eec9c6", dark: "#5c2723", description: "Error outline." },
+      { name: "color-accent-bg", value: "#eef2fe", dark: "#111a33", description: "Informational fill, in the link blue family." },
+      { name: "color-accent-border", value: "#c3d0f6", dark: "#263a6e", description: "Informational outline." },
     ],
   },
 ];
@@ -149,8 +145,6 @@ export const typographyTokens: TokenGroup[] = [
       { name: "text-xl", value: "25px", description: "Old extra large size.", deprecated: "text-h4" },
       { name: "text-2xl", value: "32px", description: "Old 2XL size.", deprecated: "text-h3" },
       { name: "text-3xl", value: "40px", description: "Old 3XL size.", deprecated: "text-h2" },
-      { name: "text-4xl", value: "50px", description: "Old 4XL size.", deprecated: "text-h1" },
-      { name: "text-5xl", value: "64px", description: "Old 5XL size.", deprecated: "text-display-1" },
     ],
   },
   {
@@ -238,9 +232,9 @@ export const shapeTokens: TokenGroup[] = [
     id: "elevation",
     title: "Elevation",
     description:
-      "The site is flat. Depth is reserved for the one thing that floats over content: the blueprint bar on the homepage.",
+      "The site is flat. Depth is reserved for the one thing that floats over content: the blueprint bar.",
     tokens: [
-      { name: "shadow-overlay", value: "0 8px 24px rgba(0, 0, 0, 0.12)", description: "Floating bars and popovers." },
+      { name: "shadow-overlay", value: "0 8px 24px rgba(0, 0, 0, 0.12)", dark: "0 8px 24px rgba(0, 0, 0, 0.6)", description: "Floating bars and popovers. Deeper on dark, where a light shadow vanishes." },
     ],
   },
   {
@@ -249,7 +243,6 @@ export const shapeTokens: TokenGroup[] = [
     description: "Named stacking levels, so nothing has to guess a number.",
     tokens: [
       { name: "z-raised", value: "2", description: "Content lifted over a fixed background effect, like the footer over the cursor field." },
-      { name: "z-sticky", value: "10", description: "Sticky headers inside a page." },
       { name: "z-overlay", value: "150", description: "The full-screen menu." },
       { name: "z-nav", value: "200", description: "The sticky nav, which stays above the menu so its close button works." },
       { name: "z-modal", value: "1000", description: "The lightbox." },
@@ -303,15 +296,31 @@ export const breakpoints = [
   { name: "lg", maxWidth: 1024, description: "Small laptops. Case study sidebars move above the article." },
 ];
 
-/** The `:root` block every page loads. */
+/**
+ * The `:root` block every page loads.
+ *
+ * Light is the base. The dark values apply when the visitor's system asks for
+ * dark and they haven't picked light on the site, or when they've picked dark.
+ * The head script in Layout.astro resolves that choice into
+ * `<html data-theme>` before first paint; the media query covers a visitor
+ * with scripts off. Both sit inside `screen`, so printing always comes out
+ * black on white.
+ */
 export function tokensToCss(): string {
   const decl = (tokens: Record<string, string>) =>
     Object.entries(tokens)
       .map(([name, value]) => `--${name}:${value};`)
       .join("");
-  const base = Object.fromEntries(allTokenGroups.flatMap((g) => g.tokens.map((t) => [t.name, t.value])));
+  const all = allTokenGroups.flatMap((g) => g.tokens);
+  const base = Object.fromEntries(all.map((t) => [t.name, t.value]));
+  const dark = decl(Object.fromEntries(all.filter((t) => t.dark).map((t) => [t.name, t.dark!])));
   const overrides = responsiveOverrides
     .map((o) => `@media (max-width:${o.maxWidth}px){:root{${decl(o.tokens)}}}`)
     .join("");
-  return `:root{${decl(base)}}${overrides}`;
+  return (
+    `:root{color-scheme:light;${decl(base)}}` +
+    `@media screen and (prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;${dark}}}` +
+    `@media screen{:root[data-theme=dark]{color-scheme:dark;${dark}}}` +
+    overrides
+  );
 }

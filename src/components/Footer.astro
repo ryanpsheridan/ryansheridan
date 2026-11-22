@@ -27,6 +27,7 @@ const year = new Date().getFullYear();
     </div>
     <div class="footer-bottom">
       <span class="footer-copyright">&copy; {year} Ryan Sheridan</span>
+      <div class="footer-actions">
       {blueprint && (
         /* The way into the blueprint, kept down here as a colophon-style
            extra for whoever reads to the end. A real toggle, the same as the
@@ -39,6 +40,11 @@ const year = new Date().getFullYear();
           <kbd class="footer-peek-key"><span data-shortcut-mod>Cmd</span> + I</kbd>
         </button>
       )}
+        <button type="button" class="footer-theme" role="switch" aria-checked="false" data-theme-toggle>
+          Dark mode
+          <span class="footer-theme-track" aria-hidden="true"><span class="footer-theme-thumb"></span></span>
+        </button>
+      </div>
     </div>
   </div>
 </footer>
@@ -101,6 +107,69 @@ const year = new Date().getFullYear();
     align-items: center;
   }
 
+  .footer-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+  }
+
+  /* A small switch in the footer's mono voice. It and the nav icon drive the
+     same setting and stay in step. */
+  .footer-theme {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-s);
+    color: var(--color-text-muted);
+    background: none;
+    border: 0;
+    cursor: pointer;
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+
+  .footer-theme:hover,
+  .footer-theme[aria-checked="true"] {
+    color: var(--color-text);
+  }
+
+  .footer-theme-track {
+    position: relative;
+    width: 28px;
+    height: 16px;
+    border: var(--border-width) solid var(--color-border-strong);
+    border-radius: var(--radius-full);
+    transition: background var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .footer-theme-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-full);
+    background: var(--color-text-muted);
+    transition: transform var(--duration-fast) var(--ease-emphasized), background var(--duration-fast) var(--ease-standard);
+  }
+
+  .footer-theme[aria-checked="true"] .footer-theme-track {
+    background: var(--color-text);
+    border-color: var(--color-text);
+  }
+
+  .footer-theme[aria-checked="true"] .footer-theme-thumb {
+    background: var(--color-bg);
+    transform: translateX(12px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-theme-thumb {
+      transition: none;
+    }
+  }
+
   .footer-peek {
     display: inline-flex;
     align-items: center;
@@ -132,7 +201,7 @@ const year = new Date().getFullYear();
   }
 
   .footer-peek[aria-pressed="true"] .footer-peek-key {
-    color: #ffffff;
+    color: var(--color-on-blueprint);
     background: var(--blueprint, var(--color-link));
   }
 
@@ -173,5 +242,20 @@ const year = new Date().getFullYear();
     .footer-nav {
       gap: var(--space-4);
     }
+
+    .footer-bottom {
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
   }
 </style>
+
+<script>
+  import { onThemeChange, toggleTheme } from "../scripts/theme";
+
+  const themeSwitch = document.querySelector<HTMLButtonElement>(".footer-theme");
+  if (themeSwitch) {
+    themeSwitch.addEventListener("click", toggleTheme);
+    onThemeChange((theme) => themeSwitch.setAttribute("aria-checked", String(theme === "dark")));
+  }
+</script>
