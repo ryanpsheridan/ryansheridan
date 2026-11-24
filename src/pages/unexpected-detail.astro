@@ -75,12 +75,12 @@ const heroFall = 25;
 /*
   The lockups draw the falling line from the cover's own geometry (14
   lines, 5.83 apart, 46 long, the ninth fallen at 14 degrees), scaled as
-  one unit so the length to width ratio never changes, with the stroke 15%
-  thinner than the cover's. k scales the row; left and top place it in a
-  100 by 75 tile.
+  one unit so the length to width ratio never changes. The stroke is the
+  cover's too, so the page-wide --ln thins both by the same 15%. k scales
+  the row; left and top place it in a 100 by 75 tile.
 */
 const COVER_LINES = { count: 14, fall: 9, gap: 5.83, len: 46, w: 0.7 };
-const LOCKUP_STROKE = 0.85;
+const LOCKUP_STROKE = 1;
 const lockupLines = (k: number, left: number, top: number) => ({
   vw: 100,
   vh: 75,
@@ -102,6 +102,16 @@ const stackK = 0.52;
 const stackLeft = (100 - rowWidth(stackK)) / 2;
 const stackLines = lockupLines(stackK, stackLeft, 16);
 const stackRight = +stackLeft.toFixed(3);
+// Grounded: the name above the row, sharing its right edge.
+const groundLines = lockupLines(stackK, stackLeft, 35);
+// Centered: the row above the one line name, both on the tile's center line.
+const centerK = 0.5;
+const centerLines = lockupLines(centerK, (100 - rowWidth(centerK)) / 2, 20);
+// Badge with the line: a small stacked lockup inside the circle.
+const badgeK = 0.3;
+const badgeLeft = 50 - rowWidth(badgeK) / 2;
+const badgeLines = lockupLines(badgeK, badgeLeft, 25);
+const badgeRight = +badgeLeft.toFixed(3);
 // Horizontal: the row beside the name, centered on the tile's middle.
 const sideK = 0.435;
 const sideLeft = 9.85;
@@ -343,7 +353,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=Gloock&display=swap"
         <div class="wrap">
           <div class="slabel reveal"><span>06</span><h2 id="lk-h">Logo lockups</h2></div>
           <p class="lk-lead reveal">
-            Twelve ways to set the logo, from a business card to the back of a T-shirt. Every one is
+            Eighteen ways to set the logo, from a business card to the back of a T-shirt. Every one is
             the same name, the same dot and the same line, arranged for the space it has.
           </p>
           <ul class="lk-grid">
@@ -423,6 +433,52 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=Gloock&display=swap"
               <figure>
                 <div class="lk tone-dark" role="img" aria-label="Wordmark with the tagline"><span class="lk-tag"><Wordmark size="1em" /><small>Curiosity flips the frame.</small></span></div>
                 <figcaption><b>With the tagline.</b> The name and its line, for end cards and event posters.</figcaption>
+              </figure>
+            </li>
+            <li class="reveal">
+              <figure>
+                <div class="lk tone-light" role="img" aria-label="Grounded: the wordmark above the falling line">
+                  <Wordmark class="lk-ground-wm" size="7cqi" style={`right:${stackRight}cqi`} />
+                  <Lines {...groundLines} />
+                </div>
+                <figcaption><b>Grounded.</b> The name above the line, so the row reads as ground it stands on. For signage and the foot of a page.</figcaption>
+              </figure>
+            </li>
+            <li class="reveal">
+              <figure>
+                <div class="lk tone-dark" role="img" aria-label="Centered: the falling line above the one line wordmark">
+                  <Lines {...centerLines} />
+                  <Wordmark class="lk-center-wm" size="5cqi" line />
+                </div>
+                <figcaption><b>Centered.</b> The line above the name on one axis, for the chest of a T-shirt and centered layouts.</figcaption>
+              </figure>
+            </li>
+            <li class="reveal">
+              <figure>
+                <div class="lk tone-light" role="img" aria-label="Spine: the one line wordmark turned on its side"><Wordmark class="lk-spine-wm" size="6cqi" line /></div>
+                <figcaption><b>Spine.</b> The one line name turned to read upward, for book spines, the side of a mug and a sleeve.</figcaption>
+              </figure>
+            </li>
+            <li class="reveal">
+              <figure>
+                <div class="lk tone-dark" role="img" aria-label="Corner: a small wordmark in the bottom right corner"><Wordmark class="lk-corner-wm" size="4.4cqi" /></div>
+                <figcaption><b>Corner.</b> Small and out of the way, as on the cover. A signature for photography and video.</figcaption>
+              </figure>
+            </li>
+            <li class="reveal">
+              <figure>
+                <div class="lk tone-light" role="img" aria-label="Badge with the falling line inside">
+                  <span class="lk-badge lk-badge--lines" aria-hidden="true"></span>
+                  <Lines {...badgeLines} />
+                  <Wordmark class="lk-badge-wm" size="4.2cqi" style={`right:${badgeRight}cqi`} />
+                </div>
+                <figcaption><b>Badge with the line.</b> The stacked lockup inside the circle, for patches, coasters and the back of a phone case.</figcaption>
+              </figure>
+            </li>
+            <li class="reveal">
+              <figure>
+                <div class="lk tone-dark" role="img" aria-label="Ruled one line wordmark with the tagline"><span class="lk-rtag"><span class="lk-rule lk-rule--line"><Wordmark size="1em" line /></span><small>Curiosity flips the frame.</small></span></div>
+                <figcaption><b>Ruled, with the tagline.</b> The ruled name with its line set beneath, for merch tags and event signage.</figcaption>
               </figure>
             </li>
           </ul>
@@ -721,6 +777,16 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=Gloock&display=swap"
   }
 
   /* ---------- the falling line (SVG) ---------- */
+  /*
+    --ln thins every stroke of the falling line on this page, 15% under the
+    drawn width. Each line narrows about its own center, so spacing, length
+    and the row's proportions stay exactly as drawn; only the stroke changes.
+    It is set here, not in the shared components, so the archived rounds
+    keep their original weight.
+  */
+  .ub {
+    --ln: 0.85;
+  }
   .ub .ud-lines {
     position: absolute;
     inset: 0;
@@ -728,16 +794,20 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=Gloock&display=swap"
     height: 100%;
     pointer-events: none;
   }
-  .ub .ud-fall {
+  .ub .ud-lines rect {
     transform-box: fill-box;
     transform-origin: 50% 100%;
-    transform: rotate(var(--fall));
+    transform: scaleX(var(--ln));
+  }
+  /* As specific as the rule above, plus one, so the fall always wins. */
+  .ub .ud-lines .ud-fall {
+    transform: rotate(var(--fall)) scaleX(var(--ln));
   }
   .ub.motion .tip .ud-fall {
     transition: transform 1.4s cubic-bezier(0.6, 0, 0.4, 1) 0.4s;
   }
   .ub.motion .tip:not(.is-in) .ud-fall {
-    transform: rotate(0deg);
+    transform: rotate(0deg) scaleX(var(--ln));
   }
 
   /*
@@ -926,7 +996,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=Gloock&display=swap"
     margin-top: clamp(48px, 10svh, 120px);
   }
   .intro-lines span {
-    width: 1px;
+    width: calc(1px * var(--ln));
     background: currentColor;
     transform-origin: 50% 100%;
   }
@@ -1832,6 +1902,51 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=Gloock&display=swap"
     padding: 0.42em 0 0.38em;
     border-block: 1px solid currentColor;
     font-size: calc(var(--wm-scale) * 8.4cqi);
+  }
+  .lk-ground-wm {
+    position: absolute;
+    top: 16cqi;
+  }
+  .lk-center-wm {
+    position: absolute;
+    left: 50%;
+    top: 52.5cqi;
+    translate: -50% -50%;
+  }
+  .lk-spine-wm {
+    rotate: -90deg;
+  }
+  .lk-corner-wm {
+    position: absolute;
+    right: 6cqi;
+    bottom: 6cqi;
+  }
+  .lk-badge--lines {
+    position: absolute;
+    left: 50%;
+    top: 37.5cqi;
+    width: 60cqi;
+    translate: -50% -50%;
+  }
+  .lk-badge-wm {
+    position: absolute;
+    top: 42cqi;
+  }
+  .lk-rtag {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.6em;
+    font-size: calc(var(--wm-scale) * 5.6cqi);
+  }
+  .lk-rtag .lk-rule--line {
+    font-size: 1em;
+  }
+  .lk-rtag small {
+    font-family: var(--font-sans);
+    font-size: 0.42em;
+    letter-spacing: 0;
+    opacity: 0.7;
   }
   .lk-badge {
     display: grid;
