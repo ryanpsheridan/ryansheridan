@@ -72,6 +72,42 @@ const recVars = vars(rec.p, rec.s, rec.keep);
 const heroLines = 37;
 const heroFall = 25;
 
+/*
+  The lockups draw the falling line from the cover's own geometry (14
+  lines, 5.83 apart, 46 long, the ninth fallen at 14 degrees), scaled as
+  one unit so the length to width ratio never changes, with the stroke 15%
+  thinner than the cover's. k scales the row; left and top place it in a
+  100 by 75 tile.
+*/
+const COVER_LINES = { count: 14, fall: 9, gap: 5.83, len: 46, w: 0.7 };
+const LOCKUP_STROKE = 0.85;
+const lockupLines = (k: number, left: number, top: number) => ({
+  vw: 100,
+  vh: 75,
+  count: COVER_LINES.count,
+  fall: COVER_LINES.fall,
+  x: +left.toFixed(3),
+  y: +top.toFixed(3),
+  gap: +(COVER_LINES.gap * k).toFixed(4),
+  len: +(COVER_LINES.len * k).toFixed(4),
+  w: +(COVER_LINES.w * LOCKUP_STROKE * k).toFixed(4),
+});
+// Width of the row at scale k, from the first line's left edge to the last's right.
+const rowWidth = (k: number) => ((COVER_LINES.count - 1) * COVER_LINES.gap + COVER_LINES.w * LOCKUP_STROKE) * k;
+
+// The falling line alone, at the cover's own size, centered in the tile.
+const soloLines = lockupLines(1, (100 - rowWidth(1)) / 2, (75 - COVER_LINES.len) / 2);
+// Stacked: the row above the name, sharing its right edge.
+const stackK = 0.52;
+const stackLeft = (100 - rowWidth(stackK)) / 2;
+const stackLines = lockupLines(stackK, stackLeft, 16);
+const stackRight = +stackLeft.toFixed(3);
+// Horizontal: the row beside the name, centered on the tile's middle.
+const sideK = 0.435;
+const sideLeft = 9.85;
+const sideLines = lockupLines(sideK, sideLeft, 37.5 - (COVER_LINES.len * sideK) / 2);
+const sideWordLeft = +(sideLeft + rowWidth(sideK) + 4).toFixed(3);
+
 const fontsHref = "https://fonts.googleapis.com/css2?family=Gloock&display=swap";
 ---
 
@@ -307,7 +343,7 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=Gloock&display=swap"
         <div class="wrap">
           <div class="slabel reveal"><span>06</span><h2 id="lk-h">Logo lockups</h2></div>
           <p class="lk-lead reveal">
-            Nine ways to set the logo, from a business card to the back of a T-shirt. Every one is
+            Twelve ways to set the logo, from a business card to the back of a T-shirt. Every one is
             the same name, the same dot and the same line, arranged for the space it has.
           </p>
           <ul class="lk-grid">
@@ -325,24 +361,24 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=Gloock&display=swap"
             </li>
             <li class="reveal">
               <figure>
-                <div class="lk tone-light" role="img" aria-label="The falling line"><Lines vw={100} vh={75} count={14} fall={9} x={11.4} y={15} len={45} /></div>
+                <div class="lk tone-light" role="img" aria-label="The falling line"><Lines {...soloLines} /></div>
                 <figcaption><b>The falling line.</b> On its own as a print or a sleeve detail. It never stands in for the name.</figcaption>
               </figure>
             </li>
             <li class="reveal">
               <figure>
-                <div class="lk tone-dark lk-stack" role="img" aria-label="Stacked: the falling line above the wordmark">
-                  <Lines vw={100} vh={75} count={10} fall={6} x={30} gap={4.4} y={13} len={30} />
-                  <Wordmark class="lk-stack-wm" size="7cqi" />
+                <div class="lk tone-dark" role="img" aria-label="Stacked: the falling line above the wordmark">
+                  <Lines {...stackLines} />
+                  <Wordmark class="lk-stack-wm" size="7cqi" style={`right:${stackRight}cqi`} />
                 </div>
                 <figcaption><b>Stacked.</b> The line above the name, for posters, tote bags and the back of a T-shirt.</figcaption>
               </figure>
             </li>
             <li class="reveal">
               <figure>
-                <div class="lk tone-light lk-h" role="img" aria-label="Horizontal: the falling line beside the wordmark">
-                  <Lines vw={100} vh={75} count={6} fall={4} x={16} gap={3} y={26} len={23} w={0.6} />
-                  <Wordmark class="lk-h-wm" size="5.6cqi" line />
+                <div class="lk tone-light" role="img" aria-label="Horizontal: the falling line beside the wordmark">
+                  <Lines {...sideLines} />
+                  <Wordmark class="lk-h-wm" size="5cqi" line style={`left:${sideWordLeft}cqi`} />
                 </div>
                 <figcaption><b>Horizontal.</b> The line beside the name, for business cards, banners and the site header.</figcaption>
               </figure>
@@ -355,19 +391,37 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=Gloock&display=swap"
             </li>
             <li class="reveal">
               <figure>
-                <div class="lk tone-light" role="img" aria-label="Round badge"><span class="lk-badge"><Wordmark size="1em" /></span></div>
+                <div class="lk tone-light" role="img" aria-label="Ruled wordmark, a line above and below"><span class="lk-rule"><Wordmark size="1em" /></span></div>
+                <figcaption><b>Ruled.</b> A line above and below, exactly as wide as the name. Lighter than the box, for labels and printed matter.</figcaption>
+              </figure>
+            </li>
+            <li class="reveal">
+              <figure>
+                <div class="lk tone-dark" role="img" aria-label="Ruled wordmark on one line"><span class="lk-rule lk-rule--line"><Wordmark size="1em" line /></span></div>
+                <figcaption><b>Ruled, one line.</b> The single line between two rules, for spines, footers and the edge of a tote.</figcaption>
+              </figure>
+            </li>
+            <li class="reveal">
+              <figure>
+                <div class="lk tone-light" role="img" aria-label="Banded: rules across the full width with the wordmark between"><span class="lk-band"><Wordmark size="1em" /></span></div>
+                <figcaption><b>Banded.</b> The rules run edge to edge, like a stripe across a T-shirt or the top of a poster.</figcaption>
+              </figure>
+            </li>
+            <li class="reveal">
+              <figure>
+                <div class="lk tone-dark" role="img" aria-label="Round badge"><span class="lk-badge"><Wordmark size="1em" /></span></div>
                 <figcaption><b>Badge.</b> A round mark for stickers, pins and embroidery.</figcaption>
               </figure>
             </li>
             <li class="reveal">
               <figure>
-                <div class="lk tone-dark" role="img" aria-label="App icon: the i mark"><span class="lk-icon tone-light"><span class="wm mark"><span class="wm-i">i</span></span></span></div>
+                <div class="lk tone-light" role="img" aria-label="App icon: the i mark"><span class="lk-icon tone-dark"><span class="wm mark"><span class="wm-i">i</span></span></span></div>
                 <figcaption><b>App icon.</b> The i in a rounded square, for apps, favicons and avatars.</figcaption>
               </figure>
             </li>
             <li class="reveal">
               <figure>
-                <div class="lk tone-light" role="img" aria-label="Wordmark with the tagline"><span class="lk-tag"><Wordmark size="1em" /><small>Curiosity flips the frame.</small></span></div>
+                <div class="lk tone-dark" role="img" aria-label="Wordmark with the tagline"><span class="lk-tag"><Wordmark size="1em" /><small>Curiosity flips the frame.</small></span></div>
                 <figcaption><b>With the tagline.</b> The name and its line, for end cards and event posters.</figcaption>
               </figure>
             </li>
@@ -1742,22 +1796,41 @@ const fontsHref = "https://fonts.googleapis.com/css2?family=Gloock&display=swap"
   .lk.tone-light {
     box-shadow: inset 0 0 0 1px var(--ud-line);
   }
-  /* The line above the name: both share a right edge, 29.7cqi in. */
+  /* The row above the name: they share a right edge (set inline from the
+     row's geometry). */
   .lk-stack-wm {
     position: absolute;
-    right: 29.7cqi;
-    top: 49cqi;
+    top: 46cqi;
   }
-  /* The line beside the name, both centered on the tile's middle. */
+  /* The row beside the name, both centered on the tile's middle. */
   .lk-h-wm {
     position: absolute;
-    left: 37cqi;
     top: 37.5cqi;
     translate: 0 -50%;
   }
   .lk-box {
     padding: 0.55em 0.6em 0.5em;
     border: 1px solid currentColor;
+    font-size: calc(var(--wm-scale) * 8.4cqi);
+  }
+  /* Ruled: a hairline above and below instead of a box. The plain version
+     is exactly as wide as the name; the one line version runs a little
+     past it; the band runs the full width of the tile. */
+  .lk-rule {
+    padding: 0.42em 0 0.38em;
+    border-block: 1px solid currentColor;
+    font-size: calc(var(--wm-scale) * 8.4cqi);
+  }
+  .lk-rule--line {
+    padding: 0.7em 0.5em 0.62em;
+    font-size: calc(var(--wm-scale) * 5.6cqi);
+  }
+  .lk-band {
+    justify-self: stretch;
+    display: grid;
+    place-items: center;
+    padding: 0.42em 0 0.38em;
+    border-block: 1px solid currentColor;
     font-size: calc(var(--wm-scale) * 8.4cqi);
   }
   .lk-badge {
